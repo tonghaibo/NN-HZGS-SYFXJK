@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >L_IMGTEXT</MWID><NAME >图文标题加省略内容</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >L_IMGTEXT.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function GetBody(){
+	var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; order by crtdat desc &amp;quot;  ;
+	
+	var ds=db.QuerySQL(sql);
+	var count =0;
+	if(ds.getRowCount()&amp;gt;LAYROW){
+		count = LAYROW;
+	}else{
+		count = ds.getRowCount();
+	}
+	
+	for (var r =0;r &amp;lt; count; r ++) {
+		var txt = &amp;quot;txt&amp;quot;;
+		var img = ds.getStringAt(r,&amp;quot;icon&amp;quot;);
+		var name = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+		var htmlguid=ds.getStringAt(r,&amp;quot;htmlguid&amp;quot;);
+		var contextes=ds.getStringAt(r,&amp;quot;contextes&amp;quot;);
+		var context = db.getBlob2String(&amp;quot;select b.bdata from LSYSURL a,formblob b where a.htmlguid=b.guid and a.htmlguid=&amp;apos;&amp;quot;+htmlguid+&amp;quot;&amp;apos;&amp;quot;,&amp;quot;bdata&amp;quot;);
+		
+		var url = ds.getStringAt(r,&amp;quot;url&amp;quot;);
+		if (url != &amp;quot;&amp;quot;) {
+			url += &amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(r,&amp;quot;GUID&amp;quot;);
+		}
+		txt=txt+r;
+		html += &amp;quot;&amp;lt;table valign=\&amp;quot;top\&amp;quot; cellpadding=\&amp;quot;5\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+img+&amp;quot;\&amp;quot; width=\&amp;quot;200\&amp;quot; height=\&amp;quot;200\&amp;quot;/&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;table  width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;h3&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/h3&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td height=\&amp;quot;40\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td id=\&amp;quot;&amp;quot;+txt+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;a href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+contextes+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;	
+		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td colspan=2&amp;gt;&amp;lt;hr style=\&amp;quot;border-top:1px dashed #cccccc; height:1px\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	}
+
+//	html += &amp;quot;
+//			&amp;lt;script&amp;gt;
+//				window.onload = function(){
+//					for (var r=0;r&amp;lt;&amp;quot;+count+&amp;quot;;r++) {
+//						var txt = \&amp;quot;txt\&amp;quot;;
+//						txt=txt+r;
+//						 var text = document.getElementById(txt),
+//						 str = text.innerHTML,
+//						 textLeng = 400;
+//					
+//						 if(str.length &amp;gt; textLeng ){
+//							   text .innerHTML = str.substring(0,textLeng)+\&amp;quot;。。。。\&amp;quot;;
+//						 } 
+//					 }
+//				 }
+//			 &amp;lt;/script&amp;gt;
+//			&amp;quot;;
+//
+	return html;
+
+}
+
+
+//	var html = &amp;quot;&amp;quot;;
+//	var sql = &amp;quot;select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; order by crtdat desc &amp;quot;  ;
+//	
+//	var ds=db.QuerySQL(sql);
+//	var count =0;
+//	if(ds.getRowCount()&amp;gt;LAYROW){
+//		count = LAYROW;
+//	}else{
+//		count = ds.getRowCount();
+//	}
+//	
+//	for (var r =0;r &amp;lt; count; r ++) {
+//		var txt = &amp;quot;txt&amp;quot;;
+//		var img = ds.getStringAt(r,&amp;quot;icon&amp;quot;);
+//		var name = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+//		var htmlguid=ds.getStringAt(r,&amp;quot;htmlguid&amp;quot;);
+//		var context = db.getBlob2String(&amp;quot;select b.bdata from LSYSURL a,formblob b where a.htmlguid=b.guid and a.htmlguid=&amp;apos;&amp;quot;+htmlguid+&amp;quot;&amp;apos;&amp;quot;,&amp;quot;bdata&amp;quot;);
+//	
+//		var url = ds.getStringAt(r,&amp;quot;url&amp;quot;);
+//		if (url != &amp;quot;&amp;quot;) {
+//			url += &amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(r,&amp;quot;GUID&amp;quot;);
+//		}
+//		txt=txt+r;
+//		html += &amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot;   height=\&amp;quot;100%\&amp;quot; valign=\&amp;quot;top\&amp;quot; cellpadding=\&amp;quot;5\&amp;quot;&amp;gt;&amp;quot;;
+//		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+//		html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;div  style=\&amp;quot; float:left;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+img+&amp;quot;\&amp;quot; width=\&amp;quot;200\&amp;quot; height=\&amp;quot;200\&amp;quot;/&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+//		html += &amp;quot;&amp;lt;table &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;table align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;h3&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/h3&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+//		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+context.substring(0,400)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+//
+//	}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

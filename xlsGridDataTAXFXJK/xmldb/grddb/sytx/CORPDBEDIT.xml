@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>CORPDBEDIT</MWID><NAME>往来单位数据维护</NAME><NOTE></NOTE><FILE>CORPDBEDIT.zxg</FILE><FIXED></FIXED><CATTYP>02</CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>function _thisOnpost_loaddata(sheet)
+{
+order = &amp;apos; order by ID&amp;apos;;
+       setButton();
+       
+       selectSQL = &amp;quot;SELECT GUID,ID as 单位编号,NAME as 单位名称,LONNAME as 全称,SHTNAM as 简称,&amp;quot;+
+            &amp;quot;CORPTYP as 单位属性,REFID as 上级编号,ENDFLG as 末级标志,&amp;quot; +
+            &amp;quot;CRDDAY as 最大赊账天数,CRDSUM as 最大赊账限额,ADS as 地址,ZIP as 邮政编码, &amp;quot;+
+            &amp;quot;TEL as 电话,FAX as 传真,EML as 邮件,MAN as 联系人,&amp;quot;+
+            &amp;quot;BANK as 开户银行,ACCOUNT as 账号,TAXNO as 税号,CORMAN as 法人代表 &amp;quot;+
+            &amp;quot;from V_CORP where (org =&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; or org is null) and endflg=&amp;apos;1&amp;apos; &amp;quot;;
+
+       insertSQL = &amp;quot;INSERT INTO CORP( GUID,ID,NAME,LONNAME,SHTNAM,&amp;quot; +
+            &amp;quot;CORPTYP,REFID,ENDFLG,CRDDAY,CRDSUM,ADS,ZIP,&amp;quot;+
+            &amp;quot;TEL,FAX,EML,MAN,BANK,ACCOUNT,TAXNO,CORMAN) &amp;quot;+
+
+            &amp;quot;VALUES( sys_guid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? ) &amp;quot;;
+
+       updateSQL = &amp;quot;UPDATE CORP SET id=?,NAME=?,LONNAME=?,SHTNAM=?,&amp;quot;+
+            &amp;quot;CORPTYP=?,REFID=?,ENDFLG=?,CRDDAY=?,CRDSUM=?,ADS=?,ZIP=?,&amp;quot;+
+            &amp;quot;TEL=?,FAX=?,EML=?,MAN=?,BANK=?,ACCOUNT=?,TAXNO=?,CORMAN=? &amp;quot;+
+
+            &amp;quot;where guid=?&amp;quot;;
+
+       deleteSQL = &amp;quot;delete CORP where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+
+       _dbhelper.Load(1,1,2,2);
+
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+function f_dbeditpostloaddata(){
+  
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ENDFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_CORPTYPE&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);       
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+             {                
+                   var str = _this.GetCellText(sheet,row,9);                
+                   _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,9,listid1);
+                   _this.SetCellText(sheet,row,9,str);
+                   
+                   str = _this.GetCellText(sheet,row,7);                
+                   _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid2 );
+                   _this.SetCellText(sheet,row,7,str);                   
+            }
+       
+}
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+      if( sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==3 ){
+            _this.SetCellText(sheet,row,3,orgid+newvalue);
+      }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1????编??</BILID><SUBTYP>0??????</SUBTYP><CORPID>0????????编??</CORPID><CORPNAM>0????????????</CORPNAM><LOCID>0????|????编??</LOCID><LOCNAM>0????|????????</LOCNAM><DAT>0????????</DAT><CRTUSR>1??????</CRTUSR><CRTUSRNAM>0??????????</CRTUSRNAM><CHKUSR>1??????</CHKUSR><CHKUSRNAM>0??????????</CHKUSRNAM><REFID1>0????编??1</REFID1><REFNAM1>0????????1</REFNAM1><REFID2>0????编??2</REFID2><REFNAM2>0????????2</REFNAM2><NOTE>0????????</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1????????</SEQID><ITMID>1????编??</ITMID><ITMNAM>0????????</ITMNAM><ITMSPC>0????</ITMSPC><UNIT>0????????</UNIT><PRICE>0????</PRICE><QTY>0????</QTY><TAXTYP>0????????</TAXTYP><NOTAXMNY>0??????????</NOTAXMNY><TAXMNY>0????</TAXMNY><MNY>0????????</MNY><REFID1>0????编??1</REFID1><REFNAM1>0????????1</REFNAM1><REFID2>0????编??2</REFID2><REFNAM2>0????????2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

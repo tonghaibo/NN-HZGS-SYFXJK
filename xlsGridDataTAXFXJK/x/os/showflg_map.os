@@ -1,0 +1,7 @@
+function x_showflg_map(){//µÿÕºœ‘ æ
+function GetBody(){
+
+
+}
+
+}

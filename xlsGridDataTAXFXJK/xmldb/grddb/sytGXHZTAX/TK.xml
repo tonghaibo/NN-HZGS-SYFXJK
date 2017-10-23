@@ -1,0 +1,380 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >TK</MWID><NAME >核实任务</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TK.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >TAX_TRKHDR</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >bilid 单号,yymm1 起始年月,yymm2 截止年月,cmid 企业编号,  cmnam 企业名称,(select name from v_tax_trktyp where id=subtyp) 类型,to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) 创建时间,tousr 税管员,decode(stat,&amp;apos;1&amp;apos;,&amp;apos;未分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;已分派&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;4&amp;apos;,&amp;apos;关闭&amp;apos;) 状态,to_char(chkdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) 分派时间,enddat 截止日期</COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL >3</IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,2</ID><CELLID ></CELLID><NAME >企业编号</NAME><VALFLD >CMID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >0,4,2</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="1" ><ID >0,5,2</ID><CELLID ></CELLID><NAME >企业名称</NAME><VALFLD >CMNAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >0,5,2</C22><C23 >0,5,2</C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="2" ><ID >0,4,6</ID><CELLID ></CELLID><NAME >处理类型</NAME><VALFLD >TYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_TAX_NEWTRKTYP</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >0,4,6</C22><C23 >0,4,6</C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="3" ><ID >0,3,6</ID><CELLID ></CELLID><NAME >表单号</NAME><VALFLD >BILID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >0,3,6</C22><C23 >0,3,6</C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="4" ><ID >0,6,2</ID><CELLID ></CELLID><NAME >税管员</NAME><VALFLD >TOUSR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,5,5</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >0,5,6</C22><C23 >0,5,6</C23><C24 ></C24><C25 >0,6,2</C25><C26 ></C26></ROW>
+<ROW num="5" ><ID >0,5,6</ID><CELLID ></CELLID><NAME >处理状态</NAME><VALFLD >NEWSUBTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_TAX_TRKNEWSUBTYP</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >0,6,2</C21><C22 >0,6,2</C22><C23 >0,6,2</C23><C24 ></C24><C25 ></C25><C26 >0,5,6</C26></ROW>
+<ROW num="6" ><ID >0,10,1</ID><CELLID ></CELLID><NAME >处理内容</NAME><VALFLD >RENOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,9,1</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >0,8,1</C21><C22 >0,8,1</C22><C23 >0,10,1</C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="7" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >起始年月</NAME><VALFLD >YYMM1</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_YYYY_MM</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,3,2</C19><C20 ></C20><C21 >0,3,2</C21><C22 >0,3,2</C22><C23 >0,3,2</C23><C24 ></C24><C25 >0,3,2</C25><C26 ></C26></ROW>
+<ROW num="8" ><ID >0,3,4</ID><CELLID ></CELLID><NAME >截止年月</NAME><VALFLD >YYMM2</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_YYYY_MM</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,3,4</C19><C20 ></C20><C21 >0,3,4</C21><C22 >0,3,4</C22><C23 >0,3,4</C23><C24 ></C24><C25 >0,3,4</C25><C26 ></C26></ROW>
+<ROW num="9" ><ID >0,6,6</ID><CELLID ></CELLID><NAME >任务截至日期</NAME><VALFLD >ENDDAT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >0</IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><QUERTDEFVAL >       </QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 >0,6,6</C20><C21 >0,6,6</C21><C22 >0,6,6</C22><C23 >0,6,6</C23><C24 ></C24><C25 >0,6,6</C25><C26 ></C26></ROW>
+<ROW num="10" ><ID >2,-1,-1</ID><CELLID ></CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >0,5,6</C21><C22 ></C22><C23 >2,-1,-1</C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="11" ><ID >0,8,1</ID><CELLID ></CELLID><NAME >备注</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="12" ><ID >0,12,2</ID><CELLID ></CELLID><NAME >附件</NAME><VALFLD >ZIPFILE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >FILE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="13" ><ID >0,1,2</ID><CELLID ></CELLID><NAME >电力税负异常标志</NAME><VALFLD >CHKFLG1</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >0,1,2</C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="14" ><ID >0,1,3</ID><CELLID ></CELLID><NAME >补足标志</NAME><VALFLD >CHKFLG2</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="15" ><ID >0,14,2</ID><CELLID ></CELLID><NAME >审批结果</NAME><VALFLD >SP_RES</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_TAX_SP</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >0,14,2</C26></ROW>
+<ROW num="16" ><ID >0,16,1</ID><CELLID ></CELLID><NAME >审批内容</NAME><VALFLD >SP_NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="17" ><ID >0,18,4</ID><CELLID ></CELLID><NAME >审批时间</NAME><VALFLD >SP_TIME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="18" ><ID >0,18,6</ID><CELLID ></CELLID><NAME >审批人</NAME><VALFLD >SP_NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+<ROW num="19" ><ID >1,-1,-1</ID><CELLID ></CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >1,-1,-1</C26></ROW>
+<ROW num="20" ><ID >0,2,6</ID><CELLID ></CELLID><NAME >稽查类型</NAME><VALFLD >SUBTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_TAX_TRKTYP</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+  	//loaddoc();
+//  	_this.SetColVisible(sheet,7,-1);
+        
+	if (_this.GetCellText(sheet,12,2) != &amp;quot;&amp;quot;) {
+		_this.SetCellText(0,12,7,&amp;quot;【双击下载】&amp;quot;);
+	}
+	
+	if (stat == 13 ) {
+		var chkflg1 = _this.GetCellText(sheet,1,2);
+		if (chkflg1 == &amp;quot;1&amp;quot;) {
+			alert(&amp;quot;电力税负异常检查完毕，没有异常！&amp;quot;);
+		}
+		else if (chkflg1 == &amp;quot;2&amp;quot;) {
+			alert(&amp;quot;电力税负异常检查完毕，仍然有异常！&amp;quot;);
+		}
+	}
+	
+	var tmp = _this.GetCellText(0,2,6);
+	if(tmp == &amp;quot;6&amp;quot;)
+	{
+		_this.SetCellText(0,4,1,&amp;quot;电表编号：&amp;quot;);
+	}
+	
+	var chkrol = invokeOSFunc(&amp;quot;checkGenTask&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+		_this.AddToolbarButton(&amp;quot;udf_btnback&amp;quot;,&amp;quot;返回首页&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+		
+	}
+
+}
+//单据列表加载完毕
+function _thisOnpostloadListBill(sheet)
+{
+	_this.SetColVisible(sheet,3,-1);
+	_this.SetColVisible(sheet,4,-1);  
+	
+//	_this.AddToolbarButton(&amp;quot;udf_closeTrk&amp;quot;,&amp;quot;删除任务&amp;quot;,&amp;quot;删除任务&amp;quot;,&amp;quot;&amp;quot;,0,0,0,80);
+}
+//加载附件
+function loaddoc(){
+	
+	//获取会议结论表头GUID
+ 	_sql.querytods(&amp;quot;getGuid&amp;quot;,&amp;quot;bilid=&amp;quot;+_this.GetCellText(0,3,6));
+	var GUID1 ;	
+	if ( _this.XMLDS_GetRowCount() &amp;gt; 0 ) 
+		GUID1 = _this.XMLDS_GetString(0,&amp;quot;GUID&amp;quot;);	
+	
+	//获取附件
+
+	var dtlxml = _sql.querytods(&amp;quot;getdoc&amp;quot;,&amp;quot;GUID=&amp;quot;+GUID1);
+	var filecount = _this.XMLDS_GetRowCount(); 	
+ 	var row = 0; 	
+  	
+ 		//有附件需要加载时 		
+	 _this.SetCellText(0,10,2,_this.XMLDS_GetStringAt(row,0));
+	 _this.SetCellText(0,12,7,_this.XMLDS_GetStringAt(row,1)); 
+	 if(_this.GetCellText(0,12,2)!=&amp;quot;&amp;quot;)
+	 	_this.SetCellText(0,12,1,&amp;quot;【双击下载】&amp;quot;);
+	 			
+}
+
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+  	if(row == 12 &amp;&amp; col == 7 &amp;&amp; _this.GetCellText(sheet,row,col) != &amp;quot;&amp;quot;) {
+  		_sql.querytods(&amp;quot;GETFILEGUID&amp;quot;,&amp;quot;GUID=&amp;quot;+guid);
+  		var fileguid = _this.XMLDS_GetString(0,&amp;quot;ZIPFILE&amp;quot;);
+  		//window.open(&amp;quot;EAFormBlob.sp?guid=&amp;quot;+fileguid+&amp;quot;&amp;sytid=TAXMON&amp;grdid=TK_RE&amp;quot;);
+//  		window.open(&amp;quot;EAFormBlob.sp?guid=&amp;quot;+fileguid+&amp;quot;&amp;sytid=TAXMON&amp;grdid=TK_RE&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;height=0,width=0&amp;quot;);
+  		window.location.href = &amp;quot;EAFormBlob.sp?guid=&amp;quot;+fileguid+&amp;quot;&amp;sytid=&amp;quot;+G_SYTID+&amp;quot;&amp;grdid=TK_RE&amp;quot;;
+  	}
+}
+
+//点击菜单项
+//function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+//{
+//  alert(menuitemid);
+//}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	//alert(id);return;  udf_stm2433
+	if (id == &amp;quot;udf_stm30&amp;quot; || id == &amp;quot;udf_stm39&amp;quot;) {
+		if (confirm(&amp;quot;是否需要进行电表号维护?&amp;quot;)) {
+			window.open(&amp;quot;show.sp?grdid=AMMEDIT&amp;TAXMAN=&amp;quot;+G_USRNAM+&amp;quot;&amp;loaddata=1&amp;quot;);
+		}
+	}
+	else if (id == &amp;quot;udf_closeTrk&amp;quot;) {
+		closeTrk();
+	}
+//	if (id == &amp;quot;udf_stm2433&amp;quot; || id == &amp;quot;udf_stm2332&amp;quot; || id == &amp;quot;udf_stm2533&amp;quot; || id == &amp;quot;udf_stm2131&amp;quot;) {
+//		var chkrol = invokeOSFunc(&amp;quot;checkGenTask&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+//		if (chkrol &amp;gt; 0) {
+//			alert(&amp;quot;待审批，审批后任务将自动完成!&amp;quot;);
+//			_this.Close(stm2332());
+//		}
+//	}
+//        if(id == &amp;quot;F_run_cancelbutton1&amp;quot; ){
+//        	alert(homeurl+&amp;quot;ROOT_&amp;quot;+G_ACCID+&amp;quot;/Layout.sp?id=taxman&amp;stats=&amp;quot;);
+//        	window.location.href=homeurl+&amp;quot;ROOT_&amp;quot;+G_ACCID+&amp;quot;/Layout.sp?id=taxman&amp;stats=&amp;quot;;
+//        	return;
+//        }
+}
+
+function closeTrk() 
+{
+	alert(&amp;quot;aaa&amp;quot;);
+}
+
+
+//重新检查
+function checkAgain()
+{
+	try {
+		var ret = invokeOSFunc(&amp;quot;check&amp;quot;,&amp;quot;formguid=&amp;quot;+guid);
+		if (ret == &amp;quot;0&amp;quot;) {
+			alert(&amp;quot;没有异常!&amp;quot;);	
+		}
+		else {
+			alert(&amp;quot;核实任务仍有异常!&amp;quot;);	
+		}
+	}
+	catch (e) {
+		alert(e);
+	}
+
+}
+
+function  F_run_cancelbutton1()
+{
+	alert(&amp;quot;123&amp;quot;);
+}
+
+//返回首页
+function btnback()
+{
+	//document.frames[&amp;apos;CELL_1_0&amp;apos;].src = window.location.href=homeurl+&amp;quot;ROOT_&amp;quot;+G_ACCID+&amp;quot;/Layout.sp?id=taxman&amp;stats=&amp;quot;;
+//	var ifr = window.parent.document.getElementById(&amp;quot;CELL_1_0&amp;quot;);
+//	ifr.src =  window.location.href=homeurl+&amp;quot;ROOT_&amp;quot;+G_ACCID+&amp;quot;/Layout.sp?id=taxman&amp;stats=&amp;quot;;
+
+	window.location.href = window.location.href=homeurl+&amp;quot;/Layout.sp?id=taxman&amp;stats=&amp;quot;;
+
+	//window.location.href=homeurl+&amp;quot;Layout.sp?id=taxman&amp;quot;;
+}
+
+//工作流中处理的确定按钮完成后调用该处理函数
+function f_afterWorkeFlowAction(stat) 
+{
+	//_sql.querytods(&amp;quot;getNewSubTyp&amp;quot;,&amp;quot;GUID=&amp;quot;+guid);
+	//var cltyp = _this.XMLDS_GetString(0,&amp;quot;NEWSUBTYP&amp;quot;);
+	
+	//alert(&amp;quot;cltyp =&amp;quot;+cltyp );
+	//alert(stat);
+	if (stat == &amp;quot;23&amp;quot;) {
+		window.location.href = &amp;quot;show.sp?grdid=TK&amp;guid=&amp;quot;+guid+&amp;quot;&amp;processid=3&amp;quot;;
+		return stat;
+	}
+	return &amp;quot;&amp;quot;; //返回空
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var web = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+
+function WorkeFlowAction(request,db,formguid,stat,tostat)
+{
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+   	var accid = usrinfo.getAccid();
+   	var orgid = usrinfo.getOrgid();
+   	var sytid = usrinfo.getSytid();  
+   	
+  	var sql = &amp;quot;&amp;quot;;
+  	//1未分派 2已分派 3已处理 9完成 8分派到股室 0退回
+  	if (tostat == 2) {
+  		sql = &amp;quot;update tax_trkhdr set chkusr=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,chkdat=sysdate where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;;
+  		db.ExcecutSQL(sql);
+   	}
+   	else if (tostat == 3) {
+  		sql = &amp;quot;update tax_trkhdr set redat=sysdate where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;;
+  		db.ExcecutSQL(sql);
+   	}
+   	else if (tostat == 1) {
+  		sql = &amp;quot;update tax_trkhdr set tousr=null,chkdat=null,chkusr=null,chkusrnam=null where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;;
+  		db.ExcecutSQL(sql);
+   	}
+   	else if (tostat == 9) {
+   		//检查是否还存在异常
+   		var ret = checkTrk(formguid);
+   		if (ret == &amp;quot;1&amp;quot;) {
+   			throw new Exception(&amp;quot; 【核实任务还有异常，不能结束任务！】&amp;quot;);
+   		}
+   	}
+   	else if (tostat == 13 || tostat == 25) {
+		var chkret = checkTrk(formguid);
+		var chkflg1 = &amp;quot;&amp;quot;;
+		if (chkret == &amp;quot;0&amp;quot;) {
+			chkflg1 = &amp;quot;1&amp;quot;;		
+		}
+		else chkflg1 = &amp;quot;2&amp;quot;;
+		
+		//chkflg1 = &amp;quot;2&amp;quot;;
+		
+		sql = &amp;quot;update tax_trkhdr set chkflg1=&amp;apos;&amp;quot;+chkflg1+&amp;quot;&amp;apos; where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+
+	}
+   	//15.电表号标识为“非国税管户”
+   	if (stat == 15 &amp;&amp; tostat == 9) {
+   		var cmid = db.GetSQL(&amp;quot;select cmid from tax_trkhdr where guid=&amp;apos;&amp;quot;+foormguid+&amp;quot;&amp;apos;&amp;quot;);
+   		sql = &amp;quot;update tax_company set flag=&amp;apos;0&amp;apos; where id=&amp;apos;&amp;quot;+cmid+&amp;quot;&amp;apos;&amp;quot;;
+   		db.ExcecutSQL(sql);
+   	}
+   	if(stat==21 || stat==23 || stat==24 || stat==25)
+   	{
+   		var res = db.GetSQL(&amp;quot;select sp_res from tax_trkhdr where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;);
+   		if(res == 0){
+   			sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;9&amp;apos;,sp_time=sysdate where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+      		}
+      		else if(res == 1)
+   		{
+   			sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;2&amp;apos;,sp_time=sysdate  where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+   		}
+   	}
+}   	
+
+//返回单据列表的查询SQL
+function getListSql(request,selectsql, where, orderby)
+//var request=javax.servlet.http.HttpServletRequest();
+{
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+   	var accid = usrinfo.getAccid();
+   	var orgid = usrinfo.getOrgid();
+   	var sytid = usrinfo.getSytid();  
+	var sql = &amp;quot;&amp;quot;;
+	//throw new Exception(selectsql);
+	sql = selectsql + where + &amp;quot; and (crtusr=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; or tousr=(select name from usr where org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;))&amp;quot;;
+	
+	return sql;
+}
+
+function check()
+{
+	return checkTrk(formguid);
+}
+
+function checkTrk(formguid)
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		var ds = db.QuerySQL(&amp;quot;select * from tax_trkhdr where guid=&amp;apos;&amp;quot;+formguid+&amp;quot;&amp;apos;&amp;quot;);
+		var trktyp = ds.getStringAt(0,&amp;quot;SUBTYP&amp;quot;);
+		var yymm1 = ds.getStringAt(0,&amp;quot;YYMM1&amp;quot;);
+		var yymm2 = ds.getStringAt(0,&amp;quot;YYMM2&amp;quot;);
+		var cmid = ds.getStringAt(0,&amp;quot;CMID&amp;quot;);
+		
+		//电力税负异常
+		if (trktyp == &amp;quot;3&amp;quot;) {
+			sql = &amp;quot;select * from (
+				select &amp;apos;&amp;apos; flag,&amp;apos;2010-06&amp;apos;||&amp;apos;~&amp;apos;||&amp;apos;2012-07&amp;apos; YYMM,a.id,a.name,sum(eleqty) eleqty,envload,sum(ens) ens,
+				       sum(somny) somny,sum(ens-somny) cz,Ytaxman,taxman 
+				from (
+				select b.id,sum(a.eleqty) eleqty,nvl(round(sum(a.eleqty/c.envload*avgsale),2),0) ens,c.envload,
+				   decode(b.Ytaxman,&amp;apos;1&amp;apos;,&amp;apos;是&amp;apos;,&amp;apos;否&amp;apos;) ytaxman,b.taxman,b.name
+				from tax_eledata a,tax_company b,tax_compclass c
+				where a.usrid=b.ammno and b.Typclsid=c.id 
+				  and a.YYMM between &amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos; and &amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos;
+				  and b.id=&amp;apos;&amp;quot;+cmid+&amp;quot;&amp;apos;
+				group by b.id,b.name,b.Ytaxman,b.taxman,c.envload 
+				) a,(select id,sum(somny) somny from tax_taxdata where YYMM between &amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos; and &amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos; group by id) d
+				where a.id=d.id
+				group by a.id,a.name,envload,ytaxman,taxman
+				)
+				where nvl(somny,0) &amp;lt; ens&amp;quot;;
+			var retdst = db.QuerySQL(sql);
+			return retds.getRowCount();
+		}
+		//电力税额异常
+		else if (trktyp == &amp;quot;7&amp;quot;) {
+			sql = &amp;quot;select flag,yymm,id,name,eleqty,rate,ens,taxmny,ens-taxmny cx,ytaxman,taxman from (
+				select &amp;apos;&amp;apos; flag,&amp;apos;2010-09&amp;apos;||&amp;apos;~&amp;apos;||&amp;apos;2012-07&amp;apos; YYMM,a.ID,a.name,sum(eleqty) eleqty,rate,sum(ens) ens,sum(b.taxmny) taxmny,Ytaxman,taxman 
+				from (
+				select b.id,b.name,sum(a.eleqty) eleqty,decode(b.ytaxman,&amp;apos;1&amp;apos;,e.rate1,e.rate2) rate,
+				   case when ytaxman = &amp;apos;1&amp;apos; then round(sum(a.eleqty)*rate1,2)
+				     else round(sum(a.eleqty)*rate2,2) end as ens,decode(b.Ytaxman,&amp;apos;1&amp;apos;,&amp;apos;是&amp;apos;,&amp;apos;否&amp;apos;) ytaxman,b.taxman 
+				   from tax_eledata a,tax_company b,tax_compclass c,tax_eletaxdef e
+				   where a.usrID=b.ammno 
+				   and b.Typclsid=c.id
+				   and c.id =e.hyid and b.id=&amp;apos;&amp;quot;+cmid+&amp;quot;&amp;apos;
+				   and a.YYMM between &amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos; and &amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos;
+				   group by b.taxman,b.name,b.id,b.ytaxman,rate1,rate2
+				) a,(select id,sum(taxmny) taxmny from tax_taxdata where YYMM between &amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos; and &amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos; group by id) b
+				where a.id=b.id
+				group by a.ID,a.name,rate,Ytaxman,taxman 
+				) where taxmny &amp;lt; ens &amp;quot;;
+			var retdst = db.QuerySQL(sql);
+			return retds.getRowCount();
+
+		}
+		
+		return &amp;quot;0&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//权限检查
+function checkGenTask()
+{
+	var sql = &amp;quot;select * from usrrol where usr=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)
+		and rol in (select guid from rol where id=&amp;apos;03&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)&amp;quot;;
+	return pub.EADbTool.GetSQLRowCount(sql);
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >getGuid</ID><NAME ></NAME><DATDSC >select GUID from tax_trkhdr where bilid = &amp;apos;[%bilid]&amp;apos;</DATDSC><C4 >getGuid</C4><C5 >getGuid</C5><C6 >getGuid</C6><C7 >getGuid</C7></ROW>
+<ROW num="1" ><ID >getdoc</ID><NAME ></NAME><DATDSC >select filename, guid from formblob where formguid=&amp;apos;[%GUID]&amp;apos; </DATDSC><C4 >getdoc</C4><C5 >getdoc</C5><C6 >getdoc</C6><C7 ></C7></ROW>
+<ROW num="2" ><ID >GETFILEGUID</ID><NAME ></NAME><DATDSC >select zipfile from tax_trkhdr where guid=&amp;apos;[%GUID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="3" ><ID >getNewSubTyp</ID><NAME ></NAME><DATDSC >select * from tax_trkhdr where guid=&amp;apos;[%GUID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

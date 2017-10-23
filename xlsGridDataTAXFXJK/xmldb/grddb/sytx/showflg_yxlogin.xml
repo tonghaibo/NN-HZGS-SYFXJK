@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_yxlogin</MWID><NAME >影像登入</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_yxlogin.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+//
+// 登陆页面
+// TITLEIMG: EAFormBlob.sp?guid=165708C479077819E050007F010064A3
+// REGISTERPAGE xlsgrid/loginregister.jsp
+// openmode=autologin 自动登陆 openmode=entrypassword 需要输入密码(默认)
+function GetWebLogin()
+{
+
+	var textustnam=&amp;quot;用户：&amp;quot;;
+	var textpwdnam=&amp;quot;密码：&amp;quot;;
+	var usrplaceholder=&amp;quot;请输入您的用户名！&amp;quot;;
+	var pwdplaceholder=&amp;quot;请输入您的用户密码！&amp;quot;;
+	var titlename=pubpack.EAFunc.NVL( request.getParameter(&amp;quot;TITLETYP&amp;quot;),&amp;quot;&amp;quot;);
+	var titlecolor=&amp;quot;&amp;quot;;
+	if(titlename==&amp;quot;&amp;quot;){
+		 titlename=&amp;quot;高级专家 登入&amp;quot;;
+		  titlecolor=&amp;quot;#1EBB91&amp;quot;;
+	}
+	else{
+		 titlename=&amp;quot;用户登入&amp;quot;;
+		  titlecolor=&amp;quot;red&amp;quot;;
+		  REGISTERPAGE=&amp;quot;L.sp?id=loginRegHospital&amp;quot;;
+	}
+//       &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/reset.css\&amp;quot;&amp;gt;
+//	        &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/supersized.css\&amp;quot;&amp;gt;
+//	        &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/logstyle.css\&amp;quot;&amp;gt;
+	var html = &amp;quot;&amp;lt;!-- CSS --&amp;gt;
+		 
+	        &amp;lt;div class=\&amp;quot;page-container\&amp;quot; id=\&amp;quot;container\&amp;quot; style=\&amp;quot;background-color:#EEEEEE;filter:alpha(opacity=80); -moz-opacity:0.8; opacity:0.8;width:600px;height:400px; border: 1px solid #EFEFEF;-moz-border-radius: 10px; -webkit-border-radius: 10px;   border-radius:10px; \&amp;quot;&amp;gt;
+        &amp;quot;;
+        var tdwidth=80;
+        if(IFTEXTVISI==&amp;quot;false&amp;quot;){ textustnam=&amp;quot;&amp;quot;; textpwdnam=&amp;quot;&amp;quot;;tdwidth=0;}
+        
+        if(TS_USERNAM!=null) usrplaceholder=TS_USERNAM;
+        if(TS_PWD!=null) pwdplaceholder=TS_PWD;
+//	&amp;lt;h1&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+TITLEIMG+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/h1&amp;gt;
+        if(GOTOPAGE==null|| GOTOPAGE==&amp;quot;&amp;quot; || GOTOPAGE==&amp;quot;Login.sp&amp;quot;  ) {
+        	html+=&amp;quot;
+	             &amp;lt;form style=\&amp;quot;width:600px;height:400px; \&amp;quot; id=\&amp;quot;f_login\&amp;quot;  action=\&amp;quot;Login.sp\&amp;quot; method=\&amp;quot;post\&amp;quot; target=\&amp;quot;_parent\&amp;quot; &amp;gt;
+	            	
+	               	&amp;lt;table style=\&amp;quot;width:100%;\&amp;quot;&amp;gt;
+		       &amp;lt;tr&amp;gt;
+	               		&amp;lt;td width=&amp;quot;+tdwidth+&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+	               		&amp;lt;td align=center style=\&amp;quot;padding-top: 47px; padding-bottom: 20px;\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;font color=\&amp;quot;#ccc\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;position:relative;width:300px;\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;float:left;width:20px;height:20px;background:&amp;quot;+titlecolor+&amp;quot;;margin-top:5px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=\&amp;quot;float:left; font-size:20px;color:#222;\&amp;quot;&amp;gt;&amp;nbsp;&amp;quot;+titlename+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+	               	&amp;lt;/tr&amp;gt;
+		        &amp;lt;tr&amp;gt;
+	               		&amp;lt;td align=right&amp;gt;&amp;lt;/td&amp;gt;
+	               		&amp;lt;td&amp;gt;&amp;lt;input type=\&amp;quot;text\&amp;quot; name=\&amp;quot;usrid\&amp;quot;  placeholder=\&amp;quot;&amp;quot;+usrplaceholder+&amp;quot;\&amp;quot; style=\&amp;quot;font-family:微软雅黑;vertical-align:middle;color:#222;width:300px;height:44px;box-shadow:inset 2px 2px 5px #ececec;border:1px solid #aaa; border-radius:4px;padding:6px 4px; margin-bottom:10px; background:#fff;\&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/td&amp;gt;
+	               	&amp;lt;/tr&amp;gt;
+	               	
+	                &amp;lt;tr&amp;gt;
+	               		&amp;lt;td align=right&amp;gt;&amp;lt;p&amp;gt;&amp;lt;font color=\&amp;quot;#333333\&amp;quot;&amp;gt;&amp;quot;+textpwdnam+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+			 	&amp;lt;td&amp;gt;&amp;lt;input type=\&amp;quot;password\&amp;quot; name=\&amp;quot;userpwd\&amp;quot;  placeholder=\&amp;quot;&amp;quot;+pwdplaceholder+&amp;quot;\&amp;quot; style=\&amp;quot;font-family:微软雅黑;vertical-align:middle; color:#222; width:300px;height:44px;box-shadow:inset 2px 2px 5px #ececec;border:1px solid #aaa; border-radius:4px;padding:6px 4px; margin-bottom:10px; background:#fff;\&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/td&amp;gt;
+
+			&amp;lt;/tr&amp;gt;
+	               &amp;lt;tr&amp;gt;
+	               		&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=center&amp;gt; &amp;lt;button id=\&amp;quot;com_ok\&amp;quot; type=\&amp;quot;submit\&amp;quot; class=\&amp;quot;submit_button\&amp;quot; style=\&amp;quot;font-family:微软雅黑;vertical-align:middle;font-size:24px;letter-spacing:15px;width:300px;height:44px;background:#ef4300;border-radius:6px;border:1px solid #ff730e;box-shadow:inset 0px 15px 30px 0px rgba(255,255,255,0.25), 0px 2px 7px 0px rgba(0,0,0,0.2);color:#fff;text-shadow:0px 1px 2px rgba(0,0,0,0.1);\&amp;quot;&amp;gt;&amp;nbsp;登录&amp;lt;/button&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	        
+	        html +=&amp;quot;&amp;lt;tr&amp;gt;
+				&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td align=center &amp;gt;&amp;lt;br&amp;gt;&amp;lt;font color=\&amp;quot;#3232cd\&amp;quot;&amp;gt;&amp;lt;a onclick=\&amp;quot;javascript:window.location.href=&amp;apos;&amp;quot;+REGISTERPAGE+&amp;quot;&amp;apos;\&amp;quot; style=\&amp;quot;cursor:pointer;\&amp;quot;&amp;gt;注册账号&amp;lt;/a&amp;gt; &amp;nbsp;|&amp;nbsp;&amp;lt;a onclick=\&amp;quot;javascript:alert(&amp;apos;请搜索添加微信公众号“医学影像专家集团”与管理员取得联系！&amp;apos;)\&amp;quot; style=\&amp;quot;cursor:pointer;\&amp;quot;&amp;gt;忘记密码?&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;
+			&amp;lt;/tr&amp;gt;&amp;quot;;
+	        
+	        html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;lt;/form&amp;gt; &amp;quot;;
+	}
+	else {	// 脚本登陆并跳转
+		html+=&amp;quot;	&amp;lt;h1&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+TITLEIMG+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/h1&amp;gt;
+	               &amp;lt;p&amp;gt;&amp;lt;font color=\&amp;quot;#333333\&amp;quot;&amp;gt;用户：&amp;lt;/font&amp;gt; &amp;lt;input type=\&amp;quot;text\&amp;quot; name=\&amp;quot;usrid\&amp;quot; class=\&amp;quot;username\&amp;quot; placeholder=\&amp;quot;请输入您的用户名！\&amp;quot; style=\&amp;quot;color:#222222;\&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+	               &amp;lt;p&amp;gt;&amp;lt;font color=\&amp;quot;#333333\&amp;quot;&amp;gt;密码：&amp;lt;/font&amp;gt; &amp;lt;input type=\&amp;quot;password\&amp;quot; name=\&amp;quot;userpwd\&amp;quot; class=\&amp;quot;password\&amp;quot; placeholder=\&amp;quot;请输入您的用户密码！\&amp;quot; style=\&amp;quot;color:#222222;\&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+	               &amp;lt;p&amp;gt;&amp;nbsp;&amp;lt;/p&amp;gt;
+	                &amp;lt;button id=\&amp;quot;com_ok\&amp;quot; onclick=\&amp;quot;javascript:xmidware_login();\&amp;quot; type=\&amp;quot;submit\&amp;quot; class=\&amp;quot;submit_button\&amp;quot; style=\&amp;quot;font-family:微软雅黑;\&amp;quot;&amp;gt;&amp;nbsp;登录&amp;lt;/button&amp;gt;&amp;quot;;
+	        if(  REGISTERPAGE!=&amp;quot;&amp;quot; )    
+			html+=&amp;quot;	&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;submit_button\&amp;quot; onclick=\&amp;quot;javascript:window.location.href=&amp;apos;&amp;quot;+REGISTERPAGE+&amp;quot;&amp;apos;\&amp;quot; style=\&amp;quot;font-family:微软雅黑;\&amp;quot;&amp;gt;注册&amp;lt;/button&amp;gt;&amp;quot;;
+	        html+=&amp;quot;&amp;lt;div id=&amp;apos;txt_log&amp;apos; style=\&amp;quot;margin:15px;align:left;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+
+	}
+
+	html+=&amp;quot;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;!-- Javascript --&amp;gt;
+        &amp;lt;script&amp;gt;
+	        	function xmidware_login(){
+	        		document.all(&amp;apos;txt_log&amp;apos;).innerHTML=&amp;apos;&amp;lt;font color=#444444&amp;gt;登录中...&amp;lt;/font&amp;gt;&amp;apos;;
+	        		// 必须要在x系统中有RLogin中间件
+	        		&amp;lt;!--Login.sp?sytid=x&amp;accid=0 --&amp;gt;
+	     	        	$.get(\&amp;quot;rlogin.jsp?sytid=x&amp;accid=0&amp;usrid=\&amp;quot;+document.all(&amp;apos;usrid&amp;apos;).value+\&amp;quot;&amp;userpwd=\&amp;quot;+document.all(&amp;apos;userpwd&amp;apos;).value, function(result){	
+	     	        		result = result.trim();
+	        			if(result.indexOf(&amp;apos;如有问题,请记录以上信息,联系开发商。&amp;apos;)&amp;gt;0){
+	        				var pos1 = result.indexOf(&amp;apos;&amp;lt;pre&amp;gt;&amp;apos;);
+	        				var pos2 = result.indexOf(&amp;apos;&amp;lt;/pre&amp;gt;&amp;apos;);
+						document.all(&amp;apos;txt_log&amp;apos;).innerHTML=&amp;apos;&amp;lt;font color=#444444&amp;gt;&amp;apos;+result.substring(pos1+5,pos2)+&amp;apos;&amp;lt;/font&amp;gt;&amp;apos;;
+	        			}
+	        			else if(result.substring(0,5)==&amp;apos;&amp;lt;?xml&amp;apos;){
+	        				var pos1 = result.indexOf(&amp;apos;&amp;lt;TOPIC&amp;gt;&amp;apos;);
+	        				var pos2 = result.indexOf(&amp;apos;&amp;lt;/TOPIC&amp;gt;&amp;apos;);
+						document.all(&amp;apos;txt_log&amp;apos;).innerHTML=&amp;apos;&amp;lt;font color=#444444&amp;gt;&amp;apos;+result.substring(pos1+7,pos2)+&amp;apos;&amp;lt;/font&amp;gt;&amp;apos;;
+
+	        			}
+	        			else {	// 让login的返回信息，  成功标志~提示信息~用户编号~用户名称~用户GUID~用户IMGGUID~跳转的页面
+	        				// 0~登录成功~xlsgrid~0~管理员~BE34D90B76D2450AA67B6B66D6953FF2~16BE57BE7AC806DEE050007F01005DFF~
+	        				var ss = result.split(&amp;apos;~&amp;apos;);
+	        				if(ss.length&amp;gt;6){
+	        					document.all(&amp;apos;txt_log&amp;apos;).innerHTML=&amp;apos;&amp;lt;font color=#444444&amp;gt;&amp;apos;+ss[1] +&amp;apos;&amp;lt;/font&amp;gt;&amp;apos;;
+	        					if(ss[6]!=&amp;apos;&amp;apos;)GOTOPAGE = ss[6];
+	        					if(ss[0]==&amp;apos;0&amp;apos;) {
+	        						try{
+	        							window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRID&amp;apos;,document.all(&amp;apos;usrid&amp;apos;).value);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USERPWD&amp;apos;,document.all(&amp;apos;userpwd&amp;apos;).value);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRNAM&amp;apos;,ss[4]);
+
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRGUID&amp;apos;,ss[5]);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRIMG&amp;apos;,ss[6]);
+								}catch(e){}
+	        						window.location = \&amp;quot;&amp;quot;+GOTOPAGE+&amp;quot;\&amp;quot;;
+							}
+	        				}
+	        				else if(ss.length&amp;gt;1)document.all(&amp;apos;txt_log&amp;apos;).innerHTML=&amp;apos;&amp;lt;font color=#444444&amp;gt;&amp;apos;+ss[1] +&amp;apos;&amp;lt;/font&amp;gt;&amp;apos;;
+	        				else document.all(&amp;apos;txt_log&amp;apos;).innerHTML=&amp;apos;&amp;lt;font color=#444444&amp;gt;&amp;apos;+result +&amp;apos;&amp;lt;/font&amp;gt;&amp;apos;;
+
+	        			}
+				});
+	        	}
+	        	$(document).ready(function(){
+			  	_resizeheight();
+				if(G_APP_USRID!=&amp;apos;&amp;apos;) document.all(&amp;apos;usrid&amp;apos;).value =G_APP_USRID;
+				var openmode = GetLocationParam(&amp;apos;openmode&amp;apos;);//openmode=autologin 自动登陆 
+				if(openmode == &amp;apos;autologin&amp;apos;&amp;&amp;G_APP_USERPWD!=&amp;apos;&amp;apos;){
+					document.all(&amp;apos;userpwd&amp;apos;).value =G_APP_USERPWD;
+					try{f_login.submit();}catch(e){ xmidware_login() ;}
+				}
+			});
+			window.onresize=function()
+			{
+				_resizeheight();
+			}
+			function _resizeheight()
+			{
+				
+				if($(window).width()&amp;lt;600){
+					document.all(&amp;apos;container&amp;apos;).style.width = &amp;apos;&amp;apos;+$(window).width()*0.98+&amp;apos;px&amp;apos;;
+					document.all(&amp;apos;usrid&amp;apos;).style.width = &amp;apos;&amp;apos;+$(window).width()*0.5+&amp;apos;px&amp;apos;;
+					document.all(&amp;apos;userpwd&amp;apos;).style.width = &amp;apos;&amp;apos;+$(window).width()*0.5+&amp;apos;px&amp;apos;;
+				}
+				else  {
+					document.all(&amp;apos;container&amp;apos;).style.width = &amp;apos;600px&amp;apos;;
+					document.all(&amp;apos;usrid&amp;apos;).style.width = &amp;apos;300px&amp;apos;;
+					document.all(&amp;apos;userpwd&amp;apos;).style.width = &amp;apos;300px&amp;apos;;
+				}
+				if($(window).width()&amp;lt;$(window).height())//竖屏
+					document.all(&amp;apos;container&amp;apos;).style.margin = &amp;apos;&amp;apos;+($(window).height() - 400)/30+&amp;apos;px auto 0 auto&amp;apos;
+				else
+					document.all(&amp;apos;container&amp;apos;).style.margin = &amp;apos;&amp;apos;+($(window).height() - 400)/3+&amp;apos;px auto 0 auto&amp;apos;
+				
+			}
+			function openurl(name,url){
+				document.all(&amp;apos;mainframe&amp;apos;).src=url;
+			}
+	&amp;lt;/script&amp;gt;&amp;quot;;
+        return html;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

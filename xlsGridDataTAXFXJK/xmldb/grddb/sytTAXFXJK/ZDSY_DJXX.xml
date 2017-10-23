@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDSY_DJXX</MWID><NAME >纳税人登记信息</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDSY_DJXX.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >重点税源管理</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >filter</ID><NAME >查询条件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	//_this.SetToolbarString(&amp;quot;重点税源企业一户式查询 [ &amp;quot;+YM1+&amp;quot; - &amp;quot;+YM2+&amp;quot; ]&amp;quot;);
+	_this.ShowToolBar(0);
+	
+	_sql.querytods(&amp;quot;MAIN&amp;quot;,&amp;quot;DJXH=&amp;quot;+DJXH);
+	_this.SetCellText(0,1,2,_this.XMLDS_GetString(0,&amp;quot;NSRMC&amp;quot;));
+	_this.SetCellText(0,2,2,_this.XMLDS_GetString(0,&amp;quot;NSRSBH&amp;quot;));
+	_this.SetCellText(0,3,2,_this.XMLDS_GetString(0,&amp;quot;SHXYDM&amp;quot;));
+	_this.SetCellText(0,4,2,_this.XMLDS_GetString(0,&amp;quot;HY&amp;quot;));
+	_this.SetCellText(0,5,2,_this.XMLDS_GetString(0,&amp;quot;ZFJGLXMC&amp;quot;));
+
+	_this.SetCellText(0,2,4,_this.XMLDS_GetString(0,&amp;quot;FDDBRXM&amp;quot;));
+	_this.SetCellText(0,3,4,_this.XMLDS_GetString(0,&amp;quot;FDDBRSFZJHM&amp;quot;));
+	_this.SetCellText(0,4,4,_this.XMLDS_GetString(0,&amp;quot;FDDBRLXDH&amp;quot;));
+	_this.SetCellText(0,5,4,_this.XMLDS_GetString(0,&amp;quot;DJRQ&amp;quot;));
+	
+	_this.SetCellText(0,1,6,_this.XMLDS_GetString(0,&amp;quot;DJZCLX&amp;quot;));
+	_this.SetCellText(0,2,6,_this.XMLDS_GetString(0,&amp;quot;KZZTDJLXMC&amp;quot;));
+	_this.SetCellText(0,3,6,_this.XMLDS_GetString(0,&amp;quot;ZCDZ&amp;quot;));
+	_this.SetCellText(0,4,6,_this.XMLDS_GetString(0,&amp;quot;ZCZB&amp;quot;));
+	_this.SetCellText(0,5,6,_this.XMLDS_GetString(0,&amp;quot;ZGSWJG&amp;quot;));
+
+	_this.SetCellText(0,1,8,_this.XMLDS_GetString(0,&amp;quot;CWFZRXM&amp;quot;));
+	_this.SetCellText(0,2,8,_this.XMLDS_GetString(0,&amp;quot;CWFZRSFZJHM&amp;quot;));
+	_this.SetCellText(0,3,8,_this.XMLDS_GetString(0,&amp;quot;CWFZRLXDH&amp;quot;));
+	_this.SetCellText(0,4,8,_this.XMLDS_GetString(0,&amp;quot;SSGLY&amp;quot;));
+	_this.SetCellText(0,5,8,_this.XMLDS_GetString(0,&amp;quot;ZGSWSKFJ&amp;quot;));
+	
+	_this.SetCellText(0,2,9,_this.XMLDS_GetString(0,&amp;quot;JYFW&amp;quot;));
+	
+	_sql.querytods(&amp;quot;YBNSR&amp;quot;,&amp;quot;DJXH=&amp;quot;+DJXH);
+	if (_this.XMLDS_GetRowCount() &amp;gt; 0) {
+		_this.SetCellText(0,6,2,&amp;quot;是&amp;quot;);
+		_this.SetCellText(0,6,4,_this.XMLDS_GetString(0,&amp;quot;YXQQ&amp;quot;));
+		_this.SetCellText(0,6,6,_this.XMLDS_GetString(0,&amp;quot;YXQZ&amp;quot;));
+	}
+	
+	_this.AutoFixScreenWidth();
+	
+}
+
+//查询条件
+function filter()
+{
+	var ym1 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-01&amp;quot;;
+	var ym2 =  G_LOGDAT.substring(0,7);
+	var ret = window.showModalDialog(&amp;quot;show.sp?grdid=SELECTYM12&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:300px;dialogHeight:220px&amp;quot;);
+	if (ret != &amp;quot;&amp;quot; &amp;&amp; ret != undefined) {	
+		ym1 = ret.split(&amp;quot;,&amp;quot;)[0];
+		ym2 = ret.split(&amp;quot;,&amp;quot;)[1];
+		parent.window.location.href = &amp;quot;Layout.sp?id=zdsyyhs&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2;
+
+	}
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+/*
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+{
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts-3d.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	//sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/exporting.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+
+	//窗口上下分割，上面显示中间件数据，下面显示图表
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;quot;); //上面窗口高度占的比例
+	sb.append(&amp;quot;&amp;lt;td width=100% height=50% style=\&amp;quot;border:solid 0px gray\&amp;quot; valign=top;&amp;gt;&amp;quot;);
+
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+{
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=100% bgcolor=\&amp;quot;FEFEFE\&amp;quot; style=\&amp;quot;border:1px solid #DEDEDE\&amp;quot; align=left valign=top&amp;quot;);	
+	
+	sb.append(&amp;quot;&amp;lt;h1&amp;gt;ddaaddf&amp;lt;/h1&amp;gt;&amp;quot;);
+
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);	
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+*/
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >
+select  dj.djxh,dj.nsrmc,dj.nsrsbh,dj.shxydm,dj.fddbrxm,dj.fddbrsfzjhm,
+       dj.zcdz,nvl(fddbryddh,fddbrgddh) fddbrlxdh, 
+       (select kzztdjlxmc
+          from DM_DJ_KZZTDJLX kzzt
+         where dj.kzztdjlx_dm = kzzt.kzztdjlx_dm) kzztdjlxmc,
+       (select djzclxmc
+          from DM_DJ_DJZCLX zclx
+         where zclx.djzclx_dm = dj.djzclx_dm) djzclx,
+       to_char(djrq, &amp;apos;YYYY-MM-DD&amp;apos;) DJRQ,
+       (select hymc
+          from DM_GY_HY hy
+         where dj.hy_dm = hy.hy_dm
+           and hy.yxbz = &amp;apos;Y&amp;apos;) hy,
+       JYFW,
+       CWFZRXM,
+       CWFZRSFZJHM,
+       nvl(CWFZRYDDH, CWFZRGDDH) CWFZRLXDH,
+       ZCZB, --TZZE,
+       --(select gykglxmc from DM_GY_GYKGLX kg where kz.GYKGLX_DM=kg.gykglx_dm)gykglxmc,
+       (select zfjglxmc
+          from DM_DJ_ZFJGLX zfjg
+         where kz.ZFJGLX_DM = zfjg.zfjglx_dm) zfjglxmc,
+       (select swryxm from DM_GY_SWRY swry where swry.swry_dm = dj.SSGLY_DM) ssgly,
+       (select name
+          from v_swjg sw
+         where sw.id = substr(dj.zgswskfj_dm, 1, 7)) zgswjg,
+       (select swjgmc from DM_GY_SWJG jg where dj.zgswskfj_dm = jg.swjg_dm) zgswskfj
+from dj_nsrxx dj, dj_nsrxx_kz kz
+where dj.djxh = kz.djxh(+)
+  and dj.djxh=&amp;apos;[%DJXH]&amp;apos; 
+</DATDSC><C4 >DJXX</C4><C5 >DJXX</C5><C6 >MAIN</C6><C7 >MAIN</C7></ROW>
+<ROW num="1" ><ID >YBNSR</ID><NAME >一般纳税人</NAME><DATDSC >select to_char(yxqq,&amp;apos;yyyy-mm-dd&amp;apos;) yxqq, 
+	to_char(yxqz,&amp;apos;yyyy-mm-dd&amp;apos;) yxqz,
+	djxh
+from v_tax_ybnsr_djxx where djxh=&amp;apos;[%DJXH]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

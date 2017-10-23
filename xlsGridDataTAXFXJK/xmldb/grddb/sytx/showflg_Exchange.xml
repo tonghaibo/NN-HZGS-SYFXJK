@@ -1,0 +1,367 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_Exchange</MWID><NAME >聊天中间件</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_Exchange.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+//
+function GetBody(){
+	// OS 中如何得到登录的信息
+	var usr=web.EASession.GetLoginInfo(request);
+	var orgid=usr.getOrgid();
+	var accid=usr.getAccid();
+	var userid =usr.getUsrid();
+	var TITLE=&amp;quot;&amp;quot;;
+	//var userid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;USERID&amp;quot;),&amp;quot;&amp;quot;);
+	var ro  = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;ro&amp;quot;),&amp;quot;&amp;quot;);
+//&amp;lt;!--//xmidware下的目录格式如下：xlsgrid/images/flash/js/jquery-1.7.2.min.js&amp;quot;--&amp;gt;    
+//XMIDWARE_APP_USRGUID
+	var TITLE = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;TITLE&amp;quot;),&amp;quot;&amp;quot;);
+
+	var baseguid=&amp;quot;&amp;quot;;
+	var sql=&amp;quot;&amp;quot;;
+	var ds=null;
+	var db=null;
+	try{
+	db = new pubpack.EADatabase();
+	sql=&amp;quot;select guid from hin_his a where a.formguid=&amp;apos;&amp;quot;+XMIDWARE_APP_USRGUID+&amp;quot;&amp;apos;&amp;quot;;
+	ds=db.QuerySQL(sql);
+	if(ds.getRowCount()!=0)
+	{
+		baseguid=ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+	} 
+	}catch(e){}
+	finally{
+		if(db!=null){
+			db.Close();
+		}
+	}
+
+
+//图片地址
+var html=&amp;quot;
+&amp;lt;!DOCTYPE HTML&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;&amp;quot;+TITLE+&amp;quot;&amp;lt;/title&amp;gt;
+    &amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0\&amp;quot;&amp;gt;    
+   &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/bootstrap.min.css\&amp;quot;&amp;gt; 
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/style.css\&amp;quot;&amp;gt;    
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/jquery.mobile.flatui.css\&amp;quot; /&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+        #bottomNav {
+            z-index:999;
+            position:fixed;
+            background: -webkit-linear-gradient(top, #fdfdfd, #CDCDCD);
+
+            margin-top: -50px; 
+    	    height: 50px;
+            bottom:0;
+            left:0;
+            width:100%;
+         
+            overflow:visible;
+        }
+        #bottomNav input{
+            width: 90%;
+        }
+        #tstart-toolbar-bottom
+         {
+             position: fixed;/*固定*/
+             bottom: 0;/*在最下*/
+             color: #3E3E3E;
+             left: 0;
+             text-align: left;
+             width: 100%;
+             z-index: 500;
+             _position:absolute; /* for IE6 */
+             _top: expression(documentElement.scrollTop + documentElement.clientHeight-this.offsetHeight); /* for IE6 */
+             overflow:visible;
+         }
+         #tstart-toolbar-bottom .tstart-left
+         {
+             float: left;/*在左*/             
+             width: 300px;
+             margin: 5px 5px 5px 5px;
+             padding: 5px;
+             border: 1px solid silver;
+             background-color:white;
+             /*椭圆与阴影*/
+             box-shadow: 0px 0px 5px #000;
+             -moz-box-shadow: 0px 0px 5px #000;
+             -webkit-box-shadow: 0px 0px 5px #000;
+         }
+         #tstart-toolbar-bottom .tstart-right
+         {
+             float: right; /*在右*/
+             width: 300px;
+             margin: 5px 5px 5px 5px;
+             padding: 5px;
+             border: 1px solid silver;
+             background-color:white;
+             
+             box-shadow: 0px 0px 5px #000;
+             -moz-box-shadow: 0px 0px 5px #000;
+             -webkit-box-shadow: 0px 0px 5px #000;
+         }
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ #popup{
+  position: absolute;display:none; z-index:999999; background-color:#FFF; left: 601px; top: 217px; height: 150px; width: 217px;line-height:94px;text-align:center;
+  border: 1px solid #03F;
+}
+#embedding{
+  position: absolute; background-color: #36F; top: 94px;height:56px; width:217px;line-height:56px;text-align:center;
+}
+&amp;lt;/style&amp;gt;
+    
+    
+    
+    
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-2.1.3.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;    
+    	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	function genup(url){
+	$(&amp;apos;#loadingDiv&amp;apos;).css(&amp;apos;display&amp;apos;,&amp;apos;block&amp;apos;);  
+	    $(&amp;apos;#popup&amp;apos;).slideDown();
+            document.getElementById(\&amp;quot;loadingafram\&amp;quot;).src=url; 
+	}
+	function gendown(){
+	$(&amp;apos;#loadingDiv&amp;apos;).css(&amp;apos;display&amp;apos;,&amp;apos;none&amp;apos;); 
+	$(&amp;apos;#popup&amp;apos;).slideUp();
+	}
+	&amp;lt;/script&amp;gt;
+
+
+&amp;lt;/head&amp;gt;
+&amp;lt;body style=\&amp;quot;text-align:left;scrollbar:no;\&amp;quot;&amp;gt;
+&amp;lt;!-- 这--&amp;gt;
+&amp;lt;div data-role=\&amp;quot;page\&amp;quot; id=\&amp;quot;mainpage\&amp;quot;&amp;gt;
+    &amp;lt;div class=\&amp;quot;header linear-g\&amp;quot;&amp;gt;
+ 
+        &amp;lt;a class=\&amp;quot;text-center col-xs-8\&amp;quot;&amp;gt;诊疗室&amp;lt;/a&amp;gt;
+    &amp;lt;/div&amp;gt;
+   
+  
+    &amp;lt;div data-role=\&amp;quot;content\&amp;quot; class=\&amp;quot;container\&amp;quot; role=\&amp;quot;main\&amp;quot;&amp;gt;
+        &amp;lt;ul class=\&amp;quot;content-reply-box mg10\&amp;quot; id=\&amp;quot;list\&amp;quot;&amp;gt;
+        &amp;lt;/ul&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div id=\&amp;quot;bottomNav\&amp;quot;&amp;gt;
+        &amp;lt;input type=\&amp;quot;text\&amp;quot; style=\&amp;quot;float: left\&amp;quot; id=\&amp;quot;text\&amp;quot;/&amp;gt;
+        &amp;lt;a style=\&amp;quot;cursor:pointer;float: right;width: 8%;margin-right: 3px;border: 1px solid #000000; text-align: center\&amp;quot; id=\&amp;quot;send\&amp;quot;&amp;gt;回复&amp;lt;/a&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+
+
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.jquery.mobile-1.4.0-rc.1.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.main.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.peer.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;&amp;quot;;
+var sql=&amp;quot;&amp;quot;;
+var ds=null;
+var db=null;
+db = new pubpack.EADatabase();
+//sql=&amp;quot;select a.guid,a.name,a.id,a.imgguid img from usr a where a.id=&amp;apos;&amp;quot;+userid+&amp;quot;&amp;apos;&amp;quot;;
+//ds=db.QuerySQL(sql);
+//if(ds.getRowCount()==0) throw new Exception (&amp;quot;改用户(&amp;quot;+userid+&amp;quot;没有找到医生资料&amp;quot;);
+
+		
+		html += &amp;quot;
+		var rooms = GetLocationParam(&amp;apos;ro&amp;apos;);
+		var socket = null;
+		var currentUid = G_APP_USRGUID;
+		var currentuser = null;
+		$(document).ready(function() {
+
+		
+			// 如果存在usrid和userpwd用户，执行一次登陆
+			var myusrid = GetLocationParam(&amp;apos;usrid&amp;apos;);
+			var myuserpwd = GetLocationParam(&amp;apos;userpwd&amp;apos;);
+			if(myusrid !=null&amp;&amp; myusrid !=&amp;apos;&amp;apos;&amp;&amp;myuserpwd !=null&amp;&amp; myuserpwd !=&amp;apos;&amp;apos;  ){
+				$.get(\&amp;quot;rlogin.jsp?sytid=x&amp;accid=0&amp;usrid=\&amp;quot;+myusrid+\&amp;quot;&amp;userpwd=\&amp;quot;+myuserpwd, function(result){	
+	     	        		result = result.trim();
+	        			if(result.indexOf(&amp;apos;如有问题,请记录以上信息,联系开发商。&amp;apos;)&amp;gt;0){
+	        				var pos1 = result.indexOf(&amp;apos;&amp;lt;pre&amp;gt;&amp;apos;);
+	        				var pos2 = result.indexOf(&amp;apos;&amp;lt;/pre&amp;gt;&amp;apos;);
+	        			}
+	        			else if(result.substring(0,5)==&amp;apos;&amp;lt;?xml&amp;apos;){
+	        				var pos1 = result.indexOf(&amp;apos;&amp;lt;TOPIC&amp;gt;&amp;apos;);
+	        				var pos2 = result.indexOf(&amp;apos;&amp;lt;/TOPIC&amp;gt;&amp;apos;);
+	        			}
+	        			else {	// 让login的返回信息，  成功标志~提示信息~用户编号~用户名称~用户GUID~用户IMGGUID~跳转的页面
+	        				// 0~登录成功~xlsgrid~0~管理员~BE34D90B76D2450AA67B6B66D6953FF2~16BE57BE7AC806DEE050007F01005DFF~
+	        				var ss = result.split(&amp;apos;~&amp;apos;);
+	        				if(ss.length&amp;gt;6){
+	        					if(ss[0]==&amp;apos;0&amp;apos;) {
+	        						try{
+	        							window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRID&amp;apos;,myusrid);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USERPWD&amp;apos;,myuserpwd);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRNAM&amp;apos;,ss[4]);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRGUID&amp;apos;,ss[5]);
+									window.localStorage.setItem(&amp;apos;XMIDWARE_APP_USRIMG&amp;apos;,ss[6]);
+									G_APP_USRID = myusrid;
+									G_APP_USERPWD = myuserpwd;
+									G_APP_USRIMG = ss[6];
+									G_APP_USRGUID = ss[5];
+									G_APP_USRNAM = ss[4];
+								}catch(e){}
+	        													}
+	        				}
+
+	        			}
+				});
+			}
+			
+			if(typeof WebSocket === &amp;apos;undefined&amp;apos;) {
+				alert(\&amp;quot;当前浏览器不支持websocket\&amp;quot;);
+				return;
+			}
+			
+			
+
+			socket = new WebSocket(\&amp;quot;ws://114.80.114.43:8000/\&amp;quot;);
+
+			socket.onopen = function(event) {
+				if(rooms==&amp;apos;&amp;apos;) {
+					// 医生端，如果co是空值，那么创建一个room
+					rooms = Math.round(Math.random()*1000000);
+					socket.send(JSON.stringify({
+						&amp;apos;EVENT&amp;apos;: &amp;apos;LOGIN&amp;apos;,
+						&amp;apos;GUID&amp;apos;: currentUid,
+						&amp;apos;NAME&amp;apos;: &amp;apos;管理员&amp;apos;,
+						&amp;apos;ROOM&amp;apos;: rooms,
+						&amp;apos;ID&amp;apos;  : &amp;apos;xlsgrid&amp;apos;,
+						&amp;apos;IMG&amp;apos; :&amp;apos;&amp;apos;,
+						&amp;apos;ACTION&amp;apos; : &amp;apos;REQUEST&amp;apos;,		// 
+						&amp;apos;OTHGUID&amp;apos;: &amp;apos;1&amp;apos;
+					}));
+					// 修改标题
+
+					G_USRROL = &amp;apos;1&amp;apos;;
+				}
+				else {//病人直接连接
+					socket.send(JSON.stringify({
+						&amp;apos;EVENT&amp;apos;: &amp;apos;LOGIN&amp;apos;,
+						&amp;apos;GUID&amp;apos;: G_USRGUID,
+						&amp;apos;NAME&amp;apos;: G_USRNAM,
+						&amp;apos;ROOM&amp;apos;: rooms,
+						&amp;apos;ID&amp;apos;  : G_USRID,
+						&amp;apos;IMG&amp;apos; : G_USRIMG,
+						&amp;apos;ACTION&amp;apos; : &amp;apos;REQUEST&amp;apos;
+					}));
+					document.all(&amp;apos;myroomname&amp;apos;).innerHTML = &amp;apos;管理员聊天室&amp;apos;;
+				}
+			};
+			
+			socket.onmessage = function(event) {
+				var mData = JSON.parse(event.data);
+				if(mData &amp;&amp; mData.event) {
+					switch(mData.event) {
+						case &amp;apos;LOGIN&amp;apos;:
+						var user = mData.user;
+						
+						if(user.GUID==&amp;apos;xlsgrd&amp;apos;){//排除本人
+						}
+						else {
+							var room = user.ROOM;
+							
+							if(room == rooms){
+								if( user.ACTION ==&amp;apos;REQUEST&amp;apos;){
+									if(2==&amp;apos;1&amp;apos;&amp;&amp; confirm(&amp;apos;进入诊室,是否确认&amp;apos;)==1 ){
+										G_USRNAM1 = user.NAME;
+										G_USRID1 = user.ID;
+										G_USRIMG1 = user.IMG;
+										G_USRGUID1 = user.GUID;
+										// 发送确认消息告诉进入房间的人，你可以进来了，对方会获取医生的资料
+										
+										socket.send(JSON.stringify({
+											&amp;apos;EVENT&amp;apos;: &amp;apos;LOGIN&amp;apos;,
+											&amp;apos;GUID&amp;apos;: G_USRGUID,
+											&amp;apos;NAME&amp;apos;: G_USRNAM,
+											&amp;apos;ROOM&amp;apos;: rooms,
+											&amp;apos;ID&amp;apos;  : G_USRID,
+											&amp;apos;IMG&amp;apos; : G_USRIMG,
+											&amp;apos;ACTION&amp;apos; : &amp;apos;COMFIRM&amp;apos;
+
+										}));
+										appendMessage(G_USRNAM1+&amp;apos;进入&amp;quot;+TITLE+&amp;quot;&amp;apos;,G_USRNAM1,G_USRIMG1,&amp;apos;left&amp;apos;);
+										document.all(&amp;apos;myroomname&amp;apos;).innerHTML = G_USRNAM+&amp;apos;&amp;quot;+TITLE+&amp;quot;-&amp;apos;+G_USRNAM1;
+	
+									}
+								}
+								else if( user.ACTION ==&amp;apos;COMFIRM&amp;apos;){// 收到登陆的请求回复了，获取医生的资料
+
+									if( user.ID!=&amp;apos;xlsgrid&amp;apos;) { 
+										G_USRID1 = user.ID;
+										G_USRNAM1 = user.NAME;
+										G_USRIMG1 = user.IMG;
+										G_USRGUID1 = user.GUID;
+										document.all(&amp;apos;myroomname&amp;apos;).innerHTML = G_USRNAM1+&amp;apos;的&amp;quot;+TITLE+&amp;quot;-&amp;apos;+G_USRNAM;
+									}
+								}
+								else if( user.ACTION ==&amp;apos;CLOSE&amp;apos;){// 收到登陆的请求回复了，获取医生的资料
+
+									appendMessage(G_USRNAM1+&amp;apos;离开&amp;quot;+TITLE+&amp;quot;&amp;apos;,G_USRNAM1,G_USRIMG1,&amp;apos;left&amp;apos;);
+
+								}
+
+							} else{
+								return;
+							}
+							
+						}
+						break;
+						case &amp;apos;SPEAK&amp;apos;:
+						var content = mData.values;
+						var newUser = mData.user;
+						var uid = newUser.GUID;
+						if(newUser.ROOM == rooms) {
+							
+							if(uid != G_USRGUID)appendMessage(content,G_USRNAM1,G_USRIMG1,&amp;apos;left&amp;apos;);
+						}
+					
+						break;
+						
+					}
+				}
+			};
+			
+		
+		
+	});
+&amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;quot;;
+if(db!=null){db.Close();}
+return html;
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

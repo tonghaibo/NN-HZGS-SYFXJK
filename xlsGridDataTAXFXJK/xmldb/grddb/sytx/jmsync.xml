@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >jmsync</MWID><NAME >移动商务信息同步</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >jmsync.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var starttime= request.getParameter(&amp;quot;starttime&amp;quot;);//必须
+      var typ= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;typ&amp;quot;),&amp;quot;&amp;quot;);
+      var stat= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;stat&amp;quot;),&amp;quot;0&amp;quot;);
+      
+      var usrinfo = web.EASession.GetLoginInfo(request);
+      var usrorg= usrinfo.getusrOrg();
+      var usrid = usrinfo.getUsrid();
+      
+      var sql = &amp;quot;select guid,title name,to_char(STRDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crtdat,crtusrnam crtusrnam,openurl,printurl,to_char(prtdat,&amp;apos;dd/mm hh24:mi&amp;apos;) prtdat &amp;quot;+
+		&amp;quot; from jmsync  where to_char(STRDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) &amp;lt;= to_char(SYSDATE,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) and &amp;quot;+
+		&amp;quot; TYP=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos; and NVL(stat,&amp;apos;0&amp;apos;) = &amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; &amp;quot;+
+		&amp;quot; and accid in (select deptid from usr where org=&amp;apos;&amp;quot;+usrorg+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and useflg=&amp;apos;1&amp;apos;) &amp;quot;+
+		&amp;quot; order by STRDAT asc&amp;quot;;
+//      pubpack.EAFunc.Log(sql);
+      var db = null;
+      var ret= &amp;quot;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            var ds = db.QuerySQL(sql);
+            for ( var i=0;i&amp;lt;ds.getRowCount();i++) {
+            	if ( i!=0 ) ret += &amp;quot;~r~n&amp;quot;;
+	            for ( var j=0;j&amp;lt;ds.getColumnCount();j++) {
+	            	if ( j!=0 ) ret+=&amp;quot;,&amp;quot;;
+	            	ret+=ds.getStringAt(i,j);
+	            }
+            	    var guid = ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+		    
+		    // stat   接受标志~=0 未接受 =1 已接受 =2 已执行（打印）
+		    // resdat 接受时间
+		    if (stat != &amp;quot;2&amp;quot;) {
+            	    	//db.ExcecutSQL(&amp;quot;update jmsync set stat=&amp;apos;1&amp;apos;,resdat=sysdate where guid=&amp;apos;&amp;quot;+guid +&amp;quot;&amp;apos;&amp;quot;);
+            	    }
+            }
+            
+            //2.要更改这个用户的最后在线时间
+            try {
+                    var cnt = db.ExcecutSQL(&amp;quot;update jmsyncusr set enddat=sysdate where orgid=&amp;apos;&amp;quot;+usrorg+&amp;quot;&amp;apos; and usrid=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;);
+                    if (cnt == 0) {
+                    	db.ExcecutSQL(&amp;quot;insert into jmsyncusr(orgid,usrid,enddat) values(&amp;apos;&amp;quot;+usrorg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,sysdate)&amp;quot;);
+                    }
+            } catch (e) {
+            	    
+            }
+            
+            db.Commit();
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+
+//更改状态的函数
+function updatestat()
+{
+	var db = null;
+	var msg = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		// stat   接受标志~=0 未接受 =1 已接受 =2 已执行（打印）
+		// prtdat 打印时间
+		if (stat == &amp;quot;1&amp;quot;) {
+			msg = db.ExcecutSQL(&amp;quot;update jmsync set stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos;,resdat=sysdate where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		else if (stat == &amp;quot;2&amp;quot;) {
+			msg = db.ExcecutSQL(&amp;quot;update jmsync set stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos;,prtdat=sysdate where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		
+		db.Commit();
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+function lastRows()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+		
+	try {
+		
+		var usrinfo = web.EASession.GetLoginInfo(request);
+		var usrorg = usrinfo.getusrOrg();
+		var thisaccid = usrinfo.getAccid();
+		var usrid = usrinfo.getUsrid();
+		//return thisaccid ;
+		db = new pubpack.EADatabase();	
+		sql = &amp;quot;select * from (
+			select a.* from jmsync a where accid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and stat=&amp;apos;2&amp;apos; and nvl(flg,&amp;apos;0&amp;apos;)&amp;lt;&amp;gt;&amp;apos;1&amp;apos; order by strdat desc
+			) t where rownum &amp;lt;=20&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			if (ret == &amp;quot;&amp;quot;) ret += guid;
+			else ret += &amp;quot;~&amp;quot;+guid;
+		}
+		
+		sql = &amp;quot;update jmsync set flg=&amp;apos;1&amp;apos; where guid in (select guid from (
+			select a.* from jmsync a where accid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and stat=&amp;apos;2&amp;apos; and nvl(flg,&amp;apos;0&amp;apos;)&amp;lt;&amp;gt;&amp;apos;1&amp;apos; order by strdat desc
+			) t where rownum &amp;lt;=20)&amp;quot;;
+		db.ExcecutSQL(sql);
+		db.Commit();
+		
+		return ret;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		return ee.toString();
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	
+	
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >select guid,title name,
+to_char(STRDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crtdat,
+crtusrnam crtusrnam,openurl,printurl
+from jmsync 
+
+where 
+to_char(STRDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) &amp;lt;= to_char(SYSDATE,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) and 
+TYP = &amp;apos;[%typ]&amp;apos; 
+and to_char(STRDAT ,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;)&amp;gt;NVL(&amp;apos;[%starttime]&amp;apos; ,&amp;apos;0&amp;apos;)
+and NVL(stat,&amp;apos;0&amp;apos;) like &amp;apos;[%stat]%&amp;apos;
+order by STRDAT asc</DATDSC><C4 >main</C4><C5 >main</C5><C6 >main</C6><C7 >main</C7><C8 >main</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

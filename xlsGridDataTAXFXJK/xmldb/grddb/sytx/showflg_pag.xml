@@ -1,0 +1,3330 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_pag</MWID><NAME >showflg_pag</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_pag.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+
+//静态html文本
+function html(){
+	return  db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+HTMLGUID+&amp;quot;&amp;apos; &amp;quot;,&amp;quot;bdata&amp;quot;);
+	if(sc==&amp;quot;&amp;quot;){
+		return &amp;quot;&amp;quot;;
+	}
+}
+
+//信息发布正文
+function tbody(){
+	var layhdrguid = request.getParameter( &amp;quot;layhdrguid&amp;quot; );
+	if (TITLESIZE == &amp;quot;&amp;quot;) TITLESIZE = 4;
+	
+	var sql = &amp;quot;select a.* from LSYSURL a,formblob b,formblob img where a.icon=img.guid(+) and a.htmlguid=b.guid(+) and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos;&amp;quot;;
+	var ds = db.QuerySQL(sql);
+	var title = &amp;quot;&amp;quot;;
+	var pendat = &amp;quot;&amp;quot;;
+	var penusr = &amp;quot;&amp;quot;;
+	var image = &amp;quot;&amp;quot;;
+	if (ds.getRowCount() &amp;gt; 0) {
+		title = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		pendat = ds.getStringAt(0,&amp;quot;PENDAT&amp;quot;);
+		penusr = ds.getStringAt(0,&amp;quot;PENUSR&amp;quot;);
+		image = ds.getStringAt(0,&amp;quot;ICON&amp;quot;);
+	}
+	var context = db.getBlob2String(&amp;quot;select b.bdata from LSYSURL a,formblob b where a.htmlguid=b.guid and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos;&amp;quot;,&amp;quot;bdata&amp;quot;);
+	
+	if (title == &amp;quot;&amp;quot;) title = &amp;quot;无标题&amp;quot;;
+	if (context == &amp;quot;&amp;quot;) context = &amp;quot;&amp;lt;b&amp;gt;无内容&amp;lt;b&amp;gt;&amp;quot;;
+	
+	var html = &amp;quot; &amp;lt;table width=100%&amp;gt;&amp;quot;;
+	//验证是否显示标题
+	if (TITLEFLG != 1) {
+		var msg = &amp;quot;&amp;quot;;
+		var ids = db.QuerySQL(&amp;quot;select nvl(b.name,a.penusr) nam,nvl(a.pendat,a.crtdat) dat from LSYSURL a,usr b where a.org=b.org(+) and a.penusr=b.id(+) and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos;&amp;quot;);
+			
+		if (ids.getRowCount() &amp;gt; 0) {
+			msg = ids.getStringAt(0,&amp;quot;NAM&amp;quot;);
+			if (msg != &amp;quot;&amp;quot;) msg += &amp;quot;&amp;emsp;&amp;quot;;
+			msg += ids.getStringAt(0,&amp;quot;DAT&amp;quot;);
+		}
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; height=\&amp;quot;60px\&amp;quot;&amp;gt;&amp;lt;font size=&amp;quot;+TITLESIZE+&amp;quot;&amp;gt;&amp;lt;b&amp;gt;&amp;quot;+ title +&amp;quot;&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; style=\&amp;quot;color: #AFAFAF;\&amp;quot;&amp;gt;&amp;quot;+ msg +&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;gt;&amp;lt;hr style=\&amp;quot;width: 92%; border: 1px solid #EFEFEF;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	if (image != &amp;quot;&amp;quot;) {
+		html+= &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;gt;&amp;lt;table width=92% style=\&amp;quot;text-align: left;\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+ image +&amp;quot;\&amp;quot; style=\&amp;quot;float:right;margin:10px;\&amp;quot;&amp;gt;&amp;quot;+ context +&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	} else {
+		html+= &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;gt;&amp;lt;table width=92% style=\&amp;quot;text-align: left;\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+ context +&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	html += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	
+	return  html;
+}
+
+//登录窗口
+function login(){
+var fguid = db.GetSQL(&amp;quot;select sys_guid() from dual &amp;quot; );
+	return &amp;quot;&amp;lt;form id=\&amp;quot;f_login&amp;quot;+fguid +&amp;quot;\&amp;quot; action=\&amp;quot;&amp;quot;+IFRAMEURL+&amp;quot;\&amp;quot; method=\&amp;quot;post\&amp;quot;&amp;gt;
+		&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;  cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;
+		    &amp;lt;tr height=\&amp;quot;50\&amp;quot;&amp;gt; &amp;lt;td align=\&amp;quot;right\&amp;quot; width=\&amp;quot;20%\&amp;quot; &amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td  &amp;gt;请输入用户名密码：&amp;lt;/td&amp;gt; &amp;lt;td width=\&amp;quot;20%\&amp;quot; &amp;gt;　&amp;lt;/td&amp;gt;   &amp;lt;/tr&amp;gt;
+		    &amp;lt;tr height=\&amp;quot;30\&amp;quot;&amp;gt; &amp;lt;td align=\&amp;quot;right\&amp;quot; width=\&amp;quot;20%\&amp;quot; &amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;
+		        &amp;lt;td &amp;gt;
+		        &amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=100% cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td width=30 height=30 bgcolor=#00A8EC style=\&amp;quot;border: 1px solid #CCCCCC; padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px\&amp;quot;&amp;gt;
+					&amp;lt;img src=&amp;apos;xlsgrid/images/flash/icon/icon_151.png&amp;apos; width=35  height=35&amp;gt;&amp;lt;/td&amp;gt;
+					&amp;lt;td style=\&amp;quot;border-right:1px solid #CCCCCC; border-top:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; padding:0px; \&amp;quot; valign=middle&amp;gt;&amp;lt;input type=\&amp;quot;text\&amp;quot; name=\&amp;quot;usrid\&amp;quot;  style=\&amp;quot;width:98%;height:25px;border: 0px ;font-size: 12pt \&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+			&amp;lt;/table&amp;gt;
+		        &amp;lt;/td&amp;gt; &amp;lt;td width=\&amp;quot;20%\&amp;quot;&amp;gt;　&amp;lt;/td&amp;gt;
+		    &amp;lt;/tr&amp;gt;
+		    &amp;lt;tr height=\&amp;quot;20\&amp;quot;&amp;gt; &amp;lt;td colspan=\&amp;quot;3\&amp;quot; &amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		    &amp;lt;tr height=\&amp;quot;30\&amp;quot;&amp;gt; &amp;lt;td align=\&amp;quot;right\&amp;quot; width=\&amp;quot;20%\&amp;quot; &amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;
+		        &amp;lt;td &amp;gt;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td width=30 height=30 bgcolor=#FFC500 style=\&amp;quot;border: 1px solid #CCCCCC; padding-left: 0px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px\&amp;quot;&amp;gt;
+					&amp;lt;img src=&amp;apos;xlsgrid/images/flash/icon/icon_162.png&amp;apos; width=35 height=35&amp;gt;&amp;lt;/td&amp;gt;
+					&amp;lt;td style=\&amp;quot;border-right:1px solid #CCCCCC; border-top:1px solid #CCCCCC; border-bottom:1px solid #CCCCCC; padding:0px; \&amp;quot; valign=middle&amp;gt;&amp;lt;input type=\&amp;quot;password\&amp;quot; name=\&amp;quot;userpwd\&amp;quot;  style=\&amp;quot;width:98%;height:25px;border: 0px ;font-size: 12pt \&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+			&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td width=\&amp;quot;20%\&amp;quot; &amp;gt;　&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		    &amp;lt;tr height=40 &amp;gt; &amp;lt;td align=\&amp;quot;center\&amp;quot; colspan=\&amp;quot;3\&amp;quot; &amp;gt;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;EAImgBlob.sp?guid=2DBC1121895D4FD48D9584E47E4D11C7\&amp;quot; border=0 onclick=\&amp;quot;javascript: f_login&amp;quot;+fguid +&amp;quot;.submit();\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot;&amp;gt; &amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt;
+		&amp;lt;/table&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;;
+//var html=
+//	&amp;quot;&amp;lt;form id=\&amp;quot;f_login\&amp;quot; action=\&amp;quot;&amp;quot;+IFRAMEURL+&amp;quot;\&amp;quot; method=\&amp;quot;post\&amp;quot;&amp;gt;&amp;quot;+
+//	&amp;quot;&amp;lt;table  width=\&amp;quot;320\&amp;quot;  cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;quot;+
+//		&amp;quot;&amp;lt;tr height=\&amp;quot;16\&amp;quot;&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td colspan=\&amp;quot;3\&amp;quot;  align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font color=#999999&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt; &amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt;&amp;quot;+
+//	&amp;quot;&amp;lt;tr height=\&amp;quot;40\&amp;quot;&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td colspan=\&amp;quot;3\&amp;quot;  align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font color=#999999 size=\&amp;quot;4px\&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;请输入用户名密码&amp;lt;/font&amp;gt; &amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt;&amp;quot;+
+//	&amp;quot;&amp;lt;tr height=\&amp;quot;40\&amp;quot;&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td align=\&amp;quot;right\&amp;quot; width=\&amp;quot;100\&amp;quot; valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;lt;img src=EAFormBlob.sp?guid=69A085C9273641A39FD790D0D47D5468&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td  align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+//	        &amp;quot;&amp;lt;input type=\&amp;quot;text\&amp;quot; name=\&amp;quot;usrid\&amp;quot;  style=\&amp;quot;width:200px;height:25px;border: 1px solid #C0C0C0;font-size: 12pt\&amp;quot; &amp;gt; &amp;lt;/td&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td width=\&amp;quot;50\&amp;quot;&amp;gt;　&amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt;&amp;quot;+
+//	&amp;quot;&amp;lt;tr height=\&amp;quot;40\&amp;quot;&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td align=\&amp;quot;right\&amp;quot; width=\&amp;quot;100\&amp;quot; valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;lt;img src=EAFormBlob.sp?guid=84D43F2B042F456A94A84013D6622D52&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+//	   &amp;quot; &amp;lt;td  align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+//	        &amp;quot;&amp;lt;input type=\&amp;quot;password\&amp;quot; name=\&amp;quot;userpwd\&amp;quot; style=\&amp;quot;width:200px;height:25px;border: 1px solid #C0C0C0;font-size: 12pt\&amp;quot;&amp;gt; &amp;lt;/td&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td width=\&amp;quot;50\&amp;quot; &amp;gt;　&amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt; &amp;lt;tr&amp;gt;&amp;quot;+
+//	    &amp;quot;&amp;lt;td align=\&amp;quot;right\&amp;quot; colspan=\&amp;quot;3\&amp;quot; height=\&amp;quot;40\&amp;quot;&amp;gt;&amp;quot;+
+//	        &amp;quot;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;img src=EAFormBlob.sp?guid=44000855226C4576924B2C0A6BEE3A63 border=0 onclick=\&amp;quot;javascript: f_login.submit();\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+
+//	         &amp;quot;&amp;lt;/td&amp;gt; &amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;;
+	return html;
+
+}
+
+//上下滚动图片
+function sxscrollimg(){
+var onload=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;window.onload=function(){$(\&amp;quot;.imageBox img\&amp;quot;).width($(\&amp;quot;.imageRotation\&amp;quot;).width());$(\&amp;quot;.imageBox img\&amp;quot;).height($(\&amp;quot;.imageRotation\&amp;quot;).height());}&amp;lt;/script&amp;gt;&amp;quot;;
+		
+
+	var html=&amp;quot;&amp;lt;div class=\&amp;quot;imageRotation\&amp;quot; id=\&amp;quot;imageRotation\&amp;quot;&amp;gt;&amp;quot;+
+		    &amp;quot;&amp;lt;div class=\&amp;quot;imageBox\&amp;quot;&amp;gt;&amp;quot;;
+	html=ond+html;    
+	var xml=db.QuerySQL(&amp;quot;select icon,icon2,url from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;);
+	var spn=&amp;quot;&amp;quot;;
+	for(var i=0;i&amp;lt;xml.getRowCount();i++){
+		html+= &amp;quot;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;&amp;gt;&amp;quot;;
+		if(i==0)
+			spn+=&amp;quot;&amp;lt;span class=\&amp;quot;active\&amp;quot; rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;http://dev.sss-shanghai.org/aca/ROOT_HIS/&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+		else
+			spn+=&amp;quot;&amp;lt;span  rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;http://dev.sss-shanghai.org/aca/ROOT_HIS/&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+	}
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+ &amp;quot;&amp;lt;div class=\&amp;quot;icoBox\&amp;quot;&amp;gt;&amp;quot;+spn+ &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	
+	var jvaspt=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;&amp;quot;+
+			&amp;quot;    $(document).ready(function() {&amp;quot;+
+			&amp;quot;       $(\&amp;quot;.imageRotation\&amp;quot;).each(function(){&amp;quot;+
+			&amp;quot;           var imageRotation = this, &amp;quot;+
+			&amp;quot;                    imageBox = $(imageRotation).children(\&amp;quot;.imageBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                   icoBox = $(imageRotation).children(\&amp;quot;.icoBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                    icoArr = $(icoBox).children(), &amp;quot;+
+			&amp;quot;                    imageWidth = $(imageBox).width(),  &amp;quot;+
+			&amp;quot;                    imageNum = $(imageBox).children().size(),  &amp;quot;+
+			&amp;quot;                    imageReelWidth = imageWidth*imageNum,  &amp;quot;+
+			&amp;quot;                    activeID = parseInt($($(icoBox).children(\&amp;quot;.active\&amp;quot;)[0]).attr(\&amp;quot;rel\&amp;quot;)), &amp;quot;+
+			&amp;quot;                    nextID = 0, &amp;quot;+
+			&amp;quot;                    setIntervalID,  &amp;quot;+
+			&amp;quot;                    intervalTime = 4000,  &amp;quot;+
+			&amp;quot;                    speed =500;  &amp;quot;+
+			
+
+			&amp;quot;            $(imageBox).css({&amp;apos;width&amp;apos; : imageReelWidth + \&amp;quot;px\&amp;quot;});&amp;quot;+
+			
+	
+			&amp;quot;            var rotate=function(clickID){&amp;quot;+
+			&amp;quot;                if(clickID){ nextID = clickID; }&amp;quot;+
+			&amp;quot;                else{ nextID=activeID&amp;lt;=3 ? activeID+1 : 1; }&amp;quot;+
+			
+			&amp;quot;                $(icoArr[activeID-1]).removeClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(imageBox).animate({left:\&amp;quot;-\&amp;quot;+(nextID-1)*imageWidth+\&amp;quot;px\&amp;quot;} , speed);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;3px solid #eee&amp;apos;});&amp;quot;+
+			&amp;quot;                $(icoArr[activeID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;0px solid #eee&amp;apos;});&amp;quot;+
+			&amp;quot;                activeID = nextID;&amp;quot;+
+			&amp;quot;            };&amp;quot;+
+			&amp;quot;            setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			
+			&amp;quot;            $(imageBox).hover(&amp;quot;+
+			&amp;quot;                    function(){ clearInterval(setIntervalID); },&amp;quot;+
+			&amp;quot;                    function(){ setIntervalID=setInterval(rotate,intervalTime); }&amp;quot;+
+			&amp;quot;            );&amp;quot;+
+			
+			&amp;quot;            $(icoArr).click(function(){&amp;quot;+
+			&amp;quot;                clearInterval(setIntervalID);&amp;quot;+
+			&amp;quot;                var clickID = parseInt($(this).attr(\&amp;quot;rel\&amp;quot;));&amp;quot;+
+			&amp;quot;                rotate(clickID);&amp;quot;+
+			&amp;quot;                setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			&amp;quot;            });&amp;quot;+
+			 &amp;quot;       });&amp;quot;+
+			&amp;quot;    });&amp;quot;+
+			&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;;
+   return html+jvaspt;
+}
+
+//左右滚动图片右边带小视图
+function lscrollimg(){
+var html =&amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		/* Reset style */
+		* { margin:0; padding:0; word-break:break-all; }
+		body { background:#FFF; color:#333; font:12px/1.6em Helvetica, Arial, sans-serif; }
+		h1, h2, h3, h4, h5, h6 { font-size:1em; }
+		a { color:#039; text-decoration:none; }
+		 a:hover { text-decoration:underline; }
+		ul, li { list-style:none; }
+		fieldset, img { border:none; }
+		em, strong, cite, th { font-style:normal; font-weight:normal; }
+		/* Focus_change style */
+		
+		 #focus_change_list li { float:left; }
+		
+		 #focus_change_btn ul { padding-left:5px; }
+		 #focus_change_btn li { display:inline; float:left; margin:0 15px; padding-top:12px; }
+		 #focus_change_btn li img {border:2px solid #888;}
+		
+		 #focus_change_btn .current img { border-color:#EEE; }
+		&amp;lt;/style&amp;gt;&amp;quot;;
+		
+	if(LAYCOL ==&amp;quot;&amp;quot;)LAYCOL =&amp;quot;1&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and icon is not null &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	
+	  
+	var xml=db.QuerySQL(sql);
+	var spn=&amp;quot;&amp;quot;;
+	var cnt=xml.getRowCount();
+	if(cnt&amp;gt;5) cnt=5;
+	
+		
+	
+	html += &amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+
+		function $a(id) { return document.getElementById(id); }
+		function moveElement(elementID,final_x,final_y,interval) {
+	
+		 if (!document.getElementById) return false;
+		 if (!document.getElementById(elementID)) return false;
+		 var elem = document.getElementById(elementID);
+		 if (elem.movement) {
+		 clearTimeout(elem.movement);
+		 }
+		 if (!elem.style.left) {
+		 elem.style.left = \&amp;quot;0px\&amp;quot;;
+		 }
+		 if (!elem.style.top) {
+		 elem.style.top = \&amp;quot;0px\&amp;quot;;
+		 }
+		 var xpos = parseInt(elem.style.left);
+		 var ypos = parseInt(elem.style.top);
+		 if (xpos == final_x &amp;&amp; ypos == final_y) {
+		 return true;
+		 }
+		 if (xpos &amp;lt; final_x) {
+		 var dist = Math.ceil((final_x - xpos)/10);
+		 xpos = xpos + dist;
+		 }
+		 if (xpos &amp;gt; final_x) {
+		 var dist = Math.ceil((xpos - final_x)/10);
+		 xpos = xpos - dist;
+		 }
+		 if (ypos &amp;lt; final_y) {
+		 var dist = Math.ceil((final_y - ypos)/10);
+		 ypos = ypos + dist;
+		 }
+		 if (ypos &amp;gt; final_y) {
+		 var dist = Math.ceil((ypos - final_y)/10);
+		 ypos = ypos - dist;
+		 }
+		 elem.style.left = xpos + \&amp;quot;px\&amp;quot;;
+		 elem.style.top = ypos + \&amp;quot;px\&amp;quot;;
+		 var repeat = \&amp;quot;moveElement(&amp;apos;\&amp;quot;+elementID+\&amp;quot;&amp;apos;,\&amp;quot;+final_x+\&amp;quot;,\&amp;quot;+final_y+\&amp;quot;,\&amp;quot;+interval+\&amp;quot;)\&amp;quot;;
+		 elem.movement = setTimeout(repeat,interval);
+		}
+		function classNormal(){
+		
+		 var focusBtnList = $a(&amp;apos;focus_change_btn&amp;apos;).getElementsByTagName(&amp;apos;li&amp;apos;);
+		 for(var i=0; i&amp;lt;focusBtnList.length; i++) {
+		 focusBtnList[i].className=&amp;apos;&amp;apos;;
+		 }
+		}
+		function focusChange() {
+
+			var focusBtnList = $a(&amp;apos;focus_change_btn&amp;apos;).getElementsByTagName(&amp;apos;li&amp;apos;);
+			
+			var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+			if(!document.body.scrollWidth &amp;gt;= 960){
+				 widthImg = 960 * 0.8 * 0.57;
+			}
+		 	focusBtnList[0].onmouseover = function() {
+			moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg * 0,0,5);
+			classNormal()
+			focusBtnList[0].className=&amp;apos;current&amp;apos;
+			 
+			}			 
+			 focusBtnList[1].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg ,0,5);
+			 classNormal()
+			 focusBtnList[1].className=&amp;apos;current&amp;apos;
+			 }
+			 focusBtnList[2].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *2,0,5);
+			 classNormal()
+			 focusBtnList[2].className=&amp;apos;current&amp;apos;
+			 }
+			 focusBtnList[3].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *3,0,5);
+			 classNormal()
+			 focusBtnList[3].className=&amp;apos;current&amp;apos;
+			 }
+			 focusBtnList[4].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *4,0,5);
+			 classNormal()
+			 focusBtnList[4].className=&amp;apos;current&amp;apos;
+			 }
+			}
+		setInterval(&amp;apos;autoFocusChange()&amp;apos;, 4000);
+		function autoFocusChange() {
+			
+			 var focusBtnList = $a(&amp;apos;focus_change_btn&amp;apos;).getElementsByTagName(&amp;apos;li&amp;apos;);
+			 for(var i=0; i&amp;lt;focusBtnList.length; i++) {
+				 if (focusBtnList[i].className == &amp;apos;current&amp;apos;) {
+				 var currentNum = i;
+				 }
+			 }
+				 var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+				if(!document.body.scrollWidth &amp;gt;= 960){
+					widthImg = 960 * 0.8 * 0.57;
+				}
+			 if (currentNum==0 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg ,0,5);
+			 classNormal()
+			 focusBtnList[1].className=&amp;apos;current&amp;apos;
+			 }
+			 if (currentNum==1 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *2,0,5);
+			 classNormal()
+			 focusBtnList[2].className=&amp;apos;current&amp;apos;
+			 }
+			 if (currentNum==2 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *3,0,5);
+			 classNormal()
+			 focusBtnList[3].className=&amp;apos;current&amp;apos;
+			 } 
+			 if (currentNum==3 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *4,0,5);
+			 classNormal()
+			 focusBtnList[4].className=&amp;apos;current&amp;apos;
+			 }
+			if (currentNum==4 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,0,0,5);
+			 classNormal()
+			 focusBtnList[0].className=&amp;apos;current&amp;apos;
+			 }
+		}
+		
+
+		window.onload=function(){
+		  focusChange();
+		   eve();
+		}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+
+	html += &amp;quot;&amp;lt;div id=\&amp;quot;focus_change\&amp;quot; style=\&amp;quot; position:relative; height:350px;width:100%; overflow:hidden;\&amp;quot;&amp;gt;
+		 &amp;lt;div id=\&amp;quot;focus_change_list\&amp;quot; style=\&amp;quot;top:0; left:0; position:absolute; height:350px;\&amp;quot;&amp;gt;
+		 &amp;lt;ul&amp;gt;&amp;quot;;
+		for(var i=0;i&amp;lt;cnt;i++){
+		if(i==0)
+			html += &amp;quot;&amp;lt;li class=\&amp;quot;current\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot; id=&amp;apos;imgpx0&amp;apos; style=\&amp;quot;height:350px;\&amp;quot;  alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		else
+			html += &amp;quot;&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot; id=&amp;apos;imgpx&amp;quot;+i+&amp;quot;&amp;apos;  style=\&amp;quot; height:350px;\&amp;quot;  alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}
+	html +=	 &amp;quot;&amp;lt;/ul&amp;gt;
+		 &amp;lt;/div&amp;gt;
+		 &amp;lt;div  style=\&amp;quot;position:absolute; width:65px; height:100%; top:0; right:0; background:#000; filter:alpha(opacity=50); -moz-opacity:0.5; opacity: 0.5; \&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		 &amp;lt;div id=\&amp;quot;focus_change_btn\&amp;quot; style=\&amp;quot;position:absolute; width:60px; height:100%;  bottom:0; right:20px;_right:-11px;\&amp;quot;&amp;gt;
+		 &amp;lt;ul&amp;gt;&amp;quot;;
+		 for(var i=0;i&amp;lt;cnt;i++){
+		 if(i==0)
+			html += &amp;quot;&amp;lt;li class=\&amp;quot;current\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot; style=\&amp;quot;width:50px; height:50px;\&amp;quot;   alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		 else
+			html += &amp;quot;&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot; style=\&amp;quot;width:50px; height:50px;\&amp;quot;   alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		 }
+	html +=	&amp;quot;&amp;lt;/ul&amp;gt;
+		 &amp;lt;/div&amp;gt;
+		 &amp;lt;/div&amp;gt;&amp;quot;;
+		
+	html += &amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+
+
+		
+		//窗口宽度大小改变
+		function eve() {
+			var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+			if(document.body.scrollWidth &amp;gt;= 960){
+				document.getElementById(\&amp;quot;focus_change\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot;;		
+				document.getElementById(&amp;apos;imgpx0&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;			
+				document.getElementById(&amp;apos;imgpx1&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx2&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx3&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx4&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+
+				document.getElementById(\&amp;quot;focus_change_list\&amp;quot;).style.width=4000+\&amp;quot;px\&amp;quot; ;
+			}else{
+				widthImg = 960 * 0.8 * 0.57;
+				
+				
+				document.getElementById(\&amp;quot;focus_change\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx0&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx1&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx2&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx3&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx4&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(\&amp;quot;focus_change_list\&amp;quot;).style.width=4000+\&amp;quot;px\&amp;quot; ;
+			}
+		}
+		
+
+		fEventListen(window, &amp;apos;resize&amp;apos;,eve);
+		function fEventListen(b,c,d,a){
+		a=!!a;if(b.addEventListener)
+		{b.addEventListener(c,d,a);}
+		else{
+			if(b.attachEvent)
+			{b.attachEvent(\&amp;quot;on\&amp;quot;+c,d);}}
+		}&amp;lt;/script&amp;gt;&amp;quot;;
+	return html;
+
+}
+
+//从上往下滚动文字
+function texscoll(){
+var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; order by  seqid)&amp;quot;  ;
+	var ds=db.QuerySQL(sql);
+	//html +=&amp;quot;&amp;lt;div id=\&amp;quot;colee_bottom\&amp;quot; style=\&amp;quot;overflow:hidden;height:200px;width:400px;\&amp;quot;&amp;gt;&amp;quot;;
+
+	html +=&amp;quot;&amp;lt;div id=\&amp;quot;colee_bottom\&amp;quot; style=\&amp;quot;overflow:hidden;height:100%;width:100%;\&amp;quot;&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;div id=\&amp;quot;colee_bottom1\&amp;quot;&amp;gt;&amp;quot;;
+	
+	for (var r = 0; (r &amp;lt; ds.getRowCount()&amp;&amp;r&amp;lt;LAYROW)||(LAYROW==&amp;quot;&amp;quot;&amp;&amp;r &amp;lt; ds.getRowCount()); r ++) {
+		var icon = ds.getStringAt(r,&amp;quot;icon&amp;quot;);
+		var name = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+		var url = ds.getStringAt(r,&amp;quot;url&amp;quot;);
+		if (OPENLAYID != &amp;quot;&amp;quot;) {
+			url = &amp;quot;L.sp?id=&amp;quot;+OPENLAYID+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(r,&amp;quot;GUID&amp;quot;);
+		}
+		if (url != &amp;quot;&amp;quot;) {
+			html += &amp;quot;&amp;lt;a target=\&amp;quot;&amp;quot;+ds.getStringAt(r,&amp;quot;target&amp;quot;)+&amp;quot;\&amp;quot; href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;BR/&amp;gt;&amp;quot;;
+		} else {
+			html += name;
+		}
+	}
+	html += &amp;quot; &amp;lt;div id=\&amp;quot;colee_bottom2\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt; &amp;quot;;
+	html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;script&amp;gt;marqueeStart(2, \&amp;quot;up\&amp;quot;);&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	html += &amp;quot;&amp;lt;script&amp;gt;
+			var speed=30
+			var colee_bottom2=document.getElementById(\&amp;quot;colee_bottom2\&amp;quot;);
+			var colee_bottom1=document.getElementById(\&amp;quot;colee_bottom1\&amp;quot;);
+			var colee_bottom=document.getElementById(\&amp;quot;colee_bottom\&amp;quot;);
+//			colee_bottom2.innerHTML=colee_bottom1.innerHTML
+			colee_bottom.scrollTop=colee_bottom.scrollHeight
+			function Marquee2(){
+			if(colee_bottom1.offsetTop-colee_bottom.scrollTop&amp;gt;=0)
+			colee_bottom.scrollTop+=colee_bottom2.offsetHeight
+			else{
+			colee_bottom.scrollTop--
+			}
+			}
+			var MyMar2=setInterval(Marquee2,speed)
+			colee_bottom.onmouseover=function() {clearInterval(MyMar2)}
+			colee_bottom.onmouseout=function() {MyMar2=setInterval(Marquee2,speed)}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	return html;
+
+
+}
+
+//微信微博
+function weixinbo(){
+	return  db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+HTMLGUID+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;);
+}
+
+//视频演示
+function flashdemo(){
+	
+}
+
+//系统默认工具栏
+function toolbar(){
+
+}
+
+//登录信息和搜索
+function loginsearch(){
+}
+
+//OS脚本
+function mwos(){
+	var eas = new pub.EAScript(null);
+	eas.DefineScopeVar(&amp;quot;request&amp;quot;, request);
+	eas.DefineScopeVar(&amp;quot;deforg&amp;quot;, deforg);
+	eas.DefineScopeVar(&amp;quot;OSPARAM&amp;quot;, OSPARAM);
+	return eas .CallClassFunc(OSMWID,OSFUNC,null).castToString();
+}
+
+//内部FRAME
+function framelayout(){
+
+	if(IFRAMEURL!=&amp;quot;&amp;quot;){
+		IFRAMEURL=pub.EAFunc.Replace(IFRAMEURL,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+				
+		try{	
+			IFRAMEURL=web.EASession.GetSysValue(IFRAMEURL,request);//替换request 中[%id]
+		}
+		catch(e){
+			
+		}
+		
+		
+		var usrinfo = web.EASession.GetUserinfo(request);
+		if(usrinfo!=null)
+			IFRAMEURL=web.EASession.GetSysValue(IFRAMEURL,usrinfo);
+		var r=0;
+		
+//		while((IFRAMEURL.indexOf(&amp;quot;[%&amp;quot;)&amp;gt;-1&amp;&amp;r&amp;lt;1000)){
+//				var idx1 = IFRAMEURL.indexOf(&amp;quot;[&amp;quot;);
+//				
+//				var idx2 = IFRAMEURL.indexOf(&amp;quot;]&amp;quot;)+1;
+//				if(idx1&amp;gt;0&amp;&amp;idx2&amp;gt;0){
+//					var val=IFRAMEURL.substring(idx1,idx2);
+//					
+//					IFRAMEURL=pub.EAFunc.Replace(IFRAMEURL,val,&amp;quot;&amp;quot;);
+//				}
+//				r++;
+//		}
+	}
+	var html=&amp;quot;&amp;lt;iframe id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; src=&amp;apos;&amp;quot;+IFRAMEURL+&amp;quot;&amp;apos; scrolling=&amp;apos;auto&amp;apos; frameBorder=0 border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; &amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;;
+	return html;
+}
+
+//药物信息
+function retrieve(){
+	var html = menu();
+	html += loadBody();
+	return html;
+}
+
+//药品说明书
+function drugs(){
+	var sb=new langpack.StringBuffer();
+	sb.append(&amp;quot;&amp;lt;script src=\&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+	var blo = loaddiv(id);
+	return blo;
+}
+
+function GetBody(){
+var doc_id = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;doc_id&amp;quot;),&amp;quot;&amp;quot;);
+	var sb=new langpack.StringBuffer();
+	var db = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select note from CDMS_DRUNOTE WHERE DOC_ID IN(select DOC_ID from CDMS_DRUNOTEREF WHERE DOc_id =&amp;apos;&amp;quot;+doc_id+&amp;quot;&amp;apos;)   ORDER BY seqid&amp;quot;;
+		var ds=db.QuerySQL(sql);
+		sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:80%;margin-left:10%;\&amp;quot;&amp;gt;&amp;quot;);
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			//药品介绍等信息
+			var sql = &amp;quot;select title from cdms_drunote d where d.note = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+			var dsa=db.QuerySQL(sql);
+			if(i != 0){
+				sb.append(&amp;quot;&amp;lt;span&amp;gt;【&amp;quot;+dsa.getValueAt(0,&amp;quot;title&amp;quot;)+&amp;quot;】&amp;lt;/span&amp;gt;&amp;quot;);
+				var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;div&amp;gt;&amp;lt;font color=&amp;apos;#666666&amp;apos;&amp;gt;&amp;quot;+blo +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;hr  style=\&amp;quot;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;);
+			}else{
+				var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;margin-left:40%;\&amp;quot;&amp;gt;&amp;lt;font color=&amp;apos;#CCCCCC&amp;apos;&amp;gt;&amp;quot;+blo +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+
+			}
+			
+			
+			
+		}
+		
+		sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);
+//		sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:84.9%;height:500px;float:left;\&amp;quot;&amp;gt;&amp;quot;);
+//		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+//			var sql = &amp;quot;select title from formblob  b,cdms_drunote d where b.guid =d.note and b.guid  = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+//			var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+//			var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+//			var dsa=db.QuerySQL(sql);
+			
+					
+//			sb.append(&amp;quot;&amp;lt;p&amp;gt;&amp;lt;a name=\&amp;quot;#&amp;quot;+i+&amp;quot;\&amp;quot;&amp;gt;【&amp;quot;+dsa.getValueAt(0,&amp;quot;title&amp;quot;)+&amp;quot;】&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;);
+//			var bda=&amp;quot;select bdata from formblob where guid in(select pic_jpg from cdms_notepic where doc_id in (select doc_id from formblob  b,cdms_drunote d where b.guid =d.note and b.guid =&amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;))&amp;quot;;
+		
+//			var jpgname = &amp;quot;select name from cdms_notepic where doc_id in (select doc_id from formblob  b,cdms_drunote d where b.guid =d.note and b.guid =  &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;;
+//			var dsn=db.QuerySQL(jpgname);
+//			var img = db.getBlob2String(bda,&amp;quot;bdata&amp;quot;);
+//			var blobimg = &amp;quot;&amp;quot;;
+//			
+//			for(var k=0;k&amp;lt;dsn.getRowCount();k++){
+//				//可能有多张照片
+//				//将blob中图片替换掉blob中引用
+//				
+//				blobimg = pubpack.EAFunc.ReplaceNoCase(blo,&amp;quot;&amp;lt;img src=‘&amp;quot;+dsn.getValueAt(k,&amp;quot;name&amp;quot;)+&amp;quot;‘&amp;gt;&amp;lt;/img&amp;gt;&amp;quot;,img);
+//				
+//			}
+//			sb.append(&amp;quot;&amp;lt;div&amp;gt;&amp;quot;+blo +&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);
+//		}
+	}catch ( ee ) {
+		db.Rollback();
+		//sb.append(ee.toString());
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=&amp;quot;&amp;quot;) db.Close();
+	}
+
+	return sb;
+
+
+}
+
+//药物专论
+function drugMonograp(){
+var sb=new langpack.StringBuffer();
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;hidde\&amp;quot; style=\&amp;quot;margin-left:10%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;frist\&amp;quot; onclick=\&amp;quot;tree(0)\&amp;quot; style=\&amp;quot;margin-left:10%;width:100px;height:20px;\&amp;quot; &amp;gt;&amp;lt;font color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;药理分类&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;tree\&amp;quot; style=\&amp;quot;margin-left:10%;margin-right:10%;float:left;width:1000px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);//显示菜单
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;dru\&amp;quot; style=\&amp;quot;margin-left:10%;float:left;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);//
+	sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;inp\&amp;quot;&amp;quot;);//用来得到菜单
+	
+	
+	sb.append(&amp;quot;&amp;lt;script src=\&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	function manu(id){
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.manu.osp?id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	
+	}
+	function dru(id,page){
+		//隐藏上级菜单
+		document.getElementById(\&amp;quot;tree\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.dru.osp?id=&amp;apos;+id+&amp;apos;&amp;page&amp;apos;+page,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	}
+	function tree(id){
+
+	if(document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML != \&amp;quot;\&amp;quot;){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;//隐藏
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;//清空
+	}
+	document.getElementById(\&amp;quot;tree\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+	document.getElementById(\&amp;quot;frist\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+	$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.node.osp?id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value+=result +\&amp;quot;&amp;lt;font color=&amp;apos;#FFFFFF&amp;apos;&amp;gt;&amp;gt;&amp;lt;/font&amp;gt;\&amp;quot;;
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML = document.getElementById(\&amp;quot;inp\&amp;quot;).value;
+	
+		var spl = document.getElementById(\&amp;quot;inp\&amp;quot;).value.split(\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;);
+		
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML = spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;;
+
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value = spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;;
+	}
+	});
+	
+	$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.treenode.osp?id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;tree\&amp;quot;).innerHTML =result;
+		
+		
+	}
+	});
+	
+	
+	}
+	//分页
+	function page(id,pagesize,count){
+		
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.page.osp?id=&amp;apos;+id+&amp;apos;&amp;pagesize=&amp;apos;+pagesize+&amp;apos;&amp;count=&amp;apos;+count,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	}
+	&amp;lt;/script&amp;gt;&amp;quot;);
+//	var sb=new langpack.StringBuffer();
+//	sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;va\&amp;quot; value=\&amp;quot;frist\&amp;quot;/&amp;gt; &amp;quot;);
+//	//sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;text\&amp;quot; id=\&amp;quot;sp\&amp;quot; value=\&amp;quot;\&amp;quot;/&amp;gt; &amp;quot;);
+//	sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;val\&amp;quot; value=\&amp;quot;\&amp;quot;/&amp;gt; &amp;quot;);
+//	sb.append(&amp;quot;&amp;lt;div  id=\&amp;quot;tex\&amp;quot;  style=\&amp;quot;width:25%;border:1px solid #CCCCCC;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+//	sb.append(&amp;quot;&amp;lt;div  id=\&amp;quot;right\&amp;quot;  style=\&amp;quot;width:74.9%;border:1px solid #CCCCCC;float:right;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+//
+//	//&amp;lt;a onclick=\&amp;quot;onclic(1,1,0,&amp;apos;西药&amp;apos;)\&amp;quot;&amp;gt;西药&amp;lt;/a&amp;gt;
+//	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;frist\&amp;quot; style=\&amp;quot;width:300px;border:1px solid #CCCCCC;\&amp;quot;&amp;gt;&amp;lt;a  onclick=\&amp;quot;onclic(0,0,0,&amp;apos;药理分类&amp;apos;)\&amp;quot;&amp;gt;药理分类&amp;lt;/a&amp;gt; &amp;lt;/div&amp;gt;&amp;quot;);
+//	pha(0,sb,0);
+//	
+//	
+//	//sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;function onclic(id,refid,isl,valu){alert(valu);if(isl == 0){document.getElementById(\&amp;quot;tex\&amp;quot;).innerHTML +=\&amp;quot; &amp;gt;&amp;gt;&amp;lt;a onclick=&amp;apos;onclic(\&amp;quot;+id+\&amp;quot;,\&amp;quot;+refid+\&amp;quot;,\&amp;quot;+isl+\&amp;quot;,\&amp;quot;+&amp;quot;&amp;apos;&amp;quot;+valu+&amp;quot;&amp;apos;&amp;quot;+&amp;quot;\&amp;quot;)&amp;apos;&amp;gt; \&amp;quot;+valu+\&amp;quot;&amp;lt;/a&amp;gt;\&amp;quot;; var tid = document.getElementById(\&amp;quot;va\&amp;quot;).value;document.getElementById(tid).style.display =\&amp;quot;none\&amp;quot;;document.getElementById(\&amp;quot;va\&amp;quot;).value=id;document.getElementById(id).style.display =\&amp;quot;\&amp;quot;;}else{alert(\&amp;quot;最低层\&amp;quot;);}}&amp;lt;/script&amp;gt;&amp;quot;);
+//	
+//	
+//	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+//	function onclic(id,refid,isl,valu){
+//	//document.getElementById(\&amp;quot;sp\&amp;quot;).value=document.getElementById(\&amp;quot;tex\&amp;quot;).innerHTML+\&amp;quot;a\&amp;quot;+id;
+//	
+//	if(isl == 0){
+//		
+//		var tid = document.getElementById(\&amp;quot;va\&amp;quot;).value;
+//		document.getElementById(tid).style.display =\&amp;quot;none\&amp;quot;;
+//		document.getElementById(\&amp;quot;va\&amp;quot;).value=id;document.getElementById(id).style.display =\&amp;quot;\&amp;quot;;
+//	}else{
+//	//var tex = document.getElementById(\&amp;quot;tex\&amp;quot;).innerHTML;
+//	//window.location.href=\&amp;quot;http://dev.sss-shanghai.org/aca/x.L_TreeNode.html.osp?id=\&amp;quot;+id+\&amp;quot;&amp;tex\&amp;quot;+tex;
+//	$.ajax({
+//	url: &amp;apos;http://dev.sss-shanghai.org/aca/x.L_TreeNode.html.osp?id=&amp;apos;+id,type: &amp;apos;POST&amp;apos;,error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+//	
+//	success: function(result){document.getElementById(\&amp;quot;right\&amp;quot;).innerHTML =result;}
+//	
+//	});
+//	return ; 
+//	}
+//	var spl =document.getElementById(\&amp;quot;val\&amp;quot;).value.split(\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos;value=\&amp;quot;+id +\&amp;quot;/&amp;gt;\&amp;quot;);
+//	document.getElementById(\&amp;quot;tex\&amp;quot;).innerHTML=spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos;value=\&amp;quot;+id +\&amp;quot;/&amp;gt;\&amp;quot;;
+//	if(valu==0){
+//		document.getElementById(\&amp;quot;val\&amp;quot;).value=spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos;value=\&amp;quot;+id +\&amp;quot;/&amp;gt;\&amp;quot;;
+//
+//	}else{
+//		document.getElementById(\&amp;quot;val\&amp;quot;).value=spl[0];
+//		document.getElementById(\&amp;quot;tex\&amp;quot;).innerHTML +=\&amp;quot; &amp;gt;&amp;gt;&amp;lt;a onclick=&amp;apos;onclic(\&amp;quot;+id+\&amp;quot;,\&amp;quot;+refid+\&amp;quot;,\&amp;quot;+isl+\&amp;quot;,0)&amp;apos;&amp;gt; \&amp;quot;+valu+\&amp;quot;&amp;lt;/a&amp;gt;\&amp;quot;+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos;value=\&amp;quot;+id +\&amp;quot;/&amp;gt;\&amp;quot;;
+//		document.getElementById(\&amp;quot;val\&amp;quot;).value +=\&amp;quot; &amp;gt;&amp;gt;&amp;lt;a onclick=&amp;apos;onclic(\&amp;quot;+id+\&amp;quot;,\&amp;quot;+refid+\&amp;quot;,\&amp;quot;+isl+\&amp;quot;,0)&amp;apos;&amp;gt; \&amp;quot;+valu+\&amp;quot;&amp;lt;/a&amp;gt;\&amp;quot;+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos;value=\&amp;quot;+id +\&amp;quot;/&amp;gt;\&amp;quot;;
+//	} 
+//	//document.getElementById(\&amp;quot;val\&amp;quot;).value=spl[0];
+//	}
+//	function dis(id){document.getElementById(\&amp;quot;+id+\&amp;quot;).display =\&amp;quot;\&amp;quot;;}&amp;lt;/script&amp;gt;&amp;quot;);
+//
+	return sb;
+
+
+}
+
+
+
+function node(){
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+	if(id==0){
+	html =&amp;quot;&amp;lt;a onclick=\&amp;quot;tree(&amp;quot;+id+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;药理分类&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=0 /&amp;gt;&amp;quot;;
+	return html;
+	}
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_PHA where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		
+		html = &amp;quot;&amp;lt;a  onclick=\&amp;quot;tree(&amp;quot;+id+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(0,1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=&amp;quot;+ds.getValueAt(0,0)+&amp;quot;/&amp;gt;&amp;quot;;
+		
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+	
+	}
+
+function treenode(){
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_PHA where REFID=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		
+		if(ds.getRowCount() == 0){
+		
+			var sql = &amp;quot;select * from CDMS_DRUNAM where id in(select DISTINCT A.catalog_id from cdms_phatyp A,CDMS_DRUTONOTE B where A.CATALOG_ID=B.CATALOG_ID AND  phacatalog_id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; )&amp;quot;;
+			var ds=db.QuerySQL(sql);
+			
+			for(var i =0;i&amp;lt;ds.getRowCount();i++){
+				html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+				html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;dru(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,1)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,4)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+				html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+			}
+			
+			
+			
+			return html;
+		}
+		
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px; background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;tree(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+			
+		}
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+
+}
+
+function dru(){
+		var html =&amp;quot;&amp;quot;;
+		var db = &amp;quot;&amp;quot;;
+		
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_DRUNOTEREF where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;) &amp;quot;;
+		var ds=db.QuerySQL(sql);
+	
+		//判断是否进行分页
+			if(ds.getRowCount() &amp;gt;15){
+				
+				var pagesize = 0;
+				
+				//总页数
+				var count = ds.getRowCount() % 15==0?ds.getRowCount() / 15:(ds.getRowCount() / 15)+1;
+				
+				//最小数
+				var pagemin = pagesize * 15;
+				//最大数
+				var pagemax = (pagesize+1) * 15;
+				var sql = &amp;quot;select * from (select rownum as r,CDMS_DRUNOTEREF.* from CDMS_DRUNOTEREF  where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;)and rownum&amp;lt;=&amp;quot;+pagemax +&amp;quot;) where r&amp;gt; &amp;quot;+pagemin;	
+			
+				var ds=db.QuerySQL(sql);
+					for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+					var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+					var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+					var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+					var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+					if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  href=\&amp;quot;http://cdms.xmidware.com/aca//ROOT_CDMS/L.sp?id=InstructionBook&amp;doc_id=&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;  \&amp;quot; target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+					}
+					html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;span&amp;gt;总页数&amp;quot;+count+&amp;quot;当前页&amp;quot;+pagesize +&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;select onchange=\&amp;quot;page(&amp;quot;+id+&amp;quot;,this.value-1,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;&amp;quot;;
+					for(var k = 1;k&amp;lt;=count;k++){
+						if(k == pagesize*1+1){
+							html += &amp;quot;&amp;lt;option selected=&amp;apos;selected&amp;apos;&amp;gt;&amp;quot;;
+							html += k;
+							html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+						}else{
+							html += &amp;quot;&amp;lt;option&amp;gt;&amp;quot;;
+							html += k;
+							html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+						}
+		
+					}
+					html += &amp;quot;&amp;lt;/select&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span  onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,0,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;首页&amp;lt;/span&amp;gt;&amp;quot;;
+					if(pagesize ==0){//没有上一页
+					html +=&amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					}
+					var bpage = pagesize * 1 +1;
+					html += &amp;quot;&amp;lt;span &amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+bpage +&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span &amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span &amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+count+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;尾页&amp;lt;/a&amp;gt;&amp;lt;/span &amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+					return html;
+			}
+			html +=&amp;quot;&amp;lt;div width=\&amp;quot;1000px\&amp;quot;&amp;gt;&amp;quot;;
+			for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+			var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+			var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+			var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+			var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+			if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  href=\&amp;quot;http:cdms.xmidware.com/aca//ROOT_CDMS/L.sp?id=InstructionBook&amp;doc_id=&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;  \&amp;quot; target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			}
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+}
+
+function menu(){
+	var html =&amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		.nav_a { 
+		color: #333333;
+		cursor: pointer;
+		float: left;
+		font-size: 14px;
+		height: 40px;
+		line-height: 40px;
+		padding: 0px 15px;
+		position: relative;
+		}
+		
+		.nav { 
+		height: 40px;
+		
+		}
+		.nav .on { 
+		background-color: #FFFFFF;
+		color: #000000;
+		
+		}
+		#dr div:hover{
+		
+			background:#666666;
+		
+		}
+
+		
+		&amp;lt;/style&amp;gt;
+
+		&amp;lt;div style=\&amp;quot;padding-left:10%;background-color: #999999;overflow:hidden;\&amp;quot;&amp;gt;
+		
+	        &amp;lt;div class=\&amp;quot;nav\&amp;quot; id=\&amp;quot;dr\&amp;quot; style=\&amp;quot;float:left;\&amp;quot;&amp;gt;
+		    &amp;lt;div class=\&amp;quot;nav_a on\&amp;quot;  id=\&amp;quot;ck1\&amp;quot; onclick=\&amp;quot;clickon(&amp;apos;ck1&amp;apos;,&amp;apos;药品说明书&amp;apos;,&amp;apos;cka&amp;apos;)\&amp;quot;&amp;gt;药品说明书&amp;lt;/div&amp;gt;
+		    &amp;lt;div  class=\&amp;quot;nav_a\&amp;quot; id=\&amp;quot;ck2\&amp;quot; onclick=\&amp;quot;clickon(&amp;apos;ck2&amp;apos;,&amp;apos;药物专论&amp;apos;,&amp;apos;ckb&amp;apos;)\&amp;quot;&amp;gt;药物专论&amp;lt;/div&amp;gt;
+		    &amp;lt;div  class=\&amp;quot;nav_a\&amp;quot; id=\&amp;quot;ck3\&amp;quot; onclick=\&amp;quot;clickon(&amp;apos;ck3&amp;apos;,&amp;apos;药物相互作用&amp;apos;,&amp;apos;ckc&amp;apos;)\&amp;quot;&amp;gt;药物相互作用&amp;lt;/div&amp;gt;
+		    &amp;lt;div class=\&amp;quot;nav_a\&amp;quot; id=\&amp;quot;ck4\&amp;quot; onclick=\&amp;quot;clickon(&amp;apos;ck4&amp;apos;,&amp;apos;配伍禁忌&amp;apos;,&amp;apos;ckd&amp;apos;)\&amp;quot;&amp;gt;配伍禁忌&amp;lt;/div&amp;gt;
+		&amp;lt;/div&amp;gt;
+		
+			
+		&amp;lt;/div&amp;gt;
+		
+		&amp;lt;div style=\&amp;quot;padding-left:10%;overflow:hidden;\&amp;quot;&amp;gt;
+			&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=E19A65A832BA47C7911045ED3DD5BC1F\&amp;quot;/&amp;gt;
+			
+			
+			&amp;lt;form id=\&amp;quot;form\&amp;quot; name=\&amp;quot;form\&amp;quot; method=\&amp;quot;post\&amp;quot; action=\&amp;quot;\&amp;quot;&amp;gt;
+
+			&amp;lt;div id=\&amp;quot;uboxstyle\&amp;quot;&amp;gt;
+			
+				&amp;lt;select name=\&amp;quot;language\&amp;quot; id=\&amp;quot;language\&amp;quot;&amp;gt;
+					&amp;lt;option value=\&amp;quot;\&amp;quot;  selected=\&amp;quot;selected\&amp;quot;&amp;gt;厂家&amp;lt;/option&amp;gt;
+					&amp;lt;option value=\&amp;quot;简体中文\&amp;quot; &amp;gt;简体中文&amp;lt;/option&amp;gt;
+					&amp;lt;option value=\&amp;quot;日本語\&amp;quot; &amp;gt;日本語&amp;lt;/option&amp;gt;
+				&amp;lt;/select&amp;gt;
+			&amp;lt;/div&amp;gt;
+			
+			
+			
+			&amp;lt;/form&amp;gt;
+			
+			
+			
+			
+			&amp;lt;input type=\&amp;quot;hidden\&amp;quot; value=\&amp;quot;药品说明书\&amp;quot; id=\&amp;quot;his\&amp;quot; /&amp;gt;
+			&amp;lt;div style=\&amp;quot;float:right;\&amp;quot;&amp;gt;
+			&amp;lt;input type=\&amp;quot;text\&amp;quot; style=\&amp;quot;height:24px;\&amp;quot; name=\&amp;quot;wd\&amp;quot;  id=\&amp;quot;kw1\&amp;quot; size=\&amp;quot;40\&amp;quot;  autocomplete=\&amp;quot;off\&amp;quot;/&amp;gt;
+			&amp;lt;input type=\&amp;quot;button\&amp;quot; style=\&amp;quot;background:none; border:0px;  color:#FFFFFF; height:30px;width:70px;\&amp;quot; onclick=\&amp;quot;likedru()\&amp;quot;  value=\&amp;quot;搜 索\&amp;quot;&amp;gt;
+			&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;rdrug\&amp;quot; value=\&amp;quot;\&amp;quot; /&amp;gt;
+			&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;rdrugid\&amp;quot; value=\&amp;quot;\&amp;quot; /&amp;gt;
+			&amp;lt;/div&amp;gt;
+		&amp;lt;/div&amp;gt;
+		&amp;lt;/div&amp;gt;
+		&amp;quot;;
+		html +=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		//分析药物相互作用
+		function fenxi(id,name){
+			var drug = document.getElementById(\&amp;quot;rdrug\&amp;quot;);
+			var drugspl = drug.value.split(\&amp;quot;rdrug\&amp;quot;);
+			for(var i= 0;i&amp;lt; drugspl.length;i++){
+				if(name ==drugspl[i]){
+					alert(\&amp;quot;不能添加重复药品\&amp;quot;);
+					return ;
+				}
+			}
+			document.getElementById(\&amp;quot;rdrugid\&amp;quot;).value += id +\&amp;quot;rdrug\&amp;quot;;
+			document.getElementById(\&amp;quot;rdrug\&amp;quot;).value += name +\&amp;quot;rdrug\&amp;quot;;
+			document.getElementById(\&amp;quot;bot\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+			document.getElementById(\&amp;quot;bot\&amp;quot;).innerHTML += name;
+		}
+		//分析按钮进行药品分析
+		function analyse(){
+			var drug = document.getElementById(\&amp;quot;rdrugid\&amp;quot;).value;
+			
+			$.ajax({
+			url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.anal.osp?likename=&amp;apos;+drug,
+			type: &amp;apos;POST&amp;apos;,
+			error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+			success: function(result){
+			document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+			document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+			}
+			});
+			
+		}
+		
+		//模糊搜索
+		function likedru(){
+			var va = document.getElementById(\&amp;quot;his\&amp;quot;).value;
+		
+			var likename = document.getElementById(\&amp;quot;kw1\&amp;quot;).value;
+			if(likename.length &amp;lt; 2){
+				alert(\&amp;quot;请输入两个以上字符(包含2个)\&amp;quot;);
+				return ;
+			}
+			if(va == \&amp;quot;药品说明书\&amp;quot;){
+			}else if(va == \&amp;quot;药物专论\&amp;quot;){
+			
+			}else if(va == \&amp;quot;药物相互作用\&amp;quot;){
+				$.ajax({
+				url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.like.osp?likename=&amp;apos;+likename+&amp;apos;&amp;ty&amp;apos;+va,
+				type: &amp;apos;POST&amp;apos;,
+				error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+				success: function(result){
+				document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+				document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+				}
+				});
+
+			}else{
+			}
+
+			
+		}
+		
+		function clickon(id,va,cid){
+		document.getElementById(\&amp;quot;rdrug\&amp;quot;).value =\&amp;quot;\&amp;quot;;	
+		document.getElementById(\&amp;quot;bot\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;tree\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;bot\&amp;quot;).innerHTML=\&amp;quot;&amp;lt;div style=&amp;apos;width:70px; height:100%; float:right&amp;apos;&amp;gt;&amp;lt;div style=&amp;apos;background-color:#FFFFFF; float:right; margin:10px;&amp;apos; onclick=&amp;apos;analyse()&amp;apos;&amp;gt;分析&amp;lt;/div&amp;gt;&amp;lt;div  style=&amp;apos;background-color:#FFFFFF;float:right; margin:10px;&amp;apos; onclick=&amp;apos;clearhtml()&amp;apos;&amp;gt;清空&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&amp;quot;;
+		if(va == \&amp;quot;药品说明书\&amp;quot;){
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;frist\&amp;quot;).innerHTML =\&amp;quot;&amp;lt;div onclick=&amp;apos;tree(0,0)&amp;apos; style=&amp;apos;width:100px;height:20px;&amp;apos;&amp;gt;&amp;lt;font&amp;gt;药理分类&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;\&amp;quot;;
+		if(document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML !=\&amp;quot;\&amp;quot;){
+			document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML =&amp;apos;&amp;lt;a onclick=\&amp;quot;tree(0,0)\&amp;quot;&amp;gt;&amp;lt;font&amp;gt;药理分类&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;input value=\&amp;quot;0\&amp;quot; type=\&amp;quot;hidden\&amp;quot;&amp;gt;&amp;apos;;
+		}
+
+		}else if(va == \&amp;quot;药物专论\&amp;quot;){
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;frist\&amp;quot;).innerHTML =\&amp;quot;&amp;lt;div onclick=&amp;apos;tree(0,1)&amp;apos; style=&amp;apos;width:100px;height:20px;&amp;apos;&amp;gt;&amp;lt;font&amp;gt;药理分类&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;\&amp;quot;;
+		if(document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML !=\&amp;quot;\&amp;quot;){
+			document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML =&amp;apos;&amp;lt;a onclick=\&amp;quot;tree(0,1)\&amp;quot;&amp;gt;&amp;lt;font&amp;gt;药理分类&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;input value=\&amp;quot;0\&amp;quot; type=\&amp;quot;hidden\&amp;quot;&amp;gt;&amp;apos;;
+		}
+		}else if(va == \&amp;quot;药物相互作用\&amp;quot;){
+		
+		document.getElementById(\&amp;quot;frist\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+
+		}else{
+		document.getElementById(\&amp;quot;frist\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+		}
+		
+		document.getElementById(\&amp;quot;his\&amp;quot;).value =va;
+		var b = document.getElementById(&amp;apos;dr&amp;apos;).getElementsByTagName(&amp;apos;div&amp;apos;);
+		
+		for(var i = 0;i&amp;lt;b.length;i++){
+			
+			b[i].className=\&amp;quot;nav_a\&amp;quot;;
+		}
+	
+		document.getElementById(id).className=\&amp;quot;nav_a on\&amp;quot;;
+		}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+
+
+		return html;
+	
+}
+
+function loadBody(){
+	var sb=new langpack.StringBuffer();
+
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;hidde\&amp;quot; style=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;frist\&amp;quot; style=\&amp;quot;width:100px;height:20px;\&amp;quot; &amp;gt;&amp;lt;div onclick=&amp;apos;tree(0,0)&amp;apos; &amp;gt;&amp;lt;font&amp;gt;药理分类&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;tree\&amp;quot; style=\&amp;quot;float:left;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);//显示菜单
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;dru\&amp;quot; style=\&amp;quot;float:left;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);//
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;bot\&amp;quot; style=\&amp;quot;float:left;display:none;background-color:#CCC;position:fixed;bottom:0;height:70px;_position:absolute;_margin-top:expression(this.style.pixelHeight+document.documentElement.scrollTop);\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;width:70px; height:100%; float:right\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;background-color:#FFFFFF; float:right; margin:10px;\&amp;quot; onclick=&amp;apos;&amp;apos;analyse()&amp;apos;&amp;gt;分析&amp;lt;/div&amp;gt;&amp;lt;div  style=\&amp;quot;background-color:#FFFFFF;float:right; margin:10px;\&amp;quot; onclick=\&amp;quot;clearhtml()\&amp;quot;&amp;gt;清空&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;inp\&amp;quot;&amp;quot;);//用来得到菜单
+	sb.append(&amp;quot;&amp;lt;script src=\&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+
+	
+	function manu(id){
+	$.ajax({
+	url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.manu.osp?id=&amp;apos;+id,
+	type: &amp;apos;POST&amp;apos;,
+	error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+	success: function(result){
+	document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+	}
+	});
+	
+	}
+	//清空html
+	function clearhtml(){
+		document.getElementById(\&amp;quot;bot\&amp;quot;).innerHTML=\&amp;quot;&amp;lt;div style=&amp;apos;width:70px; height:100%; float:right&amp;apos;&amp;gt;&amp;lt;div style=&amp;apos;background-color:#FFFFFF; float:right; margin:10px;&amp;apos; onclick=&amp;apos;analyse()&amp;apos;&amp;gt;分析&amp;lt;/div&amp;gt;&amp;lt;div  style=&amp;apos;background-color:#FFFFFF;float:right; margin:10px;&amp;apos; onclick=&amp;apos;clearhtml()&amp;apos;&amp;gt;清空&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&amp;quot;;
+		document.getElementById(\&amp;quot;rdrug\&amp;quot;).value =\&amp;quot;\&amp;quot;;
+	}
+	
+	//取同类药品
+	function dru(id,page){
+		//隐藏上级菜单
+		document.getElementById(\&amp;quot;tree\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.dru.osp?id=&amp;apos;+id+&amp;apos;&amp;page&amp;apos;+page,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	}
+	//直接显示药品
+	function drugShow(id){
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.drugShow.osp?id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		//默认有&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;相当于判空
+		if(result.length &amp;gt;36){
+			document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		}else{
+			document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=\&amp;quot;没有找到这个药品的信息\&amp;quot;;
+		}
+		}
+		});
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;//显示
+
+	}
+	
+	
+	function tree(id,ty){
+	
+	if(document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML != \&amp;quot;\&amp;quot;){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;//隐藏
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;//清空
+	}
+	document.getElementById(\&amp;quot;tree\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+	document.getElementById(\&amp;quot;frist\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+	$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.node.osp?id=&amp;apos;+id+&amp;apos;&amp;ty=&amp;apos;+ty,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value+=result +\&amp;quot;&amp;lt;font&amp;gt;&amp;gt;&amp;lt;/font&amp;gt;\&amp;quot;;
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML = document.getElementById(\&amp;quot;inp\&amp;quot;).value;
+	
+		var spl = document.getElementById(\&amp;quot;inp\&amp;quot;).value.split(\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;);
+		
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML = spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;;
+
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value = spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;;
+	}
+	});
+	
+	$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.treenode.osp?id=&amp;apos;+id+&amp;apos;&amp;ty=&amp;apos;+ty,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		
+		document.getElementById(\&amp;quot;tree\&amp;quot;).innerHTML =result;
+		
+		
+	}
+	});
+	
+	}
+	
+	//查看说明书
+	function instructionBook(id){
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.instructionBook.osp?doc_id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;tree\&amp;quot;).innerHTML =result;
+		document.getElementById(\&amp;quot;tree\&amp;quot;).style.display = \&amp;quot;\&amp;quot;;
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display = \&amp;quot;none\&amp;quot;;
+		
+	}
+	});
+	
+	}
+	
+	//分页
+	function page(id,pagesize,count){
+		
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_retrieve.page.osp?id=&amp;apos;+id+&amp;apos;&amp;pagesize=&amp;apos;+pagesize+&amp;apos;&amp;count=&amp;apos;+count,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	}
+	&amp;lt;/script&amp;gt;&amp;quot;);
+	return sb;
+
+
+}
+
+
+//分类
+function node(){
+
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+	if(id==0){
+	html =&amp;quot;&amp;lt;a onclick=\&amp;quot;tree(&amp;quot;+id+&amp;quot;,&amp;quot;+ty+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font &amp;gt;药理分类&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=0 /&amp;gt;&amp;quot;;
+	return html;
+	}
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_PHA where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		
+		html = &amp;quot;&amp;lt;a  onclick=\&amp;quot;tree(&amp;quot;+id+&amp;quot;,&amp;quot;+ty+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font &amp;gt;&amp;quot;+ds.getValueAt(0,1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=&amp;quot;+ds.getValueAt(0,0)+&amp;quot;/&amp;gt;&amp;quot;;
+		
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+	
+	}
+
+function treenode(){
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+	
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_PHA where REFID=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		
+		if(ds.getRowCount() == 0){
+			var ty= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;ty&amp;quot;),&amp;quot;&amp;quot;);
+			var sql = &amp;quot;select * from CDMS_DRUNAM where id in(select DISTINCT A.catalog_id from cdms_phatyp A,CDMS_DRUTONOTE B where A.CATALOG_ID=B.CATALOG_ID AND  phacatalog_id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; )&amp;quot;;
+			var ds=db.QuerySQL(sql);
+			if(ty == 0){//药品说明书
+				for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;dru(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,1)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,4)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+				}
+			}else if(ty ==1){//药物专论
+				for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;drugShow(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,1)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,4)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+				}
+			}
+			
+			
+			
+			return html;
+		}
+		
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px; background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;tree(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,&amp;quot;+ty+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+			
+		}
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+
+}
+
+function dru(){
+		var html =&amp;quot;&amp;quot;;
+		var db = &amp;quot;&amp;quot;;
+		
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_DRUNOTEREF where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;) &amp;quot;;
+		var ds=db.QuerySQL(sql);
+	
+		//判断是否进行分页
+			if(ds.getRowCount() &amp;gt;15){
+				
+				var pagesize = 0;
+				
+				//总页数
+				var count = ds.getRowCount() % 15==0?ds.getRowCount() / 15:(ds.getRowCount() / 15)+1;
+				
+				//最小数
+				var pagemin = pagesize * 15;
+				//最大数
+				var pagemax = (pagesize+1) * 15;
+				var sql = &amp;quot;select * from (select rownum as r,CDMS_DRUNOTEREF.* from CDMS_DRUNOTEREF  where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;)and rownum&amp;lt;=&amp;quot;+pagemax +&amp;quot;) where r&amp;gt; &amp;quot;+pagemin;	
+			
+				var ds=db.QuerySQL(sql);
+					for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+					var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+					var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+					var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+					var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+					if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  onclick=\&amp;quot;instructionBook(&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;)\&amp;quot; &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+					}
+					html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;span&amp;gt;总页数&amp;quot;+count+&amp;quot;当前页&amp;quot;+pagesize +&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;select onchange=\&amp;quot;page(&amp;quot;+id+&amp;quot;,this.value-1,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;&amp;quot;;
+					for(var k = 1;k&amp;lt;=count;k++){
+						if(k == pagesize*1+1){
+							html += &amp;quot;&amp;lt;option selected=&amp;apos;selected&amp;apos;&amp;gt;&amp;quot;;
+							html += k;
+							html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+						}else{
+							html += &amp;quot;&amp;lt;option&amp;gt;&amp;quot;;
+							html += k;
+							html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+						}
+		
+					}
+					html += &amp;quot;&amp;lt;/select&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span  onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,0,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;首页&amp;lt;/span&amp;gt;&amp;quot;;
+					if(pagesize ==0){//没有上一页
+					html +=&amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					}
+					var bpage = pagesize * 1 +1;
+					html += &amp;quot;&amp;lt;span &amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+bpage +&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span &amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span &amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+count+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;尾页&amp;lt;/a&amp;gt;&amp;lt;/span &amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+					return html;
+			}
+			html +=&amp;quot;&amp;lt;div width=\&amp;quot;1000px\&amp;quot;&amp;gt;&amp;quot;;
+			for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+			var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+			var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+			var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+			var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+			if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a onclick=\&amp;quot;instructionBook(&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;)\&amp;quot;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			}
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+}
+
+function page(){
+
+		var db=&amp;quot;&amp;quot;;
+		
+		try{
+		//总页数
+		db = new pubpack.EADatabase();
+		var pag = pagesize*1 +1;
+		//最小数
+		var pagemin = pagesize * 15;
+		//最大数
+		var pagemax = pag* 15;
+		var sql = &amp;quot;select * from (select rownum as r,CDMS_DRUNOTEREF.* from CDMS_DRUNOTEREF  where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;)and rownum&amp;lt;=&amp;quot;+pagemax +&amp;quot;) where r&amp;gt; &amp;quot;+pagemin;	
+		var ds=db.QuerySQL(sql);
+		html =&amp;quot;&amp;quot;;
+	
+
+
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+			var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+			var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+			var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+			var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+			if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  href=\&amp;quot;http://cdms.xmidware.com/aca//ROOT_CDMS/L.sp?id=InstructionBook&amp;doc_id=&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;  \&amp;quot; target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			}
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;span&amp;gt;总页数&amp;quot;+count+&amp;quot;当前页&amp;quot;+pagesize +&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;select onchange=\&amp;quot;page(&amp;quot;+id+&amp;quot;,this.value-1,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;&amp;quot;;
+			for(var k = 1;k&amp;lt;=count;k++){
+				if(k == pagesize*1+1){
+					html += &amp;quot;&amp;lt;option selected=&amp;apos;selected&amp;apos;&amp;gt;&amp;quot;;
+					html += k;
+					html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+				}else{
+					html += &amp;quot;&amp;lt;option&amp;gt;&amp;quot;;
+					html += k;
+					html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+				}
+	
+			}
+			html += &amp;quot;&amp;lt;/select&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span  onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,0,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;首页&amp;lt;/span&amp;gt;&amp;quot;;
+			var bpage = pagesize *1 +1;
+			var tpage = pagesize *1 -1;
+	
+			if(pagesize ==0){
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}else{
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+tpage+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}
+			var coun = count * 1 -1;
+			if(pagesize == coun){
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}else{
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+bpage+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}
+			
+			html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+coun+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;尾页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		
+		
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+		return html;	
+
+}
+
+//药物专论显示
+function drugShow(){
+	var html =&amp;quot;&amp;quot;;
+	var db=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+	
+		var sql = &amp;quot;select * from CDMS_DRCONTENT  where CATALOG_ID =&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;quot;;
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+ds.getValueAt(i,&amp;quot;dr_title&amp;quot;)+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			var hql = &amp;quot;select bdata from formblob where guid =&amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;dr_content&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+			var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+blo+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  style=\&amp;quot;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			
+		}
+		html +=&amp;quot;&amp;lt;div&amp;gt;&amp;quot;;
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+
+}
+
+function htmls(){
+
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select DISTINCT A.* from cdms_phatyp A,CDMS_DRUTONOTE B where A.CATALOG_ID=B.CATALOG_ID AND  phacatalog_id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var hql = &amp;quot;select * from cdms_drunam where id =&amp;quot;+ds.getValueAt(i,1);
+			var dsa =db.QuerySQL(hql);
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+dsa.getValueAt(0,0)+&amp;quot;&amp;quot;+dsa.getValueAt(0,4)+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		}
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+	
+}
+
+//模糊查询
+function like(){
+ 	var html =&amp;quot;&amp;quot;;
+	var db=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sp = likename.split(&amp;quot; &amp;quot;);
+		var sql = &amp;quot;select * from CDMS_DRUNAM where 1=1 and name like &amp;quot;;
+		var spli = &amp;quot;&amp;quot;;
+		for(var i =0;i&amp;lt;sp.length();i++){
+			if(sp[i] != &amp;quot;&amp;quot;){
+			sql += &amp;quot;&amp;apos;%&amp;quot;+sp[i]+&amp;quot;%&amp;apos; and name like&amp;quot;;
+			}
+		}
+		sql += &amp;quot; &amp;apos;%%&amp;apos;&amp;quot;;
+		var ds=db.QuerySQL(sql);
+	
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;quot;;
+		if(ds.getRowCount() == 0){
+			html += &amp;quot;&amp;lt;p&amp;gt;未检索到与 &amp;quot;+likename+&amp;quot; 相关的信息。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;建议您：&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;1. 检查您输入的关键词有无错误；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;2. 更换检索词后重新进行检索。&amp;lt;/p&amp;gt; &amp;quot;;
+		}
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;width:200px;height:50px;float:left;\&amp;quot; onclick=\&amp;quot;fenxi(&amp;quot;+ds.getValueAt(i,&amp;quot;id&amp;quot;)+&amp;quot;,&amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;	
+		}
+		html +=&amp;quot;&amp;lt;div&amp;gt;&amp;quot;;
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+}
+
+function instructionBook(){
+	var doc_id = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;doc_id&amp;quot;),&amp;quot;&amp;quot;);
+	var sb=new langpack.StringBuffer();
+	var db = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select note from CDMS_DRUNOTE WHERE DOC_ID IN(select DOC_ID from CDMS_DRUNOTEREF WHERE DOc_id =&amp;apos;&amp;quot;+doc_id+&amp;quot;&amp;apos;)   ORDER BY seqid&amp;quot;;
+		var ds=db.QuerySQL(sql);
+		sb.append(&amp;quot;&amp;lt;div &amp;gt;&amp;quot;);
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			//药品介绍等信息
+			var sql = &amp;quot;select title from cdms_drunote d where d.note = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+			var dsa=db.QuerySQL(sql);
+			if(i != 0){
+				sb.append(&amp;quot;&amp;lt;span&amp;gt;【&amp;quot;+dsa.getValueAt(0,&amp;quot;title&amp;quot;)+&amp;quot;】&amp;lt;/span&amp;gt;&amp;quot;);
+				var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;div&amp;gt;&amp;lt;font color=&amp;apos;#666666&amp;apos;&amp;gt;&amp;quot;+blo +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;hr  style=\&amp;quot;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;);
+			}else{
+				var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;margin-left:40%;\&amp;quot;&amp;gt;&amp;lt;font color=&amp;apos;#CCCCCC&amp;apos;&amp;gt;&amp;quot;+blo +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+
+			}
+
+		}
+		
+		sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);
+		
+		}catch ( ee ) {
+		db.Rollback();
+		//sb.append(ee.toString());
+		throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	
+		return sb;
+
+
+}
+
+
+function anal(){
+	var drug = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;likename&amp;quot;),&amp;quot;&amp;quot;);
+	var sb=new langpack.StringBuffer();
+	var db = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();
+		var likename =&amp;quot;&amp;quot;;
+		var drugspl =drug.split(&amp;quot;rdrug&amp;quot;);
+	
+		for(var i=0;i&amp;lt;drugspl.length();i++){
+			if(drugspl.length()-1 ==i){
+				likename += &amp;quot;refids like &amp;apos;%&amp;quot;+drugspl[i]+&amp;quot;%&amp;apos;&amp;quot;;
+			}else{
+				likename += &amp;quot;refids like &amp;apos;%&amp;quot;+drugspl[i]+&amp;quot;%&amp;apos; and &amp;quot;;
+			}
+		}
+		db = new pubpack.EADatabase();
+		var sql = &amp;quot;select content1 from CDMS_ERRORMSG WHERE 1=1 and &amp;quot;;
+		sql += likename ;
+
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount() &amp;gt; 0){
+			sb.append(ds.getValueAt(0,&amp;quot;content1&amp;quot;));
+		}else{
+			sb.append(&amp;quot;没有找到相关信息&amp;quot;);
+		}
+		}catch ( ee ) {
+		db.Rollback();
+		//sb.append(ee.toString());
+		throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	
+	return sb;
+}
+
+//
+// 
+//
+function getlinkage(){
+
+	var sql=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	var divli=&amp;quot;&amp;lt;div style=\&amp;quot;border:1px solid #CCCCCC;width:100%; height:100%;\&amp;quot;&amp;gt;&amp;lt;ul  id=\&amp;quot;leftmenu0\&amp;quot;&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;quot;;
+	try{
+		var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+		sql=&amp;quot;select * from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;;
+		var ds=db.QuerySQL(sql);
+		var onurl=&amp;quot;&amp;quot;;
+		var onguid=&amp;quot;&amp;quot;;
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			
+			var url=ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+			if(onurl==&amp;quot;&amp;quot;) {onurl=url; onguid=ds.getStringAt(i,&amp;quot;guid&amp;quot;);}
+			divli+=&amp;quot;&amp;lt;li style=\&amp;quot;cursor:pointer\&amp;quot;&amp;gt;&amp;lt;a onclick=\&amp;quot;setTab&amp;quot;+cdcnt +&amp;quot;(&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;br /&amp;gt;&amp;quot;;
+		}
+		divli+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		script=&amp;quot;&amp;lt;script&amp;gt;
+				function setTab&amp;quot;+cdcnt+&amp;quot;(url)
+				{ 
+					var ul=url+\&amp;quot;&amp;hashead=n\&amp;quot;;
+					$.ajax({
+					url: ul,
+					type: &amp;apos;POST&amp;apos;,
+//					error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+					success: function(result){
+						
+						document.getElementById(\&amp;quot;contentinfo&amp;quot;+cdcnt +&amp;quot;\&amp;quot;).innerHTML=result;
+					}
+					});
+				}
+				 window.onload=setTab&amp;quot;+cdcnt+&amp;quot;(&amp;apos;&amp;quot;+onurl+&amp;quot;&amp;apos;);
+			&amp;lt;/script&amp;gt;&amp;quot;;
+		var loyhtml=&amp;quot;&amp;quot;;
+//		if(onurl!=&amp;quot;&amp;quot;){
+//			
+//			var parent = new x_showflg_title();
+//			var layoutid=onurl.split(&amp;quot;&amp;&amp;quot;)[0].split(&amp;quot;=&amp;quot;)[1];
+//			request.getSession().setAttribute(&amp;quot;layhdrguid&amp;quot;,onguid);
+//			loyhtml=parent.getlayout(request,layoutid);
+//		}
+		html+=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;table width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;
+				 	&amp;lt;tr valign=\&amp;quot;top\&amp;quot;&amp;gt;
+						&amp;lt;td width=\&amp;quot;25%\&amp;quot;&amp;gt;&amp;quot;+divli+&amp;quot;&amp;lt;/td&amp;gt;
+						&amp;lt;td  width=\&amp;quot;70%\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;border:1px solid #CCCCCC; width:100%; height:100%;\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;width:100%; height:100%;\&amp;quot; id=\&amp;quot;contentinfo&amp;quot;+cdcnt +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;
+					&amp;lt;tr&amp;gt;
+				 &amp;lt;/table&amp;gt;
+			 &amp;lt;/div&amp;gt;&amp;quot;;
+	}catch ( ee ) {
+	db.Rollback();
+	//sb.append(ee.toString());
+	throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=&amp;quot;&amp;quot;) db.Close();
+	}
+	return html+script;
+
+}
+
+
+//
+//
+function btcontent()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	var tablehtml = &amp;quot;&amp;quot;;
+	var toolhtml = 0;
+	
+	//取request教师编号
+	var usrid = request.getParameter(&amp;quot;IDS&amp;quot;);
+
+	///取session登录教师编号
+	if (usrid == null || usrid == &amp;quot;&amp;quot;) {
+		var usrinfo = web.EASession.GetLoginInfo(request);
+		usrid = usrinfo.getUsrid();
+		
+		if (usrid == &amp;quot;xlsgrid&amp;quot;) {
+			usrid = &amp;quot;040470&amp;quot;;
+		}
+	}
+   
+	try{
+		db = new pubpack.EADatabase();
+		
+		sql=&amp;quot;select guid,url,icon2,decode(LEVEL,1,name,2,&amp;apos;　&amp;apos;||name,name) name,seqid,CONTEXTES,LEVEL from LSYSURL a where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; start with CONTEXTES is null connect by prior id=CONTEXTES order by id&amp;quot;;
+		var ds = db.QuerySQL(sql);
+
+		var onurl = &amp;quot;&amp;quot;;
+		var onguid = &amp;quot;&amp;quot;;
+	
+		for(var i = 0;i&amp;lt; ds.getRowCount();i++){
+			var url = ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+			if(onurl == &amp;quot;&amp;quot;) {
+				onurl = url; 
+				onguid = ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+			}
+			var lev= ds.getStringAt(i,&amp;quot;LEVEL&amp;quot;);
+			if (lev == 1) {
+				tablehtml+=&amp;quot;&amp;lt;p  style=&amp;apos;color:#c0c0c0&amp;apos;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot;\&amp;quot; width=16 height=16/&amp;gt; &amp;nbsp;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			}else {
+				tablehtml+=&amp;quot;&amp;lt;button class=&amp;apos;button white&amp;apos; onclick=&amp;apos;javascript:show_right(&amp;quot;+i+&amp;quot;);&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/button&amp;gt;&amp;quot;;
+			}
+			toolhtml ++;
+		}
+	}catch(e) {
+		db.Rollback();
+		throw new pubpack.EAException ( e.toString() );
+		
+	}finally {
+		if (db != &amp;quot;&amp;quot;) db.Close();
+	}
+
+	ret = &amp;quot;&amp;lt;html&amp;gt;
+		 &amp;lt;head&amp;gt;
+			&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html;charset=gb2312&amp;apos;&amp;gt;
+			
+			&amp;lt;script&amp;gt;
+			onload = function() {
+				show_right(3);
+			}
+			onresize = function() {
+				iframeResize(this); 
+			}
+				// 切换页面的触发事件
+				function show_right(num){
+					if (num == 1) { //编辑
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Edit&amp;apos;;
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid+&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 3) { //工作量
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Dou&amp;apos;;						
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid +&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+						
+					}if (num == 4) {//教学工作
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Dou2&amp;apos;;						
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid +&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 5) {//学习经历
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Dou1&amp;apos;;					
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid +&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 6) {//工作经历
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Dou5&amp;apos;;		
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid +&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 7) {//发表论文
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Dou3&amp;apos;;						
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid +&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 8) {//教师获奖情况
+						var a = &amp;apos;show.sp?grdid=APO_TEA_Dou4&amp;apos;;						
+						a += &amp;apos;&amp;ID=&amp;quot;+usrid +&amp;quot;&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 10) {//教师获奖信息上报
+						var a = &amp;apos;show.sp?grdid=APO_AwaRep&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 11) {//教师教研项目上报
+						var a = &amp;apos;show.sp?grdid=APO_ResRep&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}if (num == 12) {//教师发表论文上报
+						var a = &amp;apos;show.sp?grdid=APO_TheRep&amp;apos;;
+						document.getElementById(\&amp;quot;_main\&amp;quot;).src = a;
+					}
+				}
+
+			    function iframeResize(iframe){
+ 					 try {
+ 					 
+ 					 
+// 					alert(document.body.clientHeight+&amp;apos;~&amp;apos;+document.body.offsetHeight+&amp;apos;@&amp;apos;+document.body.scrollHeight+&amp;apos;#&amp;apos;+document.documentElement.clientHeight);
+					 iframe.height = document.documentElement.clientHeight-75-(2*10);
+					 alert(iframe.height);
+ 					 
+//				             var idocumentElement = iframe.contentWindow.document.documentElement;
+//				             //取得body的页面内容：alert(iframe.contentWindow.document.body.innerHTML);
+//				             if (idocumentElement.scrollHeight &amp;gt; 560) {
+//				                 iframe.height -= 5;
+//				                 iframe.height = idocumentElement.scrollHeight;
+//				             } else {
+//				                 var topHeight=4+43+12; //标题栏高度+控制栏高度
+//						 var winHeight= window.screenTop;    //55
+//						 var avaHeight= document.body.offsetHeight;//window.screen.availHeight; // 浏览器总高度
+//						  
+//				                 iframe.height = avaHeight-(topHeight+winHeight);
+//				                 alert(avaHeight);
+//				             }
+				         }
+				         catch (e) {
+				             window.status = &amp;apos;Error: &amp;apos; + e.number + &amp;apos;; &amp;apos; + e.description;
+				         }
+				}
+
+			&amp;lt;/script&amp;gt;
+			&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;
+				 .button {
+			    		margin: 0 2px;  
+			   		cursor: pointer;  
+			    		text-align: left;  
+			    		text-decoration: none;
+			    		padding: .10em 2em .50em; 
+			    		width:140px;
+			    		height:30px;
+					background:url(EAFormBlob.sp?guid=68440FEC95C0400D93C0A07950791CAA);
+					border:0px;
+					font:&amp;apos;a7a7a7&amp;apos;;
+					font-size:13px;
+				}
+				.button:hover {
+					background:url(EAFormBlob.sp?guid=B14A7629BD874B27AEFFE6B3E50923AC);
+				}
+//				body { 
+//					overflow-y : auto; 
+//				} 
+			&amp;lt;/style&amp;gt;
+		 &amp;lt;/head&amp;gt;
+		
+		&amp;lt;body bgcolor=&amp;apos;#c0c0c0&amp;apos; height=&amp;apos;100%&amp;apos; scrolling=&amp;apos;auto&amp;apos;&amp;gt;
+			&amp;lt;table width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; style=&amp;apos;background-color:#ffffff&amp;apos;&amp;gt;
+			   &amp;lt;tr width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+		              &amp;lt;td width=&amp;apos;100&amp;apos; height=&amp;apos;100%&amp;apos; align=&amp;apos;center&amp;apos; valign=&amp;apos;top&amp;apos; style=&amp;apos;text-decoration:none;&amp;apos;&amp;gt;
+			       &amp;quot;+tablehtml+&amp;quot;
+		             &amp;lt;/td&amp;gt;
+			    &amp;lt;td style=&amp;apos;border-left:1px solid #c0c0c0&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;
+			    &amp;lt;td width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;&amp;lt;iframe id=&amp;apos;_main&amp;apos; onresize=&amp;apos;javascript:iframeResize(this);&amp;apos; scrolling=&amp;apos;auto&amp;apos; frameBorder=0 border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; &amp;gt;&amp;lt;/iframe&amp;gt;&amp;lt;/td&amp;gt;
+		        &amp;lt;/tr&amp;gt;
+		    &amp;lt;/table&amp;gt;
+	       &amp;lt;/body&amp;gt;
+	&amp;lt;/html&amp;gt;&amp;quot;;
+	
+	return ret;
+}
+//
+function cjmuen(){
+	var sql=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	if(onmouseovercolor==null)  onmouseovercolor=&amp;quot;&amp;quot;;
+	if(onmouseoverground==null) onmouseoverground=&amp;quot;&amp;quot;;
+	if(clickbackground==null) clickbackground=&amp;quot;&amp;quot;;
+	if(clickcolor==null) clickcolor=&amp;quot;&amp;quot;;
+//	var divli=&amp;quot;&amp;lt;div style=\&amp;quot;border:0px solid #CCCCCC;width:100%; height:100%;background-color:#ffffff;\&amp;quot;&amp;gt;&amp;lt;ul  id=\&amp;quot;leftmenu0\&amp;quot;&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;quot;;
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	if(SQLTXT==&amp;quot;&amp;quot;)
+//		sql=&amp;quot;select guid,url,icon2,decode(LEVEL,1,name,2,&amp;apos;　&amp;apos;||name,name) name,seqid,CONTEXTES,target,id,LEVEL from LSYSURL a where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; start with CONTEXTES is null connect by prior id=CONTEXTES order by id&amp;quot;;
+		sql=&amp;quot;select guid,url,icon2,decode(CONTEXTES,&amp;apos;&amp;apos;,name,&amp;apos;　&amp;apos;||name) name,seqid,CONTEXTES,target,id from LSYSURL a where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;  order by id&amp;quot;;
+	else
+		sql=SQLTXT;
+	var ds=db.QuerySQL(sql);
+	var onurl=&amp;quot;&amp;quot;;
+	var onguid=&amp;quot;&amp;quot;;
+	var st = new Array(); 
+	var divli=&amp;quot;&amp;lt;table width=100% style=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+	for(var i=0;i&amp;lt;ds.getRowCount();i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		url=pub.EAFunc.Replace(url,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		var gusrinfo=web.EASession.GetUserinfo(request);
+		if(gusrinfo!=null){
+			url=web.EASession.GetSysValue(url,request);//替换request 中[%id]
+			url=web.EASession.GetSysValue(url,web.EASession.GetUserinfo(request));
+		}
+		
+		while((url.indexOf(&amp;quot;[%&amp;quot;)&amp;gt;-1&amp;&amp;i&amp;lt;1000)){
+			var idx1 = url.indexOf(&amp;quot;[&amp;quot;);
+			
+			var idx2 = url.indexOf(&amp;quot;]&amp;quot;)+1;
+			
+			var val=url.substring(idx1,idx2);
+			url=pub.EAFunc.Replace(url,val,&amp;quot;&amp;quot;);
+		}
+
+	
+		var target=ds.getStringAt(i,&amp;quot;target&amp;quot;);
+		if(onurl==&amp;quot;&amp;quot;&amp;&amp;ds.getStringAt(i,&amp;quot;url&amp;quot;)!=&amp;quot;&amp;quot;) {onurl=url; onguid=ds.getStringAt(i,&amp;quot;guid&amp;quot;);}
+		var lev= ds.getStringAt(i,&amp;quot;CONTEXTES&amp;quot;);
+		if (lev == 1) {
+			divli+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;apos;right&amp;apos; width=15% height=\&amp;quot;35px\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td id=\&amp;quot;td&amp;quot;+id+&amp;quot;\&amp;quot; style=\&amp;quot;color:#999999;font-size:13px;\&amp;quot; align=&amp;apos;left&amp;apos; width=75% &amp;gt; &amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		else {
+			st.push(id);
+			if(i==1){
+				divli+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;apos;right&amp;apos; width=15% height=\&amp;quot;30px\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td id=\&amp;quot;td&amp;quot;+id+&amp;quot;\&amp;quot; style=\&amp;quot;cursor:pointer;background:&amp;quot;+clickbackground+&amp;quot;\&amp;quot; align=&amp;apos;left&amp;apos; width=75% onMouseOut=\&amp;quot;setoutcolor&amp;quot;+cdcnt+&amp;quot;(this.id)\&amp;quot; onmouseover=\&amp;quot;setovercolor&amp;quot;+cdcnt+&amp;quot;(this.id)\&amp;quot; onclick=\&amp;quot;setTab&amp;quot;+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			}
+			else
+				divli+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;apos;right&amp;apos; width=15% height=\&amp;quot;30px\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td id=\&amp;quot;td&amp;quot;+id+&amp;quot;\&amp;quot; style=\&amp;quot;cursor:pointer\&amp;quot; align=&amp;apos;left&amp;apos; width=75% onMouseOut=\&amp;quot;setoutcolor&amp;quot;+cdcnt+&amp;quot;(this.id)\&amp;quot; onmouseover=\&amp;quot;setovercolor&amp;quot;+cdcnt+&amp;quot;(this.id)\&amp;quot; onclick=\&amp;quot;setTab&amp;quot;+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+	}
+	divli+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+
+	script=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+			function setTab&amp;quot;+cdcnt+&amp;quot;(id,url,target)
+			{
+				var str=&amp;quot;+st+&amp;quot;;
+				for ( var i=0;i&amp;lt;str.length;i++){
+					var rid=\&amp;quot;td\&amp;quot;+str[i];
+					document.getElementById(rid).style.background=&amp;apos;#ffffff&amp;apos;;
+					document.getElementById(rid).style.color=&amp;apos;#000000&amp;apos;;
+				}
+				document.getElementById(id).style.background=&amp;apos;&amp;quot;+clickbackground+&amp;quot;&amp;apos;;
+				document.getElementById(id).style.color=&amp;apos;&amp;quot;+clickcolor+&amp;quot;&amp;apos;;
+				if(target==\&amp;quot;_self\&amp;quot;){
+					
+				}
+				else if (target==\&amp;quot;_blank\&amp;quot;){
+				
+				}
+				else if (target==\&amp;quot;_parent\&amp;quot;){
+					
+				}
+				else if (target!=\&amp;quot;\&amp;quot;){
+					
+					document.getElementById(target).src=url;
+				}
+				else 
+					window.location = url;
+			}
+			function setovercolor&amp;quot;+cdcnt+&amp;quot;(id){
+				document.getElementById(id).style.color=&amp;apos;&amp;quot;+onmouseovercolor+&amp;quot;&amp;apos;;
+//					document.getElementById(id).style.background=&amp;apos;&amp;quot;+onmouseoverground+&amp;quot;&amp;apos;;
+			}
+			function setoutcolor&amp;quot;+cdcnt+&amp;quot;(id){
+//					document.getElementById(id).style.background=&amp;apos;#ffffff&amp;apos;;
+				document.getElementById(id).style.color=&amp;apos;#000000&amp;apos;;
+			}
+//				 window.onload=setTab&amp;quot;+cdcnt+&amp;quot;(&amp;apos;&amp;quot;+onurl+&amp;quot;&amp;apos;);
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	var style=&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;
+
+
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	var loyhtml=&amp;quot;&amp;quot;;
+	html+=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;table id=tbhower width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;
+			 	&amp;lt;tr valign=\&amp;quot;top\&amp;quot;&amp;gt;
+					&amp;lt;td&amp;gt;&amp;quot;+divli+&amp;quot;&amp;lt;/td&amp;gt;
+				&amp;lt;tr&amp;gt;
+			 &amp;lt;/table&amp;gt;
+		 &amp;lt;/div&amp;gt;&amp;quot;;
+	return style+script+html;
+}
+
+//
+// leftwidth : default 25% 
+// showsubmenumode 载入时是否展开子菜单	如果0默认全展开1仅展开第一个菜单 2 不展开菜单
+function get_cjmenucontent(){
+
+	var sql=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	var script=&amp;quot;&amp;quot;;
+	var tablehtml = &amp;quot;&amp;quot;;
+	var toolhtml = 0;
+	if(leftwidth==&amp;quot;&amp;quot;)leftwidth = &amp;quot;25%&amp;quot;;
+	if(titlefontsize==&amp;quot;&amp;quot;)titlefontsize= &amp;quot;3&amp;quot;;	
+	if(showsubmenumode ==&amp;quot;&amp;quot;)showsubmenumode = &amp;quot;0&amp;quot;;	
+
+	var layhdrguid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;layhdrguid&amp;quot;),&amp;quot;&amp;quot;) ;
+		var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	      	if(SQLTXT==&amp;quot;&amp;quot;)
+			sql=&amp;quot;select guid,url,icon2,decode(CONTEXTES,&amp;apos;&amp;apos;,name,&amp;apos;　&amp;apos;||name) name,seqid,CONTEXTES,target,id from LSYSURL a where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;  order by seqid,id&amp;quot;;
+		else
+			sql=SQLTXT;var ds=db.QuerySQL(sql);
+		var onurl=&amp;quot;&amp;quot;;
+		var onguid=&amp;quot;&amp;quot;;
+		tablehtml+=&amp;quot;&amp;lt;table width=100%&amp;gt;&amp;quot;;
+		var menucnt = 0;
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+				var url=ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+				var target=ds.getStringAt(i,&amp;quot;target&amp;quot;);
+				var thisid = ds.getStringAt(i,&amp;quot;id&amp;quot;);
+				var titleimg = &amp;quot;&amp;quot;;
+				var icon2 = ds.getStringAt(i,&amp;quot;icon2&amp;quot;);
+				if(icon2.length()&amp;gt;0&amp;&amp;icon2.substring(0,1)==&amp;quot;&amp;lt;&amp;quot;)titleimg = icon2;
+				else if(icon2.length()&amp;gt;=9&amp;&amp;icon2.substring(0,9)==&amp;quot;glyphicon&amp;quot;)titleimg = &amp;quot;&amp;lt;span class=&amp;apos;&amp;quot;+icon2+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+
+				else if(icon2 !=&amp;quot;&amp;quot;) titleimg = &amp;quot;&amp;lt;img src=\&amp;quot;&amp;quot;+icon2 +&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;
+				
+			        if(onurl==&amp;quot;&amp;quot;) {
+			        	if(layhdrguid!=&amp;quot;&amp;quot;)
+			        		onurl=&amp;quot;L.sp?id=contenttxt&amp;layhdrguid=&amp;quot;+layhdrguid; onguid=ds.getStringAt(i,&amp;quot;guid&amp;quot;); 
+			        	if(layhdrguid==&amp;quot;&amp;quot;&amp;&amp;ds.getStringAt(i,&amp;quot;url&amp;quot;)!=&amp;quot;&amp;quot;&amp;&amp;ds.getStringAt(i,&amp;quot;guid&amp;quot;)!=&amp;quot;&amp;quot;)
+			        		onurl=url;
+			        }
+				var lev= ds.getStringAt(i,&amp;quot;CONTEXTES&amp;quot;);
+				if (lev ==&amp;quot;&amp;quot;) {
+					menucnt ++;
+					if(titleimg == &amp;quot;&amp;quot;)titleimg  = &amp;quot;&amp;lt;span class=&amp;apos;glyphicon glyphicon-folder-open&amp;apos;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					if(ds.getStringAt(i,&amp;quot;url&amp;quot;) == &amp;quot;&amp;quot;) tablehtml+=&amp;quot; &amp;lt;tr&amp;gt;&amp;lt;td height=30 id=&amp;apos;&amp;quot;+thisid +&amp;quot;&amp;apos; onclick=\&amp;quot;javascript:f_showsub(&amp;apos;&amp;quot;+thisid+&amp;quot;&amp;apos;);\&amp;quot; width=100%  style=\&amp;quot;cursor:pointer;padding-left:20px;display:block;\&amp;quot; bgcolor=&amp;apos;#EFEFEF&amp;apos;&amp;gt; &amp;lt;table width=100% height=100%&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;apos;right&amp;apos; width=&amp;apos;10px&amp;apos; height=\&amp;quot;30px\&amp;quot;&amp;gt;&amp;quot;+titleimg+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td style=\&amp;quot;color:#333333;font-size:13px;\&amp;quot; align=&amp;apos;left&amp;apos; &amp;gt;&amp;lt;font size=&amp;quot;+titlefontsize+&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+					else tablehtml+=&amp;quot; &amp;lt;tr&amp;gt;&amp;lt;td height=30 id=&amp;apos;&amp;quot;+thisid +&amp;quot;&amp;apos; onclick=\&amp;quot;javascript:setTab&amp;quot;+cdcnt+&amp;quot;(&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;);f_showsub(&amp;apos;&amp;quot;+thisid+&amp;quot;&amp;apos;);\&amp;quot; width=100%  style=\&amp;quot;cursor:pointer;padding-left:20px;display:block;\&amp;quot; bgcolor=&amp;apos;#EFEFEF&amp;apos;&amp;gt; &amp;lt;table width=100% height=100%&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;apos;right&amp;apos; width=&amp;apos;10px&amp;apos; height=\&amp;quot;30px\&amp;quot;&amp;gt;&amp;quot;+titleimg+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td style=\&amp;quot;color:#333333;font-size:13px;\&amp;quot; align=&amp;apos;left&amp;apos; &amp;gt;&amp;lt;font size=&amp;quot;+titlefontsize+&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+				}
+				else {
+					var display = &amp;quot;block&amp;quot;;
+					if(showsubmenumode==1&amp;&amp;menucnt!=1)	display  = &amp;quot;none&amp;quot;;
+					else if(showsubmenumode==2) display  = &amp;quot;none&amp;quot;;
+					if(titleimg ==&amp;quot;&amp;quot;)titleimg  = &amp;quot;&amp;lt;span class=&amp;apos;glyphicon glyphicon-list-alt&amp;apos;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+
+					tablehtml+=&amp;quot;&amp;lt;tr id=&amp;apos;ref_&amp;quot;+lev +&amp;quot;&amp;apos; style=\&amp;quot;cursor:pointer;display:&amp;quot;+display +&amp;quot;;\&amp;quot; onclick=\&amp;quot;setTab&amp;quot;+cdcnt+&amp;quot;(&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;&amp;lt;td height=30  style=\&amp;quot;padding-top:5px;padding-left:45px;\&amp;quot;  align=&amp;apos;left&amp;apos; width=100%  &amp;gt;&amp;quot;+titleimg+&amp;quot; &amp;nbsp;&amp;nbsp;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+				}
+				toolhtml ++;
+		}
+		tablehtml+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+//					window.location.href=url;
+		script=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+				function setTab&amp;quot;+cdcnt+&amp;quot;(url,target)
+				{
+					if(target == &amp;apos;_blank&amp;apos;) window.location  = url;
+					else {
+						var ul=url+\&amp;quot;&amp;hashead=n\&amp;quot;;
+						$.ajax({
+						url: ul,
+						type: &amp;apos;POST&amp;apos;,
+						error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+						success: function(result){
+							document.getElementById(\&amp;quot;contentinfo&amp;quot;+cdcnt +&amp;quot;\&amp;quot;).innerHTML=result;
+							try { setTimeout(\&amp;quot;ref_load()\&amp;quot;,10); } catch (e) { }
+						}
+						});
+					}
+				}
+				function f_showsub(id)
+				{
+					var idlist = document.all(&amp;apos;ref_&amp;apos;+id) ;
+					if(idlist.length==0)return;
+					var dis = &amp;apos;none&amp;apos;;
+					
+					try { //多个对象
+						if(idlist[0].style.display==&amp;apos;none&amp;apos;)dis =&amp;apos;block&amp;apos;;
+						for ( var i=0;i&amp;lt;idlist.length;i++){
+							idlist[i].style.display = dis;
+						}
+					} catch (e) { //单个对象
+						if(document.all(&amp;apos;ref_&amp;apos;+id).style.display==&amp;apos;none&amp;apos;)dis =&amp;apos;block&amp;apos;;
+						document.all(&amp;apos;ref_&amp;apos;+id).style.display = dis;
+					}
+				}
+				 window.onload=setTab&amp;quot;+cdcnt+&amp;quot;(&amp;apos;&amp;quot;+onurl+&amp;quot;&amp;apos;);
+			&amp;lt;/script&amp;gt;&amp;quot;;
+		script+=&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;
+				.colsz{
+			    		margin: 0 2px;  
+			   		cursor: pointer;  
+			    		text-align: left;  
+			    		text-decoration: none;
+			    		padding: .10em 2em .50em; 
+			    		height:30px;
+					background:url(EAFormBlob.sp?guid=68440FEC95C0400D93C0A07950791CAA);
+					border:0px;
+					font:&amp;apos;a7a7a7&amp;apos;;
+					font-size:13px;
+				}
+
+			&amp;lt;/style&amp;gt;&amp;quot;;
+			
+		var loyhtml=&amp;quot;&amp;quot;;
+
+		html+=&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; style=&amp;apos;background-color:#ffffff&amp;apos;&amp;gt;
+				 	&amp;lt;tr valign=\&amp;quot;top\&amp;quot;&amp;gt;
+						&amp;lt;td width=\&amp;quot;&amp;quot;+leftwidth+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;margin-top:5px;\&amp;quot;&amp;gt;&amp;quot;+tablehtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;
+						&amp;lt;td style=&amp;apos;border-left:1px solid #c0c0c0;height:100px&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+						&amp;lt;td &amp;gt;&amp;lt;div style=\&amp;quot;border:0px solid #CCCCCC; width:100%; height:100%; text-align:center;\&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;width:100%; height:100%; margin:0 auto; \&amp;quot; id=\&amp;quot;contentinfo&amp;quot;+cdcnt +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;
+					&amp;lt;tr&amp;gt;
+				 &amp;lt;/table&amp;gt;
+			 &amp;quot;;
+
+	return script+html;
+
+}
+
+//
+// 新搜索
+//
+function newsearch(){
+	var searchval= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;searchval&amp;quot;),&amp;quot;&amp;quot;) ;
+	if(gridcolor==&amp;quot;&amp;quot;) gridcolor=&amp;quot;#ff0000&amp;quot;;
+	if(width==&amp;quot;&amp;quot;) width=&amp;quot;500&amp;quot;; else if(width.split(&amp;quot;px&amp;quot;).length()&amp;gt;1) width=width.split(&amp;quot;px&amp;quot;)[0];
+	if(height==&amp;quot;&amp;quot;) height=&amp;quot;25&amp;quot;; else if(height.split(&amp;quot;px&amp;quot;).length()&amp;gt;1) height=height.split(&amp;quot;px&amp;quot;)[0]*1.0;
+	var css=&amp;quot;&amp;lt;style&amp;gt;
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	var html=&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;&amp;quot;+width+&amp;quot;\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;&amp;quot;+border+&amp;quot;\&amp;quot;&amp;gt;
+	&amp;lt;tr&amp;gt;
+		&amp;lt;td  bgcolor=\&amp;quot;&amp;quot;+gridcolor+&amp;quot;\&amp;quot;&amp;gt;
+			&amp;lt;table width=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; height=\&amp;quot;25\&amp;quot; style=\&amp;quot;border:&amp;quot;+border+&amp;quot; solid &amp;quot;+bordercolor+&amp;quot;\&amp;quot;&amp;gt;
+				&amp;lt;tr&amp;gt;
+				&amp;lt;td&amp;gt;&amp;lt;input  id=\&amp;quot;ipt&amp;quot;+cdcnt+&amp;quot;\&amp;quot; type=\&amp;quot;text\&amp;quot; value=\&amp;quot;&amp;quot;+searchval+&amp;quot;\&amp;quot; name=\&amp;quot;T1\&amp;quot;  style=\&amp;quot;height:&amp;quot;+height+&amp;quot;px;width:100%; border: 1px solid #FFFFFF; padding-left: 4px; padding-right: 4px; padding-top: &amp;quot;+height/5+&amp;quot;px; padding-bottom: 1px; font-size:14pt; text-align:left;\&amp;quot; size=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td rowspan=2 onclick=\&amp;quot;searchA&amp;quot;+cdcnt+&amp;quot;(&amp;apos;ipt&amp;quot;+cdcnt+&amp;quot;&amp;apos;)\&amp;quot; width=\&amp;quot;80\&amp;quot; style=\&amp;quot;CURSOR: pointer;\&amp;quot; bgcolor=\&amp;quot;&amp;quot;+gridcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;font color=\&amp;quot;#FFFFFF\&amp;quot; size=\&amp;quot;1\&amp;quot; style=\&amp;quot;font-family:&amp;apos;微软雅黑&amp;apos;; font-size:12pt;\&amp;quot;&amp;gt;搜 索&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;div id=\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;  style=\&amp;quot;position: absolute;z-index:9;background-color:white;border:1px solid;display:none;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+			&amp;lt;/table&amp;gt;
+		&amp;lt;/td&amp;gt;
+	&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+		function searchA&amp;quot;+cdcnt+&amp;quot;(id){
+			var value=document.getElementById(id).value;
+			if(value!=null &amp;&amp; value!=\&amp;quot;\&amp;quot;){
+				var url=&amp;apos;&amp;quot;+seaurl+&amp;quot;&amp;apos;;
+				url+=&amp;apos;&amp;searchval=&amp;apos;+value;&amp;quot;;
+				if(action==&amp;quot;location&amp;quot;){
+					script+=&amp;quot;window.location.href=url;&amp;quot;;
+				}
+				else{
+					script+=&amp;quot;window.open(url);&amp;quot;;
+				}
+		script+=&amp;quot;}
+			else{
+				alert(&amp;apos;请输入内容！&amp;apos;);
+			}
+		}&amp;quot;;
+	script+=&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;;
+	return css+html+script;
+}
+
+
+function mwiframe(){
+	var target= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;target&amp;quot;),&amp;quot;&amp;quot;);
+	if(target==&amp;quot;&amp;quot;)target=deftarget;//deftarget定义初始化target路径
+	var url=&amp;quot;show.sp?grdid=&amp;quot;+target;
+//	return url;
+	var html=&amp;quot;&amp;lt;iframe id=mwid src=&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos; scrolling=&amp;apos;auto&amp;apos; frameBorder=0 border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; &amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;;
+	return html;
+}
+
+function BIWAP1(){
+
+	var BI_GUID=pubpack.EAFunc.NVL( request.getParameter(&amp;quot;BIID&amp;quot;),&amp;quot;&amp;quot;);
+	
+	var BI_TITID=pubpack.EAFunc.NVL( request.getParameter(&amp;quot;BITITID&amp;quot;),&amp;quot;&amp;quot;);
+	var BI_TYP=&amp;quot;2&amp;quot;;
+	var TB_IFHEAD=&amp;quot;false&amp;quot;;
+	var TB_IFHEADBORDER=&amp;quot;false&amp;quot;;
+	var TB_HEAD=&amp;quot;&amp;quot;;
+	var TB_WIDTH=&amp;quot;100%&amp;quot;;
+	var TB_HEIGHT=&amp;quot;100%&amp;quot;;
+	var TB_ROLBGCOLOR=&amp;quot;#d5d5d5&amp;quot;;
+	var TB_BORDERCOLOR=&amp;quot;#cdcdcd&amp;quot;;
+	var LINE_HEIGHT=&amp;quot;25px&amp;quot;;
+	var TB_TABLW=&amp;quot;true&amp;quot;;
+	var TB_ENTBTYP=&amp;quot;&amp;quot;;
+	var usr = web.EASession.GetLoginInfo(request);
+	var sytid = usr.getSytid();
+	var topic = pub.EAFunc.NVL(BI_TITID,&amp;quot;&amp;quot;);
+	var modguid = pub.EAFunc.NVL(BI_GUID,&amp;quot;&amp;quot;);
+	var html=&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+bitypicon(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td valign=top&amp;gt;&amp;quot;+bityptable(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	return html;
+}
+//
+// 
+//
+function Biwap(){
+
+	var usr = web.EASession.GetLoginInfo(request);
+	var sytid = usr.getSytid();
+	var topic = pub.EAFunc.NVL(BI_TITID,&amp;quot;&amp;quot;);
+	var modguid = pub.EAFunc.NVL(BI_GUID,&amp;quot;&amp;quot;);
+	if(BI_TYP==0){
+		return bityptable(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP);
+	}
+	if(BI_TYP==1){
+		return bitypicon(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP);
+	}
+	if(BI_TYP==2){
+		var html=&amp;quot;&amp;lt;table width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+bitypicon(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td valign=top&amp;gt;&amp;quot;+bityptable(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		return html;
+	}
+}
+
+//BI表格
+function bityptable(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP){
+	var sql=&amp;quot;&amp;quot;;
+	sql=getbisql(db,request,sytid,topic,modguid,usr);
+
+	var trbgcolor=&amp;quot;#F9F9F9&amp;quot;;
+	var tdborder=0;
+//	TB_ENTBTYP=true;
+	var html=&amp;quot;&amp;lt;table borderColor=\&amp;quot;\&amp;quot;  align=\&amp;quot;center\&amp;quot; width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot; cellspcing=\&amp;quot;2\&amp;quot; cellpadding=\&amp;quot;2\&amp;quot; style=\&amp;quot;border-collapse:collapse;line-height:&amp;quot;+LINE_HEIGHT+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;
+	var ds=db.QuerySQL(sql);
+	var style=&amp;quot;&amp;quot;;
+	if(TB_IFHEADBORDER){
+		style=&amp;quot;style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px 1px;\&amp;quot;&amp;quot;;
+	}
+	if(TB_IFHEAD){
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;quot;+style+&amp;quot; colspan=\&amp;quot;&amp;quot;+ds.getColumnCount()+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+TB_HEAD+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	
+	for(var r=0; r&amp;lt;ds.getRowCount(); r++){
+		var colsum=0;
+		if(r==0){
+			html+=&amp;quot;&amp;lt;tr style=\&amp;quot;height:30px\&amp;quot; bgcolor=\&amp;quot;&amp;quot;+TB_ROLBGCOLOR+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+			for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+				
+				html+=&amp;quot;&amp;lt;td background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				if(c==ds.getColumnCount()-1){
+					html+=&amp;quot;&amp;lt;td background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px 1px;\&amp;quot;&amp;gt;合计&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+			}
+			html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		if(TB_TABLW==true&amp;&amp;r%2==1) trbgcolor=&amp;quot;#F9F9F9&amp;quot;; else trbgcolor=&amp;quot;#FFFFFF&amp;quot;;
+		if(TB_ENTBTYP==true) tdborder=0;  else tdborder=1;
+		html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+trbgcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+			
+			if(c&amp;gt;0) colsum+=ds.getStringAt(r,c)*1;
+			if(c==0&amp;&amp;ds.getColumnCount()&amp;gt;1)
+				html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+			else
+				html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+			if(c==ds.getColumnCount()-1){
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+colsum+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+			}
+		}
+		html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		if(r==ds.getRowCount()-1){
+			
+			var rlsum=0;
+			html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+trbgcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+			for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+				var rowsum=0;
+				for(var rr=0;rr&amp;lt;ds.getRowCount();rr++){
+					if(c&amp;gt;0) rowsum+=ds.getStringAt(rr,c)*1;
+				}
+				rlsum+=rowsum;
+				if(c==0&amp;&amp;ds.getColumnCount()&amp;gt;1)
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px 1px;\&amp;quot;&amp;gt;合计&amp;lt;/td&amp;gt;&amp;quot;;
+				else
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+rowsum+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				if(c==ds.getColumnCount()-1){
+						html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+rlsum+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+			}
+			html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+
+	}
+	
+	
+	html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+
+	return html;
+
+}
+//BI图形
+function bitypicon(db,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP){
+	var sql=getbisql(db,request,sytid,topic,modguid,usr);
+	var optionstr = &amp;quot;&amp;quot;;
+	var optionds = db.QuerySQL(&amp;quot;select * from V_CHARTTYPE&amp;quot;);
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	for (var r = 0;r &amp;lt; optionds.getRowCount();r ++) {
+		var id = optionds.getStringAt(r,&amp;quot;ID&amp;quot;);
+		var name = optionds.getStringAt(r,&amp;quot;NAME&amp;quot;);
+		var typ = optionds.getStringAt(r,&amp;quot;TYP&amp;quot;);
+		optionstr += &amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;-&amp;quot;+typ+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+	}
+	var html=&amp;quot;&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos;  style=&amp;apos;border: 1px solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;&amp;apos;  width=&amp;apos;98.5%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+								&amp;lt;tr&amp;gt;&amp;lt;td height=30 align=center background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif&amp;gt;
+								&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+								&amp;lt;tr&amp;gt;&amp;lt;td height=50% valign=top&amp;gt;
+									&amp;lt;div id=&amp;apos;container&amp;quot;+cdcnt+&amp;quot;&amp;apos; style=&amp;apos;margin:0px; &amp;apos;&amp;gt;&amp;lt;/div&amp;gt;
+								&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+								&amp;lt;/table&amp;gt;&amp;quot;;
+	var style=&amp;quot;&amp;lt;style&amp;gt;
+			.navPoint {
+				COLOR: #225f98; CURSOR: hand; FONT-FAMILY: &amp;apos;Webdings&amp;apos;; FONT-SIZE: 9pt
+				}
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+   	 var options={
+	        chart:{
+	            backgroundColor: &amp;apos;#FFFFFF&amp;apos;,
+	            plotBackgroundColor: null,
+		    plotBorderWidth: null,
+		    plotShadow: false,
+		    renderTo:&amp;apos;container&amp;quot;+cdcnt+&amp;quot;&amp;apos;  
+	        },
+	        exporting: {
+	            buttons: {
+	                contextButton: {
+	                    menuItems: [
+	                    	{
+	                       	 	text: &amp;apos;柱状图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;柱状图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;折线图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;折线图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;区域图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;区域图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;曲线区域图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;曲线区域图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;3D柱状图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;3D柱状图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;3D饼图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;3D饼图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;混合图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;混合图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;柱形堆叠图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;柱形堆叠图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;漏斗图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart(&amp;apos;漏斗图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                        	separator: true
+	                    	}
+	                   ]
+	                   .concat(Highcharts.getOptions().exporting.buttons.contextButton.menuItems)
+	                 }
+	       	   }
+	        },
+	        title: {
+	            text: &amp;apos;&amp;quot;+GetTopic(db,sytid,topic)+&amp;quot;&amp;apos;
+	        },
+	        plotOptions: {
+	            column: {
+	                depth: 25
+	            }
+	        },
+	        xAxis: {
+	            categories: &amp;quot;+getxAxis(db,sql,sytid,topic,0)+&amp;quot;
+	        },
+	        yAxis: {
+	            allowDecimals: false,
+	            title: {
+	                text: &amp;apos;z &amp;apos;
+	            }
+	        },
+	        series: [&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;]
+	    };
+    	$(document).ready(function(){
+    		options.chart.type =&amp;apos;column&amp;apos;;
+		var chart = new Highcharts.Chart(options);
+	});
+&amp;lt;/script&amp;gt;&amp;quot;;
+	script+=&amp;quot;&amp;lt;script&amp;gt;
+		function f_chgchart(val){
+			if(val==&amp;apos;柱状图&amp;apos;){
+				options.labels={};
+				options.legend={};
+				options.plotOptions={};
+				options.chart.type =&amp;apos;column&amp;apos;;
+				 options.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options.series=[&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;];
+				var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;折线图&amp;apos;){	
+				options.plotOptions={};
+			 	options.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };	
+        			options.yAxis.plotLines=[{
+			                value: 0,
+			                width: 1,
+			                color: &amp;apos;#808080&amp;apos;
+			            }];
+				options.chart.type =&amp;apos;line&amp;apos;;
+				options.legend ={
+				            layout: &amp;apos;vertical&amp;apos;,
+				            align: &amp;apos;right&amp;apos;,
+				            verticalAlign: &amp;apos;middle&amp;apos;,
+				            borderWidth: 0
+				        };
+				        options.series=[&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;];
+				var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;区域图&amp;apos;){
+				options.labels={};
+				options.legend={};
+				options.plotOptions={};
+				options.chart.type =&amp;apos;area&amp;apos;;
+				 options.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options.series=[&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;];
+				var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;曲线区域图&amp;apos;){
+				options.labels={};
+				options.legend={};
+				options.plotOptions={};
+				options.chart.type =&amp;apos;areaspline&amp;apos;;
+				 options.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options.series=[&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;];
+				 var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;3D柱状图&amp;apos;){
+				options.labels={};
+				options.legend={};
+				options.plotOptions={};
+				 options.chart.type=&amp;apos;column&amp;apos;;
+				 options.chart.margin=75;
+				 options.chart.options3d={
+				                enabled: true,
+				                alpha: 10,
+				                beta: 25,
+				                depth: 70
+				            };
+				 options.plotOptions.column={
+				                depth: 25
+				            };
+				 options.series=[&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;];
+				 var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;3D饼图&amp;apos;){
+				 options.chart.type=&amp;apos;pie&amp;apos;;
+				 options.plotOptions={};
+				 options.chart.options3d={
+			                enabled: true,
+			                alpha: 45,
+			                beta: 0
+			            };
+			           options.series=[{
+				            type: &amp;apos;pie&amp;apos;,
+				            name: &amp;apos;合计&amp;apos;,
+				            data: &amp;quot;+getseriessum(db,sql,sytid,topic,0)+&amp;quot;
+				   }];
+				   
+				   options.plotOptions={
+				            pie: {
+				                allowPointSelect: true,
+				                cursor: &amp;apos;pointer&amp;apos;,
+				                dataLabels: {
+				                    enabled: true,
+				                    color: &amp;apos;#cdcdcd&amp;apos;,
+				                    connectorColor: &amp;apos;#000000&amp;apos;,
+				                    format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt;: {point.percentage:.1f} %&amp;apos;
+				                }
+				            }
+				        };
+				 options.labels={};
+			          var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;混合图&amp;apos;){
+				 options.chart.options3d={};
+				 options.plotOptions={};
+				 options.series=[&amp;quot;+getserieshunhe(db,sql,sytid,topic,0)+&amp;quot;];
+				 options.labels= {                                                         
+			            items: [{                                                     
+			                html: &amp;apos;合计&amp;apos;,                          
+			                style: {                                                  
+			                    left: &amp;apos;150px&amp;apos;,                                         
+			                    top: &amp;apos;8px&amp;apos;,                                           
+			                    color: &amp;apos;black&amp;apos;                                        
+			                }                                                         
+			            }]                                                            
+			        };                                                          
+				 var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;柱形堆叠图&amp;apos;){
+				
+				options.labels={};
+				options.legend={};
+				options.chart.type =&amp;apos;column&amp;apos;;
+				 options.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options.plotOptions={
+					            column: {
+					                stacking: &amp;apos;normal&amp;apos;
+					            }
+					        };
+				options.series=[&amp;quot;+getseries(db,sql,sytid,topic,0)+&amp;quot;];
+				var chart = new Highcharts.Chart(options);
+			}
+			else if(val==&amp;apos;漏斗图&amp;apos;){
+				options.labels={};
+				options.legend={};
+				options.plotOptions={
+					            series: {
+					                dataLabels: {
+					                    enabled: true,
+					                    format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt; ({point.y:,.0f})&amp;apos;,
+					                    color: &amp;apos;black&amp;apos;,
+					                    softConnector: true
+					                },
+					                neckWidth: &amp;apos;30%&amp;apos;,
+					                neckHeight: &amp;apos;25%&amp;apos;
+					            }
+					        };
+				options.chart.type ={
+					            type: &amp;apos;funnel&amp;apos;,
+					            marginRight: 100
+					        };
+				
+				options.series=[{
+						   name: &amp;apos;合计&amp;apos;,
+						   data: &amp;quot;+getseriessum(db,sql,sytid,topic,0)+&amp;quot;
+						}];
+				options.xAxis={};
+				options.yAxis={};
+				alert(options);
+				var chart = new Highcharts.Chart(options);
+			}
+
+		}
+	
+	&amp;lt;/script&amp;gt;&amp;quot;;
+	return style+script+html;
+}
+//获取BI sql
+function getbisql(db,request,sytid,topic,modguid,usr){
+
+	db = new pub.EADatabase();
+	var tablename = db.GetSQL(&amp;quot;select sourceds from dim_model where guid=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;);
+	var isCross = isCrossReport(db,sytid,topic);
+	var sql=&amp;quot;&amp;quot;;
+	if (!isCross) {
+		sql = &amp;quot;select &amp;quot;
+			+ getVdimWithName(db,sytid,topic,modguid,tablename) + &amp;quot;,&amp;quot;
+			+ getTarget(db,sytid,topic,true,modguid,tablename)
+			+ &amp;quot;,&amp;apos;双击钻取&amp;apos; 双击钻取&amp;quot;
+			+ &amp;quot;\n  from &amp;quot;
+			+ tablename
+			+ &amp;quot;\n where &amp;quot;
+			+ getSearchParam(db,sytid,topic,request)
+			+ &amp;quot;\n group by &amp;quot;
+			+ getVdim(db,sytid,topic)
+			+ &amp;quot;\n order by &amp;quot;
+			+ getVdimOrders(db,sytid,topic,modguid,tablename);
+	} else {
+		sql = &amp;quot;select &amp;quot;
+			+ getVdimWithName(db,sytid,topic,modguid,tablename) + &amp;quot;,&amp;quot;
+			+ colDate2Char(db,sytid,topic,getTarget(db,sytid,topic,false,modguid,tablename))
+			+ &amp;quot;\n  from &amp;quot;
+			+ tablename
+			+ &amp;quot;\n where &amp;quot;
+			+ getSearchParam(db,sytid,topic,request);
+		var r_HCols = getVdimName(db,sytid,topic,modguid,tablename);		//交叉行字段
+		var r_VCols = getCrossCol(db,sytid,topic);	//交叉列字段
+		var r_VCol = getCrossTarget(db,sytid,topic);	//交叉值字段
+		var colsql = getColSQL(db,sytid,topic,r_VCols);	//交叉列字段SQL
+		var orderby = getVdimOrders(db,sytid,topic,modguid,tablename);		//行排序字段
+		sql = pub.EASqlFunc.GetSql2CrossTableSQL(db,sql,colsql,r_HCols,r_VCols,r_VCol,orderby);
+	}
+	var gusrinfo=web.EASession.GetUserinfo(request);
+	if(gusrinfo!=null){
+		sql=web.EASession.GetSysValue(sql,request);//替换request 中[%id]
+		sql=web.EASession.GetSysValue(sql,web.EASession.GetUserinfo(request));
+	}
+
+	
+	return sql;
+}
+
+//获取维度（带中文名）
+function getVdimWithName(db,sytid,topic,modguid,tablename)
+{
+	var str = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var vdim = db.GetSQL(sql);
+	
+	var arr = vdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+		if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+		if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+		str += arr[i] +&amp;quot; as \&amp;quot;&amp;quot;+ colnam +&amp;quot;\&amp;quot;&amp;quot;;
+	}
+	return str;
+}
+
+//获取目标（带中文名）
+function getTarget(db,sytid,topic,sumflg,modguid,tablename)
+{
+	var str = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select hdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var hdim = db.GetSQL(sql);
+	
+	var arr = hdim.split(&amp;quot;,&amp;quot;);
+	if (!sumflg) {
+		for (var i = 0;i &amp;lt; arr.length();i ++) {
+			if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+			str += arr[i];
+		}
+	} else {
+		for (var i = 0;i &amp;lt; arr.length();i ++) {
+			var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+			if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+			
+			if (i == 0) {
+				str = &amp;quot;sum(&amp;quot;+ arr[i] +&amp;quot;) as \&amp;quot;&amp;quot;+ colnam +&amp;quot;\&amp;quot;&amp;quot;;
+			} else {
+				str += &amp;quot;,sum(&amp;quot;+ arr[i] +&amp;quot;) as \&amp;quot;&amp;quot;+ colnam +&amp;quot;\&amp;quot;&amp;quot;;
+			}
+		}
+	}
+	return str;
+}
+
+//获取查询条件
+function getSearchParam(db,sytid,topic,request)
+{
+	var where = &amp;quot;1=1&amp;quot;;
+	
+	var sql = &amp;quot;select refmod,lvl,to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) dat from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	
+	var ds = db.GetXMLSQL(sql);
+	var refmod = ds.getStringAt(0,&amp;quot;REFMOD&amp;quot;);
+	var lvl = ds.getStringAt(0,&amp;quot;LVL&amp;quot;);
+	var sysdate = ds.getStringAt(0,&amp;quot;DAT&amp;quot;);
+	
+	if (lvl != null &amp;&amp; lvl != &amp;quot;&amp;quot;) {
+		where += &amp;quot;\n   and &amp;quot;+lvl;
+	}
+	
+	sql = &amp;quot;select * from dim_dim where refmod=&amp;apos;%s&amp;apos; order by seq&amp;quot;.format([refmod]);
+
+	var dimxmlds = db.GetXMLSQL(sql);
+	
+	for (var i = 0;i &amp;lt; dimxmlds.getRowCount();i ++) {
+		var id = dimxmlds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = dimxmlds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var datatyp = dimxmlds.getStringAt(i,&amp;quot;DATATYP&amp;quot;);
+		var control = dimxmlds.getStringAt(i,&amp;quot;CONTROL&amp;quot;);
+		var keyval = dimxmlds.getStringAt(i,&amp;quot;KEYVAL&amp;quot;);
+		var val = &amp;quot;&amp;quot;; 
+		var dat1 = &amp;quot;&amp;quot;;
+		var dat2 = &amp;quot;&amp;quot;;
+		
+		if (datatyp == &amp;quot;DATE&amp;quot;) {
+			dat1 = pub.EAFunc.NVL(request.getParameter(&amp;quot;STA&amp;quot;+id),sysdate);
+			dat2 = pub.EAFunc.NVL(request.getParameter(&amp;quot;END&amp;quot;+id),sysdate);
+			
+			where += &amp;quot;\n   and &amp;quot; + id + &amp;quot;&amp;gt;=to_date(decode(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01-01&amp;apos;,&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;;
+			where += &amp;quot;\n   and &amp;quot; + id + &amp;quot;&amp;lt;=to_date(decode(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2900-01-01&amp;apos;,&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;;
+		} else {
+			if (val != &amp;quot;&amp;quot;) {
+				if (control != &amp;quot;&amp;quot; &amp;&amp; keyval != &amp;quot;&amp;quot;) {
+					if (datatyp.indexOf(&amp;quot;CHAR&amp;quot;) &amp;gt;= 0) where += &amp;quot;\n   and &amp;quot;+ id +&amp;quot;=&amp;apos;&amp;quot;+ val +&amp;quot;&amp;apos;&amp;quot;;
+					else where += &amp;quot;\n   and to_char(&amp;quot;+ id +&amp;quot;)=&amp;apos;&amp;quot;+ val +&amp;quot;&amp;apos;&amp;quot;;
+				} else {
+					if (datatyp.indexOf(&amp;quot;CHAR&amp;quot;) &amp;gt;= 0) where += &amp;quot;\n   and nvl(&amp;quot;+ id +&amp;quot;,&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ val +&amp;quot;%&amp;apos;&amp;quot;;
+					else where += &amp;quot;\n   and nvl(to_char(&amp;quot;+ id +&amp;quot;),&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ val +&amp;quot;%&amp;apos;&amp;quot;;
+				}
+			}
+		}
+	}
+
+	return where;
+}
+
+//日期类型的转为字符型 select dat,itmid from aaa --&amp;gt; select to_char(dat,&amp;apos;yyyy-mm-dd&amp;apos;) dat,itmid from aaa
+function colDate2Char(db,sytid,topic,cols)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var arrcols = cols.split(&amp;quot;,&amp;quot;);
+	var incols = pub.EAFunc.SQLIN(cols);
+	var sql = &amp;quot;select * from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) and id in (%s)&amp;quot;.format([sytid,topic,incols]);
+	var ds = db.GetXMLSQL(sql);
+	var colid = ds.getStringAt(0,&amp;quot;ID&amp;quot;);
+	var coltyp = ds.getStringAt(0,&amp;quot;DATATYP&amp;quot;);
+	
+	for (var i = 0;i &amp;lt; arrcols.length();i ++) {
+		if (ret != &amp;quot;&amp;quot;) ret += &amp;quot;,&amp;quot;;
+		if (colid == arrcols[i] &amp;&amp; coltyp == &amp;quot;DATE&amp;quot;) ret += &amp;quot;to_char(&amp;quot;+arrcols[i]+&amp;quot;,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;+arrcols[i];
+		else ret += arrcols[i];
+	}
+	return ret;
+}
+
+
+
+//获取维度（中文名,用于交叉表行字段）
+function getVdimName(db,sytid,topic,modguid,tablename)
+{
+	var str = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var vdim = db.GetSQL(sql);
+	
+	var arr = vdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+		if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+		if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+		str += colnam;
+	}
+	return str;
+}
+
+
+//取得交叉列字段
+function getCrossCol(db,sytid,topic)
+{
+	var sql = &amp;quot;select b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	return db.GetSQL(sql);
+}
+
+//交叉值字段
+function getCrossTarget(db,sytid,topic)
+{
+	var sql = &amp;quot;select a.hdim,b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	var ds = db.GetXMLSQL(sql);
+	var hdim = ds.getStringAt(0,&amp;quot;HDIM&amp;quot;);
+	var vdim = ds.getStringAt(0,&amp;quot;ID&amp;quot;);
+	var arr = hdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		if (arr[i] != vdim) return arr[i];
+	}
+	return &amp;quot;&amp;quot;;
+}
+
+//交叉列字段SQL
+function getColSQL(db,sytid,topic,vcol)
+{
+	var sql = &amp;quot;select keyval,wher from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic,vcol]);
+	var ds = db.GetXMLSQL(sql);
+	var view_name = ds.getStringAt(0,&amp;quot;KEYVAL&amp;quot;);
+	var where = ds.getStringAt(0,&amp;quot;WHER&amp;quot;);
+	if (view_name == &amp;quot;&amp;quot;) {
+		return &amp;quot;&amp;quot;;
+	} else {
+		if (where != &amp;quot;&amp;quot;) where = &amp;quot; and &amp;quot; + where;
+		sql = &amp;quot;select name from &amp;quot;+ view_name +&amp;quot; where 1&amp;gt;0 &amp;quot; + where;
+		return sql;
+	}
+}
+//排序依据（中文名）
+function getVdimOrders(db,sytid,topic,modguid,tablename)
+{
+	var sql = &amp;quot;select orders,vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var ds = db.GetXMLSQL(sql);
+	
+	var str = ds.getStringAt(0,&amp;quot;ORDERS&amp;quot;);
+	var vdim = ds.getStringAt(0,&amp;quot;VDIM&amp;quot;);
+	
+	if (str != null &amp;&amp; str != &amp;quot;&amp;quot;) return str;
+	
+	str = &amp;quot;&amp;quot;;
+	var arr = vdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+		if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+		if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+		str += colnam;
+	}
+	return str;
+}
+//是否交叉
+function isCrossReport(db,sytid,topic)
+{
+	var sql = &amp;quot;select a.hdim,b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.sytid=&amp;apos;%s&amp;apos; and a.id=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([sytid,topic]);
+	var rowcnt = db.GetSQLRowCount(sql);
+	if (rowcnt &amp;gt; 0) return true;
+	return false;
+}
+
+//获取维度
+function getVdim(db,sytid,topic)
+{
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	return db.GetSQL(sql);
+}
+
+//字段名称
+function GetColname(db,colid,modguid,tablename)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var ds = db.QuerySQL(&amp;quot;select name from dim_dim where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos; and upper(id)=upper(&amp;apos;&amp;quot;+colid+&amp;quot;&amp;apos;)&amp;quot;); //维度
+	if ( ds.getRowCount() &amp;gt; 0 ) ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+	else {
+		ds = db.QuerySQL(&amp;quot;select nvl(supername,&amp;apos;&amp;apos;)||&amp;apos;Ｘ&amp;apos;||name name from dim_target where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos; and upper(id)=upper(&amp;apos;&amp;quot;+colid+&amp;quot;&amp;apos;)&amp;quot;); //目标
+		if ( ds.getRowCount() &amp;gt; 0 ) ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		else {
+			ds = db.QuerySQL(&amp;quot; select comments name from user_col_comments where upper(table_name)=upper(&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;) and upper(column_name)=upper(&amp;apos;&amp;quot;+colid+&amp;quot;&amp;apos;)&amp;quot;); //系统
+			if ( ds.getRowCount() &amp;gt; 0 ) ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		}
+	}
+	if ( ret == &amp;quot;&amp;quot; ) ret = colid;
+	return ret;
+}
+//得到主题
+function GetTopic(db,sytid,topicid)
+{
+	var ds = null;
+	var curtopic = topicid;
+
+	ds = db.QuerySQL(&amp;quot;select name,longname,hdim,vdim,hdim||&amp;apos;,&amp;apos;||vdim hvdim,nvl(picnote,&amp;apos;MSColumn3D-1&amp;apos;) picnote,vdimshowcol,piclocation,xchart from dim_topic where sytid=&amp;apos;&amp;quot;+sytid+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+topicid+&amp;quot;&amp;apos;&amp;quot;);
+	if ( ds.getRowCount() == 0 ) throw new Exception( &amp;quot;主题&amp;quot;+topicid+&amp;quot;没有找到&amp;quot; );
+	
+	var str =ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+	return str ;
+}
+
+//bchgxy	图型轴向 = 1 X和Y轴旋转
+function getseries(db,sql,sytid,topic,bchgxy){
+
+	var ds=null;
+	ds = db.QuerySQL(sql);
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;&amp;quot;;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		for ( var r=statrow;r&amp;lt;torow;r++ ) {
+			str+=&amp;quot;{name: &amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var c=1;c&amp;lt;tocol;c++){
+				if(c==tocol-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(r==torow-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+			
+		}
+	} else {
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			str+=&amp;quot;{name: &amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var r=1;r&amp;lt;torow;r++){
+				if(c==torow-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(c==tocol-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+		}
+	}
+
+	return str;
+}
+
+//bchgxy	图型轴向 = 1 X和Y轴旋转
+function getxAxis(db,sql,sytid,topic,bchgxy){
+	
+	var ds=null;
+	ds = db.QuerySQL(sql);
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var str=&amp;quot;&amp;quot;;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		str+=&amp;quot;[&amp;quot;;
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			if(c==tocol-1)
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;apos;&amp;quot;;
+			else
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;apos;,&amp;quot;;
+		}
+		str+=&amp;quot;]&amp;quot;;
+	} 
+	else {
+		str+=&amp;quot;categories: [&amp;quot;;
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			if(r==torow-1)
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;&amp;quot;;
+			else
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,&amp;quot;;
+		}
+		str+=&amp;quot;]&amp;quot;;
+	}
+	
+	return str;
+}
+
+//bchgxy图型轴向 = 1 X和Y轴旋转
+function getseriessum(db,sql,sytid,topic,bchgxy){
+
+	var ds=null;
+	ds = db.QuerySQL(sql);
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;[&amp;quot;;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		var sum=0;
+		var colsum=0;
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			sum+=colsum;
+		}
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+//			throw new Exception(colsum+&amp;quot;--&amp;quot;+sum+&amp;quot;===&amp;quot;+colsum*100/sum.toFixed(2));
+//			colsum=colsum/sum;
+			if(r==torow-1)
+				str+=&amp;quot;[&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,&amp;quot;+colsum+&amp;quot;]&amp;quot;;
+			else
+				str+=&amp;quot;[&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,&amp;quot;+colsum+&amp;quot;],&amp;quot;;
+		}
+	} 
+	else {
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			for ( var r=0;r&amp;lt;torow;r++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1;
+			}
+			if(r==tocol-1)
+				str+=&amp;quot; [&amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,&amp;quot;+ds.getStringAt(torow-1,ds.getColumnName(c))+&amp;quot;]&amp;quot;;
+			else
+				str+=&amp;quot; [&amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,&amp;quot;+ds.getStringAt(torow-1,ds.getColumnName(c))+&amp;quot;],&amp;quot;;
+		}
+	}
+	str+=&amp;quot;]&amp;quot;;
+	return str;
+}
+
+//bchgxy	图型轴向 = 1 X和Y轴旋转
+function getserieshunhe(db,sql,sytid,topic,bchgxy){
+
+	var ds=null;
+	ds = db.QuerySQL(sql);
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;&amp;quot;;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		for ( var r=statrow;r&amp;lt;torow;r++ ) {
+			str+=&amp;quot;{type:&amp;apos;column&amp;apos;,name: &amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var c=1;c&amp;lt;tocol;c++){
+				if(c==tocol-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(r==torow-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+			
+		}
+	} else {
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			str+=&amp;quot;{type:&amp;apos;column&amp;apos;,name: &amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var r=1;r&amp;lt;torow;r++){
+				if(c==torow-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(c==tocol-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+		}
+	}
+	str+=&amp;quot;,{type: &amp;apos;spline&amp;apos;, name: &amp;apos;平均&amp;apos;,data:&amp;quot;+getseriespingjun(db,sql,sytid,topic,bchgxy)+&amp;quot; },{type:&amp;apos;pie&amp;apos;,name: &amp;apos;合计饼图&amp;apos;,data:&amp;quot;+getseriessum(db,sql,sytid,topic,bchgxy)+&amp;quot;,center: [150, 80],                                            
+            size: 100,                                                    
+            showInLegend: false,                                          
+            dataLabels: {                                                 
+                enabled: true,
+                color: &amp;apos;#cdcdcd&amp;apos;,
+                connectorColor: &amp;apos;#000000&amp;apos;,
+                format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt;: {point.percentage:.1f} %&amp;apos;
+
+            } }&amp;quot;;
+	return str;
+}
+
+
+//bchgxy图型轴向 = 1 X和Y轴旋转 去平均数
+function getseriespingjun(db,sql,sytid,topic,bchgxy){
+
+	var ds=null;
+	ds = db.QuerySQL(sql);
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;[&amp;quot;;
+	if (bchgxy == &amp;quot;1&amp;quot;) {
+		var sum=0;
+		var colsum=0;
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			sum+=colsum;
+		}
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+//			throw new Exception(colsum+&amp;quot;--&amp;quot;+sum+&amp;quot;===&amp;quot;+colsum*100/sum.toFixed(2));
+//			colsum=colsum/sum;
+			if(r==torow-1)
+				str+=colsum;
+			else
+				str+=colsum+&amp;quot;,&amp;quot;;
+		}
+	} 
+	else {
+		var sum=0;
+		var colsum=0;
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			colsum=0;
+			for ( var r=0;r&amp;lt;torow;r++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			sum+=colsum;
+		}
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			colsum=0;
+			for ( var r=0;r&amp;lt;torow;r++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			var a=db.GetSQL(&amp;quot;select round(&amp;quot;+colsum+&amp;quot;/&amp;quot;+torow+&amp;quot;,2) from dual&amp;quot;);
+//			throw new Exception(&amp;quot;select round(&amp;quot;+colsum/torow+&amp;quot;,2) from dual&amp;quot;);
+			if(c==tocol-1)
+				str+=a;
+			else
+				str+=a+&amp;quot;,&amp;quot;;
+		}
+	}
+	str+=&amp;quot;]&amp;quot;;
+	return str;
+}
+
+//
+// 
+//
+function GetMap() {
+	var html = &amp;quot;	&amp;lt;html&amp;gt;
+		&amp;lt;head&amp;gt;
+			&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot; /&amp;gt;
+			&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;initial-scale=1.0, user-scalable=no\&amp;quot; /&amp;gt;
+			&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+				body, html{width: 100%;height: 100%; margin:0;}
+				#l-map{height:800px;width:100%;}
+			&amp;lt;/style&amp;gt;
+			&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?v=2.0&amp;ak=bcqnSYjGSOPcmxcDpG8T9nMs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+			&amp;lt;title&amp;gt;MAP&amp;lt;/title&amp;gt;
+		&amp;lt;/head&amp;gt;
+		&amp;lt;body onload=\&amp;quot;load()\&amp;quot;&amp;gt;
+			&amp;lt;div id=\&amp;quot;l-map\&amp;quot; style=\&amp;quot;width:100%;height:100%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+			
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+			function load() {
+				navigator.geolocation.getCurrentPosition(onSuccess, onError,{ maximumAge: 3000, timeout: 10000, enableHighAccuracy: true });
+			}
+			
+			var onSuccess = function (position) {
+				var lat = position.coords.latitude;
+				var lng = position.coords.longitude;
+			if(lat!=&amp;apos;&amp;apos;&amp;&amp;lat!=null&amp;&amp;lng!=&amp;apos;&amp;apos;&amp;&amp;lng!=null){
+				var map = new BMap.Map(&amp;apos;l-map&amp;apos;);
+				var gpsPoint=new BMap.Point(lng,lat);
+				map.centerAndZoom(gpsPoint, 16);
+				map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件 v2.0
+
+				var marker1 = new BMap.Marker(gpsPoint);  // 创建标注	
+				map.addOverlay(marker1);              // 将标注添加到地图中	
+				
+				map.setCenter(gpsPoint);
+				var label = new BMap.Label(&amp;apos;Localtion&amp;apos;,{offset:new BMap.Size(20,-10)});
+				map.addOverlay(label);//添加标签
+
+				var local = new BMap.LocalSearch(map, {
+					renderOptions:{map: map, autoViewport:true}
+				});
+				local.searchNearby(&amp;apos;医院&amp;apos;, gpsPoint);
+			}
+			};
+			function onError(error) {  
+				alert(JSON.stringify(error)); 
+			} 
+		&amp;lt;/script&amp;gt;&amp;quot;;
+		
+		return html;
+}
+
+function os()
+{
+	
+	var eas = new pubpack.EAScript(null);
+	eas.DefineScopeVar(&amp;quot;request&amp;quot;, request);
+	eas.DefineScopeVar(&amp;quot;deforg&amp;quot;, deforg);
+	eas.DefineScopeVar(&amp;quot;OSPARAM&amp;quot;, OSPARAM);
+
+	return eas.CallClassFunc(OSMWID,OSFUNC,null).castToString();
+}
+
+
+//
+// 
+//
+function GetMap()
+{
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

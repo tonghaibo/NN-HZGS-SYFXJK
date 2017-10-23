@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >TRKUSR</MWID><NAME >人员选择</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TRKUSR.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >MSG</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >note &amp;quot;内容&amp;quot;,crtusr &amp;quot;发送人&amp;quot;,to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) &amp;quot;发送时间&amp;quot;,tousr &amp;quot;接收人&amp;quot;</COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >1,4</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >说明</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >CODEEDITOR</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,3,2</C17><C18 >0,3,2</C18></ROW>
+<ROW num="1" ><ID >0,5,2</ID><CELLID ></CELLID><NAME >说明</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >CODEEDITOR</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,5,2</C18></ROW>
+<ROW num="2" ><ID >0,1,5</ID><CELLID ></CELLID><NAME >生成日期</NAME><VALFLD >CRTDAT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,16,5</C17><C18 >0,1,5</C18></ROW>
+<ROW num="3" ><ID >0,1,2</ID><CELLID ></CELLID><NAME >创建人~用户的id非GUID</NAME><VALFLD >CRTUSR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,16,2</C17><C18 >0,1,2</C18></ROW>
+<ROW num="4" ><ID >1,-1,-1</ID><CELLID ></CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,3,2</C17><C18 >1,-1,-1</C18></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var arrbl = new Array(0,0,0,0,0,0,0,0,0,0);
+var obj= window.dialogArguments;
+// 说明：选择框多选
+function _thisOnRunSelectBoxButtonClicked(sheet,row,col,value,key,where)
+{
+            var ret = sel_cell(sheet,row,col,key,where);
+            var s = &amp;quot;&amp;quot;;
+            if ( !!ret ) 
+            {                   
+                    var len = ret.length;
+                    for(var i=0;i&amp;lt;len;i++)
+                    {        
+                              s += ret[i]+&amp;quot;,&amp;quot;;
+                              _this.SetCellText(sheet,row,col,s);
+                    }
+            } 
+
+}
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	
+	if(row==1 &amp;&amp; col==2 ){
+		getbool();
+		prjid= _this.GetCellText(sheet,1,2);
+		//if(deptid ==&amp;quot;all&amp;quot;) deptid=&amp;quot;&amp;quot;;
+		clearRow();
+		_this.SetXmlDS(sheet,4,2,6,6,_sql.query(&amp;quot;USR&amp;quot;,&amp;quot;prjid=&amp;quot;+prjid) );
+		setbool();
+	}
+	
+	if(row&amp;gt;=4&amp;&amp;col==2){
+		if(_this.GetCellText(0,row,2)==&amp;quot;0&amp;quot;&amp;&amp;arrbl[0]!=&amp;quot;&amp;quot;){
+			var id=_this.GetCellText(0,row,3);
+			if(arrbl[0].indexOf(id)&amp;gt;1){
+				arrbl[0]=arrbl[0].replace(&amp;quot;,&amp;quot;+id,&amp;quot;&amp;quot;); 
+				
+			}
+			else{
+				arrbl[0]=arrbl[0].replace(id+&amp;quot;,&amp;quot;,&amp;quot;&amp;quot;); 
+			}
+		}
+	}
+	//全选
+	if(row==3 &amp;&amp; col==2 ){
+		if(_this.GetCellText(sheet,3,2) == &amp;quot;1&amp;quot;){
+			for(var row=4;row&amp;lt;=_this.GetRowCount(sheet);row++){
+				_this.SetCellText(sheet,row,2,&amp;quot;1&amp;quot;);
+			}
+		}else{
+			for(var row=4;row&amp;lt;=_this.GetRowCount(sheet);row++){
+				_this.SetCellText(sheet,row,2,&amp;quot;0&amp;quot;);
+			}
+		}
+	}
+	
+}
+var deptlist = -1;
+var deptid=&amp;quot;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	deptlist   =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=v_msg3_dept&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	 var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=v_prjusr&amp;where=usrid=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos;&amp;quot;),&amp;quot;PRJID&amp;quot;,&amp;quot;PRJNAM&amp;quot;);//查找出用户所属的项目
+	_this.SetToComboBox(&amp;quot;&amp;quot;, sheet,1,2,listid0 );
+//	_this.SetToRadioBox(&amp;quot;&amp;quot;, sheet,1,2,deptlist);
+	_this.SetCellText(sheet,1,2,obj.prjname);
+	_this.SetToBoolBox(sheet,3,2);
+//	_this.SetRowVisible(0,2,-1);
+	_this.SetMainCellRange(sheet,4,2,6,6);
+	_this.SetXmlDS(sheet,4,2,6,6,_sql.query(&amp;quot;USR&amp;quot;,&amp;quot;prjid=&amp;quot;+obj.prjid) );
+	for(var row=4;row&amp;lt;=_this.GetRowCount(sheet);row++){
+		_this.SetToBoolBox(sheet,row,2);
+	}
+	if(obj.fsusr!=&amp;quot;&amp;quot;) arrbl[0]=obj.fsusr;
+	setbool();
+	_this.SetFixedRow(0,4);
+//	_this.SetFixedCol(2,2);
+//	_this.SetColVisible(2,2,0);
+	_this.SetToButton(&amp;quot;udf_sent&amp;quot;,sheet,1,6,&amp;quot;确定&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,0);
+	_this.ShowToolBar(0);
+//	_this.SetToStandardCell(sheet,3,2);
+}
+var sheet= 0;
+function clearRow()
+{
+	for(var row=_this.GetRowCount(sheet);row&amp;gt;=6;row--){
+		_this.DeleteRow(sheet,row);
+	}
+	
+	for(var r=4;r&amp;lt;=6;r++){
+		for(var c=2;c&amp;lt;=6;c++){
+			_this.SetCellText(sheet,r,c,&amp;quot;&amp;quot;);
+		}
+	}
+
+}
+function setbool()
+{
+	var blno=arrbl[0];
+	if(blno!=&amp;quot;0&amp;quot;){
+		var b=blno.split(&amp;quot;,&amp;quot;);
+		for(var i=4;i&amp;lt;=_this.GetRowCount(0);i++)
+		{
+			for(var r=0;r&amp;lt;=b.length;r++){
+				if(_this.GetCellText(0,i,3)==b[r]&amp;&amp;b[r]!=&amp;quot;&amp;quot;){
+					_this.SetCellText(0,i,2,&amp;quot;1&amp;quot;);
+					break;
+				}
+			}
+		}
+	}
+
+}
+function getbool()
+{
+	var a=0;
+	var blno=&amp;quot;&amp;quot;;
+	for(var i=4;i&amp;lt;=_this.GetRowCount(0);i++)
+	{
+		var ifo=-1;
+		if(arrbl[0]!=&amp;quot;0&amp;quot;){
+			ifo=arrbl[0].indexOf(_this.GetCellText(0,i,3));
+		}
+		if(_this.GetCellText(0,i,2)==&amp;quot;1&amp;quot;&amp;&amp;ifo&amp;lt;0){
+			if(blno==&amp;quot;&amp;quot;) blno=_this.GetCellText(0,i,3);else blno=blno+&amp;quot;,&amp;quot;+_this.GetCellText(0,i,3);
+		}
+	}
+	if(blno!=&amp;quot;&amp;quot;){
+		if(arrbl[0]==&amp;quot;&amp;quot;)
+			arrbl[0]=blno;
+		else{
+			arrbl[0]=arrbl[0]+&amp;quot;,&amp;quot;+blno;
+		}
+	}	
+}
+function getXml()
+{
+	var row1 = _this.GetMainCellRangeRow1(0);
+	var col1 = _this.GetMainCellRangeCol1(0);
+	var row2 = _this.GetMainCellRangeRow2(0);
+	var col2 = _this.GetMainCellRangeCol2(0);
+	return  _this.GetXml(0,row1,col1,row2,col2);
+}
+
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;udf_sent&amp;quot;)
+	{
+		getbool();
+		window.returnValue = arrbl[0];
+		window.close();
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+
+function save()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	var cnt =0;
+	
+	try {
+		db = new pub.EADatabase();
+		var ds = new pub.EAXmlDS(xml);
+	
+			for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+				var ck = ds.getStringAt(row,&amp;quot;CK&amp;quot;);
+				var id = ds.getStringAt(row,&amp;quot;ID&amp;quot;);
+				var name = ds.getStringAt(row,&amp;quot;NAME&amp;quot;);
+				var useflg = ds.getStringAt(row,&amp;quot;USEFLG&amp;quot;);
+				var deptid = ds.getStringAt(row,&amp;quot;DEPTID&amp;quot;);
+				var note = ds.getStringAt(row,&amp;quot;DEPTID&amp;quot;);
+				
+				sql = &amp;quot;insert into msg(org,title,note,tousr,crtusr) 
+				values(&amp;apos;COMAC&amp;apos;,&amp;apos;NOTICE&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([noticeid,id ,crtusr]);
+			//	 throw new pub.EAException ( sql );
+				if (ck == &amp;quot;1&amp;quot;) {
+					db.ExcecutSQL(sql);
+					cnt++;
+				}
+				
+			}	
+//		}
+		db.Commit();
+		return cnt;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pub.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >USR</ID><NAME ></NAME><DATDSC >select &amp;apos;0&amp;apos;ck,id,name,decode(useflg,&amp;apos;1&amp;apos;,&amp;apos;在用&amp;apos;,&amp;apos;0&amp;apos;,&amp;apos;停用&amp;apos;,&amp;apos;在用&amp;apos;) USEFLG, deptid
+from usr
+where org = &amp;apos;XLSGRID&amp;apos;
+and id in(select usrid from V_PRJUSR where prjid=&amp;apos;[%prjid]&amp;apos;)</DATDSC><C4 >USR</C4><C5 >USR</C5><C6 >USR</C6><C7 >USR</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

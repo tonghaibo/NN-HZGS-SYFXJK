@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >IMP2B</MWID><NAME >导入二包结果</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >IMP2B.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >核实任务</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;10%&amp;quot;);
+	_this.AutoFixScreenWidth();
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,1,1,2);
+	
+}
+
+function loadData(impbz)
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedRow(0,4);
+	_this.SetFixedCol(0,0);
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;IMPBZ=&amp;quot;+impbz);
+	_this.SetXmlDS(0,4,0,_this.GetRowCount(0)-1,_this.GetColCount(0)-1,xml);
+	_this.AutoFixScreenWidth();
+}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;导入&amp;quot;) {
+		var filepath = _this.GetCellText(1,1,2);
+		if (filepath == &amp;quot;&amp;quot;) { alert(&amp;quot;请先选择导入文件！&amp;quot;); return; }
+		if (!confirm(&amp;quot;导入金税三期决策二包任务处理结果，是否继续？&amp;quot;)) return;
+		try {
+			var filename = upLoadFile2Server(filepath);
+			var param = new Object();
+			param.filename = &amp;quot;/u/filestore&amp;quot;+filename;		
+			var msg = invokeOSFuncExt(&amp;quot;import2B&amp;quot;,param);
+			var impbz = msg.split(&amp;quot;~&amp;quot;)[0];
+			var ret = msg.split(&amp;quot;~&amp;quot;)[1];
+			alert(ret);
+			loadData(impbz);
+		}
+		catch (e) {
+			alert(e.toString());
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+
+//决策二包数据导入
+function import2B()
+{
+	var db = null ;
+	var ds = null ;
+	var ps = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	var table = &amp;quot;&amp;quot;;
+	
+	try {		
+		db = new pub.EADatabase();
+
+		//加载xmlDS
+		var excelgrid = new xlsdb.excelgrid();	
+		var xmlds = excelgrid.GetXmlDS(filename,0);	
+		if (xmlds.getColumnCount() == 46) {
+			table =  db.GetSQL(&amp;quot;select &amp;apos;PG_&amp;apos;||TAX_NEXTVAL.nextval from dual&amp;quot;);
+			var params = &amp;quot;&amp;quot;;
+			var columns = &amp;quot;&amp;quot;;
+
+			//创建临时表		
+			sql = &amp;quot;create table &amp;quot;+table+&amp;quot; (&amp;quot;;
+			for (var col = 0;col &amp;lt; xmlds.getColumnCount();col ++) {
+				if (col &amp;gt; 0) sql += &amp;quot;,&amp;quot;;
+				sql += &amp;quot;CO&amp;quot;+col+&amp;quot; varchar2(500) \n&amp;quot;;
+				if (columns != &amp;quot;&amp;quot;) columns += &amp;quot;,&amp;quot;;
+				columns += &amp;quot;CO&amp;quot;+col;
+				if (params != &amp;quot;&amp;quot;) params += &amp;quot;,&amp;quot;;
+				params += &amp;quot;?&amp;quot;;
+			}
+			sql += &amp;quot;) &amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			//导入临时表
+			//最后一列日期类型的 导入后变成了数字，如何转成日期？
+			//to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;) co5
+			var updatesql = &amp;quot;insert into &amp;quot;+table+&amp;quot; (&amp;quot;+columns +&amp;quot;) values (&amp;quot;+params+&amp;quot;)&amp;quot;;
+			ps = db.GetConn().prepareStatement(updatesql);
+			
+			var rowcount = xmlds.getRowCount();
+			for(var rows=0;rows&amp;lt;rowcount;rows++) {
+				for(var cols=0;cols&amp;lt;xmlds.getColumnCount();cols++) {
+					var colname=xmlds.getColumnName(cols);
+					var colstr=xmlds.getStringAt(rows,colname);
+					ps.setString(cols+1,colstr);
+				}
+				ps.addBatch();
+			}
+			ps.executeBatch();
+
+			//写入正式目标表 
+			sql = &amp;quot;delete from &amp;quot;+table+&amp;quot; where co1 is null or co1=&amp;apos;序号&amp;apos; or co0 is null&amp;quot;; 
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;select * from tax_trk_js2b where pch in (select co0 from &amp;quot;+table+&amp;quot;)&amp;quot;;
+			var ds = db.QuerySQL(sql);
+			if (ds.getRowCount() &amp;gt; 0) {
+				var pch = ds.getStringAt(0,&amp;quot;PCH&amp;quot;);
+				return &amp;quot;任务批次号：&amp;quot;+pch+&amp;quot; 已经导入过，不能重复导入！&amp;quot;;
+			}
+			 
+			sql = &amp;quot;update &amp;quot;+table+&amp;quot; set co14=replace(co14,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co15=replace(co15,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co16=replace(co16,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co17=replace(co17,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),
+				       co18=replace(co18,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co19=replace(co19,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co20=replace(co20,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co21=replace(co21,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),
+				       co22=replace(co22,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co23=replace(co23,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co24=replace(co24,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co25=replace(co25,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),
+				       co26=replace(co26,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co27=replace(co27,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co28=replace(co28,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co29=replace(co29,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),
+				       co30=replace(co30,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co31=replace(co31,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co32=replace(co32,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co33=replace(co33,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),
+				       co34=replace(co34,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co35=replace(co35,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co36=replace(co36,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co37=replace(co37,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),
+				       co38=replace(co38,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co39=replace(co39,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co40=replace(co40,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co41=replace(co41,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),  
+				       co42=replace(co42,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;),co43=replace(co43,&amp;apos;,&amp;apos;,&amp;apos;&amp;apos;)
+				where co1 is not null and co1!=&amp;apos;序号&amp;apos; and co0 is not null&amp;quot;;       
+			db.ExcecutSQL(sql);  
+			
+			sql = &amp;quot;insert into tax_trk_js2b(PCH,XH,NSRSBH,NSRMC,ZGSWJG,RWLY,FXDJ,YDFS,YDSWJG,YDRY,YDKSRQ,YDWCRQ,RWWCQX,SFYWT,
+				  CBSK_XJ,CBSK_ZZS,CBSK_XFS,CBSK_QYSDS,CBSK_GRSDS,CBSK_FCS,CBSK_TDZZS,CBSK_TDSYS,CBSK_YHS,
+				  CBSK_QS,CBSK_CLGZS,CBSK_QTSF,RKSK_XJ,RKSK_ZZS,RKSK_XFS,RKSK_QYSDS,RKSK_GRSDS,RKSK_FCS,
+				  RKSK_TDZZS,RKSK_TDSYS,RKSK_YHS,RKSK_QS,RKSK_CLGZS,RKSK_QTSF,RKZNJ,RKFK,ZZSDJLDJE,
+				  QYSDSTZYNSE,QYSDSTZYNSSDE,QYSDSMBKSE,BZCXWLX,YDGZQKSM,IMPBZ)     
+				select co0,co1,co2,co3,co4,co5,co6,co7,co8,co9,co10,co11,co12,co13,co14,co15,co16,co17,co18,co19,co20,co21,
+				       co22,co23,co24,co25,co26,co27,co28,co29,co30,co31,co32,co33,co34,co35,co36,co37,co38,co39,co40,co41,
+				       co42,co43,co44,co45,&amp;apos;&amp;quot;+table+&amp;quot;&amp;apos; impbz
+				from &amp;quot;+table+&amp;quot; 
+				where co1 is not null and co1!=&amp;apos;序号&amp;apos; and co0 is not null&amp;quot;;
+			ret += db.ExcecutSQL(sql);
+			
+			//更新任务状态
+			sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;5&amp;apos; where (pch,cmid) in (select pch,nsrsbh from tax_trk_js2b where impbz=&amp;apos;&amp;quot;+table+&amp;quot;&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			//差异对比
+			//查补税款大于核实金额百分比以上的，任务自动判断结束
+			sql = &amp;quot;select * from TAX_CS_HSRWZDJS&amp;quot;;
+			var csds = db.QuerySQL(sql);
+			if (csds.getRowCount() &amp;gt; 0) {
+				var ce = csds.getStringAt(0,&amp;quot;CE&amp;quot;);
+				var bl = csds.getStringAt(0,&amp;quot;BL&amp;quot;);
+				
+				//核实金额乘以0.17转为税额
+				sql = &amp;quot;select * from (select b.guid,a.pch,a.nsrsbh,a.nsrmc,a.cbsk_xj,b.cyje,round(a.cbsk_xj/b.cyje*0.17,2)*100 cbbl,abs(b.cyje*0.17-a.cbsk_xj) ce
+					from tax_trk_js2b a,tax_trkhdr b
+					where a.pch=b.pch and a.nsrsbh=b.cmid
+					  and a.impbz=&amp;apos;&amp;quot;+table+&amp;quot;&amp;apos;
+					  and b.cyje&amp;gt;0
+					) where ce&amp;lt;&amp;apos;&amp;quot;+ce+&amp;quot;&amp;apos; and cbbl&amp;gt;&amp;apos;&amp;quot;+bl+&amp;quot;&amp;apos;&amp;quot;;
+				var cxds = db.QuerySQL(sql);
+				for (var i=0;i&amp;lt;cxds.getRowCount();i++) {
+					var trkguid = cxds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+					sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;9&amp;apos; where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;;
+					db.ExcecutSQL(sql);
+				}
+			}
+			
+			//drop临时表
+  			sql = &amp;quot;drop table &amp;quot; + table;
+ 			db.ExcecutSQL(sql);
+		}
+		else {
+			return &amp;quot;导入格式不正确！&amp;quot;;
+		}
+
+		db.Commit();
+		return table+&amp;quot;~导入成功，记录数&amp;quot;+ret;
+
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+		throw new Exception(e);
+	}
+	finally {
+		if(db != null) db.Close();
+		//文件导入成功后删除
+		var file = new java.io.File(filename);   
+         	if(file.exists()){   
+         		file.delete();
+         	}
+	}
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select PCH,XH,NSRSBH,NSRMC,ZGSWJG,RWLY,FXDJ,YDFS,YDSWJG,YDRY,YDKSRQ,YDWCRQ,RWWCQX,SFYWT,
+  CBSK_XJ,CBSK_ZZS,CBSK_XFS,CBSK_QYSDS,CBSK_GRSDS,CBSK_FCS,CBSK_TDZZS,CBSK_TDSYS,CBSK_YHS,
+  CBSK_QS,CBSK_CLGZS,CBSK_QTSF,RKSK_XJ,RKSK_ZZS,RKSK_XFS,RKSK_QYSDS,RKSK_GRSDS,RKSK_FCS,
+  RKSK_TDZZS,RKSK_TDSYS,RKSK_YHS,RKSK_QS,RKSK_CLGZS,RKSK_QTSF,RKZNJ,RKFK,ZZSDJLDJE,
+  QYSDSTZYNSE,QYSDSTZYNSSDE,QYSDSMBKSE,BZCXWLX,YDGZQKSM
+from TAX_TRK_JS2B
+where impbz=&amp;apos;[%IMPBZ]&amp;apos;
+order by to_number(xh)  </DATDSC><C4 >MAIN</C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

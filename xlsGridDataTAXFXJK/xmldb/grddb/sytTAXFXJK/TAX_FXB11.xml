@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >TAX_FXB11</MWID><NAME >一般纳税人（按月份统计）</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TAX_FXB11.zxg</FILE><SCENE ></SCENE><FIXED >1,1</FIXED><CATTYP >主题分析</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YM1</ID><NAME >起始年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM1</C13><C14 ></C14><C15 >DAT1</C15><C16 >YM1</C16></ROW>
+<ROW num="1" ><ID >YM2</ID><NAME >截止年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM2</C13><C14 ></C14><C15 >DAT2</C15><C16 >YM2</C16></ROW>
+<ROW num="2" ><ID >SWJG</ID><NAME >税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >SWJG</C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="3" ><ID >NSRSBH</ID><NAME >纳税人</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >纳税人识别号(社会信用代码)</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >18</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.AutoFixScreenWidth();
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum rn,t.* from (
+select (select name from v_swjg sw where sw.id=substr(swjg_dm,0,7)) swjg,
+       nsrsbh,
+       nsrmc,
+       yymm,
+       sum(xse) xse,
+       sum(kpsr) kpsr,
+       sum(wkpsr) wkpsr,
+       sum(hj_xxynse) hj_xxynse,
+       sum(jxse) jxse,
+       sum(ncpsgdje) ncpsgdje,
+       sum(bqfse) bqfse,
+       sum(gdzcdk) gdzcdk,
+       sum(yfdkje) yfdkje,
+       sum(yydkje) yydkje,
+       sum(jsyj) jsyj,
+       sum(ynse) ynse,
+       sum(sf) sf
+from tax_fxb11 a
+where yymm&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+  and yymm&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+  and substr(swjg_dm,0,7) like &amp;apos;[%SWJG]%&amp;apos;
+  and nsrsbh like &amp;apos;%[%NSRSBH]%&amp;apos;
+group by yymm,swjg_dm,nsrsbh,nsrmc
+order by swjg_dm,yymm,nsrsbh
+) t</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

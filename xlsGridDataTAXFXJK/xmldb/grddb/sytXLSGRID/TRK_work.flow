@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_243811" x="16" y="112" width="547" height="308" stroke="#000000" fill="#ffffff" >
+ </rect>
+ <rect id="rect_243812" x="17" y="27" width="101" height="36" stroke="#000000" fill="#acacff"  url="show.sp?grdid=WAITTRK&loaddata=1">我的待办事务</rect>
+ <rect id="rect_243813" x="329" y="27" width="101" height="36" stroke="#000000" fill="#acacff"  url="ShowXlsGrid.sp?grdid=NEWTRK">我创建的事务</rect>
+ <rect id="rect_243814" x="225" y="27" width="101" height="36" stroke="#000000" fill="#acacff"  url="ShowXlsGrid.sp?grdid=TRKOPEN">我完成的事务</rect>
+ <rect id="rect_243815" x="121" y="27" width="101" height="36" stroke="#000000" fill="#acacff"  url="ShowXlsGrid.sp?grdid=TRKALL">所有事务查询 </rect>
+ <text id="text_243824" x="18" y="89" width="362" height="29"   font-color="#0000ff" font-size="15">【硕格事务跟踪系统－示意图】</text>
+ <connector id="connector_208_465711" from="rect_243816" to="rect_243819" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_465712" from="rect_243819" to="trapezoid_243823" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect id="rect_155410" x="54" y="181" width="83" height="33" stroke="#000000" fill="#FFFFFF" >发起事务</rect>
+ <rect id="rect_155411" x="193" y="180" width="82" height="35" stroke="#000000" fill="#FFFFFF" >接受事务</rect>
+ <connector id="connector_208_535710" from="rect_155410" to="rect_155411" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <text id="text_320011" x="388" y="174" width="112" height="23"  >各部门处理事务</text>
+ <rect  id="rect_475411" x="16" y="82" width="547" height="30" stroke="#000000" fill="#feffe1">
+ </rect>
+ <text id="事务接受人" x="21" y="90" width="363" height="20"   font-family="">【硕格事务跟踪系统 - 事务流转示意图
+
+</text>
+ <text id="事务处理人" x="227" y="242" width="74" height="24"  >处理结束?</text>
+ <rect  id="rect_475415" x="16" y="112" width="150" height="30" stroke="#000000" fill="#FFFFFF">事务发起人</rect>
+ <rect  id="rect_475416" x="166" y="112" width="150" height="30" stroke="#000000" fill="#FFFFFF">事务接受人</rect>
+ <rect  id="rect_475417" x="316" y="112" width="247" height="30" stroke="#000000" fill="#FFFFFF">事务处理人</rect>
+ <rect  id="rect_475423" x="54" y="255" width="83" height="33" stroke="#000000" fill="#FFFFFF">结束事务</rect>
+ <polygon id="事务流转" points="368,258 430,308 493,258 430,209 368,258" changeto="rhombus" stroke="#000000" fill="#CCFFCC" >事务流转</polygon>
+ <rect id="rect_475425" x="497" y="254" width="10" height="11" stroke="#FFFFFF" fill="#FFFFFF" >
+ </rect>
+ <rect  id="rect_475426" x="427" y="312" width="10" height="11" stroke="#FFFFFF" fill="#FFFFFF">
+ </rect>
+ <rect  id="rect_475427" x="358" y="254" width="10" height="11" stroke="#FFFFFF" fill="#FFFFFF">
+ </rect>
+ <rect  id="rect_475428" x="427" y="195" width="10" height="11" stroke="#FFFFFF" fill="#FFFFFF">
+ </rect>
+ <connector id="connector_108_475429" from="rect_475428" to="rect_475428" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_475430" from="rect_475425" to="rect_475428" fromcp="21" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_475431" from="rect_475428" to="rect_475427" fromcp="12" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_475432" from="rect_475427" to="rect_475426" fromcp="23" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_475433" from="rect_475426" to="rect_475425" fromcp="32" tocp="23" type="108"  >
+ </connector>
+ <polygon id="rhombus_475434" points="239,270 250,281 262,270 250,260 239,270" changeto="rhombus" stroke="#000000" fill="#FFFFFF" >
+ </polygon>
+ <connector id="connector_208_20812" from="rect_155411" to="rect_475427" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_20813" from="rect_475426" to="rhombus_475434" fromcp="23" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_208_20814" from="rhombus_475434" to="rect_475423" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <text  id="text_20816" x="39" y="322" width="140" height="38">【查看事务最新状态】
+【统计事务流转时间】</text>
+ <text  id="text_20817" x="84" y="155" width="96" height="25">选择事务类型，所属项目</text>
+ <polygon id="请点击这里" points="439,12 439,38 455,38 432,51 469,38 530,38 530,12 439,12 439,12" changeto="downnote" stroke="#000000" fill="#FFFFFF" >请点击这里
+
+</polygon>
+</svg>

@@ -1,0 +1,33 @@
+2:30:0 执行第1次.开始
+2:30:0 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+2:30:0 参数xmlstr=
+8:0:0 任务已取消 
+8:0:0 任务发布,从02:30开始执行
+9:16:11 任务已取消 
+9:16:11 任务发布,从9:20开始执行
+9:20:11 执行第1次.开始
+9:20:11 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+9:20:11 参数xmlstr=
+10:37:6 出错:提交到数据库出错java.sql.SQLRecoverableException: 无法从套接字读取更多的数据
+10:39:44 任务已取消 
+10:39:44 任务发布,从10:42开始执行
+10:42:44 执行第1次.开始
+10:42:44 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+10:42:44 参数xmlstr=
+10:42:46 操作结束,返回:NoSuchMemberException: no such member: (global): start_time
+  at script line 191
+  at RunTB (/D:/u/xlsGridDataTAXFXJK/TAXFXJK/os/IMP_TaxData.os:215)
+10:44:57 任务已取消 
+10:44:57 任务发布,从10:46开始执行
+10:46:57 执行第1次.开始
+10:46:57 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+10:46:57 参数xmlstr=
+12:45:2 操作结束,返回:数据采集成功！更新记录数37  >>>同步到核心库成功！
+17:54:44 任务已取消 
+17:55:4 任务发布,从0:30开始执行
+17:56:5 任务已取消 
+17:57:9 任务发布,从0:30开始执行
+18:3:9 任务已取消 
+18:3:25 任务发布,从0:30开始执行
+18:5:23 任务已取消 
+18:5:42 任务发布,从0:30开始执行

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ROLDBEDIT</MWID><NAME >角色数据维护</NAME><NOTE ></NOTE><FILE >ROLDBEDIT.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+       order = &amp;quot; order by ID&amp;quot;;   
+       setButton();          //设置中间件按钮
+       var  fields = 
+            &amp;quot;GUID,GUID,sys_guid();&amp;quot;+
+            &amp;quot;SYT,系统编号,,.+;&amp;quot;+
+            &amp;quot;ORG,组织编号,,.+;&amp;quot;+
+            &amp;quot;ACC,子公司编号,,.+;&amp;quot;+	
+            &amp;quot;ID,角色编号,,.+;&amp;quot;+
+            &amp;quot;NAME,角色名称,,.+;&amp;quot;+
+            &amp;quot;NOTE,备注&amp;quot;;
+            
+      _dbhelper.InitSQL(&amp;quot;ROL&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false,&amp;quot;&amp;quot;,&amp;quot;org=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;and(acc is null or acc=&amp;apos;&amp;quot;+G_ACCID+&amp;quot;&amp;apos;)&amp;quot;);
+      _dbhelper.Load(1,1,2,2); 
+//return;   
+  //隐藏系统和子公司两列
+  _this.SetColVisible(0,3,-1);
+  _this.SetColVisible(0,4,-1);
+}
+
+function f_dbeditafternewrow(sheet,row)
+{
+  _this.SetCellText(sheet,row,3,G_SYTID);
+  _this.SetCellText(sheet,row,4,G_ORGID);
+  _this.SetCellText(sheet,row,5,G_ACCID);
+  
+}
+
+function f_dbeditpostloaddata()
+{
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

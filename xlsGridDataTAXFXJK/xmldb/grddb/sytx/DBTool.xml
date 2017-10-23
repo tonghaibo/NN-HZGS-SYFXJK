@@ -1,0 +1,505 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >DBTool</MWID><NAME >数据库迁移工具</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DBTool.zxg</FILE><SCENE ></SCENE><FIXED >2,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >doExp</ID><NAME >执行导出</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >SYTID</ID><NAME >所属系统</NAME><NOTNULL ></NOTNULL><KEYVAL >SYT</KEYVAL><INPCTL >idlist</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >OBJTYPES</ID><NAME >对象类型</NAME><NOTNULL ></NOTNULL><KEYVAL >V_DBOBJTYPES</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >OBJTYPES</C13><C14 >OBJTYPES</C14><C15 >OBJTYPES</C15></ROW>
+<ROW num="2" ><ID >OWNER</ID><NAME >数据库</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >OWNER</C14><C15 >OWNER</C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >15</NROW><NCOL >8</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var objname_col = 2;//类型
+var objtyp_col = 3; //对象名称
+var owner_col = 4;   //用户
+var ddl_col = 5;    //DDL
+var store_col = 6;  //STORE
+var data_col = 7;   //DATA
+var where_col = 8;  //WHERE
+
+var fLoad = true;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetRedraw(0);
+	
+	_this.SetFixedRow(sheet,2);
+	_this.ShowTabBar(1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	if (fLoad == true) {
+		_this.SplitSheet(sheet,&amp;quot;H&amp;quot;,&amp;quot;80%&amp;quot;);
+		_this.SetSheetName(1,&amp;quot;选项&amp;quot;);
+		fLoad = false;
+	}
+	
+	for (var i=0;i&amp;lt;_this.GetRowCount(0);i++) {
+		_this.SetToBoolBox(sheet,i,0);
+		if (i &amp;gt; 0) {
+			_this.SetToBoolBox(sheet,i,ddl_col);
+			_this.SetToBoolBox(sheet,i,store_col);
+			_this.SetToBoolBox(sheet,i,data_col);
+		}
+	}
+	setSelectAll(sheet,1,ddl_col,1);
+	//setOwnerList();
+	
+	_this.SetToBoolBox(1,1,0); _this.SetCellText(1,1,0,&amp;quot;1&amp;quot;);
+	_this.SetToBoolBox(1,2,0); _this.SetCellText(1,2,0,&amp;quot;1&amp;quot;);
+	_this.SetToBoolBox(1,3,0);
+	_this.SetToBoolBox(1,5,0);
+	
+	for (var i=_this.GetSheetCount();i&amp;gt;1;i--) {
+		_this.DeleteSheet(i);
+	}
+	_this.SetCurrentSheet(1);	
+	_this.SetRedraw(1);
+
+}
+
+function setOwnerList()
+{
+	var owner = $(this).val();
+	_this.QuerySQLDS(&amp;quot;select username id,username name from dba_users where account_status=&amp;apos;OPEN&amp;apos; order by username&amp;quot;);
+	$(&amp;quot;select[name=OWNER]&amp;quot;).empty();// 清空下拉框
+	for (var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++) {
+		var id = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+		var name = _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+		$(&amp;quot;select[name=OWNER]&amp;quot;).append(&amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;);
+	}
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp; (row == 0 &amp;&amp; col == 0) || (row == 1 &amp;&amp; col == ddl_col) || (row == 1 &amp;&amp; col == store_col) || (row == 1 &amp;&amp; col == data_col)) {
+		setSelectAll(sheet,row,col,newvalue);
+	}
+	if (sheet == 1 &amp;&amp; (row == 3 || row == 5) &amp;&amp; col == 0) {
+		if (newvalue == &amp;quot;1&amp;quot;) {
+			_this.SetCellLock(sheet,row+1,1,0);
+			if (row == 3) _this.SetCellText(sheet,row+1,1,_this.GetCellText(0,2,owner_col)+&amp;quot;.sql&amp;quot;);
+		}
+		else {
+			_this.SetCellLock(sheet,row+1,1,1);
+			_this.SetCellText(sheet,row+1,1,&amp;quot;&amp;quot;);
+		}
+	}
+}
+
+function setSelectAll(sheet,row,col,val)
+{
+	for (var i=row;i&amp;lt;_this.GetRowCount(sheet);i++) {
+		_this.SetCellText(sheet,i,col,val);
+	}
+}
+//执行导出
+function doExp()
+{
+	if (!confirm(&amp;quot;确定执行导出操作吗？&amp;quot;)) return;
+	
+	var fso,tmpfd = &amp;quot;&amp;quot;;
+    
+	// 获得 FileSystemObject 的实例。
+	fso = new ActiveXObject(&amp;quot;Scripting.FileSystemObject&amp;quot;);
+	tmpfd = browseFolder();
+	_this.SetTrustedDir(tmpfd);
+	refreshCell();
+	
+	var expcnt = 0;
+	var expsum = 0;
+	var expstr = &amp;quot;&amp;quot;;
+	var processlen = _this.GetColWidth(1,0)+_this.GetColWidth(1,1);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,0) == &amp;quot;1&amp;quot;) expsum ++;
+	}
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,0) == &amp;quot;1&amp;quot;) {
+			_this.SetCellText(0,r,9,&amp;quot;Exporting...&amp;quot;);
+			_this.SetCellColor(0,r,9,255,0,0);
+			var percent = expcnt/expsum;
+			_this.SetToRectbox(1,8,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;+(percent*processlen),&amp;quot;&amp;quot;+_this.GetRowHeight(1,8),&amp;quot;#99CCFF&amp;quot;,1,&amp;quot;#99CCFF&amp;quot;,1,&amp;quot;#99CCFF&amp;quot;,1,&amp;quot;#99CCFF&amp;quot;,1,&amp;quot;#99CCFF&amp;quot;);
+			expcnt ++;
+
+			var obj_name = _this.GetCellText(0,r,objname_col);
+			var obj_type = _this.GetCellText(0,r,objtyp_col);
+			var owner = _this.GetCellText(0,r,owner_col);
+			var ddl = _this.GetCellText(0,r,ddl_col);
+			var store = _this.GetCellText(0,r,store_col);
+			var data = _this.GetCellText(0,r,data_col);
+			var where = _this.GetCellText(0,r,where_col);
+			
+			var url = &amp;quot;DBTool.sp?obj_name=&amp;quot;+obj_name+&amp;quot;&amp;obj_type=&amp;quot;+obj_type+&amp;quot;&amp;owner=&amp;quot;+owner+&amp;quot;&amp;ddl=&amp;quot;+ddl+&amp;quot;&amp;store=&amp;quot;+store+&amp;quot;&amp;data=&amp;quot;+data+&amp;quot;&amp;where=&amp;quot;+where;
+			url += getExpParameter(); //导出选项参数
+			url += &amp;quot;&amp;log=&amp;quot;+expcnt;
+			_this.SetCellText(1,8,0,&amp;quot;Export &amp;quot;+obj_type + &amp;quot; &amp;quot; + obj_name+&amp;quot; ...&amp;quot;);	
+			
+		    	var ret = _this.DownLoadFileToTrustedDir(url,obj_name+&amp;quot;.sql&amp;quot;);
+		    	_this.SetCellText(0,r,9,&amp;quot;finish&amp;quot;);
+		    	_this.SetCellColor(0,r,9,0,0,255);
+		    	
+		    	if (_this.GetCellText(1,3,0) == &amp;quot;1&amp;quot; &amp;&amp; _this.GetCellText(1,4,1) != &amp;quot;&amp;quot;) {
+		    		var f = fso.GetFile(ret);			      
+				var fs = f.OpenAsTextStream(1);
+		    		expstr += fs.ReadAll();
+		    		fs.Close();
+		    		f.Delete();
+		    	}
+		    	
+		    	//导出数据，另存为一个文件
+		    	if (data == &amp;quot;1&amp;quot; &amp;&amp; obj_type == &amp;quot;TABLE&amp;quot;) {
+		    		var data = expTableData(owner,obj_name,where);
+		    		var dataFile = fso.CreateTextFile(tmpfd+obj_name+&amp;quot;_data.sql&amp;quot;, true);
+		    		dataFile.Write(data);
+		    		dataFile.Close();
+		    	}
+		}
+	}
+	_this.SetCellText(1,8,0,&amp;quot;&amp;quot;);	
+	_this.SetCellText(1,8,0,&amp;quot;导出用时 &amp;quot;+times+&amp;quot;s&amp;quot;);
+			
+	if (_this.GetCellText(1,3,0) == &amp;quot;1&amp;quot; &amp;&amp; _this.GetCellText(1,4,1) != &amp;quot;&amp;quot;) {
+		var fileName = _this.GetCellText(1,4,1);
+		//_this.SaveTextFile(fileName,expstr,&amp;quot;Text Files (*.txt)|*.txt|All Files&amp;quot;);
+		var expFile = fso.CreateTextFile(tmpfd + fileName, true);
+		expFile.Write(expstr);
+		expFile.Close();
+		
+		alert(&amp;quot;导出完成！&amp;quot;);
+	}
+	else {
+		alert(&amp;quot;导出完成！，共导出&amp;quot;+expcnt+&amp;quot;个文件。&amp;quot;);
+	}
+	setTimeout(&amp;apos;refreshCell()&amp;apos;,0);
+}
+
+function getExpParameter()
+{
+	var param = &amp;quot;&amp;quot;;
+	//导出不含用户名
+	param += &amp;quot;&amp;user=&amp;quot; + _this.GetCellText(1,1,0); 
+	//导出注释
+	param += &amp;quot;&amp;zs=&amp;quot; + _this.GetCellText(1,2,0); 
+	//导为一个文件
+	if (_this.GetCellText(1,3,0) == &amp;quot;1&amp;quot;) {
+		param += &amp;quot;&amp;onefile=&amp;quot; + _this.GetCellText(1,4,0);
+	}
+	else {
+		param += &amp;quot;&amp;onefile=&amp;quot;;
+	}
+	//提交行数
+	if (_this.GetCellText(1,5,0) == &amp;quot;1&amp;quot;) {
+		param += &amp;quot;&amp;cmt=&amp;quot; + _this.GetCellText(1,6,0);
+	}
+	else {
+		param += &amp;quot;&amp;cmt=&amp;quot;;
+	}
+	return param;
+}
+    
+//获取路径
+function browseFolder()
+{
+    try
+    {
+        var Message = &amp;quot;\u8bf7\u9009\u62e9\u6587\u4ef6\u5939&amp;quot;; //选择框提示信息
+        var Shell = new ActiveXObject(&amp;quot;Shell.Application&amp;quot;);
+        var Folder = Shell.BrowseForFolder(0, Message, 64, 17);
+        //起始目录为：我的电脑
+        //var Folder = Shell.BrowseForFolder(0,Message,0); //起始目录为：桌面
+        if (Folder != null)
+        {
+            Folder = Folder.items(); // 返回 FolderItems 对象
+            Folder = Folder.item(); // 返回 Folderitem 对象
+            Folder = Folder.Path; // 返回路径
+            if (Folder.charAt(Folder.length - 1) != &amp;quot;\\&amp;quot;)
+            {
+                Folder = Folder + &amp;quot;\\&amp;quot;;
+            }
+            //document.getElementById(path).value = Folder;
+            return Folder;
+        }
+    }
+    catch (e)
+    {
+        alert(e.message);
+    }
+}
+    
+function expTableData(user,tableName,where)
+{
+	var data = &amp;quot;&amp;quot;;
+	try {
+		var cmt = 0;
+		if (_this.GetCellText(1,5,0) == &amp;quot;1&amp;quot;) {
+			if (_this.GetCellText(1,6,1) != &amp;quot;&amp;quot;)
+				cmt = _this.GetCellText(1,6,1);
+		}
+		data = invokeOSFunc(&amp;quot;expData&amp;quot;,&amp;quot;user=&amp;quot;+user+&amp;quot;&amp;tableName=&amp;quot;+tableName+&amp;quot;&amp;where=&amp;quot;+where+&amp;quot;&amp;cmt=&amp;quot;+cmt);
+	}
+	catch(e) {
+		
+	}
+	return data;
+}    
+
+var splitStr = &amp;quot;/&amp;quot;;
+var times = 0;
+function refreshCell()
+{	
+	var date = new Date();	
+	var year = date.getYear();
+	var months = to_charr(date.getMonth()+1);
+	var dat = to_charr(date.getDate());
+	var hours = to_charr(date.getHours());
+	var minites = to_charr(date.getMinutes());
+	var seconds = to_charr(date.getSeconds());
+	var fullDate = year+splitStr+months+splitStr+dat;
+	var fullTime = fullDate + &amp;quot; &amp;quot; + hours+&amp;quot;:&amp;quot;+minites+&amp;quot;:&amp;quot;+seconds;
+	_this.SetCellText(1,7,1,fullTime);
+	setTimeout(&amp;apos;refreshCell()&amp;apos;,1000);
+	times ++;	
+	_this.Redraw();
+}
+function to_charr(str)
+{
+	str =&amp;quot;&amp;quot;+str; 
+	if(str.length==1) { 
+		return &amp;quot;0&amp;quot;+str;
+	} else {
+		return str;
+	}
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+	var db = null;
+	var obj_name = request.getParameter(&amp;quot;obj_name&amp;quot;);
+	var obj_type = request.getParameter(&amp;quot;obj_type&amp;quot;);
+	var owner = request.getParameter(&amp;quot;owner&amp;quot;);
+	var ddl = request.getParameter(&amp;quot;ddl&amp;quot;);
+	var store = request.getParameter(&amp;quot;store&amp;quot;);
+	var data = request.getParameter(&amp;quot;data&amp;quot;);
+	var where = request.getParameter(&amp;quot;where&amp;quot;);
+	try {
+	  	response.setHeader(&amp;quot;File&amp;quot;,obj_name+&amp;quot;.sql&amp;quot;);
+	        response.setHeader(&amp;quot;Content-Disposition&amp;quot;, &amp;quot;attachment;filename=&amp;quot;+obj_name+&amp;quot;.sql&amp;quot;);
+	        
+	        db = new pub.EADatabase();
+	        var sb = new java.lang.StringBuffer();	
+	        var sql = &amp;quot;select to_char(sysdate,&amp;apos;yyyy/mm/dd hh24:mi:ss&amp;apos;) from dual&amp;quot;;
+	        var crttime = db.GetSQL(sql);
+	        //导出文件信息
+		if (log == &amp;quot;1&amp;quot;) {
+			sb.append(&amp;quot;--------------------------------------------------------------\r\n&amp;quot;);
+		        sb.append(formatHearNote(&amp;quot;--Export file for user &amp;quot;+owner,60)+&amp;quot;\r\n&amp;quot;);
+			sb.append(&amp;quot;----------------Created on &amp;quot;+crttime+&amp;quot;----------------\r\n&amp;quot;);
+			sb.append(&amp;quot;--------------------------------------------------------------\r\n&amp;quot;);
+	        }
+	        
+	        if (obj_type == &amp;quot;TABLE&amp;quot;) {
+	        	//导出不包含存储信息
+	        	if (store != &amp;quot;1&amp;quot;) {
+	        		sql = &amp;quot;EXECUTE DBMS_METADATA.SET_TRANSFORM_PARAM(DBMS_METADATA.SESSION_TRANSFORM,&amp;apos;STORAGE&amp;apos;,false)&amp;quot;;
+	        		//db.ExcecutSQL(sql);
+	        		//var proc = new java.sql.CallableStatement();
+	        		createMyProc(db);
+	        		var proc = db.GetConn().prepareCall(&amp;quot;{ call comm_proc() }&amp;quot;);
+	        		proc.execute();
+	        	}
+	        }
+	        //导出对象创建语句
+	        if (ddl == &amp;quot;1&amp;quot;) {
+		        sql = &amp;quot;select dbms_metadata.get_ddl(&amp;apos;&amp;quot;+obj_type+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+obj_name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+owner+&amp;quot;&amp;apos;) from dual&amp;quot;;
+		        var str = db.GetSQL(sql);
+			sb.append(pub.EAFunc.Replace(str,&amp;quot;\n&amp;quot;,&amp;quot;\r\n&amp;quot;));
+		        if (obj_type == &amp;quot;VIEW&amp;quot; || obj_type == &amp;quot;SEQUENCE&amp;quot;) {
+				sb.append(&amp;quot;;\r\n&amp;quot;);
+		        }
+		        
+		        //导出表索引
+		        if (obj_type == &amp;quot;TABLE&amp;quot;) {
+		        	sql = &amp;quot;select index_name from dba_indexes where owner=&amp;apos;&amp;quot;+owner+&amp;quot;&amp;apos; and table_name=&amp;apos;&amp;quot;+obj_name+&amp;quot;&amp;apos;&amp;quot;;
+		        	var idxDS = db.QuerySQL(sql);
+		        	for (var i=0;i&amp;lt;idxDS.getRowCount();i++) {
+		        		var index_name = idxDS.getStringAt(i,&amp;quot;INDEX_NAME&amp;quot;);
+		        		sql = &amp;quot;select dbms_metadata.get_ddl(&amp;apos;INDEX&amp;apos;,&amp;apos;&amp;quot;+index_name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+owner+&amp;quot;&amp;apos;) from dual&amp;quot;;
+				        sb.append(db.GetSQL(sql));
+		        	}
+		        }
+		        
+		        //获取表注释
+		        if (zs == &amp;quot;1&amp;quot;) {
+			        try {
+					sql = &amp;quot;SELECT DBMS_LOB.substr(DBMS_METADATA.get_dependent_ddl (&amp;apos;COMMENT&amp;apos;,&amp;apos;&amp;quot;+obj_name+&amp;quot;&amp;apos;)) STR FROM dual&amp;quot;;
+					var comds = db.QuerySQL(sql);
+					for (var i=0;i&amp;lt;comds.getRowCount();i++) {
+						if (comds.getStringAt(i,&amp;quot;STR&amp;quot;).indexOf(&amp;quot;ORA-&amp;quot;) == -1) break;
+						sb.append(comds.getStringAt(i,&amp;quot;STR&amp;quot;));
+					}
+					sb.append(&amp;quot;\r\n&amp;quot;);
+				} 
+				catch(e) {
+				
+				}
+			}
+		}
+		
+		var ddlstr = sb.toString();
+		//导出不含用户名
+		if (user == &amp;quot;1&amp;quot;) {
+			var userstr = &amp;quot;\&amp;quot;&amp;quot; + owner + &amp;quot;\&amp;quot;.&amp;quot;;
+			ddlstr = pub.EAFunc.Replace(ddlstr,userstr,&amp;quot;&amp;quot;);
+		}
+		
+		//压缩下载
+		pub.EAZip.compressStringToStream(ddlstr,response.getOutputStream());
+
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		pub.EAZip.compressStringToStream(e.toString(),response.getOutputStream());
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;script type=&amp;apos;text/javascript&amp;apos; src=&amp;apos;xlsgrid/js/jquery-1.3.2.min.js&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); //压缩版  
+}
+
+function formatHearNote(str,length)
+{
+	var len = str.length();
+	for (var i=0;i&amp;lt;length-len;i++) {
+		str += &amp;quot; &amp;quot;;
+	}
+	str += &amp;quot;--&amp;quot;;
+	return str;
+}
+
+//创建去掉注释的存储过程
+function createMyProc(db) 
+{
+	var sql = &amp;quot;create or replace procedure comm_proc
+		  AS
+		  BEGIN
+		    --输出信息采用缩排或换行格式化
+		    DBMS_METADATA.set_transform_param(DBMS_METADATA.session_transform, &amp;apos;PRETTY&amp;apos;, TRUE);
+		    --确保每个语句都带分号
+		    DBMS_METADATA.set_transform_param(DBMS_METADATA.session_transform, &amp;apos;SQLTERMINATOR&amp;apos;, TRUE);
+		    --关闭存储、表空间属性
+		    dbms_metadata.set_transform_param(DBMS_METADATA.SESSION_TRANSFORM,&amp;apos;STORAGE&amp;apos;,false);
+		    DBMS_METADATA.set_transform_param(DBMS_METADATA.session_transform, &amp;apos;TABLESPACE&amp;apos;, FALSE);
+		    --关闭创建表的PCTFREE、NOCOMPRESS等属性
+		    DBMS_METADATA.set_transform_param(DBMS_METADATA.session_transform, &amp;apos;SEGMENT_ATTRIBUTES&amp;apos;, FALSE);
+		  END;&amp;quot;;
+	db.ExcecutSQL(sql);
+}
+
+
+function expData()
+{
+	var data = &amp;quot;&amp;quot;;
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sb = new java.lang.StringBuffer();	
+		var sql = &amp;quot;select * from dba_tab_columns where owner=&amp;apos;&amp;quot;+user+&amp;quot;&amp;apos; and table_name=&amp;apos;&amp;quot;+tableName+&amp;quot;&amp;apos; and data_type not in (&amp;apos;BLOB&amp;apos;,&amp;apos;CLOB&amp;apos;)&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		var columns = &amp;quot;&amp;quot;;
+		var values = &amp;quot;&amp;quot;;
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var column_name = ds.getStringAt(i,&amp;quot;COLUMN_NAME&amp;quot;);
+			var column_type = ds.getStringAt(i,&amp;quot;DATA_TYPE&amp;quot;);
+			var column_values = &amp;quot;&amp;apos;[%&amp;quot;+column_name+&amp;quot;]&amp;apos;&amp;quot;;
+
+			if (column_type == &amp;quot;DATE&amp;quot;) {
+				column_values = &amp;quot;to_date(&amp;apos;[%&amp;quot;+column_name+&amp;quot;]&amp;apos;,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;)&amp;quot;;
+			}
+			
+			if (i == 0) {
+				columns += column_name;
+				values += column_values;
+			}
+			else {
+				columns += &amp;quot;,&amp;quot;+column_name;
+				values += &amp;quot;,&amp;quot;+column_values;
+			}
+		}
+		var insql = &amp;quot;insert into &amp;quot;+tableName+&amp;quot;(&amp;quot;+columns+&amp;quot;) values(&amp;quot;+values+&amp;quot;);\r\n&amp;quot;;		
+		var mysql = &amp;quot;select &amp;quot; + columns + &amp;quot; from &amp;quot; + tableName + &amp;quot; where 1=1&amp;quot;;
+		if (where != &amp;quot;&amp;quot;) mysql += &amp;quot; and &amp;quot;+where;
+		var dataDS = db.QuerySQL(mysql);
+		if (cmt &amp;lt;= 0) cmt = 99999;
+		for (var r=0;r&amp;lt;dataDS.getRowCount();r++) {
+			var tmpinsql = insql;
+			for (var c=0;c&amp;lt;ds.getRowCount();c++) {
+				var cname = ds.getStringAt(c,&amp;quot;COLUMN_NAME&amp;quot;);
+				var val = dataDS.getStringAt(r,cname);
+				tmpinsql = pub.EAFunc.Replace(tmpinsql,&amp;quot;[%&amp;quot;+cname+&amp;quot;]&amp;quot;,val);
+			}
+			sb.append(tmpinsql);
+			if ((r+1)%cmt == 0) {
+				sb.append(&amp;quot;commit;\r\n&amp;quot;);
+			}
+		}	
+		sb.append(&amp;quot;commit;\r\n&amp;quot;);
+		data = sb.toString();
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}	
+	return data;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum rn,t.* from (
+	select a.OBJECT_NAME,
+		a.OBJECT_TYPE,
+		a.owner,
+		&amp;apos;&amp;apos; ddl,&amp;apos;&amp;apos; store,&amp;apos;&amp;apos; data,&amp;apos;&amp;apos; swhere 
+	from dba_objects a,sysxdbinfo b
+	where a.object_type=b.typ(+)
+	  and a.object_name=b.objid(+)
+	  and a.owner=&amp;apos;[%OWNER]&amp;apos;
+	  and a.OBJECT_TYPE like &amp;apos;[%OBJTYPES]%&amp;apos;
+	  and b.sytid=&amp;apos;[%SYTID]&amp;apos;
+	order by a.object_type,a.object_name  
+) t	</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

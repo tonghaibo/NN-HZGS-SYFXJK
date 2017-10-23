@@ -1,0 +1,551 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >swfwelcome</MWID><NAME >欢迎页面的编辑（WP8）</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >swfwelcome.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><SHOWBTN >1,3,4</SHOWBTN><WIDTHMOD ></WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >1,0,1</ID><CELLID ></CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >SYSURL</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >SAVE</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 >SAVE</C10><C11 >SAVE</C11><C12 ></C12><C13 >SAVE</C13><C14 >SAVE</C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="1" ><ID >TestRun</ID><NAME >试运行</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE><C10 ></C10><C11 ></C11><C12 >TestRun</C12><C13 ></C13><C14 >TestRun</C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="2" ><ID >opensutyped</ID><NAME >菜单库定义</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 >opensutyped</C15><C16 >opensutyped</C16></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >layoutid</ID><NAME >布局编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="1" ><ID >myorgid</ID><NAME >组织编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >orgid</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >AStartRow = 5;//A.数据显示：的行号
+var BStartRow = 15;//B.数据来源： 的行号
+
+var G_DROPSHEET=-1;
+var G_DROPROW=-1;
+var G_DROPCOL=-1;
+var G_ZXGFILE = &amp;quot;&amp;quot;;
+var A_ICONLIST = &amp;quot;&amp;quot;;
+
+var G_THISNLS = &amp;quot;&amp;quot;;
+var g_thissytid = &amp;quot;&amp;quot;;//强制载入哪个系统的菜单
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	try{g_thissytid=thissytid;}catch(e){g_thissytid=G_SYTID;}
+
+	try{  G_THISNLS =nls; } catch(e){}
+	if(_this.GetReleaseNo()&amp;lt;&amp;quot;7.45&amp;quot;) {
+		alert ( &amp;quot;控件版本号必须是7.45以上&amp;quot; );
+		return;
+	}
+	var xbase = &amp;quot;/org/&amp;quot;+G_DEFORG+&amp;quot;/layout/&amp;quot;;
+	var url = &amp;quot;DownloadFromXlsGridData.sp?filename=&amp;quot;+xbase +layoutid+G_THISNLS+&amp;quot;.swfzxg&amp;t=&amp;quot;+Math.random();
+	_this.LogString(url);
+	var ret=_this.LoadZXGFile(url,0,0);//&amp;quot;-&amp;quot;+G_FLOORID+
+
+	G_ZXGFILE  = _this.SaveTempZXGFile(1);
+	_this.SetSheetName(1,&amp;quot;菜单库&amp;quot;);
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;75%&amp;quot;); 
+	
+	//设置允许拖拉开关 //设置拖拉模式,设为单元格选择模式
+      	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+//      	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);  
+      	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+      	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+      	
+      	GetLayout();  
+
+	
+	var iconlist = _this.HttpCall(&amp;quot;xlsgrid/images/flash/icon/readme.txt&amp;quot;);
+	A_ICONLIST  = iconlist.split(&amp;quot;\r\n&amp;quot;);
+	
+	_this.SetDesignMode(1);
+}
+
+function GetLayout()
+{
+	var xml = invokeOSFunc(&amp;quot;GetSubsyt&amp;quot;,&amp;quot;thisorgid=&amp;quot;+myorgid+&amp;quot;&amp;sub=flow&amp;thissytid=&amp;quot;+g_thissytid+&amp;quot;&amp;nls=&amp;quot;+G_THISNLS);
+	_this.XMLDS_Parse(xml);
+	var list0 = _this.CreateListValue();
+	
+	var curid = &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		_this.SetListValue(list0,_this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;),_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+		if(i==0 ) curid = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;)
+	}
+
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,0,1,list0)  ;	
+	if(curid!=&amp;quot;&amp;quot; ) {
+		_this.SetCellText(1,0,1,curid);
+		GetLayoutItem(curid);
+	}
+	//_this.SetXmlDS(1,2,0,17,2,xml);
+
+}
+function GetLayoutItem(subid)
+{
+	var xml = invokeOSFunc(&amp;quot;GetSubsytItem&amp;quot;,&amp;quot;thisorgid=&amp;quot;+myorgid+&amp;quot;&amp;sub=flow&amp;thissytid=&amp;quot;+g_thissytid+&amp;quot;&amp;subid=&amp;quot;+subid+&amp;quot;&amp;nls=&amp;quot;+G_THISNLS);
+	_this.SetRowCount(1,18);
+	for ( var r=2;r&amp;lt;_this.GetRowCount(1);r++) 
+		for ( var c=0;c&amp;lt;3;c++)
+			_this.SetCellText(1,r,c,&amp;quot;&amp;quot;);
+	_this.SetXmlDS(1,2,0,17,2,xml);
+}
+
+//测试
+function TestRun()
+{
+	//window.open( &amp;quot;../Layout.sp?id=&amp;quot;+layoutid+&amp;quot;&amp;org=&amp;quot;+ myorgid);
+}
+
+//保存
+function SAVE()
+{
+	//POST方式调用网络OS函数
+	var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+	_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+	var tmpfile =_this.GetWindowTempFile()+&amp;quot;.swfzxg&amp;quot;;
+	_this.SaveZXGFile(tmpfile,0);
+	_this.LogString(tmpfile );
+	_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,tmpfile ,1);//本地文件的路径
+	_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,&amp;quot;org/&amp;quot;+G_DEFORG+&amp;quot;/layout/&amp;quot; ,0);	//远程保存的目录
+	_this.LogString(&amp;quot;org/&amp;quot;+G_DEFORG+&amp;quot;/layout/&amp;quot;);
+
+	var ss = tmpfile .split(&amp;quot;\\&amp;quot;);
+	var filename = ss[ss.length-1];
+	_this.LogString(filename );
+	_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,layoutid+G_THISNLS+&amp;quot;.swfzxg&amp;quot;,0);//注意这里只能是文件名，用于远程保存的文件名
+	
+	_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+	_this.AddHttpRequestParam(&amp;quot;nls&amp;quot;,G_THISNLS,0);
+	var ret=_this.SendHttpRequest(); 
+	_this.CloseHttpRequest();
+	var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+	var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+	var str = ret.substring(loc1+7,loc2);
+	
+
+	var param = new Object();
+	param.layoutid    = layoutid;
+	param.thisorgid = myorgid;
+	param.layoutxml = _this.GetLayoutXML(0);
+	param.nls =G_THISNLS;
+
+	try {
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		
+		_this.SetToolbarString(invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;thisorgid=&amp;quot;+G_DEFORG) ); 
+		alert ( msg );
+	}
+	catch (e) {
+		alert ( e );
+	}  
+}
+
+
+
+function _thisOnShellExecuteFileModify(filepath,classname)
+{
+
+	_this.LoadZXGFile(filepath,-1,0);
+	
+}
+
+//下面是建立个把一个中文字符串转换为gbk编码的url编码.js自带的编码只能转换为utf-8
+var asfman = {};   
+asfman.urlEncode = function(str)   
+{   
+    window.execScript(&amp;quot;Function vbsFun(str):vbsFun=hex(asc(str)):End Function&amp;quot;,&amp;quot;vbscript&amp;quot;);   
+    var gObject={};   
+    return str.replace(/[\x00-\xff]/g,function(a)   
+    {   
+        return a.replace(/[^0-9a-zA-Z]/g,function(b){   
+        if(!gObject[b])   
+        gObject[b]=&amp;quot;%&amp;quot;+vbsFun(b);   
+        return gObject[b];   
+        })   
+    }).replace(/[^\x00-\xff]/g,function(c){   
+        return c.replace(/./g,function(d)   
+        {   
+            if(!gObject[d])   
+            gObject[d]= vbsFun(d).replace(/(..)(..)/,&amp;quot;%$1%$2&amp;quot;);   
+            return gObject[d];   
+        })   
+    }).replace(/%20/g,&amp;quot;+&amp;quot;)   
+};
+
+
+//打开子系统定义
+function opensutyped()
+{
+	openWindow(&amp;quot;show.sp?grdid=subsyt&amp;MYSYTID=&amp;quot;+G_SYTID);
+}
+
+//================================================================//  
+// 函数：_thisOnBeginDrag
+// 说明：开始拖动
+//================)_================================================// 
+function _thisOnBeginDrag(id)  
+{ 
+	window.status = &amp;quot;开始拖动&amp;quot;+id ;
+	var idsplit= id.split(&amp;quot;_&amp;quot; );
+	G_DROPSHEET = idsplit[1];
+	G_DROPROW = idsplit[2];
+	G_DROPCOL = idsplit[3];   
+   
+
+}
+//================================================================// 
+// 函数：_thisOnEndDrop
+// 说明：
+// 参数：拖动到终点,id为目标点编号
+//================================================================// 
+function _thisOnEndDrop(id,text)  
+{ 
+
+	var idsplit= id.split(&amp;quot;_&amp;quot; );
+	if(G_DROPSHEET==&amp;quot;1&amp;quot;&amp;&amp;idsplit[1]==&amp;quot;0&amp;quot; ){
+		var icon = _this.GetCellText(G_DROPSHEET,G_DROPROW,1);
+		_this.LogString(icon);
+		var bkcolor = &amp;quot;&amp;quot;;
+		for ( var i=0;i&amp;lt;A_ICONLIST.length;i++ ){
+			var ss = A_ICONLIST[i].split(&amp;quot;,&amp;quot;);
+			if( ss.length&amp;gt;1) {	
+				_this.LogString(&amp;quot;resource://&amp;quot;+ss[0]);
+				
+				if( &amp;quot;resource://&amp;quot;+ss[0] == icon +&amp;quot;.png&amp;quot;){
+					bkcolor = ss[1];
+					_this.LogString(bkcolor);
+					//resource://
+					icon  = &amp;quot;xlsgrid/images/flash/icon/&amp;quot;+icon.substring(11)+&amp;quot;.png&amp;quot;;
+					_this.LogString(icon);
+					break;
+				}
+			}
+		}
+		var url = _this.GetCellText(G_DROPSHEET,G_DROPROW,2);
+		var title = _this.GetCellText(G_DROPSHEET,G_DROPROW,0);
+		
+		if(url.substring(0,3)==&amp;quot;../&amp;quot;)
+			url = url.substring(3);
+		
+		var DROPSTR = &amp;quot;icon=\&amp;quot;&amp;quot;+icon+ &amp;quot;\&amp;quot; url=\&amp;quot;javascript:j_openWindow(-1,-1,-1,-1,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+title +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+title +&amp;quot;&amp;apos;);\&amp;quot; bkcolor=\&amp;quot;&amp;quot;+bkcolor +&amp;quot;\&amp;quot; title=\&amp;quot;&amp;quot;+ title+&amp;quot;\&amp;quot; &amp;quot;;
+		_this.SetCellText( idsplit[1], idsplit[2], idsplit[3],DROPSTR    );
+		//_this.SetToImage(&amp;quot;&amp;quot;,idsplit[1], idsplit[2], idsplit[3],_this.LoadImage(icon) );
+	//	_this.SetCellBkColor(idsplit[1], idsplit[2], idsplit[3], 
+	}
+	if(G_DROPSHEET==&amp;quot;0&amp;quot;&amp;&amp;idsplit[1]==&amp;quot;0&amp;quot; ){	
+		//相互替代
+		var DROPSTR = _this.GetCellText( G_DROPSHEET, G_DROPROW, G_DROPCOL);
+
+		var str = _this.GetCellText( idsplit[1], idsplit[2], idsplit[3]);
+		_this.SetCellText( idsplit[1], idsplit[2], idsplit[3],DROPSTR    );
+		_this.SetCellText( G_DROPSHEET, G_DROPROW, G_DROPCOL,str );
+
+	
+	}
+	G_DROPSHEET =&amp;quot;-1&amp;quot;;
+	G_DROPROW = &amp;quot;-1&amp;quot;;
+	G_DROPCOL = &amp;quot;-1&amp;quot;;   
+	_this.SetFocusCell(idsplit[1], idsplit[2], idsplit[3]);
+
+}
+
+//设置为显示值	
+function SetShowValue ()
+{
+
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if(sheet ==1 &amp;&amp; row== 0&amp;&amp; col ==1 ) {
+	
+		GetLayoutItem(newvalue);
+	}	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+var grdpack = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot; );
+
+function copytoweb()
+{
+	var srcpath = pubpack.EAOption.dynaDataRoot +&amp;quot;org/&amp;quot;+ thisorgid +&amp;quot;/layout/&amp;quot;;
+	var destpath = pubpack.EAOption.approot+&amp;quot;/org/&amp;quot;+ thisorgid +&amp;quot;/layout/&amp;quot;;
+
+	pubpack.EAFunc.copyDirectiory(srcpath,destpath,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+	return &amp;quot;服务端：文件已从&amp;quot;+ srcpath +&amp;quot;同步到&amp;quot;+destpath ;
+}
+
+//var fileurl=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + thisorgid+&amp;quot;/layout&amp;quot;;    
+// 得到数据流的定义
+function GetSubsyt()
+{
+	var ret = &amp;quot;&amp;quot;;
+	var num = 0;
+	var ds = new pubpack.EAXmlDS();
+	var ds0 = xmldbpack.EAXmlDB.getSubSytDB(thissytid);
+	
+	if ( ds0 != null ) {
+		for ( var i=0;i&amp;lt;=ds0.getRowCount()-1; i++ )
+		{
+			//循环该组织的所有系统
+			var sytType = ds0.getStringAt(i,&amp;quot;TYP&amp;quot;);
+			var order = ds0.getStringAt(i,&amp;quot;order&amp;quot;);
+			if (order==&amp;quot;0&amp;quot;&amp;&amp; !(sytType==&amp;quot;PDA&amp;quot; ||sytType==&amp;quot;WAP&amp;quot; || sytType==&amp;quot;J2ME&amp;quot; ) ){
+				var row =ds.AddRow(ds.getRowCount()-1);
+				
+				ds.setValueAt(row,&amp;quot;ID&amp;quot;,ds0.getStringAt(i,&amp;quot;subid&amp;quot;) );
+				var sName = ds0.getStringAt(i,&amp;quot;NAME&amp;quot;);
+
+				if(nls==&amp;quot;en&amp;quot;&amp;&amp; ds0.getStringAt(i,&amp;quot;TITLE&amp;quot;)!=&amp;quot;&amp;quot; ) 
+					sName = ds0.getStringAt(i,&amp;quot;TITLE&amp;quot;);
+
+				ds.setValueAt(row,&amp;quot;NAME&amp;quot;,ds0.getStringAt(i,&amp;quot;subid&amp;quot;)+&amp;quot;-&amp;quot;+sName );
+			}
+		}
+	}
+        return ds.GetXml();
+}
+
+function GetSubsytItem()
+{
+	var ret = &amp;quot;&amp;quot;;
+	var num = 0;
+	var ds = new pubpack.EAXmlDS();
+	var ds0 = xmldbpack.EAXmlDB.getSubSytDB(thissytid);
+	
+	if ( ds0 != null ) {
+		for ( var i=0;i&amp;lt;=ds0.getRowCount()-1; i++ )
+		{
+			//循环该组织的所有系统
+			var sytType = ds0.getStringAt(i,&amp;quot;TYP&amp;quot;);
+			var order = ds0.getStringAt(i,&amp;quot;order&amp;quot;);
+			var id = ds0.getStringAt(i,&amp;quot;subid&amp;quot;);
+			if (order!=&amp;quot;0&amp;quot;&amp;&amp; id==subid ){
+				var row =ds.AddRow(ds.getRowCount()-1);
+				var sName = ds0.getStringAt(i,&amp;quot;NAME&amp;quot;);
+				
+				if(nls==&amp;quot;en&amp;quot;&amp;&amp; ds0.getStringAt(i,&amp;quot;TITLE&amp;quot;)!=&amp;quot;&amp;quot; ) 
+					sName = ds0.getStringAt(i,&amp;quot;TITLE&amp;quot;);
+
+				ds.setValueAt(row,&amp;quot;NAME&amp;quot;, sName);
+
+				ds.setValueAt(row,&amp;quot;ICON&amp;quot;,ds0.getStringAt(i,&amp;quot;ICON&amp;quot;) );
+				ds.setValueAt(row,&amp;quot;URL&amp;quot;,ds0.getStringAt(i,&amp;quot;URL&amp;quot;) );
+
+			}
+		}
+	}
+        return ds.GetXml();
+}
+
+// 得到数据流的定义
+function GetLayoutItem()
+{
+       var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EAORGXmlDB.getOrgDs();
+	var ds = new pubpack.EAXmlDS();
+	var num = 0;
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+		var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		
+		if ( thissytid == selsytid ) {
+			var fileurl=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + selsytid+&amp;quot;/layout&amp;quot;;     
+			var folds = (new java.io.File(fileurl)).listFiles();
+			if ( folds != null ) {
+				folds=pub.EAFunc.sort(folds);
+				var c = folds.length();
+				for(var i=0;i&amp;lt;c;i++) {
+					var f=folds[i];
+					if(!f.isDirectory() ) {
+						var filename = f.getName();
+		            			var index = filename.indexOf(&amp;quot;.sxg&amp;quot;);	
+						if ( index &amp;gt;=0  ) {
+							var row= ds.AddRow(ds.getRowCount()-1);
+							num++;
+							ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+							ds.setValueAt(row,&amp;quot;FILENAME&amp;quot;,filename);
+							ds.setValueAt(row,&amp;quot;NOTE&amp;quot;,&amp;quot;数据流&amp;quot;+filename);
+							ds.setValueAt(row,&amp;quot;SYTID&amp;quot;,selsytid );
+							ds.setValueAt(row,&amp;quot;ACTION&amp;quot;,&amp;quot;修改布局&amp;quot; );
+							ds.setValueAt(row,&amp;quot;ACTION1&amp;quot;,&amp;quot;删除布局&amp;quot; );
+							
+	
+	
+							
+						}	
+					}
+				}
+			}
+		}
+	}
+        return ds.GetXml();
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	try {
+		  layoutxml = XmlToStd(layoutxml );
+		  var path = pubpack.EAOption.dynaDataRoot+&amp;quot;org/&amp;quot; + thisorgid + &amp;quot;/layout/&amp;quot; + layoutid+nls+&amp;quot;.swflayout&amp;quot;;
+		  pubpack.EAFunc.WriteToFile(path,layoutxml );	
+	}
+	catch ( ee ) {
+
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		
+	}
+	return &amp;quot;已保存&amp;quot;+layoutid;
+}
+
+
+
+function  XmlToStd(xml)
+{
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+}
+
+
+
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var code = request.getParameter(&amp;quot;CODE&amp;quot;);
+      var deforg= &amp;quot;&amp;quot;;
+      var usr=web.EASession.GetLoginInfo(request);
+      var nls = usr.getLang();
+      deforg = usr.getDeforg();
+      var vappmenu = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;vappmenu&amp;quot;), &amp;quot;&amp;quot;);
+      
+      if(vappmenu!=&amp;quot;&amp;quot;){// vappmenu=null
+      	    var layoutxml = pubpack.EAFunc.readFile(pubpack.EAOption.approot+&amp;quot;/org/&amp;quot;+ deforg +&amp;quot;/layout/&amp;quot;+vappmenu+nls+&amp;quot;.swflayout&amp;quot;);
+            layoutxml = pubpack.EAFunc.Replace(layoutxml ,&amp;quot;bkcolor=\&amp;quot;#&amp;quot;, &amp;quot;bkcolor=\&amp;quot;0x&amp;quot; );
+            layoutxml = pubpack.EAFunc.Replace(layoutxml ,&amp;quot;fkcolor=\&amp;quot;#&amp;quot;, &amp;quot;fkcolor=\&amp;quot;0x&amp;quot; );
+            return layoutxml ;
+      }
+      
+      var db = null;
+      var ret= &amp;quot;&amp;quot;;
+
+      try {
+      	// OS 中如何得到登录的信息
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+           
+            // 如果MAINURL定义了这个进入账套的权限，那么采用这个来做WP8的菜单
+            var sql= &amp;quot;select mainurl from accmainurl where accid=&amp;apos;&amp;quot;+usr.getAccid()+&amp;quot;&amp;apos; and usrid =&amp;apos;&amp;quot;+usr.getUsrid()+&amp;quot;&amp;apos; and usrorgid =&amp;apos;&amp;quot;+usr.getOrgid()+&amp;quot;&amp;apos; &amp;quot; ;
+            var myds = db.QuerySQL(sql);
+            var loginurl = &amp;quot;&amp;quot;;
+	    if(myds.getRowCount()&amp;gt;0) 
+            	loginurl = myds.getStringAt(0,&amp;quot;MAINURL&amp;quot; );
+
+            if(loginurl!=&amp;quot;&amp;quot; ){
+            	//vappmenu = pubpack.EAFunc.Replace(loginurl ,&amp;quot;EntryCloud.jsp?menu=&amp;quot;, &amp;quot;&amp;quot;);
+            	//2013/12 modify by scott
+            	var loc = loginrul.indexOf(&amp;quot;menu=&amp;quot;);
+            	if(loc&amp;gt;=0){
+            		vappmenu = loginrul.substring(loc+5 );
+	           	if (vappmenu .indexOf(&amp;quot;&amp;&amp;quot;) != -1) vappmenu = vappmenu .substring(0,vappmenu .indexOf(&amp;quot;&amp;&amp;quot;));
+	        }
+            }
+            else 
+            if( vappmenu  == &amp;quot;&amp;quot; ) {
+           	var usrds = db.QuerySQL(&amp;quot;select mainurl from usr where id=&amp;apos;&amp;quot;+usr.getUsrid()+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usr.getOrgid()+&amp;quot;&amp;apos;&amp;quot;);
+           	if(usrds.getRowCount()&amp;gt;0 ){
+           		var mainurl = usrds.getStringAt(0,&amp;quot;mainurl&amp;quot;);
+           		//2013/12 modify by scott , ROOT_XLSGRID/...
+			var loc = mainurl.indexOf(&amp;quot;menu=&amp;quot;);
+			if(loc&amp;gt;=0){
+				vappmenu = mainurl.substring(loc+5 );
+				if (vappmenu .indexOf(&amp;quot;&amp;&amp;quot;) != -1) vappmenu = vappmenu .substring(0,vappmenu .indexOf(&amp;quot;&amp;&amp;quot;));
+			}
+			
+           		//vappmenu = pubpack.EAFunc.Replace(mainurl,&amp;quot;Entry.jsp?menu=&amp;quot;, &amp;quot;&amp;quot;);
+           		//if (vappmenu .indexOf(&amp;quot;&amp;&amp;quot;) != -1) vappmenu = vappmenu .substring(0,vappmenu .indexOf(&amp;quot;&amp;&amp;quot;));
+           		
+           	}
+            }
+            if(vappmenu==&amp;quot;&amp;quot;)vappmenu = &amp;quot;default&amp;quot;;
+
+            var layoutxml = pubpack.EAFunc.readFile(pubpack.EAOption.approot+&amp;quot;/org/&amp;quot;+ deforg +&amp;quot;/layout/&amp;quot;+vappmenu+nls+&amp;quot;.swflayout&amp;quot;);
+            layoutxml = pubpack.EAFunc.Replace(layoutxml ,&amp;quot;bkcolor=\&amp;quot;#&amp;quot;, &amp;quot;bkcolor=\&amp;quot;0x&amp;quot; );
+            layoutxml = pubpack.EAFunc.Replace(layoutxml ,&amp;quot;fkcolor=\&amp;quot;#&amp;quot;, &amp;quot;fkcolor=\&amp;quot;0x&amp;quot; );
+            return layoutxml ;
+            layoutxml = pubpack.EAFunc.Replace(layoutxml ,&amp;quot;bkcolor=\&amp;quot;#&amp;quot;, &amp;quot;bkcolor=\&amp;quot;0x&amp;quot; );
+            layoutxml = pubpack.EAFunc.Replace(layoutxml ,&amp;quot;fkcolor=\&amp;quot;#&amp;quot;, &amp;quot;fkcolor=\&amp;quot;0x&amp;quot; );
+            
+            
+	   
+            var url = &amp;quot;javascript:f_openWindow(65,30,1000,600,&amp;apos;ROOT_3ASPACE/show.sp?grdid=StartShelf&amp;apos;,&amp;apos;resource://icon_11&amp;apos;,&amp;apos;Welcome1&amp;apos;,&amp;apos;台型分析&amp;apos;);&amp;quot;;
+            var url1 = &amp;quot;javascript:f_openWindow(65,30,1000,600,&amp;apos;http://www.baidu.com/&amp;apos;,&amp;apos;resource://icon_11&amp;apos;,&amp;apos;Welcome1&amp;apos;,&amp;apos;台型分析&amp;apos;);&amp;quot;;
+
+            ret = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; 
+&amp;lt;ROWSET width=\&amp;quot;124\&amp;quot; height=\&amp;quot;120\&amp;quot;&amp;gt;&amp;lt;!--width:默认每个格子的宽、height:默认每个格子的高（合并格子之前的）--&amp;gt;
+	&amp;lt;ROW&amp;gt;
+		&amp;lt;C0  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;124\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot; icon= \&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;百度&amp;lt;/C0&amp;gt;
+		&amp;lt;C1  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;249\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;2\&amp;quot; bkcolor=\&amp;quot;0x6A00FF\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;&amp;quot;+url1+&amp;quot;\&amp;quot; icon= \&amp;quot;xlsgrid/images/12.png\&amp;quot;&amp;gt;百度&amp;lt;/C1&amp;gt;
+		&amp;lt;C3  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;200\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C3&amp;gt;
+	&amp;lt;/ROW&amp;gt;
+	&amp;lt;ROW &amp;gt;
+		&amp;lt;C0  height=\&amp;quot;241\&amp;quot; width=\&amp;quot;124\&amp;quot; COLSPAN=\&amp;quot;2\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/entry/2.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C0&amp;gt;
+		&amp;lt;C1  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;124\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFF00\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C1&amp;gt;
+		&amp;lt;C2  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;124\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C2&amp;gt;
+		&amp;lt;C3  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;200\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C3&amp;gt;
+	&amp;lt;/ROW&amp;gt;
+	&amp;lt;ROW &amp;gt;
+		&amp;lt;C1  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;124\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C1&amp;gt;
+		&amp;lt;C2  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;124\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/11.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C2&amp;gt;
+		&amp;lt;C3  height=\&amp;quot;120\&amp;quot; width=\&amp;quot;200\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; bkcolor=\&amp;quot;0x75C215\&amp;quot; fkcolor=\&amp;quot;0xFFFFFF\&amp;quot; url=\&amp;quot;http://www.baidu.com\&amp;quot;  icon=\&amp;quot;xlsgrid/images/entry/2.png\&amp;quot;&amp;gt;豌豆荚&amp;lt;/C3&amp;gt;
+	&amp;lt;/ROW&amp;gt;
+&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SEQ</ID><NAME ></NAME><DATDSC >select seq_sysurl.nextval from dual</DATDSC><C4 ></C4><C5 >SEQ</C5></ROW>
+<ROW num="1" ><ID >NEWSYSURL</ID><NAME ></NAME><DATDSC >insert into sysurl( org,id,name,refid) values(&amp;apos;[%thisorgid]&amp;apos;,&amp;apos;[%id]&amp;apos;,&amp;apos;系统自动添加[%id]&amp;apos;,&amp;apos;_HTMLSTR&amp;apos;)
+</DATDSC><C4 >NEWSYSURL</C4><C5 ></C5></ROW>
+<ROW num="2" ><ID >BODYGUID</ID><NAME ></NAME><DATDSC >select a.guid from sysurl a,urlbody b where a.guid=b.fromguid and a.id=&amp;apos;[%ID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

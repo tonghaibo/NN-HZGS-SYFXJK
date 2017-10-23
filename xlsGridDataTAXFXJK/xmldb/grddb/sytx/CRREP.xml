@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CRREP</MWID><NAME >交叉表范例</NAME><NOTE ></NOTE><FILE >CRREP.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><NOACCNAME >0</NOACCNAME><CHECKTITLE >执行统计</CHECKTITLE></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >untnum</ID><NAME >转换因子</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >DAT</ID><NAME >日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:DEATIL</DSKEY><NROW >3</NROW><NCOL >5</NCOL><ISMAIN ></ISMAIN><ISCROSS >1</ISCROSS><HCOLS >编号,名称</HCOLS><VCOLS >untnum</VCOLS><VCOLSQL >select distinct untnum from
+( select distinct bascat1,&amp;apos;u&amp;apos;||untnum UNTNUM from item 
+where bascat1 not like &amp;apos;itm%&amp;apos;
+order by  bascat1,untnum
+) a
+order by untnum</VCOLSQL><VALUECOL >price</VALUECOL><HROW >1</HROW><ROWORDER >编号 desc,名称</ROWORDER><C15 >0,4,1</C15></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+function _thisOnpost_loaddata(sheet)
+{
+  _this.LoadScene(0,1);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function demo()
+{
+  return &amp;quot;demo&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DEATIL</ID><NAME ></NAME><DATDSC >select bascat1,id 编号,name 名称,price,&amp;apos;u&amp;apos;||untnum UNTNUM
+from item
+where untnum like &amp;apos;[%untnum]%&amp;apos; and id like &amp;apos;001%&amp;apos;
+order by name  desc</DATDSC><C4 >DEATIL</C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

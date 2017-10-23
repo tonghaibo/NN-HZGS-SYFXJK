@@ -1,0 +1,2051 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_mw</MWID><NAME >中间件类显示风格</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_mw.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >// 保存表单或单据
+// bPrompt 提示是否保存成功
+// 返回：保存单据的 GUID
+function f_save(bPrompt)
+{
+
+	//alert(&amp;quot;entry f_svae&amp;quot;);
+     	// 1）调用某个servelet,以前是使用XXX.sp来调用，com.xlsgrid.net.servlet包里面的所有类，比如UploadZXG.sp
+	//		rcall.jsp?actionname=XXX 
+
+     var myurl= G_WEBBASE+&amp;quot;rcall.jsp&amp;quot;;//&amp;quot;EAGridAction.sp&amp;quot;;
+    
+
+    _this.OpenHttpRequest(myurl,&amp;quot;POST&amp;quot;);
+    try{_thisOnAddHttpRequestParam(&amp;quot;SAVE&amp;quot;) }catch(e){}
+    
+    _this.AddHttpRequestParam(&amp;quot;actionname&amp;quot;,&amp;quot;EAGridAction&amp;quot;);
+    _this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;SAVE&amp;quot;,0);
+//    _this.AddHttpRequestParam(&amp;quot;accid&amp;quot;,accid,0);
+//G_ACCID是中间件的数据帐套。不要使用accid，因可能会被url中的参数覆盖
+    _this.AddHttpRequestParam(&amp;quot;datacc&amp;quot;,G_ACCID,0);
+    _this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,sytid,0);
+    _this.AddHttpRequestParam(&amp;quot;orgid&amp;quot;,orgid,0);    
+    _this.AddHttpRequestParam(&amp;quot;biltyp&amp;quot;,grdid,0);
+    _this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,grdid,0);
+    _this.AddHttpRequestParam(&amp;quot;grdtyp&amp;quot;,grdtyp,0);
+    _this.AddHttpRequestParam(&amp;quot;bilid&amp;quot;,bilid,0);
+    _this.AddHttpRequestParam(&amp;quot;guid&amp;quot;,G_GUID,0);
+    _this.AddHttpRequestParam(&amp;quot;idold&amp;quot;,idold,0);
+   
+   
+    var hdrxml = xlscell.getHdrXML(_this);
+    //alert(hdrxml);
+    _this.AddHttpRequestParam(&amp;quot;xmlhdr&amp;quot;,hdrxml ,0);
+    var detailxml=GetXml(0,_this.GetMainCellRangeRow1(0),_this.GetMainCellRangeCol1(0),_this.GetMainCellRangeRow2(0),_this.GetMainCellRangeCol2(0));
+    _this.AddHttpRequestParam(&amp;quot;xmldtl&amp;quot;,detailxml,0);
+      
+    // 一定要放在_thisOnbeforeXXXX之后，否则可能网络连接被改动
+    var xml = _this.SendHttpRequest();
+
+    var topic = GetMessage(xml,&amp;quot;TOPIC&amp;quot;);
+    var code = GetMessage(xml,&amp;quot;CODE&amp;quot;);
+    var retval = GetMessage(xml,&amp;quot;RETVAL&amp;quot;);
+    var sRet = retval.split(&amp;quot;,&amp;quot;);
+    var retguid = &amp;quot;&amp;quot;; var retbil = &amp;quot;&amp;quot;;
+    if(sRet.length&amp;gt;=2) {
+    	retguid == sRet[1];
+    	retbil == sRet[0];
+    }
+    else retguid = retval;
+
+    if(code !=&amp;quot;1&amp;quot;){
+    	if(bPrompt)	alert(topic );
+    	return &amp;quot;&amp;quot;;
+    }
+    try{
+      xml = _thisOnaftersave(ret);
+      if ( xml == null ) ret = &amp;quot;&amp;quot;;
+      if ( xml != &amp;quot;&amp;quot; ) {
+        if (GetMessage(xml,&amp;quot;CODE&amp;quot;)!=&amp;quot;1&amp;quot; ) {
+          return xml;
+        }
+      }
+    }
+    catch(e){
+    }
+    if(code!=&amp;quot;1&amp;quot;)
+    	alert(topic);
+    else 
+    	if(bPrompt) alert(topic );
+    return retguid ;
+
+}
+function GetXml(sheet,row1,col1,row2,col2){
+	if(row2-row1&amp;gt;0||col2-col1&amp;gt;0) {
+		var xml = &amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+		for ( var r=1*row1;r&amp;lt;=1*row2;r++){
+			xml+=&amp;quot;&amp;lt;ROW&amp;quot;;
+			var rowobj = document.all(&amp;quot;ROW_&amp;quot;+r);
+			if(rowobj!=null&amp;&amp;rowobj!=undefined) {
+				var rowvalue = rowobj.getAttribute(&amp;quot;ROWVALUE&amp;quot;);
+				if(rowvalue!=null)
+					xml+=&amp;quot; VALUE=\&amp;quot;&amp;quot;+rowvalue+&amp;quot;\&amp;quot;&amp;quot;;
+			}
+			xml+=&amp;quot; &amp;gt;&amp;quot;;
+			//xml+=&amp;quot;&amp;lt;SEQID&amp;gt;&amp;quot;+(i-1*row1+1)+&amp;quot;&amp;lt;/SEQID&amp;gt;&amp;quot;;
+			for( var c=1*col1;c&amp;lt;=1*col2;c++){
+				var colnam = _this.GetColName0(sheet,c);
+				if(colnam!=&amp;quot;&amp;quot;)
+					xml+=&amp;quot;&amp;lt;&amp;quot;+colnam+&amp;quot;&amp;gt;&amp;quot;+_this.GetCellText(sheet,r,c)+&amp;quot;&amp;lt;/&amp;quot;+colnam+&amp;quot;&amp;gt;&amp;quot;;
+				// 判断是否有显示字段
+				var seq = xlscol.getByName(colnam);
+				if(seq&amp;gt;=0 ) {
+					var showkeyid =xlscol.aGrdCol[seq].m_keyhide;
+					if(showkeyid!=&amp;quot;&amp;quot;){
+						xml+=&amp;quot;&amp;lt;&amp;quot;+showkeyid +&amp;quot;&amp;gt;&amp;quot;+_this.GetCellShowText(sheet,r,c)+&amp;quot;&amp;lt;/&amp;quot;+showkeyid +&amp;quot;&amp;gt;&amp;quot;;
+	
+					}
+				}
+			}
+			xml+=&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;;
+		}
+		xml+=&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+		//alert(xml);
+		return xml;
+	}else return &amp;quot;&amp;quot;;
+}
+
+// 得到xml里面的某个标签的值，如&amp;lt;TOPIC&amp;gt;保存成功&amp;lt;/TOPIC&amp;gt; 里面的保存成功
+function GetMessage(xml ,id)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var len = id.length+2;
+	 var idx = xml.indexOf(&amp;quot;&amp;lt;&amp;quot;+id+&amp;quot;&amp;gt;&amp;quot;);
+	    var idx1 = xml.indexOf(&amp;quot;&amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt;&amp;quot; );
+	    var topic = &amp;quot;&amp;quot;;
+	    if(idx&amp;gt;0&amp;&amp;idx1&amp;gt;0){
+	    	ret = xml.substring(idx+len ,idx1 );
+	    }
+	return ret;
+}
+//得到焦点,需要进入录入框
+var G_FOCUS_SHEET = -1;
+var G_FOCUS_ROW = -1;
+var G_FOCUS_COL = -1;
+
+
+
+function f_cell_entry(sheet,row,col)
+{
+
+	console.log(&amp;apos;entry cell &amp;apos;+row+&amp;apos;,&amp;apos;+col );
+	$(&amp;quot;.selectbox_wnd&amp;quot;).hide();
+	if(G_FOCUS_SHEET == sheet&amp;&amp;G_FOCUS_ROW == row&amp;&amp;G_FOCUS_COL==col)return;
+
+	var id = &amp;quot;CELLTEXT_&amp;quot;+sheet+&amp;quot;_&amp;quot;+row+&amp;quot;_&amp;quot;+col;
+	var obj = document.all(id);
+	if(obj ==null) return;
+	var ctrltype = obj.getAttribute(&amp;quot;ctrltype&amp;quot;);
+	
+	if(!(ctrltype ==&amp;quot;text&amp;quot;||ctrltype ==&amp;quot;date&amp;quot; ||ctrltype ==&amp;quot;selectbox&amp;quot;||ctrltype ==&amp;quot;MULTLINE&amp;quot;) ) return; 
+	
+	var lock  = obj.getAttribute(&amp;quot;celllock&amp;quot;);
+	if(lock==&amp;quot;0&amp;quot;){
+		var id=  obj.getAttribute(&amp;quot;id&amp;quot;);
+		
+		$(&amp;quot;#&amp;quot;+id).hide();
+
+		$(&amp;quot;#INPUT_&amp;quot;+id).show();
+		
+		$(&amp;quot;#INPUT_&amp;quot;+id).val(obj.getAttribute(&amp;quot;innerval&amp;quot;));
+		
+		$(&amp;quot;#INPUT_&amp;quot;+id).focus();
+		$(&amp;quot;#INPUT_&amp;quot;+id).select();
+		if(ctrltype ==&amp;quot;date&amp;quot;)
+			f_show_dateselectwnd(sheet,row,col);
+	}
+	G_FOCUS_SHEET = sheet;G_FOCUS_ROW = row;G_FOCUS_COL=col;
+	if(ctrltype ==&amp;quot;selectbox&amp;quot; ) {	// 如果是selectbox 智能感应
+		keyOption2 = true;
+		ddldiv(&amp;apos;CELLTEXT_&amp;apos;+sheet+&amp;apos;_&amp;apos;+row+&amp;apos;_&amp;apos;+col);
+	}
+}
+//录入框失去焦点
+function f_cell_unentry(sheet,row,col)
+{
+	var id = &amp;quot;INPUT_CELLTEXT_&amp;quot;+sheet+&amp;quot;_&amp;quot;+row+&amp;quot;_&amp;quot;+col;
+	var obj =  document.all(id);
+	
+	var val = obj.value;
+	var spanid = &amp;quot;CELLTEXT_&amp;quot;+sheet+&amp;quot;_&amp;quot;+row+&amp;quot;_&amp;quot;+col;
+	var spanobj = document.all(spanid);
+	spanobj.setAttribute(&amp;quot;innerval&amp;quot;,val);
+	var showtext = spanobj.getAttribute(&amp;quot;showval&amp;quot;);
+	if(showtext!=&amp;quot;&amp;quot;)
+		spanobj.innerHTML = showtext;
+	else spanobj.innerHTML = val;
+	
+	$(&amp;quot;#&amp;quot;+spanid).show();
+	$(&amp;quot;#&amp;quot;+id).hide();
+	G_FOCUS_SHEET = -1;
+	G_FOCUS_ROW = -1;
+	G_FOCUS_COL = -1;	
+}
+//录入框键盘输入
+function f_cell_keydown(evt)
+{
+	try {
+	   if(evt.keyCode==&amp;apos;13&amp;apos;){ 
+	   	var obj = event.srcElement;
+	   	var id = obj.getAttribute(&amp;quot;id&amp;quot;);
+		var ss = id.split(&amp;quot;_&amp;quot;);//INPUT_CELLTEXT_sheet_row_col
+		if(ss.length==5){
+	   		f_cell_unentry(ss[2],ss[3],ss[4]);
+	   	}
+	    }
+	 }catch(e){}
+	 
+}
+
+//////////////////////////////////  日历选择 
+var gdCtrl = new Object();
+var goSelectTag = new Array();
+var gcGray = &amp;quot;#ABABAB&amp;quot;;
+//var gcToggle = &amp;quot;#ffff00&amp;quot;;// 日历表面的颜色
+var gcToggle = &amp;quot;#1F4E78&amp;quot;;
+//var gcBG = &amp;quot;#99CCFF&amp;quot;; // 日历表面的颜色
+var gcBG = &amp;quot;#FEFEFE&amp;quot;;
+var previousObject = null;
+
+var gdCurDate = new Date();
+var giYear = gdCurDate.getFullYear();
+var giMonth = gdCurDate.getMonth()+1;
+var giDay = gdCurDate.getDate();
+//这是当前时间 giYear 是当前值
+var gdCurCurDate = new Date();
+var giCurYear = gdCurCurDate .getFullYear();	
+var giCurMonth = gdCurCurDate .getMonth()+1;
+var giCurDay = gdCurCurDate .getDate();
+var gCalMode = &amp;quot;&amp;quot;;
+var gCalDefDate = &amp;quot;&amp;quot;;
+var giCurDateSheet= 0;//返回值的sheet,row,col
+var giCurDateRow= 0;
+var giCurDateCol= 0;
+var CAL_MODE_NOBLANK = &amp;quot;2&amp;quot;;
+var monthName = new Array(&amp;quot;一月&amp;quot;, &amp;quot;二月&amp;quot;, &amp;quot;三月&amp;quot;,
+                          &amp;quot;四月&amp;quot;, &amp;quot;五月&amp;quot;, &amp;quot;六月&amp;quot;,
+                          &amp;quot;七月&amp;quot;, &amp;quot;八月&amp;quot;, &amp;quot;九月&amp;quot;,
+                          &amp;quot;十月&amp;quot;, &amp;quot;十一月&amp;quot;, &amp;quot;十二月&amp;quot;);
+
+function fSetDate(iYear, iMonth, iDay){
+  var ret = &amp;quot;&amp;quot;;
+  if ((iYear == 0) &amp;&amp; (iMonth == 0) &amp;&amp; (iDay == 0)){
+  	ret = &amp;quot;&amp;quot;;
+  }else{
+  	iMonth = iMonth + 100 + &amp;quot;&amp;quot;;
+  	iMonth = iMonth.substring(1);
+
+  	iDay   = iDay + 100 + &amp;quot;&amp;quot;;
+  	iDay   = iDay.substring(1);
+  	
+  	ret = iYear+ &amp;quot;-&amp;quot;+ iMonth+ &amp;quot;-&amp;quot;+ iDay;
+  	
+  }
+  
+
+  _this.SetCellText(giCurDateSheet,giCurDateRow,giCurDateCol,ret );
+  
+  f_closepopwnd();
+}
+
+function HiddenDiv()
+{
+	var i;
+  VicPopCal.style.visibility = &amp;quot;hidden&amp;quot;;
+  for (i in goSelectTag)
+  	goSelectTag[i].style.visibility = &amp;quot;visible&amp;quot;;
+  goSelectTag.length = 0;
+
+}
+function fSetSelected(aCell){
+  var iOffset = 0;
+  var iYear = parseInt(document.all(&amp;apos;tbSelYear&amp;apos;).value);
+  var iMonth = parseInt(document.all(&amp;apos;tbSelMonth&amp;apos;).value);
+  
+  aCell.bgColor = gcBG;
+
+  //with (aCell.children[&amp;quot;cellText&amp;quot;]){
+  	var iDay = parseInt(aCell.innerText);
+  	if (aCell.style.color==gcGray)
+		iOffset = (Victor&amp;lt;10)?-1:1;
+
+	if( aCell.style.color == gcGray ){
+		iOffset = (iDay &amp;lt; 15 )?1:-1;
+	}
+
+	iMonth += iOffset;
+	if (iMonth&amp;lt;1) {
+		iYear--;
+		iMonth = 12;
+	}else if (iMonth&amp;gt;12){
+		iYear++;
+		iMonth = 1;
+	}
+  //}
+  fSetDate(iYear, iMonth, iDay);
+}
+
+function Point(iX, iY){
+	this.x = iX;
+	this.y = iY;
+}
+
+function fBuildCal(iYear, iMonth) {
+  var aMonth=new Array();
+  for(i=1;i&amp;lt;7;i++)
+  	aMonth[i]=new Array(i);
+  
+  var dCalDate=new Date(iYear, iMonth-1, 1);
+  var iDayOfFirst=dCalDate.getDay();
+  var iDaysInMonth=new Date(iYear, iMonth, 0).getDate();
+  var iOffsetLast=new Date(iYear, iMonth-1, 0).getDate()-iDayOfFirst+1;
+  var iDate = 1;
+  var iNext = 1;
+
+  for (d = 0; d &amp;lt; 7; d++)
+	aMonth[1][d] = (d&amp;lt;iDayOfFirst)?-(iOffsetLast+d):iDate++;
+  for (w = 2; w &amp;lt; 7; w++)
+  	for (d = 0; d &amp;lt; 7; d++)
+		aMonth[w][d] = (iDate&amp;lt;=iDaysInMonth)?iDate++:-(iNext++);
+  return aMonth;
+}
+
+function fDrawCal(iYear, iMonth, iCellHeight, sDateTextSize) {
+  var WeekDay = new Array(&amp;quot;日&amp;quot;,&amp;quot;一&amp;quot;,&amp;quot;二&amp;quot;,&amp;quot;三&amp;quot;,&amp;quot;四&amp;quot;,&amp;quot;五&amp;quot;,&amp;quot;六&amp;quot;);
+  var styleTD = &amp;quot; bordercolor=&amp;apos;&amp;quot;+gcBG+&amp;quot;&amp;apos; valign=&amp;apos;middle&amp;apos; align=&amp;apos;center&amp;apos; height=&amp;apos;&amp;quot;+iCellHeight+&amp;quot;&amp;apos; style=&amp;apos;font-size:16px; border-bottom:1px solid #ABABAB; &amp;quot;;
+  var html = &amp;quot;&amp;quot;;
+	html+=&amp;quot;&amp;lt;tr heigth=40&amp;gt;&amp;quot;;
+	for(i=0; i&amp;lt;7; i++)
+		html+=&amp;quot;&amp;lt;td bgcolor=&amp;apos;#DFDFDF&amp;apos;  &amp;quot;+styleTD+&amp;quot; color:#1F4E78&amp;apos;  &amp;gt;&amp;lt;B&amp;gt;&amp;quot; + WeekDay[i] + &amp;quot;&amp;lt;/B&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+
+  	for (w = 1; w &amp;lt; 7; w++) {
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		for (d = 0; d &amp;lt; 7; d++) {
+			html+=&amp;quot;&amp;lt;td bgcolor=&amp;apos;&amp;quot;+gcBG+&amp;quot;&amp;apos;  &amp;quot;+styleTD+&amp;quot;cursor:hand;&amp;apos; onMouseOver=\&amp;quot;this.bgColor=&amp;apos;#CDCDCD&amp;apos;\&amp;quot; onMouseOut=&amp;apos;this.bgColor=gcBG&amp;apos; onclick=&amp;apos;fSetSelected(this)&amp;apos;&amp;gt;&amp;quot;;
+			html+=&amp;quot;&amp;lt;b&amp;gt;&amp;lt;span id=&amp;apos;datecell_&amp;quot;+w+&amp;quot;_&amp;quot;+d+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/span&amp;gt; &amp;lt;/b&amp;gt;&amp;quot;;
+			html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		}
+		html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+  return html ;
+}
+
+function fUpdateCal(iYear, iMonth) {
+
+
+  myMonth = fBuildCal(iYear, iMonth);
+  var i = 0;
+  for (w = 0; w &amp;lt; 6; w++) {
+	for (d = 0; d &amp;lt; 7; d++) {
+			Victor = i++;
+			if (1*myMonth[w+1][d]&amp;lt;0) {
+				document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).style.color = gcGray;
+				document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).innerText = -myMonth[w+1][d];
+			}else{
+				if(iYear == giYear &amp;&amp; iMonth == giMonth &amp;&amp;myMonth[w+1][d]==  giDay )
+					document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).style.color = &amp;quot;red&amp;quot;;
+				else if(iYear == giCurYear &amp;&amp; iMonth == giCurMonth &amp;&amp;myMonth[w+1][d]==  giCurDay )
+					document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).style.color = &amp;quot;green&amp;quot;;
+				else if( d == 0 ){
+					document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).style.color = &amp;quot;blue&amp;quot;;
+				}else if( d == 6 ){
+					document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).style.color = &amp;quot;blue&amp;quot;;
+				}else{
+					document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).style.color = &amp;quot;black&amp;quot;;
+				}
+				
+				document.all(&amp;apos;datecell_&amp;apos;+(w+1)+&amp;apos;_&amp;apos;+d).innerText =&amp;quot;&amp;quot;+ myMonth[w+1][d];
+			}
+	}
+   }
+
+}
+
+function fSetYearMon(iYear, iMon){
+	if( iYear &amp;lt; gCliCurDate.getFullYear() - 100 || iYear &amp;gt; gCliCurDate.getFullYear() + 20 ) return false;
+	
+  document.all(&amp;apos;tbSelMonth&amp;apos;).options[iMon-1].selected = true;
+  for (i = 0; i &amp;lt; document.all(&amp;apos;tbSelYear&amp;apos;).length; i++)
+	if (document.all(&amp;apos;tbSelYear&amp;apos;).options[i].value == iYear)
+		document.all(&amp;apos;tbSelYear&amp;apos;).options[i].selected = true;
+  fUpdateCal(iYear, iMon);
+}
+
+function fPrevMonth(){
+  var iMon = document.all(&amp;apos;tbSelMonth&amp;apos;).value;
+  var iYear = document.all(&amp;apos;tbSelYear&amp;apos;).value;
+  
+  if (--iMon&amp;lt;1) {
+	  iMon = 12;
+	  iYear--;
+  }
+  
+  fSetYearMon(iYear, iMon);
+}
+
+function fNextMonth(){
+  var iMon = document.all(&amp;apos;tbSelMonth&amp;apos;).value;
+  var iYear = document.all(&amp;apos;tbSelYear&amp;apos;).value;
+  
+  if (++iMon&amp;gt;12) {
+	  iMon = 1;
+	  iYear++;
+  }
+  
+  fSetYearMon(iYear, iMon);
+}
+
+function fToggleTags(){
+  with (document.all.tags(&amp;quot;SELECT&amp;quot;)){
+ 	for (i=0; i&amp;lt;length; i++)
+ 		if ((item(i).Victor!=&amp;quot;Won&amp;quot;)&amp;&amp;fTagInBound(item(i))){
+ 			item(i).style.visibility = &amp;quot;hidden&amp;quot;;
+ 			goSelectTag[goSelectTag.length] = item(i);
+ 		}
+  }
+}
+
+function fTagInBound(aTag){
+  with (VicPopCal.style){
+  	var l = parseInt(left);
+  	var t = parseInt(top);
+  	var r = l+parseInt(width);
+  	var b = t+parseInt(height);
+	var ptLT = fGetXY(aTag);
+	return !((ptLT.x&amp;gt;r)||(ptLT.x+aTag.offsetWidth&amp;lt;l)||(ptLT.y&amp;gt;b)||(ptLT.y+aTag.offsetHeight&amp;lt;t));
+  }
+}
+
+function fGetXY(aTag){
+  var oTmp = aTag;
+  var pt = new Point(0,0);
+  do {
+  	pt.x += oTmp.offsetLeft;
+  	pt.y += oTmp.offsetTop;
+  	oTmp = oTmp.offsetParent;
+  } while(oTmp.tagName!=&amp;quot;BODY&amp;quot;);
+  return pt;
+}
+
+var gMonths = monthName;
+var gCliCurDate = new Date();
+// 得到显示日期控件的html
+//来源控件的编号 sheet,row,col
+function f_show_dateselectwnd(sheet,row,col)
+{
+	var html= &amp;quot;&amp;quot;;
+	var initval =_this.GetCellText(sheet,row,col);
+	
+	giCurDateSheet= sheet;
+	giCurDateRow= row;
+	giCurDateCol= col;
+	if(initval == &amp;quot;&amp;quot;){
+		giYear = giCurYear ;
+		giMonth = giCurMonth ;
+		giDay = giCurDay ;
+	} 
+	else {
+		giYear = 1*initval.substring(0,4);//2015-01-21
+		giMonth  = 1*initval.substring(5,7);
+		giDay = 1*initval.substring(8,10);
+		
+	}
+
+	
+	//html+=&amp;quot;&amp;lt;Div id=&amp;apos;VicPopCal&amp;apos; style=&amp;apos;POSITION:fixed;VISIBILITY:visible;border:1px ridge;width:&amp;quot;+w+&amp;quot;;height:&amp;quot;+h+&amp;quot;;top:&amp;quot;+((h0-h)/2)+&amp;quot;;left:&amp;quot;+((w0-w)/2)+&amp;quot;;z-index:100;overflow:hidden&amp;apos;&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;table border=&amp;apos;0&amp;apos; width=100% border=1&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;TR height=40&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;td valign=&amp;apos;middle&amp;apos; align=&amp;apos;center&amp;apos; bgcolor=1F4E78&amp;gt;&amp;lt;span onclick=&amp;apos;fPrevMonth()&amp;apos;  onmouseover=\&amp;quot;this.style.cursor=&amp;apos;pointer&amp;apos;\&amp;quot;&amp;gt; &amp;lt;font color=#FFFFFF size=3&amp;gt;&amp;lt;li class=&amp;apos;glyphicon glyphicon-chevron-left&amp;apos; href=&amp;apos;#&amp;apos; onClick=&amp;apos;fPrevMonth()&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;nbsp;&amp;lt;font size=4 color=#FFFFFF&amp;gt;上月&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;nbsp;&amp;lt;SELECT name=&amp;apos;tbSelYear&amp;apos; onChange=\&amp;quot;fUpdateCal(document.all(&amp;apos;tbSelYear&amp;apos;).value, document.all(&amp;apos;tbSelMonth&amp;apos;).value)\&amp;quot; Victor=&amp;apos;Won&amp;apos;&amp;gt;&amp;quot;;
+	for( i = gCliCurDate.getFullYear() - 100; i &amp;lt;= gCliCurDate.getFullYear() + 20; i++ ){
+		html+=&amp;quot;&amp;lt;OPTION value=&amp;apos;&amp;quot;+i+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+i+&amp;quot;&amp;lt;/OPTION&amp;gt;&amp;quot;;
+	}	
+	html+=&amp;quot;&amp;lt;/SELECT&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;nbsp;&amp;lt;select name=&amp;apos;tbSelMonth&amp;apos; onChange=\&amp;quot;fUpdateCal(document.all(&amp;apos;tbSelYear&amp;apos;).value, document.all(&amp;apos;tbSelMonth&amp;apos;).value)\&amp;quot; Victor=&amp;apos;Won&amp;apos;&amp;gt;&amp;quot;;
+	for (i=0; i&amp;lt;12; i++)
+		html+=&amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+(i+1)+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+gMonths[i]+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/SELECT&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;nbsp;&amp;lt;span onclick=&amp;apos;fNextMonth()&amp;apos; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;pointer&amp;apos;\&amp;quot;&amp;gt; &amp;nbsp;&amp;lt;font size=4 color=#FFFFFF&amp;gt;下月&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;font color=#FFFFFF size=3&amp;gt;&amp;lt;li class=&amp;apos;glyphicon glyphicon-chevron-right&amp;apos; href=&amp;apos;#&amp;apos; onClick=&amp;apos;fPrevMonth()&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;nbsp;&amp;lt;/span&amp;gt; &amp;quot;;
+	html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/TR&amp;gt;&amp;lt;TR&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;td align=&amp;apos;center&amp;apos;&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;DIV style=&amp;apos;background-color:#000066&amp;apos;&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos;&amp;gt;&amp;quot;;
+	html+=fDrawCal(giYear, giMonth, 40, &amp;apos;14&amp;apos;);
+	html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;lt;/DIV&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/TR&amp;gt;&amp;lt;TR&amp;gt;&amp;lt;TD align=&amp;apos;center&amp;apos;&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;TABLE width=&amp;apos;100%&amp;apos;&amp;gt;&amp;lt;TR&amp;gt;&amp;lt;TD align=&amp;apos;center&amp;apos;&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;B ID=\&amp;quot;CAL_B_BLANK\&amp;quot; style=&amp;apos;color:&amp;quot;+gcBG+&amp;quot;; visibility:visible; cursor:hand; font-size:10px&amp;apos; onclick=&amp;apos;fSetDate(0,0,0)&amp;apos; onMouseOver=&amp;apos;this.style.color=gcToggle&amp;apos; onMouseOut=&amp;apos;this.style.color=gcBG&amp;apos;&amp;gt;&amp;lt;/B&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td align=&amp;apos;center&amp;apos;&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;button class=&amp;apos;bnt&amp;apos; onclick=&amp;apos;fSetDate(giCurYear,giCurMonth,giCurDay)&amp;apos; style=\&amp;quot;width:150px;height:40px;\&amp;quot;&amp;gt;今日: &amp;quot;+giCurYear+&amp;quot;-&amp;quot;+giCurMonth+&amp;quot;-&amp;quot;+giCurDay+&amp;quot;&amp;lt;/button &amp;gt;&amp;nbsp;&amp;nbsp;&amp;quot;;
+	html+=&amp;quot;&amp;lt;button class=&amp;apos;bnt&amp;apos; onclick=&amp;apos;f_closepopwnd()&amp;apos; style=\&amp;quot;height:40px;width:80px;\&amp;quot;&amp;gt; 关 闭 &amp;lt;/button &amp;gt;&amp;quot;;
+
+	html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/TABLE&amp;gt;&amp;quot;;
+	//alert(html);
+	var h0 = $(window).height();
+	var w0 = $(window).width();
+	f_showpopwnd(html,(w0-380)/2,(h0-380)/2,380,380);
+	fSetYearMon(giYear , giMonth );
+
+	return html;
+}
+
+// 把一段html代码显示到指定的弹出窗口
+function f_closepopwnd(){
+	document.all(&amp;quot;POPWIN&amp;quot;).style.display= &amp;quot;none&amp;quot;;
+}
+// 把一段html代码显示到指定的弹出窗口
+
+// w,h 默认的高度和宽度
+// maxw : 如果w=-1 , NAME
+function f_showpopwnd(htmlstr,left,top,w,h)
+{
+	
+	document.all(&amp;quot;POPWIN&amp;quot;).innerHTML = htmlstr;
+	document.all(&amp;quot;POPWIN&amp;quot;).style.display= &amp;quot;block&amp;quot;;
+	document.all(&amp;quot;POPWIN&amp;quot;).style.left=left+&amp;quot;px&amp;quot;
+	document.all(&amp;quot;POPWIN&amp;quot;).style.top=top+&amp;quot;px&amp;quot;
+	document.all(&amp;quot;POPWIN&amp;quot;).style.width=(w)+&amp;quot;px&amp;quot;
+	document.all(&amp;quot;POPWIN&amp;quot;).style.height=(h)+&amp;quot;px&amp;quot;
+
+
+	
+}
+
+//var bflag
+var G_CLOSECLICKEVENT = false;//临时关闭进入单元格事件，主要用于弹出select的点击
+
+//Selectbox
+// selectbox onchange调用
+function f_scm(sheet,row,col,oldvalue,newvalue,key,where)
+{
+	var ret = -1;
+	// 调用自定义的thisOnSelectBoxCellModify函数，如果返回1，表示不需要再处理
+	try{ret = _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where);}catch(eeee){}
+	if(ret==undefined)
+		ret = 0;
+	if(ret!=1){
+		// 根据关键字来取得定义的值
+		
+		var url = G_WEBBASE+&amp;quot;rcall.jsp?sytid=x&amp;mwid=showflg_mw&amp;funcid=genSelectBox&amp;key=&amp;quot;+key +&amp;quot;&amp;id=&amp;quot;+newvalue+&amp;quot;&amp;where=&amp;quot;+where;
+		var spec=&amp;quot;&amp;quot;;
+		_this.OpenHttpRequest(url,&amp;quot;get&amp;quot;);
+		spec=_this.SendHttpRequest();
+		_this.CloseHttpRequest();
+		spec=spec.trim();
+		if(spec!=&amp;quot;&amp;quot;){
+			var unit=spec.split(&amp;quot;~&amp;quot;);
+			sp1=unit[0];
+			sp2=unit[1];
+			_this.SetCellText(sheet,row,col,sp1);
+			_this.SetCellShowText(sheet,row,col,sp2);
+			f_cell_unentry(sheet,row,col);
+
+		}else{
+			if(newvalue!=&amp;quot;&amp;quot;){
+				try{log(&amp;apos;提示：&amp;apos;+newvalue+&amp;apos;(&amp;apos;+row+&amp;apos;,&amp;apos;+col+&amp;apos;)不存在&amp;apos;);}catch(e){}
+				_this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+				_this.SetCellShowText(sheet,row,col,&amp;quot;&amp;quot;);
+			}
+		}
+	}
+	try{_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);}catch(eeee){}
+	f_cell_unentry(sheet,row,col);
+	var objid = &amp;apos;INPUT_CELLTEXT_&amp;apos;+sheet+&amp;apos;_&amp;apos;+row+&amp;apos;_&amp;apos;+col;
+	if(G_CLOSECLICKEVENT==true) nextfocus(document.all(objid));// 说明是点中的，不是回车
+}
+
+var currentSelIndex2 = -1;  
+var oldSelIndex2 = -1; 
+var keyOption2= true;
+ 				function  ddldiv(vid){
+ 					console.log(&amp;apos;ddldiv&amp;apos;);
+	var binput=document.getElementById(&amp;apos;INPUT_&amp;apos;+vid);
+	bsdiv=document.getElementById(vid+&amp;apos;div_bkxl&amp;apos;);
+	var obj = document.all(vid);						
+	var key = obj.getAttribute(&amp;apos;key&amp;apos;);
+
+	  
+	//if(binput.value.length!=0){
+		bsdiv.style.display=&amp;apos;block&amp;apos;;
+ 
+		var value=document.getElementById(&amp;apos;INPUT_&amp;apos;+vid).value;
+		
+ 
+		if(keyOption2==true){//value!=null&amp;&amp;value!=&amp;apos;&amp;apos;&amp;&amp;
+			var url=G_WEBBASE+ &amp;quot;x.showflg_mw.getSelect.osp?valid=&amp;quot;+vid+&amp;quot;&amp;tables=&amp;quot;+key +&amp;quot;&amp;value=&amp;quot;+value;
+			$.ajax({
+				url: url,
+				type: &amp;apos;POST&amp;apos;,
+				error: function(){},
+				success: function(result){
+					bsdiv.innerHTML=result;
+					url= null;
+				}
+			});
+		}	
+	//}
+	//else{
+		//alert(5);
+	//	hidediv(&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;);
+	//}
+	
+	
+	
+	
+}
+function hidediv(vid){
+		var bsdiv=document.getElementById(vid+&amp;apos;div_bkxl&amp;apos;);
+		var bflag=setTimeout(function(){bsdiv.style.display = &amp;apos;none&amp;apos;;}, 200);
+		console.log(&amp;apos;hidediv&amp;apos;);
+
+		//currentSelIndex2 = -1;  
+		oldSelIndex2 = -1; 
+		var ss = vid.split(&amp;apos;_&amp;apos;);	
+		//var oldval = _this.GetCellText(ss[0],ss[1],ss[2]);
+		f_cell_unentry(ss[1],ss[2],ss[3]);
+	}
+
+
+//键盘事件
+function arrowevent(vid){
+	var bsdiv=document.getElementById(vid+&amp;apos;div_bkxl&amp;apos;);
+	
+	var bsdiv=document.getElementById(vid+&amp;apos;div_bkxl&amp;apos;);
+		var liLength2 = bsdiv.getElementsByTagName(&amp;apos;li&amp;apos;).length; //获取列表数量  
+		//var oli2 = scroll2.getElementsByTagName(&amp;apos;li&amp;apos;);
+		//var liH2=oli2[0].offsetHeight;//获取每个条目的高度
+		binput=document.getElementById(&amp;apos;INPUT_&amp;apos;+vid);
+	//回车
+	if (event.keyCode == 13) {
+		console.log(&amp;apos;回车&amp;apos;+currentSelIndex2 );
+		keyOption2 = false;
+		var curidx =currentSelIndex2;
+ 
+                    			if (bsdiv.style.display!= &amp;quot;none&amp;quot;&amp;&amp; curidx !=-1) {    
+                    				var seled = document.getElementById(vid+&amp;apos;li2_&amp;apos; + curidx );
+                    				var curid=curidx ;
+			var name=seled .innerText; 
+			var id =seled.getAttribute(&amp;quot;idval&amp;quot;); 
+                        		setBSName(curid,id,vid);
+                        	console.log(&amp;apos;arrowevent&amp;apos;);
+
+                               	currentSelIndex2 = -1;  
+                        	oldSelIndex2 = -1;
+                    			}  
+                    			else{
+ 							if(currentSelIndex2&amp;gt;-1)
+ 							{
+ 								var seled = document.getElementById(vid+&amp;apos;li2_&amp;apos; + currentSelIndex2);
+				var name=seled .innerText; 
+				var id =seled.getAttribute(&amp;quot;idval&amp;quot;); 
+ 							}
+                    				//binput.blur();       
+                    			}
+ 
+                		}  
+		//删除键
+                		else if (event.keyCode == 8) {
+                			console.log(&amp;apos;delete key&amp;apos;);
+                			currentSelIndex2 = -1;  
+                        		oldSelIndex2 = -1; 
+
+                        		//document.getElementById(&amp;apos;abc&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+                        		//document.getElementById(&amp;apos;bsres&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+                        		//document.getElementById(&amp;apos;abc&amp;apos;).innerHTML=&amp;apos;&amp;apos;;
+                        		//document.getElementById(&amp;apos;bsres&amp;apos;).innerHTML=&amp;apos;&amp;apos;;
+                        		keyOption2 = true;				 
+                		}else if ((event.keyCode == 38 || event.keyCode == 40) &amp;&amp; bsdiv.style.display != &amp;apos;none&amp;apos;){
+			oldSelIndex2 = currentSelIndex2;
+			keyOption2 = false;
+			//上移  
+			if (event.keyCode == 38) {  
+				
+
+				if (currentSelIndex2 == -1) {  
+					console.log(&amp;apos;up key last&amp;apos;);
+					currentSelIndex2 = liLength2 - 1;  
+				}  
+				else {  
+					console.log(&amp;apos;up key last&amp;apos;);
+
+					currentSelIndex2 = currentSelIndex2 - 1;  
+					if (currentSelIndex2 &amp;lt; 0) {  
+						currentSelIndex2= liLength2 - 1;  
+					}  
+				}  
+				
+				
+				if (oldSelIndex2 != -1) {  
+ 
+					document.getElementById(vid+&amp;apos;li2_&amp;apos; + oldSelIndex2).style.backgroundColor = &amp;apos;#ffffff&amp;apos;;  
+
+				}  
+				if (currentSelIndex2 != -1) {  
+					document.getElementById(vid+&amp;apos;li2_&amp;apos; + currentSelIndex2).style.backgroundColor = &amp;apos;#D7D7D7&amp;apos;;
+					binput.value = document.getElementById(vid+&amp;apos;li2_&amp;apos; + currentSelIndex2).innerText; 
+												 
+				}
+			}else if (event.keyCode == 40) { 
+				if (currentSelIndex2 == liLength2 - 1) { 
+					currentSelIndex2 = 0;  
+				}  
+				else {  
+					console.log(&amp;apos;down key last&amp;apos;);
+
+					currentSelIndex2 = currentSelIndex2 + 1;    				
+					if (currentSelIndex2 &amp;gt; liLength2 - 1) {  
+						currentSelIndex2 = 0;   
+					}  
+				}
+				if (oldSelIndex2 != -1) {  
+					document.getElementById(vid+&amp;apos;li2_&amp;apos; + oldSelIndex2).style.backgroundColor = &amp;apos;#ffffff&amp;apos;;  
+				} 
+				if (currentSelIndex2 != -1) {  
+					document.getElementById(vid+&amp;apos;li2_&amp;apos; + currentSelIndex2).style.backgroundColor = &amp;apos;#D7D7D7&amp;apos;; 
+					binput.value = document.getElementById(vid+&amp;apos;li2_&amp;apos; + currentSelIndex2).innerText;    
+ 
+				}
+				
+			}else{
+				alert(&amp;quot;1abc&amp;quot;+event.keyCode);
+			}	
+		}//输入搜索信息	
+                		else if ((event.keyCode&amp;gt;=48 &amp;&amp; event.keyCode&amp;lt;=57 )||(event.keyCode&amp;gt;=65 &amp;&amp;event.keyCode&amp;lt;=90)){
+                			//&amp;quot;+valid+&amp;quot;ddldiv(&amp;apos;INPUT_&amp;apos;+vid);
+                			console.log(&amp;apos;key ascii&amp;apos;);
+
+                			currentSelIndex2 = -1;  
+				oldSelIndex2 = -1; 
+                			keyOption2 = true ;
+                		} 
+                							
+}
+function setBSName(id,val,vid){	
+	console.log(&amp;apos;setBSName &amp;apos;+id+&amp;apos;,&amp;apos;+val+&amp;apos;,vid=&amp;apos;+vid);
+
+	var ss = vid.split(&amp;apos;_&amp;apos;);//CELLTEXT_0_22_2	
+
+	var oldval = _this.GetCellText(ss[1],ss[2],ss[3]);
+	var binput=document.getElementById(&amp;apos;INPUT_&amp;apos;+vid);
+	var  name =document.getElementById(vid+&amp;apos;li2_&amp;apos; + id).innerText; 
+	var obj = document.all(vid);
+	obj.setAttribute(&amp;quot;innerval&amp;quot;,val);
+	//obj.setAttribute(&amp;quot;showval&amp;quot;,name);
+	binput.value=val;
+ 
+	hidediv(vid);
+	f_cell_unentry(ss[1],ss[2],ss[3]);
+	try{
+		f_scm(ss[1],ss[2],ss[3],oldval,val,obj.getAttribute(&amp;apos;key&amp;apos;),obj.getAttribute(&amp;apos;where&amp;apos;));
+//		_thisOnSelectBoxCellModify(ss[1],ss[2],ss[3],oldval,val,obj.getAttribute(&amp;apos;key&amp;apos;),obj.getAttribute(&amp;apos;where&amp;apos;));
+	}
+	catch(eee){}
+}	
+
+// 焦点跳转
+$(function () {	//$(document).ready(function(){}) 的简写，用来在DOM加载完成之后执行一系列预先定义好的函数。
+	document.onkeypress=doKey;
+	document.onkeydown=doKey;
+	$(&amp;quot;input&amp;quot;).keypress(function (e) {
+		if (e.which == 13) {// 判断所按是否回车键  
+			return nextfocus(this);
+//			var inputs = $(&amp;quot;input&amp;quot;); // 获取表单中的所有输入框 :text
+//			var idx = inputs.index(this); // 获取当前焦点输入框所处的位置  
+//			if (idx == inputs.length - 1) {// 判断是否是最后一个输入框  
+//			} else {
+//
+//				var cellid=inputs[idx + 1].id;
+//				cellid=cellid.replace(&amp;quot;INPUT_CELLTEXT_&amp;quot;,&amp;quot;&amp;quot;);
+//				var arry=cellid.split(&amp;quot;_&amp;quot;);
+//				if((arry[1] !=&amp;quot;22&amp;quot; || arry[2]!=&amp;quot;4&amp;quot;) &amp;&amp; (arry[1] !=&amp;quot;28&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;29&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;30&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;31&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;32&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;33&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;34&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)){
+//					_this.SetCellFocus(arry[0],arry[1],arry[2]);
+//				}
+//			}
+//			return false; // 取消默认的提交行为  
+		}
+	});
+}); 
+function nextfocus(obj)
+{
+	var inputs = $(&amp;quot;input&amp;quot;); // 获取表单中的所有输入框 :text
+	var idx = inputs.index(obj); // 获取当前焦点输入框所处的位置  
+	if (idx == inputs.length - 1) {// 判断是否是最后一个输入框  
+	} else {
+
+		var cellid=inputs[idx + 1].id;
+		cellid=cellid.replace(&amp;quot;INPUT_CELLTEXT_&amp;quot;,&amp;quot;&amp;quot;);
+		var arry=cellid.split(&amp;quot;_&amp;quot;);
+		if((arry[1] !=&amp;quot;22&amp;quot; || arry[2]!=&amp;quot;4&amp;quot;) &amp;&amp; (arry[1] !=&amp;quot;28&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;29&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;30&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;31&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;32&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;33&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)&amp;&amp; (arry[1] !=&amp;quot;34&amp;quot; || arry[2]!=&amp;quot;5&amp;quot;)){
+			_this.SetCellFocus(arry[0],arry[1],arry[2]);
+		}
+	}
+	return false; // 取消默认的提交行为  
+
+}
+
+//处理键盘事件
+function doKey(e){
+	var ev = e || window.event;//获取event对象
+	var obj = ev.target || ev.srcElement;//获取事件源
+	var t = obj.type || obj.getAttribute(&amp;apos;type&amp;apos;);//获取事件源类型
+	if(ev.keyCode == 8 &amp;&amp; t != &amp;quot;password&amp;quot; &amp;&amp; t != &amp;quot;text&amp;quot; &amp;&amp; t != &amp;quot;textarea&amp;quot;){
+		return false;
+	}
+}
+
+function f_initgrid(){
+		for ( var r= 0;r&amp;lt;G_ROW_COUNT;r++){
+			for ( var c= 0;c&amp;lt;G_COL_COUNT;c++){
+				var obj = document.all(&amp;apos;CELL_0_&amp;apos;+r+&amp;apos;_&amp;apos;+c);
+				if(obj!=undefined&amp;&amp; obj!=null){
+					if(obj.innerHTML ==&amp;apos;&amp;apos;){
+						obj.innerHTML = &amp;quot;&amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/nvlimg.jpg&amp;apos; width=1 height=1&amp;gt;&amp;quot;;// 占位符
+					}
+				}
+			}
+		}
+	}
+	function CC(sheet,row,col){
+		console.log(&amp;quot;cell click &amp;quot;+row+&amp;quot;,&amp;quot;+col);
+		if(G_CLOSECLICKEVENT==true ){	//临时关闭进入单元格事件，主要用于弹出select的点击
+			G_CLOSECLICKEVENT = false;
+			return;
+		}
+		
+		try{f_cell_entry(sheet,row,col);_thisOnMouseLClick(0,row,col);}catch(e){}
+	}
+	function CDC(sheet,row,col){
+		try{_thisOnMouseDClick(sheet,row,col);}catch(e){}
+	}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot; );
+var servletpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+//================================================================// 
+// 函数：GetBody
+// 说明：实现类似show.sp的功能
+// 参数：MWID（中间件编号） VAL(参数列表 guid=131241&amp;bilid=12131&amp;)
+// 返回：
+// 样例：fGetBodygetColu
+// 作者：
+// 创建日期：01/28/15 17:58:16
+// 修改日志：
+//================================================================// 
+var ones = &amp;quot;0&amp;quot;;
+function GetBody(){
+	
+//	throw new Exception(&amp;quot;hello，kettle！&amp;quot;); 
+	var db = null;
+	try{
+		db = new pubpack.EADatabase();
+	
+		var html = &amp;quot;&amp;quot;;
+		var sql = &amp;quot;&amp;quot;;
+		var m_usrinfo = webpack.EASession.GetLoginInfo(request);
+		var processid =  pubpack.EAFunc.NVL(request.getParameter(&amp;quot;processid&amp;quot;),&amp;quot;&amp;quot;);
+	
+		var actionid =  pubpack.EAFunc.NVL(request.getParameter(&amp;quot;actionid&amp;quot;),&amp;quot;&amp;quot;);
+	
+		var workflowmwid =  pubpack.EAFunc.NVL(request.getParameter(&amp;quot;workflowmwid&amp;quot;),&amp;quot;&amp;quot;);// 
+	
+		var action = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;action&amp;quot;),&amp;quot;&amp;quot;);
+		var bLock = &amp;quot;0&amp;quot;;
+		if(action==&amp;quot;query&amp;quot;)bLock = &amp;quot;1&amp;quot;;
+		else if(processid!=&amp;quot;&amp;quot;)bLock=&amp;quot;1&amp;quot;;
+		
+		var fixscreenwidth = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;fixscreenwidth&amp;quot;),&amp;quot;1&amp;quot;);
+	
+		if(sytid == null || sytid==&amp;quot;&amp;quot; )sytid= m_usrinfo.getSytid();
+		var m_accid = m_usrinfo.getAccid();
+		var accdb = new xmlpack.EAACCXmlDB(m_accid);
+		
+		var m_mwXmlDB = new xmlpack.EAGRDXmlDB(sytid,grdid);
+		
+		var m_mwds = m_mwXmlDB.getGrdDS();
+		
+		var m_showds=m_mwXmlDB.getGrdShwDS(); //找到报表和查询中间单元格绑定的信息
+		var m_paramds = m_mwXmlDB.getGrdPamDS();
+		var m_dscds = m_mwXmlDB.getGrdDSCDS();
+	
+		var m_celds=m_mwXmlDB.getGrdCelDS(); //找到表头单元格绑定的信息
+		var m_colds=m_mwXmlDB.getGrdColDS(); //找到明细单元格绑定的信息
+		
+		var m_grdnam=m_mwds.getStringDef(0,grdpack.EAMidWareUtil.GRD_NAME,&amp;quot;&amp;quot;);
+		var m_defdbname = m_mwds.getStringDef(0,&amp;quot;DBNAME&amp;quot;,&amp;quot;&amp;quot;); // 默认的数据库
+		var m_itemtablename = m_mwds.getStringDef(0,&amp;quot;ITEMTABLE&amp;quot;,&amp;quot;&amp;quot;);
+		var m_checktitle = m_mwds.getStringDef(0,grdpack.EAMidWareUtil.GRDCEL_CHECKTITLE,&amp;quot;&amp;quot;); // 
+		var m_closepages = &amp;quot;1&amp;quot;.equals(m_mwds.getStringDef(0,&amp;quot;CLOSEPAGES&amp;quot;,&amp;quot;&amp;quot;)); 
+		//throw new Exception(grdpack.EAMidWareUtil.GRD_MWTYP);
+		var m_mwtyp = m_mwds.getStringAt(0, grdpack.EAMidWareUtil.GRD_MWTYP);
+		var m_mwbtnds = m_mwXmlDB.getGrdBtnDS();
+	 
+		var m_accnameCell=&amp;quot;1-1&amp;quot;;
+		
+		html=sytid +&amp;quot;-&amp;quot;+grdid+&amp;quot;-&amp;quot;+m_mwtyp;
+		
+		var sb = new StringBuffer();
+		var jssb = new StringBuffer();
+	
+		sb.append(&amp;quot;&amp;lt;script src=\&amp;quot;xlsgrid/js/xlscel.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;script src=\&amp;quot;xlsgrid/js/xlscol.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;script src=\&amp;quot;xlsgrid/js/x/showflg_mw.djs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;script&amp;gt;var homeurl=\&amp;quot;&amp;quot;+m_usrinfo.getHomeURL()+&amp;quot;\&amp;quot;;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);	
+		sb.append(&amp;quot;&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;syt&amp;quot;+sytid+&amp;quot;/&amp;quot;+grdid+&amp;quot;/iconfont.css\&amp;quot;&amp;gt;&amp;quot;);	
+	
+	      
+		var file = m_mwXmlDB.getBaseFileName();
+		var html = pubpack.EAFunc.readFile(file+&amp;quot;.htm&amp;quot;);//读取中间件目录下的grdid.htm文件
+		// 取出html里面的样式
+		var p = html.indexOf(&amp;quot;&amp;lt;style&amp;gt;&amp;quot;);if ( p == -1 ) throw new pubpack.EAException( &amp;quot;该中间件的页面有误，没有找到标签&amp;lt;style&amp;gt;&amp;quot;);
+		var p1 = html.indexOf(&amp;quot;&amp;lt;/style&amp;gt;&amp;quot;);if ( p1 == -1 ) throw new pubpack.EAException( &amp;quot;该中间件的页面有误，没有找到标签&amp;lt;/style&amp;gt;&amp;quot;);
+		sb.append(html.substring(p,p1+8));
+		
+		var stru = pubpack.EAFunc.readFile(file+&amp;quot;.str&amp;quot;);
+		var ds = new pubpack.EAXmlDS(stru);
+		if (ds.getColumnCount()&amp;gt;0 &amp;&amp; getDSColumnName(ds,0)==&amp;quot;num&amp;quot; ) // //删除行号列；从第二列开始才是有效数据
+	        		ds.removeColumn(0);
+	      		var line = new StringBuffer();
+		var g_guid=&amp;quot;&amp;quot;;	try{g_guid=guid;}catch(e){ }
+		var g_bilid=&amp;quot;&amp;quot;;	try{g_bilid=bilid;}catch(e){ }
+		var g_biltyp=&amp;quot;&amp;quot;;try{g_biltyp=biltyp;}catch(e){ }
+		var hdrds  = new pubpack.EADS();
+		var BILHDRTABLE = m_mwds.getValueDef(0,&amp;quot;BILHDRTABLE&amp;quot;,&amp;quot;BILHDR&amp;quot;);
+		var BILDTLTABLE = m_mwds.getValueDef(0,&amp;quot;BILDTLTABLE&amp;quot;,&amp;quot;BILDTL&amp;quot;);
+		jssb.append(&amp;quot; var BILHDRTABLE=&amp;apos;&amp;quot;+BILHDRTABLE +&amp;quot;&amp;apos;;var BILDTLTABLE =&amp;apos;&amp;quot;+BILDTLTABLE +&amp;quot;&amp;apos;;&amp;quot;);	
+		if(m_mwtyp==&amp;quot;F&amp;quot;) {
+			//表单中间件f
+			
+			var sql = &amp;quot;select * from &amp;quot;+BILHDRTABLE +&amp;quot; where guid=&amp;apos;&amp;quot;+g_guid+&amp;quot;&amp;apos;&amp;quot;;
+			hdrds = db.QuerySQL(sql);
+	
+		}
+		else if (m_mwtyp==&amp;quot;B&amp;quot;){
+			var sql = &amp;quot;&amp;quot;;
+			if(g_guid!=&amp;quot;&amp;quot; )
+				sql = &amp;quot;select * from BILHDR where  guid=&amp;apos;&amp;quot;+g_guid+&amp;quot;&amp;apos;&amp;quot;;
+			else sql = &amp;quot;select * from BILHDR where bilid=&amp;apos;&amp;quot;+g_bilid+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+m_accid+&amp;quot;&amp;apos; and biltyp=&amp;apos;&amp;quot;+g_biltyp+&amp;quot;&amp;apos;&amp;quot;;
+			hdrds = db.QuerySQL(sql);
+	
+		}
+	 	
+	 	var mstat = &amp;quot;&amp;quot;;
+	 	var msubtyp = &amp;quot;&amp;quot;;
+	 	var g_idold = &amp;quot;&amp;quot;;
+	 	
+	 	if(hdrds.getRowCount()&amp;gt;0){
+	 		mstat = hdrds.getStringDef(0,&amp;quot;stat&amp;quot;,&amp;quot;&amp;quot;);
+	 		msubtyp = hdrds.getStringDef(0,&amp;quot;subtyp&amp;quot;,&amp;quot;&amp;quot;);
+	
+	 		g_idold= hdrds.getStringDef(0,&amp;quot;bilid&amp;quot;,&amp;quot;&amp;quot;);
+	
+		}
+		sb.append(&amp;quot;&amp;lt;script&amp;gt;var grdtyp=\&amp;quot;&amp;quot;+m_mwtyp+&amp;quot;\&amp;quot;;var bilid =\&amp;quot;&amp;quot;+g_bilid+&amp;quot;\&amp;quot;;var G_GUID =\&amp;quot;&amp;quot;+g_guid +&amp;quot;\&amp;quot;;var idold =\&amp;quot;&amp;quot;+g_idold +&amp;quot;\&amp;quot;;var stat =\&amp;quot;&amp;quot;+mstat  +&amp;quot;\&amp;quot;;var subtyp =\&amp;quot;&amp;quot;+msubtyp +&amp;quot;\&amp;quot;;
+		function f_afteraction(actionid){	// 子窗口录入审批意见后返回修改状态
+	              	var runurl = G_WEBBASE + &amp;apos;EAWorkFlow1.sp?thissytid=&amp;apos;+G_SYTID+&amp;apos;&amp;thismwid=&amp;apos;+G_GRDID+&amp;apos;&amp;formguid=&amp;apos;+G_GUID+&amp;apos;&amp;actionid=&amp;apos;+actionid;
+	              	_this.OpenHttpRequest(runurl ,&amp;apos;GET&amp;apos;);
+			var runret=_this.SendHttpRequest();
+			_this.CloseHttpRequest();
+			if(runret!=&amp;apos;&amp;apos;) 
+				alert(&amp;apos;操作成功&amp;apos;+runret);
+			else alert(&amp;apos;操作失败&amp;apos;+runret);
+		} 
+		&amp;lt;/script&amp;gt;&amp;quot;);
+		
+		var tooldiv =&amp;quot;&amp;quot;;// 这是工具栏
+		var toolbut=&amp;quot;&amp;quot;; //工具栏中按钮
+		
+		if(action!=&amp;quot;query&amp;quot;&amp;&amp;m_mwtyp==&amp;quot;F&amp;quot;){
+			if(g_guid!=&amp;quot;&amp;quot;){
+				toolbut=&amp;quot;&amp;lt;a  onclick=\&amp;quot;f_save()\&amp;quot;&amp;gt;&amp;lt;span style=\&amp;quot;padding: 6px 16px;background-color:#08A5EC;color: #fff;cursor:pointer;\&amp;quot;&amp;gt;保存&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				   	 &amp;lt;a onclick=\&amp;quot;f_delete();\&amp;quot;&amp;gt;&amp;lt;span style=\&amp;quot;padding: 6px 16px;background-color:#FF0005;color: #fff;margin: 0 20px 0 5px;cursor:pointer;\&amp;quot;&amp;gt;删除&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+			}else{
+				toolbut=&amp;quot;&amp;lt;a onclick=\&amp;quot;f_save()\&amp;quot;&amp;gt;&amp;lt;span style=\&amp;quot;padding: 6px 16px;background-color:#08A5EC;color: #fff;margin: 0 20px 0 5px;cursor:pointer;\&amp;quot;&amp;gt;保存&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+			}
+			tooldiv =&amp;quot;&amp;lt;div style=\&amp;quot;position: fixed;top:0;left: 0;width: 100%;background-color: #E8EDED;z-index: 998;tab-size: 18;height: 36px;text-align: right;line-height: 36px;\&amp;quot;&amp;gt;
+				  &amp;quot;+toolbut+&amp;quot;	
+				&amp;lt;/div&amp;gt;&amp;lt;div style=\&amp;quot;height:36px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+			
+		}
+		sb.append(tooldiv);
+	 	var buttondiv = &amp;quot;&amp;quot;;
+	 	//设置div占位
+	// 	buttondiv +=&amp;quot;&amp;lt;div style=\&amp;quot;filter: alpha(opacity=45); opacity:0.45; height:40px;width:100%;left:0px;top:0px;background-color:#2c2c2c;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		//添加按钮事件
+		buttondiv +=&amp;quot;&amp;lt;div style=\&amp;quot;filter: alpha(opacity=45); opacity:0.45; height:40px;width:100%;position:fixed;left:0px;top:0px;background-color:#2c2c2c;\&amp;quot;&amp;gt;&amp;quot;;
+	
+	var buttonhtml2 = &amp;quot;&amp;quot;;
+	var buttonhtml  = &amp;quot;&amp;quot;;
+	//添加工作流按钮
+
+		if(workflowmwid !=null&amp;&amp;actionid!=null&amp;&amp;!pub.EAFunc.isEmptyStr(actionid)){// 打开的是1）执行界面，录入审批意见等，2）普通的保存界面
+			buttondiv +=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:parent.hideupload();\&amp;quot;&amp;gt;&amp;lt;div   style=\&amp;quot;float:left;width:120px;height:100%;\&amp;quot;/&amp;gt;&amp;lt;table height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=middle&amp;gt;&amp;lt;font size=3 color=#FFFFFF&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;取消&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+	
+			var wsActionds = xmlpack.EAXmlDB.getActionDs(sytid,workflowmwid );
+			//throw new Exception(wsActionds.GetXml());
+			if(wsActionds !=null){
+		              	wsActionds = wsActionds .filterDS(&amp;quot;ID&amp;quot;,actionid);
+		              	//throw new Exception(&amp;quot;fdakf&amp;quot;+bLock+&amp;quot;,action=&amp;quot;+action+&amp;quot;,processid=&amp;quot;+processid+&amp;quot;,mstat  =&amp;quot;+mstat  +&amp;quot;,workflowmwid =&amp;quot;+workflowmwid +&amp;quot;,sytid=&amp;quot;+sytid+&amp;quot;,&amp;quot;+wsActionds .getRowCount()+&amp;quot;,xml=&amp;quot;+wsActionds .GetXml());
+//				var xxxml = wsActionds.GetXml();
+//				sb.append(xxxml);
+				for(var i=0;i&amp;lt;wsActionds .getRowCount();i++){
+			             
+				
+			            	var actionName = wsActionds .getStringAt(i,&amp;quot;NAME&amp;quot;); 
+ 
+			            	var funcid = wsActionds .getStringAt(i,&amp;quot;id&amp;quot;);// EAFunc.format(&amp;quot;%s%s%s&amp;quot;,m_mwid,processid,destid);
+			            	var actmw  = wsActionds .getStringDef(i,&amp;quot;actmw&amp;quot;,&amp;quot;&amp;quot;);
+			            	var destid = wsActionds .getStringDef(i,&amp;quot;DESTID&amp;quot;,&amp;quot;&amp;quot;);
+			            	var srcid =wsActionds .getStringDef(i,&amp;quot;SRCID&amp;quot;,&amp;quot;&amp;quot;);
+			            	//buttonhtml2 +=&amp;quot;&amp;lt;input type=\&amp;quot;button\&amp;quot; onclick=\&amp;quot;stm&amp;quot;+funcid +&amp;quot;();\&amp;quot; id=\&amp;quot;&amp;quot;+funcid +&amp;quot;\&amp;quot; name = \&amp;quot;name&amp;quot;+funcid +&amp;quot;\&amp;quot; value =\&amp;quot;&amp;quot;+actionName +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+			            	buttonhtml2 +=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;stm&amp;quot;+funcid +&amp;quot;();\&amp;quot;&amp;gt;&amp;lt;div id=\&amp;quot;&amp;quot;+funcid +&amp;quot;\&amp;quot; name = \&amp;quot;name&amp;quot;+funcid +&amp;quot;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; value =\&amp;quot;&amp;quot;+actionName +&amp;quot;\&amp;quot; style=\&amp;quot;float:right;height:100%;\&amp;quot;/&amp;gt;&amp;lt;table  height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=middle&amp;gt;&amp;lt;font size=3 color=#FFFFFF&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+actionName +&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+					//sb.append(wsActionds.GetXml());
+
+					buttonhtml += &amp;quot;\r
+			              		function stm&amp;quot;+funcid+&amp;quot;(){\r
+			              			//先执行保存
+			              			var retguid = f_save(false);
+			              			if(retguid!=&amp;apos;&amp;apos;){
+				              			parent.f_afteraction(&amp;quot;+funcid+&amp;quot;);
+				              			parent.hideupload();
+			              			}
+			              			//else alert(&amp;apos;操作失败&amp;apos;);
+
+			              		\r}\r
+			              	&amp;quot;;
+
+//			            sb.append(&amp;quot;\n _this.AddToolbarButton(&amp;apos;udf_stm&amp;quot;+funcid+&amp;quot;&amp;apos;, &amp;apos;&amp;quot;+EAFunc.il8n(&amp;quot;formgrid.submit&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;, &amp;apos;&amp;apos; , 0,1, 1, &amp;quot;+length+&amp;quot;);&amp;quot;);
+//			            stmsb.append(&amp;quot;function stm&amp;quot;+funcid+&amp;quot;(){\r&amp;quot; );
+//			            
+//			            //客户端脚本验证检查  2021.12.11 add by flm
+//			            stmsb.append(&amp;quot;if(typeof _thisValidateStm&amp;quot;+funcid+&amp;quot; !=&amp;apos;undefined&amp;apos;) {\rvar result=_thisValidateStm&amp;quot;+funcid+&amp;quot;();\r&amp;quot;);
+//			            stmsb.append(&amp;quot;if(result!=\&amp;quot;\&amp;quot;){alert(result);return;}}&amp;quot;);
+//			            
+//			            stmsb.append(&amp;quot;if(!f_save(false)){}\r&amp;quot;);
+//			            stmsb.append(&amp;quot;else{\r&amp;quot;);
+//			            stmsb.append(&amp;quot;  window.returnValue=\&amp;quot;1\&amp;quot;;\rwindow.close();&amp;quot;);
+//			            stmsb.append(&amp;quot;}\r}&amp;quot;);
+				}
+				
+				
+			}
+		}else if(processid !=null&amp;&amp;!pub.EAFunc.isEmptyStr(processid)){	// 打开的是某个表单的待审批界面
+			
+			buttondiv +=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.close();\&amp;quot;&amp;gt;&amp;lt;div   style=\&amp;quot;float:left;width:120px;height:100%;\&amp;quot;/&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;; //&amp;lt;table height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=middle&amp;gt;&amp;lt;font size=3 color=#FFFFFF&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;关闭&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			
+			var wsActionds = xmlpack.EAXmlDB.getActionDs(sytid,grdid); 
+			if(wsActionds !=null){
+		              	wsActionds = wsActionds .filterDS(&amp;quot;SRCID&amp;quot;,processid );//mstat
+
+		              	for(var i=0;i&amp;lt;wsActionds.getRowCount();i++) {
+		              		
+		              		var funcid = wsActionds.getStringAt(i,&amp;quot;id&amp;quot;);//操作编号
+			              		var wsWhere = wsActionds .getStringDef(i,&amp;quot;WHERE&amp;quot;,&amp;quot;&amp;quot;);
+			              		if(wsWhere!=&amp;quot;&amp;quot;){
+							if( wsWhere.length()&amp;gt;0){
+					              wsWhere= pub.EAFunc.XmlToStd(wsWhere);
+					              wsWhere= pub.EAFunc.Replace(wsWhere, &amp;quot;&amp;apos;&amp;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;);
+					              wsWhere= pub.EAFunc.Replace(wsWhere, &amp;quot;&amp;lt;&amp;lt;&amp;quot;, &amp;quot;&amp;lt;&amp;quot;);
+					              wsWhere= pub.EAFunc.Replace(wsWhere, &amp;quot;&amp;gt;&amp;gt;&amp;quot;, &amp;quot;&amp;gt;&amp;quot;);
+							}
+							var sql = &amp;quot;select count(*) from &amp;quot;+BILHDRTABLE+&amp;quot; where guid=&amp;apos;&amp;quot;+g_guid+&amp;quot;&amp;apos; and stat=decode(&amp;apos;&amp;quot;+processid +&amp;quot;&amp;apos;,&amp;apos;0&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;&amp;quot;+processid +&amp;quot;&amp;apos;) &amp;quot; +wsWhere;
+							var ret = &amp;quot;&amp;quot;;
+							try {
+								ret = pub.EADbTool.GetSQL(sql);
+							}
+				                  catch (e)
+				                  {
+				                  // 去掉and stat=&amp;apos;&amp;quot;+processid+&amp;quot;&amp;apos; ？
+					                  sql = &amp;quot;select count(*) from &amp;quot;+BILHDRTABLE+&amp;quot; where guid=&amp;apos;&amp;quot;+g_guid+&amp;quot;&amp;apos;  &amp;quot; +wsWhere;
+					                  ret = pub.EADbTool.GetSQL(sql);
+				                  }
+				                	if(ret==&amp;quot;0&amp;quot;){
+				                	
+				                	}else{
+		              		var actionName = wsActionds.getStringAt(i,&amp;quot;name&amp;quot;);//操作名称
+		              		buttonhtml2 +=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;f&amp;quot;+funcid +&amp;quot;();\&amp;quot;&amp;gt;&amp;lt;div  id=\&amp;quot;&amp;quot;+funcid +&amp;quot;\&amp;quot; name = \&amp;quot;name&amp;quot;+funcid +&amp;quot;\&amp;quot; value =\&amp;quot;&amp;quot;+actionName +&amp;quot;\&amp;quot;  onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; style=\&amp;quot;float:right;height:100%;\&amp;quot;/&amp;gt;&amp;lt;table height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=middle&amp;gt;&amp;lt;font size=3 color=#FFFFFF&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+actionName +&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		              		buttonhtml +=&amp;quot; function f&amp;quot;+funcid+&amp;quot;(){\r&amp;quot;;
+	            			var actmw = wsActionds.getStringDef(i,&amp;quot;actmw&amp;quot;,&amp;quot;&amp;quot;);//操作相关的中间件
+	            			var destid = wsActionds.getStringAt(i,&amp;quot;destid&amp;quot;);//操作目标状态
+	            			if(actmw.length() &amp;gt; 0 ) {
+	            				//确认前需要先打开窗口进行操作
+	            				buttonhtml +=&amp;quot;var ret = \&amp;quot;\&amp;quot;;showupload(&amp;apos;L.sp?grdid=&amp;quot;+actmw+&amp;quot;&amp;actionid=&amp;quot;+funcid+&amp;quot;&amp;workflowmwid=&amp;quot;+grdid+&amp;quot;&amp;srcformguid=&amp;quot;+g_guid+&amp;quot;&amp;guid=&amp;quot;+g_guid+&amp;quot;&amp;fixscreenwidth=1&amp;usrid=&amp;apos;+G_APP_USRID+&amp;apos;&amp;userpwd=&amp;apos;+G_APP_USERPWD);\r\n&amp;quot;;
+			            	}
+			            	else {	// 直接修改状态
+			            		buttonhtml +=&amp;quot;f_afteraction(&amp;quot;+funcid+&amp;quot; );&amp;quot;;
+			            	}
+					buttonhtml +=&amp;quot;}\r&amp;quot;;	
+		            	}
+			              		}else{
+			              			var actionName = wsActionds.getStringAt(i,&amp;quot;name&amp;quot;);//操作名称
+				              		buttonhtml2 +=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;f&amp;quot;+funcid +&amp;quot;();\&amp;quot;&amp;gt;&amp;lt;div  id=\&amp;quot;&amp;quot;+funcid +&amp;quot;\&amp;quot; name = \&amp;quot;name&amp;quot;+funcid +&amp;quot;\&amp;quot; value =\&amp;quot;&amp;quot;+actionName +&amp;quot;\&amp;quot;  onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; style=\&amp;quot;float:right;height:100%;\&amp;quot;/&amp;gt;&amp;lt;table height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=middle&amp;gt;&amp;lt;font size=3 color=#FFFFFF&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+actionName +&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+				              		buttonhtml +=&amp;quot; function f&amp;quot;+funcid+&amp;quot;(){\r&amp;quot;;
+			            			var actmw = wsActionds.getStringDef(i,&amp;quot;actmw&amp;quot;,&amp;quot;&amp;quot;);//操作相关的中间件
+			            			var destid = wsActionds.getStringAt(i,&amp;quot;destid&amp;quot;);//操作目标状态
+			            			if(actmw.length() &amp;gt; 0 ) {
+			            				//确认前需要先打开窗口进行操作
+			            				buttonhtml +=&amp;quot;var ret = \&amp;quot;\&amp;quot;;showupload(&amp;apos;L.sp?grdid=&amp;quot;+actmw+&amp;quot;&amp;actionid=&amp;quot;+funcid+&amp;quot;&amp;workflowmwid=&amp;quot;+grdid+&amp;quot;&amp;srcformguid=&amp;quot;+g_guid+&amp;quot;&amp;guid=&amp;quot;+g_guid+&amp;quot;&amp;fixscreenwidth=1&amp;usrid=&amp;apos;+G_APP_USRID+&amp;apos;&amp;userpwd=&amp;apos;+G_APP_USERPWD);\r\n&amp;quot;;
+					            	}
+					            	else {	// 直接修改状态
+					            		buttonhtml +=&amp;quot;f_afteraction(&amp;quot;+funcid+&amp;quot; );&amp;quot;;
+					            	}
+							buttonhtml +=&amp;quot;}\r&amp;quot;;
+			              		}
+			              			
+			            	}
+				}
+			}
+ 	
+	
+		
+	for(var i=0;i&amp;lt;m_mwbtnds.getRowCount();i++){
+		//添加中间件自定义按钮
+		var cus_buttonid = m_mwbtnds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var cus_buttonname = m_mwbtnds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		//sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;button\&amp;quot; onclick=\&amp;quot;&amp;quot;+cus_buttonid+&amp;quot;();\&amp;quot; id=\&amp;quot;&amp;quot;+cus_buttonid+&amp;quot;\&amp;quot; name = \&amp;quot;name&amp;quot;+cus_buttonid+&amp;quot;\&amp;quot; value =\&amp;quot;&amp;quot;+cus_buttonname+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;);
+		buttonhtml2 +=&amp;quot;\r\n&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;try{&amp;quot;+cus_buttonid+&amp;quot;();}catch(e){}\&amp;quot;&amp;gt;&amp;lt;div  id=\&amp;quot;&amp;quot;+cus_buttonid+&amp;quot;\&amp;quot; name = \&amp;quot;name&amp;quot;+cus_buttonid+&amp;quot;\&amp;quot;  style=\&amp;quot;float:right;height:100%;\&amp;quot;&amp;gt;&amp;lt;table  height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=middle &amp;gt;&amp;lt;font size=3 color=#FFFFFF&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+cus_buttonname+&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;\r\n&amp;quot;;
+
+
+	}
+
+	if(!(buttonhtml ==&amp;quot;&amp;quot;&amp;&amp;buttonhtml2 ==&amp;quot;&amp;quot;)){
+		buttonhtml+=&amp;quot;// 隐藏浮动窗口 
+		function hideupload(){ 
+			$(&amp;apos;#show_upload_iframe&amp;apos;).hide(); 
+		} 
+		// 弹出浮动窗口 
+		function showupload(ajaxurl){ 
+			window.scrollTo(0,0);
+			
+			var f=$(&amp;apos;#show_upload_iframe&amp;apos;); 
+			f.attr(\&amp;quot;src\&amp;quot;,ajaxurl);
+			f.attr(\&amp;quot;width\&amp;quot;,$(window).width);
+			f.attr(\&amp;quot;height\&amp;quot;,$(window).height);
+
+			f.attr(\&amp;quot;src\&amp;quot;,ajaxurl);
+			f.show();
+
+		} 
+		function iFrameHeight() {   
+//			var ifm= document.getElementById(\&amp;quot;show_upload_iframe\&amp;quot;);   
+//			var f=$(&amp;apos;#show_upload_iframe&amp;apos;); 
+//			var subWeb = document.frames ? document.frames[\&amp;quot;show_upload_iframe\&amp;quot;].document : ifm.contentDocument;   
+//			if(ifm != null &amp;&amp; subWeb != null) {
+//			   ifm.height = subWeb.body.scrollHeight;
+//			   ifm.width = 800;
+//			}   
+			//f.show();
+		}&amp;quot;;
+		sb.append(buttondiv +&amp;quot;&amp;lt;script language=&amp;apos;javascript&amp;apos;&amp;gt;&amp;quot;+buttonhtml+&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;+buttonhtml2 +&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:100%;height:50px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+
+	}
+	//审核意见的弹出窗口
+	var htmlifram =&amp;quot;&amp;quot;;
+ 	htmlifram +=&amp;quot;
+ 		
+ 		&amp;lt;iframe frameborder=0 border=0 id=\&amp;quot;show_upload_iframe\&amp;quot;  frameborder=2   style=\&amp;quot;position: absolute;top:0px;left:0px; display:none;  background-color: white;z-index:99999; width:100%; height:100%;\&amp;quot; &amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;;
+
+ 	sb.append(htmlifram );
+	//renderPDAPage_fillCell(ds,jssb);
+	var startRow = 0; 
+	var startCol = 0;  
+	var resRow = 0;
+	var resCol = 0;
+	var endRow = 0;
+	var endCol = 0;
+	var haveDtl=true;
+		var _dtlrng = &amp;quot;&amp;quot;;
+		try{_dtlrng=_dtlrng+m_mwds.getValueAt(0,grdpack.EAMidWareUtil.GRD_DTLRNG);}catch(e){}
+	
+	try{
+		var dtlrng = _dtlrng.split(&amp;quot;,&amp;quot;);
+		startRow = langpack.Integer.parseInt(dtlrng[0]);   
+		startCol = langpack.Integer.parseInt(dtlrng[1]);   
+		endRow  =langpack.Integer.parseInt(dtlrng[2]);
+		endCol  =langpack.Integer.parseInt(dtlrng[3]);
+	}catch(e){haveDtl=false;}
+	
+	//get col define
+//	var cods = m_mwXmlDB.getGrdColDS();
+//	var m_detailShowID = dsshow.getStringAt(idx, EAMidWareUtil.GRDSHW_ID).trim();
+//	if(m_mwtyp==&amp;quot;F&amp;quot;){//表单中间件
+		
+
+		var dtlds = new pubpack.EADS();
+		if(m_mwtyp==&amp;quot;F&amp;quot;){
+			if (m_mwds.getStringDef(0,&amp;quot;BILDTLTABLE&amp;quot;,&amp;quot;&amp;quot;).length() &amp;gt; 0 ) 
+		      		dtlds=db.QuerySQL(&amp;quot;select * from &amp;quot;+m_mwds.getValueDef(0,&amp;quot;BILDTLTABLE&amp;quot;,&amp;quot;&amp;quot;)+&amp;quot; where formguid=&amp;apos;&amp;quot;+g_guid+&amp;quot;&amp;apos;&amp;quot;);
+	      				
+		}
+		else if (m_mwtyp==&amp;quot;B&amp;quot;){
+			if(g_guid!=&amp;quot;&amp;quot; )dtlds=db.QuerySQL(&amp;quot;select * from BILDTL where (acc,biltyp,bilid)=(select acc,biltyp,bilid from bilhdr where guid=&amp;apos;&amp;quot;+g_guid+&amp;quot;&amp;apos;)&amp;quot;);
+			else dtlds=db.QuerySQL(&amp;quot;select * from BILDTL where bilid=&amp;apos;&amp;quot;+g_bilid+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+m_accid+&amp;quot;&amp;apos; and biltyp=&amp;apos;&amp;quot;+g_biltyp+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		else if (m_mwtyp==&amp;quot;R&amp;quot;||m_mwtyp==&amp;quot;Q&amp;quot;){
+			var mysql = &amp;quot;&amp;quot;;
+			
+		      	for (var i=0;i&amp;lt;m_showds.getRowCount();i++)
+		      	{
+		        	var dskey = m_showds.get(i,&amp;quot;DSKEY&amp;quot;);
+		        	var arrDs = dskey.split(&amp;quot;,&amp;quot;);
+		        	var cellid = m_showds.getStringAt(i,&amp;quot;ID&amp;quot;);
+				var aCellid = m_showds.getStringAt(i,&amp;quot;ID&amp;quot;).split(&amp;quot;,&amp;quot;);//sheet,row,col
+					
+		       		if (arrDs.length() == 1 &amp;&amp; dskey.indexOf(&amp;quot;DSC:&amp;quot;) &amp;gt; -1 &amp;&amp; dskey.indexOf(&amp;quot;,&amp;quot;)&amp;lt;0 )  //2010/6 忽略DSC:MAIN,0,0
+		        	{
+		        		// 这是主数据区
+		        		var dscid=arrDs[0].substring(4);	
+		        		if(m_dscds!=null){
+				      		var keyidx = m_dscds.getColumnLoc(&amp;quot;ID&amp;quot;);
+				      		var validx = m_dscds.getColumnLoc(&amp;quot;DATDSC&amp;quot;);
+				      		mysql = m_dscds.FindasHashMap(dscid,keyidx,validx);
+				      		if(mysql==null || mysql==&amp;quot;&amp;quot; ) throw new Exception ( &amp;quot;数据源&amp;quot;+dscid+&amp;quot;没有定义SQL语句&amp;quot;);
+				      		//交叉表信息
+//						var m_isCross = &amp;quot;1&amp;quot;.equals(m_showds.getStringDef(i, &amp;quot;GRDSHW_ISCROSS&amp;quot;, &amp;quot;&amp;quot;));
+//						var m_showPages = &amp;quot;1&amp;quot;.equals(m_showds.getStringDef(i,&amp;quot;PAGES&amp;quot;,&amp;quot;&amp;quot;));
+//						var m_showPagesize = Integer.parseInt(m_showds.getStringDef(i,&amp;quot;PAGESIZE&amp;quot;,&amp;quot;-1&amp;quot;));
+//						var m_initDynCtrl = &amp;quot;1&amp;quot;.equals(m_showds.getStringDef(i,&amp;quot;DYNCTL&amp;quot;,&amp;quot;&amp;quot;));
+//						var m_dbname = m_showds.getStringDef(i, EAMidWareUtil.GRDSHW_DBNAME, &amp;quot;&amp;quot;);      
+//						var m_isCrossIncludeHead = &amp;quot;1&amp;quot;.equals(m_showds.getStringDef(i, &amp;quot;HROW&amp;quot;, &amp;quot;&amp;quot;));
+//						var m_detailDscID=arrDs[0].substring(4);
+				      
+				      		////给脚本一个处理参数的机会
+						//var result = &amp;quot;&amp;quot;+ servletpack.RunScript.ExecMwOsEx(sytid,mwid,&amp;quot;replaceParam&amp;quot;,new Object[]{this,request,mysql});
+						//if(result!=&amp;quot;&amp;quot; &amp;&amp; result!=&amp;quot;null&amp;quot;) mysql= result;
+						
+						if(aCellid.length()&amp;gt;=3){
+							startRow  = 1*aCellid[1];
+							startCol  = 1*aCellid[2];
+							endRow = startRow + 1*m_showds.getStringAt(i,&amp;quot;NROW&amp;quot;)-1;
+							endCol = startCol + 1*m_showds.getStringAt(i,&amp;quot;NCOL&amp;quot;)-1;
+							
+							haveDtl = true;
+						}
+						mysql=webpack.EASession.GetSysValue(mysql,m_usrinfo);
+						for ( var ii = 0 ; ii &amp;lt; m_paramds.getRowCount(); ii ++ ) { 
+							var paramid = m_paramds.getStringAt(ii,&amp;quot;ID&amp;quot;);
+							var defval = m_paramds.getStringAt(ii,&amp;quot;DEFVAL&amp;quot;);
+						      	mysql  = pubpack.EAFunc.Replace(mysql,&amp;quot;[%&amp;quot;+paramid+&amp;quot;]&amp;quot;,pubpack.EAFunc.NVL(request.getParameter(paramid),defval));
+						}
+						mysql=webpack.EASession.GetSysValue(mysql,request);//替换request 中[%id]
+						dtlds=db.QuerySQL(mysql);
+						
+					}
+					
+				}
+				else if (arrDs.length()&amp;gt; 1 &amp;&amp; dskey.indexOf(&amp;quot;DSC:&amp;quot;) &amp;gt; -1 &amp;&amp; dskey.indexOf(&amp;quot;,&amp;quot;)&amp;gt;0 )  //
+		        	{	// 这是某个查询的输出 DSC:MAIN,0,0
+		        		var dscid=arrDs[0].substring(4);	
+		        		if(m_dscds!=null){
+				      		var keyidx = m_dscds.getColumnLoc(&amp;quot;ID&amp;quot;);
+				      		var validx = m_dscds.getColumnLoc(&amp;quot;DATDSC&amp;quot;);
+				      		mysql = m_dscds.FindasHashMap(dscid,keyidx,validx);
+				      		if(mysql==null || mysql==&amp;quot;&amp;quot; ) throw new Exception ( &amp;quot;数据源&amp;quot;+dscid+&amp;quot;没有定义SQL语句&amp;quot;);
+						mysql=webpack.EASession.GetSysValue(mysql,m_usrinfo);
+						for ( var ii = 0 ; ii &amp;lt; m_paramds.getRowCount(); ii ++ ) { 
+							var paramid = m_paramds.getStringAt(ii,&amp;quot;ID&amp;quot;);
+							var defval = m_paramds.getStringAt(ii,&amp;quot;DEFVAL&amp;quot;);
+						      	mysql  = pubpack.EAFunc.Replace(mysql,&amp;quot;[%&amp;quot;+paramid+&amp;quot;]&amp;quot;,pubpack.EAFunc.NVL(request.getParameter(paramid),defval));
+						}
+						mysql=webpack.EASession.GetSysValue(mysql,request);//替换request 中[%id]
+						var dsds =db.QuerySQL(mysql);
+						var val = &amp;quot;&amp;quot;;
+						try{
+							val = dsds.getStringAt(1*arrDs[1],1*arrDs[2]);
+						}
+						catch(eeee){}
+						var rr = 1*aCellid[1];var cc = 1*aCellid[2];
+						var oldval = ds.getStringAt(rr,cc);
+						var ss = oldval.split(&amp;quot;`&amp;quot;);oldval = val ;
+							
+						for( var nn=1;nn&amp;lt;ss.length();nn++) oldval+=&amp;quot;`&amp;quot;+ss[nn];
+							ds.setValueAt(rr,cc,oldval);
+
+
+					}
+
+		        	}
+		        	else {
+		        		// 替代参数，如[%itmid] [%SYS_USRNAM]
+		        		if(aCellid.length()&amp;gt;=3){
+		        			dskey  =webpack.EASession.GetSysValue(dskey ,m_usrinfo);
+		        			for ( var ii = 0 ; ii &amp;lt; m_paramds.getRowCount(); ii ++ ) { 
+							var paramid = m_paramds.getStringAt(ii,&amp;quot;ID&amp;quot;);
+							var defval = m_paramds.getStringAt(ii,&amp;quot;DEFVAL&amp;quot;);
+						      	dskey = pubpack.EAFunc.Replace(dskey ,&amp;quot;[%&amp;quot;+paramid+&amp;quot;]&amp;quot;,pubpack.EAFunc.NVL(request.getParameter(paramid),defval));
+						}
+						dskey =webpack.EASession.GetSysValue(dskey ,request);//替换request 中[%id]
+		        			var rr = 1*aCellid[1];var cc = 1*aCellid[2]; 
+						var oldval = ds.getStringAt(rr,cc);
+						var ss = oldval.split(&amp;quot;`&amp;quot;);oldval = dskey ;
+						
+						for( var nn=1;nn&amp;lt;ss.length();nn++) oldval+=&amp;quot;`&amp;quot;+ss[nn];
+							ds.setValueAt(rr,cc,oldval);
+
+
+					}
+		        	}
+		     	 }
+			     
+			
+			
+			
+		}
+
+		//生成主数据区和列信息脚本
+		resRow = endRow-startRow+1;
+		resCol = endCol-startCol+1; 
+		sb.append( &amp;quot;&amp;lt;script&amp;gt;\n  m_startrow = &amp;quot;+startRow + &amp;quot;;&amp;quot; ); 
+		sb.append( &amp;quot;\n  m_startcol = &amp;quot;+startCol+ &amp;quot;;&amp;quot; ); 
+		sb.append( &amp;quot;\n  m_endrow = &amp;quot;+(endRow+1)+ &amp;quot;;&amp;quot; );
+		sb.append( &amp;quot;\n  m_orgEndRow = &amp;quot;+endRow+ &amp;quot;;&amp;quot;);
+		sb.append( &amp;quot;\n  m_endcol =  &amp;quot;+endCol+ &amp;quot;;&amp;quot; );//1 +  
+		
+		for ( var c=0;c&amp;lt;m_colds.getRowCount();c++){
+		
+			var ids = m_colds.getStringAt(c,&amp;quot;ID&amp;quot;); var idss = ids.split(&amp;quot;,&amp;quot;);
+			sb.append(&amp;quot;\n xlscol.add(&amp;quot;+idss[0]+&amp;quot;,&amp;quot;+idss[1]+&amp;quot;,&amp;apos;&amp;quot;+m_colds.getStringAt(c,&amp;quot;VALFLD&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+m_colds.getStringAt(c,&amp;quot;LISTID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+m_colds.getStringAt(c,&amp;quot;FLD&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+
+				m_colds.getStringAt(c,&amp;quot;COLTYP&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+m_colds.getStringDef(c,&amp;quot;NOTNULL&amp;quot;,&amp;quot;&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+m_colds.getStringDef(c,&amp;quot;WHERE&amp;quot;,&amp;quot;&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+m_colds.getStringDef(c,&amp;quot;ORDER&amp;quot;,&amp;quot;&amp;quot;)+&amp;quot;&amp;apos;);&amp;quot;);
+		}   	      
+		sb.append(&amp;quot;\n&amp;lt;/script&amp;gt;&amp;quot;);
+		// 单元格数值格式：
+		// 第一部分：基础定义
+		//	值,跨行,跨列,宽度,样式,高度,XX,数值格式7
+		// 第二部分：匹配信息
+		//	控件类型8,绑定关键字9,关联字段表头或明细标识10,列序号11,从数据库取出的值12，从数据库取出的显示值13,END结尾标志
+		//设置表头信息
+		
+		for(var i=0;i&amp;lt;m_celds.getRowCount();i++){
+			var t_cells=m_celds.getStringAt(i,grdpack.EAMidWareUtil.GRDSHW_ID).split(&amp;quot;,&amp;quot;);
+			var VALFLD=m_celds.getStringAt(i,&amp;quot;VALFLD&amp;quot;) ;//找到关联字段
+			var CTLTYP=m_celds.getStringAt(i,&amp;quot;CTLTYP&amp;quot;) ;//找到关联字段的控件类型
+			var LISTID=m_celds.getStringAt(i,&amp;quot;LISTID&amp;quot;) ;//找到关联字段的控件的绑定关键字
+			var SHWVALFLD=m_celds.getStringDef(i,&amp;quot;FLD&amp;quot;,&amp;quot;&amp;quot;) ;//显示值
+						
+			var t_row=t_cells[1];
+			var t_col=t_cells[2];
+			if(t_col!=-1){
+				var btyp=&amp;quot;hdr&amp;quot;;//关联字段表头或明细标识	
+				var cel=i;//m_colds的行号	
+				
+				if(CTLTYP==&amp;quot;&amp;quot;) CTLTYP=&amp;quot;text&amp;quot;;
+				
+				//2015 6 modify by scott
+				//if(t_col==43)return 26;
+				var thiscolnam = getDSColumnName(ds,t_col);
+				if(thiscolnam!=&amp;quot;&amp;quot;){
+					var oldval = ds.getStringAt(t_row,thiscolnam );
+//					if(i==18){
+//						throw new Exception( &amp;quot;SHWVALFLD=&amp;quot;+SHWVALFLD);
+//					
+//					}
+					if(oldval.trim()!=&amp;quot;&amp;quot;)
+						ds.setValueAt(t_row,thiscolnam ,
+						oldval+&amp;quot;`&amp;quot;+CTLTYP+&amp;quot;`&amp;quot;+LISTID+&amp;quot;`&amp;quot;+btyp+&amp;quot;`&amp;quot;+cel+&amp;quot;`&amp;quot;+hdrds.getStringDef(0,VALFLD,&amp;quot;&amp;quot;)+&amp;quot;`&amp;quot;+hdrds.getStringDef(0,SHWVALFLD,&amp;quot;&amp;quot;)+&amp;quot;`&amp;quot;+&amp;quot;END&amp;quot;
+						);
+				}
+				
+				
+			}
+			
+
+		}
+		//return m_celds.GetXml();
+		var dtlrow1=startRow ;var dtlcol1=startCol ;var dtlrow2=endRow  ;var dtlcol2=endCol  ;
+		var addcolhtml = &amp;quot;&amp;quot;;
+		if(dtlrow1!=0 &amp;&amp; dtlrow2!=0 &amp;&amp; dtlcol1!=0 &amp;&amp; dtlcol2!=0 ){
+			var startrow = 1*dtlrow1;
+			//设置明细信息
+			
+			if(dtlds.getRowCount()&amp;gt;0){
+				for(var r=0;r&amp;lt;dtlds.getRowCount();r++){
+					if(r+dtlrow1&amp;gt;=dtlrow2&amp;&amp;r&amp;lt;dtlds.getRowCount()-1){
+						var newrow = ds.AddRow(dtlrow1+r);
+						dtlrow2++;endRow  ++;
+					}
+					var thisguid = dtlds.getStringDef(r,&amp;quot;GUID&amp;quot;,&amp;quot;&amp;quot;);// 已存在的明细，需要借一个地方来记录guid
+					ds.setRowValue(dtlrow1+r,thisguid );
+					if(m_mwtyp==&amp;quot;B&amp;quot; ||m_mwtyp==&amp;quot;F&amp;quot; ) {
+						for(var i=0;i&amp;lt;m_colds.getRowCount();i++){
+							var t_colls=m_colds.getStringAt(i,grdpack.EAMidWareUtil.GRDSHW_ID).split(&amp;quot;,&amp;quot;);
+							var VALFLD=m_colds.getStringAt(i,&amp;quot;VALFLD&amp;quot;) ;//找到关联字段
+							var COLTYP=m_colds.getStringAt(i,&amp;quot;COLTYP&amp;quot;) ;//找到关联字段的控件类型
+							var LISTID=m_colds.getStringAt(i,&amp;quot;LISTID&amp;quot;) ;//找到关联字段的控件的绑定关键字
+							var SHWVALFLD=m_colds.getStringDef(i,&amp;quot;FLD&amp;quot;,&amp;quot;&amp;quot;) ;//找到关联字段
+	
+							var t_col=t_colls[1];
+							addcolhtml += &amp;quot;_this.SetColName(0,&amp;quot;+t_col+&amp;quot;,\&amp;quot;&amp;quot;+VALFLD+&amp;quot;\&amp;quot;);&amp;quot;;
+	
+							var btyp=&amp;quot;dtl&amp;quot;;//关联字段表头或明细标识	
+							var cel=i;//m_colds的行号
+							if(COLTYP==&amp;quot;&amp;quot;) COLTYP=&amp;quot;text&amp;quot;;
+							var thiscolnam = getDSColumnName(ds,t_col);
+							if(thiscolnam!=&amp;quot;&amp;quot;){
+								var oldval= ds.getStringAt(dtlrow1+r,thiscolnam );
+								if(oldval.trim()!=&amp;quot;&amp;quot;)
+									ds.setValueAt(dtlrow1+r,thiscolnam ,
+										oldval+&amp;quot;`&amp;quot;+COLTYP+&amp;quot;`&amp;quot;+LISTID+&amp;quot;`&amp;quot;+btyp+&amp;quot;`&amp;quot;+cel+&amp;quot;`&amp;quot;+dtlds.getStringDef(r,VALFLD,&amp;quot;&amp;quot;)+&amp;quot;`&amp;quot;+dtlds.getStringDef(r,SHWVALFLD,&amp;quot;&amp;quot;)+&amp;quot;`&amp;quot;+&amp;quot;END&amp;quot;
+									);
+							}
+						}
+					}
+					else if (m_mwtyp==&amp;quot;Q&amp;quot; ||m_mwtyp==&amp;quot;R&amp;quot; ) {
+						
+						for(var c=0;c&amp;lt;dtlds.getColumnCount();c++){
+							var oldval = ds.getStringAt(dtlrow1+r,dtlcol1+c);
+							var ss = oldval.split(&amp;quot;`&amp;quot;);oldval = dtlds.getStringAt(r,c);
+							//throw new Exception(oldval);
+							for( var nn=1;nn&amp;lt;ss.length();nn++) oldval+=&amp;quot;`&amp;quot;+ss[nn];
+							ds.setValueAt(dtlrow1+r,dtlcol1+c,oldval);//+&amp;quot;`````&amp;quot;+dtlds.getStringAt(r,c)+&amp;quot;``END&amp;quot;
+							
+						}
+					}
+				}
+				startrow += dtlds.getRowCount();	// 后续的空行还是要设置列信息
+			}
+			
+				
+			for(var r=startrow;r&amp;lt;=1*dtlrow2;r++){
+				for(var i=0;i&amp;lt;m_colds.getRowCount();i++){
+					var t_colls=m_colds.getStringAt(i,grdpack.EAMidWareUtil.GRDSHW_ID).split(&amp;quot;,&amp;quot;);
+					var VALFLD=m_colds.getStringAt(i,&amp;quot;VALFLD&amp;quot;) ;//找到关联字段
+					var COLTYP=m_colds.getStringAt(i,&amp;quot;COLTYP&amp;quot;) ;//找到关联字段的控件类型
+					var LISTID=m_colds.getStringAt(i,&amp;quot;LISTID&amp;quot;) ;//找到关联字段的控件的绑定关键字
+					var SHWVALFLD=m_colds.getStringDef(i,&amp;quot;VAL&amp;quot;,&amp;quot;&amp;quot;) ;//找到关联字段
+					
+					var t_col=t_colls[1];
+					addcolhtml += &amp;quot;_this.SetColName(0,&amp;quot;+t_col+&amp;quot;,\&amp;quot;&amp;quot;+VALFLD+&amp;quot;\&amp;quot;);&amp;quot;;
+					var btyp=&amp;quot;dtl&amp;quot;;//关联字段表头或明细标识	
+					var cel=i;//m_colds的行号
+					
+					
+					if(COLTYP==&amp;quot;&amp;quot;) COLTYP=&amp;quot;text&amp;quot;;
+					var thiscolnam = getDSColumnName(ds,t_col);
+					if(thiscolnam!=&amp;quot;&amp;quot;){//2015 6 modify by scott
+						var oldval = ds.getStringAt(r,thiscolnam );
+						if(oldval!=&amp;quot;&amp;quot;)
+						ds.setValueAt(r,thiscolnam ,
+							oldval+&amp;quot;`&amp;quot;+COLTYP+&amp;quot;`&amp;quot;+LISTID+&amp;quot;`&amp;quot;+btyp+&amp;quot;`&amp;quot;+cel+&amp;quot;`&amp;quot;+&amp;quot;&amp;quot;+&amp;quot;`&amp;quot;+&amp;quot;&amp;quot;+&amp;quot;`&amp;quot;+&amp;quot;END&amp;quot;
+						);
+						
+					}	
+				}
+			}
+			
+			
+		}
+		sb.append(&amp;quot;&amp;lt;script&amp;gt;var G_MAINCELLRANGROW1=&amp;apos;&amp;quot;+dtlrow1+&amp;quot;&amp;apos;;var G_MAINCELLRANGROW2=&amp;apos;&amp;quot;+dtlrow2+&amp;quot;&amp;apos;;var G_MAINCELLRANGCOL1=&amp;apos;&amp;quot;+dtlcol1+&amp;quot;&amp;apos;;var G_MAINCELLRANGCOL2=&amp;apos;&amp;quot;+dtlcol2+&amp;quot;&amp;apos;;&amp;quot;+addcolhtml +&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+		var r=ds.getRowCount();
+      		var c=ds.getColumnCount();
+		
+		//先初始化数据和格式(输入格式)
+	      //初始化列宽度,宽度在第一行 ```31`s1`18
+	      var sumwidth = 0 ;
+	      for( var n=0;n&amp;lt;ds.getColumnCount();n++)
+	      {
+	        var  ss= ds.getStringAt(0,n).split(&amp;quot;`&amp;quot;);
+	        if ( ss.length()&amp;gt;=4) {
+	        	if(ss[3]==&amp;quot;&amp;quot;)ss[3]=&amp;quot;0&amp;quot;;//throw new Exception( &amp;quot;运行报错，提示，这是老版本的中间件XML文件，请把该中间件&amp;quot;+grdid+&amp;quot;在设计器保存一次&amp;quot;+ds.getStringAt(0,n));
+	        	sumwidth +=  langpack.Integer.parseInt(ss[3]);	
+	          	ds.SetColumnExValue(n,ss[3]);  
+	          
+	        }
+	      }
+	      jssb.append(&amp;quot;var G_ROW_COUNT=&amp;quot;+ds.getRowCount()+&amp;quot;;var G_COL_COUNT=&amp;quot;+ds.getColumnCount()+&amp;quot;;&amp;quot;);
+	      	var  cc = dtlds.getColumnCount();
+		var uicols = c&amp;gt;cc?c:cc+(c-resCol);
+		var col1 = 255;
+		if(fixscreenwidth==&amp;quot;1&amp;quot;)
+			sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;table_main\&amp;quot; width=\&amp;quot;100%\&amp;quot;  border=0 cellpadding=0 cellspacing=0 style=&amp;apos;border-collapse:collapse;&amp;apos; &amp;apos;&amp;gt;&amp;quot;);//&amp;quot;+sumwidth +&amp;quot;
+		else sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;table_main\&amp;quot; width=\&amp;quot;&amp;quot;+sumwidth +&amp;quot;px\&amp;quot;  border=0 cellpadding=0 cellspacing=0 style=&amp;apos;border-collapse:collapse;&amp;apos;&amp;gt;&amp;quot;);//&amp;quot;+sumwidth +&amp;quot; width=\&amp;quot;&amp;quot;+sumwidth +&amp;quot;px\&amp;quot; 
+
+		for(var i=0;i&amp;lt;r;i++)
+		{
+			
+			sb.append(&amp;quot;\n&amp;lt;TR id=\&amp;quot;ROW_&amp;quot;+i+&amp;quot;\&amp;quot; &amp;quot;);
+			var rowvalue = ds.getRowValue(i);
+			if(rowvalue!=&amp;quot;&amp;quot;)sb.append(&amp;quot; ROWVALUE=\&amp;quot;&amp;quot;+rowvalue+&amp;quot;\&amp;quot; &amp;quot; );
+			if ( dtlds.bHaveRowURL==true ){
+				var url = dtlds.getRowURL(i);
+				if ( url.length() &amp;gt; 0 ) {
+					sb.append(&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ dtl.getRowURL(i)+&amp;quot;&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; &amp;quot; );
+				}
+			}
+			
+			var closed=false;
+				
+			for(var j=0;j&amp;lt;c ;j++){
+				
+//				var hcol = (j &amp;lt;col1+resCol)?j:col1+resCol-1;//如果模板明细区要进行列扩展，用最后一列明细区的定义；
+//          			
+//          			if(j==uicols-1)hcol=c-1; //最后一列
+				
+				var hcol= j;
+				var info=ds.getStringAt(i,hcol);
+				var items = info.split(&amp;quot;`&amp;quot;);
+				
+          			if(items.length()==1){//           				//sb.append(&amp;quot;len=&amp;quot;+items.length()+&amp;quot;,&amp;quot;+info);
+//          				 continue;//被合并的单元格 info==&amp;quot;&amp;quot;
+          			}
+          			else{
+					var idx=0;
+					// 值,跨行,跨列,宽度,样式,高度,单元格属性 如：库存申请单``9``s4`24``100000021  其中单元格属性第一位=1表示锁定
+					 
+					 
+					var val = &amp;quot;&amp;quot;;if(items.length()&amp;gt;0){ val=items[0];}
+					var nrow= &amp;quot;&amp;quot;;if(items.length()&amp;gt;1)nrow=items[1];
+					var ncol= &amp;quot;&amp;quot;;if(items.length()&amp;gt;2)ncol=items[2];
+					var wid = ds.GetColumnExValue(j);// 宽度在第一行初始化掉了
+					if(ncol&amp;gt;1) {
+						for( var cc = 1;cc&amp;lt;ncol;cc++) {
+							var newcolwidth = &amp;quot;&amp;quot;+GetDSExValue(ds,j+cc);
+							if(newcolwidth!=&amp;quot;&amp;quot;&amp;&amp;wid !=&amp;quot;&amp;quot;){
+								wid=&amp;quot;&amp;quot;+(langpack.Integer.parseInt(&amp;quot;&amp;quot;+newcolwidth )+langpack.Integer.parseInt(&amp;quot;&amp;quot;+wid));
+							}
+						}
+					}
+					
+					var cls = &amp;quot;&amp;quot;;if(items.length()&amp;gt;4)cls=items[4];//style
+					var hgt = &amp;quot;&amp;quot;;if(items.length()&amp;gt;5)hgt=items[5];// 高度
+					var cellattr = &amp;quot;&amp;quot;;if(items.length()&amp;gt;7)cellattr=items[7];//单元格属性
+					var bCellLock = &amp;quot;0&amp;quot;; //是否锁定
+					
+					//throw new Exception(&amp;quot;cellattr=&amp;quot;+items[5]+&amp;quot;,cellattr.substring(0,1)=&amp;quot;+items[7]+&amp;quot;,bLock=&amp;quot;+bLock+&amp;quot;,bCellLock=&amp;quot;+bCellLock );
+					if(cellattr!=&amp;quot;&amp;quot;)bCellLock = cellattr.substring(0,1);
+					
+					
+					var typ = &amp;quot;&amp;quot;;if(items.length()&amp;gt;8) typ=items[8];// 					
+			          	if(!closed)
+			          	{
+				            	sb.append(&amp;quot;height=&amp;quot;+hgt+&amp;quot;&amp;gt;&amp;quot;);
+				            	closed=true;
+			          	}
+			          				          	
+			          	if(m_accnameCell==&amp;quot;&amp;quot;+i+&amp;quot;_&amp;quot;+j){//显示表头
+						if ( m_mwds.getStringDef(0,EAMidWareUtil.GRD_NOACCNAME,&amp;quot;0&amp;quot;).equalsIgnoreCase(&amp;quot;0&amp;quot;)&amp;&amp; !pubpack.EAOption.get(&amp;quot;SHOW_ACCNAM_ON_GRID&amp;quot;).equalsIgnoreCase(&amp;quot;n&amp;quot;)) 
+							val = accdb.getLngnam(); 
+					}
+					
+					if(val.length()&amp;gt;0){
+						
+						var loc = hdrds.getColumnLoc(val);
+						
+						if(loc&amp;gt;=0)val = hdrds.getStringAt(0,loc);
+						
+					}
+					
+			          	if(cls.length()==0&amp;&amp; wid.length()==0){//2010 可能是合并
+			          	
+			            		//sb.append(val);
+			            		
+			          	}
+			          	else {
+			  			sb.append( gettdinfo(i,j,nrow,ncol,cls,wid  ,typ) );//
+					            	sb.append(&amp;quot;&amp;gt;&amp;quot;);
+	//				            	if(hgt!=&amp;quot;&amp;quot;&amp;&amp;val.length()== 0 &amp;&amp; langpack.Integer.parseInt(hgt) &amp;gt; 5 ) // 高度如果小于5，不要把空替代为&amp;nbsp; 
+	//				              		val = &amp;quot;&amp;nbsp;&amp;quot;;
+//					        }catch(e){
+//			            			return hgt;
+//			            		}
+			            		var thiswidth  = &amp;quot;100%&amp;quot;;
+			            		if(fixscreenwidth==&amp;quot;0&amp;quot;){
+			            			thiswidth  = wid+&amp;quot;px&amp;quot;;//
+			            			//try{thiswidth =&amp;quot;&amp;quot;+ (1*wid-5);}catch(e){thiswidth =wid;}
+
+						}
+						var readonly = &amp;quot;0&amp;quot;;
+						if(bLock==&amp;quot;1&amp;quot;) readonly = bLock;
+						else if(bCellLock==&amp;quot;1&amp;quot;)readonly =bCellLock;
+						
+			            		showContent(sb,cls,val,items,m_celds,m_colds,i,j,thiswidth,readonly,thiswidth,hgt,jssb);
+
+			            		//showContent(sb,cls,val,items,m_celds,m_colds,i,j,wid);
+			            		
+		          		}
+		          		
+		          		 
+	          			
+		          	}	
+	          		
+
+        		}
+        		
+        		if(!closed)sb.append(&amp;quot;&amp;gt;&amp;quot;);
+		
+//        		sb.setLength(0);
+        		sb.append(&amp;quot;&amp;lt;/TR&amp;gt;&amp;quot;);
+        		
+      		}
+		
+	      //数据准备完毕，由os做进一步加工；可在此事件中为新单据临时生成数据
+	    	//servletpack.RunScript.ExecMwOsEx(m_sytid,m_mwid,&amp;quot;filterBillDS&amp;quot;,new Object[]{hdrds,dtlds,sb,request});
+		
+
+//	}
+	sb.append(&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;);	
+	// xlsgrid/js/&amp;quot;+sytid+&amp;quot;/&amp;quot;+grdid+&amp;quot;.djs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;+ 不再使用 djs 直接放到html正文里面
+	sb.append(&amp;quot;&amp;lt;script&amp;gt;&amp;quot;);	
+
+	// 自动生成djs
+	grdpack.EAMidWareBase.EnsureMwJsFile(sytid,grdid);
+	sb.append( pubpack.EAFunc.readFile(pubpack.AppStartListener.approot+&amp;quot;xlsgrid/js/&amp;quot;+sytid+&amp;quot;/&amp;quot;+grdid+&amp;quot;.djs&amp;quot;) );
+	sb.append( jssb.toString() );
+	sb.append( &amp;quot;
+	setTimeout(&amp;apos;f_initgrid()&amp;apos;,10);
+	
+		&amp;quot;);
+		
+	sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+	//弹出窗口
+	sb.append(&amp;quot;&amp;lt;div id=&amp;apos;POPWIN&amp;apos; style=&amp;apos;POSITION:fixed;display:none;border:1px ridge;width:380px;height:380px;top:0px;left:0px;z-index:900;overflow:auto;background-color:#ABABAB;&amp;apos;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	return sb.toString() ;
+	}catch(e){
+		db.Rollback();
+		
+		return ;
+	}finally{
+		if(db!=null){db.Close();}
+	}
+	
+	
+	return &amp;quot;error&amp;quot;;
+}
+//得到单元格的高度
+function GetDSExValue(ds,c){
+	try{
+		return ds.GetColumnExValue(c);
+	}
+	catch(eee){
+		return &amp;quot;&amp;quot;;
+	}
+}
+
+//设置单元格合并及高度
+function gettdinfo(row,col,rows,cols,cls,wid,typ)
+{
+    var ret = &amp;quot;&amp;lt;TD id=CELL_0_&amp;quot;+row+&amp;quot;_&amp;quot;+col+&amp;quot; type=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos; class=&amp;quot;;
+    ret +=cls;
+    if(rows.length()&amp;gt;0)
+      ret += (&amp;quot; rowspan=&amp;quot;+rows);
+    if(cols.length()&amp;gt;0)
+      ret += (&amp;quot; colspan=&amp;quot;+cols);
+    if(wid.length()&amp;gt;0)
+      ret += (&amp;quot; width=&amp;quot;+wid);
+    //ret+=&amp;quot; onclick=\&amp;quot;try{f_cell_entry(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);_thisOnMouseLClick(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);}catch(e){}\&amp;quot;  ondbclick=\&amp;quot;try{_thisOnMouseDClick(0,r,c);}catch(e){}\&amp;quot;&amp;quot;;
+    ret += &amp;quot; onclick=\&amp;quot;CC(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot;  ondbclick=\&amp;quot;CDC(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot;&amp;quot;;
+
+    return ret;
+}
+// jssb 内容中的脚本
+function showContent(sb,cls,val,items,m_celds,m_colds,row,col,wid,readonly,w,h,jssb)
+{
+	try{
+	if(val.toUpperCase().startsWith(&amp;quot;$$&amp;quot;))
+	{
+ 
+		var names= new Array(); 
+		names=val.substring(2).split(&amp;quot;,&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;TABLE height=\&amp;quot;100%\&amp;quot; cellSpacing=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;TBODY&amp;gt;&amp;lt;TR&amp;gt;\n&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;TD style=\&amp;quot;BORDER-RIGHT: #3a77ba 1px solid; BORDER-TOP: #3a77ba 1px solid; BORDER-LEFT: #3a77ba &amp;quot;);
+		sb.append(&amp;quot;1px solid; BORDER-BOTTOM: #3a77ba 1px solid\&amp;quot; bgColor=\&amp;quot;#ffffff\&amp;quot; height=\&amp;quot;23\&amp;quot;&amp;gt;\n&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;TABLE width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;TR&amp;gt;&amp;lt;TD width=154&amp;gt;&amp;nbsp;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;IMG height=\&amp;quot;9\&amp;quot; src=\&amp;quot;xlsgrid/images/my/collapse.gif\&amp;quot; width=\&amp;quot;9\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;span class=\&amp;quot;&amp;quot;+cls+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;);
+	        if(names.length&amp;gt;1) sb.append(names[1]);
+		else sb.append(names[0]);
+	        sb.append(&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/TD&amp;gt;&amp;lt;TD&amp;gt;&amp;lt;IMG height=15 src=\&amp;quot;xlsgrid/images/my/barright.jpg\&amp;quot; width=22 &amp;quot;);
+	        sb.append(&amp;quot;align=right border=0&amp;gt;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TABLE&amp;gt;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\n&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;TR&amp;gt;&amp;lt;TD style=\&amp;quot;BORDER-RIGHT: #3a77ba 1px solid; BORDER-LEFT: #3a77ba 1px solid; BORDER-BOTTOM: #3a77ba 1px solid\&amp;quot;&amp;quot;);
+		sb.append(&amp;quot;vAlign=\&amp;quot;top\&amp;quot; background=\&amp;quot;xlsgrid/images/my/greeting.jpg\&amp;quot; bgColor=\&amp;quot;#ffffff\&amp;quot;&amp;gt;&amp;lt;FONT color=\&amp;quot;#014e82\&amp;quot;&amp;gt;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;iframe width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;ShowXlsGrid.sp?grdid=&amp;quot;);
+		sb.append(names[0]);
+		sb.append(&amp;quot;&amp;&amp;quot;);
+		sb.append(request.getQueryString());
+		sb.append(&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;);
+		sb.append(&amp;quot;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TBODY&amp;gt;&amp;lt;/TABLE&amp;gt;&amp;quot;);
+		 
+	}
+	else{
+		// 单元格数值格式：
+		// 第一部分：基础定义
+		//	值,跨行,跨列,宽度,样式,高度,XX,数值格式7
+		// 第二部分：匹配信息
+		//	控件类型8,绑定关键字9,关联字段表头或明细标识10,列序号11,从数据库取出的值12，从数据库取出的显示值13,END结尾标志14
+		if(items.length()&amp;lt;8){
+			
+			//sb.append(&amp;quot;(&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;)len=&amp;quot;+items.length());//&amp;quot;单元格字段不足,一般是老的中间件保存缺乏字段，请重新打开设计器对该中间件进行一次保存&amp;quot;);
+			return;
+		}
+		var kjtype=&amp;quot;&amp;quot;;//取到控件类型
+		var view=&amp;quot;&amp;quot;;//绑定关键字
+		var btyp=&amp;quot;&amp;quot;; //数据类型			
+		var cellrow=&amp;quot;&amp;quot;; 
+		var newval = &amp;quot;&amp;quot;; 
+		var newshowval = &amp;quot;&amp;quot;;
+		var valid = &amp;quot;CELLTEXT_0_&amp;quot;+row+&amp;quot;_&amp;quot;+col;
+		var showvalid = &amp;quot;CELLSHOWTEXT_0_&amp;quot;+row+&amp;quot;_&amp;quot;+col;
+		
+		var valdisplaycss = &amp;quot;&amp;quot;;
+		var showvaldisplaycss = &amp;quot;display:none;&amp;quot;;
+		var id=&amp;quot;&amp;quot;;
+		var name=&amp;quot;&amp;quot;;
+		var sheet=&amp;quot;&amp;quot;;
+		if(items.length()==8){// 没有绑定字段
+			//if(val!=&amp;quot;&amp;quot;)sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;\&amp;quot; id=\&amp;quot;CELLTEXT_0_&amp;quot;+row+&amp;quot;_&amp;quot;+col+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+			newval = val;
+		}
+		else if(items.length()==15){
+			
+			kjtype=items[8];//取到控件类型
+			view=items[9];//绑定关键字
+			btyp=items[10]; //数据类型			
+			cellrow=items[11]; 
+			newval = items[12]; if(newval==&amp;quot;&amp;quot;)newval= val;
+			newshowval = items[13];
+			if(btyp==&amp;quot;hdr&amp;quot;){
+				id=m_celds.getStringDef(cellrow,&amp;quot;FLD&amp;quot;,&amp;quot;&amp;quot;);//CELLID
+				name=m_celds.getStringDef(cellrow,&amp;quot;VALFLD&amp;quot;,&amp;quot;&amp;quot;);
+				sheet=m_celds.getStringAt(cellrow,grdpack.EAMidWareUtil.GRDSHW_ID).split(&amp;quot;,&amp;quot;)[0];
+				//sheet,row,col,name,namekey,key,coltyp,collen,where,sort
+				//显示值id, 内部值 //name 显示值
+				jssb.append( &amp;quot;\n xlscell.addnew( &amp;quot; + &amp;quot;&amp;quot;+sheet+&amp;quot;,&amp;quot;+  &amp;quot;&amp;quot;+row+&amp;quot;,&amp;quot;+&amp;quot;&amp;quot;+col+&amp;quot;,&amp;quot;+&amp;quot;\&amp;quot;&amp;quot; + id+&amp;quot;\&amp;quot;,&amp;quot; + &amp;quot;\&amp;quot;&amp;quot; + name+&amp;quot;\&amp;quot;,&amp;quot; + 
+				          &amp;quot;\&amp;quot;&amp;quot; + view+&amp;quot;\&amp;quot;,&amp;quot; + &amp;quot;\&amp;quot;&amp;quot; + kjtype +&amp;quot;\&amp;quot;,&amp;quot; + &amp;quot;\&amp;quot;\&amp;quot;,&amp;quot; + &amp;quot;\&amp;quot;\&amp;quot;,&amp;quot; + &amp;quot;\&amp;quot;\&amp;quot;,\&amp;quot;&amp;quot;+val+&amp;quot;\&amp;quot; );&amp;quot; );
+				
+			}
+			else{
+	 				//throw new Exception(grdpack.EAMidWareUtil.GRDSHW_ID);
+	  				var ddd = m_colds.getStringDef(cellrow,&amp;quot;ID&amp;quot;,&amp;quot;&amp;quot;);
+	 				var cells=m_colds.getStringAt(cellrow,grdpack.EAMidWareUtil.GRDSHW_ID).split(&amp;quot;,&amp;quot;);
+				 
+				id=&amp;quot;DTL_&amp;quot;+cells[0]+&amp;quot;_&amp;quot;+row+&amp;quot;_&amp;quot;+cells[1];
+				name=m_colds.getStringAt(cellrow,&amp;quot;name&amp;quot;);
+				sheet=m_colds.getStringAt(cellrow,grdpack.EAMidWareUtil.GRDSHW_ID).split(&amp;quot;,&amp;quot;)[0];
+			}
+
+		}
+			
+		if(newshowval !=&amp;quot;&amp;quot;){
+			valdisplaycss = &amp;quot;display:none;&amp;quot;;
+			showvaldisplaycss = &amp;quot;&amp;quot;;
+		}
+		if(sheet==&amp;quot;&amp;quot;)sheet=&amp;quot;0&amp;quot;;
+		var thiswidth = wid;
+		if(val==&amp;quot;[%BOOLBOX]&amp;quot;){// 打勾
+			//throw new Exception ( val);
+			sb.append(&amp;quot;&amp;lt;input type=checkbox id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; ctrltype=\&amp;quot;boolbox\&amp;quot; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; onchange=\&amp;quot;_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value)\&amp;quot;  value=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; style=\&amp;quot;width:20px;height:20px;\&amp;quot;&amp;gt;&amp;quot;);
+		}
+		else if(val.length()&amp;gt;2&amp;&amp;val.substring(0,1)==&amp;quot;【&amp;quot;){//按钮
+			sb.append(&amp;quot;&amp;lt;table id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; width=100% height=&amp;quot;+h+&amp;quot;  value=\&amp;quot;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;\&amp;quot; ctrltype=\&amp;quot;button\&amp;quot;  onmouseover=\&amp;quot;this.style.cursor=&amp;apos;pointer&amp;apos;\&amp;quot; onclick=\&amp;quot;try{_thisOnButtonCtrlClick(&amp;apos;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;apos;,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);}catch(e){}\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle&amp;gt;&amp;lt;font size=3&amp;gt;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+
+
+			//sb.append(&amp;quot;&amp;lt;table width=100% height=&amp;quot;+h+&amp;quot; border=0 id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; value=\&amp;quot;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;\&amp;quot; ctrltype=\&amp;quot;button\&amp;quot;  onmouseover=\&amp;quot;this.style.cursor=&amp;apos;pointer&amp;apos;\&amp;quot; onclick=\&amp;quot;try{_thisOnButtonCtrlClick(&amp;apos;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;apos;,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);}catch(e){}\&amp;quot;&amp;gt;&amp;lt;tr height=&amp;quot;+h+&amp;quot;&amp;gt;&amp;lt;td align=center valign=middle height=100% width=100%&amp;gt;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;);
+
+
+			//sb.append(&amp;quot;&amp;lt;a style=\&amp;quot;text-decoration: none;  border-radius: 4px;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; value=\&amp;quot;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;\&amp;quot; ctrltype=\&amp;quot;button\&amp;quot; onclick=\&amp;quot;try{_thisOnButtonCtrlClick(&amp;apos;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;apos;,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);}catch(e){}\&amp;quot; &amp;gt;&amp;lt;table width=100% height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle height=100% width=100%&amp;gt;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+
+			//sb.append(&amp;quot;&amp;lt;input id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; type=\&amp;quot;button\&amp;quot; ctrltype=\&amp;quot;button\&amp;quot; value=\&amp;quot;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;\&amp;quot; onclick=\&amp;quot;try{_thisOnButtonCtrlClick(&amp;apos;&amp;quot;+val.substring(1,val.length()-1)+&amp;quot;&amp;apos;,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);}catch(e){}\&amp;quot; style=\&amp;quot;border: 0px solid #CDCDCD;width:&amp;quot;+thiswidth +&amp;quot;;height:100%;\&amp;quot;&amp;gt;&amp;quot;);
+		}
+		else if(kjtype==&amp;quot;Button&amp;quot;){
+			sb.append(&amp;quot;&amp;lt;input id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; type=\&amp;quot;button\&amp;quot;  ctrltype=\&amp;quot;button\&amp;quot;  value=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; onclick=\&amp;quot;_thisOnButtonCtrlClick(&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;)\&amp;quot; /&amp;gt;&amp;quot;);
+		}
+		else if(val.length()&amp;gt;7&amp;&amp;val.substring(0,7)==&amp;quot;[%IMAGE&amp;quot;){// 图片
+			var str = val.substring(8,val.length()-1);
+			sb.append(&amp;quot;&amp;lt;img &amp;quot;+str+&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;  ctrltype=\&amp;quot;image\&amp;quot;  onclick=\&amp;quot;_thisOnButtonCtrlClick(&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;)\&amp;quot; &amp;gt;&amp;quot;);
+		}
+		else if(kjtype==&amp;quot;PasswordBox&amp;quot;&amp;&amp;readonly==&amp;quot;0&amp;quot;){ // 密码
+			sb.append(&amp;quot;&amp;lt;input type=password id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; ctrltype=\&amp;quot;password\&amp;quot; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; onchange=\&amp;quot;_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value)\&amp;quot;  value=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; style=\&amp;quot;font-size:9pt;border: 0px solid #0A246A;font-size:9pt;padding-left:5px; width:&amp;quot;+thiswidth +&amp;quot;;height:100%;\&amp;quot;&amp;gt;&amp;quot;);
+		}
+		else if(kjtype==&amp;quot;SELECTBOX&amp;quot;){
+			if(view!=&amp;quot;&amp;quot;){
+				var str= newval;
+				if(newshowval!=&amp;quot;&amp;quot;)str=newshowval;//onblur=\&amp;quot;hidediv(&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;)\&amp;quot;
+				sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:3px;padding-right:3px;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;  innerval=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; showval=&amp;apos;&amp;quot;+newshowval+&amp;quot;&amp;apos; celllock=&amp;apos;&amp;quot;+readonly+&amp;quot;&amp;apos; ctrltype=\&amp;quot;selectbox\&amp;quot; cellformat=\&amp;quot;\&amp;quot;  key=\&amp;quot;&amp;quot;+view+&amp;quot;\&amp;quot;  where=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+str+&amp;quot;&amp;lt;/span&amp;gt;
+				&amp;lt;input ctrltype=\&amp;quot;selectbox\&amp;quot; type=text id=&amp;apos;INPUT_&amp;quot;+valid+&amp;quot;&amp;apos;    name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; value=\&amp;quot;\&amp;quot;  onkeyup=\&amp;quot;ddldiv(&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;);\&amp;quot;  onkeydown=\&amp;quot;f_cell_keydown(event);arrowevent(&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;);\&amp;quot;  onchange=\&amp;quot;f_scm(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value,&amp;apos;&amp;quot;+view+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;);\&amp;quot;  style=\&amp;quot;display:none;border: 0px solid #0A246A; width:&amp;quot;+thiswidth+&amp;quot;;height:100%;\&amp;quot;&amp;gt;&amp;lt;/input&amp;gt;
+				&amp;lt;div id=\&amp;quot;&amp;quot;+valid+&amp;quot;div_bkxl\&amp;quot; class=\&amp;quot;selectbox_wnd\&amp;quot; style=\&amp;quot;position: absolute; z-index: 9; border: 1px solid; display: none; width: 300px; overflow: hidden; cursor: pointer; background-color: white;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+
+			}
+			
+		}
+		else if(kjtype==&amp;quot;DATE&amp;quot;||val==&amp;quot;[%DATEBOX]&amp;quot;||kjtype==&amp;quot;DATE&amp;quot;){
+			var str= newval;
+			if(newshowval!=&amp;quot;&amp;quot;)str=newshowval;
+			sb.append(&amp;quot;\n&amp;lt;span style=\&amp;quot;padding-left:3px;padding-right:3px;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; innerval=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; showval=&amp;apos;&amp;quot;+newshowval+&amp;quot;&amp;apos; celllock=&amp;apos;&amp;quot;+readonly+&amp;quot;&amp;apos; ctrltype=\&amp;quot;date\&amp;quot; cellformat=\&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+str+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;\n&amp;lt;input type=text readOnly=&amp;apos;true&amp;apos;  id=&amp;apos;INPUT_&amp;quot;+valid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; value=\&amp;quot;\&amp;quot;  onkeydown=\&amp;quot;f_cell_keydown(event);\&amp;quot; onblur=\&amp;quot;f_cell_unentry(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot; onchange=\&amp;quot;try{_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);}catch(eeee){}\&amp;quot;  style=\&amp;quot;display:none;border: 0px solid #0A246A; width:&amp;quot;+thiswidth+&amp;quot;;height:100%;\&amp;quot;&amp;gt;\n&amp;quot;);
+			
+
+		}
+		else if(kjtype==&amp;quot;RADIOBOX&amp;quot;){
+			var str= newval;
+			if(newshowval!=&amp;quot;&amp;quot;)str=newshowval;
+
+			sb.append(&amp;quot;\n&amp;lt;span style=\&amp;quot;display:none;padding-left:3px;padding-right:3px;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; innerval=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; showval=&amp;apos;&amp;quot;+newshowval+&amp;quot;&amp;apos; celllock=&amp;apos;&amp;quot;+readonly+&amp;quot;&amp;apos; ctrltype=\&amp;quot;text\&amp;quot; cellformat=\&amp;quot;\&amp;quot; style=\&amp;quot;display:none;\&amp;quot; &amp;gt;&amp;quot;+str+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+			
+			var rediobox=&amp;quot;&amp;quot;;
+			if(view!=&amp;quot;&amp;quot;){
+				var typds=db.QuerySQL(&amp;quot;select * from &amp;quot;+view);
+				for(var i=0;i&amp;lt;typds.getRowCount();i++){
+					var id = typds.getStringAt(i,&amp;quot;id&amp;quot;);
+					var name = typds.getStringAt(i,&amp;quot;name&amp;quot;);
+					rediobox+=&amp;quot;&amp;lt;input type=&amp;apos;radio&amp;apos; name=&amp;apos;&amp;quot;+valid+&amp;quot;_option&amp;apos; id=&amp;apos;&amp;quot;+valid+&amp;quot;_option&amp;apos; value=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; onchange=\&amp;quot;try{_this.SetCellText(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;);_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;);}catch(eeee){}\&amp;quot; &amp;quot;;
+					if(id==newval)
+						rediobox+=&amp;quot; checked &amp;quot;;
+					
+					rediobox+=&amp;quot;/&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/input&amp;gt;&amp;nbsp;&amp;quot;;
+				}
+			}
+			sb.append(&amp;quot;&amp;quot;+rediobox+&amp;quot;&amp;quot;);
+		}	
+			
+		else if(kjtype==&amp;quot;COMBOBOX&amp;quot;){
+			var option=&amp;quot;&amp;quot;;
+			if(view!=&amp;quot;&amp;quot;){
+				var typds=db.QuerySQL(&amp;quot;select * from &amp;quot;+view);
+				for(var i=0;i&amp;lt;typds.getRowCount();i++){
+					var id = typds.getStringAt(i,&amp;quot;id&amp;quot;);
+					var name = typds.getStringAt(i,&amp;quot;name&amp;quot;);
+					if(id==newval)
+						option+=&amp;quot;&amp;lt;option selected value=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/OPTION&amp;gt;&amp;quot;;
+					else
+						option+=&amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/OPTION&amp;gt;&amp;quot;;
+
+				}
+			}
+			sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:&amp;quot;+thiswidth +&amp;quot;;border:0px solid #ccc; height:100%;background:#fffff; overflow:hidden;\&amp;quot;&amp;gt;
+			&amp;lt;select id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; ctrltype=\&amp;quot;combobox\&amp;quot; style=\&amp;quot;border-width:0px 0px 0px 0px; position:relative;width:&amp;quot;+thiswidth +&amp;quot;;height:100%; &amp;quot;+valdisplaycss +&amp;quot;\&amp;quot; &amp;quot;);
+			if(readonly==&amp;quot;1&amp;quot;)
+				sb.append(&amp;quot; disabled=\&amp;quot;disabled\&amp;quot; &amp;quot;);
+			sb.append(&amp;quot;&amp;gt; 
+			&amp;lt;option value=&amp;apos;&amp;apos;&amp;gt;&amp;lt;/option&amp;gt; &amp;quot;+option+&amp;quot;
+			&amp;lt;/select&amp;gt;
+			&amp;lt;/div&amp;gt;&amp;quot;);
+		}
+		else if(kjtype==&amp;quot;MULTLINE&amp;quot;){
+
+			var str= newval;
+			if(newshowval!=&amp;quot;&amp;quot;)str=newshowval;
+			//sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:100%;height:100%\&amp;quot; onclick=\&amp;quot;f_cell_entry(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot;&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;\n&amp;lt;span style=\&amp;quot;padding-left:3px;padding-right:3px;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; innerval=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; showval=&amp;apos;&amp;quot;+newshowval+&amp;quot;&amp;apos; celllock=&amp;apos;&amp;quot;+readonly+&amp;quot;&amp;apos; ctrltype=\&amp;quot;MULTLINE\&amp;quot; cellformat=\&amp;quot;\&amp;quot;  &amp;gt;&amp;quot;+str+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;\n&amp;lt;textarea rows=\&amp;quot;2\&amp;quot; type=text id=&amp;apos;INPUT_&amp;quot;+valid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; value=\&amp;quot;\&amp;quot;  onkeydown=\&amp;quot;f_cell_keydown(event);\&amp;quot; onblur=\&amp;quot;f_cell_unentry(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot; onchange=\&amp;quot;try{_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);}catch(eeee){}\&amp;quot;  style=\&amp;quot;margin:0px;display:none;border: 0px solid #0A246A; width:&amp;quot;+thiswidth+&amp;quot;;height:100%;\&amp;quot;&amp;gt;&amp;lt;/textarea&amp;gt;\n&amp;quot;);
+			//sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);	
+
+		}
+
+		else if ( kjtype==&amp;quot;&amp;quot; &amp;&amp; newval==&amp;quot;&amp;quot; &amp;&amp; readonly==&amp;quot;1&amp;quot; ){ }// 空的内容 sb.append(&amp;quot;&amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/nvlimg.jpg&amp;apos; width=1 height=1&amp;gt;&amp;quot;);
+		else if(readonly!=&amp;quot;1&amp;quot;){
+			var str= newval;
+			if(newshowval!=&amp;quot;&amp;quot;)str=newshowval;
+			//sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:100%;height:100%\&amp;quot; onclick=\&amp;quot;f_cell_entry(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot;&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;\n&amp;lt;span style=\&amp;quot;padding-left:3px;padding-right:3px;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos; innerval=&amp;apos;&amp;quot;+newval+&amp;quot;&amp;apos; showval=&amp;apos;&amp;quot;+newshowval+&amp;quot;&amp;apos; celllock=&amp;apos;&amp;quot;+readonly+&amp;quot;&amp;apos; ctrltype=\&amp;quot;text\&amp;quot; cellformat=\&amp;quot;\&amp;quot;  &amp;gt;&amp;quot;+str+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;\n&amp;lt;input type=text id=&amp;apos;INPUT_&amp;quot;+valid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; value=\&amp;quot;\&amp;quot;  onkeydown=\&amp;quot;f_cell_keydown(event);\&amp;quot; onblur=\&amp;quot;f_cell_unentry(0,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;);\&amp;quot; onchange=\&amp;quot;try{_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);}catch(eeee){}\&amp;quot;  style=\&amp;quot;margin:0px;display:none;border: 0px solid #0A246A; width:&amp;quot;+thiswidth+&amp;quot;;height:100%;\&amp;quot;&amp;gt;\n&amp;quot;);
+			//sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);	
+
+		}
+		else sb.append(newval);// 如果是不可以修改，内容是什么，就返回什么
+
+//		else if(kjtype==&amp;quot;text&amp;quot;&amp;&amp;readonly==&amp;quot;0&amp;quot;){
+//			sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;display:none;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+newval+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+//			sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;display:none;\&amp;quot; id=&amp;apos;&amp;quot;+showvalid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+newshowval+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+//			sb.append(&amp;quot;&amp;lt;input type=text id=&amp;apos;INPUT_&amp;quot;+valid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;  onchange=\&amp;quot;_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);\&amp;quot;  value=&amp;apos;&amp;quot;+newval+&amp;quot; &amp;quot;+newshowval+&amp;quot;&amp;apos; style=\&amp;quot;font-size:9pt;border: 0px solid #0A246A;padding-left:5px; width:&amp;quot;+thiswidth +&amp;quot;;height:100%;\&amp;quot;&amp;gt;&amp;quot;);
+//			//sb.append(&amp;quot;&amp;lt;input type=text id=&amp;apos;&amp;quot;+showvalid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; onchange=\&amp;quot;_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);\&amp;quot;  value=\&amp;quot;&amp;quot;+newshowval+&amp;quot;\&amp;quot; style=\&amp;quot;font-size:9pt;border: 0px solid #0A246A;font-size:9pt;padding-left:5px; width:&amp;quot;+thiswidth +&amp;quot;;height:100%;&amp;quot;+showvaldisplaycss +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;);
+//
+//		}	
+//		else if(readonly==&amp;quot;0&amp;quot;){
+//			sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;display:none;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+newval+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+//			sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;display:none;\&amp;quot; id=&amp;apos;&amp;quot;+showvalid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+newshowval+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+//			sb.append(&amp;quot;&amp;lt;input type=text id=&amp;apos;INPUT_&amp;quot;+valid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;  onchange=\&amp;quot;_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);\&amp;quot;  value=&amp;apos;&amp;quot;+newval+&amp;quot; &amp;quot;+newshowval+&amp;quot;&amp;apos; style=\&amp;quot;font-size:9pt;border: 0px solid #0A246A;font-size:9pt;padding-left:5px; width:&amp;quot;+thiswidth +&amp;quot;;height:100%;\&amp;quot;&amp;gt;&amp;quot;);
+//			//sb.append(&amp;quot;&amp;lt;input type=text id=&amp;apos;&amp;quot;+showvalid+&amp;quot;&amp;apos; name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos; onchange=\&amp;quot;_thisOnCellModify(&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;apos;&amp;apos;,this.value);\&amp;quot;  value=\&amp;quot;&amp;quot;+newshowval+&amp;quot;\&amp;quot; style=\&amp;quot;font-size:9pt;border: 0px solid #0A246A;font-size:9pt;padding-left:5px; width:&amp;quot;+thiswidth +&amp;quot;;height:100%;&amp;quot;+showvaldisplaycss +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;);
+//
+//
+//		}
+//		else {
+//			sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;&amp;quot;+valdisplaycss +&amp;quot;\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+newval+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+//			sb.append(&amp;quot;&amp;lt;span style=\&amp;quot;padding-left:5px;padding-right:5px;&amp;quot;+showvaldisplaycss +&amp;quot;\&amp;quot; id=&amp;apos;&amp;quot;+showvalid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+newshowval+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;);
+//
+//		}
+		
+
+		
+
+	}
+	}catch(e){
+		throw new Exception(&amp;quot;showContent:error&amp;quot;+e.toString());
+	}
+	sb.append(&amp;quot;&amp;lt;/TD&amp;gt;&amp;quot;);    
+}
+//得到主数据区的 SQL语句
+function getMainSQL(sytid,mwid,m_usrinfo,dsshow,m_dscds,request){
+	var sql = &amp;quot;&amp;quot;;
+      for (var i=0;i&amp;lt;dsshow.getRowCount();i++)
+      {
+        var dskey = dsshow.get(i,&amp;quot;DSKEY&amp;quot;);
+        var arrDs = dskey.split(&amp;quot;,&amp;quot;);
+        if (arrDs.length == 1 &amp;&amp; dskey.indexOf(&amp;quot;DSC:&amp;quot;) &amp;gt; -1 &amp;&amp; dskey.indexOf(&amp;quot;,&amp;quot;)&amp;lt;0 )  //2010/6 忽略DSC:MAIN,0,0
+        {
+        	var dscid=arrDs[0].substring(4); 
+        	if(m_dscds!=null){
+		      var keyidx = m_dscds.getColumnLoc(&amp;quot;GRDDS_ID&amp;quot;);
+		      var validx = m_dscds.getColumnLoc(&amp;quot;DATDSC&amp;quot;);
+		      sql = m_dscds.FindasHashMap(dscid,keyidx,validx);
+		      if(sql==null || sql==&amp;quot;&amp;quot; ) throw new Exception ( &amp;quot;数据源&amp;quot;+dscid+&amp;quot;没有定义SQL语句&amp;quot;);
+		      //m_curdsid = dscid;
+			//交叉表信息
+			var m_isCross = &amp;quot;1&amp;quot;.equals(dsshow.getStringDef(i, &amp;quot;GRDSHW_ISCROSS&amp;quot;, &amp;quot;&amp;quot;));
+			var m_showPages = &amp;quot;1&amp;quot;.equals(dsshow.getStringDef(i,&amp;quot;PAGES&amp;quot;,&amp;quot;&amp;quot;));
+			var m_showPagesize = Integer.parseInt(dsshow.getStringDef(i,&amp;quot;PAGESIZE&amp;quot;,&amp;quot;-1&amp;quot;));
+			var m_initDynCtrl = &amp;quot;1&amp;quot;.equals(dsshow.getStringDef(i,&amp;quot;DYNCTL&amp;quot;,&amp;quot;&amp;quot;));
+			var m_dbname = dsshow.getStringDef(i, EAMidWareUtil.GRDSHW_DBNAME, &amp;quot;&amp;quot;);      
+			var m_isCrossIncludeHead = &amp;quot;1&amp;quot;.equals(dsshow.getStringDef(i, &amp;quot;HROW&amp;quot;, &amp;quot;&amp;quot;));
+			var m_detailDscID=arrDs[0].substring(4);
+		      
+		      //sql = ExpandEmbedSql(sql,1);//展开SQL中直接嵌入的其它报表的数据源,如：select * from ([@310.Detail])
+			////给脚本一个处理参数的机会
+			//var result = &amp;quot;&amp;quot;+ servletpack.RunScript.ExecMwOsEx(sytid,mwid,&amp;quot;replaceParam&amp;quot;,new Object[]{this,request,sql});
+			//if(result!=&amp;quot;&amp;quot; &amp;&amp; result!=&amp;quot;null&amp;quot;) sql= result;
+//			sql = webpack.EASession.GetSysValue(sql,m_usrinfo);
+//		    
+//			for ( var i = 0 ; i &amp;lt; m_paramds.getRowCount(); i ++ ) {    
+//		      	sql = EAFunc.Replace(ret,&amp;quot;[%&amp;quot;+(i+1)+&amp;quot;]&amp;quot;,m_paramds.getStringAt(i,&amp;quot;VALUE&amp;quot;) );
+//			}
+//			for ( int i = 0 ; i &amp;lt; m_paramds.getRowCount(); i ++ ) {    
+//				sql = pubpack.EAFunc.Replace(ret,&amp;quot;[%&amp;quot;+m_paramds.getStringAt(i,&amp;quot;ID&amp;quot;)+&amp;quot;]&amp;quot;,m_paramds.getStringAt(i,&amp;quot;VALUE&amp;quot;) );
+//			}
+//			ret = pubpack.EAFunc.Replace(ret,&amp;quot;[]&amp;quot;,&amp;quot;&amp;quot;);
+		    //EALog.debug(&amp;quot; [  replaceParam  完成参数条件替换的查询数据源sql：&amp;quot;+ret+&amp;quot; ] &amp;quot;);    
+		}
+          
+          break;
+        }
+      }
+      return sql;
+}
+function getDSColumnName(ds,idx)
+{
+	try {
+		return ds.getColumnName(idx);
+	}catch(e){
+		
+	}
+	return &amp;quot;&amp;quot;;
+}
+//selectbox 的服务端
+function getSelect() {
+	var db = new pubpack.EADatabase();
+	var ds = null;
+	var html =&amp;quot;&amp;quot;;
+	var sql1 = &amp;quot;select * from ( select * from (
+		select name , id ,seqid from &amp;quot;+tables+&amp;quot; where to_char(seqid) = &amp;apos;&amp;quot;+value+&amp;quot;&amp;apos; or name like &amp;apos;%&amp;quot;+value+&amp;quot;%&amp;apos; or UPPER(id) like UPPER(&amp;apos;%&amp;quot;+value+&amp;quot;%&amp;apos;) or UPPER(note) like UPPER(&amp;apos;&amp;quot;+value+&amp;quot;%&amp;apos;) 
+		)where rownum&amp;lt;=30 ) order by seqid&amp;quot;;
+
+	var sql0 = &amp;quot;select * from (
+		select name , id from &amp;quot;+tables+&amp;quot; where name like &amp;apos;%&amp;quot;+value+&amp;quot;%&amp;apos; or UPPER(id) like UPPER(&amp;apos;%&amp;quot;+value+&amp;quot;%&amp;apos;) or UPPER(note) like UPPER(&amp;apos;&amp;quot;+value+&amp;quot;%&amp;apos;)
+		)where rownum&amp;lt;=30 order by id&amp;quot;;
+	var sql = &amp;quot;select * from (
+		select name , id from &amp;quot;+tables+&amp;quot; where name like &amp;apos;%&amp;quot;+value+&amp;quot;%&amp;apos; or UPPER(id) like UPPER(&amp;apos;%&amp;quot;+value+&amp;quot;%&amp;apos;)
+		)where rownum&amp;lt;=30 order by id&amp;quot;;
+	
+	try {
+		try{
+			ds = db.QuerySQL(sql1);
+			
+
+		}
+		catch(e) {
+			try{
+				ds = db.QuerySQL(sql0);
+			}
+			catch(e){
+				ds = db.QuerySQL(sql);
+	
+			}
+		}
+	
+		if(ds.getRowCount() == 0){
+			 html += &amp;quot;&amp;lt;p&amp;gt;未检索到与&amp;lt;font style=&amp;apos;font-weight:bold&amp;apos;&amp;gt; &amp;quot;+value+&amp;quot; &amp;lt;/font&amp;gt;相关的信息。&amp;lt;/p&amp;gt;&amp;quot;;		 
+			 return html;
+		}			
+		if(ds.getRowCount()&amp;gt;0){ 
+			html +=&amp;quot;&amp;lt;ul id=&amp;apos;booksearch_list&amp;apos; style=\&amp;quot;float:left;margin:0px;padding:0px;height:100%;width:100%;\&amp;quot;&amp;gt;&amp;quot;;
+			for(var i=0;i&amp;lt;ds.getRowCount();i++){
+				var name=ds.getValueAt(i,&amp;quot;name&amp;quot;);
+				var id=ds.getValueAt(i,&amp;quot;id&amp;quot;);
+				var seqid = ds.getValueDef(i,&amp;quot;seqid&amp;quot;,&amp;quot;&amp;quot;);
+				if(seqid!=&amp;quot;&amp;quot;)name = &amp;quot;(&amp;quot;+seqid+&amp;quot;)&amp;quot;+name;
+				html+=&amp;quot;&amp;lt;li style=\&amp;quot;align:left;width:100%\&amp;quot; id=&amp;apos;&amp;quot;+valid+&amp;quot;li2_&amp;quot;+i+&amp;quot;&amp;apos; onmousemove=this.style.backgroundColor=&amp;apos;#D7D7D7&amp;apos; onmouseout=this.style.backgroundColor=&amp;apos;#FFFFFF&amp;apos; idval=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; onclick=&amp;apos;G_CLOSECLICKEVENT = true;setBSName(&amp;quot;+i+&amp;quot;,\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot;,\&amp;quot;&amp;quot;+valid+&amp;quot;\&amp;quot;)&amp;apos;&amp;gt;&amp;quot;+name;
+				html+=&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+			}
+			html +=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+		}
+		
+		return html;
+	}catch(e){
+		return ;
+	}finally{
+		if(db!=null){db.Close();}
+	}
+}
+
+//获取关键字的显示值
+function genSelectBox()
+{
+	var db=null;
+	var sql=&amp;quot;&amp;quot;;
+	var ret=&amp;quot;&amp;quot;;
+	var ds = null;
+	var spec =&amp;quot;&amp;quot;;
+	
+	var id= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;id&amp;quot;),&amp;quot;&amp;quot;) ;
+	var key= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;key&amp;quot;),&amp;quot;&amp;quot;) ;
+
+	
+	try{
+		db = new pubpack.EADatabase();
+		sql=&amp;quot;SELECT id||&amp;apos;~&amp;apos;||name spec FROM &amp;quot;+key+&amp;quot; WHERE ID =&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+		var sql0=&amp;quot;SELECT id||&amp;apos;~&amp;apos;||name spec FROM &amp;quot;+key+&amp;quot; WHERE SEQID =&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+		try{ ds=db.QuerySQL(sql0); }
+		catch(ee){
+
+			ds=db.QuerySQL(sql);
+		}
+		if(ds.getRowCount()&amp;gt;=&amp;quot;1&amp;quot;){
+			spec =ds.getStringAt(0,&amp;quot;spec&amp;quot;);
+			return spec ;	
+		}		
+					
+	} catch(e){
+		db.Rollback();
+		return e.toString();
+		throw new Exception(e.toString());
+	} finally {
+		if(db!=null) db.Close();
+	}
+
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

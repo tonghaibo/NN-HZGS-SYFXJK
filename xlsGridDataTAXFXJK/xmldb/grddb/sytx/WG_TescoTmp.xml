@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_TescoTmp</MWID><NAME >乐购</NAME><NOTE >品号取第二行</NOTE><NOACCNAME ></NOACCNAME><FILE >WG_TescoTmp.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);
+	_this.SaveTextFile( &amp;quot;d:/Tesco.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var protocolpack = new JavaPackage(&amp;quot;org.apache.commons.httpclient.protocol&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+var httpcall = new webget.HttpCall();
+var HtmlParser = new x_WG_HtmlParser();
+//var order = new pubpack.EAXmlDS();
+//var row = -1;
+
+var msg = &amp;quot;&amp;quot;;
+
+function start()
+{
+	return getOrderStr(&amp;quot;GMHD&amp;quot;,&amp;quot;2013-01-24&amp;quot;,&amp;quot;00071&amp;quot;,&amp;quot;T101187&amp;quot;,&amp;quot;b60299101187&amp;quot;,&amp;quot;dept&amp;quot;,&amp;quot;utf-8&amp;quot;);
+}
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var param = &amp;quot;&amp;quot;;
+	var url = &amp;quot;&amp;quot;;
+	var db=&amp;quot;&amp;quot;;
+	var sql=&amp;quot;&amp;quot;;
+	var msg=&amp;quot;&amp;quot;;
+	try
+	{
+	       db=new pubpack.EADatabase();
+	       //日期用用户输入的日期，编码格式这里强制改为utf-8
+	       code=&amp;quot;utf-8&amp;quot;;
+	       var dat1=dat;
+	       var dat2=dat;
+		url = &amp;quot;https://tesco.chinab2bi.com&amp;quot;;
+		ret = httpcall.Get(url+&amp;quot;/mainLogon.hlt&amp;quot;,code);
+		param = &amp;quot;j_captcha=&amp;j_username=&amp;quot;+userid+&amp;quot;&amp;j_password=&amp;quot;+passwd+&amp;quot;&amp;Submit=   登录&amp;quot; ;
+		ret = httpcall.Post(url+&amp;quot;/j_spring_security_check&amp;quot;,param,code);
+		//供应商编号
+		param = &amp;quot;downFlag=&amp;readFlag=&amp;page.jumpNumber=1&amp;page.pageNo=1&amp;page.totalPages=2&amp;page.pageSize=100&amp;orderDateStart=&amp;quot;+dat1+&amp;quot;&amp;orderDateEnd=&amp;quot;+dat1+&amp;quot;&amp;parentVendor=101187&amp;vendor=10000704&amp;page.togglestatus=null&amp;status=sell&amp;quot; ;
+		ret = httpcall.Post(url+&amp;quot;/tesco/sp/purOrder/sellPubOrderQry.hlt&amp;quot;,param,code);//查询
+	        ret =GetBillist(ret,httpcall,userid,dat,deptid,kaid,code);
+	        msg+=ret ;
+	}
+	catch(e)
+	{
+	 	db.Rollback();
+		throw new Exception(e);
+	}
+	finally{
+		if(db!=&amp;quot;&amp;quot;){
+			db.Close();
+		}
+	}
+	//throw new Exception(msg);
+	return msg;
+}
+
+//递归，取出单据列表
+function GetBillist(node,httpcall,userid,dat ,deptid,kaid,code)
+{
+	
+			 /*  具体订单的商品信息  ds格式
+					&amp;lt;ROW num=&amp;quot;1&amp;quot; &amp;gt;
+						&amp;lt;_序号&amp;gt;2&amp;lt;/_序号&amp;gt;
+						&amp;lt;_供应商编号&amp;gt;100255&amp;lt;/_供应商编号&amp;gt;
+						&amp;lt;_供应商8位编号&amp;gt;12255751&amp;lt;/_供应商8位编号&amp;gt;
+						&amp;lt;_供应商名称&amp;gt;上海捷强烟草糖酒集团配销中心&amp;lt;/_供应商名称&amp;gt;
+						&amp;lt;_通知日期&amp;gt;2012-12-21&amp;lt;/_通知日期&amp;gt;
+						&amp;lt;_通知状态&amp;gt;已阅读&amp;lt;/_通知状态&amp;gt;
+						&amp;lt;_下载状态&amp;gt;已下载&amp;lt;/_下载状态&amp;gt;
+						&amp;lt;_最后一次访问IP&amp;gt;218.242.148.242&amp;lt;/_最后一次访问IP&amp;gt;
+						&amp;lt;_最后访问时间&amp;gt;2012-12-2413:34&amp;lt;/_最后访问时间&amp;gt;
+						&amp;lt;_最后下载IP&amp;gt;218.242.148.242&amp;lt;/_最后下载IP&amp;gt;
+						&amp;lt;_最后下载时间&amp;gt;2012-12-2413:34&amp;lt;/_最后下载时间&amp;gt;
+						&amp;lt;_操作&amp;gt;&amp;quot;#&amp;quot;onclick=&amp;quot;openPDF(&amp;apos;2050606&amp;apos;,&amp;apos;100255&amp;apos;,&amp;apos;MERGE_12255751@supplier.cn.tesco.com_20121221132444.txt&amp;apos;,&amp;apos;2012-12-2113:29:08.0&amp;apos;)&amp;quot;&amp;gt;[明细]&amp;lt;/_操作&amp;gt;
+						&amp;lt;_操作__操作&amp;gt;&amp;quot;#&amp;quot;onclick=&amp;quot;downPDF(&amp;apos;2050606&amp;apos;,&amp;apos;100255&amp;apos;,&amp;apos;MERGE_12255751@supplier.cn.tesco.com_20121221132444.txt&amp;apos;,&amp;apos;2012-12-2113:29:08.0&amp;apos;)&amp;quot;&amp;gt;[PDF下载]&amp;lt;/_操作__操作&amp;gt;
+					&amp;lt;/ROW&amp;gt;
+			*/
+			
+			node=pub.EAFunc.Replace(node,&amp;quot;&amp;lt;th&amp;gt;&amp;quot;,&amp;quot;&amp;lt;td&amp;gt;&amp;quot;);//替换
+			node=pub.EAFunc.Replace(node,&amp;quot;&amp;lt;/th&amp;gt;&amp;quot;,&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;);//替换
+			node=pub.EAFunc.Replace(node,&amp;quot;&amp;lt;a href=&amp;quot;,&amp;quot;&amp;quot;);//替换
+			node=pub.EAFunc.Replace(node,&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;,&amp;quot;&amp;quot;);//替换
+			
+			var nodelist = HtmlParser.parserHtml(node,code); 
+			var tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;); 
+			var ds = HtmlParser.parserTableOne(tablist,code,new Array(&amp;quot;5&amp;quot;));
+			//throw new Exception(ds.GetXml());
+			//分析具体的单子
+			var url=&amp;quot;https://tesco.chinab2bi.com&amp;quot;;
+			var param=&amp;quot;&amp;quot;;
+			var createDate=&amp;quot;&amp;quot;;
+			var str =&amp;quot;&amp;quot;;
+			var fileName=&amp;quot;&amp;quot;;
+			var poid=&amp;quot;&amp;quot;;
+			var parentVendor=&amp;quot;&amp;quot;;
+			for (var r=0;r&amp;lt;ds.getRowCount();r++){ 
+				str=ds.getStringAt(r,&amp;quot;_操作&amp;quot;);
+				str=str.substring(str.indexOf( &amp;quot;(&amp;quot; )+1,str.indexOf( &amp;quot;)&amp;quot; ));
+				var strsplits =str.split(&amp;quot;,&amp;quot;);
+				//strsplits[0] =2054340
+				//strsplits[1] =100255
+				//strsplits[2] =MERGE_12255751@supplier.cn.tesco.com_20121221185044.txt
+				//strsplits[3] =2012-12-2118:58:59.0
+				createDate=strsplits[3];
+				createDate=createDate.substring(1,11);
+				createDate=pub.EAFunc.Replace(createDate,&amp;quot;-&amp;quot;,&amp;quot;&amp;quot;);//替换
+				fileName=strsplits[2];
+				fileName=fileName.substring(1,fileName.length()-1);
+				poid=strsplits[0];
+				poid=poid.substring(1,poid.length()-1);
+				parentVendor=strsplits[1];
+				parentVendor=parentVendor.substring(1,parentVendor.length()-1);
+				param=&amp;quot;seed&amp;fileName=&amp;quot;+fileName+&amp;quot;&amp;createDate=&amp;quot;+createDate+&amp;quot;&amp;poId=&amp;quot;+poid+&amp;quot;&amp;parentVendor=&amp;quot;+parentVendor+&amp;quot;&amp;quot;;
+				var txt = httpcall.Post(url+&amp;quot;/tesco/sp/purOrder/pdfView.hlt&amp;quot;,param,code);
+				if(msg != &amp;quot;&amp;quot;)
+		          	msg += &amp;quot;╃&amp;quot;;
+		          	msg += parseOneBill(httpcall,txt,userid,deptid,kaid);
+				
+			}
+			return msg ;
+   }
+
+//解析一张单据
+//httpcall
+//str：单据的文本
+//返回：字符串分割的字符
+function  parseOneBill(httpcall,str,userid,deptid,kaid)
+{
+      /**
+	*		               TESCO 乐  购  商  品  订  单
+	*	    店别:  上海大华店                     页1  页
+	*	─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+	*	  订单号码  12000323          促销期数                    紧急订单                  
+	*	  订单日期  2012/12/21        交货日期  2012/12/25        订单类型  -DSD PO-        
+	*	  电  话    66405003          传  真                                                
+	*	  店  址    上海大华路518号                               邮  编                    
+	*	  厂商编号  12255751                                      名  称    上海捷强烟草糖酒集团配销中心-
+	*	  电  话    02158357527       传  真    02158203461       联 系 人  徐菁            
+	*	  地  址    浦东新区张杨路579号9楼三鑫世界大厦            邮  编    200120          
+	*	  备  注                                                
+	*	─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+	*	 商品货号/       品名                           规格     订购   箱   单件成本     成本   总成本 订购数量     应交 应交单件  订单     促销
+	*	 单个商品货号                                   国际条码 单位   入数                            搭赠数量     总数 总数      (Ti Hi)  票折
+	*	─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+	*	 150502662/      SP_24_52度泸州老窖头曲1        瓶       箱       24     9.23   221.54   221.54        1        1       24    1    1 N   
+	*	 103067890       25ml/瓶                        6901798132611                                       0.00                             Y   
+	*
+	*	─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+	*	 Terms &amp; Conditions /  备注 :                                                    
+	*	 1.收货时间 周一至周六5 30-19 00 周日5 30-12 00 大进货期间周一至周日8 00-21 00
+	*	 ......
+	*	 9.商品单价不包含供应商在商品购销合同中承诺给予的折扣!
+	*	─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+	*/
+	var ret = str;
+	var title_param = &amp;quot;TESCO 乐  购  商  品  订  单\n&amp;quot;;
+	var title_params = ret.split(title_param);                         
+	var line = &amp;quot;─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\n&amp;quot;;
+	var msgs = &amp;quot;&amp;quot;;
+	for(var r = 1;r &amp;lt; title_params.length();r ++)
+	{
+		var lines = title_params[r].split(line);
+		var corpnam = lines[0].substring(lines[0].indexOf(&amp;quot;:&amp;quot;)+3,lines[0].indexOf(&amp;quot;页&amp;quot;)); 
+		corpnam  = EAfunc.regexReplace(corpnam , &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		if (corpnam.indexOf(&amp;quot;EXPRESS&amp;quot;) != -1) break;
+		var bilid = lines[1].substring(lines[1].indexOf(&amp;quot;订单号码&amp;quot;)+6,lines[1].indexOf(&amp;quot;促销期数&amp;quot;));//订单编号
+		bilid = EAfunc.regexReplace(bilid, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		var date = lines[1].substring(lines[1].indexOf(&amp;quot;订单日期&amp;quot;)+6,lines[1].indexOf(&amp;quot;交货日期&amp;quot;));//订单日期
+		date = EAfunc.regexReplace(date, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		//dd/mm/yyyy
+		var _date = date.split(&amp;quot;/&amp;quot;)[2]+&amp;quot;/&amp;quot;+date.split(&amp;quot;/&amp;quot;)[1]+&amp;quot;/&amp;quot;+date.split(&amp;quot;/&amp;quot;)[0];
+		var addrdate = lines[1].substring(lines[1].indexOf(&amp;quot;交货日期&amp;quot;)+6,lines[1].indexOf(&amp;quot;订单类型&amp;quot;));//交货日期
+		addrdate = EAfunc.regexReplace(addrdate, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		if (addrdate == &amp;quot;&amp;quot;) addrdate = date;
+		var _addrdate = addrdate.split(&amp;quot;/&amp;quot;)[2]+&amp;quot;/&amp;quot;+addrdate.split(&amp;quot;/&amp;quot;)[1]+&amp;quot;/&amp;quot;+addrdate.split(&amp;quot;/&amp;quot;)[0];
+		var tel = lines[1].substring(lines[1].indexOf(&amp;quot;电  话&amp;quot;)+6,lines[1].indexOf(&amp;quot;传  真&amp;quot;));//电话
+		tel = EAfunc.regexReplace(tel, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		var fax = lines[1].substring(lines[1].indexOf(&amp;quot;传  真&amp;quot;)+6,lines[1].indexOf(&amp;quot;店  址&amp;quot;));//传真
+		fax = EAfunc.regexReplace(fax, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		var addr = lines[1].substring(lines[1].indexOf(&amp;quot;店  址&amp;quot;)+6,lines[1].indexOf(&amp;quot;邮  编&amp;quot;));//地址
+		addr = EAfunc.regexReplace(addr, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+//		throw new Exception(&amp;quot;corpnam&amp;quot;+corpnam+&amp;quot;,bilid=&amp;quot;+bilid+&amp;quot;,date=&amp;quot;+_date+&amp;quot;,addrdate=&amp;quot;+_addrdate+&amp;quot;,tel=&amp;quot;+tel+&amp;quot;,fax=&amp;quot;+fax+&amp;quot;\n,addr=&amp;quot;+addr);
+                //双引号里面的\r代表换行符
+		var details = lines[3].split(&amp;quot;\n&amp;quot;);
+		//throw  new Exception(lines[1]);
+		var count = 1;
+		for(var details_r = 0;details_r &amp;lt; details.length();details_r++)
+		{
+			if(details[details_r].length() &amp;gt; 0&amp;&amp;details[details_r] != &amp;quot;───&amp;quot;)
+			{
+				var detail = EAfunc.regexReplace(details[details_r] , &amp;quot;\\s+&amp;quot;,&amp;quot;,&amp;quot;);//抓明细
+				var detail1 = EAfunc.regexReplace(details[details_r+1] , &amp;quot;\\s+&amp;quot;,&amp;quot;,&amp;quot;);//抓明细
+//				,102717619/,椰岛鹿龟酒一星33度/500,瓶,个,12,-,-,12.00,-,12.00,12.00,1,1,***,6901160007073,ml/瓶,0.00,	
+				var itmid = detail1.split(&amp;quot;,&amp;quot;)[1];
+			
+				var _itmnam = &amp;quot;&amp;quot;;
+				var zpqty = &amp;quot;&amp;quot;;
+			
+				if(detail1.split(&amp;quot;,&amp;quot;).length() &amp;gt; 2)
+					_itmnam = detail1.split(&amp;quot;,&amp;quot;)[2];
+				zpqty = detail1.split(&amp;quot;,&amp;quot;)[detail1.split(&amp;quot;,&amp;quot;).length()-2];
+
+//				if((detail1.split(&amp;quot;,&amp;quot;)[3]).indexOf(&amp;quot;.&amp;quot;) == -1)
+//				{
+//					_itmnam = detail1.split(&amp;quot;,&amp;quot;)[2];
+//					zpqty = detail1.split(&amp;quot;,&amp;quot;)[4];
+//				}
+//				else
+//				{
+//					zpqty = detail1.split(&amp;quot;,&amp;quot;)[3];
+//				}
+			
+				if(msgs != &amp;quot;&amp;quot;)
+				 	msgs += &amp;quot;╃&amp;quot;;
+				//srflg,userid,deptid,kaid,bilid,ecorpnam,ecorpid,itmclass,ordid,dat,arrdat,tel,fax,seqid,eitmid,code,spec,eitmnam,untnum,qtyflg,qty,zpqty,eprice,corpaddr,note,EBOPTION,org
+				//&amp;100143587&amp;渔夫之宝特强薄荷糖(&amp;盒&amp;EA&amp;12&amp;12.00&amp;0&amp;12.00&amp;1&amp;1&amp;原味)/11g/盒
+				//SRFLG~~~USERID~~~DEPTID~~~KAID~~~BILID~~~ECORPNAM~~~ECORPID~~~ITMCLASS~~~ORDID~~~DAT~~~ARRDAT~~~
+				//TEL~~~FAX~~~SEQID~~~EITMID~~~CODE~~~SPEC~~~EITMNAM~~~
+				//QTYFLG~~~UNTNUM~~~QTY~~~ZPQTY~~~EPRICE~~~CORPADDR~~~NOTE~~~NULL
+				msgs += &amp;quot;NR ~~~&amp;quot;+userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~ ~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+_date+&amp;quot;~~~&amp;quot;+_addrdate+&amp;quot;~~~&amp;quot;+
+					tel+&amp;quot;~~~&amp;quot;+fax+&amp;quot;~~~&amp;quot;+count+&amp;quot;~~~&amp;quot;+itmid+&amp;quot;~~~ ~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[3]+&amp;quot;~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[2]+_itmnam+
+					&amp;quot;~~~ ~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[5]+&amp;quot;~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[9]+&amp;quot;~~~&amp;quot;+zpqty+&amp;quot;~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[6]+&amp;quot;~~~&amp;quot;+addr+&amp;quot;~~~ ~~~ &amp;quot;;
+				count ++;
+				details_r++;
+			}
+		}
+	}
+	return msgs;
+
+}
+
+//将字符串中的某些字符替换成&amp;quot;&amp;quot;
+function ReploaceStatment(str,array)
+{
+	
+	for(var r = 0;r &amp;lt; array.length() ;r ++)
+	{
+		var replacestatment = array[r];
+		while(true)
+		{
+			if (str.indexOf(replacestatment)&amp;gt;-1)			
+				str = EAfunc.Replace(str,replacestatment,&amp;quot;&amp;quot;);	
+			else
+			     break;
+		}
+	}
+	return str;
+}
+
+function DeleteSameStatment(str,replacement1,replacement2)
+{
+	var strs = str.split(replacement1);
+	var strs_1 = strs[1];
+	for(var r = 2;r &amp;lt; strs.length()-1;r ++)
+	{
+		if(strs[r+1] == replacement2&amp;&amp;strs[r] == strs[r+1])
+		{
+			strs[r] = EAfunc.Replace(strs[r],replacement2,&amp;quot;&amp;quot;);
+			strs_1 += strs[r];
+		}
+		else
+			strs_1 += strs[r];
+	}
+	return strs_1;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GRDDSCDS_0</ID><NAME ></NAME><DATDSC ></DATDSC></ROW>
+<ROW num="1" ><ID >GETDAT</ID><NAME ></NAME><DATDSC >select to_char(sysdate,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;-01&amp;apos; dat1,to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) dat2 from dual</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

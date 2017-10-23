@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >framechartlefttop</MWID><NAME >表格嵌套动态分析图入口-左上角</NAME><NOTE ></NOTE><NOACCNAME >0</NOACCNAME><FILE >framechartlefttop.zxg</FILE><SCENE ></SCENE><FIXED >5,1</FIXED><CATTYP >SS</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >0</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var web = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+var grd = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var tag = new JavaPackage(&amp;quot;com.xlsgrid.net.tag&amp;quot;);
+var xmldsform = new tag.XmlDSForm();
+var EAfunc = new pubpack.EAFunc();
+//作为.sp服务时的入口	
+//预定义变量：request,response
+function Response()
+{
+	var db = null;
+        var ret= &amp;quot;&amp;quot;;
+        var sql = &amp;quot;&amp;quot;;
+        var _sql = &amp;quot;&amp;quot;;
+        var ds = null;
+        var _ds = null;
+        var GHtml = &amp;quot;&amp;quot;;
+	var SYTID = pub.EAFunc.NVL(request.getParameter(&amp;quot;sytid&amp;quot;),&amp;quot;&amp;quot;);
+	
+
+	var usr = web.EASession.GetLoginInfo(request);
+	if (SYTID == &amp;quot;&amp;quot; || SYTID == null){
+		SYTID = usr.getSytid();
+	}
+      var ret= &amp;quot;&amp;quot;;
+      var leftgrdid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftgrdid&amp;quot;),&amp;quot;&amp;quot;);
+      var lefturl = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;lefturl&amp;quot;),&amp;quot;&amp;quot; );
+      if(leftgrdid!=&amp;quot;&amp;quot;)lefturl=&amp;quot;show.sp?grdid=&amp;quot;+leftgrdid;
+      var rightgrdid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightgrdid&amp;quot;),&amp;quot;&amp;quot;);
+      var righturl = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;righturl&amp;quot;),&amp;quot;&amp;quot; );
+      if (rightgrdid!=&amp;quot;&amp;quot; &amp;&amp; righturl==&amp;quot;&amp;quot;)righturl= &amp;quot;show.sp?grdid=&amp;quot;+rightgrdid;
+      var rightflowid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightflowid&amp;quot;),&amp;quot;&amp;quot;);
+      var rightflowsytid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightflowsyt&amp;quot;),&amp;quot;&amp;quot;);
+      var charttype= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;defcharttype&amp;quot;),&amp;quot;&amp;quot;);
+      	if(charttype==&amp;quot;&amp;quot;) charttype = &amp;quot;Funnel&amp;quot;;
+	
+      
+      if ( rightflowid !=&amp;quot;&amp;quot; ) {
+      		righturl = &amp;quot;flow.jsp?flowid=&amp;quot;+rightflowid ;
+      		if (rightflowsytid !=&amp;quot;&amp;quot; ) righturl += &amp;quot;&amp;syt=&amp;quot;+rightflowsytid ;
+      }
+      var leftflowid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftflowid&amp;quot;),&amp;quot;&amp;quot;);
+      var leftflowsytid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftflowsyt&amp;quot;),&amp;quot;&amp;quot;);
+      if ( leftflowid !=&amp;quot;&amp;quot; ) {
+      		lefturl = &amp;quot;flow.jsp?flowid=&amp;quot;+leftflowid ;
+      		if (leftflowsytid !=&amp;quot;&amp;quot; ) lefturl += &amp;quot;&amp;syt=&amp;quot;+leftflowsytid ;
+      }
+      //加载所有的参数
+      var paramlist = pubpack.EAFunc.GetRequestQueryString(request);
+      if (lefturl!=&amp;quot;&amp;quot;&amp;&amp;paramlist!=&amp;quot;&amp;quot; ) {
+  	lefturl+=&amp;quot;&amp;&amp;quot;+paramlist;
+      }
+      if (righturl!=&amp;quot;&amp;quot;&amp;&amp;paramlist!=&amp;quot;&amp;quot; ) {
+  	righturl+=&amp;quot;&amp;&amp;quot;+paramlist;
+      }
+      //加载GUID
+//      var GUID = pub.EAFunc.NVL(request.getParameter(&amp;quot;guid&amp;quot;),&amp;quot;&amp;quot;);
+//      if(GUID!=&amp;quot;&amp;quot;&amp;&amp;lefturl!=&amp;quot;&amp;quot;) 
+//      	lefturl = lefturl + &amp;quot;&amp;guid=&amp;quot;+GUID;
+//      if(GUID!=&amp;quot;&amp;quot;&amp;&amp;righturl!=&amp;quot;&amp;quot;) 
+//      	righturl= righturl+ &amp;quot;&amp;guid=&amp;quot;+GUID;
+      	
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            
+          
+
+	  var optionstr = &amp;quot;&amp;quot;;
+	  var optionds = db.QuerySQL(&amp;quot;select * from v_charttype&amp;quot;);
+            
+            for(var r = 0;r &amp;lt;optionds .getRowCount();r ++)
+            {	//有多少个主题
+            	    var id = optionds .getStringAt(r,&amp;quot;ID&amp;quot;);
+            	    var typ = optionds .getStringAt(r,&amp;quot;typ&amp;quot;);
+            	    var name = optionds .getStringAt(r,&amp;quot;name&amp;quot;);
+            	    if(id==&amp;quot;Funnel&amp;quot;||(typ ==&amp;quot;1&amp;quot;)){
+	            	    if (id==&amp;quot;Funnel&amp;quot;)
+	            	    	optionstr+=&amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;-&amp;quot;+typ+&amp;quot;&amp;apos; selected&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+	            	    else optionstr+=&amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;-&amp;quot;+typ+&amp;quot;&amp;apos; &amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+		    }
+	   }
+	  
+	     ret=&amp;quot;	&amp;lt;html&amp;gt;
+    			&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main.css&amp;apos;&amp;gt;
+    			&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;
+    			&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/images/flash/FusionCharts.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;
+			&amp;lt;head&amp;gt;
+			&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html; charset=gb2312&amp;apos;&amp;gt;
+			
+			&amp;lt;STYLE&amp;gt;
+    						.navPoint {
+					COLOR: #225f98; CURSOR: hand; FONT-FAMILY: &amp;apos;Webdings&amp;apos;; FONT-SIZE: 9pt
+					}
+			&amp;lt;/STYLE&amp;gt;
+			&amp;lt;script&amp;gt;
+				
+				function switchRBar()
+				{
+					if (RPoint.innerText==4)
+					{
+						RPoint.innerText=3;
+						rightTd.style.display =&amp;apos;none&amp;apos;; 
+    							rightTd.style.width = 10;
+					}
+					else
+					{
+						RPoint.innerText=4;
+						rightTd.style.display=&amp;apos;&amp;apos;; 
+   							rightTd.style.width = 400;
+					}
+				}
+
+				
+				      
+			      function SetRightURL(url){
+			        _grid.location=url;
+			      }
+			      
+			    function loadmainwnd ()
+			    {
+			    	_right.location = &amp;apos;&amp;quot;+lefturl +&amp;quot;&amp;apos;;
+			    
+			    }
+								
+			    //更新分析图1
+			    var chartxml1 = &amp;apos;&amp;apos;;
+			    var chartxml2 = &amp;apos;&amp;apos;;
+			    var charttype =  &amp;apos;&amp;quot;+charttype+&amp;quot;&amp;apos;;
+			    var chartdatatype = &amp;apos;1&amp;apos;;
+			    function f_setchartxml1(xml){	//多维度的XML格式
+			    	chartxml1  = xml;
+			    }	 
+			    function f_setchartxml2(xml){	//多维度的XML格式
+			    	chartxml2  = xml;
+			    }	 
+			    function f_chgchart()
+			    {
+   					var swf = document.all(&amp;apos;chgchart&amp;apos;).value;
+			    	var ss = swf.split(&amp;apos;-&amp;apos;);
+			    	var chart1 = new FusionCharts(&amp;apos;xlsgrid/images/flash/&amp;apos;+ss[0]+&amp;apos;.swf&amp;apos;, &amp;apos;ChartId1&amp;apos;, &amp;apos;400&amp;apos;, &amp;apos;300&amp;apos;); 
+			    	chartdatatype  = ss[1];
+			    	if ( ss[1]==&amp;apos;1&amp;apos;) 
+			            chart1.setDataXML(chartxml1  );
+			        else     chart1.setDataXML(chartxml2  );
+
+			        chart1.render(&amp;apos;chartdiv1&amp;apos;);
+			    }
+			    function f_getcharttype()
+			    {
+			    	return document.all(&amp;apos;chgchart&amp;apos;).value;
+
+			    }
+			    function f_getchartxml1()
+			    {
+			    	return chartxml1  ;
+
+			    }
+			    function f_getchartxml2()
+			    {
+			    	return chartxml2;
+
+			    }
+			    function f_showpath(tip){
+			    	document.all(&amp;apos;pathtip&amp;apos;).innerHTML= tip;
+			    
+			    }
+			    
+			    function zoomchart()
+			    {
+			    	window.open( &amp;apos;BIPath.sp&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;fullscreen=yes,toolbar=no,menubar=no,scrollbars=no,resizable=yes,location=no,status=no&amp;apos;);
+			    }
+					
+
+		&amp;lt;/script&amp;gt;
+		&amp;lt;/head&amp;gt; 
+		&amp;lt;body  topmargin=&amp;apos;0&amp;apos; leftmargin=&amp;apos;0&amp;apos; scroll=no bgcolor=&amp;apos;#F6F6F6&amp;apos; &amp;gt;
+		
+			&amp;lt;table width=100% height=100% border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; &amp;gt;&amp;lt;tr&amp;gt;
+				&amp;lt;td id=rightTd width=400&amp;gt;
+        				&amp;lt;table width=100% height=100% border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; &amp;gt;
+        				&amp;lt;tr&amp;gt;&amp;lt;td height=30 align=center background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif&amp;gt;
+        				更换图型：&amp;nbsp;&amp;lt;select id=chgchart size=&amp;apos;1&amp;apos; name=&amp;apos;chgchart&amp;apos; onchange=&amp;apos;f_chgchart();&amp;apos; style=&amp;apos;border: 1px solid #808080&amp;apos;&amp;gt;
+        				&amp;quot;+optionstr+&amp;quot;
+        				&amp;lt;/select&amp;gt;
+        				&amp;nbsp;&amp;lt;a href=&amp;apos;javascript:zoomchart();&amp;apos;&amp;gt;放大图&amp;lt;/a&amp;gt;&amp;nbsp;
+        				&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+
+        				&amp;lt;tr&amp;gt;&amp;lt;td height=300 valign=top&amp;gt;
+
+        				&amp;lt;div id=&amp;apos;chartdiv1&amp;apos; align=&amp;apos;center&amp;apos;&amp;gt; &amp;nbsp; &amp;lt;/div&amp;gt;
+		      		
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+					
+	        				&amp;lt;tr&amp;gt;&amp;lt;td height=30 align=left background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif&amp;gt;
+	        					&amp;lt;div id=&amp;apos;pathtip&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;/div&amp;gt;
+	        				&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+					&amp;lt;tr&amp;gt;&amp;lt;td valign=top&amp;gt;
+					&amp;lt;IFRAME name=&amp;apos;_left&amp;apos; id=&amp;apos;_left&amp;apos; frameBorder=0 width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; src=&amp;apos;&amp;quot;+lefturl +&amp;quot;&amp;apos;
+	        				scrolling=&amp;apos;yes&amp;apos; style=&amp;apos;border: 0px solid #808080&amp;apos; &amp;gt;
+	        			&amp;lt;/IFRAME&amp;gt;
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+	        			&amp;lt;/td&amp;gt;
+	        			
+	        			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;		  
+				&amp;lt;/td&amp;gt;
+				
+        			&amp;lt;TD  class=navPoint id=RPoint bgColor=#EEEEEE onclick=switchRBar() style=&amp;apos;border-right: 1px solid #CCCCCC; border-left: 1px solid #CCCCCC; WIDTH: 3pt;vertical-align: middle;&amp;apos;&amp;gt;
+      					3
+    				&amp;lt;/TD&amp;gt;
+				&amp;lt;td &amp;gt;
+        			&amp;lt;IFRAME name=&amp;apos;_grid&amp;apos; id=&amp;apos;_grid&amp;apos; frameBorder=0 width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos;
+        				scrolling=&amp;apos;yes&amp;apos; style=&amp;apos;border: 0px solid #808080&amp;apos; src=&amp;apos;&amp;quot;+righturl+&amp;quot;&amp;apos; &amp;gt;
+        			&amp;lt;/IFRAME&amp;gt;	
+        			&amp;lt;/td&amp;gt;
+        			
+			&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+	
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+	&amp;quot;;
+
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

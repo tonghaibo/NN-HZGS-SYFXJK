@@ -1,0 +1,444 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDXM_TREE</MWID><NAME >重点项目树形展示</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXM_TREE.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >重点项目</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >1</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >upLoadXMZP</ID><NAME >上传项目照片</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >upLoadXMZP</C10></ROW>
+<ROW num="1" ><ID >showXMTW</ID><NAME >查看项目图文</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >showXMTW</C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var ZXGFILE1 = &amp;quot;&amp;quot;;
+var ZXGFILE2 = &amp;quot;&amp;quot;;
+
+var zTree;
+// zTree 的参数配置，深入使用请参考 API 文档（setting 配置详解）
+var setting = {
+	data: {
+		simpleData: {
+			enable: true
+		}
+	},
+	view: {
+		showIcon: true,
+		showLine: true,
+		showTitle: true,
+		addDiyDom: addDiyDom,
+		dbClickExpand: true
+	},
+	callback: {
+		onClick: zTreeOnClick
+	}
+};
+
+// zTree 的数据属性，深入使用请参考 API 文档（zTreeNode 节点数据详解）
+//var zNodes = [
+//   {name:&amp;quot;test1&amp;quot;, open:true, children:[
+//      {name:&amp;quot;test1_1&amp;quot;,orgid:&amp;quot;1&amp;quot;,accid:&amp;quot;21&amp;quot;}, {name:&amp;quot;test1_2&amp;quot;,orgid:&amp;quot;1&amp;quot;,accid:&amp;quot;21&amp;quot;}]},
+//   {name:&amp;quot;test2&amp;quot;, open:true, children:[
+//      {name:&amp;quot;test2_1&amp;quot;,orgid:&amp;quot;1&amp;quot;,accid:&amp;quot;21&amp;quot;}, {name:&amp;quot;test2_2&amp;quot;,orgid:&amp;quot;1&amp;quot;,accid:&amp;quot;21&amp;quot;}]}
+//   ];
+
+$(document).ready(function() {
+	$(&amp;quot;#xmyy1&amp;quot;).val(G_LOGDAT.split(&amp;quot;-&amp;quot;)[0]);
+	$(&amp;quot;#xmyy2&amp;quot;).val((1*G_LOGDAT.split(&amp;quot;-&amp;quot;)[0])+1);
+
+	var zNodes = eval(getTreeNodes());
+	zTree = $.fn.zTree.init($(&amp;quot;#treeZDXM&amp;quot;), setting, zNodes);
+      
+      //var node = zTree.getNodeByTId(&amp;quot;treeReploc_0012121&amp;quot;);
+//      var node = zTree.getNodeByParam(&amp;quot;id&amp;quot;,&amp;quot;00121&amp;quot;);
+//      zTree.expandNode(node,true,true,true);
+      //zTree.expandAll(true);
+//zTree.selectNode(zTree.getNodeByParam(&amp;quot;id&amp;quot;,&amp;quot;0012121&amp;quot;));
+                
+});
+
+function loadXMTree()
+{
+	var zNodes = eval(getTreeNodes());
+	zTree = $.fn.zTree.init($(&amp;quot;#treeZDXM&amp;quot;), setting, zNodes);
+}
+
+//自定义树结点的文字显示长度
+function addDiyDom(treeId,treeNode)
+{
+	var spaceWidth  = 5;
+	var switchObj = $(&amp;quot;#&amp;quot; + treeNode.tId + &amp;quot;_switch&amp;quot;);
+	switchObj.remove();
+	var spantxt = $(&amp;quot;#&amp;quot;+treeNode.tId+&amp;quot;_span&amp;quot;).html();
+	//alert(&amp;quot;txt=&amp;quot;+spantxt);
+	if (spantxt.length &amp;gt; 16) {
+		spantxt = spantxt.substring(0,16) + &amp;quot;...&amp;quot;;
+		$(&amp;quot;#&amp;quot;+treeNode.tId+&amp;quot;_span&amp;quot;).html(spantxt);
+	}
+}
+
+//点击树节点事件
+function zTreeOnClick(event, treeId, treeNode) 
+{
+	//alert(treeNode.tId + &amp;quot;, &amp;quot; + treeNode.name+&amp;quot;,orgid=&amp;quot;+treeNode.orgid+&amp;quot;,accid=&amp;quot;+treeNode.accid);
+    	var typ = treeNode.typ;
+	var bydjuuid = treeNode.bydjuuid;
+	var id = treeNode.id;
+	var name = treeNode.name;
+	
+	//alert(&amp;quot;name=&amp;quot;+name+&amp;quot;,bydjuuid=&amp;quot;+bydjuuid+&amp;quot;,id=&amp;quot;+id);
+	
+//	if (typ == &amp;quot;xmNode&amp;quot;) { //项目信息
+//		var arrbydj = bydjuuid.split(&amp;quot;,&amp;quot;);	
+//		loadBYDJXX(arrbydj[0]);	
+//		loadSBXX(bydjuuid,&amp;quot;&amp;quot;);
+//	}
+//	else if (typ == &amp;quot;nsrNode&amp;quot;) { //中标单位
+//		loadBYDJXX(bydjuuid);
+//		loadSBXX(bydjuuid,id);
+//	}
+
+	if (typ == &amp;quot;fgwxmNode&amp;quot;) {
+		loadFGW(id);	
+	}
+
+	var arrbydj = bydjuuid.split(&amp;quot;,&amp;quot;);
+	loadBYDJXX(arrbydj[0]);	
+	loadSBXX(bydjuuid,&amp;quot;&amp;quot;);
+
+};
+
+//获取报表位置节点数据
+function getTreeNodes()
+{
+	try {
+		var xmyy1 = $(&amp;quot;#xmyy1 option:selected&amp;quot;).val();
+		var xmyy2 = $(&amp;quot;#xmyy2 option:selected&amp;quot;).val();
+		var xmlx = $(&amp;quot;#xmlx option:selected&amp;quot;).val();		
+		var skey = $(&amp;quot;#skey&amp;quot;).val();
+		var nodes = invokeOSFunc(&amp;quot;getTreeJson&amp;quot;,&amp;quot;xmyy1=&amp;quot;+xmyy1+&amp;quot;&amp;xmyy2=&amp;quot;+xmyy2+&amp;quot;&amp;xmlx=&amp;quot;+xmlx+&amp;quot;&amp;skey=&amp;quot;+skey);
+		//alert(&amp;quot;nodes=&amp;quot;+nodes);
+		return nodes;
+	} catch (e) {
+		alert(e.toString());
+	}
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	//_this.ShowToolBar(0); //隐藏工具栏
+	_this.ShowTabBar(1);
+	_this.SplitSheet(2,&amp;quot;V&amp;quot;,&amp;quot;25%&amp;quot;);
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;30%&amp;quot;);
+	//_this.AutoFixScreenWidth();
+	parent.switchLBar();
+//	alert(&amp;quot;ddda&amp;quot;);
+//	zTree.selectNode(zTree.getNodeByParam(&amp;quot;id&amp;quot;,cursel_replocid));
+	
+	_this.AutoFixScreenWidth();
+	
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	ZXGFILE1 = _this.SaveTempZXGFile(1);
+	ZXGFILE2 = _this.SaveTempZXGFile(2);
+
+	
+}
+
+//加载发改委项目信息
+function loadFGW(fgwxmuuid)
+{
+	_this.LoadZXGFile(ZXGFILE2,-1,2);
+	_sql.querytods(&amp;quot;FGWXMXX&amp;quot;,&amp;quot;fgwxmuuid=&amp;quot;+fgwxmuuid);
+	_this.SetCellText(2,1,2,fgwxmuuid);
+	_this.SetCellText(2,2,2,_this.XMLDS_GetString(0,&amp;quot;XMDM&amp;quot;)+_this.XMLDS_GetString(0,&amp;quot;XMMC&amp;quot;));	
+	_this.SetCellText(2,2,4,_this.XMLDS_GetString(0,&amp;quot;ZTZJE&amp;quot;));
+	_this.SetCellText(2,3,2,_this.XMLDS_GetString(0,&amp;quot;XMLXMC&amp;quot;));
+	_this.SetCellText(2,3,4,_this.XMLDS_GetString(0,&amp;quot;JHKGSJ&amp;quot;));
+	_this.SetCellText(2,2,6,_this.XMLDS_GetString(0,&amp;quot;XMSSDW&amp;quot;));
+	_this.SetCellText(2,3,6,_this.XMLDS_GetString(0,&amp;quot;XMZRDW&amp;quot;));
+	_this.SetCellText(2,4,2,_this.XMLDS_GetString(0,&amp;quot;ZYJSNRGM&amp;quot;));
+	
+}
+
+//加载项目报验信息
+function loadBYDJXX(bydjuuid)
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_sql.querytods(&amp;quot;WBBYDJXX&amp;quot;,&amp;quot;bydjuuid=&amp;quot;+bydjuuid);
+	_this.SetCellText(0,1,2,bydjuuid);
+	_this.SetCellText(0,2,2,_this.XMLDS_GetString(0,&amp;quot;WCJYHDSSGLZMBH&amp;quot;));	
+	_this.SetCellText(0,2,4,_this.XMLDS_GetString(0,&amp;quot;WCJYHTZJE&amp;quot;));
+	_this.SetCellText(0,2,6,_this.XMLDS_GetString(0,&amp;quot;WCJYHDSSGLZMYXQXQ&amp;quot;));
+	_this.SetCellText(0,2,8,_this.XMLDS_GetString(0,&amp;quot;WCJYHDSSGLZMYXQXZ&amp;quot;));
+	_this.SetCellText(0,3,2,_this.XMLDS_GetString(0,&amp;quot;BSRXM&amp;quot;));
+	_this.SetCellText(0,3,4,_this.XMLDS_GetString(0,&amp;quot;LXDH&amp;quot;));
+	_this.SetCellText(0,3,6,_this.XMLDS_GetString(0,&amp;quot;SQRQ&amp;quot;));
+	_this.SetCellText(0,3,8,_this.XMLDS_GetString(0,&amp;quot;BYSJ&amp;quot;));
+	_this.SetCellText(0,4,2,_this.XMLDS_GetString(0,&amp;quot;SWDJD&amp;quot;));
+	_this.SetCellText(0,5,2,_this.XMLDS_GetString(0,&amp;quot;WCJYD&amp;quot;));
+	_this.SetCellText(0,4,6,_this.XMLDS_GetString(0,&amp;quot;SWDJDSWJGYJ&amp;quot;));
+	_this.SetCellText(0,5,6,_this.XMLDS_GetString(0,&amp;quot;WCJYDSWJGYJ&amp;quot;));
+	
+	_this.AutoFixScreenWidth();
+}
+
+
+function loadSBXX(bydjuuid,nsrsbh)
+{
+	_this.LoadZXGFile(ZXGFILE1,-1,1);
+	_this.SetFixedRow(1,1);
+
+	var bydjstr = &amp;quot;&amp;quot;;
+	var arrbydj = bydjuuid.split(&amp;quot;,&amp;quot;);		
+	for (var i=0;i&amp;lt;arrbydj.length;i++) {
+		if (i == 0) bydjstr += &amp;quot;&amp;apos;&amp;quot; + arrbydj[i] + &amp;quot;&amp;apos;&amp;quot;;
+		else bydjstr += &amp;quot;,&amp;apos;&amp;quot; + arrbydj[i] + &amp;quot;&amp;apos;&amp;quot;;
+	}
+
+	var xml = _sql.query(&amp;quot;WBSBXX&amp;quot;,&amp;quot;BYDJUUID=&amp;quot;+bydjstr+&amp;quot;&amp;NSRSBH=&amp;quot;+nsrsbh);
+	_this.SetMainCellRange(1,1,0,2,6);
+	_this.SetXmlDS(1,1,0,2,6,xml);
+	_this.RefreshFormula();
+	
+	if (_this.GetCellText(1,1,0) == &amp;quot;&amp;quot;) {
+		//alert(&amp;quot;查询不到外出经营活动情况申报信息！&amp;quot;);
+	}
+	
+	_this.AutoFixScreenWidth();
+
+}
+
+//上传项目照片
+function upLoadXMZP()
+{
+	//alert(&amp;quot;该功能暂未实现！&amp;quot;);
+	var fgwxmuuid = _this.GetCellText(2,1,2);
+	if (fgwxmuuid == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;请先选择项目！&amp;quot;);
+		return;
+	}
+	window.showModalDialog(&amp;quot;show.sp?grdid=ZDXM_UPLOAD&amp;fgwxmuuid=&amp;quot;+fgwxmuuid,window,&amp;quot;scroll:no;status:no;dialogWidth:600px;dialoHeight:300px&amp;quot;);
+}
+
+//查看项目图文
+function showXMTW()
+{
+	//alert(&amp;quot;该功能暂未实现！&amp;quot;);
+	var fgwxmuuid = _this.GetCellText(2,1,2);
+	if (fgwxmuuid == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;请先选择项目！&amp;quot;);
+		return;
+	}
+	window.showModalDialog(&amp;quot;Layout.sp?id=ZDXMIMG&amp;xmuuid=&amp;quot;+fgwxmuuid,window,&amp;quot;dialogWidth:1200px;dialoHeight:800px&amp;quot;);
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;xlsgrid/zTree/css/zTreeStyle/zTreeStyle.css\&amp;quot; type=\&amp;quot;text/css\&amp;quot;&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/zTree/js/jquery-1.4.4.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/zTree/js/jquery.ztree.core.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;	&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=20% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top;&amp;gt;&amp;quot;);
+	
+	sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;height:5%;\&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;年度：&amp;lt;select id=&amp;apos;xmyy1&amp;apos; name=&amp;apos;xmyy1&amp;apos;&amp;gt;&amp;quot;+getYYYYOptions()+&amp;quot;&amp;lt;/select&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;至&amp;lt;select id=&amp;apos;xmyy2&amp;apos; name=&amp;apos;xmyy2&amp;apos;&amp;gt;&amp;quot;+getYYYYOptions()+&amp;quot;&amp;lt;/select&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;br&amp;gt;&amp;nbsp;&amp;nbsp;类型：&amp;lt;select id=&amp;apos;xmlx&amp;apos; name=&amp;apos;xmlx&amp;apos;&amp;gt;&amp;quot;+getXMLXOptions()+&amp;quot;&amp;lt;/select&amp;gt;&amp;quot;);
+	//sb.append(&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;重点项目：&amp;lt;label&amp;gt;&amp;lt;input id=&amp;apos;zdbz&amp;apos; type=&amp;apos;radio&amp;apos; value=&amp;apos;1&amp;apos;/&amp;gt;是&amp;lt;/label&amp;gt;&amp;lt;label&amp;gt;&amp;lt;input id=&amp;apos;zdbz&amp;apos; type=&amp;apos;radio&amp;apos; value=&amp;apos;0&amp;apos;/&amp;gt;否&amp;lt;/label&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;br&amp;gt;&amp;nbsp;&amp;nbsp;查找：&amp;lt;input type=&amp;apos;text&amp;apos; id=&amp;apos;skey&amp;apos;&amp;gt;&amp;lt;button type=&amp;apos;button&amp;apos; onclick=&amp;apos;loadXMTree()&amp;apos;&amp;gt;查找&amp;lt;/button&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;hr&amp;gt;&amp;quot;);
+	
+	sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;overflow-y:scroll;height:95%;\&amp;quot;&amp;gt;&amp;lt;ul id=\&amp;quot;treeZDXM\&amp;quot; class=\&amp;quot;ztree\&amp;quot;&amp;gt;&amp;lt;/ul&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=80% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot;  valign=top;&amp;gt;&amp;lt;div style=\&amp;quot;overflow-y:scroll;height:100%;\&amp;quot;&amp;gt;&amp;quot;);
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);	
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+
+function getYYYYOptions()
+{	
+	var optionstr = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select to_char(sysdate,&amp;apos;yyyy&amp;apos;)-3 yy from dual&amp;quot;;
+	var yy = pub.EADbTool.GetSQL(sql);
+	for (var i=5;i&amp;gt;=0;i--) {
+		var year = 1*yy + i;
+		optionstr += &amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+year+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+year+&amp;quot;&amp;lt;/option&amp;gt;\n&amp;quot;;
+	}
+	return optionstr;
+}
+
+function getXMLXOptions()
+{	
+	var optionstr = &amp;quot;&amp;lt;option value=&amp;apos;&amp;apos;&amp;gt;全部&amp;lt;/option&amp;gt;\n&amp;quot;;
+	var sql = &amp;quot;select id,name from v_tax_zdxm_xmlx&amp;quot;;
+	var ds = pub.EADbTool.QuerySQL(sql);
+	for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+		var id = ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		optionstr += &amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;\n&amp;quot;;
+	}
+	return optionstr;
+}
+
+//获取报表位置节点数据
+function getTreeJson()
+{
+	var db = null;
+	var json = &amp;quot;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		json = getZdxmTreeJson(db,xmyy1,xmyy2,xmlx,skey);
+		
+		return json;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+function getZdxmTreeJson(db,xmyy1,xmyy2,xmlx,skey)
+{
+	//var sql = &amp;quot;select xmdm,xmmc,jhkgsj,ztzje from tax_zdxm_fgwxm order by jhkgsj,xmdm&amp;quot;;
+	var sql = &amp;quot;select fgw.fgwxmuuid,fgw.xmdm,fgw.xmmc fgwxmmc,
+		        jypt.jyptxmuuid,jypt.xmmc jyptxmmc,b.djxh,nvl(dj.shxydm,dj.nsrsbh) nsrsbh,dj.nsrmc,
+		        b.bydjuuid,bydj.wcjyhwyxqxq,bydj.xmje
+		from tax_zdxm_fgwxm fgw,tax_zdxm_jyptxm jypt,tax_zdxm_jyptwbbyxm_dzb b,dj_nsrxx dj,
+		    (
+		    select bydjuuid,djxh,wcjyhwmc xmmc,wcjyhwzz xmje,wcjyhwyxqxq,wcjyhwyxqxz from dj_wbnsrjydbydj_hwxx
+		    where to_char(wcjyhwyxqxq,&amp;apos;yyyy&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+xmyy1+&amp;quot;&amp;apos; and to_char(wcjyhwyxqxz,&amp;apos;yyyy&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+xmyy2+&amp;quot;&amp;apos;
+		    union all
+		    select bydjuuid,djxh,wcjylwmc xmmc,wcjylwdhtje xmje,wcjylwyxqxq,wcjylwyxqxz from dj_wbnsrjydbydj_lwxx
+		    where to_char(wcjylwyxqxq,&amp;apos;yyyy&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+xmyy1+&amp;quot;&amp;apos; and to_char(wcjylwyxqxz,&amp;apos;yyyy&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+xmyy2+&amp;quot;&amp;apos;
+		    ) bydj
+		where fgw.xmdm=jypt.fgwxmdm(+) 
+		  and jypt.jyptxmuuid=b.jyptxmuuid(+) 
+		  and b.djxh=dj.djxh(+)
+		  and b.bydjuuid=bydj.bydjuuid(+)
+		  and fgw.xmlx like &amp;apos;&amp;quot;+xmlx+&amp;quot;%&amp;apos;
+		  and (fgw.xmmc like &amp;apos;%&amp;quot;+skey+&amp;quot;%&amp;apos; or bydj.xmmc like &amp;apos;%&amp;quot;+skey+&amp;quot;%&amp;apos;)
+		    
+		union all
+		
+		--发改委项目直接与报验项目勾对的
+		select fgw.fgwxmuuid xmuuid,fgw.xmdm fgwxmdm,fgw.xmmc fgwxmmc,
+		       &amp;apos;&amp;apos; jyptxmuuid,&amp;apos;&amp;apos; jyptxmmc,b.djxh,nvl(dj.shxydm,dj.nsrsbh) nsrsbh,dj.nsrmc,
+		        bydj.bydjuuid,bydj.wcjyhwyxqxq,bydj.xmje
+		from tax_zdxm_fgwxm fgw,tax_zdxm_fgwbyxm_dzb b,dj_nsrxx dj,
+		    (
+		    select bydjuuid,djxh,wcjyhwmc xmmc,wcjyhwzz xmje,wcjyhwyxqxq,wcjyhwyxqxz from dj_wbnsrjydbydj_hwxx 
+		    where to_char(wcjyhwyxqxq,&amp;apos;yyyy&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+xmyy1+&amp;quot;&amp;apos; and to_char(wcjyhwyxqxz,&amp;apos;yyyy&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+xmyy2+&amp;quot;&amp;apos;
+		    union all
+		    select bydjuuid,djxh,wcjylwmc xmmc,wcjylwdhtje xmje,wcjylwyxqxq,wcjylwyxqxz from dj_wbnsrjydbydj_lwxx
+		    where to_char(wcjylwyxqxq,&amp;apos;yyyy&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+xmyy1+&amp;quot;&amp;apos; and to_char(wcjylwyxqxz,&amp;apos;yyyy&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+xmyy2+&amp;quot;&amp;apos;
+		    ) bydj
+		where fgw.fgwxmuuid=b.fgwxmuuid
+		  and b.djxh=dj.djxh
+		  and b.bydjuuid=bydj.bydjuuid  
+		  and fgw.xmlx like &amp;apos;&amp;quot;+xmlx+&amp;quot;%&amp;apos;
+		  and (fgw.xmmc like &amp;apos;%&amp;quot;+skey+&amp;quot;%&amp;apos; or bydj.xmmc like &amp;apos;%&amp;quot;+skey+&amp;quot;%&amp;apos;)&amp;quot;;
+	var xmsql = &amp;quot;select distinct fgwxmuuid,fgwxmmc,wm_concat(trim(bydjuuid)) bydjuuid from (&amp;quot;+sql+&amp;quot;) group by fgwxmuuid,fgwxmmc&amp;quot;;
+	var ds = db.QuerySQL(xmsql);
+	var xmcount = ds.getRowCount();
+	var json = &amp;quot;[\n{ id:\&amp;quot;9999\&amp;quot;,open:true,name:\&amp;quot;项目管理（项目总数&amp;quot;+xmcount+&amp;quot;）\&amp;quot;,typ:\&amp;quot;root\&amp;quot;,iconOpen:\&amp;quot;xlsgrid/zTree/css/zTreeStyle/img/diy/1_open.png\&amp;quot;,iconClose:\&amp;quot;xlsgrid/zTree/css/zTreeStyle/img/diy/1_close.png\&amp;quot; }\n&amp;quot;;
+	for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+		var xmuuid = ds.getStringAt(i,&amp;quot;FGWXMUUID&amp;quot;);
+		var bydjuuid = ds.getStringAt(i,&amp;quot;BYDJUUID&amp;quot;);
+		var xmmc = ds.getStringAt(i,&amp;quot;FGWXMMC&amp;quot;);
+		var node = &amp;quot;{ id:\&amp;quot;&amp;quot;+xmuuid+&amp;quot;\&amp;quot;,pId:\&amp;quot;9999\&amp;quot;,open:false,name:\&amp;quot;&amp;quot;+xmmc+&amp;quot;\&amp;quot;,bydjuuid:\&amp;quot;&amp;quot;+bydjuuid+&amp;quot;\&amp;quot;,typ:\&amp;quot;fgwxmNode\&amp;quot;}\n&amp;quot;; // ,icon:\&amp;quot;xlsgrid/zTree/css/zTreeStyle/img/diy/3.png\&amp;quot;
+		json += &amp;quot;,&amp;quot; + node;
+	}
+	
+	xmsql = &amp;quot;select distinct fgwxmuuid,jyptxmuuid,jyptxmmc,wm_concat(trim(bydjuuid)) bydjuuid from (&amp;quot;+sql+&amp;quot;) where jyptxmuuid is not null group by fgwxmuuid,jyptxmuuid,jyptxmmc&amp;quot;;
+	ds = db.QuerySQL(xmsql);
+	for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+		var xmuuid = ds.getStringAt(i,&amp;quot;FGWXMUUID&amp;quot;);
+		var jyptxmuuid = ds.getStringAt(i,&amp;quot;JYPTXMUUID&amp;quot;);
+		var bydjuuid = ds.getStringAt(i,&amp;quot;BYDJUUID&amp;quot;);
+		var xmmc = ds.getStringAt(i,&amp;quot;JYPTXMMC&amp;quot;);
+		var node = &amp;quot;{ id:\&amp;quot;&amp;quot;+jyptxmuuid+&amp;quot;\&amp;quot;,pId:\&amp;quot;&amp;quot;+xmuuid+&amp;quot;\&amp;quot;,open:false,name:\&amp;quot;&amp;quot;+xmmc+&amp;quot;\&amp;quot;,bydjuuid:\&amp;quot;&amp;quot;+bydjuuid+&amp;quot;\&amp;quot;,typ:\&amp;quot;jyptxmNode\&amp;quot; }\n&amp;quot;; //,icon:\&amp;quot;xlsgrid/zTree/css/zTreeStyle/img/diy/9.png\&amp;quot;
+		json += &amp;quot;,&amp;quot; + node;
+	}
+	
+	//中标单位
+	var dwsql = &amp;quot;select distinct jyptxmuuid,nsrsbh,nsrmc,wm_concat(trim(bydjuuid)) bydjuuid from (&amp;quot;+sql+&amp;quot;)  where jyptxmuuid is not null and nsrsbh is not null group by jyptxmuuid,nsrsbh,nsrmc&amp;quot;;
+	var dwds = db.QuerySQL(dwsql);
+	for (var i=0;i&amp;lt;dwds.getRowCount();i++) {
+		var jyptxmuuid = dwds.getStringAt(i,&amp;quot;JYPTXMUUID&amp;quot;);
+		var bydjuuid = dwds.getStringAt(i,&amp;quot;BYDJUUID&amp;quot;);
+		var nsrsbh = dwds.getStringAt(i,&amp;quot;NSRSBH&amp;quot;);
+		var nsrmc = dwds.getStringAt(i,&amp;quot;NSRMC&amp;quot;);
+		var node = &amp;quot;{ id:\&amp;quot;&amp;quot;+nsrsbh+&amp;quot;\&amp;quot;,pId:\&amp;quot;&amp;quot;+jyptxmuuid+&amp;quot;\&amp;quot;,open:false,name:\&amp;quot;&amp;quot;+nsrmc+&amp;quot;\&amp;quot;,bydjuuid:\&amp;quot;&amp;quot;+bydjuuid+&amp;quot;\&amp;quot;,typ:\&amp;quot;nsrNode\&amp;quot; }\n&amp;quot;;
+		json += &amp;quot;,&amp;quot; + node;
+	}
+	
+	json += &amp;quot;]&amp;quot;;
+	return json;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >WBBYDJXX</ID><NAME ></NAME><DATDSC >select WCJYHDSSGLZMBH,WCJYHTZJE,
+  to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm-dd&amp;apos;) WCJYHDSSGLZMYXQXQ,
+  to_char(WCJYHDSSGLZMYXQXZ,&amp;apos;yyyy-mm-dd&amp;apos;) WCJYHDSSGLZMYXQXZ,
+  BSRXM,LXDH,
+  to_char(SQRQ,&amp;apos;yyyy-mm-dd&amp;apos;) SQRQ,
+  to_char(BYSJ,&amp;apos;yyyy-mm-dd&amp;apos;) BYSJ,
+  SWDJD,WCJYD,SWDJDSWJGYJ,WCJYDSWJGYJ 
+from dj_wbnsrjydbydj 
+where bydjuuid=&amp;apos;[%bydjuuid]&amp;apos;</DATDSC><C4 >WBBYDJXX</C4></ROW>
+<ROW num="1" ><ID >WBSBXX</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select nvl(nsr.shxydm,nsr.nsrsbh) nsrsbh,nsr.nsrmc,
+       to_char(sb.bysj,&amp;apos;yyyy-mm-dd&amp;apos;) bysj,sbxx.sbje,sbxx.jnsk,sbxx.yyjskje
+from dj_wcjyhdqksbbxx sb,(
+    select wcjyhdqksbuuid,sum(sbje) sbje,sum(jnsk) jnsk,sum(yyjskje) yyjskje from (
+       select wcjyhdqksbuuid,wcjyhwmc,hwxse sbje,xshwjnsk jnsk,yyjskje from dj_wcjyhdqksbbxx_hwxx
+       union all
+       select wcjyhdqksbuuid,wcjylwmc,yslwyye sbje,yslwjnsk jnsk,0 yyjskje from dj_wcjyhdqksbbxx_lwxx sblw
+    ) group by wcjyhdqksbuuid
+  ) sbxx,dj_nsrxx nsr
+where sb.wcjyhdqksbuuid=sbxx.wcjyhdqksbuuid(+)    
+  and sb.djxh=nsr.djxh(+)
+  and sb.zfbz_1=&amp;apos;N&amp;apos;
+  and sb.bydjuuid in ([%BYDJUUID])
+  and nvl(nsr.shxydm(+),nsr.nsrsbh(+)) like &amp;apos;[%NSRSBH]%&amp;apos;
+order by nvl(nsr.shxydm(+),nsr.nsrsbh(+))
+) t  </DATDSC><C4 >WBSBXX</C4></ROW>
+<ROW num="2" ><ID >FGWXMXX</ID><NAME ></NAME><DATDSC >select a.*,nvl(b.name,a.xmlx) xmlxmc 
+from tax_zdxm_fgwxm a,v_tax_zdxm_xmlx b
+where a.xmlx=b.id(+)
+  and fgwxmuuid=&amp;apos;[%fgwxmuuid]&amp;apos;</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

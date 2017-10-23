@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="模板" ID="RV2RV">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESC name="数据流描述"></DESC>
+				<DESTCLS name="待生成的目标单据">RV</DESTCLS>
+				<ValFld name="目标单据的字段">TAXTYP</ValFld>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总"></Filter>
+				<MappedMode name="单据映射关系。0:(默认)多源单据对一目标单据映射；1:一对一映射"></MappedMode>
+				<WriteBack name="修改目标单据时，是否回写数据流状态。0:不回写;1(默认):回写"></WriteBack>
+				<SrcHdrFlds name="源单据头的转换">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</SrcHdrFlds>
+				<DestHdrFlds name="目标单据的对应转换字段">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</DestHdrFlds>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生">//
+  //可用对象:eaContext,usrinf,srchdr,srcdtl(源单据明细),bilhdr(目标单据的单据头)
+  //      bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+  //      flwstaidx(当前状态行)
+        var pubpack = new JavaPackage("com.xlsgrid.net.pub" );
+        var bil_id="&amp;apos;"+srcdtl.getStringAt(0,"bilid")+"&amp;apos;";  
+        var oldbilid=eaContext.getAttribute("bil_id");
+        if(oldbilid==""||oldbilid==null) {
+             eaContext.setAttribute("bil_id",bil_id);        	
+        } else { 
+              var a=pubpack.EAFunc.SplitString(oldbilid,",");
+              var flag=0; 
+              for(var i=0;i&amp;lt;a.length();i++) {
+                   
+                    if(a[i]==bil_id) {
+                          flag=1;
+                          break;
+                    } else {
+                    
+                    }
+                    
+              }
+              if(flag==0) {
+                    bil_id=bil_id+","+oldbilid;
+                    eaContext.setAttribute("bil_id",bil_id);
+              } else {
+                    
+              } 
+        }
+        
+        var locid=srcdtl.getStringAt(0,"locid");
+        if(eaContext.getAttribute("loc_id")==""||eaContext.getAttribute("loc_id")==null) {
+              eaContext.setAttribute("loc_id",locid);
+        } else {
+        
+        }
+        var dat=srcdtl.getStringAt(0,"dat");
+        if(eaContext.getAttribute("dest_dat")==""||eaContext.getAttribute("dest_dat")==null) {
+              eaContext.setAttribute("dest_dat",dat);
+        } else {
+        
+        }
+  //end of func</OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生">//
+  //可用对象:eaContext,usrinf,srchdr,bilhdr(目标单据的单据头),bildtl(目标单据的明细)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+        //取得当前日期
+        var pubpack = new JavaPackage("com.xlsgrid.net.pub" ); 
+        var db = eaContext.getEADatabase();
+        var bilid=eaContext.getAttribute("bil_id");
+        //var a=pubpack.EAFunc.SplitString(bilid,",");
+        // var dat=db.GetSQL("select sysdate from dual");        
+        //var dat=db.GetSQL("select to_char(dat,&amp;apos;yyyy-mm-dd&amp;apos;) from bilhdr where biltyp=&amp;apos;RV&amp;apos; and bilid="+a[0]+"");
+        
+        var cnt=1*db.GetSQL("select count(distinct locid) from bildtl where biltyp=&amp;apos;RV&amp;apos; and bilid in ( "+bilid+")"); 
+        //throw new Exception(cnt); 
+        if(cnt!=1) { 
+              throw new Exception("回执合并必须为同一仓库，请检查确认"); 
+        } 
+        //设置表头相关信息
+        bilhdr.setValueAt(0,"REFID1","");
+        bilhdr.setValueAt(0,"REFID3","1");
+        var dat=eaContext.getAttribute("dest_dat");
+       // throw new Exception(dat); 
+        bilhdr.setValueAt(0,"DAT",dat);
+        var locid=eaContext.getAttribute("loc_id");
+        bilhdr.setValueAt(0,"LOCID",locid);
+        bilhdr.setValueAt(0,"SUBTYP","SU");
+       // var bilid=eaContext.getAttribute("bil_id");
+	//设置明细相关信息
+        var slotid1 = "";
+        var slotname1 = "";
+        var slotid2 = "";
+        var slotname2 = "";
+        //DEFSLT5 as  常温退货待处理库位,                                  
+        //DEFSLT8 as  低温退货待处理库位 from loc
+        var sql1= "SELECT NVL(slot.id,&amp;apos;&amp;apos;) SLOTID,NVL(slot.name,&amp;apos;&amp;apos;) SLOTNAME from loc,slot where loc.guid=slot.loc(+) and loc.DEFSLT5 =slot.guid(+) and loc.id=&amp;apos;"+locid+"&amp;apos;";
+        var sql2 = "SELECT NVL(slot.id,&amp;apos;&amp;apos;) SLOTID,NVL(slot.name,&amp;apos;&amp;apos;) SLOTNAME from loc,slot where loc.guid=slot.loc(+) and loc.DEFSLT8 =slot.guid(+) and loc.id=&amp;apos;"+locid+"&amp;apos;";
+        var ds1 = db.QuerySQL(sql1);
+        var ds2 = db.QuerySQL(sql2);
+        if (ds1!=null &amp;&amp; ds1.getRowCount() &amp;gt; 0 )  {
+             slotid1  =  ds1.getStringAt(0,"SLOTID");
+             slotname1  =  ds1.getStringAt(0,"SLOTNAME");
+        }     
+        if (ds2!=null &amp;&amp; ds2.getRowCount() &amp;gt; 0 )  {
+             slotid2  =  ds2.getStringAt(0,"SLOTID");
+             slotname2  =  ds2.getStringAt(0,"SLOTNAME");
+        }
+         
+        var cnt=bildtl.getRowCount();
+        for(var i=0;i&amp;lt;cnt;i++) {            	
+            	var itmid=bildtl.getValueAt(i,"ITMID");
+            	var flw = bildtl.getValueAt(i,"DATFLW");// 对应数据流DATFLW的的值
+            	var srcbil = bildtl.getValueAt(i,"refid2");
+            	bildtl.setValueAt(i,"bilid","");
+            	var refid=db.GetSQL("select refid from v_sh_item where id=&amp;apos;"+itmid+"&amp;apos;");
+            	bildtl.setValueAt(i,"DAT",dat);
+            	
+//                var qty=1.0*bildtl.getValueAt(i,"TAXTYP")-1.0*bildtl.getValueAt(i,"QTY");
+            	//var qty= 1.0*db.GetSQL( "SELECT nvl(a.TAXTYP-a.QTY,0) FROM BILDTL a,DATFLW b WHERE a.bilid=b.srcbil and a.seqid=b.srcbilseq and a.acc=b.acc and a.biltyp=b.srcbiltyp and b.guid=&amp;apos;"+flw +"&amp;apos;" ); 
+            	var qty= 1.0*db.GetSQL( "SELECT nvl(sum(a.TAXTYP-a.QTY),0) FROM BILDTL a,DATFLW b WHERE a.bilid=b.srcbil and a.itmid=&amp;apos;"+itmid+"&amp;apos; and a.acc=b.acc and a.biltyp=b.srcbiltyp and a.refid2=&amp;apos;"+srcbil+"&amp;apos; and b.guid=&amp;apos;"+flw +"&amp;apos;" ); 
+                bildtl.setValueAt(i,"TAXTYP",qty);
+                bildtl.setValueAt(i,"QTY",qty);                
+                //bildtl.setValueAt(i,"QTY",0); 
+                if ( refid == "1" ) {//throw new Exception(refid);
+                   bildtl.setValueAt(i,"REFID1",slotid1 );
+                   bildtl.setValueAt(i,"REFNAM1",slotname1 );
+                } else {
+                   bildtl.setValueAt(i,"REFID1",slotid2 );
+                   bildtl.setValueAt(i,"REFNAM1",slotname2 );
+                }
+       }
+      // throw new Exception(bildtl.GetXml());
+       //throw new Exception(bildtl.GetXml());
+  //end of func</OnConvert>
+				<OnDelete name="删除目标单据时发生">//
+  //可用对象:eaContext,_EADB
+  
+  //end of func</OnDelete>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+</ROW>
+</ROWSET>
+</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">RV</SRCCLS>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">QTY</ValFld>
+				<ConvertTimes name="数据流可转换的次数：0=(默认)不限制;1=转换一次后关闭(设置endflg＝2)">2</ConvertTimes>
+				<ValueMod name="数据转换模式:0=(默认)不限制;1=限制大于0;2=限制不大于剩余可转数;3=模式1和2的组合"></ValueMod>
+				<ConvertMod name="单据转换模式:0=明细转换;1=(默认)整单转换;2=仅转换单据头;3=表头部分勾选">1</ConvertMod>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。">//
+  //可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)
+  //如果把bilhdr的BILID或bildtl的ITMID清空，则跳过该单据或明细
+        var dealflag=bilhdr.getValueAt(0,"refid3");
+        //throw new Exception(dealflag);  
+        var str=""; 
+        if(dealflag=="1") {
+            bilhdr.setValueAt(0,"BILID","");        
+        } else {
+	              
+              //throw new Exception(bildtl.GetXml());
+              for(var row=0;row&amp;lt;bildtl.getRowCount();row++) {
+	            var sumqty=0;
+	            var sumtaxtyp=0;              	    
+              	    var itmid = bildtl.getValueAt(row,"ITMID");
+              	    if( itmid !="" ) {              	    
+	              	    var qty = 1.0*bildtlraw.getValueAt(row,"QTY"); 
+		            var taxtyp = 1.0*bildtlraw.getValueAt(row,"TAXTYP");
+		            var srcbil = bildtlraw.getValueAt(row,"REFID2");
+		            sumqty = sumqty+qty;
+		            sumtaxtyp = sumtaxtyp+taxtyp; 
+		            for( var innerrow=row+1;innerrow&amp;lt;bildtl.getRowCount();innerrow++ ) {                    
+	                    	var newitmid = bildtl.getValueAt(innerrow,"ITMID");
+	                    	var newbil = bildtl.getValueAt(innerrow,"REFID2");
+	                    	if( itmid == newitmid&amp;&amp;srcbil==newbil) { 
+	                    		sumqty = sumqty+1.0*bildtlraw.getValueAt(innerrow,"QTY");
+	                    		sumtaxtyp = sumtaxtyp+1.0*bildtlraw.getValueAt(innerrow,"taxtyp");
+	                    		bildtl.setValueAt(innerrow,"ITMID","");
+	                    	}	                    	
+	                    }
+	                    if( sumqty==sumtaxtyp ) {
+	                    	bildtl.setValueAt(row,"ITMID","");
+	                    } else {
+	                    	bildtlraw.setValueAt(row,"qty",9999);
+	                    	//str=str+"  "+itmid+":"+sumqty+"/"+sumtaxtyp;
+	                    }
+	                    
+                    }
+              }
+              //throw new Exception(str);  
+              /*
+              throw new Exception(bildtl.GetXml());
+              
+              for(var row=0;row&amp;lt;bildtl.getRowCount();row++) {             
+                    var qty=1.0*bildtlraw.getValueAt(row,"QTY"); 
+                    var taxtyp=1.0*bildtl.getValueAt(row,"TAXTYP");                    
+                    if(qty==taxtyp) { 
+                          bildtl.setValueAt(row,"ITMID","");
+                    }
+              } 
+              */             
+        }
+  
+  //end of func</OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生">//
+  //可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);
+  //返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息
+  //如果把ds的BILID或ITMID清空，则跳过该单据或明细
+  //如果要保存额外信息到  datflwsta 中,请当sta=0时设置ds的字段,后台处理时回自动保存到
+  //对应的 datflwsta 字段中:
+  //  LOCID  --  REFID1      LOCNAM  --  REFNAM1
+  //  CORPID --  REFID2      CORPNAM --  REFNAM2
+  //  SUBTYP --  SRCSUBTYP
+  
+  //end of func</OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生">//
+  //可用对象:eaContext,_EADB(EADatabase)
+  
+  //end of func</OnUnCkeck>
+</ROW>
+</ROWSET>
+</srcBil>
+</dataFlow>

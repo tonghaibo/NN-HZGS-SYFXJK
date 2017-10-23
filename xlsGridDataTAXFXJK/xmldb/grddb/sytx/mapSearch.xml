@@ -1,0 +1,264 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >mapSearch</MWID><NAME >地图探索附近</NAME><NOTE >COMFUNC</NOTE><FILE >mapSearch.zxg</FILE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><NOACCNAME >1</NOACCNAME></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >demo</ID><NAME >test</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >read</ID><NAME >读取文件</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="2" ><ID >uploadFile</ID><NAME >上传文件</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+function _thisOnpost_loaddata(sheet)
+{
+	//_this.SaveImageFile();
+	
+	
+}
+//function read()
+//{
+//  alert(invokeOSFunc(&amp;quot;read&amp;quot;,&amp;quot;&amp;quot;));
+//}
+//
+//function uploadFile()
+//{ 
+//  var saveUrl = homeurl+&amp;quot;UploadZXG.sp&amp;quot;;
+//  _this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+//  _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,&amp;quot;c:\\Demo.asm&amp;quot;,1);
+//  _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,&amp;quot;c:\\poos.txt&amp;quot;,1);
+//  _this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+//  _this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,&amp;quot;POS&amp;quot;,0);
+//  var ret=_this.SendHttpRequest(); 
+//  _this.CloseHttpRequest();
+//}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+  var path = &amp;quot;/xlsGridData/d.txt&amp;quot;;
+function demo()
+{
+var s=&amp;quot;   ggg  &amp;quot;;
+return s.trim();
+var osw =
+      new java.io.OutputStreamWriter(new java.io.FileOutputStream(path ), &amp;quot;GBK&amp;quot;);
+osw.write(msg);
+osw.close(); 
+  return read();
+}
+
+function read()
+{
+  //return pub.EAFunc.readFile(path);
+    var fi = new java.io.FileInputStream(path);
+    var ir = new java.io.InputStreamReader(fi,&amp;quot;GBK&amp;quot;);
+    return pub.EAFunc.ReaderToString(ir);
+}
+
+function runsql()
+{
+  var db = pub.EADbTool.QuerySQL(&amp;quot;select * from usr&amp;quot;);
+  return db.getValueAt(0,0);
+  return java.lang.System.getProperty(&amp;quot;user.home&amp;quot;)+&amp;quot;,&amp;quot;+java.lang.System.getProperty(&amp;quot;user.dir.orig&amp;quot;);
+  //db.getStringAt(0,0);
+}
+function getKey()
+{
+  var ds = pub.EADbTool.QuerySQL(&amp;quot;select id,name from &amp;quot;+tablename+&amp;quot; where rownum&amp;lt;10&amp;quot;);
+  return ds.GetXml();
+}
+
+var mypack = new JavaPackage ( &amp;quot;com.syt.serp.ejb&amp;quot; );
+function Run()
+{
+      var ctrl = new mypack.CustCtrl();
+      var db = null;
+      try {
+            db = new pub.EADatabase();
+            //ctrl.CheckADS(db,accid,&amp;quot;SX&amp;quot;,&amp;quot;ZJ11581&amp;quot;);
+            ctrl.CheckSXADS(db,accid,&amp;quot;SX&amp;quot;,&amp;quot;ZJ11581&amp;quot;);
+            return &amp;quot;ok&amp;quot;;
+      }
+      catch ( ee ) {
+            throw ee;
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return &amp;quot;操作成功&amp;quot;;
+}
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+{
+  
+}
+var i=0;
+function addBottomHtml(mwobj,request,sb,usrinfo)
+{
+//  var c = 1300;
+//  for( i=0;i&amp;lt;c;i++)
+//  {
+//    sb.append(i);
+//    sb.append(&amp;quot;,&amp;quot;);
+//    sb.append(pub.EAFunc.DateToStr(new java.util.Date(),&amp;quot;hh:mm:ss&amp;quot;));
+//    sb.append(&amp;quot;,&amp;quot;);
+//    sb.append(java.lang.Thread.activeCount());
+//    sb.append(&amp;quot;\n&amp;quot;);
+    //java.lang.Thread.currentThread().sleep(1);
+    //java.lang.Thread.currentThread().stop();
+//  }
+//  sb.append(java.lang.Thread.currentThread().getName());
+//  sb.append(&amp;quot;.end:&amp;quot;+c);
+}
+
+function Response()
+{
+	//response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+	//request.setCharacterEncoding(&amp;quot;UTF-8&amp;quot;);
+	
+	//URL传递过来的方式是&amp;quot;&amp;lb=&amp;quot;+java.net.URLEncoder.encode(lb,&amp;quot;gbk&amp;quot;)
+	var mylocation = pub.EAFunc.NVL(request.getParameter(&amp;quot;lb&amp;quot;),&amp;quot;&amp;quot;);
+	mylocation = java.net.URLDecoder.decode(mylocation,&amp;quot;utf-8&amp;quot;);
+	//mylocation = pub.EAJ2meUtil.changeCharset(mylocation,&amp;quot;gbk&amp;quot;,&amp;quot;utf-8&amp;quot;);
+	var location_x = request.getParameter(&amp;quot;lx&amp;quot;);
+	var location_y = request.getParameter(&amp;quot;ly&amp;quot;);
+	
+	var html = getBaiduMap(location_x,location_y,mylocation);
+	//html = getGoogleMap(location_x,location_y,mylocation);
+
+	return html;
+}
+
+// 百度地图
+function getBaiduMap(location_x,location_y,mylocation) 
+{
+	var html = &amp;quot;&amp;lt;!DOCTYPE html&amp;gt;
+		&amp;lt;html&amp;gt;
+		&amp;lt;head&amp;gt;
+		&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot; /&amp;gt;
+		&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;initial-scale=1.0, user-scalable=no\&amp;quot; /&amp;gt;
+		&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+		&amp;lt;/style&amp;gt;
+		&amp;lt;!--&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?type=quick&amp;v=1.0&amp;ak=bcqnSYjGSOPcmxcDpG8T9nMs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;--&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?v=2.0&amp;ak=bcqnSYjGSOPcmxcDpG8T9nMs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://developer.baidu.com/map/jsdemo/demo/convertor.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;title&amp;gt;微信地图网页-我的位置&amp;lt;/title&amp;gt;
+		&amp;lt;/head&amp;gt;
+		&amp;lt;body&amp;gt;
+		&amp;lt;div id=\&amp;quot;allmap\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		var mylocation = &amp;apos;&amp;quot;+mylocation+&amp;quot;&amp;apos;;
+		var location_x = &amp;quot;+location_x+&amp;quot;;
+		var location_y = &amp;quot;+location_y+&amp;quot;;
+		// 百度地图API功能
+		var map = new BMap.Map(\&amp;quot;allmap\&amp;quot;);            // 创建Map实例
+		var gpsPoint = new BMap.Point(location_y,location_x);
+		map.centerAndZoom(gpsPoint,16);  //初始化时，即可设置中心点和地图缩放级别。
+		//map.setCenter(\&amp;quot;南宁\&amp;quot;);
+		//map.addControl(new BMap.ZoomControl());          //添加地图缩放控件 v1.0
+		map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件 v2.0
+		
+		var marker1 = new BMap.Marker(gpsPoint);  // 创建标注
+		map.addOverlay(marker1);              // 将标注添加到地图中		
+		var opts = {
+		  width : 200,     // 信息窗口宽度
+		  height: 80,     // 信息窗口高度
+		  title : \&amp;quot;我的位置\&amp;quot; // 信息窗口标题
+		}
+		//创建信息窗口
+		var infoWindow1 = new BMap.InfoWindow(mylocation,opts);
+		//marker1.openInfoWindow(infoWindow1,opts);
+		marker1.addEventListener(\&amp;quot;click\&amp;quot;, function(){this.openInfoWindow(infoWindow1,opts);});
+		//map.openInfoWindow(infoWindow,point); //开启信息窗口
+		
+//		//创建信息窗口
+//		var infoWindow1 = new BMap.InfoWindow(mylocation);
+//		marker1.addEventListener(\&amp;quot;click\&amp;quot;, function(){this.openInfoWindow(infoWindow1);});
+		
+		setTimeout(function(){
+		    //BMap.Convertor.translate(gpsPoint,0,translateCallback);     //GPS坐标 真实经纬度转成百度坐标
+		    BMap.Convertor.translate(gpsPoint,2,translateCallback);     //谷歌坐标 真实经纬度转成百度坐标
+		}, 2000);
+
+		//坐标转换完之后的回调函数
+		translateCallback = function (point){
+		    //var marker2 = new BMap.Marker(point);
+		    //map.addOverlay(marker2);
+		    //创建信息窗口
+		    //var infoWindow2 = new BMap.InfoWindow(mylocation,opts);
+		    //marker2.openInfoWindow(infoWindow2,opts);
+		    //marker2.addEventListener(\&amp;quot;click\&amp;quot;, function(){this.openInfoWindow(infoWindow2,opts);});
+		    map.setCenter(point);
+		    //alert(point.lng + &amp;apos;,&amp;apos; + point.lat);
+		    var local = new BMap.LocalSearch(map, {
+			  renderOptions:{map: map, autoViewport:true}
+			});
+		    local.searchNearby(\&amp;quot;捷强\&amp;quot;, point);
+		    //local.searchNearby(\&amp;quot;银行\&amp;quot;, point);
+		}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	return html;
+
+}
+
+// 谷歌地图
+function getGoogleMap(location_x,location_y,mylocation) 
+{
+	var html = &amp;quot;&amp;lt;!DOCTYPE html&amp;gt;
+		&amp;lt;html&amp;gt;
+		&amp;lt;head&amp;gt;
+		&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot; /&amp;gt;
+		&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;initial-scale=1.0, user-scalable=no\&amp;quot; /&amp;gt;
+		&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+		&amp;lt;/style&amp;gt;
+		&amp;lt;script src=&amp;apos;http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true_or_false&amp;key=ABQIAAAADEgO6kqjKx2W3NKoYkXzGhTepiFuMo4rdqjr65BYebADdmCbPBSZRe2SjhGp7UEHeh4Eg90T-LJuxw&amp;sensor=true&amp;apos; type=&amp;apos;text/javascript&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;title&amp;gt;微信地图网页-我的位置&amp;lt;/title&amp;gt;
+		&amp;lt;/head&amp;gt;
+		&amp;lt;body&amp;gt;
+		&amp;lt;div id=\&amp;quot;allmap\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		var mylocation = &amp;apos;&amp;quot;+mylocation+&amp;quot;&amp;apos;;
+		var location_x = &amp;quot;+location_x+&amp;quot;;
+		var location_y = &amp;quot;+location_y+&amp;quot;;
+		// 百度地图API功能
+		var map = new GMap2(document.getElementById(\&amp;quot;allmap\&amp;quot;));          // 创建Map实例
+		if (GBrowserIsCompatible()) {
+		        map.addControl(new GSmallMapControl());
+			map.addControl(new GMapTypeControl());
+			map.setCenter(new GLatLng(location_x,location_y), 15);
+			
+			var latlng = new GLatLng(location_x,location_y);
+			var marker = new GMarker(latlng, {title:mylocation,draggable:false});
+			map.addOverlay(marker);
+			marker.openInfoWindow(mylocatin);
+
+	
+	        }
+		
+
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	return html;
+
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1????</BILID><SUBTYP >0???</SUBTYP><CORPID >0??????</CORPID><CORPNAM >0??????</CORPNAM><LOCID >0??|????</LOCID><LOCNAM >0??|????</LOCNAM><DAT >0????</DAT><CRTUSR >1???</CRTUSR><CRTUSRNAM >0?????</CRTUSRNAM><CRTDAT >0????</CRTDAT><CHKUSR >1???</CHKUSR><CHKUSRNAM >0?????</CHKUSRNAM><CHKDAT >0????</CHKDAT><REFID1 >0????1</REFID1><REFNAM1 >0????1</REFNAM1><REFID2 >0????2</REFID2><REFNAM2 >0????2</REFNAM2><NOTE >0????</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1????</SEQID><ITMID >1????</ITMID><ITMNAM >0????</ITMNAM><ITMSPC >0??</ITMSPC><UNIT >0????</UNIT><PRICE >0??</PRICE><QTY >0??</QTY><TAXTYP >0????</TAXTYP><NOTAXMNY >0?????</NOTAXMNY><TAXMNY >0??</TAXMNY><MNY >0????</MNY><REFID1 >0????1</REFID1><REFNAM1 >0????1</REFNAM1><REFID2 >0????2</REFID2><REFNAM2 >0????2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

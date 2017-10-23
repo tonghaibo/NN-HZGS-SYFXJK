@@ -1,0 +1,410 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >NLS</MWID><NAME >国际化</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >NLS.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+var sheet =0;
+
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+    if(id==&amp;apos;执行&amp;apos;&amp;&amp; row ==&amp;quot;7&amp;quot;&amp;&amp; col==&amp;quot;6&amp;quot; &amp;&amp; sheet==&amp;quot;0&amp;quot;)
+    {
+               
+    		var jobid = &amp;quot;NLS&amp;quot;;
+    		_sql.querytods(&amp;quot;GetSEQ&amp;quot;,&amp;quot;&amp;quot;);
+		var seqid= _this.XMLDS_GetString(0,&amp;quot;val&amp;quot;);
+		var thisjobid = jobid +seqid;	
+		_sql.querytods(&amp;quot;QueryRunOSTimer&amp;quot;,&amp;quot;jobid=&amp;quot;+jobid );
+		if( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+			//有一个作业正在运行，打开进度框
+			thisjobid = _this.XMLDS_GetString(0,&amp;quot;ID&amp;quot;);
+			window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+		}
+		else {
+			// 通过Get的方式调用服务端的一个函数
+			var par=G_SYTID;//系统号
+			var htp=G_HOMEURL;//url地址
+       			htp=htp.substring(0,htp.lastIndexOf(&amp;quot;ROOT&amp;quot;));
+			
+			//var par=&amp;quot;MSG3&amp;quot;;//将系统号传给服务端这里强制设置为msg3
+			var sParam =&amp;quot;jobid=&amp;quot;+thisjobid+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;htp=&amp;quot;+htp+&amp;quot;&amp;jobnam=&amp;quot;+_this.GetCellText(0,1,1)+&amp;quot;&amp;lan=&amp;quot;+_this.GetCellText(sheet,5,4)+&amp;quot;&amp;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisaccid=&amp;quot;+G_ACCID+&amp;quot;&amp;thissytid=&amp;quot;+par;
+			try {
+				var ret = invokeOSFunc(&amp;quot;genbatch&amp;quot;,sParam) ;
+				
+				if ( ret!=&amp;quot;&amp;quot; ) {
+					window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+ thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+				}   
+			}
+			catch ( e ) {
+					alert (e);
+			}
+		}
+    }
+}
+
+
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellText(sheet,3,4,G_SYTNAM);//显示系统名称
+	//_this.SetCellText(sheet,3,4,&amp;quot;MSG-3故障分析系统&amp;quot;);//显示系统名称
+	sql=&amp;quot;select id,name from V_LANGUAGE&amp;quot;;
+	_this.QuerySQLDS(sql);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,5,4,createListValues(sql));
+	_this.SetCellText(sheet,5,4,&amp;quot;en&amp;quot;);
+}
+
+ //生成List值
+function createListValues(sql){
+	var id = &amp;quot;&amp;quot;;
+	var name = &amp;quot;&amp;quot;;
+	var listid = _this.CreateListValue();
+	QuerySQLDS(sql);
+	var count = _this.XMLDS_GetRowCount();
+	for(var i = 0;i &amp;lt; count;i ++){
+		id = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+		name = _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+		_this.SetListValue(listid,id,name);
+	}
+	return listid ;
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var mutil = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var timepack = new JavaPackage( &amp;quot;com.xlsgrid.net.time&amp;quot; );
+var rs = new JavaPackage ( &amp;quot;com.xlsgrid.net.servlet&amp;quot; );
+var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);//httpcall的包
+function genbatch()
+{
+	var db = null;
+	var jobseqid  = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		jobseqid = jobid;
+		var tim = new timepack.EARunOSTimer(); 
+		tim.init(   jobseqid , jobnam,   &amp;quot;x&amp;quot;,  &amp;quot;NLS&amp;quot;,  &amp;quot;modify2&amp;quot;, &amp;quot;jobid=&amp;quot;+jobid+&amp;quot;&amp;lan=&amp;quot;+lan+&amp;quot;&amp;htp=&amp;quot;+htp+&amp;quot;&amp;isorgid=&amp;quot;+thisorgid+&amp;quot;&amp;jobseqid=&amp;quot;+jobseqid +&amp;quot;&amp;thisaccid=&amp;quot;+thisaccid+&amp;quot;&amp;thissytid=&amp;quot;+thissytid);
+	}
+	catch ( ee ) {
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return jobseqid  ;// 返回后台分配的作业编号
+
+}
+// 通知外部当前的运行情况
+function notify(jobseqid,percent,note,stat)
+{
+	var db = null;
+	if ( percent &amp;lt; 0 ) return &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		note = pubpack.EAFunc.Replace( note, &amp;quot;&amp;apos;&amp;quot;,&amp;quot;‘&amp;quot; );
+		if(note==&amp;quot;&amp;quot;){
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		else {
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,percentnote=&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+			db.ExcecutSQL(&amp;quot;insert into RunOSTimerDTL(id,name ) values(&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;)&amp;quot; );
+		}
+		db.Commit();
+	}
+	catch ( e ) {
+		//pubpack.EAFunc.Log( e.toString() );
+		db.Rollback();
+		return &amp;quot;ERROR&amp;quot; ;
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot;OK&amp;quot;;
+}
+
+//根据syt表中的系统号翻译xmldb/grddb下不同的系统
+//手动配置系统的中文路径和英文路径客户端不传入参数
+function modify2()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+	        db = new pubpack.EADatabase();
+		sql =&amp;quot;select distinct(id) from syt&amp;quot;;//查系统号
+	    	var ds =db.QuerySQL(sql);
+	    	var thisorgid=&amp;quot;&amp;quot;;//组织号
+	    	var oldpath =&amp;quot;&amp;quot;;
+	    	var newpath =&amp;quot;&amp;quot;;
+	        var ifper=0;
+	        var filesum=0;
+	        var thissum=0;
+	        var language=lan;
+	        var iflayout=0;
+	    	var path =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;xmldb/grddb/syt&amp;quot;;//动态路径（中间件）
+	    	//alert(path);
+       	 	//翻译系统中间件对象
+    	 	oldpath =path +thissytid;
+    	 	newpath =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;/&amp;quot;+&amp;quot;EN&amp;quot;;
+	        newpath= pub.EAFunc.Replace(newpath,&amp;quot;//&amp;quot;,&amp;quot;_&amp;quot;)+&amp;quot;/xmldb/grddb/syt&amp;quot;+thissytid+&amp;quot;/&amp;quot;;//从原来的路径得出英文路径
+	        ifper=0;
+	        notify(jobid,0,&amp;quot;第一步：中间件对象翻译开始 ...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+	        thissum=getf(oldpath,newpath,thissytid,ifper,language)*1.0;
+	        filesum=filesum*1.0+thissum*1.0;
+	        //翻译组织的布局（一个系统可能有多个组织，逐个翻译）
+	        var tablename =&amp;quot;sysurl&amp;quot;+lan;
+	        //建表
+	        try{ 
+	        	sql=&amp;quot;select  count(*)  from &amp;quot;+tablename+&amp;quot;&amp;quot;;
+                        var dst=db.QuerySQL(sql);
+	        }
+	        catch(e){
+                        sql=&amp;quot;create table &amp;quot;+tablename+&amp;quot; as  select * from sysurl&amp;quot;;
+			db.ExcecutSQL(sql);
+	        }
+	        sql=&amp;quot;select org from acc where syt=&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos;&amp;quot;;
+    	        var newds =db.QuerySQL(sql);
+                ifper=1;
+	        for( var o=0;o&amp;lt;newds.getRowCount();o++){
+	                thisorgid=newds.getStringAt(o,&amp;quot;org&amp;quot;);
+	        	oldpath =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;org/&amp;quot;+thisorgid+&amp;quot;/layout/&amp;quot;;
+	        	newpath =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;/&amp;quot;+&amp;quot;EN&amp;quot;;
+	        	newpath= pub.EAFunc.Replace(newpath,&amp;quot;//&amp;quot;,&amp;quot;_&amp;quot;)+&amp;quot;/org/&amp;quot;+thisorgid+&amp;quot;/layout/&amp;quot;;//从原来的路径得出英文路径
+	        	notify(jobid,85,&amp;quot;第二步：组织&amp;quot;+thisorgid+&amp;quot;的布局翻译开始 ...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+	        	//翻译布局不翻译只替换
+	        	iflayout=1;
+	        	thissum=getf(oldpath,newpath,thissytid,ifper,language)*1.0;
+	        	iflayout=0;
+	        	filesum=filesum*1.0+thissum*1.0;	
+	        	//替换数据库中的菜单布局数据（表名动态构造）
+                        sql=&amp;quot;select * from &amp;quot;+tablename+&amp;quot; where org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;&amp;quot;;
+			var ds1=db.QuerySQL(sql);
+                        if(ds1.getRowCount()&amp;gt;0){//有此系统的数据就清空，否则不执行
+                        	sql=&amp;quot;delete from &amp;quot;+tablename+&amp;quot; where org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;&amp;quot;;
+		        	db.ExcecutSQL(sql);//清空表中这个系统的数据
+                        }
+		        sql=&amp;quot;insert into sysurlen  select * from sysurl  where org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);//插入这个系统的数据（从中文版中取）
+			//db.Commit();//清空和插入提交一次
+			sql=&amp;quot;select * from &amp;quot;+tablename+&amp;quot;&amp;quot;;
+			var ds2=db.QuerySQL(sql);
+			var ds3=&amp;quot;&amp;quot;;
+			var cn=&amp;quot;&amp;quot;;
+			var guid=&amp;quot;&amp;quot;;
+			var rownum=0;
+			if(ds2.getRowCount()&amp;gt;0){
+				for(var i=0;i&amp;lt;ds2.getRowCount();i++){
+					cn=ds2.getStringAt(i,&amp;quot;name&amp;quot;);
+					guid=ds2.getStringAt(i,&amp;quot;guid&amp;quot;);
+					sql=&amp;quot;select * from nls where nls=&amp;apos;&amp;quot;+language+&amp;quot;&amp;apos; and cnstr=&amp;apos;&amp;quot;+cn+&amp;quot;&amp;apos;&amp;quot;;
+					ds3=db.QuerySQL(sql);
+					if(ds3.getRowCount()&amp;gt;0){
+						sql=&amp;quot;update &amp;quot;+tablename+&amp;quot; set name =(select deststr from nls where nls=&amp;apos;&amp;quot;+language+&amp;quot;&amp;apos; and cnstr=&amp;apos;&amp;quot;+cn+&amp;quot;&amp;apos; and  rownum &amp;lt;2) where guid =&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos; &amp;quot;;
+						db.ExcecutSQL(sql);
+						rownum=rownum+1;
+					}
+				}
+			}
+			db.Commit();
+			notify(jobid,86,&amp;quot;更新&amp;quot;+rownum+&amp;quot;条数据&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+	        }
+	        ifper=1;
+	        //翻译配置
+	        oldpath =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+thissytid+&amp;quot;/&amp;quot;;
+    	 	newpath =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;/&amp;quot;+&amp;quot;EN&amp;quot;;
+	        newpath= pub.EAFunc.Replace(newpath,&amp;quot;//&amp;quot;,&amp;quot;_&amp;quot;)+&amp;quot;/&amp;quot;+thissytid+&amp;quot;/&amp;quot;;//从原来的路径得出英文路径
+	        ifper=1;
+	        notify(jobid,90,&amp;quot;第三步：基础信息(菜单等)翻译开始...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+	        thissum=getf(oldpath,newpath,thissytid,ifper,language)*1.0; 
+	        filesum=filesum*1.0+thissum*1.0;
+	        db.Close();
+	        notify(jobid,95,&amp;quot;翻译共更新文件数&amp;quot;+filesum,&amp;quot;Run&amp;quot;);
+	        //重载所有中间件和系统定义(用户名密码是必须要的)
+	        htp=pub.EAFunc.Replace(htp,&amp;quot;xlsgrid&amp;quot;,&amp;quot;xlsgriden&amp;quot;);//因为是在中文系统里重载英文系统的中间件，路径要改成英文的路径
+	        var thishtp=htp+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=0&amp;sytid=&amp;quot;+thissytid+&amp;quot;&amp;mwid=&amp;usrid=xlsgrid&amp;userpwd=0&amp;quot;;
+	        //var thishtp=htp+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=2&amp;usrid=xlsgrid&amp;userpwd=0&amp;quot;;                         
+	        notify(jobid,97,&amp;quot;第四步：重载本系统中的所有中间件,请耐心等候 ...&amp;quot;+thishtp,&amp;quot;Run&amp;quot;);
+	        try {
+		        var httpcall = new webget.HttpCall();        
+		        var ret = httpcall.Get(thishtp,&amp;quot;GBK&amp;quot;);//重载所有中间件
+		        
+		        notify(jobid,98,&amp;quot;第五步：重载系统定义...&amp;quot;+thishtp,&amp;quot;Run&amp;quot;);
+	    		thishtp=htp+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=1&amp;usrid=xlsgrid&amp;userpwd=0&amp;quot;;
+		        ret =  httpcall.Get(thishtp,&amp;quot;GBK&amp;quot;);//重载系统定义
+		        
+		        notify(jobid,99,&amp;quot;第六步：重载子系统定义...&amp;quot;+thishtp,&amp;quot;Run&amp;quot;);
+		        thishtp=htp+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=5&amp;usrid=xlsgrid&amp;userpwd=0&amp;quot;;
+		        ret =  httpcall.Get(thishtp,&amp;quot;GBK&amp;quot;);//重载子系统定义
+		        ret=ret.substring(2,ret.lastIndexOf(&amp;quot;]&amp;quot;));
+		}
+		catch (e) {
+		
+		}
+	       	        
+	        notify(jobid,100,&amp;quot;操作完成&amp;quot;,&amp;quot;end&amp;quot;);
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		throw new Exception(e.toString());
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+//  中文路径oldpath
+//  英文路径newpath
+//  系统号thissytid
+//  是否计算进度条ifper
+//  目标语言lan
+function getf(oldpath1,newpath1,thissytid1,ifper,lan){
+
+         var sumf =0;
+         var oldpath=oldpath1;
+         var newpath=newpath1;
+         var thissytid=thissytid1;
+         var sql =&amp;quot;select * from NLS where sytid =&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos; and nls=&amp;apos;&amp;quot;+lan+&amp;quot;&amp;apos; order by lengthb(cnstr) desc&amp;quot;;//获取对照表信息
+    	 var db = new pubpack.EADatabase();
+    	 var ds =db.QuerySQL(sql);
+         var map = new mutil.LinkedHashMap();//有序
+         var mkey=&amp;quot;&amp;quot;;
+         var mvalue=&amp;quot;&amp;quot;;
+         var arong=&amp;quot;&amp;quot;;
+         if(ds.getRowCount()&amp;lt;=0){
+         	notify(jobid,1,&amp;quot;数据库中无此系统的对照表 !&amp;quot; ,&amp;quot;Run&amp;quot;);
+         }
+         else{
+	         for(var j=0;j&amp;lt;ds.getRowCount();j++){
+	         	mkey=ds.getStringAt(j,&amp;quot;cnstr&amp;quot;);//中文
+	            	mvalue=ds.getStringAt(j,&amp;quot;deststr&amp;quot;);//英文
+	            	map.put(mkey,mvalue);
+	          }      
+	       	  var file = new java.io.File(oldpath);//目录
+		  var fold = file.listFiles(); //文件列表
+		  fold =pub.EAFunc.sort(fold);
+		  var len = fold.length();//文件数
+		  var filename =&amp;quot;&amp;quot;;//文件名
+		  var prefix=&amp;quot;&amp;quot;;//文件后缀
+		  var content=&amp;quot;&amp;quot;;//要写入的内容
+		  //创建临时文件夹
+        	  var dempath=&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;xmldb/grddb/syt&amp;quot;+thissytid+&amp;quot;_demp/&amp;quot;;
+        	  pub.EAFunc.WriteToFile(dempath+&amp;quot;demp.xml&amp;quot;,&amp;quot; &amp;quot;,&amp;quot;UTF-8&amp;quot;);//保存新文件
+        	  if(ifper==0){
+        	  	notify(jobid,1,&amp;quot;文件总数： &amp;quot;+len ,&amp;quot;Run&amp;quot;);//后台通知外部
+		  }
+		  for(var i=0;i&amp;lt;len;i++){
+		  	file = fold[i];
+		  	if(file.isDirectory()){
+		        	arong=&amp;quot;无法翻译文件夹&amp;quot;;
+		    	}
+		   	 else{
+		    		filename =file.getName();//文件名
+		    		//nofixname =filename.substring(0,filename.lastIndexOf(&amp;quot;.&amp;quot;));//不包括后缀的文件名
+		    		if(ifper==0){
+			    		var temp=len/80;
+			    		var per=(sumf/temp);
+				    	if(sumf%5 == 0){
+				    		notify(jobid,per,&amp;quot;文件： &amp;quot;+file.getAbsolutePath(),&amp;quot;Run&amp;quot;);//后台通知外部
+				    	}
+		    		}
+		        	prefix=filename.substring(filename.lastIndexOf(&amp;quot;.&amp;quot;)+1);//文件后缀
+		        	
+		        	if(prefix==&amp;quot;zxg&amp;quot; ){   //对于压缩文件要单独处理 
+			        	pub.EAZip.deCompressFileToFile(file.getAbsolutePath(),dempath+&amp;quot;/demp.xml&amp;quot;);//解压文件    
+		          		content=pub.EAFunc.readFile(dempath+&amp;quot;/demp.xml&amp;quot;,&amp;quot;UTF-8&amp;quot;);//读取解压后的文件
+		          		var set = map.keySet();
+					var it = set.iterator();
+					while(it.hasNext()){
+					        var key = it.next();
+					        var value=map.get(key);
+					        if(content.indexOf(key)&amp;gt;-1){
+					        	try{
+					        		content=pub.EAFunc.Replace(content,key,value);//替换中文
+					        	}
+					        	catch(e){
+					        		notify(jobid,per,&amp;quot;错误： &amp;quot;+e.toString(),&amp;quot;Run&amp;quot;);//后台通知外部
+					        	}
+					        }
+				        }	   
+				        pub.EAFunc.WriteToFile(dempath+&amp;quot;/demp.xml&amp;quot;,content,&amp;quot;UTF-8&amp;quot;);//保存新文件
+				        pub.EAZip.compressFileToFile(dempath+&amp;quot;/demp.xml&amp;quot;,newpath+filename);//压缩文件       		
+		          	}
+				else if(prefix!=&amp;quot;zxg&amp;quot;){
+			          	content=pub.EAFunc.readFile(file.getAbsolutePath(),&amp;quot;GBK&amp;quot;);//要写入的内容
+			          	var set = map.keySet();
+					var it = set.iterator();
+					while(it.hasNext()){
+						var key = it.next();
+						var value=map.get(key);
+					        if(content.indexOf(key)&amp;gt;-1){
+					        	try{
+					        		content=pub.EAFunc.Replace(content,key,value);//替换中文
+					        	}
+					        	catch(e){
+					        		notify(jobid,per,&amp;quot;错误： &amp;quot;+e.toString(),&amp;quot;Run&amp;quot;);//后台通知外部
+					        	}
+					        }
+					  }
+					  pub.EAFunc.WriteToFile(newpath+filename,content,&amp;quot;GBK&amp;quot;);//保存新文件
+			        }
+			        sumf=sumf*1.0+1;     
+		    }           
+		                     	    
+		}//for
+		 //删除临时文件，和临时目录
+		 var f = new java.io.File(dempath+&amp;quot;/demp.xml&amp;quot;);
+		 f.delete();//删除文件
+		 pub.EAFunc.deltree(dempath);//删除目录
+		 db.Close();
+		 return sumf;
+    }
+}
+//由路径计算文件数量（忽略子文件夹）
+function getfilesum(path)
+{
+	var sum=0;
+        var file = new java.io.File(path);//目录
+        var fold = file.listFiles(); //文件列表
+        fold =pub.EAFunc.sort(fold);
+        sum = fold.length();//文件数
+	return sum;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >QueryRunOSTimer</ID><NAME ></NAME><DATDSC >select id from RunOSTimer
+where upper(stat)=&amp;apos;RUN&amp;apos; and id like &amp;apos;[%jobid]%&amp;apos;</DATDSC><C4 >QueryRunOSTimer</C4><C5 ></C5><C6 >QueryRunOSTimer</C6><C7 >QueryRunOSTimer</C7><C8 >QueryRunOSTimer</C8></ROW>
+<ROW num="1" ><ID >QueryRunOSTimerExist</ID><NAME ></NAME><DATDSC >select count(*) from RunOSTimer
+where (stat=&amp;apos;end&amp;apos; or stat=&amp;apos;error&amp;apos;) and id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >QueryRunOSTimerExist</C7><C8 >QueryRunOSTimerExist</C8></ROW>
+<ROW num="2" ><ID >DeleteQueryRunOSTimer</ID><NAME ></NAME><DATDSC >delete from RunOSTimer where  id=&amp;apos;[%jobid]&amp;apos;;
+delete from RunOSTimerDTL where  id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >DeleteQueryRunOSTimer</C8></ROW>
+<ROW num="3" ><ID >NewRunOSTimer</ID><NAME ></NAME><DATDSC >insert into RunOSTimer(id,name) values(&amp;apos;[%jobid]&amp;apos;,&amp;apos;[%jobnam]&amp;apos;)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8></ROW>
+<ROW num="4" ><ID >init</ID><NAME ></NAME><DATDSC >create view V_ETL_TYP as select distinct cls id ,cls name from ETLHDR;
+create table RunOSTimer(guid char(32) default sys_guid() primary key , id varchar2(20), name varchar2(256),percent int, percentnote varchar2(256),stat varchar2(10) default &amp;apos;end&amp;apos; ,crtdat date default sysdate);
+alert table RunOSTimer add crtdat date default sysdate;
+create table RunOSTimerDTL(guid char(32) default sys_guid() primary key , id varchar2(20), name varchar2(256),crtdat date default sysdate);
+create sequence seq_etl </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8></ROW>
+<ROW num="5" ><ID >GetSEQ</ID><NAME ></NAME><DATDSC >select seq_etl.nextval val from dual</DATDSC><C4 ></C4><C5 >GetSEQ</C5><C6 ></C6><C7 ></C7><C8 >GetSEQ</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

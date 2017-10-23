@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_RtMart</MWID><NAME >大润发</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_RtMart.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);  
+//	_this.SetCellText(0,0,0,msg);
+	_this.SaveTextFile( &amp;quot;d:/GMS.htm&amp;quot;,msg,&amp;quot; (*.htm)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var util = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+var protocolpack = new JavaPackage(&amp;quot;org.apache.commons.httpclient.protocol&amp;quot;);
+function start()
+{
+	return getOrderStr(&amp;quot;jqpx&amp;quot;,&amp;quot;2011-05-13&amp;quot;,&amp;quot;0001&amp;quot;,&amp;quot;rt23886&amp;quot;,&amp;quot;6969&amp;quot;,&amp;quot;5&amp;quot;,&amp;quot;GBK&amp;quot;);
+}
+var order = new pubpack.EAXmlDS();
+var row = -1;
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{ 
+	var db = null;
+	code = &amp;quot;GBK&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		var map = new util.HashMap();
+		var httpcall = new webget.HttpCall();	
+		
+		var myhttps = new protocolpack.Protocol(&amp;quot;https&amp;quot;, new webget.MySecureProtocolSocketFactory(), 443); 
+		protocolpack.Protocol.registerProtocol(&amp;quot;https&amp;quot;, myhttps);
+					
+		//登陆页面
+		var ret = httpcall.Get(&amp;quot;https://supplier.rt-mart.com.cn/index.php&amp;quot;,code);
+		//后台验证页面
+		ret = httpcall.Get(&amp;quot;https://supplier.rt-mart.com.cn/php/scm_login_check.php?area=1&amp;userid=&amp;quot;+userid+&amp;quot;&amp;passwd=&amp;quot;+passwd+&amp;quot;&amp;image.x=15&amp;image.y=12&amp;quot;,code);
+		//登陆后的主页面
+		ret = httpcall.Get(&amp;quot;https://supplier.rt-mart.com.cn/php/scm_main.php&amp;quot;,code);
+		//点击订单下传
+		ret = httpcall.Get(&amp;quot;https://supplier.rt-mart.com.cn/php/scm_basic.php?status=0&amp;quot;,code);
+		//取得需要下传的订单列表，放入Map容器中
+		var rootlist = HtmlParser.parserHtml(ret,code);
+		var aTagList = HtmlParser.filterHtml(rootlist,&amp;quot;A&amp;quot;);
+		var attr = &amp;quot;&amp;quot;;
+		for (var i = 0;i&amp;lt;aTagList.size();i++)
+		{
+			var aTag = aTagList.elementAt(i);
+			attr = aTag.getAttribute(&amp;quot;class&amp;quot;);
+			if (attr!=&amp;quot;&amp;quot; &amp;&amp; attr!=null &amp;&amp; attr.equals(&amp;quot;class1&amp;quot;))
+			{
+				map.put(aTag.toPlainTextString().trim()+&amp;quot;_&amp;quot;+i,aTag.getAttribute(&amp;quot;href&amp;quot;));
+			}							
+		}
+		//遍历Map容器中存在的订单打开相应的订单明细列表
+		var host = &amp;quot;https://supplier.rt-mart.com.cn/php/&amp;quot;;
+		var ordlist = map.keySet();
+		var it = ordlist.iterator();
+		var row = -1;
+		while(it.hasNext())
+		{
+			var ordid = it.next();
+			if (ordid != &amp;quot;&amp;quot;)
+			{
+				var url = host+map.get(ordid);
+				//订单明细(外层)列表
+				ret = httpcall.Get(url,code);
+				//点击打印订单
+				//+&amp;quot;&amp;store_no=999&amp;ord_no=&amp;quot;+ordid
+				//还原ordid
+				ordid = ordid.split(&amp;quot;_&amp;quot;)[0];
+				ret = httpcall.Get(host+&amp;quot;scm_temp_print.php?URL=scm_basic_print.php&amp;&amp;quot;+url.split(&amp;quot;&amp;&amp;quot;)[1]+&amp;quot;&amp;ord_no=&amp;quot;+ordid+&amp;quot;&amp;sup_no=&amp;quot;+passwd,code);
+				var params = &amp;quot;code=&amp;InputDate=&amp;key=&amp;key1=&amp;key2=&amp;ord_no=&amp;quot;+ordid+&amp;quot;&amp;orderby=&amp;pay_date=&amp;pay_group=&amp;pcode=&amp;&amp;quot;+url.split(&amp;quot;&amp;&amp;quot;)[1]+&amp;quot;&amp;type=&amp;quot;; 
+				var srcode = httpcall.Post(host+&amp;quot;scm_basic_print.php&amp;quot;,params,code);
+				parserOrderList(db,srcode,order,code,ordid,userid,kaid,deptid);
+			}
+		}
+		
+		return HtmlParser.parserDsToString(order,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);								 
+	
+	}catch(e){
+		throw new Exception(e);
+	}
+	finally
+	{
+		if(db != null)
+			db.Close();
+	}
+}
+
+
+function parserOrderList(db,srcode,order,code,ordid,userid,kaid,deptid)
+{
+	//开始解析订单
+	var nodelist = HtmlParser.parserHtml(srcode,code);
+	var tablist = HtmlParser.filterHtml(nodelist,&amp;quot;TABLE&amp;quot;);
+	var title1 = HtmlParser.parserTable(tablist,code,new Array(1),&amp;quot;T&amp;quot;);
+	var title2 = HtmlParser.parserTable(tablist,code,new Array(3),&amp;quot;T&amp;quot;);
+	
+	//获得&amp;lt;TH&amp;gt;中的内容
+	var cont = HtmlParser.ReplaceStrToNull(tablist.elementAt(3).toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;));
+	var corpnam = cont.substring(cont.indexOf(&amp;quot;交货地点&amp;quot;)+6,cont.indexOf(&amp;quot;地址&amp;quot;)).trim();
+	var listnode = tablist.elementAt(7);
+	var rows = listnode.getRows();
+	var s = &amp;quot;&amp;quot;;
+	var seq = 1;
+	for (var r = 2;r &amp;lt; rows.length();r++)
+	{
+		var cols = rows[r].getColumns();
+		var count = cols.length();
+		var ordid = &amp;quot;&amp;quot;;
+		if (count &amp;gt; 3)
+		{
+			row = order.AddNullRow(row);
+			order.setValueAt(row,&amp;quot;CODE&amp;quot;,HtmlParser.ReplaceStrToNull(cols[0].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;/&amp;quot;))); 
+			order.setValueAt(row,&amp;quot;EITMID&amp;quot;,HtmlParser.ReplaceStrToNull(cols[1].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;/&amp;quot;)));
+			order.setValueAt(row,&amp;quot;EITMNAM&amp;quot;,HtmlParser.ReplaceStrToNull(cols[2].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;/&amp;quot;)));
+			order.setValueAt(row,&amp;quot;SPEC&amp;quot;,HtmlParser.ReplaceStrToNull(cols[3].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;/&amp;quot;)));   			
+			var qty = HtmlParser.ReplaceStrToNull(cols[4].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;/&amp;quot;));
+			if(qty.indexOf(&amp;quot;(&amp;quot;) &amp;gt; -1)
+			{
+				order.setValueAt(row,&amp;quot;QTY&amp;quot;,qty.substring(0,qty.indexOf(&amp;quot;(&amp;quot;)));
+				var untnum = (1 * qty.substring(0,qty.indexOf(&amp;quot;(&amp;quot;)))/(1 * qty.substring(qty.indexOf(&amp;quot;(&amp;quot;)+1,qty.length()-1));
+				order.setValueAt(row,&amp;quot;UNTNUM&amp;quot;,untnum);
+			}
+			else
+			{
+				order.setValueAt(row,&amp;quot;QTY&amp;quot;,qty);
+				order.setValueAt(row,&amp;quot;UNTNUM&amp;quot;,1);
+			}
+			order.setValueAt(row,&amp;quot;ZPQTY&amp;quot;,&amp;quot;0&amp;quot;);
+			order.setValueAt(row,&amp;quot;QTYFLG&amp;quot;,&amp;quot;N&amp;quot;);
+			order.setValueAt(row,&amp;quot;SEQID&amp;quot;,seq);
+			order.setValueAt(row,&amp;quot;EPRICE&amp;quot;,&amp;quot;0&amp;quot;);
+			order.setValueAt(row,&amp;quot;SRFLG&amp;quot;,&amp;quot;NR&amp;quot;);
+			order.setValueAt(row,&amp;quot;USERID&amp;quot;,userid);
+			order.setValueAt(row,&amp;quot;KAID&amp;quot;,kaid);
+			order.setValueAt(row,&amp;quot;DEPTID&amp;quot;,deptid);
+			order.setValueAt(row,&amp;quot;ECORPNAM&amp;quot;,corpnam);
+			order.setValueAt(row,&amp;quot;ECORPID&amp;quot;,corpnam);
+//			order.setValueAt(row,&amp;quot;ORDCONTENT&amp;quot;,srcode); 
+			//解析头部数据&amp;lt;1&amp;gt;		
+			for (var a = 0; a &amp;lt; title1.length(); a++)
+			{
+				if (title1[a].split(&amp;quot;:&amp;quot;).length()&amp;gt; 1)
+				{				
+					var key = HtmlParser.ReplaceStrToNull(title1[a].split(&amp;quot;:&amp;quot;)[0],new Array(&amp;quot;&amp;nbsp;&amp;quot;));
+					var val = HtmlParser.ReplaceStrToNull(title1[a].split(&amp;quot;:&amp;quot;)[1],new Array(&amp;quot;&amp;nbsp;&amp;quot;));
+					if (key.indexOf(&amp;quot;订货日期&amp;quot;)&amp;gt;-1)	order.setValueAt(row,&amp;quot;DAT&amp;quot;,db.GetSQL(&amp;quot;select to_char(to_date(&amp;apos;&amp;quot;+val+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;dd/mm/yyyy&amp;apos;) from dual &amp;quot;));
+					if (key.indexOf(&amp;quot;订单号码&amp;quot;)&amp;gt;-1) { order.setValueAt(row,&amp;quot;ORDID&amp;quot;,val); order.setValueAt(row,&amp;quot;BILID&amp;quot;,val);}
+					//因为大润发的订单是永久有效的，没有送货日期的
+					//order.setValueAt(row,&amp;quot;ARRDAT&amp;quot;,db.GetSQL(&amp;quot;select to_char(to_date(&amp;apos;&amp;quot;+val+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;dd/mm/yyyy&amp;apos;) from dual &amp;quot;));
+					if (key.indexOf(&amp;quot;交货日期&amp;quot;)&amp;gt;-1) order.setValueAt(row,&amp;quot;ARRDAT&amp;quot;,&amp;quot;31/12/2099&amp;quot;);
+					//order.setValueAt(row,&amp;quot;NOTE&amp;quot;,HtmlParser.ReplaceStrToNull(val,new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;&amp;quot;)))
+					if (key.indexOf(&amp;quot;备注&amp;quot;)&amp;gt;-1) order.setValueAt(row,&amp;quot;NOTE&amp;quot;,&amp;quot;&amp;quot;);
+				}	
+				
+			}
+				//return s;
+			//解析头部数据&amp;lt;2&amp;gt;
+			//throw new Exception(title2.length());
+			for (var b = 0; b &amp;lt; title2.length(); b++)
+			{
+				if (title2[b].split(&amp;quot;：&amp;quot;).length()&amp;gt;1)
+				{
+					var key = HtmlParser.ReplaceStrToNull(title2[b].split(&amp;quot;：&amp;quot;)[0],new Array(&amp;quot;&amp;nbsp;&amp;quot;));
+					var val = HtmlParser.ReplaceStrToNull(title2[b].split(&amp;quot;：&amp;quot;)[1],new Array(&amp;quot;&amp;nbsp;&amp;quot;));
+					if (key.indexOf(&amp;quot;地址&amp;quot;)&amp;gt;-1) order.setValueAt(row,&amp;quot;CORPADDR&amp;quot;,val);
+					if (key.indexOf(&amp;quot;电话&amp;quot;)&amp;gt;-1) order.setValueAt(row,&amp;quot;TEL&amp;quot;,val);
+					if (key.indexOf(&amp;quot;传真&amp;quot;)&amp;gt;-1) order.setValueAt(row,&amp;quot;FAX&amp;quot;,val);
+				}	
+			}
+			seq++;	
+		}
+	}
+	 
+	return order;
+	
+} 
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

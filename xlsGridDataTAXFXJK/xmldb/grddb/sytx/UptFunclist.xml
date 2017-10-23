@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >UptFunclist</MWID><NAME >定义中间件函数</NAME><NOTE ></NOTE><FILE >UptFunclist.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><ORDER ></ORDER><EXTJS >xlsgrid/js/dbhelper.js</EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+order = &amp;quot; order by ID&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+       setButton();
+       var  fields = &amp;quot;GUID,GUID,sys_guid();&amp;quot;+	
+            &amp;quot;LANG,语言,,.+,1;&amp;quot;+            // 第5个字段是否列入查询条件 .+ 非空 \\d 数字
+            &amp;quot;SUBTYP,分类,,.+,1;&amp;quot;+            // 第5个字段是否列入查询条件 .+ 非空 \\d 数字
+            &amp;quot;CLASS,类名,,.+,1;&amp;quot;+            // 第5个字段是否列入查询条件 .+ 非空 \\d 数字
+            &amp;quot;FLAG,标志,,.+,1;&amp;quot;+
+            &amp;quot;RETURN, 返回值,,,1;&amp;quot;+
+            &amp;quot;FUNCTION, 函数编码,,,1;&amp;quot;+
+            &amp;quot;NOTE, 说明,,,1;&amp;quot;+
+            &amp;quot;NAME, 函数名称或参数名称,,,1;&amp;quot;+
+            &amp;quot;PARAMETER, 参数简要说明,,,1;&amp;quot;+
+            &amp;quot;FUNCNOTE, 函数的原形,,,1;&amp;quot;+
+            &amp;quot;PARAMNOTE, 参数的具体说明,,,1;&amp;quot;+
+            &amp;quot;SAMPLE, 例子,,,1;&amp;quot;+
+            &amp;quot;RLSNO, 开始支持的版本号,,,1&amp;quot;;
+      var where = &amp;quot;&amp;quot;;// (org =&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; or org is null)  &amp;quot;;
+      try {
+	      if (LANG!= &amp;quot;&amp;quot; ) {
+	      	where += &amp;quot; lang like &amp;apos;&amp;quot;+LANG+&amp;quot;%&amp;apos; &amp;quot;;		
+	      }
+	}
+	catch ( e ) {
+		alert ( &amp;quot;LANG参数需要传入&amp;quot; );
+	}      
+      var orderby = &amp;quot;&amp;quot;;      // 字段的列表
+      // 参数1：基表的名称
+      // 参数2：字段列表 格式是通过;分隔不同的字段，每个分隔中使用,来分隔不同的字段属性
+      //            字段属性： ID,NAME,默认值,正则表达式,是否列入查询的字段(=1是)
+      // 参数3：主键
+      // 参数4：显示空行标志 =true表示如果结果集为空，隐藏开头的两个空行,强制用户点击“新增”，以保证填入默认值
+      // 参数5：查询的表名称，在某些情况下，查询的表名称和基表名称不一样，默认=&amp;quot;&amp;quot;表示查询表名称采用基表名称
+      // 参数6：where条件，是不带where的子句如&amp;quot;ID like &amp;apos;01%&amp;apos;&amp;quot;
+      // 参数7：orederby，是不带order by的子句如&amp;quot;ID,REFID&amp;quot;, 
+
+      _dbhelper.InitSQL(&amp;quot;FUNCLIST&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false,&amp;quot;FUNCLIST&amp;quot;,where,orderby);
+      _dbhelper.InitColumnList(fields );
+      _dbhelper.Load(1,1,2,2);                     
+     
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+function f_dbeditbeforedelete(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_FUNCSUBTYP&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_FUNCLANG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid3 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_FUNCFLAG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid4 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=v_inscodetype&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+
+       
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+       {           
+            _this.SetRowHeight(0,row,50);                        
+            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,3,listid2);
+            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,4,listid1);
+            if (LANG==&amp;apos;CODE&amp;apos; || LANG==&amp;apos;MYCODE&amp;apos; )
+           	 _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,5,listid4 );
+            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,6,listid3);
+       }
+      _this.SetColWidth(0,3,80);
+      _this.SetColWidth(0,4,130);
+      _this.SetColWidth(0,5,100);
+       
+       _this.SetColWidth(0,7,120);
+       _this.SetColWidth(0,8,150);
+
+      
+}
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+}
+
+//================================================================// 
+// 函数：f_dbeditafternewrow
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:06:17
+// 修改日志：
+//================================================================// 
+ 
+function f_dbeditafternewrow(sheet,row)
+{
+
+}
+
+//================================================================// 
+// 函数：f_dbeditbeforesave
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:15:22
+// 修改日志：
+//================================================================// 
+function f_dbeditbeforesave(){
+      nCntNoCommit =0;
+      
+}
+
+//================================================================// 
+// 函数：f_dbeditbeforesave
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:15:22
+// 修改日志：
+//================================================================// 
+function f_dbeditaftersave(){
+
+}
+//
+function UptUserList()
+{
+}
+var cursheet=-1;
+var currow=-1;
+var curcol=-1;
+function _thisOnMouseDClick(sheet,row,col)
+{
+      currow=row;
+      curcol=col;
+      cursheet=sheet;
+      if ( col &amp;gt;=9 &amp;&amp; col&amp;lt;=14) 
+      	window.open(&amp;quot;ShowXlsGrid.sp?grdid=RTFEDIT&amp;sytid=x&amp;savertf=y&amp;onlytext=y&amp;quot;);
+}
+
+//================================================================// 
+// 函数：GetRTF
+// 说明：由RTFEDIT来调用
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/25/07 15:15:58
+// 修改日志：
+//================================================================// 
+function GetRTF()
+{
+      return _this.GetCellText(cursheet,currow,curcol);
+}
+
+//================================================================// 
+// 函数：SaveRTF
+// 说明：由RTFEDIT来调用
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/25/07 15:24:54
+// 修改日志：
+//================================================================// 
+function SaveRTF(str)
+{
+      _this.SetCellText(cursheet,currow,curcol,str);
+      _thisOnCellModify(cursheet,currow,curcol,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

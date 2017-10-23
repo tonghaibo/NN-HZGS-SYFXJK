@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >chartA2</MWID><NAME >chartA2</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >chartA2.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+//初始化中间件类
+function _init(request) 
+{
+	var mwobj = new TAXFXJK_chartA2();
+	return mwobj;
+}
+
+//输出分析图的方法
+function getCharts()
+{       
+        var hello11 = &amp;quot;hello&amp;quot;;       
+	var chr = &amp;quot;&amp;lt;script&amp;gt;
+		    $(function () {
+		    
+		    $(&amp;apos;body&amp;apos;).append(\&amp;quot;&amp;lt;div id=&amp;apos;div2&amp;apos; style=&amp;apos;min-width:800px;height:400px;margin-top:50px;&amp;apos;&amp;gt;\\
+		                         &amp;lt;table border=&amp;apos;1&amp;apos; cellspacing=&amp;apos;0&amp;apos; style=&amp;apos;font-size:14px;&amp;apos; align=&amp;apos;center&amp;apos;&amp;gt;\\
+		                              &amp;lt;caption align=&amp;apos;top&amp;apos;&amp;gt;经济支出按来源和活动类型分&amp;lt;/caption&amp;gt;\\
+       &amp;lt;tr&amp;gt;\\
+          &amp;lt;th width=&amp;apos;30%&amp;apos;&amp;gt;指标&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2001&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2005&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2006&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2007&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2008&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2009&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2010&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2011&amp;lt;/th&amp;gt;\\
+		  &amp;lt;th&amp;gt;2012&amp;lt;/th&amp;gt;\\
+       &amp;lt;/tr&amp;gt;\\
+       &amp;lt;tr&amp;gt;\\
+	      &amp;lt;td&amp;gt;RAD经费支出（亿元）&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;51.69&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;92.15&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;101.36&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;121.80&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;145.18&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;189.51&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;217.50&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;249.35&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;287.20&amp;lt;/td&amp;gt;\\
+       &amp;lt;/tr&amp;gt;\\
+       &amp;lt;tr&amp;gt;\\
+	      &amp;lt;td&amp;gt;企业资金&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;12.48&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;23.27&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;33.83&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;34.07&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;44.09&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;66.77&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;76.73&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;97.77&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;114.52&amp;lt;/td&amp;gt;\\
+       &amp;lt;/tr&amp;gt;\\
+&amp;lt;tr&amp;gt;\\
+	      &amp;lt;td&amp;gt;政府资金&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;34.52&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;56.51&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;57.89&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;80.23&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;94.10&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;115.23&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;131.00&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;141.44&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;161.83&amp;lt;/td&amp;gt;\\
+       &amp;lt;/tr&amp;gt;\\
+&amp;lt;tr&amp;gt;\\
+	      &amp;lt;td&amp;gt;其他&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;4.69&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;12.36&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;10.87&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;5.66&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;8.20&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;11.11&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;12.22&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;8.99&amp;lt;/td&amp;gt;\\
+		  &amp;lt;td&amp;gt;13.14&amp;lt;/td&amp;gt;\\
+       &amp;lt;/tr&amp;gt;\\
+		                         &amp;lt;/table&amp;gt;\\
+                                        &amp;lt;/div&amp;gt;\&amp;quot;);
+		    
+		    
+		    $(&amp;apos;#container&amp;apos;).highcharts({
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false
+        },
+        title: {
+            text: &amp;apos;经济支出按资金来源分布2012&amp;apos;
+        },
+        tooltip: {
+    	    pointFormat: &amp;apos;{series.name}: &amp;lt;b&amp;gt;{point.percentage:.1f}%&amp;lt;/b&amp;gt;&amp;apos;
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: &amp;apos;pointer&amp;apos;,
+                dataLabels: {
+                    enabled: true,
+                    color: &amp;apos;#000000&amp;apos;,
+                    connectorColor: &amp;apos;#000000&amp;apos;,
+                    format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt;: {point.percentage:.1f} %&amp;apos;
+                }
+            }
+        },
+        series: [{
+            type: &amp;apos;pie&amp;apos;,
+            name: &amp;apos;按资金来源分布&amp;apos;,
+            data: [
+                [&amp;apos;企业税金&amp;apos;,   39.87],
+                [&amp;apos;其他&amp;apos;,       3.78],               
+                [&amp;apos;政府税金&amp;apos;,    56.35]
+            ]
+        }],
+        exporting:{
+           enabled:false
+        }
+    });	
+		                       
+		                       
+		                       
+		});
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	return chr;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

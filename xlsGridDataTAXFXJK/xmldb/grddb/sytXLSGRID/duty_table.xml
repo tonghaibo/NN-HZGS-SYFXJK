@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >duty_table</MWID><NAME >硕格值班表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >duty_table.zxg</FILE><FIXED >4,4</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >sta_dat</ID><NAME >开始时间</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG >1</KEYFLG><C13 >sta_dat</C13></ROW>
+<ROW num="1" ><ID >end_dat</ID><NAME >结束时间</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG >1</KEYFLG><C13 ></C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:DUTY</DSKEY><NROW >2</NROW><NCOL >5</NCOL><CTLTYP ></CTLTYP><LISTID >DATE</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+<ROW num="1" ><ID >0,4,4</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP >COMBOBOX</CTLTYP><LISTID >USR</LISTID><ISCROSS >0</ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+<ROW num="2" ><ID >0,4,5</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP >COMBOBOX</CTLTYP><LISTID >USR</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+<ROW num="3" ><ID >0,5,4</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP >COMBOBOX</CTLTYP><LISTID >USR</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+<ROW num="4" ><ID >0,5,5</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP >COMBOBOX</CTLTYP><LISTID >USR</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//如果查询的日期小于系统当前日期，那么值班人不能更改
+function _thisOnpost_loaddata(sheet)
+{
+	var thisdate;
+	var col=1;
+	var row=4;
+	_this.QuerySQLDS(&amp;quot;select sysdate from dual&amp;quot;);
+	thisdate = _this.XMLDS_GetString(0,&amp;apos;sysdate&amp;apos;);	
+	_this.QuerySQLDS(&amp;quot;select * from  日历 b  where b.日期&amp;gt;=to_date(&amp;apos;&amp;quot;+sta_dat+&amp;quot;&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) and b.日期&amp;lt;=to_date(&amp;apos;&amp;quot;+end_dat+&amp;quot;&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;)
+	var count = _this.XMLDS_GetRowCount();
+	for (var i=0;i&amp;lt;count;i++){
+		var dat_value=_this.GetCellText(0,row+i,col);
+		if (dat_value==thisdate){
+			row=i;
+			for(var i=0;i&amp;lt;row;i++){
+				_this.SetCellLock(0,4+i,4,1);
+				_this.SetCellLock(0,4+i,5,1);
+			}
+			break;
+		}
+	}	
+}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DUTY</ID><NAME ></NAME><DATDSC >select b.日期,case b.星期 
+ when 1 then &amp;apos;星期一&amp;apos;
+ when 2 then &amp;apos;星期二&amp;apos;
+ when 3 then &amp;apos;星期三&amp;apos;
+ when 4 then &amp;apos;星期四&amp;apos;
+ when 5 then &amp;apos;星期五&amp;apos;
+ when 6 then &amp;apos;星期六&amp;apos;
+ when 0 then &amp;apos;星期日&amp;apos;
+ end as 星期,
+case b.是否工作日
+ when &amp;apos;1&amp;apos; then &amp;apos;是&amp;apos;
+ when &amp;apos;0&amp;apos; then &amp;apos;否&amp;apos; 
+ end as 是否为工作日,
+ a.dayusr,a.ngtusr
+from duty a, 日历 b 
+where b.日期&amp;gt;=to_date(&amp;apos;[%sta_dat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) and b.日期&amp;lt;=to_date(&amp;apos;[%end_dat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_char(a.dat(+),&amp;apos;YYYY-MM-dd&amp;apos;)=to_char(b.日期,&amp;apos;YYYY-MM-dd&amp;apos;) order by b.日期</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

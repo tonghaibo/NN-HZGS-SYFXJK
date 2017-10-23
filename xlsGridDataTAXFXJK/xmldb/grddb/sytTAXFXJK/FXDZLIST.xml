@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FXDZLIST</MWID><NAME >风险特征</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FXDZLIST.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >newRow</ID><NAME >新增</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C10 >GRDBTNDS_0</C10><C11 >newRow</C11></ROW>
+<ROW num="1" ><ID >deleteRow</ID><NAME >删除</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><C10 >GRDBTNDS_1</C10><C11 >deleteRow</C11></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >FXLB</ID><NAME >风险类别</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+		
+	//风险类别
+	var fxlbList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_FXLB_DM&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetListValue(fxlbList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,fxlbList);
+	_this.SetCellText(1,1,2,&amp;quot;%&amp;quot;);
+	try { 
+		if (FXLB != &amp;quot;&amp;quot;) { 
+			_this.SetCellLock(1,1,2,1); 
+			_this.SetCellText(1,1,2,FXLB); 
+		} 
+	} catch(e) { 
+		_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;8%&amp;quot;);
+	}
+
+	//风险级别
+	//var fxjbList = _this.CreateListValue();
+	var fxjbList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_CS_FXYJJB&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetListValue(fxjbList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+//	_this.SetListValue(fxjbList,&amp;quot;3&amp;quot;,&amp;quot;高&amp;quot;);
+//	_this.SetListValue(fxjbList,&amp;quot;2&amp;quot;,&amp;quot;中&amp;quot;);
+//	_this.SetListValue(fxjbList,&amp;quot;1&amp;quot;,&amp;quot;低&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,fxjbList);
+	_this.SetCellText(1,1,4,&amp;quot;%&amp;quot;);
+	
+	//有效标志
+	var yxbzList = _this.CreateListValue();
+	_this.SetListValue(yxbzList,&amp;quot;1&amp;quot;,&amp;quot;是&amp;quot;);
+	_this.SetListValue(yxbzList,&amp;quot;0&amp;quot;,&amp;quot;否&amp;quot;);
+	_this.SetListValue(yxbzList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,6,yxbzList);
+	_this.SetCellText(1,1,6,&amp;quot;1&amp;quot;);
+
+
+	_this.AutoFixScreenWidth();
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	loadData();
+	
+}
+
+function loadData()
+{
+	var fxlb = _this.GetCellText(1,1,2);
+	var fxjb = _this.GetCellText(1,1,4);
+	var yxbz = _this.GetCellText(1,1,6);
+	var skey = _this.GetCellText(1,1,8);
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,1);
+	_this.SetColVisible(0,1,-1);
+	_this.SetColVisible(0,4,-1);
+	_this.SetColVisible(0,10,-1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+		
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;FXLB=&amp;quot;+escape(fxlb)+&amp;quot;&amp;FXJB=&amp;quot;+escape(fxjb)+&amp;quot;&amp;YXBZ=&amp;quot;+escape(yxbz)+&amp;quot;&amp;SKEY=&amp;quot;+skey);
+	_this.SetMainCellRange(0,1,1,3,_this.GetColCount(0)-1);
+	_this.SetXmlDS(0,1,1,3,_this.GetColCount(0)-1,xml);
+	//设置勾选列
+	_this.SetToBoolBox(0,0,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,3) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+			_this.SetToBoolBox(0,r,8);
+			_this.SetToButton(&amp;quot;&amp;quot;,0,r,9,&amp;quot;点击识别&amp;quot;,&amp;quot;点击识别&amp;quot;,&amp;quot;&amp;quot;,0,-1,-1);
+		}
+	}
+	//_this.AutoFixColWidth(0,600);
+	_this.AutoFixScreenWidth();
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		loadData();
+	}
+	else if (sheet == 0) {
+		if (id.indexOf(&amp;quot;CELL_0&amp;quot;) &amp;gt; -1) { 
+			var url = _this.GetCellText(sheet,row,10); //url
+			var id = _this.GetCellText(sheet,row,5);
+			//var url = &amp;quot;show.sp?grdid=&amp;quot;+id;
+			if (url != &amp;quot;&amp;quot;) {
+				window.open(url);
+				//window.location.href = url;
+			}
+		}
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp; row == 0 &amp;&amp; col == 0) {
+		for (var r=1;r&amp;lt;_this.GetRowCount(0);r++) {
+			_this.SetCellText(0,r,0,newvalue);
+		}
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == 0 &amp;&amp; row &amp;gt;= _this.GetMainCellRangeRow1(0) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(0)) {
+//		var id = _this.GetCellText(sheet,row,6);
+//		var url = &amp;quot;show.sp?grdid=&amp;quot;+id;
+//		window.open(url);
+		
+		var guid = _this.GetCellText(sheet,row,1);
+		var ret = window.showModalDialog(&amp;quot;show.sp?grdid=FXDZITEM&amp;guid=&amp;quot;+guid,window,&amp;quot;scroll:no;status:no;dialogWidth:600px;dialoHeight:300px&amp;quot;);
+		if (ret == &amp;quot;ok&amp;quot;) {
+			loadData();
+		}
+	}
+}
+
+
+//新增
+function newRow() 
+{
+	var chk = _this.invokeOSFunc(&amp;quot;New&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk != &amp;quot;1&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+	
+	var ret = window.showModalDialog(&amp;quot;show.sp?grdid=FXDZITEM&amp;guid=&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:600px;dialoHeight:300px&amp;quot;);
+	if (ret == &amp;quot;ok&amp;quot;) {
+		loadData();
+	}
+}
+
+//删除
+function deleteRow()
+{
+	if (!confirm(&amp;quot;删除选中记录，是否继续？&amp;quot;)) return;
+	
+	var param = new Object();
+	var xmlstr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\n&amp;lt;ROWSET&amp;gt;\n&amp;quot;;
+	var cnt = 0;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var flag = _this.GetCellText(0,r,0);
+		if (flag == &amp;quot;1&amp;quot;) {
+			cnt ++;
+			xmlstr += &amp;quot;&amp;lt;ROW&amp;gt;&amp;lt;GUID&amp;gt;&amp;quot;+_this.GetCellText(0,r,1)+&amp;quot;&amp;lt;/GUID&amp;gt;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	if (cnt == 0) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+	
+	try {
+		param.xmlstr = xmlstr;
+		var ret = _this.invokeOSFuncExt(&amp;quot;Delete&amp;quot;,param);
+		alert(ret);
+		loadData();
+	}
+	catch (e) {
+		alert(&amp;quot;删除失败:&amp;quot;+e.toString());
+	}
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//删除表信息
+function Delete()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		
+		var ds = new pub.EAXmlDS(xmlstr);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var sql = &amp;quot;delete from fxjk_item where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		db.Commit();
+		return &amp;quot;删除成功！记录数&amp;quot;+ds.getRowCount();
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function New()
+{
+	return 1;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select guid,rownum,dl,zl,flbh,flmc,
+  fxjb,
+  yxbz,&amp;apos;点击打开&amp;apos; action,url 
+from (
+select a.guid,b.name dl,zl,flbh,flmc,fxjb,yxbz,url 
+from FXJK_ITEM a,tax_fxlb_dm b
+where a.dl=b.id
+  and a.typ=&amp;apos;2&amp;apos; and (a.flbh like &amp;apos;%[%SKEY]%&amp;apos; or a.flmc like &amp;apos;%[%SKEY]%&amp;apos;)
+  and a.dl like &amp;apos;[%FXLB]%&amp;apos;
+  and a.fxjb like &amp;apos;[%FXJB]%&amp;apos;
+  and a.yxbz like &amp;apos;[%YXBZ]%&amp;apos;
+order by flbh
+)</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

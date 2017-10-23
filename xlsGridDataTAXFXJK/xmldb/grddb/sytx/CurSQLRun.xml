@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>R</MWTYP><MWID>CurSQLRun</MWID><NAME>当前运行的SQL语句</NAME><NOTE></NOTE><NOACCNAME></NOACCNAME><FILE>CurSQLRun.zxg</FILE><FIXED>1,1</FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><MANUNIT></MANUNIT><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID>USERNAME</ID><NAME>用户</NAME><NOTNULL></NOTNULL><KEYVAL></KEYVAL><INPCTL></INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet == 0 ) {
+		if ( col == 6 ) {
+			var sql = _this.GetCellText(0,row,col) ;
+			if ( confirm( &amp;quot;是否杀掉该进程？&amp;quot; ) == 1) {
+				ExcecutSQL(sql);
+			}
+		}
+		else {
+			sql = &amp;quot;select q.sql_text   from v$session_wait w, v$session s, v$process p, v$sqlarea q &amp;quot;+
+			    &amp;quot; where s.paddr=p.addr and  s.sid=&amp;quot;+_this.GetCellText(0,row,0)+&amp;quot; and s.sql_address=q.address &amp;quot;;
+			_this.SetRowCount(1,4);
+			_this.SetCellText(1,1,0,&amp;quot;&amp;quot;);
+			_this.SetCellText(1,2,0,&amp;quot;&amp;quot;);
+			_this.SetCellText(1,3,0,&amp;quot;&amp;quot;);
+			var xml= QuerySQL(sql);
+			_this.SetXmlDS(1,1,0,3,0,xml);
+		}		
+	}  
+}
+var nRefreshTime  = 10000;//5秒钟刷新一次
+
+function reload()
+{
+  _this.SetRedraw(0);
+  //查询数据
+  try
+  {
+   	var sql = &amp;quot;select ss.sid,se.command,ss.value CPU ,se.username,se.program,se.serial#,&amp;quot;+
+		&amp;quot;&amp;apos;ALTER SYSTEM KILL SESSION &amp;apos;&amp;apos;&amp;apos;||ss.sid||&amp;apos;,&amp;apos;||se.serial#||&amp;apos;&amp;apos;&amp;apos;;&amp;apos; com &amp;quot;+
+		&amp;quot;from v$sesstat ss, v$session se &amp;quot;+
+		&amp;quot;where ss.statistic# in &amp;quot;+
+		&amp;quot;(select statistic# &amp;quot;+
+		&amp;quot;from v$statname &amp;quot;+
+		&amp;quot; where name = &amp;apos;CPU used by this session&amp;apos;) &amp;quot;+
+		&amp;quot;and se.sid=ss.sid &amp;quot;+
+		&amp;quot;and se.username like &amp;apos;&amp;quot;+USERNAME+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot; and ss.sid&amp;gt;6 &amp;quot;+
+		&amp;quot;order by ss.value desc  &amp;quot;;
+		_this.SetRowCount(0,4);
+		for ( var r=1;r&amp;lt;_this.GetRowCount(0);r++  ){
+			for ( var c=1;c&amp;lt;_this.GetColCount(0);c++  ){
+				_this.SetCellText(0,r,c,&amp;quot;&amp;quot;);
+			}
+		}
+		var xml= QuerySQL(sql);
+		_this.SetXmlDS(0,1,0,3,6,xml);
+		//_thisOnMouseDClick(0,1,0);
+
+  }
+  catch(e)
+  {
+    //alert(&amp;quot;loadmsg error:&amp;quot;+e.message);
+  }
+  setTimeout(&amp;quot;reload();&amp;quot;,nRefreshTime );
+  _this.SetRedraw(1);
+  
+}
+
+	
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellBkColor(0,-1,-1,255,255,255);
+	_this.SetCellBkColor(1,-1,-1,255,255,255);	
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,570);  
+	reload();
+	_this.SetToolbarString(&amp;quot;每隔10秒刷新&amp;quot;);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,338 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >FPFXHCB</MWID><NAME >发票风险提示核查点</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FPFXHCB.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >Save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 >Save</C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var TRKGUID = &amp;quot;&amp;quot;;
+var TRKSTAT = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	try { TRKGUID = guid } catch(e) { }	
+	
+	showInfo();
+	
+	_sql.querytods(&amp;quot;TRKINFO&amp;quot;,&amp;quot;TRKGUID=&amp;quot;+TRKGUID);
+	TRKSTAT = _this.XMLDS_GetString(0,&amp;quot;STAT&amp;quot;);
+	var swjg_dm = _this.XMLDS_GetString(0,&amp;quot;SWJG_DM&amp;quot;);
+	
+	initCheckStat(TRKSTAT);
+	
+	var taxmanList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_TAXMAN&amp;where=deptid=&amp;quot;+swjg_dm+&amp;quot;&amp;orderby=NAME&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,0,20,2,taxmanList);
+	//_this.SetToComboBox(&amp;quot;&amp;quot;,0,20,4,taxmanList);
+	_this.SetToSelectBox(&amp;quot;&amp;quot;,0,20,4,&amp;quot;V_TAX_TAXMAN&amp;quot;,&amp;quot;deptid=&amp;quot;+swjg_dm);
+	
+	_this.SetColVisible(0,5,-1);
+	for (var row=5;row&amp;lt;=17;row++) {
+		_this.SetToBoolBox(0,row,3);
+		_this.SetToBoolBox(0,row,4);
+	}	
+}
+
+//处理状态
+function initCheckStat(trkstat)
+{
+	if (trkstat == 2) {
+		_this.SetCellText(0,20,2,G_USRID);
+	}
+	else if (trkstat == 3 || trkstat == 31 || trkstat == 32) {
+		if (trkstat == 3) { //处理中
+			_this.AddToolbarButton(&amp;quot;udf_SubmitTrk2FJ&amp;quot;,&amp;quot;提交分局&amp;quot;,&amp;quot;提交分局&amp;quot;,&amp;quot;&amp;quot;,0,1,1,80);
+		
+			_this.SetCellLock(0,20,2,1);  
+			_this.SetCellLock(0,20,4,-1);
+			_this.SetCellLock(0,21,2,1);
+		}
+		else if (trkstat == 31) { //提交分局
+			_this.AddToolbarButton(&amp;quot;udf_SubmitTrk2ZGG&amp;quot;,&amp;quot;提交征管股&amp;quot;,&amp;quot;提交征管股&amp;quot;,&amp;quot;&amp;quot;,0,1,1,80);
+			
+			_this.SetCellLock(0,20,2,1);  
+			_this.SetCellLock(0,20,4,-1);
+			_this.SetCellLock(0,21,2,1);
+		}
+		else if (trkstat == 32) { //提交征管股
+			_this.AddToolbarButton(&amp;quot;udf_JsTrk&amp;quot;,&amp;quot;结束任务&amp;quot;,&amp;quot;结束任务&amp;quot;,&amp;quot;&amp;quot;,0,1,1,80);
+
+			_this.SetCellLock(0,20,2,1);  
+			_this.SetCellLock(0,20,4,1);
+			_this.SetCellLock(0,21,2,-1);
+		}
+	}
+}
+
+function showInfo()
+{
+	_sql.querytods(&amp;quot;INFO&amp;quot;,&amp;quot;TRKGUID=&amp;quot;+TRKGUID);
+	var NSRSBH = _this.XMLDS_GetString(0,&amp;quot;NSRSBH&amp;quot;);
+	var NSRMC = _this.XMLDS_GetString(0,&amp;quot;NSRMC&amp;quot;);
+	var GDJYCD = _this.XMLDS_GetString(0,&amp;quot;GDJYCD&amp;quot;);
+	var SCSB = _this.XMLDS_GetString(0,&amp;quot;SCSB&amp;quot;);
+	var GDJYRY = _this.XMLDS_GetString(0,&amp;quot;GDJYRY&amp;quot;);
+	var FDDBR = _this.XMLDS_GetString(0,&amp;quot;FDDBR&amp;quot;);
+	var CWFZR = _this.XMLDS_GetString(0,&amp;quot;CWFZR&amp;quot;);
+	var BSY = _this.XMLDS_GetString(0,&amp;quot;BSY&amp;quot;);
+	var YWY = _this.XMLDS_GetString(0,&amp;quot;YWY&amp;quot;);
+	var DLY = _this.XMLDS_GetString(0,&amp;quot;DLY&amp;quot;);
+	var HT = _this.XMLDS_GetString(0,&amp;quot;HT&amp;quot;);
+	var JJSKZZ = _this.XMLDS_GetString(0,&amp;quot;JJSKZZ&amp;quot;);
+	var WLXX = _this.XMLDS_GetString(0,&amp;quot;WLXX&amp;quot;);
+	var SS = _this.XMLDS_GetString(0,&amp;quot;SS&amp;quot;);
+	var FLAG = _this.XMLDS_GetString(0,&amp;quot;FLAG&amp;quot;);
+	var NOTE = _this.XMLDS_GetString(0,&amp;quot;NOTE&amp;quot;);
+	var SSGLY = _this.XMLDS_GetString(0,&amp;quot;SSGLY&amp;quot;);
+	var FJFZR = _this.XMLDS_GetString(0,&amp;quot;FJFZR&amp;quot;);
+	var XQJYJ = _this.XMLDS_GetString(0,&amp;quot;XQJYJ&amp;quot;);
+	
+	_this.SetCellText(0,2,2,NSRSBH );
+	_this.SetCellText(0,3,2,NSRMC);
+	
+	_this.SetCellText(0,5,5,GDJYCD);
+	if (GDJYCD == &amp;quot;1&amp;quot;) _this.SetCellText(0,5,3,1); else if (GDJYCD == &amp;quot;0&amp;quot;) _this.SetCellText(0,5,4,1);
+	_this.SetCellText(0,6,5,SCSB);
+	if (SCSB == &amp;quot;1&amp;quot;) _this.SetCellText(0,6,3,1); else if (SCSB == &amp;quot;0&amp;quot;) _this.SetCellText(0,6,4,1);
+	_this.SetCellText(0,7,5,GDJYRY);
+	if (GDJYRY == &amp;quot;1&amp;quot;) _this.SetCellText(0,7,3,1); else if (GDJYRY == &amp;quot;0&amp;quot;) _this.SetCellText(0,7,4,1);
+	_this.SetCellText(0,8,5,FDDBR);
+	if (FDDBR == &amp;quot;1&amp;quot;) _this.SetCellText(0,8,3,1); else if (FDDBR == &amp;quot;0&amp;quot;) _this.SetCellText(0,8,4,1);
+	_this.SetCellText(0,9,5,CWFZR);
+	if (CWFZR == &amp;quot;1&amp;quot;) _this.SetCellText(0,9,3,1); else if (CWFZR == &amp;quot;0&amp;quot;) _this.SetCellText(0,9,4,1);
+	_this.SetCellText(0,10,5,BSY);
+	if (BSY == &amp;quot;1&amp;quot;) _this.SetCellText(0,10,3,1); else if (BSY == &amp;quot;0&amp;quot;) _this.SetCellText(0,10,4,1);
+	_this.SetCellText(0,11,5,YWY);
+	if (YWY == &amp;quot;1&amp;quot;) _this.SetCellText(0,11,3,1); else if (YWY == &amp;quot;0&amp;quot;) _this.SetCellText(0,11,4,1);
+	_this.SetCellText(0,12,5,DLY);
+	if (DLY == &amp;quot;1&amp;quot;) _this.SetCellText(0,12,3,1); else if (DLY == &amp;quot;0&amp;quot;) _this.SetCellText(0,12,4,1);
+	_this.SetCellText(0,13,5,HT);
+	if (HT == &amp;quot;1&amp;quot;) _this.SetCellText(0,13,3,1); else if (HT == &amp;quot;0&amp;quot;) _this.SetCellText(0,13,4,1);
+	_this.SetCellText(0,14,5,JJSKZZ);
+	if (JJSKZZ == &amp;quot;1&amp;quot;) _this.SetCellText(0,14,3,1); else if (JJSKZZ == &amp;quot;0&amp;quot;) _this.SetCellText(0,14,4,1);
+	_this.SetCellText(0,15,5,WLXX);
+	if (WLXX == &amp;quot;1&amp;quot;) _this.SetCellText(0,15,3,1); else if (WLXX == &amp;quot;0&amp;quot;) _this.SetCellText(0,15,4,1);
+	_this.SetCellText(0,16,5,SS);
+	if (SS == &amp;quot;1&amp;quot;) _this.SetCellText(0,16,3,1); else if (SS == &amp;quot;0&amp;quot;) _this.SetCellText(0,16,4,1);
+	_this.SetCellText(0,17,5,FLAG);
+	if (FLAG == &amp;quot;1&amp;quot;) _this.SetCellText(0,17,3,1); else if (FLAG == &amp;quot;0&amp;quot;) _this.SetCellText(0,17,4,1);
+	
+	_this.SetCellText(0,19,2,NOTE);
+	_this.SetCellText(0,20,2,SSGLY);
+	_this.SetCellText(0,20,4,FJFZR);
+	_this.SetCellText(0,21,2,XQJYJ);
+	
+	_sql.querytods(&amp;quot;USRINFO&amp;quot;,&amp;quot;UID=&amp;quot;+FJFZR);
+	_this.SetCellShowText(0,20,4,_this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;));
+	
+	
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row &amp;gt;= 5 &amp;&amp; row &amp;lt;= 17) {
+		if (col == 3 &amp;&amp; newvalue == 1) { _this.SetCellText(0,row,4,&amp;quot;0&amp;quot;); _this.SetCellText(0,row,5,&amp;quot;1&amp;quot;); }
+		if (col == 4 &amp;&amp; newvalue == 1) { _this.SetCellText(0,row,3,&amp;quot;0&amp;quot;); _this.SetCellText(0,row,5,&amp;quot;0&amp;quot;); }
+	}
+	else if (row == 20 &amp;&amp; col == 4) {
+		var uid = newvalue;
+		_sql.querytods(&amp;quot;USRINFO&amp;quot;,&amp;quot;UID=&amp;quot;+uid);
+		if (_this.XMLDS_GetRowCount() == 0) {
+			alert(&amp;quot;找不到编号为[&amp;quot;+uid+&amp;quot;]的人员，请正确选择人员！&amp;quot;);
+			_this.SetCellText(sheet,row,col,oldvalue);
+		}
+		else {
+			_this.SetCellShowText(sheet,row,col,_this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;));
+		}
+	}
+}
+
+//保存
+function Save()
+{
+	if (!confirm(&amp;quot;保存核查结果，是否继续？&amp;quot;)) return;
+	try {
+		var param = new Object();
+		param.usrid = G_USRID;
+		param.usrname = G_USRNAM;
+		param.TRKGUID = TRKGUID;
+		param.NSRSBH = _this.GetCellText(0,2,2);
+		param.NSRMC = _this.GetCellText(0,3,2);
+
+		param.GDJYCD =  _this.GetCellText(0,5,5);
+		param.SCSB =  _this.GetCellText(0,6,5);
+		param.GDJYRY =  _this.GetCellText(0,7,5);
+		param.FDDBR =  _this.GetCellText(0,8,5);
+		param.CWFZR =  _this.GetCellText(0,9,5);
+		param.BSY =  _this.GetCellText(0,10,5);
+		param.YWY =  _this.GetCellText(0,11,5);
+		param.DLY =  _this.GetCellText(0,12,5);
+		param.HT =  _this.GetCellText(0,13,5);
+		param.JJSKZZ =  _this.GetCellText(0,14,5);
+		param.WLXX =  _this.GetCellText(0,15,5);
+		param.SS =  _this.GetCellText(0,16,5);
+		param.FLAG =  _this.GetCellText(0,17,5);
+
+		param.NOTE = _this.GetCellText(0,19,2);
+		param.SSGLY = _this.GetCellText(0,20,2);
+		param.FJFZR = _this.GetCellText(0,20,4);
+		param.XQJYJ = _this.GetCellText(0,21,2);
+		var ret = _this.invokeOSFuncExt(&amp;quot;Save&amp;quot;,param);
+		alert(ret);	
+		if (TRKSTAT == 2) {
+			TRKSTAT = 3;
+			initCheckStat(3);
+			_this.Redraw();
+		}
+	}
+	catch (e) {
+		alert(e.toString());
+	}
+}
+
+//提交任务到分局
+function SubmitTrk2FJ()
+{
+	if (!confirm(&amp;quot;提交任务处理结果，是否继续？&amp;quot;)) return;
+	var fjgly = _this.GetCellText(0,20,4);
+	if (fjgly == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择分局负责人（税源管理股负责人）并保存后再进行提交！&amp;quot;); return; }
+	var ret = _this.invokeOSFunc(&amp;quot;SubmitTrk2FJ&amp;quot;,&amp;quot;TRKGUID=&amp;quot;+TRKGUID+&amp;quot;&amp;newstat=31&amp;tousr=&amp;quot;+fjgly);
+	alert(ret);
+}
+
+//提交任务到征管股
+function SubmitTrk2ZGG()
+{
+	if (!confirm(&amp;quot;提交任务处理结果，是否继续？&amp;quot;)) return;
+	var ret = _this.invokeOSFunc(&amp;quot;SubmitTrk2ZGG&amp;quot;,&amp;quot;TRKGUID=&amp;quot;+TRKGUID+&amp;quot;&amp;newstat=32&amp;tousr=&amp;quot;);
+	alert(ret);
+}
+
+//结束任务
+function JsTrk()
+{
+	if (!confirm(&amp;quot;提交任务处理结果，是否继续？&amp;quot;)) return;
+	var param = new Object();
+	param.guidstr = TRKGUID;
+	var ret = _this.invokeOSFuncExt(&amp;quot;TAXFXJK.FXYD.JSHSRW&amp;quot;,param);
+	if (ret == 1) {
+		alert(&amp;quot;结束核实任务成功&amp;quot;);
+		window.close();
+	}
+	else {
+		alert(&amp;quot;结束任务失败：&amp;quot;+ret);
+	}
+
+}
+
+
+//SelectBox控件修改单元格内容
+function _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where)
+{
+	_thisOnCellModify(sheet,row,col,oldvalue,newvalue);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function Save()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		
+		var sql = &amp;quot;update TAX_FPFX_HCB set GDJYCD=&amp;apos;%s&amp;apos;,SCSB=&amp;apos;%s&amp;apos;,GDJYRY=&amp;apos;%s&amp;apos;,FDDBR=&amp;apos;%s&amp;apos;,CWFZR=&amp;apos;%s&amp;apos;,BSY=&amp;apos;%s&amp;apos;,YWY=&amp;apos;%s&amp;apos;,
+				DLY=&amp;apos;%s&amp;apos;,HT=&amp;apos;%s&amp;apos;,JJSKZZ=&amp;apos;%s&amp;apos;,WLXX=&amp;apos;%s&amp;apos;,SS=&amp;apos;%s&amp;apos;,FLAG=&amp;apos;%s&amp;apos;,NOTE=&amp;apos;%s&amp;apos;,SSGLY=&amp;apos;%s&amp;apos;,FJFZR=&amp;apos;%s&amp;apos;,XQJYJ=&amp;apos;%s&amp;apos;
+			where trkguid=&amp;apos;%s&amp;apos;&amp;quot;.format([GDJYCD,SCSB,GDJYRY,FDDBR,CWFZR,BSY,YWY,DLY,HT,JJSKZZ,WLXX,SS,FLAG,NOTE,SSGLY,FJFZR,XQJYJ,TRKGUID]);
+		var cnt = db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;select stat from tax_trkhdr where guid=&amp;apos;&amp;quot;+TRKGUID+&amp;quot;&amp;apos;&amp;quot;;
+		var stat = db.GetSQL(sql);
+			
+		if (cnt &amp;gt; 0) {
+			if (stat == &amp;quot;2&amp;quot;) {
+				//更新核实任务应对处理的状态
+				sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;3&amp;apos;,redat=sysdate where guid=&amp;apos;&amp;quot;+TRKGUID+&amp;quot;&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);
+			}
+		}
+		db.Commit();
+		return &amp;quot;保存成功&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//提交任务
+function SubmitTrk(newstat,TRKGUID,msgusr)
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select * from tax_trkhdr where guid=&amp;apos;&amp;quot;+TRKGUID+&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		var swjg = ds.getStringAt(0,&amp;quot;SWJG_DM&amp;quot;);	
+		var tousr = ds.getStringAt(0,&amp;quot;TOUSR&amp;quot;);	
+		if (msgusr == &amp;quot;&amp;quot; &amp;&amp; newstat == &amp;quot;32&amp;quot;) {
+			sql = &amp;quot;select usrid from tax_fxjk_msgtouser where typ=&amp;apos;01&amp;apos; and swjg=&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;&amp;quot;;
+			msgusr = db.GetSQL(sql);
+		}
+		else {
+			sql = &amp;quot;update TAX_FPFX_HCB set FJFZR=&amp;apos;&amp;quot;+msgusr+&amp;quot;&amp;apos; where trkguid=&amp;apos;&amp;quot;+TRKGUID+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;&amp;quot;+newstat+&amp;quot;&amp;apos;,tousr=&amp;apos;&amp;quot;+msgusr+&amp;quot;&amp;apos;,redat=sysdate where guid=&amp;apos;&amp;quot;+TRKGUID+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return &amp;quot;提交任务成功&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function SubmitTrk2FJ()
+{
+	return SubmitTrk(newstat,TRKGUID,tousr);
+}
+
+function SubmitTrk2ZGG()
+{
+	return SubmitTrk(newstat,TRKGUID,tousr);
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >INFO</ID><NAME ></NAME><DATDSC >select * from TAX_FPFX_HCB where trkguid=&amp;apos;[%TRKGUID]&amp;apos;</DATDSC><C4 >INFO</C4><C5 >INFO</C5></ROW>
+<ROW num="1" ><ID >TRKINFO</ID><NAME ></NAME><DATDSC >select * from tax_trkhdr where guid=&amp;apos;[%TRKGUID]&amp;apos;</DATDSC><C4 ></C4><C5 >TRKINFO</C5></ROW>
+<ROW num="2" ><ID >USRINFO</ID><NAME ></NAME><DATDSC >select * from usr where id=&amp;apos;[%UID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

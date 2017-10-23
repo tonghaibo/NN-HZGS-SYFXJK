@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >newguide</MWID><NAME >中间件新增向导</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >newguide.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >1,4,3</ID><NAME >ORGID</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >1,4,3</C16><C17 >1,4,3</C17></ROW>
+<ROW num="1" ><ID >1,6,3</ID><NAME >ORGNAM</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >1,6,3</C16><C17 >1,6,3</C17></ROW>
+<ROW num="2" ><ID >1,8,3</ID><NAME >ORGREFID</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >1,8,3</C16><C17 >1,8,3</C17></ROW>
+<ROW num="3" ><ID >1,10,3</ID><NAME >ORGUSRID</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >1,10,3</C16><C17 >1,10,3</C17></ROW>
+<ROW num="4" ><ID >2,6,4</ID><NAME >USRID</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17></ROW>
+<ROW num="5" ><ID >2,8,4</ID><NAME >USRNAM</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17></ROW>
+<ROW num="6" ><ID >2,10,4</ID><NAME >USRPWD</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17></ROW>
+<ROW num="7" ><ID >2,12,4</ID><NAME >TELEPHONE</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17></ROW>
+<ROW num="8" ><ID >2,4,4</ID><NAME >ORG</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if ( id== &amp;quot;新增组织&amp;quot; ) {
+		_this.SetCurrentSheet(1);
+		
+	} 
+	else if ( id == &amp;quot;新增用户&amp;quot; ) {
+		_this.SetCurrentSheet(2);
+	
+	}
+	else if ( id == &amp;quot;查询&amp;quot; ) {
+//		var xml =_sql.query(&amp;quot;MAIN&amp;quot;, &amp;quot;ORGNAM=&amp;quot; + _this.GetCellText(1,6,3) );
+//		alert ( xml );
+		_sql.querytods(&amp;quot;MAIN&amp;quot;, &amp;quot;ORGNAM=&amp;quot; + _this.GetCellText(1,6,3) );
+		for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+			alert ( _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;) );
+		}
+	}
+	else if ( id == &amp;quot;查找&amp;quot; ) {
+		_sql.querytods(&amp;quot;USRINFO&amp;quot;, &amp;quot;USRID=&amp;quot; + _this.GetCellText(2,6,4) );
+		for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+			_this.SetCellText(2,4,4,_this.XMLDS_GetString(i,&amp;quot;ORG&amp;quot;));
+			_this.SetCellText(2,8,4,_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+			_this.SetCellText(2,10,4,_this.XMLDS_GetString(i,&amp;quot;PASSWD&amp;quot;));
+			_this.SetCellText(2,12,4,_this.XMLDS_GetString(i,&amp;quot;MOBILE&amp;quot;));
+		}
+	}
+	else if(id == &amp;quot;返回&amp;quot;){
+		_this.SetCurrentSheet(0);
+	}
+	else if ( id == &amp;quot;保存组织&amp;quot; ) {
+		//建立一个参数对象
+		var param = new Object();
+		//添加一个参数,参数名=xmlstr ,参数值=_this.GetText(&amp;quot;tree_1&amp;quot;)的结果
+		param.xml =  _this.GetXmlHaveCellID(1);
+		param.flag = &amp;quot;saveorg&amp;quot;;
+		try {
+			msg = invokeOSFuncExt(&amp;quot;SAVE&amp;quot;,param);
+		}
+		catch (e) {
+			alert ( e );
+		}
+	}
+	else if ( id == &amp;quot;保存用户&amp;quot; ) {
+		if(_this.GetCellText(2,4,4) == &amp;quot;&amp;quot;){
+			alert(&amp;quot;请输入所属组织ID！&amp;quot;);
+			return;
+		}
+		if(_this.GetCellText(2,6,4) == &amp;quot;&amp;quot;){
+			alert(&amp;quot;请输入用户ID！&amp;quot;);
+			return;
+		}
+		if(_this.GetCellText(2,8,4) == &amp;quot;&amp;quot;){
+			alert(&amp;quot;请输入用户姓名！&amp;quot;);
+			return;
+		}
+		if(_this.GetCellText(2,10,4) == &amp;quot;&amp;quot;){
+			alert(&amp;quot;请输入密码！&amp;quot;);
+			return;
+		}
+
+		//建立一个参数对象
+		var param = new Object();
+		//添加一个参数,参数名=xmlstr ,参数值=_this.GetText(&amp;quot;tree_1&amp;quot;)的结果
+		param.xml =  _this.GetXmlHaveCellID(2);
+		param.flag = &amp;quot;saveusr&amp;quot;;
+		try {
+			msg = invokeOSFuncExt(&amp;quot;SAVE&amp;quot;,param);
+			alert(msg);
+		}
+		catch (e) {
+			alert ( e );
+		}
+	}
+	else if ( id == &amp;quot;删除用户&amp;quot; ) {
+
+		var org = _this.GetCellText(2,4,4);
+		var uid = _this.GetCellText(2,6,4);
+		
+		var sql = &amp;quot;delete from usr where org=&amp;apos;&amp;quot; + org + &amp;quot;&amp;apos; and id=&amp;apos;&amp;quot; + uid + &amp;quot;&amp;apos;&amp;quot;;
+//		_this.ExcecutSQL(sql);这个函数不支持
+		ExecuteSQL(sql);
+		alert(&amp;quot;用户已删除！&amp;quot;);
+	}		
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+// JS传入的参数（yymm）可以直接使用
+function SAVE()
+{
+      var db = null;
+      var msg= &amp;quot;&amp;quot;;
+      var ds = null;
+      try {
+      
+      	        db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+      		
+      		ds = new pubpack.EAXmlDS(xml);
+      		
+      		if(flag == &amp;quot;saveorg&amp;quot;){
+      			for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+	      			var orgid = ds.getStringAt(i,&amp;quot;ORGID&amp;quot; );
+	      			var orgnam = ds.getStringAt(i,&amp;quot;ORGNAM&amp;quot; );
+				var orgid = ds.getStringAt(i,&amp;quot;ORGID&amp;quot; );
+				//db.ExcecutSQL( &amp;quot;insert into usr(org,id,name) values(&amp;apos;&amp;quot; + &amp;quot;&amp;apos;)&amp;quot;);
+				throw new pubpack.EAException(&amp;quot;该功能尚未完成...&amp;quot; );
+	      		}
+      		}
+      		if(flag == &amp;quot;saveusr&amp;quot;){
+      			for(var i=0;i&amp;lt;ds.getRowCount();i++){
+      				var orgid = ds.getStringAt(i,&amp;quot;ORG&amp;quot;);
+      				var usrid = ds.getStringAt(i,&amp;quot;USRID&amp;quot;);
+      				var usrnam = ds.getStringAt(i,&amp;quot;USRNAM&amp;quot;);
+      				var usrpwd = ds.getStringAt(i,&amp;quot;USRPWD&amp;quot;);
+      				var tel = ds.getStringAt(i,&amp;quot;TELEPHONE&amp;quot;);
+      				
+      				db.ExcecutSQL(&amp;quot;insert into usr(org,id,name,passwd,mobile,useflg)values(&amp;apos;&amp;quot; 
+      					+ orgid + &amp;quot;&amp;apos;,&amp;apos;&amp;quot; + usrid + &amp;quot;&amp;apos;,&amp;apos;&amp;quot; + usrnam + &amp;quot;&amp;apos;,&amp;apos;&amp;quot; + usrpwd + &amp;quot;&amp;apos;,&amp;apos;&amp;quot; + tel + &amp;quot;&amp;apos;,&amp;apos;1&amp;apos;)&amp;quot;);
+      			}
+      			msg = &amp;quot;用户添加成功！&amp;quot;;
+      		}
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( &amp;quot;Error:&amp;quot; + ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return msg;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select id,name from v_ORG where name like &amp;apos;%[%ORGNAM]%&amp;apos;</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5></ROW>
+<ROW num="1" ><ID >USRINFO</ID><NAME >用户信息</NAME><DATDSC >select org,id,name,passwd,mobile from usr where id = &amp;apos;[%USRID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

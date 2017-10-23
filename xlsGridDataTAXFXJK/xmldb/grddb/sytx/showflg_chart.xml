@@ -1,0 +1,332 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_chart</MWID><NAME >分析图</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_chart.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var tag = new JavaPackage(&amp;quot;com.xlsgrid.net.tag&amp;quot;);
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var xmldsform = new tag.XmlDSForm();
+
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+var lamath=new JavaPackage(&amp;quot;java.math&amp;quot;);
+
+
+//BI分析的显示风格1:柱状图
+function BI1()
+{
+	var db = null;
+	
+	var chaptyp= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;CHARTTYPE&amp;quot;),&amp;quot;&amp;quot;) ;
+	if (chaptyp!=&amp;quot;&amp;quot;||chaptyp!=&amp;quot;null&amp;quot;||chaptyp!=null){} else CHARTTYPE= chaptyp;
+	if(CHARTTYPE==&amp;quot;&amp;quot;||CHARTTYPE==&amp;quot;null&amp;quot;||CHARTTYPE==null)CHARTTYPE= &amp;quot;column&amp;quot;;
+	
+	var stackstr=&amp;quot;&amp;quot;;
+	if(CHARTTYPE==&amp;quot;stacking&amp;quot;) {stackstr=&amp;quot;plotOptions: { column: { stacking: &amp;apos;normal&amp;apos;} },&amp;quot;; CHARTTYPE=&amp;quot;column&amp;quot;; }
+	
+	if(WIDTH==&amp;quot;&amp;quot;||WIDTH==&amp;quot;null&amp;quot;||WIDTH==null)WIDTH= &amp;quot;100%&amp;quot;;
+	if(HEIGHT==&amp;quot;&amp;quot;||HEIGHT==&amp;quot;null&amp;quot;||HEIGHT==null)HEIGHT= &amp;quot;100%&amp;quot;;
+	if(SHOWFLAG==&amp;quot;&amp;quot;||SHOWFLAG==&amp;quot;null&amp;quot;||SHOWFLAG==null)SHOWFLAG= &amp;quot;default&amp;quot;;
+	if(XCOLLIST==&amp;quot;&amp;quot;||XCOLLIST==&amp;quot;null&amp;quot;||XCOLLIST==null)throw new Exception(&amp;quot;X轴字段列表不能为空&amp;quot;);
+	if(YCOLLIST==&amp;quot;&amp;quot;||YCOLLIST==&amp;quot;null&amp;quot;||YCOLLIST==null)throw new Exception(&amp;quot;Y轴字段列表(统计值)不能为空&amp;quot;);
+	if(ZCOLLIST==&amp;quot;&amp;quot;||ZCOLLIST==&amp;quot;null&amp;quot;||ZCOLLIST==null)ZCOLLIST= &amp;quot;&amp;quot;;
+	
+	if(YTITLE==&amp;quot;&amp;quot;||YTITLE==&amp;quot;null&amp;quot;||YTITLE==null)YTITLE= &amp;quot;&amp;quot;;
+	
+	var conid = &amp;quot;contrainer&amp;quot;+(&amp;quot;&amp;quot;+langpack.Math.ceil(langpack.Math.random()*1000000)).substring(0,5);
+	var cates = &amp;quot;&amp;quot;;// X轴的名称
+	
+	var series = &amp;quot;&amp;quot;;
+        var loadchart = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;loadchart&amp;quot;),&amp;quot;&amp;quot;) ;// loadchart =1 后载入，chart都是使用后载入的方式
+	if(loadchart!=&amp;quot;1&amp;quot;){// 第一次
+	        return &amp;quot;
+		&amp;lt;div id=&amp;apos;&amp;quot;+conid +&amp;quot;&amp;apos; style=&amp;apos;padding:5px;width:&amp;quot;+WIDTH+&amp;quot;;height:&amp;quot;+HEIGHT+&amp;quot;&amp;apos;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos;&amp;gt;&amp;lt;/div&amp;gt;	
+		&amp;lt;script&amp;gt;
+			//setTimeout( function(){
+				$.get(G_WEBBASE+&amp;apos;rcall.jsp?loadchart=1&amp;deforg=&amp;quot;+deforg+&amp;quot;&amp;menuid=&amp;crtlid=&amp;quot;+CTRLID+&amp;quot;&amp;apos;+G_CLIENTPARAM,function(data,status){
+					var jsondata = data.replace(/\\r\\n/g,\&amp;quot;\&amp;quot;); //处理URL传参换行符问题
+					jsondata = jsondata.replace(/\\n/g,\&amp;quot;\&amp;quot;);
+					var json = (new Function(\&amp;quot;return \&amp;quot; + jsondata))();
+					$(&amp;apos;#&amp;quot;+conid+&amp;quot;&amp;apos;).highcharts(json   );
+					SetThreme(&amp;apos;&amp;quot;+SHOWFLAG+&amp;quot;&amp;apos;);            		
+				});
+			//},500);  
+		&amp;lt;/script&amp;gt;&amp;quot;; 
+	}
+	else {	// 第二次
+		try {
+			if(DBNAME!=&amp;quot;&amp;quot;)
+				db = new pubpack.EADatabase(DBNAME);	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			else db = new pubpack.EADatabase();
+			// 处理SQL的替代
+			var usrinfo  = web.EASession.GetLoginInfo(request);
+			SQL=web.EASession.GetSysValue(SQL,usrinfo);
+			SQL=web.EASession.GetSysValue(SQL,request);//替换request 中[%id]
+			
+			var r_HCols = XCOLLIST;		//交叉行字段
+			var r_VCols = ZCOLLIST;	//交叉列字段
+			var r_VCol = YCOLLIST;	//交叉值字段
+			var colsql = &amp;quot;&amp;quot;;	//交叉列字段SQL
+			var orderby = &amp;quot;&amp;quot;;		//行排序字段
+			if(ZCOLLIST!=&amp;quot;&amp;quot;){
+				SQL= pub.EASqlFunc.GetSql2CrossTableSQL(db,SQL,colsql,r_HCols,r_VCols,r_VCol,orderby);
+			}
+			else if(CHARTTYPE==&amp;quot;radarchart&amp;quot;){
+			
+			}
+			else SQL = &amp;quot;select &amp;quot;+XCOLLIST+&amp;quot;,sum(&amp;quot;+YCOLLIST+&amp;quot;) &amp;quot;+YCOLLIST+&amp;quot; from (&amp;quot;+SQL+&amp;quot;) t group by &amp;quot;+XCOLLIST+&amp;quot; order by &amp;quot;+XCOLLIST;
+			
+			var ds = db.QuerySQL(SQL);//列名称需要有ICON，NAME，URL，CNT（记录数）等字段
+			var ss = XCOLLIST.split(&amp;quot;,&amp;quot;);
+			var startcol = ss.length();
+			// 二维表格的X坐标
+			for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+				var XVAL = ds.getStringAt(i,0);
+				var rownam = &amp;quot;&amp;quot;;
+				for ( var ii=1;ii&amp;lt;=startcol;ii++){// 列名称支持多个字段
+					if(rownam!=&amp;quot;&amp;quot;)rownam+=&amp;quot; &amp;quot;;
+					rownam+=ds.getStringAt(i,ii-1);
+				}
+	
+				if(cates!=&amp;quot;&amp;quot;)cates+=&amp;quot;,&amp;quot;;
+				cates += &amp;quot;&amp;apos;&amp;quot;+rownam+&amp;quot;&amp;apos;&amp;quot;;
+			}
+			series = &amp;quot;&amp;quot;;
+			if(CHARTTYPE==&amp;quot;pie&amp;quot;)  series += pie_series(ds,startcol,CHARTTYPE );
+			else if(CHARTTYPE==&amp;quot;scatter&amp;quot;)series += scatter_series(ds,startcol,CHARTTYPE );
+			else if(CHARTTYPE==&amp;quot;radarchart&amp;quot;){
+				cates=&amp;quot;&amp;quot;;
+				// 二维表格的X坐标
+				for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+					var rownam = &amp;quot;&amp;quot;;
+					if(cates!=&amp;quot;&amp;quot;)cates+=&amp;quot;,&amp;quot;;
+					cates += &amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(i,0)+&amp;quot;&amp;apos;&amp;quot;;
+				}
+				series += RadarChart_series(ds,startcol,CHARTTYPE);
+				
+				return &amp;quot;{ chart: {  type: &amp;apos;line&amp;apos;,polar: true },   title: {text:&amp;apos;&amp;quot;+TITLE+&amp;quot;&amp;apos; },   subtitle: { text: &amp;apos;&amp;quot;+SUBTITLE+&amp;quot;&amp;apos;},
+				 xAxis: { categories: [&amp;quot;+cates+&amp;quot;] }, yAxis: {title: {text: &amp;apos;&amp;quot;+YTITLE+&amp;quot;&amp;apos;}}, 
+				 tooltip: {enabled: false,formatter: function() {return &amp;apos;&amp;lt;b&amp;gt;&amp;apos;+ this.series.name +&amp;apos;&amp;lt;/b&amp;gt;&amp;lt;br/&amp;gt;&amp;apos;+this.x +&amp;apos;: &amp;apos;+ this.y ; }},
+				 plotOptions: {line: { dataLabels: { enabled: true },enableMouseTracking: false}}, 
+				 series: [&amp;quot;+series+&amp;quot;]  }&amp;quot;; 
+				
+			}
+			else series += other_series(ds,startcol,CHARTTYPE );
+			
+			return &amp;quot;{ chart: {  type: &amp;apos;&amp;quot;+CHARTTYPE+&amp;quot;&amp;apos;, zoomType: &amp;apos;&amp;apos;},   title: {text:&amp;apos;&amp;quot;+TITLE+&amp;quot;&amp;apos; },   subtitle: { text: &amp;apos;&amp;quot;+SUBTITLE+&amp;quot;&amp;apos;},
+				 xAxis: { categories: [&amp;quot;+cates+&amp;quot;] }, yAxis: {title: {text: &amp;apos;&amp;quot;+YTITLE+&amp;quot;&amp;apos;}}, 
+				 tooltip: { formatter: function() { var s;if (this.point.name) {s = &amp;apos;&amp;apos;+this.point.name +&amp;apos;: &amp;apos;+ this.y;} else {  s = &amp;apos;&amp;apos;+ this.x  +&amp;apos;: &amp;apos;+ this.y;} return s; }  },&amp;quot;+stackstr+&amp;quot; 
+				 series: [&amp;quot;+series+&amp;quot;]  }&amp;quot;;
+		}
+		catch ( ee ) {
+			db.Rollback();
+			throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+	}
+}
+// PIE图的数据
+function pie_series(ds,startcol,CHARTTYPE ){
+	var series  = &amp;quot;&amp;quot;;
+	var j = startcol ;
+	series += &amp;quot;{type: &amp;apos;pie&amp;apos;,name: &amp;apos;&amp;quot;+ds.getColumnName(j)+&amp;quot;&amp;apos;,data: [&amp;quot;;	
+	var sstr = &amp;quot;&amp;quot;;		
+	for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+		var XVAL = ds.getStringAt(i,j);
+		if(XVAL==&amp;quot;&amp;quot;) XVAL = &amp;quot;0&amp;quot;;
+		if(sstr !=&amp;quot;&amp;quot;)sstr +=&amp;quot;,&amp;quot;;
+		var rownam = &amp;quot;&amp;quot;;
+		for ( var ii=1;ii&amp;lt;=startcol;ii++){// 列名称支持多个字段
+			if(rownam!=&amp;quot;&amp;quot;)rownam+=&amp;quot; &amp;quot;;
+			rownam+=ds.getStringAt(i,ii-1);
+		}
+		sstr += &amp;quot;[&amp;apos;&amp;quot;+rownam+&amp;quot;&amp;apos;,    &amp;quot;+XVAL+&amp;quot;]&amp;quot; ;
+	}
+	series += sstr+&amp;quot;]}&amp;quot;;
+	return series ;
+}
+// 散点图的数据
+function scatter_series(ds,startcol,CHARTTYPE){
+	var series  = &amp;quot;&amp;quot;;
+	var j = startcol ;
+	series += &amp;quot;{type: &amp;apos;&amp;quot;+CHARTTYPE+&amp;quot;&amp;apos;,name: &amp;apos;&amp;quot;+ds.getColumnName(j)+&amp;quot;&amp;apos;,color: &amp;apos;rgba(223, 83, 83, .5)&amp;apos;, data: [&amp;quot;;	
+	var sstr = &amp;quot;&amp;quot;;		
+	for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+		var XVAL = ds.getStringAt(i,j);
+		if(XVAL==&amp;quot;&amp;quot;) XVAL = &amp;quot;0&amp;quot;;
+		if(sstr !=&amp;quot;&amp;quot;)sstr +=&amp;quot;,&amp;quot;;
+		var rownam = &amp;quot;&amp;quot;;
+		for ( var ii=1;ii&amp;lt;=startcol;ii++){// 列名称支持多个字段
+			if(rownam!=&amp;quot;&amp;quot;)rownam+=&amp;quot; &amp;quot;;
+			rownam+=ds.getStringAt(i,ii-1);
+		}
+		sstr += &amp;quot;[&amp;quot;+XVAL+&amp;quot;,    &amp;quot;+XVAL+&amp;quot;]&amp;quot; ;
+	}
+	series += sstr+&amp;quot;]}&amp;quot;;
+	return series ;
+
+}
+// 其他多系列的数据
+function other_series(ds,startcol,CHARTTYPE){
+	var series  = &amp;quot;&amp;quot;;
+			
+	for ( var j=startcol ;j&amp;lt;ds.getColumnCount();j++ ) {
+		if(series !=&amp;quot;&amp;quot;)series +=&amp;quot;,&amp;quot;;
+		series += &amp;quot;{type: &amp;apos;&amp;quot;+CHARTTYPE+&amp;quot;&amp;apos;,name: &amp;apos;&amp;quot;+ds.getColumnName(j)+&amp;quot;&amp;apos;,data: [&amp;quot;;	
+		var sstr = &amp;quot;&amp;quot;;		
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+			var XVAL = ds.getStringAt(i,j);
+			if(XVAL ==&amp;quot;&amp;quot;) XVAL  = &amp;quot;0&amp;quot;;
+			if(sstr !=&amp;quot;&amp;quot;)sstr +=&amp;quot;,&amp;quot;;
+			sstr += XVAL ;
+		}
+		series += sstr+&amp;quot;]}&amp;quot;;
+	}
+	return series ;
+}
+// 雷达图的数据
+function RadarChart_series(ds,startcol,CHARTTYPE){
+	var series  = &amp;quot;&amp;quot;;
+	var sstr = &amp;quot;&amp;quot;;
+	for(var c=1;c&amp;lt;ds.getColumnCount();c++){
+		if(c!=1) series +=&amp;quot;,&amp;quot;;
+		
+		series += &amp;quot;{pointPlacement: &amp;apos;on&amp;apos;,name: &amp;apos;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;apos;, data: [&amp;quot;;
+		for(var r=0;r&amp;lt;ds.getRowCount();r++){
+			var rval=ds.getStringAt(r,c);
+			if(r==0) series+=rval; else series+=&amp;quot;,&amp;quot;+rval;
+		}
+		series += sstr+&amp;quot;]}&amp;quot;;
+	}
+	return series;
+}
+
+// 返回
+//BI分析的显示风格2:复合图
+function BI2()
+{
+	var db = null;
+	if(CHARTTYPE==&amp;quot;&amp;quot;||CHARTTYPE==&amp;quot;null&amp;quot;||CHARTTYPE==null)CHARTTYPE= &amp;quot;1&amp;quot;;
+	if(WIDTH==&amp;quot;&amp;quot;||WIDTH==&amp;quot;null&amp;quot;||WIDTH==null)WIDTH= &amp;quot;100%&amp;quot;;
+	if(HEIGHT==&amp;quot;&amp;quot;||HEIGHT==&amp;quot;null&amp;quot;||HEIGHT==null)HEIGHT= &amp;quot;100%&amp;quot;;
+	var conid = &amp;quot;contrainer&amp;quot;+(&amp;quot;&amp;quot;+langpack.Math.ceil(langpack.Math.random()*1000000)).substring(0,5);
+	
+	
+	var rethtml= &amp;quot;
+	&amp;lt;div id=&amp;apos;&amp;quot;+conid +&amp;quot;&amp;apos; style=&amp;apos;padding:5px;width:&amp;quot;+WIDTH+&amp;quot;;height:&amp;quot;+HEIGHT+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/div&amp;gt;	
+	&amp;lt;script&amp;gt;
+	setTimeout( function () {                                                               
+    $(&amp;apos;#&amp;quot;+conid +&amp;quot;&amp;apos;).highcharts({                                          
+        chart: {     
+		zoomType: &amp;apos;xy&amp;apos;                                                     
+        },                                                                
+        title: {                                                          
+            text: &amp;apos;&amp;quot;+TITLE+&amp;quot;&amp;apos;                                     
+        },                                                                
+        xAxis: {                                                          
+            categories: [&amp;apos;公共基础&amp;apos;,&amp;apos;专业必修&amp;apos;,&amp;apos;模拟实验&amp;apos;,&amp;apos;外语实训&amp;apos;,&amp;apos;实践环节&amp;apos;,&amp;apos;综合选修&amp;apos;,&amp;apos;专业选修&amp;apos;]
+        },                                                                
+        tooltip: {                                                        
+            formatter: function() {                                       
+                var s;                                                    
+                if (this.point.name) { // the pie chart                   
+                    s = &amp;apos;&amp;apos;+                                               
+                        this.point.name +&amp;apos;: &amp;apos;+ this.y +&amp;apos; fruits&amp;apos;;         
+                } else {                                                  
+                    s = &amp;apos;&amp;apos;+                                               
+                        this.x  +&amp;apos;: &amp;apos;+ this.y;                            
+                }                                                         
+                return s;                                                 
+            }                                                             
+        },                                                                
+        labels: {                                                         
+            items: [{                                                     
+                html: &amp;apos;百分构成&amp;apos;,                          
+                style: {                                                  
+                    left: &amp;apos;40px&amp;apos;,                                         
+                    top: &amp;apos;8px&amp;apos;,                                           
+                    color: &amp;apos;black&amp;apos;                                        
+                }                                                         
+            }]                                                            
+        },   
+	series: [
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;财税学院&amp;apos;,data: [0,19,5,0,4,0,20]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;高职学院&amp;apos;,data: [32,13,0,0,36,37,43]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;工商管理学院&amp;apos;,data: [0,32,8,0,4,0,27]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;会计与财务学院&amp;apos;,data: [21,61,8,8,12,0,40]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;金融学院&amp;apos;,data: [0,22,5,0,6,0,28]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;经贸学院&amp;apos;,data: [0,27,7,0,4,0,30]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;数信学院&amp;apos;,data: [7,49,25,0,4,0,42]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;外语学院&amp;apos;,data: [1,49,8,6,5,0,20]},
+		{type: &amp;apos;column&amp;apos;,name: &amp;apos;文法学院&amp;apos;,data: [4,59,10,0,5,0,36]},
+		{type: &amp;apos;line&amp;apos;,name: &amp;apos;平均值&amp;apos;,data: [12,40,39,0,41,0,48]},
+		{type: &amp;apos;pie&amp;apos;, name: &amp;apos;合计&amp;apos;,data: [
+			{ name: &amp;apos;公共基础&amp;apos;,y: 65,color: Highcharts.getOptions().colors[0]  }, 
+			{ name: &amp;apos;专业必修&amp;apos;,y: 331,color: Highcharts.getOptions().colors[1]  }, 
+			{ name: &amp;apos;模拟实验&amp;apos;,y: 76,color: Highcharts.getOptions().colors[2]  },
+			{ name: &amp;apos;外语实训&amp;apos;,y: 14,color: Highcharts.getOptions().colors[3] },
+			{ name: &amp;apos;实践环节&amp;apos;, y: 80, color: Highcharts.getOptions().colors[4] },
+			{name: &amp;apos;综合选修&amp;apos;,y: 37,color: Highcharts.getOptions().colors[5] },
+			{name: &amp;apos;专业选修&amp;apos;,y: 286,color: Highcharts.getOptions().colors[6] },
+			{ name: &amp;apos;Joe&amp;apos;, y: 1089,color: Highcharts.getOptions().colors[7] }
+			],                                                           
+            		center: [100, 80],  size: 130, showInLegend: false,dataLabels: { enabled: false  }              
+	   	}
+	]                                                              
+    });                                                                   
+},1000);  
+	&amp;lt;/script&amp;gt;
+
+&amp;quot;;
+	try {
+		if(DBNAME!=&amp;quot;&amp;quot;)
+			db = new pubpack.EADatabase(DBNAME);	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		else db = new pubpack.EADatabase();
+		// 处理SQL的替代
+		var usrinfo  = web.EASession.GetLoginInfo(request);
+		SQL=web.EASession.GetSysValue(SQL,request);//替换request 中[%id]
+		SQL=web.EASession.GetSysValue(SQL,usrinfo);
+		var ds = db.QuerySQL(SQL);//列名称需要有ICON，NAME，URL，CNT（记录数）等字段
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+			var NAME = ds.getStringDef(i,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;);
+		}
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return rethtml;
+	
+
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

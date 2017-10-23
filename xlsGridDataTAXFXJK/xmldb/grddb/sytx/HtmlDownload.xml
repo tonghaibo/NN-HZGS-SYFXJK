@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >HtmlDownload</MWID><NAME >页面下载</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >HtmlDownload.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >HTML</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >0</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+var _saveurl=&amp;quot;c:/xlsgridindex.html&amp;quot;;//保存路径
+var _strold=&amp;quot;&amp;quot;;//日志
+var arrayhtml = new Array();
+var arrayhtmlurl = new Array();
+var arrayhtmlhad = new Array();
+var savedir = &amp;quot;&amp;quot;;
+var subdir = &amp;quot;&amp;quot;;
+	//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+}
+
+	//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(sheet==0&amp;&amp;row==5&amp;&amp;col==4){
+		var url=_this.GetCellText(0,3,2);
+		savedir = _this.GetCellText(0,5,2);
+		if(url==&amp;quot;&amp;quot;) { alert(&amp;quot;页面下载地址为空！&amp;quot;); return ; }
+		//alert(subquote(&amp;quot;alert(\&amp;quot;页面下载地址为空！\&amp;quot;)&amp;quot;,&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;\&amp;quot;&amp;quot;)     );
+//			var ret = _this.CreateDirInWorkdir(&amp;quot;dirsxxx&amp;quot;);
+//			alert(ret);
+//			ret = _this.CreateDirInTrusteddir(&amp;quot;dirsxxx2&amp;quot;);
+//			alert(ret);
+//			var ret = _this.CreateDirInWorkdir(&amp;quot;d:/dirsxxx&amp;quot;);
+//			alert(ret);
+//			ret = _this.CreateDirInTrusteddir(&amp;quot;d:/dirsxxx2&amp;quot;);
+//			alert(ret);
+		DownloadHTML(url,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+ 		//var filename = _this.DownLoadFile(&amp;quot;http://www.xlsgrid.net/xlsgrid/EAFormBlob.sp?guid=DC3D2C90795E4F458F8963BA2AEC197E&amp;quot;, &amp;quot;d:/test.jpg&amp;quot;);
+	 	alert(&amp;quot;结束&amp;quot;);
+	}
+}
+
+	//下载页面url1:页面下载地址,url2:页面保存地址
+function DownloadHTML(url1,filename,dirs){
+	alert(url1);
+	if(filename==null||filename==&amp;quot;&amp;quot;){
+		filename=url1.split(&amp;quot;id=&amp;quot;)[1].split(&amp;quot;&amp;&amp;quot;)[0];
+		subdir = filename;
+	}else{
+		 
+		
+	}
+	var html=_this.HttpCall(url1);
+	//替换js的地址
+ 	html=replaceJSall(html,filename)
+ 	//替换图片地址
+	html=replaceimgall(html,filename);
+	//替换L.sp网页地址
+ 
+	html=replaceLall(html,filename);
+ 	html=html.replace(&amp;quot;charset=UTF-8&amp;quot;,&amp;quot;charset=GBK&amp;quot;);
+ 
+		if(dirs==&amp;quot;&amp;quot;){
+			_this.SaveTextFile(&amp;quot;&amp;quot;+savedir +&amp;quot;/&amp;quot;+filename+&amp;quot;.html&amp;quot;,html,&amp;quot;&amp;quot;);
+		}else{
+			_this.SaveTextFile(&amp;quot;&amp;quot;+savedir +&amp;quot;/&amp;quot;+filename+&amp;quot;.html&amp;quot;,html,&amp;quot;&amp;quot;);
+		}
+	 	
+	 //标记需要下载的网页为已下载,并继续下载未完成下载的。
+	// alert(&amp;quot;arrayhtml=&amp;quot;+arrayhtml);
+	for(var i=0;i&amp;lt;arrayhtml.length;i++){
+		if(arrayhtml[i]==filename){
+			arrayhtmlhad[i]=1;
+		}else{
+			if(arrayhtmlhad[i]==0){
+				DownloadHTML(arrayhtmlurl[i],arrayhtml[i],&amp;quot;&amp;quot;);
+			}
+		}
+	}
+}
+	//替换图片并保存
+function replaceimgall(str,filename){
+	var curidx = -1;
+	var count = 0;
+	//替换规则&amp;lt;img 里src的图片
+	curidx = str.indexOf(&amp;quot;&amp;lt;img&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+	while(curidx &amp;gt;-1){
+		var key = 4;
+		var key2 = 4;
+		var newstr = str.substring(curidx+key ,str.length);
+		var curidx2 = newstr.indexOf(&amp;quot;src=&amp;quot;);
+		var curidx3 = -1;
+		newstr=newstr.substring(curidx2+key2 ,str.length);
+		var idx1 = newstr.indexOf(&amp;quot;\&amp;quot;&amp;quot;);
+		var idx2 = newstr.indexOf(&amp;quot;&amp;apos;&amp;quot;);
+		var quote = &amp;quot;&amp;quot;;
+		var quotes = null;
+		if(idx2&amp;lt;idx1&amp;&amp;idx2!=-1){
+			quotes = subquote(newstr,&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;quot;);
+			curidx3 =idx2+curidx2+key +key2 ;
+		}else{
+			quotes = subquote(newstr,&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;\&amp;quot;&amp;quot;);
+			curidx3 =idx1+curidx2+key +key2 ;
+		}
+ 
+		quote = quotes[0];
+		_this.SetCellText(0,5,3,&amp;quot;1|&amp;quot;+quote);
+		if(quote!=&amp;quot;&amp;quot;){
+			_this.DownLoadFile(quote, &amp;quot;&amp;quot;+savedir +&amp;quot;/&amp;quot;+subdir +&amp;quot;/&amp;quot;+filename+&amp;quot;_&amp;quot;+curidx+&amp;quot;.jpg&amp;quot;);
+			str = changeStr(str,curidx +curidx3 +quotes[1],curidx +curidx3 +quotes[2],quote,&amp;quot;index/&amp;quot;+filename+&amp;quot;_&amp;quot;+curidx+&amp;quot;.jpg&amp;quot;);
+		}
+		
+		curidx = str.indexOf(&amp;quot;&amp;lt;img&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+		count++;
+	}
+	//替换EAFormBlob.sp?guid=里的图片
+	curidx = str.indexOf(&amp;quot;EAFormBlob.sp?guid=&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+	while(curidx &amp;gt;-1){
+		var quoteNode = str.substring(curidx-1,curidx);//获取EAFormBlob前的括弧或者双引号，根据此符号判断图片地址结尾
+		var newstr = str.substring(curidx-1,str.length);
+ 		var quotes = null;
+		var quote = &amp;quot;&amp;quot;;
+		if(quoteNode==&amp;quot;(&amp;quot;){
+			quotes = subquote(newstr,quoteNode,&amp;quot;)&amp;quot;);
+		}else{
+			quotes = subquote(newstr,quoteNode,quoteNode);
+		}
+		quote = quotes[0];
+ 		_this.SetCellText(0,5,3,&amp;quot;2|&amp;quot;+quote);
+ 		if(quote!=&amp;quot;&amp;quot;){
+ 			_this.DownLoadFile(quote, &amp;quot;&amp;quot;+savedir +&amp;quot;/&amp;quot;+subdir +&amp;quot;/&amp;quot;+filename+&amp;quot;_&amp;quot;+curidx+&amp;quot;.jpg&amp;quot;);
+			str = changeStr(str,curidx-1+quotes[1],curidx-1+quotes[2],quote,&amp;quot;index/&amp;quot;+filename+&amp;quot;_&amp;quot;+curidx+&amp;quot;.jpg&amp;quot;);
+ 		}
+		
+		curidx = str.indexOf(&amp;quot;EAFormBlob.sp?guid=&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+		count++;
+	}
+	return str;
+}
+	//替换脚本文件并保存
+function replaceJSall(str,filename){
+	var curidx = -1;
+	var count = 0;
+	//替换规则&amp;lt;script 里src的地址
+	curidx = str.indexOf(&amp;quot;&amp;lt;script&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+	while(curidx &amp;gt;-1){
+		var key = 7;
+		var key2 = 4;
+		var newstr = str.substring(curidx+key ,str.length);
+		var curidx2 = newstr.indexOf(&amp;quot;src=&amp;quot;);
+		var idxend = newstr.indexOf(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+		if(curidx2!=-1&amp;&amp;idxend&amp;gt;curidx2 ){
+			//确保含有src=，&amp;lt;script 可能没有src=
+			var curidx3 = -1;
+			newstr=newstr.substring(curidx2+key2 ,str.length);
+			
+			var idx1 = newstr.indexOf(&amp;quot;\&amp;quot;&amp;quot;);
+			var idx2 = newstr.indexOf(&amp;quot;&amp;apos;&amp;quot;);
+			var quote = &amp;quot;&amp;quot;;
+			var quotes = null;
+			if(idx2&amp;lt;idx1&amp;&amp;idx2!=-1){
+				quotes = subquote(newstr,&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;quot;);
+				curidx3 =idx2+curidx2+key +key2 ;
+			}else{
+				quotes = subquote(newstr,&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;\&amp;quot;&amp;quot;);
+				curidx3 =idx1+curidx2+key +key2 ;
+			}
+	 		
+			quote = quotes[0];
+	 
+			if(quote!=&amp;quot;&amp;quot;){
+				_this.DownLoadFile(quote, &amp;quot;&amp;quot;+savedir +&amp;quot;/&amp;quot;+subdir +&amp;quot;/&amp;quot;+filename+&amp;quot;_&amp;quot;+curidx+&amp;quot;.js&amp;quot;);
+				str = changeStr(str,curidx +curidx3 +quotes[1],curidx +curidx3 +quotes[2],quote,&amp;quot;index/&amp;quot;+filename+&amp;quot;_&amp;quot;+curidx+&amp;quot;.js&amp;quot;);
+			}
+		}
+		
+		
+		curidx = str.indexOf(&amp;quot;&amp;lt;script&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+		count++;
+	}
+	return str;
+}
+        //获取字符串内第一个与第二个引号包含内的内容  
+function subquote(str,qu,qu2){
+	var curidx = -1;
+	var fristidx = -1;
+	var secondidx = -1;
+	var newstr = &amp;quot;&amp;quot;;
+	var count= 0;
+ 	var ret = new Array();
+	if(qu==qu2){
+		curidx = str.indexOf(qu,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+		while(curidx &amp;gt;-1&amp;&amp;count&amp;lt;20){
+			if(fristidx ==-1){//记录第一个双引号的位置
+				fristidx=curidx;
+			}else{
+				//获取下一个双引号位置
+				if(secondidx ==-1){
+					secondidx = curidx;
+				}
+			}
+			curidx = str.indexOf(qu,curidx+1);
+			count++;
+		}
+		newstr = str.substring(fristidx+1,secondidx );
+	}else{
+		fristidx = str.indexOf(qu,curidx+1);
+		secondidx = str.indexOf(qu2,curidx+1);
+		newstr = str.substring(fristidx+1,secondidx );
+	}
+	ret [0]= newstr;
+	ret [1]= fristidx+1;
+	ret [2]= secondidx ;
+	return ret;
+}
+//	//全程替代文件的字符串
+//	//replaceFileAll(filename,&amp;quot;show.sp?grdid=&amp;quot;,&amp;quot;&amp;quot;)
+//function replaceFileAll(filename,str1,str2)
+//{
+//	var str = _this.LoadTextFile(filename);
+//	var strnew =replaceAll(str,str1,str2);
+//	
+//	return _this.SaveTextFile(filename,strnew,&amp;quot;&amp;quot;);
+//}
+function replaceLall(str,filename){
+	//替换EAFormBlob.sp?guid=里的图片
+	var curidx = -1;
+	var count = 0;
+	curidx = str.indexOf(&amp;quot;L.sp?id=&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+	while(curidx &amp;gt;-1){
+		var quoteNode = str.substring(curidx-1,curidx);//获取EAFormBlob前的括弧或者双引号，根据此符号判断图片地址结尾
+		var newstr = str.substring(curidx-1,str.length);
+ 		
+		var quotes = null;
+		var quote = &amp;quot;&amp;quot;;
+		if(quoteNode==&amp;quot;(&amp;quot;){
+			quotes = subquote(newstr,quoteNode,&amp;quot;)&amp;quot;);
+		}else{
+			quotes = subquote(newstr,quoteNode,quoteNode);
+		}
+ 		quote = quotes[0];
+ 		//L.sp?id=N_cjmenucontent&amp;layhdrguid=8E947471B6204D008A8E5C67EB0F544B
+ 		var idxid1 = quote.indexOf(&amp;quot;=&amp;quot;);
+ 		var idxid2 = quote.indexOf(&amp;quot;&amp;&amp;quot;);
+ 		var id = &amp;quot;&amp;quot;;
+ 		var nonid = &amp;quot;&amp;quot;;
+ 		//获取id里面的值
+ 		if(idxid2==-1){
+ 			id = quote.substring(idxid1+1,quote.length);
+ 		}else{
+ 			id = quote.substring(idxid1+1,idxid2);
+ 			nonid = quote.substring(idxid2,quote.length);
+ 		}
+ 		if(&amp;quot;L.sp?id=&amp;quot;+id+&amp;quot;&amp;quot;+nonid +&amp;quot;&amp;quot;!=quote){
+ 			alert(&amp;quot;不相等有错误  L.sp?id=&amp;quot;+id+&amp;quot;&amp;quot;+nonid +&amp;quot;|&amp;quot;+quote);
+ 		}else{
+ 			
+ 		}
+ 		var had = 0;
+ 		for(var i=0;i&amp;lt;arrayhtml.length;i++){
+ 			if(arrayhtml[i]==id){
+ 				had=1;
+ 			}
+ 		}
+ 
+ 		if(had==0){
+ 			arrayhtml.push(id);
+			arrayhtmlurl.push(&amp;quot;L.sp?id=&amp;quot;+id+&amp;quot;&amp;quot;+nonid +&amp;quot;&amp;quot;);
+			arrayhtmlhad.push(0);
+ 		}
+ 		
+		str = changeStr(str,curidx-1+quotes[1],curidx-1+quotes[2],&amp;quot;L.sp?id=&amp;quot;+id+&amp;quot;&amp;quot;+nonid +&amp;quot;&amp;quot;,&amp;quot;&amp;quot;+id+&amp;quot;.html?id=&amp;quot;+id+&amp;quot;&amp;quot;+nonid +&amp;quot;&amp;quot;);
+		curidx = str.indexOf(&amp;quot;L.sp?id=&amp;quot;,curidx+1);//第一个引号位置，“curidx+1”表示从该位置开始查找引号
+		count++;
+	}
+	return str;
+}
+function changeStr(allstr,start,end,str,changeStr){ //allstr:原始字符串，start,开始位置,end：结束位  置,str：要改变的字，changeStr:改变后的字
+ if(allstr.substring(start,end) == str){
+      return allstr.substring(0,start)+changeStr+allstr.substring(end,allstr.length); 
+ }else{
+      allstr; 
+      alert(allstr.substring(start,end)+&amp;quot;|&amp;quot;+start+&amp;quot;|&amp;quot;+end+&amp;quot;||&amp;quot;+str);
+      throw new Exception(&amp;quot;cuowu &amp;quot;);
+   }
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

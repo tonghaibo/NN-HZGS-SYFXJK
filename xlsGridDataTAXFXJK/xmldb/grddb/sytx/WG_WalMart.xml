@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_WalMart</MWID><NAME >沃尔玛</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_WalMart.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);
+  	_this.SaveTextFile( &amp;quot;d:/WalMart.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var httpcall = new webget.HttpCall();
+
+var m_bilds = new pub.EADS();		//订单列表 BilDS
+var m_bilid = &amp;quot;&amp;quot;;			//订单编号
+var m_bilguid = &amp;quot;&amp;quot;;			//订单内部编号
+var m_addid = &amp;quot;&amp;quot;;			//订单发货地址
+var m_bilEnd = false;			//订单列表结束标记
+var m_bEntryHdr = false;		//表头开始抓取标记
+var m_colnamlist = new Array(&amp;quot;供应商名&amp;quot;,&amp;quot;供应商号&amp;quot;,&amp;quot;订单号&amp;quot;,&amp;quot;订单日期&amp;quot;,&amp;quot;发货日期&amp;quot;,&amp;quot;部门&amp;quot;);				//表头可抓取的&amp;lt;TD&amp;gt;Info
+var t_bilhdr = new pub.EADS();		//表头可抓取 TmpDS
+var t_hdrrow = -1;
+var m_colidlist = new Array(&amp;quot;BILID&amp;quot;,&amp;quot;CORPNAM&amp;quot;,&amp;quot;CORPID&amp;quot;,&amp;quot;DEPT&amp;quot;,&amp;quot;订单号&amp;quot;,&amp;quot;DAT&amp;quot;,&amp;quot;期望到货日&amp;quot;,&amp;quot;电话号码&amp;quot;,&amp;quot;传真号码&amp;quot;);	//家乐福抓取的&amp;lt;TD&amp;gt;Info
+var m_bilhdr = new pub.EADS();		//家乐福格式 HdrDS
+var m_hdrrow = -1;
+var m_bEntryDtl = false;		//表体开始抓取标记
+var m_bildtlstartflg = &amp;quot;合计成本&amp;quot;;	//表体开始抓取字符依据
+var m_bildtlrowStat1 = false;		//表体汇总行标记 Stat
+var m_bildtlrowStat2 = false;		//表体明细行标记 Stat
+var m_bildtlcolseq1 = 0;		//表体汇总列标记 Seqid
+var m_bildtlcolseq2 = 0;		//表体明细列标记 Seqid
+var m_bildtl = new pub.EADS();		//家乐福格式 DtlDS（可构造不同格式的DS，单独解析，这个调用了家乐福的解析函数，所以格式和家乐福相同）必须按顺序
+var m_dtlrow = -1;
+var m_lastcolnam = &amp;quot;&amp;quot;;			//上一个节点&amp;lt;TD&amp;gt;Value
+
+function start()
+{
+	return getOrderStr(&amp;quot;GMHD&amp;quot;,&amp;quot;2012-07-11&amp;quot;,&amp;quot;0012&amp;quot;,&amp;quot;bri950a&amp;quot;,&amp;quot;Jing003&amp;quot;,&amp;quot;dept&amp;quot;,&amp;quot;UTF-8&amp;quot;);
+}
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var param = &amp;quot;&amp;quot;;
+	
+	try {
+		//1.登录
+		var loginurl = &amp;quot;https://rllogin.wal-mart.com/rl_security/rl_logon.aspx&amp;quot;;
+		param = &amp;quot;__EVENTTARGET=&amp;__EVENTARGUMENT=&amp;__VIEWSTATE=%2FwEPDwULLTE0OTY5MTU2ODkPZBYCZg9kFgICCQ9kFgJmD2QWAmYPZBYCAgEPZBYCAgIPZBYCZg9kFgICAQ8PZBYEHgtvbm1vdXNlb3ZlcgUbdGhpcy5jbGFzc05hbWU9J2J0biBidG5ob3YnHgpvbm1vdXNlb3V0BRR0aGlzLmNsYXNzTmFtZT0nYnRuJ2RkPwsM6QfmB7nLs3YhaSzFQIMfpgs%3D&amp;__EVENTVALIDATION=%2FwEWBwLeg6%2BXDAK145qeCgK7iKX4CAKgmu7gDwLB2tiHDgLKw6LdBQLvz%2FGACruWvf18O2f4%2Bkt%2BWRX4INDqRZCf&amp;hidFailedLoginCount=&amp;redirect=%2Frl_security%2Frl_logon.aspx&amp;hidPwdErrHandledFlag=FALSE&amp;txtUser=&amp;quot;+userid+&amp;quot;&amp;txtPass=&amp;quot;+passwd+&amp;quot;&amp;Login=%C1%AA%BB%FA%2F%B5%C7%C2%BC&amp;quot;;
+		ret = httpcall.Post(loginurl,param,code);
+		ret = httpcall.Get(loginurl+&amp;quot;?&amp;quot;+param,code);
+		
+	        //2.得到邮件列表
+	        var pageurl = &amp;quot;https://retaillink.wal-mart.com&amp;quot;;
+	        //2.1 网站地图
+//		ret = httpcall.Get(pageurl+&amp;quot;/sitemap/sitemap.aspx&amp;quot;,code);
+		//2.2 E-Commerce/EDI
+//		ret = httpcall.Get(pageurl+&amp;quot;/edi/default.aspx?ch=H19&amp;ukey=W5294&amp;quot;,code);
+		//2.3 WebEDI
+		var node = httpcall.GetAndParse(pageurl+&amp;quot;/edi/webedi&amp;quot;,code);
+		GetBillist(node,dat);
+		//2.4 已接收
+		param = &amp;quot;__VIEWSTATE=%2FwEPDwUKLTMwNjE2NzQ3N2Rknx5Ra9ay55QcvhTs%2FIpXdKLD7PU%3D&amp;MailboxId=22856&amp;VendorCountry=CN&amp;PONumber=&amp;StoreNumber=&amp;DocumentType=850&amp;Status=20&amp;SortBy=3&amp;SortOrder=DESC&amp;IsPaginated=false&amp;PageIndex=0&amp;PageSize=10&amp;quot;;
+//		ret = httpcall.Post(pageurl+&amp;quot;/edi/webedi&amp;quot;,param,code);
+		node =  httpcall.PostAndParse(pageurl+&amp;quot;/edi/webedi&amp;quot;,param,code);
+		GetBillist(node,dat);
+		
+		//3.解析表单
+		for (var i = 0; i &amp;lt; m_bilds.getRowCount(); i ++) {
+			m_bilguid = m_bilds.getStringAt(i,&amp;quot;BILGUID&amp;quot;);
+			m_addid = m_bilds.getStringAt(i,&amp;quot;ADDID&amp;quot;);
+			
+//			ret = httpcall.Get(pageurl+m_bilguid,code);
+			node = httpcall.GetAndParse(pageurl+m_bilguid,code);
+			m_bEntryHdr = false;
+			m_bEntryDtl = false;
+			m_lastcolnam= &amp;quot;&amp;quot;;
+			m_bildtlcolseq1= 0;
+			GetBildetail(node);
+		}
+//		return m_bilhdr.GetXml()+&amp;quot;\n&amp;quot;+m_bildtl.GetXml();
+		
+//		var func = new x_WG_Currefour();
+//		return func.writeStr(userid,deptid,kaid,m_bilhdr,m_bildtl);		//调用家乐福的解析函数
+		return writeStr(userid,deptid,kaid,m_bilhdr,m_bildtl);			//重写家乐福的解析函数
+	} catch ( e ) {
+//		return e;
+		throw new Exception(e);
+	}
+}
+
+function GetBillist(node,dat)
+{
+	if (node.getNodeName().equals(&amp;quot;A&amp;quot;)) {
+		var attrs  = node.getAttributes();
+		var namnode = attrs.getNamedItem(&amp;quot;href&amp;quot;);
+		if (namnode != null) {
+			var namvalue = namnode.getNodeValue();
+			if (namvalue != null &amp;&amp; namvalue.indexOf(&amp;quot;/edi/WebEDI/Document/ViewDetails/&amp;quot;) &amp;gt;= 0) {
+				//判断是否在日期范围内，过滤订单
+				var eafunc = new pub.EAFunc();
+				var node1 = node.getParentNode(); //&amp;lt;TD&amp;gt;
+				node1 = node1.getNextSibling(); //日期
+				while (node1.getNodeName() == &amp;quot;#text&amp;quot;) node1 = node1.getNextSibling();
+				var date = node1.getFirstChild().getNodeValue();
+				date = eafunc.Replace(date,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+				date = eafunc.Replace(date ,&amp;quot;\n&amp;quot;,&amp;quot;&amp;quot;);
+				var num = pub.EADbTool.GetSQL(&amp;quot;select to_date(&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)-to_date(&amp;apos;&amp;quot;+date+&amp;quot;&amp;apos;,&amp;apos;mm/dd/yyyy&amp;apos;) from dual&amp;quot;);
+				
+				node1 = node1.getNextSibling(); //地点
+				while (node1.getNodeName() == &amp;quot;#text&amp;quot;) node1 = node1.getNextSibling();
+				var addid = node1.getFirstChild().getNextSibling().getNextSibling().getNodeValue();
+				addid = eafunc.Replace(addid,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+				addid = eafunc.Replace(addid,&amp;quot;\n&amp;quot;,&amp;quot;&amp;quot;);
+				
+				if (1*num == 0) {
+					var row = m_bilds.AddRow(m_bilds.getRowCount()-1);
+					m_bilds.setValueAt(row,&amp;quot;BILGUID&amp;quot;,namvalue);
+					m_bilds.setValueAt(row,&amp;quot;ADDID&amp;quot;,addid);
+				} else if (1*num &amp;gt; 0) {
+					m_bilEnd = true;
+					return;
+				}
+			}
+		}
+	}
+	var children = node.getChildNodes();
+	if (children != null) {
+		for ( var i = 0; i &amp;lt; children.getLength(); i ++ ) {
+			GetBillist(children.item(i),dat);
+		}
+	}
+}
+
+function GetBildetail(node)
+{
+	if (node.getNodeName().equals(&amp;quot;TD&amp;quot;) || node.getNodeName().equals(&amp;quot;STRONG&amp;quot;)) {
+		if (m_bEntryDtl) {
+			m_bildtlcolseq1 ++;
+			if (!m_bildtlrowStat1 &amp;&amp; m_dtlrow != -1) m_bildtlcolseq2 ++;
+		}
+		if (m_bildtlrowStat2 &amp;&amp; m_bildtlcolseq2 == 3) {
+			m_bildtlrowStat2 = false;
+			m_bildtlcolseq2 = 0;
+		}
+		if (node.getFirstChild() != null) {
+			var eafunc = new pub.EAFunc();
+			var nodevalue = eafunc.NVL(node.getFirstChild().getNodeValue(),&amp;quot;&amp;quot;);
+			nodevalue = eafunc.Replace(nodevalue,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			nodevalue = eafunc.Replace(nodevalue ,&amp;quot;\n&amp;quot;,&amp;quot;&amp;quot;);
+			
+			if (nodevalue.length() &amp;gt;= m_colnamlist[0].length() &amp;&amp; nodevalue.substring(0,m_colnamlist[0].length()).equals(m_colnamlist[0])) {
+				t_hdrrow = t_bilhdr.AddRow(t_bilhdr.getRowCount()-1);
+				t_bilhdr.setValueAt(t_hdrrow,m_colidlist[0],m_bilguid.substring(&amp;quot;/edi/WebEDI/Document/ViewDetails/&amp;quot;.length(),m_bilguid.indexOf(&amp;quot;?&amp;quot;)));
+				m_bEntryHdr = true;	//表头开始
+			}
+			else if (nodevalue.length() &amp;gt;= m_bildtlstartflg.length() &amp;&amp; nodevalue.substring(0,m_bildtlstartflg.length()).equals(m_bildtlstartflg)) {
+				m_bEntryDtl = true;	//表体开始
+			}
+			else if (m_bEntryHdr) {						//开始抓取HdrDS
+				for ( var i = 0; i &amp;lt; m_colnamlist.length(); i ++ ) {	//&amp;quot;供应商名&amp;quot;,&amp;quot;供应商号&amp;quot;,&amp;quot;订单号&amp;quot;,&amp;quot;订单日期&amp;quot;,&amp;quot;发货日期&amp;quot;,&amp;quot;部门&amp;quot;
+					if (m_lastcolnam.length() &amp;gt;= m_colnamlist[i].length() &amp;&amp; m_lastcolnam.substring(0,m_colnamlist[i].length()).equals(m_colnamlist[i])) {
+						if (i == 0) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[1],nodevalue);
+						}
+						else if (i == 1) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[2],nodevalue);
+						}
+						else if (i == 2) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[4],nodevalue);
+							m_bilid = nodevalue;
+						}
+						else if (i == 3) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[5],pub.EADbTool.GetSQL(&amp;quot;select to_char(to_date(&amp;apos;&amp;quot;+nodevalue+&amp;quot;&amp;apos;,&amp;apos;mm/dd/yyyy&amp;apos;),&amp;apos;dd/mm/yyyy&amp;apos;) from dual&amp;quot;));
+						}
+						else if (i == 4) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[6],pub.EADbTool.GetSQL(&amp;quot;select to_char(to_date(&amp;apos;&amp;quot;+nodevalue+&amp;quot;&amp;apos;,&amp;apos;mm/dd/yyyy&amp;apos;),&amp;apos;dd/mm/yyyy&amp;apos;) from dual&amp;quot;));
+						}
+						else if (i == 5) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[3],nodevalue);
+							m_bEntryHdr = false;
+						}
+						break;
+					}
+				}
+			}
+			else if (!m_bEntryHdr &amp;&amp; t_bilhdr.getRowCount() &amp;gt; 0) {		//抓取表头结束(t_bilhdr)，构造家乐福格式HdrDS(m_bilhdr)
+				m_hdrrow = m_bilhdr.AddRow(m_bilhdr.getRowCount()-1);
+				for (var i = 0; i &amp;lt; m_colidlist.length(); i ++) {
+					for (var j = 0; j &amp;lt; t_bilhdr.getColumnCount(); j ++) {
+						if (m_colidlist[i] == t_bilhdr.getColumnName(j)) {
+							m_bilhdr.setValueAt(m_hdrrow,m_colidlist[i],t_bilhdr.getStringAt(t_hdrrow,j));
+							break;
+						}
+						else if (j == t_bilhdr.getRowCount()-1)
+							m_bilhdr.setValueAt(m_hdrrow,m_colidlist[i],&amp;quot;&amp;quot;);
+					}
+				}
+				t_bilhdr.clearDS();
+			}
+			else if (m_bEntryDtl) {						//开始抓取DtlDS
+				if (m_bildtlcolseq1 == 1) {
+					try {
+						var attrs  = node.getParentNode().getAttributes(); //&amp;lt;TR&amp;gt;
+						var namnode = attrs.getNamedItem(&amp;quot;class&amp;quot;);
+						if (namnode != null) {
+							var namvalue = namnode.getNodeValue();
+							if (namvalue == &amp;quot;tableRow&amp;quot;) {
+								m_bildtlrowStat1 = true;
+								m_dtlrow = m_bildtl.AddRow(m_bildtl.getRowCount()-1);
+								
+								m_bildtl.setValueAt(m_dtlrow,&amp;quot;订单号&amp;quot;,m_bilid);
+								m_bildtl.setValueAt(m_dtlrow,&amp;quot;BILID&amp;quot;, m_bilguid.substring(&amp;quot;/edi/WebEDI/Document/ViewDetails/&amp;quot;.length(),m_bilguid.indexOf(&amp;quot;?&amp;quot;)));
+								m_bildtl.setValueAt(m_dtlrow,&amp;quot;SEQID&amp;quot;, nodevalue);
+								if (m_addid == &amp;quot;&amp;quot; || m_addid == &amp;quot;0&amp;quot;) {
+									m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPID&amp;quot;, &amp;quot;&amp;quot;);
+									m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPNAM&amp;quot;, &amp;quot;&amp;quot;);
+								} else {
+									m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPID&amp;quot;, m_addid);
+									m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPNAM&amp;quot;, m_addid);
+								}
+							}
+						}
+					} catch ( e ) {
+						m_bildtlrowStat1 = false;
+					}
+				}
+				if (m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 2) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMID&amp;quot;, nodevalue);
+				}
+				if (!m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 2 &amp;&amp; m_dtlrow != -1) {
+					if (m_bildtl.getValueAt(m_dtlrow,&amp;quot;ITMNAM&amp;quot;) == &amp;quot;&amp;quot; || m_bildtl.getValueAt(m_dtlrow,&amp;quot;ITMNAM&amp;quot;) == &amp;quot;进项税率&amp;quot;) {
+						m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMNAM&amp;quot;, eafunc.Replace(nodevalue,&amp;quot;商品说明&amp;quot;,&amp;quot;&amp;quot;));
+					}
+				}
+				if (m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 3) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;条码&amp;quot;, nodevalue);
+				}
+				if (!m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 3 &amp;&amp; m_dtlrow != -1) {
+					if (m_bildtl.getValueAt(m_dtlrow,&amp;quot;不含税价&amp;quot;) != &amp;quot;&amp;quot; &amp;&amp; eafunc.Replace(nodevalue,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;).indexOf(&amp;quot;%&amp;quot;) != -1) {
+						m_bildtl.setValueAt(m_dtlrow,&amp;quot;不含税价&amp;quot;, eafunc.Round((1.0+0.01*eafunc.Replace(eafunc.Replace(nodevalue,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;),&amp;quot;%&amp;quot;,&amp;quot;&amp;quot;))*m_bildtl.getValueAt(m_dtlrow,&amp;quot;不含税价&amp;quot;)/m_bildtl.getValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;),4));
+					}
+				}
+				if (m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 7) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SPEC&amp;quot;, nodevalue);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMNAM&amp;quot;, &amp;quot;&amp;quot;);
+					
+					var qtyflg = &amp;quot;&amp;quot;;
+					var untnum = &amp;quot;&amp;quot;;
+					try {
+						var qtyflgnode = node.getNextSibling();
+						while (qtyflgnode.getNodeName() == &amp;quot;#text&amp;quot;) qtyflgnode = qtyflgnode.getNextSibling();
+						qtyflgnode = qtyflgnode.getNextSibling();
+						while (qtyflgnode.getNodeName() == &amp;quot;#text&amp;quot;) qtyflgnode = qtyflgnode.getNextSibling();
+						var untnumnode = qtyflgnode.getNextSibling();
+						while (untnumnode.getNodeName() == &amp;quot;#text&amp;quot;) untnumnode = untnumnode.getNextSibling();
+						untnumnode = untnumnode.getNextSibling();
+						while (untnumnode.getNodeName() == &amp;quot;#text&amp;quot;) untnumnode = untnumnode.getNextSibling();
+						
+						qtyflg = qtyflgnode.getFirstChild().getNodeValue();
+						untnum = untnumnode.getFirstChild().getNodeValue();
+						untnum = untnum.substring(0,untnum.indexOf(&amp;quot;/&amp;quot;));
+					} catch ( e ) { }
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;, untnum);	//数量标志
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTYFLG&amp;quot;, qtyflg);	//换算比例
+				}
+				if (m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 8) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTY&amp;quot;, nodevalue);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;赠品数量&amp;quot;, &amp;quot;&amp;quot;);
+				}
+				if (m_bildtlrowStat1 &amp;&amp; m_bildtlcolseq1 == 10) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;不含税价&amp;quot;, nodevalue);
+				}
+				
+				if (m_bildtlcolseq2 == 1) {
+					try {
+						var attrs  = node.getParentNode().getAttributes(); //&amp;lt;TR&amp;gt;
+						var namnode = attrs.getNamedItem(&amp;quot;class&amp;quot;);
+						if (namnode != null) {
+							var namvalue = namnode.getNodeValue();
+							if (namvalue == &amp;quot;destinationQuantityRows&amp;quot;) {
+								m_bildtlrowStat2 = true;
+								m_dtlrow = m_bildtl.AddRow(m_bildtl.getRowCount()-1);
+								
+								m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPID&amp;quot;, nodevalue);
+								m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPNAM&amp;quot;, nodevalue);
+							}
+						}
+					} catch ( e ) { }
+				}
+				if (m_bildtlrowStat2 &amp;&amp; m_bildtlcolseq2 == 2) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTY&amp;quot;, 1*nodevalue*m_bildtl.getValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;));
+				}
+				
+				try { //判断表体一行数据是否结束
+					var node1 = node.getNextSibling();
+					while (node1.getNodeName() == &amp;quot;#text&amp;quot;) node1 = node1.getNextSibling();
+				} catch ( e ) {
+					m_bildtlrowStat1 = false;
+					m_bildtlcolseq1 = 0;
+					m_bildtlrowStat2 = false;
+					m_bildtlcolseq2 = 0;
+				}
+			}
+			m_lastcolnam = nodevalue;
+		}
+	}
+	var children = node.getChildNodes();
+	if ( children != null ) {
+		for ( var i = 0; i &amp;lt; children.getLength(); i ++ ) {
+			GetBildetail(children.item(i));
+		}
+	}
+}
+
+// 函数：writeStr
+// 说明：把抓取的数据拼接
+function writeStr(userid,deptid,kaid,hdrds,dtlds)
+{
+	var ordid = &amp;quot;&amp;quot;;
+	var context = &amp;quot;&amp;quot;;
+	var sb = new StringBuffer();
+	var eafunc = new pub.EAFunc();
+	for (var i = 0 ; i &amp;lt; hdrds.getRowCount(); i ++) {
+		var hval = &amp;quot;NR~~~&amp;quot;+userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;;
+		
+		for (var c = 0; c &amp;lt; hdrds.getColumnCount(); c ++) {
+			if (hdrds.getColumnName(c) == &amp;quot;CORPID&amp;quot;) hval += &amp;quot;#CORPID#~~~&amp;quot;;
+			else if (hdrds.getColumnName(c) == &amp;quot;CORPNAM&amp;quot;) hval += &amp;quot;#CORPNAM#~~~&amp;quot;;
+			else hval += hdrds.getStringAt(i,c)+&amp;quot;~~~&amp;quot;;
+		}
+		ordid = hdrds.getStringAt(i,&amp;quot;订单号&amp;quot;)+hdrds.getStringAt(i,&amp;quot;BILID&amp;quot;);
+		
+		for(var j = 0; j &amp;lt; dtlds.getRowCount(); j ++) {
+			var tmpord = dtlds.getStringAt(j,&amp;quot;订单号&amp;quot;)+dtlds.getStringAt(j,&amp;quot;BILID&amp;quot;);
+			var tval = hval;
+			var dval = &amp;quot;&amp;quot;;
+			if(tmpord.equals(ordid) &amp;&amp; dtlds.getStringAt(j,&amp;quot;CORPID&amp;quot;) != &amp;quot;&amp;quot;) {
+				for (var m = 2; m &amp;lt; dtlds.getColumnCount(); m ++) {
+					if (dtlds.getColumnName(m) == &amp;quot;CORPID&amp;quot;) tval = eafunc.Replace(tval,&amp;quot;#CORPID#&amp;quot;,dtlds.getStringAt(j,m));
+					else if (dtlds.getColumnName(m) == &amp;quot;CORPNAM&amp;quot;) tval = eafunc.Replace(tval,&amp;quot;#CORPNAM#&amp;quot;,dtlds.getStringAt(j,m));
+					else dval += dtlds.getStringAt(j,m)+&amp;quot;~~~&amp;quot;;
+				}
+				context = tval+dval;
+				context += &amp;quot;None~~~None~~~None╃&amp;quot;;
+				sb.append(context);
+				sb.append(&amp;quot;\n&amp;quot;);
+			}
+		}
+	}
+	return sb.toString();
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

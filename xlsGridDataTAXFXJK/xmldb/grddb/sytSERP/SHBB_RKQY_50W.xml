@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SHBB_RKQY_50W</MWID><NAME >入库税收50万元以上企业情况表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SHBB_RKQY_50W.zxg</FILE><SCENE ></SCENE><FIXED >4,1</FIXED><CATTYP >收核报表</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >SERP</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD >99</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >14</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,1</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SetCellText(0,2,3,DAT1+&amp;quot; 至 &amp;quot;+DAT2);
+	_this.SetToBoolBox(0,3,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--分析报表-收核：入库税收50万元以上企业情况表（按县区排序)
+
+select rownum,nsrsbh,nsrmc,shxydm,hy,rkje_zzs,rkje_xfs,rkje_qysds,
+rkje_hj,djzclx,nsrzt,ssgly,zgswjg,zgswskfj from(
+select t.*,t1.nsrsbh,t1.nsrmc,t1.shxydm,
+  (select hymc from DM_GY_HY hy where t1.hy_dm=hy.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)hy,
+  (select nsrztmc from  DM_GY_NSRZT zt where t1.nsrzt_dm=zt.nsrzt_dm) nsrzt, 
+  (select swryxm from DM_GY_SWRY swry where swry.swry_dm=t1.SSGLY_DM)ssgly,
+  (select name from v_swjg sw where sw.id=substr(t1.zgswskfj_dm,1,7))zgswjg,
+  (select swjgmc from DM_GY_SWJG jg where t1.zgswskfj_dm=jg.swjg_dm)zgswskfj,
+  (select djzclxmc from DM_DJ_DJZCLX zclx where zclx.djzclx_dm=t1.djzclx_dm) djzclx
+--t1.NSRZT_DM,t1.zgswskfj_dm,t1.hy_dm,t1.djzclx_dm,t1.ssgly_dm
+from(
+select skssswjg,djxh,
+   sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,rkje,0)) rkje_zzs,
+   sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,rkje,0)) rkje_xfs,
+   sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,rkje,0)) rkje_qysds,
+   sum(decode(zsxm_dm,&amp;apos;10116&amp;apos;,rkje,0)) rkje_clgzs,
+   (sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,rkje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,rkje,0))+
+     sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,rkje,0))/*+sum(decode(zsxm_dm,&amp;apos;10116&amp;apos;,rkje,0))*/)rkje_hj
+from (
+select skssswjg,djxh,zsxm_dm,
+   (sum(decode(typ,&amp;apos;入库&amp;apos;,tjje,0))+sum(decode(typ,&amp;apos;免抵调&amp;apos;,tjje,0))-sum(decode(typ,&amp;apos;退库&amp;apos;,tjje,0))) rkje
+from (
+select &amp;apos;入库&amp;apos;typ, substr(ZSRK.skssswjg_dm,1,7)skssswjg,djxh,zsxm_dm,sum(sjje)tjje 
+from HX_ZTSJ.V_ZS_SP_CX @js3q  ZSRK
+WHERE ZSRK.skssqq &amp;gt;= TO_DATE(&amp;apos;[%DAT1]&amp;apos;, &amp;apos;YYYY-MM-DD&amp;apos;) 
+AND ZSRK.skssqz &amp;lt;= TO_DATE(&amp;apos;[%DAT2]&amp;apos;, &amp;apos;YYYY-MM-DD&amp;apos;)
+and zsxm_dm in (&amp;apos;10101&amp;apos;,&amp;apos;10102&amp;apos;,&amp;apos;10104&amp;apos;,&amp;apos;10116&amp;apos;) 
+--and skgk_dm IN(&amp;apos;1451100001&amp;apos;)
+and ZSRK.skssswjg_dm like &amp;apos;14511%&amp;apos;       
+group by  &amp;apos;入库&amp;apos;,substr(ZSRK.skssswjg_dm,1,7) , djxh,zsxm_dm
+
+union all
+
+--免抵调增值税
+select &amp;apos;免抵调&amp;apos;typ,substr(skssswjg_dm,1,7)skssswjg,djxh,zsxm_dm, sum(mdtkse)tjje
+from(
+select distinct mdt.djxh, mdt.se,mdt.mdtkse,mdt.zgswskfj_dm,mdt.ZSSWJG_DM,dj.nsrsbh,dj.nsrmc,mdt.zsxm_dm,mdt.skssswjg_dm
+from ZS_MDTKMXB mdt,dj_nsrxx dj
+where mdt.djxh=dj.djxh(+)
+and mdt.skssqq&amp;gt;=date&amp;apos;[%DAT1]&amp;apos;  
+and mdt.skssqz&amp;lt;=date&amp;apos;[%DAT2]&amp;apos;
+and mdt.SKSSSWJG_DM like &amp;apos;14511%&amp;apos;
+and tzlx_dm in (&amp;apos;1&amp;apos;,&amp;apos;4&amp;apos;)
+and mdt.zsxm_dm in (&amp;apos;1451100001&amp;apos;)
+--and skgk_dm IN(&amp;apos;1451100001&amp;apos;)
+)group by &amp;apos;免抵调&amp;apos;,substr(skssswjg_dm,1,7),djxh,zsxm_dm
+
+--select * from ZS_MDTKMXB
+
+union all
+--退库处理信息表
+select &amp;apos;退库&amp;apos;typ,substr(skssswjg_dm,1,7)skssswjg,djxh,zsxm_dm,sum(se)tjje
+from(
+select ts.* ,dj.nsrsbh,dj.nsrmc
+from ZS_SRTHS ts,dj_nsrxx dj
+where ts.djxh=dj.djxh(+)
+and zsxm_dm in (&amp;apos;10101&amp;apos;,&amp;apos;10102&amp;apos;,&amp;apos;10104&amp;apos;,&amp;apos;10116&amp;apos;) 
+and ts.SKSSSWJG_DM like&amp;apos;14511%&amp;apos;
+and tzlx_dm in (&amp;apos;1&amp;apos;,&amp;apos;4&amp;apos;)
+and skssqq&amp;gt;=date &amp;apos;[%DAT1]&amp;apos;
+and skssqz&amp;lt;=date &amp;apos;[%DAT2]&amp;apos;
+--and skgk_dm IN(&amp;apos;1451100001&amp;apos;)
+)group by &amp;apos;退库&amp;apos;, substr(skssswjg_dm,1,7),djxh,zsxm_dm
+
+) group by skssswjg,djxh,zsxm_dm 
+) group by skssswjg,djxh
+)t,(
+SELECT * FROM(
+SELECT djxh,NSRSBH,NSRMC,NSRZT_DM,zgswskfj_dm,hy_dm,djzclx_dm,ssgly_dm,shxydm,
+ROW_NUMBER()OVER (PARTITION BY NSRSBH,NSRMC ORDER BY DJRQ DESC ) RN
+FROM
+(
+select djxh,nvl(shxydm,nsrsbh) nsrsbh,shxydm,NSRMC,djrq,jdxz_dm,YXBZ,NSRZT_DM,zgswskfj_dm,hy_dm,djzclx_dm,ssgly_dm
+ from dj_nsrxx 
+ where zgswskfj_dm like &amp;apos;14511%&amp;apos;
+ and yxbz=&amp;apos;Y&amp;apos;
+))WHERE RN=1 )t1
+where t.djxh=t1.djxh
+and t1.nsrzt_dm =&amp;apos;03&amp;apos;
+and nsrsbh not like &amp;apos;L%&amp;apos;
+and rkje_hj&amp;gt;50*10000
+and substr(t1.zgswskfj_dm,1,7) in (select id from v_swjg start with id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior id=sjid)
+order by skssswjg
+)dual
+
+--select * from HX_DM_ZDY.DM_GY_GK@js3q where skgk_dm like &amp;apos;14511%&amp;apos;
+</DATDSC><C4 >MAIN</C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

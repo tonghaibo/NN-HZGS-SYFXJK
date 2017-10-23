@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >EBItemIns</MWID><NAME >维护渠道商品对应EB</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >EBItemIns.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >saveEBItem</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >ITEM</ID><NAME >商品</NAME><NOTNULL ></NOTNULL><KEYVAL >V_ITEM</KEYVAL><INPCTL >select</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="1" ><ID >KA</ID><NAME >渠道</NAME><NOTNULL ></NOTNULL><KEYVAL >V_KA</KEYVAL><INPCTL >select</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="2" ><ID >EITEM</ID><NAME >订单商品编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME >200</NAME><DBNAME ></DBNAME><DSKEY >DSC:Main</DSKEY><NROW >4</NROW><NCOL >8</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,2,0</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetColVisible(sheet,0,-1);
+	_this.SetColVisible(sheet,3,-1);  
+}
+
+var arr = new Array();
+var obj = null;
+//保存
+function saveEBItem()
+{
+	if( arr.length == 0 )
+	{
+		alert(&amp;quot;无任何操作行，请确认！&amp;quot;);
+		return;
+	}
+	else 
+	{
+		var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;\n&amp;quot;;
+		    xml += &amp;quot;&amp;lt;ROWSET&amp;gt;\n&amp;quot;;
+		for (var i=0;i&amp;lt;arr.length;i++)
+		{
+			xml += &amp;quot;&amp;lt;ROW num=&amp;apos;&amp;quot;+i+&amp;quot;&amp;apos;&amp;gt;\n&amp;quot;;		
+			xml += &amp;quot;&amp;lt;KAGUID&amp;gt;&amp;quot;+arr[i].kaguid+&amp;quot;&amp;lt;/KAGUID&amp;gt;\n&amp;quot;;	
+			xml += &amp;quot;&amp;lt;ITEMGUID&amp;gt;&amp;quot;+arr[i].itemguid+&amp;quot;&amp;lt;/ITEMGUID&amp;gt;\n&amp;quot;;
+			xml += &amp;quot;&amp;lt;PRICE&amp;gt;&amp;quot;+arr[i].price+&amp;quot;&amp;lt;/PRICE&amp;gt;\n&amp;quot;;
+			xml += &amp;quot;&amp;lt;EBITEM&amp;gt;&amp;quot;+arr[i].ebitem+&amp;quot;&amp;lt;/EBITEM&amp;gt;\n&amp;quot;;				
+			xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+		xml += &amp;quot;&amp;lt;/ROWSET&amp;gt;\n&amp;quot;;
+		var param = new Object();
+		param.xml = xml;
+		try{
+			var msg = invokeOSFuncExt(&amp;quot;saveEBItem&amp;quot;,param);
+			alert(&amp;quot;保存EB对应商品成功，共操作&amp;quot;+msg+&amp;quot;条记录！&amp;quot;);
+			arr = new Array();		
+			reQuery();
+		}catch(e){	
+			alert(e);
+		}  
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	obj = new Object();
+	obj.kaguid = _this.GetCellText(sheet,row,0);
+	obj.itemguid = _this.GetCellText(sheet,row,3);
+	obj.price = _this.GetCellText(sheet,row,6);
+	obj.ebitem = newvalue;
+	arr.push(obj);
+}
+
+
+function reQuery()
+{
+	param_KA=document.all(&amp;apos;KA&amp;apos;).value;
+	param_ITEM=document.all(&amp;apos;ITEM&amp;apos;).value;
+	DoQuery(&amp;apos;KA=&amp;apos;+document.all(&amp;apos;KA&amp;apos;).value+&amp;apos;&amp;ITEM=&amp;apos;+document.all(&amp;apos;ITEM&amp;apos;).value,&amp;apos;&amp;apos;);	
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;); 
+function saveEBItem()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var i = 0;
+	try{
+		db = new pubpack.EADatabase();
+		var ds = new pubpack.EAXmlDS(xml);	
+			
+		sql = &amp;quot; update corpitem set ebitem=? where CORP=? and item=?&amp;quot;;
+		var pstmt = db.GetConn().prepareStatement(sql);
+		
+		for (var r = 0;r&amp;lt; ds.getRowCount();r++)
+		{				
+			pstmt.setString(1,ds.getStringAt(i,&amp;quot;EBITEM&amp;quot;));
+			pstmt.setString(2,ds.getStringAt(i,&amp;quot;KAGUID&amp;quot;));
+			pstmt.setString(3,ds.getStringAt(i,&amp;quot;ITEMGUID&amp;quot;));
+			pstmt.addBatch();
+			i++;
+		}
+		pstmt.executeBatch();		
+
+		db.Commit();
+		return i;
+	}catch(e){
+		db.Rollback();
+		throw new Exception(e);
+	}
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Main</ID><NAME ></NAME><DATDSC >select ci.CORP kaguid,ka.id kaid,ka.name kanam,ci.item itemguid,i.id itmid,i.name itmnam,ci.price,ebitem
+  from corpitem ci,item i,v_ka ka
+ where ci.item = i.guid
+   and ci.CORP = ka.guid
+   and ka.id like &amp;apos;[%KA]%&amp;apos;
+   and (i.id like &amp;apos;[%ITEM]%&amp;apos; or i.name like &amp;apos;%[%ITEM]%&amp;apos;)
+   and nvl(ebitem,&amp;apos; &amp;apos;) like &amp;apos;[%EITEM]%&amp;apos;</DATDSC><C4 >Main</C4><C5 >Main</C5><C6 >Main</C6><C7 >Main</C7><C8 >Main</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >MESSAGE</MWID><NAME >事务管理</NAME><NOTE ></NOTE><FILE >MESSAGE.zxg</FILE><FIXED >-1,-1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+function send()
+{
+        var ret = 0; 
+        var tousr = _this.GetCellText(sheet,1,2);
+        var title = _this.GetCellText(sheet,3,2);
+        var note = _this.GetCellText(sheet,5,1);
+        if( tousr == &amp;quot;&amp;quot; )
+        {
+            alter (&amp;quot;必须输入收信人&amp;quot;);
+            return ;
+        }
+        if ( title == &amp;quot;&amp;quot; )
+        {
+             alert (&amp;quot;输入主题&amp;quot;);
+             return ;
+        }
+         
+         var param = new Object();
+         param.note = note;;
+         param.title = title;
+         param.tousr = tousr;
+         param.crtusr = &amp;quot;aa&amp;quot;;
+         ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param) ;
+         alert ( &amp;quot;已录入&amp;quot;+ret+&amp;quot;条事务&amp;quot;);    
+      
+}
+
+
+
+function _thisOnpost_loaddata(sheet)
+{
+        _this.SetToButton(&amp;quot;udf_okbtn&amp;quot;,sheet,7,2,&amp;quot;发送&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+        _this.SetToButton(&amp;quot;udf_cancelbtn&amp;quot;,sheet,7,4,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+       
+}
+
+function init()
+{
+         var itemmenu =&amp;quot;&amp;lt;item name=\&amp;quot;刷新[&amp;0]\&amp;quot; id=\&amp;quot;udf_reload\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;删除[&amp;F]\&amp;quot; id=\&amp;quot;com_delete\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;上一页[&amp;F]\&amp;quot; id=\&amp;quot;com_prev\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;下一页[&amp;F]\&amp;quot; id=\&amp;quot;com_next\&amp;quot;/&amp;gt;&amp;quot;;
+        _this.AddToolbarButton(&amp;quot;com_toolbar_mymenu&amp;quot;, &amp;quot;操作&amp;quot;,&amp;quot;&amp;quot;, itemmenu , 3,1,0,50);
+        _this.ShowTabBar(1);
+        _this.ShowToolBar(1);      
+        _this.SetCellBkColor(0,-1,-1,255,255,255);
+        _this.SetCellBkColor(1,-1,-1,255,255,255);
+        _this.SetCellBkColor(2,-1,-1,255,255,255);      
+        _this.LoadScene(2,10);
+        _this.ShowSheet(1);
+       _this.SetSheetName(1,&amp;quot;我的消息&amp;quot;);
+        _this.HideSheet(0);
+}
+
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+
+
+  if (id == &amp;quot;udf_cancelbtn&amp;quot;)
+  {
+        _this.SetCellText(sheet,5,1,&amp;quot;&amp;quot;);
+        _this.SetCellText(sheet,3,2,&amp;quot;&amp;quot;);
+        _this.SetCellText(sheet,1,2,&amp;quot;&amp;quot;);
+  }
+  if ( id == &amp;quot;udf_okbtn&amp;quot;)
+  {
+        send();
+  }
+ 
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+
+function save()
+{
+      var ret = 0;
+      var db = null;
+      var ds = null;
+      var sql = &amp;quot;insert into msg (title,note,crtusr,tousr) &amp;quot;+
+                &amp;quot; values (&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+tousr+&amp;quot;&amp;apos;)&amp;quot;;
+      try
+      {
+            db = new pubpack.EADatabase();
+            ret =  db.ExcecutSQL(sql);
+            return ret ;
+      }
+      catch(e)
+      {
+      
+      }
+      finally
+      {
+         db.Close(); 
+      }       
+
+
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GRDDSCDS_0</ID><NAME ></NAME><DATDSC >select *
+from A2</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

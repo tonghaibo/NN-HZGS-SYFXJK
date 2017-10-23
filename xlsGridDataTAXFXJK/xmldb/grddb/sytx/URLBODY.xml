@@ -1,0 +1,450 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >URLBODY</MWID><NAME >正文编辑</NAME><FILE >URLBODY.zxg</FILE><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >SAVE</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >1</IMGMOUSE><C10 >SAVE</C10><C11 >SAVE</C11></ROW>
+<ROW num="1" ><ID >UploadImage</ID><NAME >图片资源上传</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+<ROW num="2" ><ID >DownloadImage</ID><NAME >图片资源下载</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+<ROW num="3" ><ID >LocalWebResource</ID><NAME >本地图片目录</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+<ROW num="4" ><ID >Impfile</ID><NAME >导入HTML文件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >urlguid</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >urlguid</C13></ROW>
+<ROW num="1" ><ID >SYSURLID</ID><NAME >编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var IMAGEDIR = &amp;quot;&amp;quot;;//本地图片目录
+var IMAGEFILESTR = &amp;quot;&amp;quot; ;// 本地图片目录中的文件，格式 filename,time~filename,time ...
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToCodeEditor(&amp;quot;body&amp;quot;,sheet,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	var title = &amp;quot;正文编辑 - 请点击开始按钮的[使用HTML编辑器...]打开功能来编辑&amp;quot; ;
+	_this.SetToolbarString(title);
+	_this.ShowToolBar(1);
+	if ( _this.GetReleaseNo() &amp;lt;&amp;quot;6.98&amp;quot; ) {
+		alert ( &amp;quot;请升级到6.98以上版本&amp;quot; );
+		
+	}
+	else 
+		_this.SetWorkFile(SYSURLID);
+	if ( urlguid==&amp;quot;&amp;quot; ) {
+		_sql.querytods(&amp;quot;GetURLGUID&amp;quot;,&amp;quot;id=&amp;quot;+SYSURLID) ;
+		
+		urlguid =_this.XMLDS_GetString(0,&amp;quot;GUID&amp;quot;);
+		
+		
+	}
+	if (urlguid ==&amp;quot;&amp;quot;){
+		alert ( &amp;quot;没法找到该地址,id=&amp;quot;+ SYSURLID);
+	} 
+	showPage(sheet);
+	var workdir = _this.GetWorkDir();
+	if( workdir == &amp;quot;&amp;quot; ) {
+		alert ( &amp;quot;在进行编辑之前，请首先设置您本地的工作目录&amp;quot; );
+		_this.SetWorkDir(&amp;quot;&amp;quot;);
+		workdir = _this.GetWorkDir();
+	}
+
+	try{_this.CreateDirInWorkdir(&amp;quot;images&amp;quot; );}catch(e ) {}
+	try{_this.CreateDirInWorkdir(&amp;quot;images/&amp;quot;+ deforg  );}catch(e ) {}
+
+	try{_this.CreateDirInWorkdir(&amp;quot;images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID );}catch(e ) {}
+	IMAGEDIR  = workdir +&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+	
+	
+	
+	//alert();
+	_this.GetDirFileList(IMAGEDIR  );
+	var str = &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		// 本地图片目录中的文件，格式 filename,time~filename,time ..
+		if ( i!= 0 ) str += &amp;quot;~&amp;quot;;
+		str += _this.XMLDS_GetString(i,&amp;quot;FILENAME&amp;quot; )+&amp;quot;,&amp;quot;+_this.XMLDS_GetString(i,&amp;quot;TIME&amp;quot; )+&amp;quot;~&amp;quot;;
+	}
+	IMAGEFILESTR  = str;
+	
+}
+
+function showPage(sheet)
+{
+	var ret = &amp;quot;&amp;quot;;
+	try {
+		ret = _this.invokeOSFunc(&amp;quot;getBlob&amp;quot;,&amp;quot;urlguid=&amp;quot;+urlguid);
+		_this.SetCellText(sheet,-1,-1,ret);
+	}
+	catch(e) {
+		alert(&amp;quot;初始化显示页面出错 &amp;quot;+e.toString());
+	}
+}
+
+// Excel编辑后
+function _thisOnShellExecuteFileModify(filepath,classname)
+{
+	_this.SetRedraw(0);
+	_this.LoadToCodeEditor(&amp;quot;body&amp;quot;,_this.GetCurrentSheet(),-1,-1,filepath,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetRedraw(1);
+}
+//undefined
+function SAVE()
+{
+	var param = new Object();
+	param.urlguid = urlguid;
+	param.body = _this.GetCellText(0,-1,-1);
+	
+	try {
+		_this.invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		// 检查本地图片目录是否有新的图片或修改的图片
+		_this.GetDirFileList(IMAGEDIR  );
+		var str = &amp;quot;&amp;quot;;
+		for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+			// 本地图片目录中的文件，格式 filename,time~filename,time ..
+			if ( i!= 0 ) str += &amp;quot;~&amp;quot;;
+			str += _this.XMLDS_GetString(i,&amp;quot;FILENAME&amp;quot; )+&amp;quot;,&amp;quot;+_this.XMLDS_GetString(i,&amp;quot;TIME&amp;quot; )+&amp;quot;~&amp;quot;;
+		}
+		if (IMAGEFILESTR  != str ){
+			if ( confirm( &amp;quot;系统检测到本地图片目录有更新的文件，是否上传？&amp;quot; )== 1 ) {
+				_UploadImage(false );
+
+			}
+			IMAGEFILESTR = str;
+		}
+		
+		
+		alert(&amp;quot;保存成功!&amp;quot;);
+	}
+	catch(e) {
+		alert(&amp;quot;保存失败! &amp;quot;+e);
+	}
+	
+}
+
+
+//图片资源下载
+function DownloadImage()
+{
+	var workdir = _this.GetWorkDir();
+	
+	var xml = invokeOSFunc(&amp;quot;GetWebresourceXMLDS&amp;quot;,&amp;quot;sysurlid=&amp;quot;+SYSURLID+&amp;quot;&amp;deforg=&amp;quot;+deforg);
+	
+	_this.XMLDS_Parse(xml);
+	
+	var dir = workdir +&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+	var webdir = &amp;quot;images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+
+	var n = _this.XMLDS_GetRowCount();
+	var msg =&amp;quot;下载服务器的图片文件到本地目录（&amp;quot;+dir+&amp;quot;）\n共&amp;quot;+n+&amp;quot;个文件，是否继续?&amp;quot;;  
+	if( n == 0 ) {
+		alert (&amp;quot;远程目录（&amp;quot;+webdir +&amp;quot;）没有需要下载的文件&amp;quot;);  
+		return ;
+	}
+	var files = &amp;quot;&amp;quot;;
+	if ( confirm(msg) == 1 ) {
+		for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+			var filename = _this.XMLDS_GetString(i,&amp;quot;FILENAME&amp;quot; );
+			// 下载
+			
+			files+=_this.DownLoadFileToWorkDir(webdir + filename ,webdir+filename ) + &amp;quot;\n&amp;quot;;
+		
+		}
+		if ( files!= &amp;quot;&amp;quot; )
+			alert ( &amp;quot;已下载文件\n&amp;quot;+ files );
+
+	}
+	
+}
+
+//图片资源Upload
+function UploadImage()
+{
+	_UploadImage(true );
+}
+function _UploadImage(bPrompt)
+{
+	var workdir = _this.GetWorkDir();
+	var dir = workdir +&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+	var webdir = &amp;quot;webresource/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+
+	var n = _this.GetDirFileList(dir);
+	var msg =&amp;quot;把本地目录的图片文件（&amp;quot;+dir+&amp;quot;）同步到服务器\n共&amp;quot;+n+&amp;quot;个文件，是否继续?&amp;quot;;  
+	if ( n == -1 ) {
+		alert ( &amp;quot;本地的资源目录还没有建立，路径是：&amp;quot; + dir );
+		return ;
+	}
+	else if( n == 0 ) {
+		alert (&amp;quot;本地目录（&amp;quot;+dir+&amp;quot;）没有需要同步上传的文件&amp;quot;);  
+		return ;
+	}
+	
+	if ( bPrompt==false || confirm(msg) == 1 ) {
+		var files = &amp;quot;&amp;quot;;
+
+		for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+			var filename = _this.XMLDS_GetString(i,&amp;quot;FILENAME&amp;quot;);
+			// 上传文件到xlsGridData
+			var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+			_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,dir + filename,1);//本地文件的路径
+			_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir ,0);	//远程保存的目录
+			_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,filename,0);//注意这里只能是文件名，用于远程保存的文件名
+			_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+			var ret=_this.SendHttpRequest(); 
+			_this.CloseHttpRequest();
+			
+			
+			
+			var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+			var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+			var str = ret.substring(loc1+7,loc2);
+			files+=&amp;quot;&amp;quot;+(i+1)+&amp;quot;.&amp;quot;+dir +filename+&amp;quot;:&amp;quot;+str +&amp;quot;\n&amp;quot;;
+		}
+		// 从xlsGridData同步到web
+		try {
+			invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+deforg  +&amp;quot;&amp;sysurlid=&amp;quot;+SYSURLID) ;       
+		}
+		catch ( e ) {
+			alert ( e );
+		}
+		if ( files!= &amp;quot;&amp;quot; ) {
+			alert ( &amp;quot;上传文件情况：\n&amp;quot;+ files );
+		}
+		
+	
+	}
+  
+}
+//打开本地图片目录
+function LocalWebResource()
+{
+
+	alert (&amp;quot;提示：本地图片目录是\n&amp;quot;+IMAGEDIR );  
+}
+
+//导入HTML文件
+function Impfile()
+{
+	var webdir = &amp;quot;webresource/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+	var workdir = _this.GetWorkDir();
+	var localdir = &amp;quot;images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+
+	btn.click();
+	var file = btn.value;
+	var filepos = file.lastIndexOf ( &amp;quot;\\&amp;quot; );
+	  
+	var dir = file.substr( 0,filepos+1 );
+
+	var htmlstr = _this.LoadTextFile(file);
+	
+	var pos = -1;
+	var pos1 = -1;
+	var pos2 = -1;
+	var posend = -1;
+	var bUpload = 0;
+	while ( 1&amp;gt;0 ) {
+
+		pos = htmlstr.indexOf(&amp;quot;&amp;lt;img&amp;quot;,pos+1);
+		if ( pos&amp;lt;0 ) break;
+		posend = htmlstr.indexOf(&amp;quot;&amp;gt;&amp;quot;,pos+1);
+		if ( posend&amp;lt;0 ) break;
+
+		pos1 = htmlstr.indexOf(&amp;quot;src=\&amp;quot;&amp;quot;,pos+1);
+		var yhflag = 1;//是否双引号
+		if ( pos1&amp;lt;0 || pos1&amp;gt;= posend ) {
+			pos1 = htmlstr.indexOf(&amp;quot;src=&amp;apos;&amp;quot;,pos+1);
+			yhflag = 0;
+		}
+		if ( pos1 &amp;gt;0 &amp;&amp; pos1&amp;lt; posend  ) {
+			if ( yhflag ==0 )
+				pos2 = htmlstr.indexOf(&amp;quot;&amp;apos;&amp;quot;,pos1+6);
+
+			else pos2 = htmlstr.indexOf(&amp;quot;\&amp;quot;&amp;quot;,pos1+6);
+			
+			if ( pos2 &amp;gt;0 &amp;&amp; pos2&amp;lt; posend  ) {
+				var filename =htmlstr.substr(pos1+5,pos2-pos1-5) ;
+				var sfilename = filename.split( &amp;quot;/&amp;quot; );
+	
+				window.status = &amp;quot;正在上传&amp;quot;+dir + filename ;
+				// 上传文件到xlsGridData
+				var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+				_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+				_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, dir + filename ,1);//本地文件的路径
+				_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir ,0);	//远程保存的目录
+				_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,sfilename[sfilename.length-1],0);//注意这里只能是文件名，用于远程保存的文件名
+				_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+				var ret=_this.SendHttpRequest(); 
+				_this.CloseHttpRequest();
+
+				//复制图片到工作目录
+			
+				_this.DownLoadFileToWorkDir(dir + filename ,&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; +sfilename[sfilename.length-1]) ;
+				bUpload  = 1;
+				// 替代src的内容
+				htmlstr = htmlstr.substr( 0,pos1+5 ) +localdir +sfilename[sfilename.length-1]+ htmlstr.substr(pos2);
+				var f1 = localdir +sfilename[sfilename.length-1];
+				var f2 = filename ;
+				posend += f1.length-f2.length; 
+			}
+		}
+		pos = posend;
+
+	}
+	if ( bUpload  ==1 ) {
+		// 从xlsGridData同步到web
+		try {
+			invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+deforg  +&amp;quot;&amp;sysurlid=&amp;quot;+SYSURLID) ;       
+		}
+		catch ( e ) {
+			alert ( e );
+		}
+	}
+	_this.SetRedraw(0);
+	_this.SetCellText(0,-1,-1,htmlstr );
+	_this.SetRedraw(1);	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  bodysb.append(&amp;quot;
+&amp;lt;SCRIPT LANGUAGE=javascript FOR=svg EVENT=\&amp;quot;ShellExecuteFileModify(filepath,classname)\&amp;quot;&amp;gt;
+&amp;lt;!--
+	svg.LoadZXGFile( filepath, 0, svg.GetCurrentSheet() );
+//}
+--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;SCRIPT&amp;gt; var deforg = &amp;apos;&amp;quot;+webpack.EAWebDeforg.GetDeforg(request)+&amp;quot;&amp;apos;;
+&amp;lt;/SCRIPT&amp;gt;
+  &amp;quot;);
+  bodysb.insert(0,&amp;quot;&amp;lt;input type=\&amp;quot;file\&amp;quot; id=\&amp;quot;myfile\&amp;quot; style=\&amp;quot;display:none\&amp;quot;&amp;gt;&amp;lt;/input&amp;gt;&amp;quot;);
+}
+
+
+function save()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;delete from urlbody where fromguid=&amp;apos;&amp;quot;+urlguid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into urlbody(contents,fromguid) values(empty_blob(),&amp;apos;&amp;quot;+urlguid+&amp;quot;&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		var contents = new java.lang.String(body);
+//		var out = new java.io.ByteArrayOutputStream(); 
+//		out.write(contents.getBytes(&amp;quot;GBK&amp;quot;)); 
+//		var buff = out.toByteArray(); 
+		sql = &amp;quot;select contents from urlbody where fromguid=&amp;apos;&amp;quot;+urlguid+&amp;quot;&amp;apos; for update&amp;quot;;
+		
+		db.UpdateBlobWithStr(sql,&amp;quot;CONTENTS&amp;quot;,contents);
+		
+	}
+	catch(e) {
+		db.Rollback();
+		throw new Exception(e.toString());
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function getBlob()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;select contents from urlbody where fromguid=&amp;apos;&amp;quot;+urlguid+&amp;quot;&amp;apos;&amp;quot;;
+		return db.getBlob2String(sql,&amp;quot;CONTENTS&amp;quot;);
+	}
+	catch(e) {
+		db.Rollback();
+		throw new Exception(e.toString());
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+// 得到webresource的定义
+// sysurlid, deforg 
+function GetWebresourceXMLDS()
+{
+       var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EASYTXmlDB.getSytDS();
+	var ds = new pubpack.EAXmlDS();
+	var num = 0;
+
+	var fileurl=pubpack.EAOption.dynaDataRoot + &amp;quot;webresource/images/&amp;quot; +deforg +&amp;quot;/&amp;quot; + sysurlid+&amp;quot;/&amp;quot;;     
+//	throw new pubpack.EAException(fileurl);         
+	var folds = (new java.io.File(fileurl)).listFiles();
+	if ( folds != null ) {
+		folds=pub.EAFunc.sort(folds);
+		var c = folds.length();
+		
+		for(var i=0;i&amp;lt;c;i++) {
+			
+			var f=folds[i];
+			if(!f.isDirectory() ) {
+				var filename = f.getName();
+            			
+					var row= ds.AddRow(ds.getRowCount()-1);
+					num++;
+					ds.setValueAt(row,&amp;quot;FILENAME&amp;quot;,filename);
+
+
+			}
+		}
+	}
+        return ds.GetXml();
+}
+// 复制xlsGridData到web
+// 参数 deforg  sysurlid 
+function copytoweb()
+{
+	var srcpath = basePath +&amp;quot;webresource/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+sysurlid+&amp;quot;/&amp;quot;; 
+	var destpath = pubpack.EAOption.approot+&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+sysurlid+&amp;quot;/&amp;quot;;
+	pubpack.EAFunc.copyDirectiory(srcpath,destpath,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+	return &amp;quot;服务端：文件已从&amp;quot;+ srcpath +&amp;quot;同步到&amp;quot;+destpath ;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GRDDSCDS_0</ID><NAME ></NAME><DATDSC ></DATDSC></ROW>
+<ROW num="1" ><ID >GetURLGUID</ID><NAME ></NAME><DATDSC >select guid from SYSURL where id=&amp;apos;[%id]&amp;apos;</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

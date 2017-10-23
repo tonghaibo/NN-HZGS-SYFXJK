@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >MYTKD</MWID><NAME >我的核实任务报表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >MYTKD.zxg</FILE><SCENE ></SCENE><FIXED >2,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >0</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >stats</ID><NAME >处理类型</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_TDKSTAT</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >1</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >stats</C13><C14 >stats</C14><C15 >stats</C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="1" ><ID >YYMM1</ID><NAME >开始时间</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >YYMM1</C15><C16 >YYMM1</C16><C17 ></C17></ROW>
+<ROW num="2" ><ID >YYMM2</ID><NAME >结束时间</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >YYMM2</C15><C16 >YYMM2</C16><C17 ></C17></ROW>
+<ROW num="3" ><ID >BILID</ID><NAME >任务号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >BILID</C17></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >3</NROW><NCOL >11</NCOL><PAGES >1</PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,2,1</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	var stat = _this.GetCellText(sheet,row,9);
+	var guid = _this.GetCellText(sheet,row,10);
+	var processid = _this.GetCellText(sheet,row,11);
+	if (col == 9 &amp;&amp; stat==&amp;quot;处理&amp;quot;) {
+		window.open(&amp;quot;show.sp?grdid=TK&amp;guid=&amp;quot;+guid+&amp;quot;&amp;processid=&amp;quot;+processid);
+	}
+	if (col == 9 &amp;&amp; stat==&amp;quot;分派&amp;quot;) {
+		window.open(&amp;quot;show.sp?grdid=TK&amp;guid=&amp;quot;+guid+&amp;quot;&amp;processid=&amp;quot;+processid);
+	}
+	if (col == 9 &amp;&amp; stat==&amp;quot;查看&amp;quot;) {
+		window.open(&amp;quot;show.sp?grdid=TK&amp;guid=&amp;quot;+guid+&amp;quot;&amp;processid=&amp;quot;+processid);
+	}
+	if (col == 9 &amp;&amp; stat==&amp;quot;未完成&amp;quot;) {
+		window.open(&amp;quot;show.sp?grdid=TK&amp;guid=&amp;quot;+guid+&amp;quot;&amp;processid=&amp;quot;+processid);
+	}
+}
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetColVisible(sheet,10,-1);
+	_this.SetColVisible(sheet,11,-1);
+	var row = _this.GetRowCount(sheet)+2;
+	var stat = &amp;quot;&amp;quot;;
+	for(var i=2;i&amp;lt;row;i++){
+		_this.SetCellColor(sheet,i,9,0,0,255);
+		stat = _this.GetCellText(sheet,i,9);
+		if(stat==&amp;quot;处理&amp;quot;){
+			_this.SetCellColor(sheet,i,3,255,72,72);
+		}
+		if(stat==&amp;quot;分派&amp;quot;){
+			_this.SetCellColor(sheet,i,3,205,38,38);
+		}
+		if(stat==&amp;quot;查看&amp;quot;){
+			_this.SetCellColor(sheet,i,3,34,139,34);
+		}
+		if(stat==&amp;quot;未完成&amp;quot;){
+			_this.SetCellColor(sheet,i,3,255,215,0);
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >select * from (
+select yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;未分派&amp;apos;,
+       		&amp;apos;2&amp;apos;,&amp;apos;未处理&amp;apos;,
+       		&amp;apos;3&amp;apos;,&amp;apos;处理中&amp;apos;,
+       		&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;,
+       		&amp;apos;0&amp;apos;,&amp;apos;任务退回&amp;apos;,&amp;apos;未完成&amp;apos;) 状态,
+       cmid 企业编号,
+       cmnam 企业名称,
+       b.name 类型,
+       to_char(crtdat,&amp;apos;yyyy/mm/dd&amp;apos;) 创建时间,
+       tousr 税管员,
+       decode(a.stat,&amp;apos;1&amp;apos;,&amp;apos;分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;未完成&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;查看&amp;apos;,&amp;apos;处理&amp;apos;) 操作,
+       guid guid,a.stat
+from tax_trkhdr a,V_TAX_TRKTYP b
+where a.tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp=b.id
+  and a.stat like &amp;apos;[%stats]&amp;apos;
+  and a.bilid like &amp;apos;%[%BILID]%&amp;apos;
+  and to_char(dat,&amp;apos;yyyy-MM&amp;apos;) &amp;gt;= decode(&amp;apos;[%YYMM1]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01&amp;apos;,&amp;apos;[%YYMM1]&amp;apos;) 
+  and to_char(dat,&amp;apos;yyyy-MM&amp;apos;) &amp;lt;= decode(&amp;apos;[%YYMM2]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2900-12&amp;apos;,&amp;apos;[%YYMM2]&amp;apos;) 
+  and a.stat&amp;lt;&amp;gt;&amp;apos;8&amp;apos;
+order by a.stat,a.crtdat desc
+)
+</DATDSC><C4 >main</C4><C5 >main</C5><C6 >main</C6><C7 >main</C7><C8 >main</C8><C9 >main</C9><C10 >main</C10><C11 >main</C11><C12 >main</C12><C13 >main</C13><C14 >main</C14><C15 >main</C15><C16 >main</C16></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

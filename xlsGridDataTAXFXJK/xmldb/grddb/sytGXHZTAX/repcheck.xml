@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >repcheck</MWID><NAME >报表权限检查</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >repcheck.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//数据加载完毕/////
+function _thisOnpost_loaddata(sheet)
+{
+	//税管员不能导出报表数据
+	_sql.querytods(&amp;quot;GXHZTAX.repcheck.USRROL&amp;quot;,&amp;quot;&amp;quot;);
+	if (_this.XMLDS_GetRowCount() &amp;gt; 0) {
+		_this.ShowToolBar(0); //隐藏导出工具栏
+		
+		//电量测算收入指标异常企业明细报表(CR03)
+		//需要对税管员屏蔽的数据列为：预测销售收入，数据差异
+		if (G_GRDID == &amp;quot;CR03&amp;quot;) {
+			_this.SetColVisible(sheet,7,-1);
+			_this.SetColVisible(sheet,9,-1);
+		}
+		//电量测算税额指标异常企业明细报表(CR10)
+		//需要对税管员屏蔽的数据列为：测算增值税额，增值税额差异
+		else if (G_GRDID == &amp;quot;CR10&amp;quot;) {
+			_this.SetColVisible(sheet,7,-1);
+			_this.SetColVisible(sheet,9,-1);
+		}
+	}
+
+	try { _user_Onpost_loaddata(sheet); } catch ( e ) { }
+}	</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >USRROL</ID><NAME ></NAME><DATDSC >select c.id,c.name from usrrol a,usr b,rol c
+where a.usr=b.guid and a.rol=c.guid
+  and b.org=&amp;apos;[%SYS_ORGID]&amp;apos; and  b.id=&amp;apos;[%SYS_USRID]&amp;apos;
+  and c.id in (&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)</DATDSC><C4 >USRROL</C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

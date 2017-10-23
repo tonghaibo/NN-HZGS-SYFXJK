@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >SYSMOD</MWID><NAME >模块权限定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SYSMOD.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(sheet,&amp;quot;H&amp;quot;,&amp;quot;30%&amp;quot;);
+	
+	//&amp;mwid=ImpFile&amp;sytid=SBCW
+	_this.SetCellText(sheet,4,2,sytid);
+	_this.SetCellText(sheet,5,2,mwid);
+	
+	
+	var modtyp = _this.CreateListValue();
+//	_this.SetListValue(modtyp,&amp;quot;0&amp;quot;,&amp;quot;分类&amp;quot;);
+	_this.SetListValue(modtyp,&amp;quot;1&amp;quot;,&amp;quot;页面权限&amp;quot;);
+	_this.SetListValue(modtyp,&amp;quot;2&amp;quot;,&amp;quot;单据权限&amp;quot;);
+	_this.SetListValue(modtyp,&amp;quot;3&amp;quot;,&amp;quot;脚本权限&amp;quot;);
+
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,10,2,modtyp);
+	
+	showBillAuth(-1);
+	
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	_this.SetFixedRow(1,4);
+	_this.SetFixedCol(1,1);
+	loadSysMod();
+	for (var r=4;r&amp;lt;_this.GetRowCount(1);r++) {
+		if (_this.GetCellText(1,r,2) != &amp;quot;&amp;quot;) {
+			_this.SetToComboBox(&amp;quot;&amp;quot;,1,r,5,modtyp);
+		}
+	}
+}
+
+function showBillAuth(flag)
+{
+	for (var i=12;i&amp;lt;=18;i++) {
+		_this.SetRowVisible(0,i,flag);
+		_this.SetToBoolBox(0,i,2);
+	}
+}
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp; row == 10 &amp;&amp; col == 2) {
+		var modtyp = newvalue;
+		if (modtyp == &amp;quot;2&amp;quot;) {
+			showBillAuth(1);
+			_this.SetRowVisible(sheet,11,-1);
+		}
+		else {
+			showBillAuth(-1);
+			_this.SetRowVisible(sheet,11,1);
+		}
+		if (modtyp == &amp;quot;1&amp;quot;) _this.SetCellText(sheet,11,1,&amp;quot;动作（页面URL）：&amp;quot;);
+//		if (modtyp == &amp;quot;2&amp;quot;) _this.SetCellText(sheet,11,1,&amp;quot;动作（页面URL）：&amp;quot;);
+		if (modtyp == &amp;quot;3&amp;quot;) _this.SetCellText(sheet,11,1,&amp;quot;动作（OS函数名称）：&amp;quot;);
+
+	}
+}
+
+
+function loadSysMod()
+{
+	var xml = _sql.query(&amp;quot;sysmod&amp;quot;,&amp;quot;thissytid=&amp;quot;+sytid+&amp;quot;&amp;mwid=&amp;quot;+mwid);
+	_this.SetXmlDS(1,4,1,20,10,xml);
+	_this.SetColVisible(1,1,-1);
+}
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (sheet == 0 &amp;&amp; id == &amp;quot;添加&amp;quot;) {
+		var param = new Object();
+		param.sytid = sytid;
+		param.mwid = mwid;
+		param.refid = _this.GetCellText(sheet,6,2);
+		param.mid = _this.GetCellText(sheet,7,2);
+		param.mname = _this.GetCellText(sheet,8,2);
+		param.note = _this.GetCellText(sheet,9,2);
+		param.modtyp = _this.GetCellText(sheet,10,2);
+		if (param.modtyp == &amp;quot;2&amp;quot;) {
+			param.action = getBillAuths();
+		}
+		else {
+			param.action = _this.GetCellText(sheet,11,2);
+		}
+		if (param.action != &amp;quot;&amp;quot;) {
+			if (!confirm(&amp;quot;确定添加该权限吗？&amp;quot;)) return;
+			var ret = invokeOSFuncExt(&amp;quot;saveSysMod&amp;quot;,param);
+			alert(ret);
+			window.location.reload();
+		}
+	}
+}
+
+function getBillAuths()
+{
+	var ret = &amp;quot;&amp;quot;;
+	for (var i=12;i&amp;lt;=18;i++) {
+		var s = _this.GetCellText(0,i,2);
+		if (s != &amp;quot;&amp;quot;) {
+			var str = _this.GetCellText(0,i,3);
+			var auth = (str.split(&amp;quot;-&amp;quot;)[0]).trim();
+			if (ret == &amp;quot;&amp;quot;) ret += auth;
+			else ret += &amp;quot;,&amp;quot; + auth;
+		}
+	}
+	return ret;
+
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	//删除权限
+	if (sheet == 1 &amp;&amp; col == 10) {
+		if (!confirm(&amp;quot;确定删除该权限吗？&amp;quot;)) return;
+		var ret = invokeOSFunc(&amp;quot;deleteSysMod&amp;quot;,&amp;quot;guid=&amp;quot;+_this.GetCellText(1,row,1));
+		alert(ret);
+		window.location.reload();
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function saveSysMod()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		var ps = db.prepareStatement(&amp;quot;insert into sysmod (syt,id,name,modtyp,REFID,ACTION,GRDID,note) values (?,?,?,?,?,?,?,?)&amp;quot;);
+		ps.setString(1,sytid);
+		ps.setString(2,mid);
+		ps.setString(3,mname);
+		ps.setString(4,modtyp);
+		ps.setString(5,refid);
+		ps.setString(7,mwid);
+		ps.setString(8,note);
+		if (modtyp == &amp;quot;2&amp;quot;) {
+			var auths = action.split(&amp;quot;,&amp;quot;);
+			for (var i=0;i&amp;lt;auths.length();i++) {
+				ps.setString(6,auths[i]);
+			}
+		}
+		else {
+			ps.setString(6,action);
+		}
+		ps.addBatch();
+		ps.executeBatch();
+		db.Commit();
+		
+		return &amp;quot;添加权限成功!&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function deleteSysMod()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;delete from sysmod where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		db.Commit();
+		
+		return &amp;quot;删除权限成功!&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >sysmod</ID><NAME ></NAME><DATDSC >select guid,id,name,action,modtyp,refid,syt mysyt,grdid,note,&amp;apos;删除&amp;apos; opstr from sysmod where syt=&amp;apos;[%thissytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;</DATDSC><C4 >sysmod</C4><C5 >sysmod</C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

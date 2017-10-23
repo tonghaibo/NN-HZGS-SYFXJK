@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>R</MWTYP><MWID>ToHtml</MWID><NAME>导出到html</NAME><NOTE></NOTE><FILE>ToHtml.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>DC</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>begin</ID><NAME>导出</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0;
+
+//================================================================// 
+// 函数：begin
+// 说明：测试
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/24/07 14:30:23
+// 修改日志：
+//================================================================// 
+function begin() 
+{ 
+     var str= exphtml(0); 
+     //alert(_this.SaveTextFile(&amp;quot;d:\\1.htm&amp;quot;,str,&amp;quot;&amp;quot;));
+     //var w = window.open( &amp;quot;&amp;quot; ,&amp;quot;&amp;quot;,&amp;quot;height=500,width=800,toolbar=yes,location=no,status=yes,resizable=yes,top=50,left=50&amp;quot; ); 
+    // w.document.body.innerHTML=str; 
+    document.write(str);
+} 
+//================================================================// 
+// 函数：exphtml
+// 说明：把某个sheet导出到html
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/24/07 14:29:35
+// 修改日志：
+//================================================================// 
+function exphtml( sheet )  
+{ 
+     _this.SetMainCellRange(0,2,1,5,3); 
+     var row1 = 0;
+     var row2 = _this.GetRowCount(sheet);
+     var col1 = 0; 
+     var col2 = _this.GetColCount(sheet); 
+     var p =_this.GetAttribe(&amp;quot;CELL_0_3_1&amp;quot;,_this.ATTR_CELLMERGERCOL);  
+     var pp =  _this.GetAttribe(&amp;quot;CELL_0_3_2&amp;quot;, _this.ATTR_PARENTMERGER_CELLROW) 
+     var str = &amp;quot;&amp;quot;; 
+     var xml = _this.GetStyleXml(0);   
+     _this.XMLDS_Parse(xml);
+     var length = _this.XMLDS_GetRowCount();
+     var styleid = &amp;quot;&amp;quot;;
+     var align = &amp;quot;&amp;quot;;
+     var valign = &amp;quot;&amp;quot;;
+     var multline = &amp;quot;&amp;quot;;
+     var topborder = &amp;quot;&amp;quot;;
+     var bottomborder = &amp;quot;&amp;quot;;
+     var leftborder = &amp;quot;&amp;quot;;
+     var rightborder = &amp;quot;&amp;quot;;
+     var topbordercolor = &amp;quot;&amp;quot;;
+     var bottombordercolor = &amp;quot;&amp;quot;;
+     var leftbordercolor = &amp;quot;&amp;quot;;
+     var rightbordercolor = &amp;quot;&amp;quot;;
+     var fontname = &amp;quot;&amp;quot;;
+     var fontsize = &amp;quot;&amp;quot;;
+     var fontbold = &amp;quot;&amp;quot;;
+     var fontitalic = &amp;quot;&amp;quot;;
+     var fontstrikeout = &amp;quot;&amp;quot;;
+     var fontunderline = &amp;quot;&amp;quot;;
+     var fontcolor = &amp;quot;&amp;quot;;
+     var backcolor = &amp;quot;&amp;quot;;
+     var editable = &amp;quot;&amp;quot;;
+     var printable = &amp;quot;&amp;quot;;
+     var format = &amp;quot;&amp;quot;;
+     var datetype = &amp;quot;&amp;quot;;  
+
+     str += &amp;quot;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta name=ProgId content=xlsGrid.net&amp;gt;&amp;lt;/meta&amp;gt;&amp;quot;;
+     str += &amp;quot;&amp;lt;style&amp;gt; \n&amp;quot;+
+            &amp;quot;&amp;lt;!--table\n&amp;quot;+
+	    &amp;quot;{mso-displayed-decimal-separator:\n&amp;quot;+&amp;quot;\.\n&amp;quot;+&amp;quot;;{ \n&amp;quot;+
+	    &amp;quot;mso-displayed-thousand-separator:\n&amp;quot;+&amp;quot;\,\n&amp;quot;+&amp;quot;;} \n&amp;quot;+
+            &amp;quot;@page\n&amp;quot;+
+	    &amp;quot;{margin:1.0in .75in 1.0in .75in;\n&amp;quot;+
+	    &amp;quot;mso-header-margin:.5in;\n&amp;quot;+
+	    &amp;quot;mso-footer-margin:.5in;}\n&amp;quot;+
+            &amp;quot;tr\n&amp;quot;+
+	    &amp;quot;{mso-height-source:auto;\n&amp;quot;+
+	    &amp;quot;mso-ruby-visibility:none;}\n&amp;quot;+
+            &amp;quot;col\n&amp;quot;+
+	    &amp;quot;{mso-width-source:auto;\n&amp;quot;+
+	    &amp;quot;mso-ruby-visibility:none;}\n&amp;quot;+
+            &amp;quot;br\n&amp;quot;+
+	    &amp;quot;{mso-data-placement:same-cell;}\n&amp;quot;+
+            &amp;quot;.style0\n&amp;quot;+
+	   &amp;quot;{mso-number-format:General;\n&amp;quot;+
+	   &amp;quot;text-align:general;\n&amp;quot;+
+	&amp;quot;vertical-align:middle;\n&amp;quot;+
+	&amp;quot;white-space:nowrap;\n&amp;quot;+
+	&amp;quot;mso-rotate:0;\n&amp;quot;+
+	&amp;quot;mso-background-source:auto;\n&amp;quot;+
+	&amp;quot;mso-pattern:auto;\n&amp;quot;+
+	&amp;quot;color:windowtext;\n&amp;quot;+
+	&amp;quot;font-size:9.0pt;\n&amp;quot;+
+	&amp;quot;font-weight:400;\n&amp;quot;+
+	&amp;quot;font-style:normal;\n&amp;quot;+
+	&amp;quot;text-decoration:none;\n&amp;quot;+
+	&amp;quot;font-family:SimSun;\n&amp;quot;+
+	&amp;quot;mso-generic-font-family:auto;\n&amp;quot;+
+	&amp;quot;mso-font-charset:134;\n&amp;quot;+
+	&amp;quot;border:none;\n&amp;quot;+
+	&amp;quot;mso-protection:locked visible;\n&amp;quot;+
+	&amp;quot;mso-style-name:\5E38\89C4;\n&amp;quot;+
+	&amp;quot;mso-style-id:0;}\n&amp;quot;+
+        &amp;quot;td\n&amp;quot;+
+	&amp;quot;{mso-style-parent:style0;\n&amp;quot;+
+	&amp;quot;padding-top:1px;\n&amp;quot;+
+	&amp;quot;padding-right:1px;\n&amp;quot;+
+	&amp;quot;padding-left:1px;\n&amp;quot;+
+	&amp;quot;mso-ignore:padding;\n&amp;quot;+
+	&amp;quot;color:windowtext;\n&amp;quot;+
+	&amp;quot;font-size:9.0pt;\n&amp;quot;+
+	&amp;quot;font-weight:400;\n&amp;quot;+
+	&amp;quot;font-style:normal;\n&amp;quot;+
+	&amp;quot;text-decoration:none;\n&amp;quot;+
+	&amp;quot;font-family:Arial;\n&amp;quot;+
+	&amp;quot;mso-generic-font-family:auto;\n&amp;quot;+
+	&amp;quot;mso-font-charset:134;\n&amp;quot;+
+	&amp;quot;mso-number-format:General;\n&amp;quot;+
+	&amp;quot;text-align:general;\n&amp;quot;+
+	&amp;quot;vertical-align:middle;\n&amp;quot;+
+	&amp;quot;border:none;\n&amp;quot;+
+	&amp;quot;mso-background-source:auto;\n&amp;quot;+
+	&amp;quot;mso-pattern:auto;\n&amp;quot;+
+	&amp;quot;mso-protection:locked visible;\n&amp;quot;+
+	&amp;quot;white-space:nowrap;\n&amp;quot;+
+	&amp;quot;mso-rotate:0;}\n&amp;quot;+
+	&amp;quot;display:none;}&amp;quot;;
+	for ( var i=0;i&amp;lt;length;i++)
+        {
+           styleid = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+           align =  _this.XMLDS_GetString(i,&amp;quot;ALIGN&amp;quot;);
+           valign =  _this.XMLDS_GetString(i,&amp;quot;VALIGN&amp;quot;);
+           multline =  _this.XMLDS_GetString(i,&amp;quot;MULTLINE&amp;quot;);
+           topborder =  _this.XMLDS_GetString(i,&amp;quot;TOPBORDER&amp;quot;);
+           bottomborder =  _this.XMLDS_GetString(i,&amp;quot;BOTTOMBORDER&amp;quot;);
+           leftborder = _this.XMLDS_GetString(i,&amp;quot;LEFTBORDER&amp;quot;);
+           rightborder =  _this.XMLDS_GetString(i,&amp;quot;RIGHTBORDER&amp;quot;);
+           topbordercolor =  _this.XMLDS_GetString(i,&amp;quot;TOPBORDERCOLOR&amp;quot;);
+           bottombordercolor =  _this.XMLDS_GetString(i,&amp;quot;BOTTOMBORDERCOLOR&amp;quot;);
+           leftbordercolor =  _this.XMLDS_GetString(i,&amp;quot;LEFTBORDERCOLOR&amp;quot;);
+           rightbordercolor =  _this.XMLDS_GetString(i,&amp;quot;RIGHTBORDERCOLOR&amp;quot;);
+           fontname =  _this.XMLDS_GetString(i,&amp;quot;FONTNAME&amp;quot;);
+           fontsize =  _this.XMLDS_GetString(i,&amp;quot;FONTSIZE&amp;quot;);
+           fontbold =  _this.XMLDS_GetString(i,&amp;quot;FONTBOLD&amp;quot;);
+           fontitalic =  _this.XMLDS_GetString(i,&amp;quot;FONTITALIC&amp;quot;);
+           fontstrikeout =  _this.XMLDS_GetString(i,&amp;quot;FONTTSTRICKEOUT&amp;quot;);
+           fontunderline =  _this.XMLDS_GetString(i,&amp;quot;FONTUNDERLINE&amp;quot;);
+           fontcolor =  _this.XMLDS_GetString(i,&amp;quot;FONTCOLOR&amp;quot;);
+           backcolor =  _this.XMLDS_GetString(i,&amp;quot;BACKCOLOR&amp;quot;);
+           editable =  _this.XMLDS_GetString(i,&amp;quot;EDITABLE&amp;quot;);
+           printable =  _this.XMLDS_GetString(i,&amp;quot;PRINTABLE&amp;quot;);
+           format =  _this.XMLDS_GetString(i,&amp;quot;FORMAT&amp;quot;);
+           datatype =  _this.XMLDS_GetString(i,&amp;quot;DATATYPE&amp;quot;);       
+          // alert (fontitalic);
+           str += &amp;quot;.&amp;quot;+styleid+&amp;quot;\n&amp;quot;;
+           str += &amp;quot;{\n&amp;quot;;
+           if(fontcolor!=&amp;quot;#000000&amp;quot;)str += &amp;quot;color:&amp;quot;+fontcolor+&amp;quot;;\n&amp;quot;;
+           if(backcolor !=&amp;quot;#FFFFFF&amp;quot;)str += &amp;quot;background:&amp;quot;+backcolor +&amp;quot;;\n&amp;quot;;
+           if(fontsize!=&amp;quot;9&amp;quot;) str +=&amp;quot;font-size:&amp;quot;+fontsize+&amp;quot;pt;\n&amp;quot;;
+           if(fontbold!=&amp;quot;1&amp;quot;)str+=&amp;quot;font-weight:&amp;quot;+(fontbold==&amp;quot;1&amp;quot;?700:400)+&amp;quot;;\n&amp;quot;;
+           // 自己处理        	&amp;quot;font-style:&amp;quot;+&amp;quot;normal&amp;quot;+&amp;quot;;\n&amp;quot;;
+           if(fontitalic!=&amp;quot;0&amp;quot;) str+=&amp;quot;font-style:&amp;quot;+&amp;quot;italic&amp;quot;,+&amp;quot;;\n&amp;quot;;
+           if(fontname!=&amp;quot;Arial&amp;quot;)str+=&amp;quot;font-family:&amp;quot;+fontname+&amp;quot;;\n&amp;quot;;
+           str += &amp;quot;text-align:&amp;quot;+align+&amp;quot;;\n&amp;quot;;
+           str += &amp;quot;vertical-align:&amp;quot;+(valign==&amp;quot;Center&amp;quot;?&amp;quot;middle&amp;quot;:valign) +&amp;quot;;\n&amp;quot;;
+           if(topborder!=0)str += &amp;quot;border-top:&amp;quot;+topborder+&amp;quot;pt solid &amp;quot;+topbordercolor +&amp;quot;;\n&amp;quot;;
+           if(rightborder!=0)str += &amp;quot;border-right:&amp;quot;+rightborder+&amp;quot;pt solid &amp;quot;+rightbordercolor +&amp;quot;;\n&amp;quot;;
+           if(bottomborder!=0)str += &amp;quot;border-bottom:&amp;quot;+bottomborder+&amp;quot;pt solid &amp;quot;+bottombordercolor +&amp;quot;;\n&amp;quot;;
+           if(leftborder!=0)str += &amp;quot;border-left:&amp;quot;+leftborder+&amp;quot;pt solid &amp;quot;+leftbordercolor +&amp;quot;;\n&amp;quot;;
+           str += &amp;quot;}\n&amp;quot;;
+           
+        }
+     str += &amp;quot;--&amp;gt;&amp;quot;;     
+     str+= &amp;quot;&amp;lt;/style&amp;gt;&amp;quot;;
+     str +=&amp;quot;&amp;lt;/head&amp;gt;&amp;quot; 
+     str+=&amp;quot;&amp;lt;body &amp;gt;&amp;quot;;
+     str +=&amp;quot;&amp;lt;table border=0 cellpadding=0 cellspacing=0 style=&amp;apos;border-collapse:collapse;table-layout:fixed;&amp;apos;&amp;gt;&amp;quot;;
+     var nrow; 
+     var ncol; 
+     var mrow; 
+     var mcol; 
+     for ( var i=row1;i&amp;lt;=row2;i++) 
+     { 
+           str += &amp;quot;&amp;lt;tr height=&amp;quot;+_this.GetRowHeight(sheet,i)+&amp;quot;&amp;gt;&amp;quot;;         
+           for ( var j=col1;j&amp;lt;=col2;j++) 
+           { 
+                 var cellid =&amp;quot;CELL_&amp;quot;+sheet+&amp;quot;_&amp;quot;+i+&amp;quot;_&amp;quot;+j;
+                 nrow = _this.GetAttribe(cellid , _this.ATTR_CELLMERGERROW );  
+                 ncol = _this.GetAttribe(cellid , _this.ATTR_CELLMERGERCOL ); 
+                 mcol = _this.GetAttribe(cellid , _this.ATTR_PARENTMERGER_CELLCOL );//得到父单元格的列 
+                 mrow = _this.GetAttribe(cellid , _this.ATTR_PARENTMERGER_CELLROW);//得到父单元格的列 
+                 var nWidth = _this.GetColWidth(sheet,j);
+                 if(ncol&amp;gt;1) // 如果有合并，要精确的列宽度
+                       for( var col=j+1;col&amp;lt;j+ncol;col++) nWidth+=_this.GetColWidth(sheet,col);
+
+                 if ( mcol&amp;gt;=0 || mrow&amp;gt;=0 ) continue;// 说明是被合并
+                 str+= &amp;quot;&amp;lt;td &amp;quot;;
+                 if ( nrow&amp;gt;1 ) str+=&amp;quot; rowspan=&amp;quot;+nrow;
+                 if ( ncol&amp;gt;1 ) str+=&amp;quot; colspan=&amp;quot;+ncol;
+                 str+= &amp;quot; class=&amp;quot;+_this.GetCellStyleid(sheet,i,j); 
+                 str+= &amp;quot; width=&amp;quot;+nWidth ;
+                 str+= &amp;quot;&amp;gt;&amp;quot;+_this.GetCellText(0,i,j)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+           }  
+           str += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;  
+     } 
+     str+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;; 
+     str+=&amp;quot;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;;
+     //alert (str);
+     return str; 
+} 
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

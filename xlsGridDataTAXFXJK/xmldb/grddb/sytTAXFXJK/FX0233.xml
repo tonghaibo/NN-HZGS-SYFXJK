@@ -1,0 +1,290 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FX0233</MWID><NAME >长亏不倒企业+发票领用+申报</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FX0233.zxg</FILE><SCENE ></SCENE><FIXED >5,1</FIXED><CATTYP >风险特征库</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD >99</DISPORD><SQLWHE >id=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7) or sjid=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7)</SQLWHE><DEFVAL >[%SYS_DEPTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >DAT1</C13><C14 ></C14><C15 >DAT1</C15><C16 >ZGSWJG</C16><C17 >ZGSWJG</C17></ROW>
+<ROW num="1" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="2" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >DAT2</C16><C17 ></C17></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,5,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >24</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,5,1</C21></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+	
+	var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+
+	}else{
+		_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+	}
+
+	_this.SetCellText(0,2,3,DAT1+&amp;quot; 至 &amp;quot;+DAT2);
+	_this.SetToBoolBox(0,3,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+	}
+	
+	var cur_year = 1 * G_LOGDAT.split(&amp;quot;-&amp;quot;)[0];
+	_this.SetCellText(0,4,4,(cur_year )+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,5,(cur_year - 1)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,6,(cur_year - 2)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,7,(cur_year - 3)+&amp;quot;年&amp;quot;);
+	
+	_this.SetCellText(0,4,8,(cur_year )+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,9,(cur_year - 1)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,10,(cur_year - 2)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,11,(cur_year - 3)+&amp;quot;年&amp;quot;);
+	
+	_this.SetCellText(0,4,12,(cur_year )+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,13,(cur_year - 1)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,14,(cur_year - 2)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,15,(cur_year - 3)+&amp;quot;年&amp;quot;);
+	
+	_this.SetCellText(0,4,16,(cur_year )+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,17,(cur_year - 1)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,18,(cur_year - 2)+&amp;quot;年&amp;quot;);
+	_this.SetCellText(0,4,19,(cur_year - 3)+&amp;quot;年&amp;quot;);
+	
+	
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 3 &amp;&amp; col == 0) {
+		for(var r=6;r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+			_this.SetCellText(sheet,r,1,newvalue);
+		}
+
+	}  
+}
+
+//生成核实任务
+function genTasks()
+{	
+	var param = new Object();	
+	
+	var xmlds = getXmlStr(0,5,0,_this.GetMainCellRangeRow2(0),24);
+	param.xmlstr = xmlds;	
+	param.usrids = G_USRID;
+	param.usrnams = G_USRNAM;
+	param.accids = G_ACCID;
+	param.orgs = G_ORGID;
+	param.syts = G_SYTID;
+	param.typ = &amp;quot;2&amp;quot;;     //平台内部任务
+	param.subtyp = &amp;quot;01&amp;quot;; //发票类 
+	param.yymm1 = DAT1;
+	param.yymm2 = DAT2;
+	param.swjg_dm = G_DEPTID;
+	param.toswjg = &amp;quot;&amp;quot;;
+	param.tousr=&amp;quot;&amp;quot;;
+	
+	var retobj = window.showModalDialog(&amp;quot;show.sp?grdid=RWParam&amp;typ=&amp;quot;+param.typ+&amp;quot;&amp;subtyp=&amp;quot;+param.subtyp,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	try {
+	//if (retobj != &amp;quot;undefined&amp;quot; &amp;&amp; retobj != null) {		
+		param.enddat = retobj.enddat;
+		param.note = retobj.note;
+		param.typ = retobj.typ;
+		param.subtyp = retobj.subtyp;
+		var msg = invokeOSFuncExt(&amp;quot;TAXFXJK.PUBTRK.createTask&amp;quot;,param);
+		alert(msg);
+	//}
+	} catch (e) { }
+	
+}
+
+
+function getXmlStr(sheet,row1,col1,row2,col2)
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var i = 0;
+	for (var r=row1;r&amp;lt;=row2;r++) {
+		if (_this.GetCellText(sheet,r,1) == &amp;quot;1&amp;quot;) {
+			xmlstr += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(++i)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+			var nsrsbh = _this.GetCellText(sheet,r,2);
+			var nsrmc = _this.GetCellText(sheet,r,3);
+			var csxsje = &amp;quot;&amp;quot;; //测算收入金额
+			var sbje = &amp;quot;&amp;quot;; //申报金额
+			var cyje = &amp;quot;&amp;quot;; //差异金额
+			var note = &amp;quot;长亏不倒企业&amp;quot;;
+			var fxdj = &amp;quot;高&amp;quot;;
+			
+			xmlstr += &amp;quot;&amp;lt;NSRSBH&amp;gt;&amp;quot;+nsrsbh+&amp;quot;&amp;lt;/NSRSBH&amp;gt;\n&amp;quot;; //纳税人识别号
+			xmlstr += &amp;quot;&amp;lt;NSRMC&amp;gt;&amp;quot;+nsrmc+&amp;quot;&amp;lt;/NSRMC&amp;gt;\n&amp;quot;;	   //纳税人名称
+			xmlstr += &amp;quot;&amp;lt;NOTE&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/NOTE&amp;gt;\n&amp;quot;;       //说明
+			xmlstr += &amp;quot;&amp;lt;FXDJ&amp;gt;&amp;quot;+fxdj+&amp;quot;&amp;lt;/FXDJ&amp;gt;\n&amp;quot;;       //风险等级
+			xmlstr += &amp;quot;&amp;lt;CYJE&amp;gt;&amp;quot;+cyje+&amp;quot;&amp;lt;/CYJE&amp;gt;\n&amp;quot;;       //差异金额
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--风险特征：长亏不倒企业 + 发票领用 + 销售收入 + 应纳税额
+select rownum,t.*,
+  (select nsrztmc from  DM_GY_NSRZT zt where t1.nsrzt_dm=zt.nsrzt_dm) nsrzt, 
+  (select swryxm from DM_GY_SWRY swry where swry.swry_dm=t1.SSGLY_DM)ssgly,
+  (select name from v_swjg sw where sw.id=substr(t1.zgswskfj_dm,1,7))zgswjg,
+  (select swjgmc from DM_GY_SWJG jg where t1.zgswskfj_dm=jg.swjg_dm)zgswskfj,
+  (select hymc from DM_GY_HY hy where t1.hy_dm=hy.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)hy
+from (
+select nsrsbh,nsrmc,
+  sum(lrze_dn)lrze_dn,sum(lrze_qyn_1)lrze_qyn_1 ,sum(lrze_qyn_2)lrze_qyn_2,sum(lrze_qyn_3)lrze_qyn_3,--sum(qyn_4)qyn_4,sum(qyn_5)qyn_5,
+  sum(sbje_dn)sbje_dn,sum(sbje_qyn_1)sbje_qyn_1,sum(sbje_qyn_2)sbje_qyn_2,sum(sbje_qyn_3)sbje_qyn_3,
+  sum(ynse_dn)ynse_dn,sum(ynse_qyn_1)ynse_qyn_1,sum(ynse_qyn_2)ynse_qyn_2,sum(ynse_qyn_3)ynse_qyn_3,
+  sum(fpsl_dn)fpsl_dn,sum(fpsl_qyn_1)fpsl_qyn_1,sum(fpsl_qyn_2)fpsl_qyn_2,sum(fpsl_qyn_3)fpsl_qyn_3
+from (
+select to_char(qysds.djxh)djxh,
+       dj.nsrsbh,
+       dj.nsrmc,
+       dj.shxydm,
+       lrze_dn,lrze_qyn_1,lrze_qyn_2,lrze_qyn_3,lrze_qyn_4,lrze_qyn_5,
+       sb.sbje_dn,  sb.ynse_dn,
+       sb.sbje_qyn_1,  sb.ynse_qyn_1,
+       sb.sbje_qyn_2,  sb.ynse_qyn_2,
+       sb.sbje_qyn_3,  sb.ynse_qyn_3,
+       fp.fpsl_dn,     fp.fpsl_qyn_1,
+       fp.fpsl_qyn_2,   fp.fpsl_qyn_3 
+from (
+  select djxh,
+    sum(case when tjnf=to_char(sysdate,&amp;apos;yyyy&amp;apos;) then lrze else 0 end)   lrze_dn,
+    sum(case when tjnf=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-1 then lrze else 0 end) lrze_qyn_1,
+    sum(case when tjnf=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-2 then lrze else 0 end) lrze_qyn_2,
+    sum(case when tjnf=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-3 then lrze else 0 end) lrze_qyn_3,
+    sum(case when tjnf=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-4 then lrze else 0 end) lrze_qyn_4,
+    sum(case when tjnf=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-5 then lrze else 0 end) lrze_qyn_5
+  from(
+  SELECT djxh,tjnf,
+    sum(yysr) yysr, 
+    sum(YYCB) yycb,
+    sum(XSFY) xsfy,
+    sum(GLFY) glfy,
+    sum(cwfy) cwfy,
+    sum(yylr) yylr,
+    sum(yywsr) yywsr,
+    sum(yywzc) yywzc,
+    sum(lrze) lrze,
+    sum(NSTZZJE) NSTZZJE,
+    sum(NSTZJSE) NSTZJSE,
+    sum(YNSSDE) YNSSDE,
+    sum(YNSE) YNSE
+FROM (
+  select sbuuid,djxh, 
+    --  (select nvl(dj.shxydm, dj.NSRSBH)from dj_nsrxx dj where SBXX.DJXH = DJ.DJXH  AND rownum = 1) nsrsbh,
+    --  (select dj.NSRMC from dj_nsrxx dj where SBXX.DJXH = DJ.DJXH  AND rownum = 1) NSRMC,  
+      skssqq,skssqz, gzlx_dm_1, zfbz_1, sjgsdq, zgswskfj_dm,
+     (case when zgswskfj_dm like &amp;apos;14511%&amp;apos; then zgswskfj_dm else sjgsdq end )zgswjg, 
+     to_char(skssqq,&amp;apos;yyyy&amp;apos;) tjnf
+  from sb_sbxx sbxx
+  where (zgswskfj_dm like &amp;apos;14511%&amp;apos; or sjgsdq like &amp;apos;14511%&amp;apos;)
+    and gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and zfbz_1 !=&amp;apos;Y&amp;apos;
+)T1,
+( select sbuuid,yysr,YYCB,YYSJ_FJ,XSFY,GLFY, CWFY,ZCJZSS,GYJZBDSY,TZSY,YYLR,YYWSR,YYWZC,
+   LRZE,NSTZJSE,NSTZZJE,YNSSDE,SL_1,YNSE,LRRQ  ,&amp;apos;14年版&amp;apos;
+  from SB_SDS_JMCZ_14ND_QYSDSNDNSSBZB
+  
+  union all
+  select sbuuid,yysr,YYCB,YYSJ_FJ,XSFY,GLFY, CWFY,ZCJZSS,GYJZBDSY,TZSY,YYLR,YYWSR,YYWZC,
+   LRZE,NSTZJSE,NSTZZJE,YNSSDE,SL_1,YNSE,LRRQ  ,&amp;apos;14年前版&amp;apos;
+  from SB_SDS_JMCZ_ND  
+) T2
+WHERE T1.SBUUID=T2.Sbuuid group by djxh,tjnf )group by djxh
+) qysds,
+
+(select distinct djxh,nvl(shxydm,nsrsbh) nsrsbh,shxydm,nsrmc,zgswskfj_dm,nsrzt_dm from dj_nsrxx)dj,
+(
+  select djxh,sum(jsyj) sbje,sum(ynse) ynse,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;) then jsyj else 0 end) sbje_DN,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;) then ynse else 0 end) ynse_DN,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-1 then jsyj else 0 end) sbje_QYN_1,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-1 then ynse else 0 end) ynse_QYN_1,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-2 then jsyj else 0 end) sbje_QYN_2,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-2 then ynse else 0 end) ynse_QYN_2,    
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-3 then jsyj else 0 end) sbje_QYN_3,
+       sum(case when to_char(skssqq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-3 then ynse else 0 end) ynse_QYN_3  
+  FROM(
+      SELECT a.djxh, 
+           a.jsyj,
+           a.ynse,
+           a.skssqq   
+      from sb_sbxx  a
+      where a.ZSXM_DM=&amp;apos;10101&amp;apos;
+        and a.skssqq&amp;gt;=to_date(&amp;apos;[%DAT1]&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)
+        and a.skssqz&amp;lt;=to_date(&amp;apos;[%DAT2]&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)
+        and a.zgswskfj_dm like &amp;apos;14511%&amp;apos;
+        and a.zfbz_1=&amp;apos;N&amp;apos;   
+        and a.gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;))
+  group by djxh
+) sb,
+(
+  select djxh,sum(fpsl) fpsl,
+       sum(case when to_char(lrrq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)   then FPSL else 0 end) fpsl_DN,
+       sum(case when to_char(lrrq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-1 then FPSL else 0 end) fpsl_QYN_1,
+       sum(case when to_char(lrrq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-2 then FPSL else 0 end) fpsl_QYN_2,
+       sum(case when to_char(lrrq,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)-3 then FPSL else 0 end) fpsl_QYN_3
+  from (
+       select b.djxh, a.FPSL,a.lrrq
+      from FP_LY_MX a,FP_LY b
+      where trim(a.fplyuuid)=trim(b.fplyuuid)
+         and a.lrrq&amp;gt;=to_date(&amp;apos;[%DAT1]&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;))
+   group by djxh
+
+) fp
+where qysds.djxh=dj.djxh(+) 
+  and qysds.djxh=sb.djxh(+) 
+  and qysds.djxh=fp.djxh(+)
+  and dj.nsrzt_dm in &amp;apos;03&amp;apos;
+  and (lrze_qyn_1&amp;lt;0 and lrze_qyn_2&amp;lt;0 and lrze_qyn_3&amp;lt;0 )
+  and substr(dj.zgswskfj_dm,1,7) in (select id from v_swjg start with id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior id=sjid)
+  order by djxh
+)group by nsrsbh,nsrmc) t,(
+SELECT distinct nsrsbh,nsrzt_dm,zgswskfj_dm,SSGLY_DM,hy_dm FROM(
+  SELECT NSRSBH,NSRMC,DJRQ,NSRZT_DM,zgswskfj_dm,SSGLY_DM,hy_dm,
+    ROW_NUMBER()OVER (PARTITION BY NSRSBH ORDER BY DJRQ DESC ) RN
+  FROM
+    ( select to_char(djxh),nvl(shxydm,nsrsbh)nsrsbh,shxydm,NSRMC,djrq,jdxz_dm,YXBZ,NSRZT_DM,zgswskfj_dm,SSGLY_DM,hy_dm
+      from dj_nsrxx 
+      where zgswskfj_dm like &amp;apos;14511%&amp;apos;
+      and yxbz=&amp;apos;Y&amp;apos;
+      ORDER BY DJXH,NSRSBH,DJRQ)
+)WHERE RN=1 ) t1
+where t.nsrsbh=t1.nsrsbh(+)
+
+
+
+  
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

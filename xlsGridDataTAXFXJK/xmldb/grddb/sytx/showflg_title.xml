@@ -1,0 +1,1198 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_title</MWID><NAME >菜单</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_title.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+//二级菜单栏
+function menu(){
+	var typ =DSMOD ;
+	var ds=db.QuerySQL(&amp;quot;select * from lsysurl where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and refid=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos;&amp;quot;);
+	var div=&amp;quot;&amp;quot;;
+	var iframe=&amp;quot;&amp;quot;;
+	var rowcnt=ds.getRowCount();
+	
+	var st = new Array(); 
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	var css=&amp;quot;&amp;lt;style&amp;gt;
+		    .nav_a&amp;quot;+cdcnt+&amp;quot; {
+		        color: &amp;quot;+fontcolor+&amp;quot;;
+		        cursor: pointer;
+		        float: left;
+		        font-size: 14px;
+		        height: &amp;quot;+height+&amp;quot;;
+		        line-height: &amp;quot;+height+&amp;quot;;
+		        padding: 0px 15px;
+		        position: relative;
+
+		    }
+		
+		    .nav&amp;quot;+cdcnt+&amp;quot; {
+		        height:&amp;quot;+height+&amp;quot;;
+		
+		    }
+		    .nav&amp;quot;+cdcnt+&amp;quot; .on {
+		        background-color:&amp;quot;+onclickcolor+&amp;quot;;
+		        color: #000000;
+		    }
+		    #dr&amp;quot;+cdcnt+&amp;quot; div:hover{
+		        cursor:pointer;
+		        background:&amp;quot;+hovercolor+&amp;quot;;&amp;quot;;
+		        if(bg_img!=null||bg_img!=&amp;quot;&amp;quot;){
+		        	css+=&amp;quot;background-image:url(&amp;quot;+bg_img+&amp;quot;);&amp;quot;;
+		        }
+	css += &amp;quot;}&amp;lt;/style&amp;gt;&amp;quot;;
+	var menulog= MENUID;
+	for(var i=0; i&amp;lt;rowcnt;i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;)+cdcnt;
+		var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		st[i]=id;
+		var onmo=&amp;quot;&amp;quot;;
+		if(menulog+cdcnt==id)
+			div+=&amp;quot;&amp;lt;DIV onclick=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot; on\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+		else
+			div+=&amp;quot;&amp;lt;DIV onclick=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+	}
+
+	var padding=&amp;quot;&amp;quot;;
+	
+//	if(typ==&amp;quot;NEW_MENU_1&amp;quot;) return menulog+&amp;quot;-----------------------------我是分割线-----------------------&amp;quot;;
+	if(paddingleft!=&amp;quot;&amp;quot;)  padding=&amp;quot;PADDING-LEFT:&amp;quot;+paddingleft+&amp;quot;;&amp;quot;; else if(paddingleft==&amp;quot;&amp;quot;&amp;&amp;paddingright==&amp;quot;&amp;quot;)  padding=&amp;quot;PADDING-LEFT:0px&amp;quot;; else padding=&amp;quot;PADDING-RIGHT:&amp;quot;+paddingleft+&amp;quot;;&amp;quot;;
+	var bgcolorimg=&amp;quot;&amp;quot;;
+	if(bgcolor_img!=null) bgcolorimg=&amp;quot;background-image:url(&amp;quot;+bgcolor_img+&amp;quot;);&amp;quot;;
+	var html=&amp;quot;&amp;lt;div style=\&amp;quot;OVERFLOW: hidden; &amp;quot;+padding+&amp;quot; BACKGROUND-COLOR: &amp;quot;+bgcolor+&amp;quot;; &amp;quot;+bgcolorimg+&amp;quot;);\&amp;quot;&amp;gt;&amp;lt;DIV id=dr&amp;quot;+cdcnt+&amp;quot; class=nav&amp;quot;+cdcnt+&amp;quot; style=\&amp;quot;FLOAT: left\&amp;quot;&amp;gt;&amp;quot;+div+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+			function swithpage&amp;quot;+typ+cdcnt+&amp;quot;(frameid,url){
+				window.location.href=url;
+			}
+	
+	&amp;lt;/script&amp;gt;&amp;quot;;
+//	window.onload=function(){&amp;quot;;
+//				
+//				if(bgcolor_img!=null)
+//		            		script+=&amp;quot;document.getElementById(&amp;apos;&amp;quot;+menulog+cdcnt+&amp;quot;&amp;apos;).style.backgroundImage=\&amp;quot;url(&amp;quot;+bgcolor_img+&amp;quot;)\&amp;quot;;&amp;quot;;
+//		            	else
+//				 	script+=&amp;quot;document.getElementById(&amp;apos;&amp;quot;+menulog+cdcnt+&amp;quot;&amp;apos;).style.background=\&amp;quot;&amp;quot;+onclickcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+//				 	
+//				script+=&amp;quot;document.getElementById(&amp;apos;&amp;quot;+menulog+cdcnt+&amp;quot;&amp;apos;).style.color=\&amp;quot;#000000\&amp;quot;;
+//			}
+	
+	return css+html+script;
+
+
+}
+
+//顶级菜单
+function topmenu(){
+var ds = db.QuerySQL(&amp;quot;select * from (&amp;quot;+SQLTXT+&amp;quot; )where refid is null &amp;quot;);
+	var str=&amp;quot;&amp;quot;;
+	str=&amp;quot;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;*{ font-size:12px; font-family:Tahoma, Geneva, sans-serif; }
+   #nav a{ display:block; width:80px; }
+   #nav{ margin:1; padding:0;} 
+   #nav li{ float:left; text-align:center;  }
+   #nav li a{ color:#999; background:#F0F0F0; height:25px; }
+   #nav li a:hover{ color:213213213; background:#999; }
+   #nav li ul{ list-style-type:none; margin:0px; padding:0px; display:none; }
+   #nav li ul li{ float:none; }
+   #nav li ul li a{ width:80px; height:25px;color:#999; background-color:#EFEFEF;}
+   #nav li ul li a:hover{ background:#999; color:#F00; }
+   #ddss{ float:none; width:950px; height:20px; background:#CCC; margin:5px 0 0 0;}
+   .yy{clear:both;height:10px;line-height:1px;font-size:1px;}
+ &amp;lt;/style&amp;gt;
+	 &amp;lt;ul id=\&amp;quot;nav\&amp;quot;&amp;gt;&amp;quot;;
+	 for (var r = 0; r &amp;lt; ds.getRowCount(); r ++) {
+		 var idm=&amp;quot;nav&amp;quot;+r;
+		 var menunam = ds.getValueAt(r,&amp;quot;name&amp;quot;);
+		 str+=&amp;quot;
+		 &amp;lt;li onmouseover=\&amp;quot;show(&amp;apos;&amp;quot;+idm+&amp;quot;&amp;apos;);\&amp;quot; onmouseout=\&amp;quot;hide(&amp;apos;&amp;quot;+idm+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;
+		 &amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;quot;+menunam+&amp;quot;&amp;lt;/a&amp;gt;  
+		 &amp;lt;ul id=&amp;apos;&amp;quot;+idm+&amp;quot;&amp;apos;&amp;gt;&amp;quot;;  
+		var ds2=db.QuerySQL(&amp;quot;select * from (&amp;quot;+SQLTXT+&amp;quot;)where refid = &amp;quot;+ds.getValueAt(r,&amp;quot;id&amp;quot;));
+		 for(var j=0;j&amp;lt;ds2.getRowCount();j++){   
+			 str+=&amp;quot;
+			 &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;quot;+ds2.getValueAt(j,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;        
+		 }
+		 
+		str+=&amp;quot; &amp;lt;/ul&amp;gt;   &amp;lt;/li&amp;gt;&amp;quot;;
+		 
+	 }
+	 str+=&amp;quot;
+	 &amp;lt;/ul&amp;gt; 
+	 &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt; 
+	 function show(id){document.getElementById(id).style.display=&amp;apos;block&amp;apos;;}  
+	 function hide(id){ document.getElementById(id).style.display=&amp;apos;none&amp;apos;;}
+	 &amp;lt;/script&amp;gt;
+	 &amp;quot;;
+	 return str;
+
+}
+ 
+function MENU_WIN8(){
+	return &amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+.menu {
+ 
+}
+.menu ul {
+padding:0; 
+margin:0;
+list-style-type: none;
+}
+.menu ul li {
+float:left;
+position:relative;
+}
+.menu ul li a, .menu ul li a:visited {
+display:block; 
+text-decoration:none; 
+color:#000; 
+width:139px; 
+height:3em; 
+color:#000; 
+border:0px solid #fff; 
+border-width:0px 0px 0 0; 
+background:#dfc184; 
+padding-left:10px; 
+line-height:3em;
+}
+* html .menu ul li a, .menu ul li a:visited {
+width:149px;
+ 
+}
+.menu ul li ul {
+display: none;
+}
+DIV {
+margin:-1px; 
+border-collapse:collapse;
+font-size:1em;
+}
+
+/* specific to non IE browsers */
+.menu ul li:hover a {
+color:#fff; 
+background:#bd8d5e;
+}
+.menu ul li:hover ul {
+display:block; 
+position:absolute; 
+top:3em;
+margin-top:0px;
+left:0; 
+width:150px;
+}
+.menu ul li:hover ul li ul {
+display: none;
+}
+.menu ul li:hover ul li a {
+display:block; 
+background:#faeec7; 
+color:#000; 
+height:auto; 
+line-height:1.2em; 
+padding:5px 10px; 
+width:129px
+}
+.menu ul li:hover ul li a.drop {
+background:#999999;
+}
+.menu ul li:hover ul li a:hover {
+background:#c9c9a7; 
+color:#000;
+}
+.menu ul li:hover ul li:hover ul {
+display:block; 
+position:absolute; 
+left:149px;
+top:0;
+width:150px;
+}
+.menu ul li:hover ul li:hover ul.left {
+left:-149px;
+}
+
+&amp;lt;/style&amp;gt;
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+.menu ul li a:hover {
+color:#fff; 
+background:#bd8d5e;
+}
+.menu ul li a:hover ul {
+display:block; 
+position:absolute; 
+top:3em; 
+left:0;
+background:#fff;
+margin-top:0;
+ 
+}
+.menu ul li a:hover ul li a {
+display:block; 
+background:#dbe4ab; 
+color:#000; 
+height:auto; 
+line-height:1.5em; 
+padding:5px 10px; 
+width:150px;
+ 
+}
+.menu ul li a:hover ul li a.drop {
+background:#c9c9a7;
+}
+.menu ul li a:hover ul li a ul {
+visibility:hidden; 
+position:absolute; 
+height:0; 
+width:0;
+}
+.menu ul li a:hover ul li a:hover {
+background:#c9c9a7; color:#000;
+}
+.menu ul li a:hover ul li a:hover ul {
+visibility:visible; 
+position:absolute; 
+top:0; 
+color:#000;
+left:150px;
+}
+.menu ul li a:hover ul li a:hover ul.left {
+left:-150px;
+}
+
+&amp;lt;/style&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;div class=\&amp;quot;menu\&amp;quot;&amp;gt;
+
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;a class=\&amp;quot;drop\&amp;quot; href=\&amp;quot;http://www.alixixi.com/\&amp;quot;&amp;gt;DEMOS
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+
+    &amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;The zero dollar ads page\&amp;quot;&amp;gt;zero dollars advertising page&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Wrapping text around images\&amp;quot;&amp;gt;wrapping text around images&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Styling forms\&amp;quot;&amp;gt;styled form&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Removing active/focus borders\&amp;quot;&amp;gt;active focus&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a class=\&amp;quot;drop\&amp;quot; href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Hover/click with no active/focus borders\&amp;quot;&amp;gt;hover/click with no borders
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+        &amp;lt;ul&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Styling forms\&amp;quot;&amp;gt;styled form&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Removing active/focus borders\&amp;quot;&amp;gt;removing active/focus borders&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Hover/click with no active/focus borders\&amp;quot;&amp;gt;hover/click&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+    &amp;lt;/li&amp;gt;
+
+    &amp;lt;li class=\&amp;quot;upone\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Multi-position drop shadow\&amp;quot;&amp;gt;shadow boxing&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Image Map for detailed information\&amp;quot;&amp;gt;image map for detailed information&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;fun with background images\&amp;quot;&amp;gt;fun with background images&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;fade-out scrolling\&amp;quot;&amp;gt;fade scrolling&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;em size images compared\&amp;quot;&amp;gt;em image sizes compared&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;/li&amp;gt;
+
+
+&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot;&amp;gt;BOXES
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+
+    &amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;a coded list of spies\&amp;quot;&amp;gt;a coded list of spies&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;a horizontal vertical menu\&amp;quot;&amp;gt;vertical menu&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;an enlarging unordered list\&amp;quot;&amp;gt;enlarging unordered list&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;an unordered list with link images\&amp;quot;&amp;gt;link images&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;non-rectangular links\&amp;quot;&amp;gt;non-rectangular&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;jigsaw links\&amp;quot;&amp;gt;jigsaw links&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;circular links\&amp;quot;&amp;gt;circular links&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;/li&amp;gt;
+
+&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot;&amp;gt;MOZILLA
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+
+    &amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;A drop down menu\&amp;quot;&amp;gt;drop down menu&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;A cascading menu\&amp;quot;&amp;gt;cascading menu&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Using content:\&amp;quot;&amp;gt;content:&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;:hover applied to a div\&amp;quot;&amp;gt;mozzie box&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;I can build a rainbow\&amp;quot;&amp;gt;I can build a rainbow with DIVansparent borders&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Snooker cue\&amp;quot;&amp;gt;a snooker cue using border art&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Target Practise\&amp;quot;&amp;gt;target practise&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Two tone headings\&amp;quot;&amp;gt;two tone headings&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Shadow text\&amp;quot;&amp;gt;shadow text&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;/li&amp;gt;
+
+&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot;&amp;gt;EXPLORER
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+
+    &amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Example one\&amp;quot;&amp;gt;the first example for Internet Explorer&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Weft fonts\&amp;quot;&amp;gt;weft fonts&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Vertical align\&amp;quot;&amp;gt;vertically aligning text&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;/li&amp;gt;
+
+&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot;&amp;gt;OPACITY
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+
+    &amp;lt;ul&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;colour wheel\&amp;quot;&amp;gt;a colour wheel using opaque colours&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;a menu using opacity\&amp;quot;&amp;gt;a menu using opacity&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;partial opacity\&amp;quot;&amp;gt;partial opacity&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+    &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;partial opacity II\&amp;quot;&amp;gt;partial opacity II&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+
+    &amp;lt;li&amp;gt;&amp;lt;a class=\&amp;quot;drop\&amp;quot; href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Hover/click with no active/focus borders\&amp;quot;&amp;gt;HOVER/CLICK
+&amp;lt;!--[if IE 7]&amp;gt;&amp;lt;!--&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;!--&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;&amp;lt;DIV&amp;gt;
+
+        &amp;lt;ul class=\&amp;quot;left\&amp;quot;&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Styling forms\&amp;quot;&amp;gt;styled form&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Removing active/focus borders\&amp;quot;&amp;gt;removing active/focus borders&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;http://www.alixixi.com/\&amp;quot; title=\&amp;quot;Hover/click with no active/focus borders\&amp;quot;&amp;gt;hover/click&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+    &amp;lt;/li&amp;gt;
+    &amp;lt;/ul&amp;gt;
+
+&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/DIV&amp;gt;
+
+&amp;lt;!--[if lte IE 6]&amp;gt;
+&amp;lt;/a&amp;gt;
+&amp;lt;![endif]--&amp;gt;
+
+&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+
+&amp;lt;/div&amp;gt;&amp;quot;;
+}
+
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+//
+// 
+//
+function getifrom(){
+
+	var typ =DSMOD ;
+	var ds=db.QuerySQL(&amp;quot;select * from lsysurl where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and refid=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos;&amp;quot;);
+	var div=&amp;quot;&amp;quot;;
+	var iframe=&amp;quot;&amp;quot;;
+	var rowcnt=ds.getRowCount();
+	
+	var st = new Array(); 
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	var css=&amp;quot;&amp;lt;style&amp;gt;
+		    .nav_a&amp;quot;+cdcnt+&amp;quot; {
+		        color: &amp;quot;+fontcolor+&amp;quot;;
+		        cursor: pointer;
+		        float: left;
+		        font-size: 14px;
+		        height: &amp;quot;+height+&amp;quot;;
+		        line-height: &amp;quot;+height+&amp;quot;;
+		        padding: 0px 15px;
+		        position: relative;
+
+		    }
+		
+		    .nav&amp;quot;+cdcnt+&amp;quot; {
+		        height:&amp;quot;+height+&amp;quot;;
+		
+		    }
+		    .nav&amp;quot;+cdcnt+&amp;quot; .on {
+		        background-color:&amp;quot;+onclickcolor+&amp;quot;;
+		        color: #000000;
+	
+		
+		    }
+		    #dr&amp;quot;+cdcnt+&amp;quot; div:hover{
+		        cursor:pointer;
+		        background:&amp;quot;+hovercolor+&amp;quot;;&amp;quot;;
+		        
+		   
+		        if(bg_img!=null||bg_img!=&amp;quot;&amp;quot;){
+		        	css+=&amp;quot;background-image:url(&amp;quot;+bg_img+&amp;quot;);&amp;quot;;
+		        }
+		        
+		    css += &amp;quot;}
+		&amp;lt;/style&amp;gt;&amp;quot;;
+//	return css;
+	for(var i=0; i&amp;lt;rowcnt;i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;)+cdcnt;
+		var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		st[i]=id;
+		var onmo=&amp;quot;&amp;quot;;
+//		if(Event==&amp;quot;onclick&amp;quot;) onmo=&amp;quot;onmousemove=onmous(this.id,1) onmouseout=onmous(this.id,2)&amp;quot;;
+		if(i==0){
+			//onmousemove,onclick,onmouseover
+			div+=&amp;quot;&amp;lt;DIV &amp;quot;+Event+&amp;quot;=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot; on\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+			if(OSPARAM==&amp;quot;iframe&amp;quot;){
+				iframe+=&amp;quot;&amp;lt;iframe id=\&amp;quot;ifr_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;;
+			}
+			else if(OSPARAM==&amp;quot;div&amp;quot;){
+				iframe+=&amp;quot;&amp;lt;div id=\&amp;quot;ifr_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+			}
+			else{
+				var loyhtml=&amp;quot;&amp;quot;;
+				if(url!=&amp;quot;&amp;quot;){
+					var layoutid=url.split(&amp;quot;&amp;&amp;quot;)[0].split(&amp;quot;=&amp;quot;)[1];
+					loyhtml=getlayout(request,layoutid);
+					
+				}
+				if(loadtyp==&amp;quot;onclick&amp;quot;)
+					iframe+=&amp;quot;&amp;lt;div id=\&amp;quot;ifr_&amp;quot;+typ+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+				else
+					iframe+=&amp;quot;&amp;lt;div id=\&amp;quot;ifr_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			}
+		}
+		else{
+			div+=&amp;quot;&amp;lt;DIV &amp;quot;+Event+&amp;quot;=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+			if(OSPARAM==&amp;quot;iframe&amp;quot;){
+				iframe+=&amp;quot;&amp;lt;iframe id=\&amp;quot;ifr_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;;
+			}
+			else if(OSPARAM==&amp;quot;div&amp;quot;){
+				iframe+=&amp;quot;&amp;lt;div id=\&amp;quot;ifr_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+			}
+			else{
+				var loyhtml=&amp;quot;&amp;quot;;
+				if(url!=&amp;quot;&amp;quot;){
+					var layoutid=url.split(&amp;quot;&amp;&amp;quot;)[0].split(&amp;quot;=&amp;quot;)[1];
+					loyhtml=getlayout(request,layoutid);
+					
+				}
+				if(loadtyp!=&amp;quot;onclick&amp;quot;)
+				iframe+=&amp;quot;&amp;lt;div id=\&amp;quot;ifr_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+				
+			}
+		}
+	}
+
+	var padding=&amp;quot;&amp;quot;;
+	if(paddingleft!=&amp;quot;&amp;quot;)  padding=&amp;quot;PADDING-LEFT:&amp;quot;+paddingleft+&amp;quot;;&amp;quot;; else if(paddingleft==&amp;quot;&amp;quot;&amp;&amp;paddingright==&amp;quot;&amp;quot;)  padding=&amp;quot;PADDING-LEFT:0px&amp;quot;; else padding=&amp;quot;PADDING-RIGHT:&amp;quot;+paddingleft+&amp;quot;;&amp;quot;;
+	var html=&amp;quot;&amp;lt;div style=\&amp;quot;OVERFLOW: hidden; &amp;quot;+padding+&amp;quot; BACKGROUND-COLOR: &amp;quot;+bgcolor+&amp;quot;; background-image:url(&amp;quot;+bgcolor_img+&amp;quot;);\&amp;quot;&amp;gt;&amp;lt;DIV id=dr&amp;quot;+cdcnt+&amp;quot; class=nav&amp;quot;+cdcnt+&amp;quot; style=\&amp;quot;FLOAT: left\&amp;quot;&amp;gt;&amp;quot;+div+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+//	var html=&amp;quot;&amp;lt;table border=\&amp;quot;1\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;DIV id=dr class=nav&amp;quot;+cdcnt+&amp;quot; style=\&amp;quot;FLOAT: left\&amp;quot;&amp;gt;&amp;quot;+div+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+//	html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+iframe+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;div id=\&amp;quot;CDMS_menu\&amp;quot; &amp;gt;&amp;quot;+iframe+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;&amp;quot;;
+	if(OSPARAM==&amp;quot;iframe&amp;quot;){
+		script+=&amp;quot;function swithpage&amp;quot;+typ+cdcnt+&amp;quot;(frameid,url){
+			       var st&amp;quot;+typ+cdcnt+&amp;quot;=&amp;quot;+st+&amp;quot;;
+			        var cnt=st&amp;quot;+typ+cdcnt+&amp;quot;.length;
+			        var id=\&amp;quot;ifr_\&amp;quot;+frameid;
+			        for ( var i=0;i&amp;lt;cnt;i++){
+			            var ifid=\&amp;quot;ifr_\&amp;quot;+st&amp;quot;+typ+cdcnt+&amp;quot;[i];
+			            document.getElementById(ifid).style.display=\&amp;quot;none\&amp;quot;;
+				 
+			          document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.backgroundColor=\&amp;quot;&amp;quot;+bgcolor+&amp;quot;\&amp;quot;;
+			       }
+			        document.getElementById(frameid).style.backgroundColor=\&amp;quot;#FFFFFF\&amp;quot;;
+			        var issrc= document.getElementById(id).src;
+			        if(issrc==\&amp;quot;\&amp;quot;){
+				        document.getElementById(id).src=url;
+			        }
+			       document.getElementById(id).style.display=\&amp;quot;block\&amp;quot;;
+			      
+			   }
+			   window.onload=function(){
+				meid=\&amp;quot;CDMS_menu\&amp;quot;;
+			        var div=document.getElementById(meid);
+			        var y=window.screen.availHeight-div.offsetTop-130;
+			       div.style.height=y;
+	    		}&amp;quot;;
+		
+	}
+	if(OSPARAM==&amp;quot;div&amp;quot;){
+		script+=&amp;quot;function swithpage&amp;quot;+typ+cdcnt+&amp;quot;(frameid,url){
+				var st&amp;quot;+typ+cdcnt+&amp;quot;=&amp;quot;+st+&amp;quot;;
+			        var cnt=st&amp;quot;+typ+cdcnt+&amp;quot;.length;
+			        var id=\&amp;quot;ifr_\&amp;quot;+frameid;
+			        for ( var i=0;i&amp;lt;cnt;i++){
+			            var ifid=\&amp;quot;ifr_\&amp;quot;+st&amp;quot;+typ+cdcnt+&amp;quot;[i];
+			            document.getElementById(ifid).style.display=\&amp;quot;none\&amp;quot;;&amp;quot;;
+			if(bgcolor_img!=null) {
+			            script+=&amp;quot;document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.backgroundImage=\&amp;quot;url(&amp;quot;+bgcolor_img+&amp;quot;)\&amp;quot;&amp;quot;;
+			}
+			else{
+			            script+=&amp;quot;document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.background=\&amp;quot;&amp;quot;+bgcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+			            script+=&amp;quot;document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.color=\&amp;quot;&amp;quot;+fontcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+			 }
+			if(onclickcolor!=&amp;quot;&amp;quot;||onclickcolor!=null)
+			script+=&amp;quot;} document.getElementById(frameid).style.background=\&amp;quot;&amp;quot;+onclickcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+			
+			if(bgcolor_img==null)
+			script+=&amp;quot;document.getElementById(frameid).style.color=\&amp;quot;#000000\&amp;quot;;
+		        
+			       $.ajax({
+					url: url+&amp;apos;&amp;hashead=n&amp;apos;,
+					type: &amp;apos;POST&amp;apos;,
+					error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+					success: function(result){
+						var ht=result.split(\&amp;quot;&amp;lt;sprict&amp;gt;\&amp;quot;);
+						var htl=&amp;apos;&amp;apos;;//得到html
+						var spt=&amp;apos;&amp;apos;;//得到script
+						if(ht.length&amp;gt;2){
+							for(var i=0;i&amp;lt;ht.length;i++){
+								if(i==0) 
+									htl+=ht[i];
+								else{
+									spt+=ht[i].split(\&amp;quot;&amp;lt;/script&amp;gt;\&amp;quot;)[0]
+									htl+=ht[i].split(\&amp;quot;&amp;lt;/script&amp;gt;\&amp;quot;)[1];
+								}
+							}
+						}
+						else{
+							htl=ht[0];
+							spt=ht[1].split(\&amp;quot;&amp;lt;/script&amp;gt;\&amp;quot;)[0];
+							htl+=ht[1].split(\&amp;quot;&amp;lt;/script&amp;gt;\&amp;quot;)[1];
+						}
+						var script=document.createElement(\&amp;quot;script\&amp;quot;);//在模版页创建新的&amp;lt;script&amp;gt;标签
+			                        script.text=spt;//给新的script标签赋值
+			                        document.getElementsByTagName(\&amp;quot;head\&amp;quot;)[0].appendChild(script);
+						document.getElementById(id).innerHTML=htl;
+					}
+				});
+		       		document.getElementById(id).style.display=\&amp;quot;block\&amp;quot;;
+		   }
+		   window.onload=function(){
+	
+		   	$.ajax({
+				url: &amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;url&amp;quot;)+&amp;quot;&amp;hashead=n&amp;apos;,
+				type: &amp;apos;POST&amp;apos;,
+				error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+				success: function(result){
+					document.getElementById(\&amp;quot;ifr_&amp;quot;+st[0].split(\&amp;quot;__\&amp;quot;)[0]+&amp;quot;\&amp;quot;).innerHTML=result;
+				}
+			});
+		   
+		   }&amp;quot;;
+			   
+	}
+	else{
+		
+		script+=&amp;quot;function swithpage&amp;quot;+typ+cdcnt+&amp;quot;(frameid,url){
+			var st&amp;quot;+typ+cdcnt+&amp;quot;=&amp;quot;+st+&amp;quot;;
+		        var cnt=st&amp;quot;+typ+cdcnt+&amp;quot;.length;
+		        var id=\&amp;quot;ifr_\&amp;quot;+frameid;
+		        for ( var i=0;i&amp;lt;cnt;i++){
+		            var ifid=\&amp;quot;ifr_\&amp;quot;+st&amp;quot;+typ+cdcnt+&amp;quot;[i];&amp;quot;;
+		 if(loadtyp!=&amp;quot;onclick&amp;quot;)
+		           script+=&amp;quot;document.getElementById(ifid).style.display=\&amp;quot;none\&amp;quot;;&amp;quot;;
+		if(bgcolor_img!=null) {
+		            script+=&amp;quot;document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.backgroundImage=\&amp;quot;url(&amp;quot;+bgcolor_img+&amp;quot;)\&amp;quot;&amp;quot;;
+		}
+		else{
+		            script+=&amp;quot;document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.background=\&amp;quot;&amp;quot;+bgcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+		            script+=&amp;quot;document.getElementById(st&amp;quot;+typ+cdcnt+&amp;quot;[i]).style.color=\&amp;quot;&amp;quot;+fontcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+		 }
+		            	
+		
+		if(onclickcolor==&amp;quot;&amp;quot;||onclickcolor==null){
+			script+=&amp;quot;}&amp;quot;;
+		}	
+		else
+			script+=&amp;quot;} document.getElementById(frameid).style.background=\&amp;quot;&amp;quot;+onclickcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+		if(bgcolor_img==null)
+		script+=&amp;quot;document.getElementById(frameid).style.color=\&amp;quot;#000000\&amp;quot;;&amp;quot;;
+		
+		if(loadtyp==&amp;quot;onclick&amp;quot;)
+			script+=&amp;quot;$.ajax({
+					url: url+&amp;apos;&amp;hashead=n&amp;apos;,
+					type: &amp;apos;POST&amp;apos;,
+					error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+					success: function(result){
+						document.getElementById(\&amp;quot;ifr_&amp;quot;+typ+&amp;quot;\&amp;quot;).innerHTML=result;
+					}
+				});&amp;quot;;
+		else
+			script+=&amp;quot;document.getElementById(id).style.display=\&amp;quot;block\&amp;quot;;&amp;quot;;
+		
+		
+		script+=&amp;quot;}&amp;quot;;
+	}
+	script+=&amp;quot;
+//		function onmous(id,ty){
+//			document.getElementById(id).style.cursor=\&amp;quot;pointer\&amp;quot;;
+//			var colc=document.getElementById(id).style.background-color;
+//			if(ty==1)
+//			document.getElementById(id).style.background=\&amp;quot;#666666\&amp;quot;;
+//			else
+//			document.getElementById(id).style.background=colc;
+//		}
+	&amp;lt;/script&amp;gt;&amp;quot;;
+		
+	
+	return css+html+script;
+	
+}
+
+//
+// 
+//
+function Search(){
+		if(xlcolor==&amp;quot;&amp;quot;) xlcolor=&amp;quot;#C0C0C0&amp;quot;;
+		if(gridcolor==&amp;quot;&amp;quot;) gridcolor=&amp;quot;#ff0000&amp;quot;;
+		if(width==&amp;quot;&amp;quot;) width=&amp;quot;500&amp;quot;; else if(width.split(&amp;quot;px&amp;quot;).length()&amp;gt;1) width=width.split(&amp;quot;px&amp;quot;)[0];
+		if(height==&amp;quot;&amp;quot;) height=&amp;quot;25&amp;quot;; else if(height.split(&amp;quot;px&amp;quot;).length()&amp;gt;1) height=height.split(&amp;quot;px&amp;quot;)[0]*1.0;
+
+		var css=&amp;quot;&amp;lt;style&amp;gt;
+		&amp;lt;/style&amp;gt;&amp;quot;;
+		var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+		var html=&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;&amp;quot;+width+&amp;quot;px\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;5\&amp;quot;&amp;gt;
+			&amp;lt;tr&amp;gt;
+				&amp;lt;td  bgcolor=\&amp;quot;&amp;quot;+gridcolor+&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; height=\&amp;quot;25\&amp;quot; style=\&amp;quot;border:&amp;quot;+border+&amp;quot; solid &amp;quot;+bordercolor+&amp;quot;\&amp;quot;&amp;gt;
+						&amp;lt;tr&amp;gt;
+						&amp;lt;td width=\&amp;quot;80\&amp;quot; bgcolor=\&amp;quot;&amp;quot;+xlcolor+&amp;quot;\&amp;quot; style=\&amp;quot;display:none\&amp;quot;&amp;gt;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;quot;+qurnam+&amp;quot;&amp;lt;/td&amp;gt;
+						&amp;lt;td&amp;gt;&amp;lt;input onkeyup=\&amp;quot;searchA&amp;quot;+cdcnt+&amp;quot;(&amp;apos;ipt&amp;quot;+cdcnt+&amp;quot;&amp;apos;)\&amp;quot;  id=\&amp;quot;ipt&amp;quot;+cdcnt+&amp;quot;\&amp;quot; type=\&amp;quot;text\&amp;quot; name=\&amp;quot;T1\&amp;quot;  style=\&amp;quot;height:&amp;quot;+height+&amp;quot;px;width:95%; border: 1px solid #FFFFFF; padding-left: 4px; padding-right: 4px; padding-top: &amp;quot;+height/5+&amp;quot;px; padding-bottom: 1px; font-size:14pt; text-align:left;\&amp;quot; size=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+						&amp;lt;td onclick=\&amp;quot;search&amp;quot;+cdcnt+&amp;quot;(&amp;apos;ipt&amp;quot;+cdcnt+&amp;quot;&amp;apos;)\&amp;quot; width=\&amp;quot;80\&amp;quot; style=\&amp;quot;CURSOR: pointer;\&amp;quot; bgcolor=\&amp;quot;&amp;quot;+gridcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;font color=\&amp;quot;#FFFFFF\&amp;quot; size=\&amp;quot;+1\&amp;quot; style=\&amp;quot;font-family:&amp;apos;微软雅黑&amp;apos;\&amp;quot;&amp;gt;搜 索&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/td&amp;gt;
+						&amp;lt;/tr&amp;gt;
+						&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;div id=\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;  style=\&amp;quot;position: absolute;z-index:9;background-color:white;border:1px solid;display:none;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+					&amp;lt;/table&amp;gt;
+				&amp;lt;/td&amp;gt;
+			&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+		var script=&amp;quot;&amp;lt;script&amp;gt;
+			
+			
+			function searchA&amp;quot;+cdcnt+&amp;quot;(id){
+				var sah=\&amp;quot;&amp;quot;+sahurl+&amp;quot;\&amp;quot;;
+				if(sah==\&amp;quot;xhzysearch1\&amp;quot;||sah==\&amp;quot;pwjjSearch1\&amp;quot;){
+					var value=document.getElementById(id).value;
+					if(value!=null &amp;&amp; value!=\&amp;quot;\&amp;quot;){
+						var setlistname=\&amp;quot;seachinfo&amp;quot;+cdcnt+&amp;quot;\&amp;quot;;
+						var url=\&amp;quot;http://cdms.xmidware.com/aca/x.showflg_title.getyp.osp?typ=4&amp;value=\&amp;quot;+value+\&amp;quot;&amp;setlistname=\&amp;quot;+setlistname;
+					
+						$.ajax({
+							url: url,
+							type: &amp;apos;POST&amp;apos;,
+							error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+							success: function(result){
+								
+								var str=result;
+								var arr=str.split(\&amp;quot;,\&amp;quot;);
+								var html=\&amp;quot;\&amp;quot;;
+		
+								for(var i=0;i&amp;lt;arr.length;i++){
+									if(arr[i]!=null&amp;&amp;arr[i]!=\&amp;quot;\&amp;quot;){
+										strs=arr[i].split(\&amp;quot;~\&amp;quot;);
+									html+=\&amp;quot;&amp;lt;p style=\&amp;apos;margin:0px;padding:0px;border:0px;cursor:pointer;width:330px;height:30px;size:16\&amp;apos;  onmousemove=this.style.backgroundColor=&amp;apos;#D3D3D3&amp;apos; onmouseout=this.style.backgroundColor=&amp;apos;white&amp;apos; onclick=doClick&amp;quot;+cdcnt+&amp;quot;(\&amp;quot;+strs[0]+\&amp;quot;,&amp;apos;\&amp;quot;+strs[1]+\&amp;quot;&amp;apos;); &amp;gt;\&amp;quot;+strs[1]+\&amp;quot;&amp;lt;/p&amp;gt;\&amp;quot;;
+									}
+								};
+								html+=\&amp;quot;\&amp;quot;;
+								document.getElementById(\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).innerHTML=\&amp;quot;\&amp;quot;;
+								document.getElementById(\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).style.display=&amp;apos;block&amp;apos;;
+								document.getElementById(\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).innerHTML=html;
+							}
+						});
+					}else{
+						document.getElementById(\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+	
+					}
+				}
+							
+			};
+			
+			
+		
+			function doClick&amp;quot;+cdcnt+&amp;quot;(id,val){
+
+					document.getElementById(\&amp;quot;ipt&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).value=val;
+					document.getElementById(\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+					var sah=\&amp;quot;&amp;quot;+sahurl+&amp;quot;\&amp;quot;;
+					if(sah==\&amp;quot;xhzysearch1\&amp;quot;){
+						setywscqd(id,val);
+					}else if(sah==\&amp;quot;pwjjSearch1\&amp;quot;){
+						//alert(id);
+						setywscqd2(id,val);
+					}		
+			};
+
+			function search&amp;quot;+cdcnt+&amp;quot;(id){
+				var value=document.getElementById(id).value;
+				document.getElementById(\&amp;quot;div_search&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+				var sah=\&amp;quot;&amp;quot;+sahurl+&amp;quot;\&amp;quot;;
+				
+				if(value!=null&amp;&amp;value!=\&amp;quot;\&amp;quot;){
+					var setlistname=\&amp;quot;seachinfo&amp;quot;+cdcnt+&amp;quot;\&amp;quot;;
+					var url=\&amp;quot;&amp;quot;+sahdtlMethod+&amp;quot;\&amp;quot;+value+\&amp;quot;&amp;setlistname=\&amp;quot;+setlistname;
+					
+					$.ajax({
+						url: url,
+						type: &amp;apos;POST&amp;apos;,
+						error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+						success: function(result){
+							
+							document.getElementById(\&amp;quot;&amp;quot;+sahurl+&amp;quot;\&amp;quot;).innerHTML=result;
+							if(sah==\&amp;quot;YongYaoSearch\&amp;quot;){
+								document.getElementById(\&amp;quot;YYJYdiv1\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+								document.getElementById(\&amp;quot;YYJYdiv3\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+								document.getElementById(\&amp;quot;YYJYdiv2\&amp;quot;).style.display=&amp;apos;block&amp;apos;;
+								document.getElementById(\&amp;quot;YYJYdiv2\&amp;quot;).innerHTML=&amp;apos;&amp;lt;h4&amp;gt;用药教育-&amp;apos;+value+&amp;apos;&amp;lt;/h4&amp;gt;&amp;apos;;
+								document.getElementById(\&amp;quot;YongYaoSearch\&amp;quot;).style.display=&amp;apos;block&amp;apos;;
+							}
+							
+						}
+					});
+				}
+
+			}&amp;quot;;
+			
+			
+		if(sahhdrMethod!=&amp;quot;&amp;quot;){
+			script+=&amp;quot;function seachinfo&amp;quot;+cdcnt+&amp;quot;(id,name,typ){
+				$.ajax({
+					url: &amp;apos;&amp;quot;+sahhdrMethod+&amp;quot;&amp;apos;+id,
+					type: &amp;apos;POST&amp;apos;,
+					error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+					success: function(result){
+						if(result==\&amp;quot;&amp;lt;div&amp;gt;&amp;lt;/div&amp;gt;\&amp;quot;) 
+						document.getElementById(\&amp;quot;&amp;quot;+sahurl+&amp;quot;\&amp;quot;).innerHTML=\&amp;quot;&amp;lt;p&amp;gt;未找到‘\&amp;quot;+name+\&amp;quot;‘相关信息&amp;lt;/p&amp;gt;\&amp;quot;;
+						else
+						document.getElementById(\&amp;quot;&amp;quot;+sahurl+&amp;quot;\&amp;quot;).innerHTML=result;
+					}
+				});
+			}&amp;quot;;
+		}	
+		script+=&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;;
+				
+		
+	return css+html+script;
+}
+//模糊查询
+function getyp(){
+ 	var html =&amp;quot;&amp;quot;;
+	var db=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sp = likename.split(&amp;quot; &amp;quot;);
+		var sql = &amp;quot;select * from CDMS_DRUNAM where 1=1 and name like &amp;quot;;
+		var spli = &amp;quot;&amp;quot;;//查询条件
+		for(var i =0;i&amp;lt;sp.length();i++){
+			if(sp[i] != &amp;quot;&amp;quot;){
+			sql += &amp;quot;&amp;apos;%&amp;quot;+sp[i]+&amp;quot;%&amp;apos; and name like&amp;quot;;
+			}
+		}
+		sql += &amp;quot; &amp;apos;%%&amp;apos;&amp;quot;;
+		var ds=db.QuerySQL(sql);
+	
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;quot;;
+		if(ds.getRowCount() == 0){
+			html += &amp;quot;&amp;lt;p&amp;gt;未检索到与 &amp;quot;+likename+&amp;quot; 相关的信息。&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;建议您：&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;1. 检查您输入的关键词有无错误；&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;2. 更换检索词后重新进行检索。&amp;lt;/p&amp;gt; &amp;quot;;
+		}
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;table style=\&amp;quot;width:110px;height:110px;cursor:pointer; float:left;margin:5px;background:url(EAFormBlob.sp?guid=A93897F4D66A4D9BB9F0A0CFBC13EDF6);\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;fenxi(&amp;quot;+ds.getValueAt(i,&amp;quot;id&amp;quot;)+&amp;quot;,&amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#666666\&amp;quot; &amp;gt;&amp;quot;+ds.getValueAt(i,4)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	
+		}
+		html +=&amp;quot;&amp;lt;div&amp;gt;&amp;quot;;
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+}
+
+
+//
+// 
+//传入参数 sql（表名称表如table1,table2,table3）
+function listinfo(){
+
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	var divname=&amp;quot;tree_&amp;quot;+cdcnt; //设置div id
+	var arryname=&amp;quot;menulist_&amp;quot;+cdcnt;//设置 数组id
+	var setlistname=&amp;quot;setlist&amp;quot;+cdcnt;
+	var upNavigationBarname=&amp;quot;upNavigationBar&amp;quot;+cdcnt;
+	var gethttpname=&amp;quot;gethttp&amp;quot;+cdcnt;
+	var NavigationBarname=&amp;quot;NavigationBar&amp;quot;+cdcnt;
+
+
+	var css=&amp;quot;&amp;lt;style&amp;gt;#&amp;quot;+NavigationBarname+&amp;quot; div:hover{ cursor:pointer;background-color: #FFFFFF; }&amp;lt;/style&amp;gt;&amp;quot;;
+	var html=&amp;quot;&amp;lt;DIV  id=\&amp;quot;&amp;quot;+NavigationBarname+&amp;quot;\&amp;quot; style=\&amp;quot;BORDER-TOP: #d7d4cf 1px solid;PADDING-LEFT: 10%; HEIGHT: 46px; WIDTH: 100%; BACKGROUND-IMAGE: url(http://cdms.xmidware.com/aca/ROOT_CDMS/EAFormBlob.sp?guid=5CD9AA2C3A12404DB711A10F0B547A24); BORDER-BOTTOM: #c4c6c3 1px solid; CLEAR: left\&amp;quot;&amp;gt;
+	&amp;lt;/div&amp;gt;
+	&amp;lt;DIV id=&amp;quot;+divname+&amp;quot; style=\&amp;quot;HEIGHT:100%; WIDTH: 80%; OVERFLOW-X: hidden; OVERFLOW-Y: auto; FLOAT: left; PADDING-LEFT: 10%; PADDING-RIGHT: 10%\&amp;quot;&amp;gt;
+	&amp;lt;/div&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+		var &amp;quot;+arryname+&amp;quot; = new Array();
+		function &amp;quot;+setlistname+&amp;quot;(id,name,isleaf){
+			var table=\&amp;quot;&amp;quot;+SQLTXT+&amp;quot;\&amp;quot;;
+			var html=\&amp;quot;\&amp;quot;;
+			&amp;quot;+upNavigationBarname+&amp;quot;(id+\&amp;quot;,\&amp;quot;+name+\&amp;quot;,\&amp;quot;+isleaf);
+			for(var i=0;i&amp;lt;&amp;quot;+arryname+&amp;quot;.length;i++){
+				if(&amp;quot;+arryname+&amp;quot;[i]!=\&amp;quot;\&amp;quot;){
+					id=&amp;quot;+arryname+&amp;quot;[i].split(\&amp;quot;,\&amp;quot;)[0];
+					name=&amp;quot;+arryname+&amp;quot;[i].split(\&amp;quot;,\&amp;quot;)[1];
+					isleaf=&amp;quot;+arryname+&amp;quot;[i].split(\&amp;quot;,\&amp;quot;)[2];
+					html+=\&amp;quot;&amp;lt;DIV onclick=&amp;quot;+setlistname+&amp;quot;(\&amp;quot;+id+\&amp;quot;,&amp;apos;\&amp;quot;+name+\&amp;quot;&amp;apos;,\&amp;quot;+isleaf+\&amp;quot;)  style=&amp;apos;FONT-SIZE: 14px; TEXT-DECORATION: none; POSITION: relative; FLOAT: left; FONT-WEIGHT: 700; COLOR: #666666; TEXT-ALIGN: center; PADDING-LEFT: 20px; DISPLAY:block; LINE-HEIGHT: 47px;PADDING-RIGHT: 20px;&amp;apos; &amp;gt;\&amp;quot;+name+\&amp;quot;-&amp;gt;&amp;lt;/DIV&amp;gt;\&amp;quot;;
+				}
+			}
+			&amp;quot;+gethttpname+&amp;quot;(id,isleaf,table);
+		        document.getElementById(\&amp;quot;&amp;quot;+NavigationBarname+&amp;quot;\&amp;quot;).innerHTML=html;
+		}
+		function &amp;quot;+gethttpname+&amp;quot;(id,isleaf,table){
+			var url=\&amp;quot;http://cdms.xmidware.com/aca/ROOT_CDMS/x.showflg_title.getlisti.osp?usrid=xlsgrid&amp;userpwd=0&amp;id=\&amp;quot;+id+\&amp;quot;&amp;type=\&amp;quot;+isleaf+\&amp;quot;&amp;setlistname=&amp;quot;+setlistname+&amp;quot;&amp;tabe=\&amp;quot;+table;
+			var html=\&amp;quot;\&amp;quot;;
+			$.ajax({
+		            url: url,
+		            type: &amp;apos;POST&amp;apos;,
+		            error: function(){alert(&amp;apos;您的网速有问题,如若网络正常。请联系管理员!&amp;apos;);},
+		            success: function(result){
+		                document.getElementById(\&amp;quot;&amp;quot;+divname+&amp;quot;\&amp;quot;).innerHTML=result;
+		            }
+		        });
+		}
+		function &amp;quot;+upNavigationBarname+&amp;quot;(name){
+			if(&amp;quot;+arryname+&amp;quot;.length&amp;lt;1){
+				&amp;quot;+arryname+&amp;quot;[0]=name;
+			}else{
+				var bloo=0;
+				var lenth=&amp;quot;+arryname+&amp;quot;.length;
+				for(var i=0;i&amp;lt;lenth;i++){
+					if(bloo==1) &amp;quot;+arryname+&amp;quot;.pop();
+					if(&amp;quot;+arryname+&amp;quot;[i]==name) bloo=1;
+										
+				}
+				for(var i=0;i&amp;lt;=lenth;i++){
+					if(bloo!=1&amp;&amp;(&amp;quot;+arryname+&amp;quot;[i]==\&amp;quot;\&amp;quot;||i==lenth)) &amp;quot;+arryname+&amp;quot;[i]=name;
+				}
+			}
+		}
+		window.load =&amp;quot;+setlistname+&amp;quot;(0,&amp;apos;首页&amp;apos;,0);
+	&amp;lt;/script&amp;gt;&amp;quot;;
+	return css+html+script;
+		
+}
+//获取数据集合
+function getlisti(){
+	
+	var html =&amp;quot;&amp;quot;;
+	var rid=id;
+	var typ=type;
+	var tabname=tabe.split(&amp;quot;,&amp;quot;);
+	var db = null;
+		try {
+			db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//非底层节点
+			if(typ==0||typ==1){
+				var sql = &amp;quot;select * from &amp;quot;+tabname[0]+&amp;quot; where REFID=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+				var ds=db.QuerySQL(sql);
+				if(ds.getRowCount() &amp;gt; 0){
+					for(var i =0;i&amp;lt;ds.getRowCount();i++){
+						var id= ds.getStringAt(i,&amp;quot;id&amp;quot;);
+						var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+						var isleaf=ds.getStringAt(i,&amp;quot;isleaf&amp;quot;);
+						var imgurl=&amp;quot;EAFormBlob.sp?guid=A93897F4D66A4D9BB9F0A0CFBC13EDF6&amp;quot;;
+						html+=gettalelist(id,isleaf,name,imgurl,setlistname);
+						
+					}
+				}
+				return html;
+			}
+			//已经是最底层节点
+			else if(typ==2){
+
+				var sql = &amp;quot;select * from &amp;quot;+tabname[1]+&amp;quot; where refid = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+				var ds=db.QuerySQL(sql);
+				if(ds.getRowCount() &amp;gt; 0){
+					for(var i =0;i&amp;lt;ds.getRowCount();i++){
+						var drug_name = ds.getValueAt(i,1);
+						var manufacturer = ds.getValueAt(i,2);
+						var collectdate = ds.getValueAt(i,3);
+						var doseform = ds.getValueAt(i,4);
+						var strength1 = ds.getValueAt(i,5);
+						if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+						if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+						if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+						if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+						if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+						
+						html += &amp;quot;&amp;lt;p style=\&amp;quot;line-height: 25px;\&amp;quot;&amp;gt;&amp;lt;div  target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#00FF99&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;&amp;quot;+setlistname+&amp;quot;(&amp;quot;+ds.getValueAt(i,&amp;quot;id&amp;quot;)+&amp;quot;,&amp;apos;&amp;quot;+drug_name+&amp;quot;&amp;apos;,&amp;apos;3&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+							
+				
+						html += &amp;quot;&amp;lt;p style=\&amp;quot;line-height: 25px;\&amp;quot;&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getColumnName(1)+&amp;quot;:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+						html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getColumnName(2)+&amp;quot;:&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+						html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getColumnName(3)+&amp;quot;:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+						html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getColumnName(4)+&amp;quot;:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+						html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getColumnName(5)+&amp;quot;:&amp;lt;/font&amp;gt;&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+				
+						html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:800px;margin-right:25%\&amp;quot;&amp;gt;&amp;quot;;
+					}
+				}		
+				return html;
+			}
+			else if(typ==3){
+
+				var sb=new langpack.StringBuffer();
+				var sql =&amp;quot;select * from &amp;quot;+tabname[2]+&amp;quot; where id = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+				var ds=db.QuerySQL(sql);
+				sb.append(&amp;quot;&amp;lt;div &amp;gt;&amp;quot;);
+				for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					var title=ds.getValueAt(i,&amp;quot;title&amp;quot;);
+					var noteguid=ds.getValueAt(i,&amp;quot;note&amp;quot;);
+					if(i != 0){
+						
+						var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+noteguid+&amp;quot;&amp;apos;&amp;quot;;
+						var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+						
+						if(blo!=&amp;quot;&amp;quot;){
+							var a=srcprice(id,blo);
+							if(a!=&amp;quot;&amp;quot;) blo=a;
+							sb.append(&amp;quot;&amp;lt;span&amp;gt;【&amp;quot;+title+&amp;quot;】&amp;lt;/span&amp;gt;&amp;quot;);
+							sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;padding:25px 25px; width:800px;\&amp;quot;&amp;gt;&amp;lt;font color=&amp;apos;#666666&amp;apos;&amp;gt;&amp;quot;+blo +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+							sb.append(&amp;quot;&amp;lt;hr  style=\&amp;quot;margin-right:25%;width:800px;\&amp;quot;&amp;gt;&amp;quot;);
+						}
+					}else{
+						
+						var hql = &amp;quot;select bdata from formblob  b where b.guid  = &amp;apos;&amp;quot;+noteguid+&amp;quot;&amp;apos;&amp;quot;;
+						var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+						sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;margin-left:40%; width:800px;\&amp;quot;&amp;gt;&amp;lt;font color=&amp;apos;#CCCCCC&amp;apos;&amp;gt;&amp;quot;+blo+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+					}
+				}				
+				sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);
+				return sb;
+			}
+		
+		}catch ( ee ) {
+			if(db!=null)db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+}
+//构造方块
+function gettalelist(id,isleaf,name,img,setlistname){
+	var html=&amp;quot;&amp;quot;;
+	html += &amp;quot;&amp;lt;table style=\&amp;quot;width:110px;height:110px;cursor:pointer; float:left;margin:5px;background:url(&amp;quot;+img+&amp;quot;);\&amp;quot;&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; onclick=\&amp;quot;&amp;quot;+setlistname+&amp;quot;(&amp;quot;+id+&amp;quot;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;quot;+isleaf+&amp;quot;)\&amp;quot;  &amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#666666\&amp;quot; &amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	return html;
+}
+//替换图片
+//&amp;lt;img src=&amp;quot;‘115100507.jpg‘&amp;quot;&amp;gt;
+function srcprice(docid,srcnam){
+	
+	var db = &amp;quot;&amp;quot;;
+	var sb=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();
+		
+		var st=&amp;quot;&amp;lt;img src=‘&amp;quot;;
+		var stix1=srcnam.indexOf(st);
+		if(stix1==-1) return &amp;quot;&amp;quot;;
+		var a=srcnam.split(st);
+		var jsidx=0;
+		if(a.length()&amp;gt;2){
+			for(var i=1;i&amp;lt;=a.length()-1;i++){
+				
+				stix1=srcnam.indexOf(st,jsidx);
+				stix1=stix1+st.length();
+				var stix2=srcnam.indexOf(&amp;quot;‘&amp;gt;&amp;lt;/img&amp;gt;&amp;quot;,stix1);
+				jsidx=stix2;
+				var sr=srcnam.substring(stix1,stix2);
+				
+				
+				var sql=&amp;quot;select pic_jpg from cdms_notepic where name=&amp;apos;&amp;quot;+sr+&amp;quot;&amp;apos; and doc_id=&amp;apos;&amp;quot;+docid+&amp;quot;&amp;apos;&amp;quot;;
+				var ds=db.QuerySQL(sql);
+				var guid = ds.getStringAt(0,&amp;quot;pic_jpg&amp;quot;);
+				
+				sb = pubpack.EAFunc.regexReplace(srcnam,&amp;quot;‘&amp;quot;+sr+&amp;quot;‘&amp;quot;,&amp;quot;EAFormBlob.sp?guid=&amp;quot;+guid);
+				srcnam=sb;
+			}
+		}
+		else{
+			stix1=stix1+st.length();
+			var stix2=srcnam.indexOf(&amp;quot;‘&amp;gt;&amp;lt;/img&amp;gt;&amp;quot;);
+			var sr=srcnam.substring(stix1,stix2);
+			var sql=&amp;quot;select pic_jpg from cdms_notepic where name=&amp;apos;&amp;quot;+sr+&amp;quot;&amp;apos; and doc_id=&amp;apos;&amp;quot;+docid+&amp;quot;&amp;apos;&amp;quot;;
+			var ds=db.QuerySQL(sql);
+			var guid = ds.getStringAt(0,&amp;quot;pic_jpg&amp;quot;);
+			sb = pubpack.EAFunc.regexReplace(srcnam,&amp;quot;‘&amp;quot;+sr+&amp;quot;‘&amp;quot;,&amp;quot;EAFormBlob.sp?guid=&amp;quot;+guid);
+		}
+		
+	}catch ( ee ) {
+		db.Rollback();
+		//sb.append(ee.toString());
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=&amp;quot;&amp;quot;) db.Close();
+	}
+	return sb;
+
+	
+}
+
+function getLogin()
+{
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;; 
+	var usrid = &amp;quot;&amp;quot;;
+	var style = &amp;quot;&amp;quot;;
+	var html = &amp;quot;&amp;quot;;
+
+	try {
+		db = new pubpack.EADatabase();
+		
+		//取request教师编号
+		usrid =pubpack.EAFunc.NVL( request.getParameter(&amp;quot;tid&amp;quot;),&amp;quot;&amp;quot;);
+		
+		///取session登录教师编号
+		if (usrid == null || usrid == &amp;quot;&amp;quot;) {
+			var usrinfo = web.EASession.GetLoginInfo(request);
+			usrid = usrinfo.getUsrid();
+			if(usrid ==&amp;quot;xlsgrid&amp;quot;) usrid =&amp;quot;040381&amp;quot;;
+		}
+		
+		sql = &amp;quot;select name from (select id,name from APO_FUL UNION ALL select id,name from APO_EXT ) where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;;
+		ds = db.QuerySQL(sql);
+		
+		var aponame = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		html = &amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;right\&amp;quot;&amp;gt;欢迎您，&amp;quot;+aponame +&amp;quot;   | &amp;lt;/td&amp;gt;&amp;lt;td id=&amp;apos;td1&amp;apos; class=&amp;apos;td1&amp;apos; align=\&amp;quot;left\&amp;quot; onclick=&amp;apos;window.close();&amp;apos;&amp;gt;&amp;lt;font style=&amp;apos;color:#097eb6&amp;apos;&amp;gt;退出&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+		style = &amp;quot;&amp;lt;style&amp;gt; 
+		.td1{ cursor: hand; } 
+		&amp;lt;/style&amp;gt;&amp;quot;;
+
+	}catch ( ee ) {
+		db.Rollback();
+		//sb.append(ee.toString());
+		throw new pubpack.EAException (ee.toString());
+	}
+	finally {
+		if (db!=&amp;quot;&amp;quot;) db.Close();
+	}
+	return html+style;
+}
+ 
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

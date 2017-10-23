@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CUSTDBEDIT</MWID><NAME >客户数据维护</NAME><NOTE ></NOTE><FILE >CUSTDBEDIT.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+      order = &amp;quot; order by ID&amp;quot;;
+       setButton();
+       _this.AddToolbarButton(&amp;quot;udf_com_movefromdfxd&amp;quot;,&amp;quot;从外系统更新&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,120);       
+       // 构造3个 SQL
+       // 查询客户数据表记录
+       selectSQL = &amp;quot;SELECT GUID,ID as 单位编号,NAME as 单位名称,LONNAME as 全称,SHTNAM as 简称,&amp;quot;+
+            &amp;quot;CORPTYP as 单位属性,REFID as 上级编号,ENDFLG as 末级标志,&amp;quot; +
+            &amp;quot;CRDDAY as 最大赊账天数,CRDSUM as 最大赊账限额,SXDAY AS 允许赊销天数, ADS as 地址,ZIP as 邮政编码, &amp;quot;+
+            &amp;quot;TEL as 电话,FAX as 传真,EML as 邮件,MAN as 联系人,&amp;quot;+
+            &amp;quot;BANK as 开户银行,ACCOUNT as 账号,TAXNO as 税号,CORMAN as 法人代表,MAXDIS as 最打折扣率 &amp;quot;+
+            //&amp;quot;CRTUSR as 创建用户,CRTDAT as 创建日期 &amp;quot;+
+//            &amp;quot;from v_cust where (org =&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; or org is null) and (CORPTYP=&amp;apos;1&amp;apos; or CORPTYP=&amp;apos;2&amp;apos;)  and useflg=&amp;apos;1&amp;apos;  and substr(id,3,1)&amp;lt;&amp;gt;&amp;apos;8&amp;apos; and endflg=&amp;apos;1&amp;apos; &amp;quot;;
+            &amp;quot;from v_cust where (org =&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; or org is null) and CORPTYP in(&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;6&amp;apos;)  and useflg=&amp;apos;1&amp;apos; and endflg=&amp;apos;1&amp;apos; &amp;quot;;
+/*            
+       selectSQL = &amp;quot;SELECT GUID,ID as 单位编号,NAME as 单位名称,SHTNAM as 简称,&amp;quot;+
+            &amp;quot;REFID as 分类编号,&amp;apos;&amp;apos; as 地区码,&amp;apos;&amp;apos; as 行业,ADS as 地址,ZIP as 邮政编码, &amp;quot; +
+            &amp;quot;TAXNO as 税号,BANK as 开户银行,ACCOUNT as 账号,&amp;apos;2005-01-01&amp;apos; as 发展日期,CORMAN as 法人代表,EML as 邮件, &amp;quot;+
+            &amp;quot;TEL as 电话,FAX as 传真&amp;quot;+
+            &amp;quot;from v_cust where org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; and CORPTYP in(&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;3&amp;apos;)  and useflg=&amp;apos;1&amp;apos;  and substr(id,3,1)&amp;lt;&amp;gt;&amp;apos;8&amp;apos;&amp;quot;;
+*/
+       //新增客户数据表记录
+       insertSQL = &amp;quot;INSERT INTO CORP( GUID,ID,NAME,LONNAME,SHTNAM,&amp;quot; +
+            &amp;quot;CORPTYP,REFID,ENDFLG,CRDDAY,CRDSUM,SXDAY,ADS,ZIP,&amp;quot;+
+            &amp;quot;TEL,FAX,EML,MAN,BANK,ACCOUNT,TAXNO,CORMAN,MAXDIS ) &amp;quot;+
+            //&amp;quot;CRTUSR,CRTDAT ) &amp;quot;+
+            &amp;quot;VALUES( sys_guid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? ) &amp;quot;;
+       // 修改客户数据表记录
+       updateSQL = &amp;quot;UPDATE CORP SET id=?,NAME=?,LONNAME=?,SHTNAM=?,&amp;quot;+
+            &amp;quot;CORPTYP=?,REFID=?,ENDFLG=?,CRDDAY=?,CRDSUM=?,SXDAY=?,ADS=?,ZIP=?,&amp;quot;+
+            &amp;quot;TEL=?,FAX=?,EML=?,MAN=?,BANK=?,ACCOUNT=?,TAXNO=?,CORMAN=?,MAXDIS=? &amp;quot;+
+            //&amp;quot;CRTUSR=?,CRTDAT=to_date(?,&amp;apos;YYYY-MM-DD&amp;apos;) &amp;quot;
+            &amp;quot;where guid=?&amp;quot;;
+       //删除客户数据表记录
+       deleteSQL = &amp;quot;delete CORP where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       if(&amp;quot;30&amp;quot; != G_ORGID){
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       }
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       
+       
+       
+       
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ENDFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_CORPTYPE&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);       
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+       {                
+             var str = _this.GetCellText(sheet,row,9);                
+             _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,9,listid1);
+             _this.SetCellText(sheet,row,9,str);
+             
+             str = _this.GetCellText(sheet,row,7);                
+             _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid2 );
+             _this.SetCellText(sheet,row,7,str);                   
+      }
+      if(!!codeid)            //避免分页的时候codeid丢失
+        parent.codeid = codeid;
+      codeid = parent.codeid;
+      //if(_this.GetRowCount(0)&amp;lt;4) //empty content
+      //  SetAutoNo(codeid,3); //起始行为3.前两行为保留行
+
+}
+function _f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+      if( sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==3 ){
+            var thisid = orgid+newvalue;
+            _this.SetCellText(sheet,row,3,thisid );
+            _this.SetCellText(sheet,nowrow,8,thisid .substr(0,4));//分类号
+      }
+}
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue)
+{
+  if(sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==3)
+  {
+    var parent=codeid ;//_this.GetCellText(sheet,row,3);
+    var l=parent.length;
+    var a = newvalue.substr(0,l);
+    if(a!=parent)
+      _this.SetCellText(sheet,row,col,parent+newvalue);
+    _this.SetCellText(sheet,nowrow,8,parent);//分类号
+  }
+}
+var inc=1;
+//根据分类编码,取最大值加1作为新的编码
+function SetAutoNo(classid,nowrow)
+{
+  if(!!codeid)
+  {
+    if ( classid.length!=4 ) {
+          alert ( &amp;quot;请在左边的分类中选择一个末级分类，否则无法自动获取最大客户编号&amp;quot; );
+    }
+    else {
+          var no=invokeOSFunc(&amp;apos;getNextID&amp;apos;,&amp;apos;clsid=&amp;apos;+classid+&amp;quot;&amp;inc=&amp;quot;+inc);
+          _this.SetCellText(sheet,nowrow,3,no);
+          inc++;
+          _this.SetCellText(sheet,nowrow,8,no.substr(0,4));//分类号
+     }
+  }
+}
+//新增按钮
+function f_dbeditafternewrow(sheet,nowrow)
+{
+  if(_this.GetRowCount(0)&amp;gt;3) //not empty content
+    SetAutoNo(codeid,nowrow);
+  _this.SetCellText(sheet,nowrow,9,&amp;quot;1&amp;quot;);            // 分类号的默认值
+
+}
+
+
+function com_movefromdfxd()
+{
+      try {
+            ret = invokeOSFunc(&amp;quot;MoveFromDfxd&amp;quot;,&amp;quot;&amp;quot;) ;       
+            alert ( ret );
+      }
+      catch ( e ) {
+            alert ( e );
+      }      
+}
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+      if ( id==&amp;quot;udf_com_movefromdfxd&amp;quot;) 
+            com_movefromdfxd();
+  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+function getNextID()
+{
+  var newNo = &amp;quot;&amp;quot;;
+  try
+  {
+    var sql = &amp;quot;select id,id+&amp;quot;+inc+&amp;quot; from corp v where refid=&amp;apos;&amp;quot;+clsid
+      +&amp;quot;&amp;apos; and id+1=(select max(id+1) from corp where refid=&amp;apos;&amp;quot;+clsid+&amp;quot;&amp;apos; and id like &amp;apos;&amp;quot;+clsid+&amp;quot;%&amp;apos;)&amp;quot;;
+    var ds = pub.EADbTool.QuerySQL(sql);
+    var no = ds.getStringAt(0,0);
+    var s = ds.getStringAt(0,1);
+    var zeros=&amp;quot;000000000000000000&amp;quot;;
+    var l = no.length();
+    newNo = zeros.substring(1,l-s.length()+1)+s;//补足前导0
+  }
+  catch(e)
+  {
+    return clsid+&amp;quot;0001&amp;quot;;
+    //取最大单据号＋1错误，不做进一步处理
+  }
+  return newNo;    
+}
+
+//================================================================// 
+// 函数：MoveFromDfxd
+// 说明：从外系统（数据库连接名DFXD）更新数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/21/06 23:11:13
+// 修改日志：
+//================================================================// 
+function MoveFromDfxd()
+{
+      var db = null;
+      var msg = &amp;quot;&amp;quot;;
+      var sql = &amp;quot;INSERT INTO CORP (       ID	,NAME	,LONNAME	,SHTNAM	,CORPTYP	,REFID	,ENDFLG	,ADS	,ZIP	,          TEL	,FAX	,EML	,MAN	,BANK	,ACCOUNT	,TAXNO	,CORMAN	,CRDSUM	,CRDDAY	,          CRTUSR	,CRTDAT          )&amp;quot;+
+          &amp;quot; SELECT           &amp;apos;01&amp;apos;||ID ,    NAME     ,LONNAME  ,SHTNAM   ,TYPE     ,          DECODE(REFID,NULL,&amp;apos;&amp;apos;,&amp;apos;01&amp;apos;||REFID),ENDFLG   ,ADS      ,          ZIP      ,TEL      ,FAX      ,EML      ,MAN      ,          BANK     ,ACCOUNT  ,TAXNO    ,CORMAN   ,CRDSUM   ,          CRDDAY   ,&amp;apos;SYSTEM&amp;apos; ,SYSDATE          FROM CORP@dfxd where id not like &amp;apos;8%&amp;apos; and &amp;apos;01&amp;apos;||id not in ( select id from corp );&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();
+            var ret = db.ExcecutSQL(sql);
+            sql =&amp;quot;update corp a set maxdis=NVL((select maxdis from corp@dfxd b where a.id=&amp;apos;01&amp;apos;||b.id ),1) where substr(id,1,2)=&amp;apos;01&amp;apos;&amp;quot;;
+            db.ExcecutSQL(sql);
+
+            db.Commit();
+            msg=&amp;quot;操作成功,成功插入了&amp;quot; +ret +&amp;quot;条记录&amp;quot; ;
+      }
+      catch ( ee ) {
+            if( db!=null) db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return msg;
+      
+
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

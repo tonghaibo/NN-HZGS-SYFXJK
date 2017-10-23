@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_MENU</MWID><NAME >菜单</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_MENU.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+
+function getlinkage(){
+
+	var sql=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	if(onmouseovercolor==null)  onmouseovercolor=&amp;quot;&amp;quot;;
+	if(onmouseoverground==null) onmouseoverground=&amp;quot;&amp;quot;;
+	if(clickbackground==null) clickbackground=&amp;quot;&amp;quot;;
+	if(clickcolor==null) clickcolor=&amp;quot;&amp;quot;;
+//	var divli=&amp;quot;&amp;lt;div style=\&amp;quot;border:0px solid #CCCCCC;width:100%; height:100%;background-color:#ffffff;\&amp;quot;&amp;gt;&amp;lt;ul  id=\&amp;quot;leftmenu0\&amp;quot;&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;quot;;
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	if(SQLTXT==&amp;quot;&amp;quot;)
+		sql=&amp;quot;select guid,url,icon2,name,seqid,CONTEXTES,target,id from LSYSURL a where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; order by id&amp;quot;;
+	else
+		sql=SQLTXT;
+	var ds=db.QuerySQL(sql);
+	var onurl=&amp;quot;&amp;quot;;
+	var onguid=&amp;quot;&amp;quot;;
+	var onid=&amp;quot;&amp;quot;;
+	var st = new Array(); 
+	var divli=&amp;quot;&amp;quot;;
+	for(var i=0;i&amp;lt;ds.getRowCount();i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		url=pub.EAFunc.Replace(url,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		var gusrinfo=web.EASession.GetUserinfo(request);
+		if(gusrinfo!=null){
+			url=web.EASession.GetSysValue(url,request);//替换request 中[%id]
+			url=web.EASession.GetSysValue(url,web.EASession.GetUserinfo(request));
+		}
+		while((url.indexOf(&amp;quot;[%&amp;quot;)&amp;gt;-1&amp;&amp;i&amp;lt;1000)){
+			var idx1 = url.indexOf(&amp;quot;[&amp;quot;);
+			
+			var idx2 = url.indexOf(&amp;quot;]&amp;quot;)+1;
+			
+			var val=url.substring(idx1,idx2);
+			url=pub.EAFunc.Replace(url,val,&amp;quot;&amp;quot;);
+		}
+
+	
+		var target=ds.getStringAt(i,&amp;quot;target&amp;quot;);
+		if(onurl==&amp;quot;&amp;quot;&amp;&amp;ds.getStringAt(i,&amp;quot;url&amp;quot;)!=&amp;quot;&amp;quot;) {onurl=url; onguid=ds.getStringAt(i,&amp;quot;guid&amp;quot;); onid=ds.getStringAt(i,&amp;quot;id&amp;quot;); }
+
+		st.push(id);
+		divli+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td id=\&amp;quot;td&amp;quot;+id+&amp;quot;\&amp;quot; style=\&amp;quot;cursor:pointer; border:1px #EAEAEA solid;background:#d7d7dc;\&amp;quot;  align=&amp;apos;center&amp;apos; width=100% height=30px onMouseOut=\&amp;quot;setoutcolor&amp;quot;+cdcnt+&amp;quot;(this.id)\&amp;quot; onmouseover=\&amp;quot;setovercolor&amp;quot;+cdcnt+&amp;quot;(this.id)\&amp;quot; onclick=\&amp;quot;setTab&amp;quot;+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		
+	}
+	
+	script=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+			
+			
+			function setTab&amp;quot;+cdcnt+&amp;quot;(id,url,target)
+			{ 
+				var str=&amp;quot;+st+&amp;quot;;
+				for ( var i=0;i&amp;lt;str.length;i++){
+					var rid=\&amp;quot;td\&amp;quot;+str[i];
+					document.getElementById(rid).style.background=&amp;apos;#d7d7dc&amp;apos;;
+					document.getElementById(rid).style.color=&amp;apos;#000000&amp;apos;;
+				}
+				document.getElementById(id).style.background=&amp;apos;&amp;quot;+clickbackground+&amp;quot;&amp;apos;;
+				document.getElementById(id).style.color=&amp;apos;&amp;quot;+clickcolor+&amp;quot;&amp;apos;;
+				if(target==\&amp;quot;_self\&amp;quot;){
+					
+				}
+				else if (target==\&amp;quot;_blank\&amp;quot;){
+				
+				}
+				else if (target==\&amp;quot;_parent\&amp;quot;){
+					
+				}
+				else if (target!=\&amp;quot;\&amp;quot;){
+					
+				}
+				else {
+					
+					$.get(url,function(data,status){
+					document.getElementById(\&amp;quot;divme1&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).innerHTML=data;
+				});
+					
+				}			}
+			function setovercolor&amp;quot;+cdcnt+&amp;quot;(id){
+//				document.getElementById(id).style.color=&amp;apos;&amp;quot;+onmouseovercolor+&amp;quot;&amp;apos;;
+					document.getElementById(id).style.background=&amp;apos;&amp;quot;+onmouseoverground+&amp;quot;&amp;apos;;
+			}
+			function setoutcolor&amp;quot;+cdcnt+&amp;quot;(id){
+					document.getElementById(id).style.background=&amp;apos;#d7d7dc&amp;apos;;
+//				document.getElementById(id).style.color=&amp;apos;#000000&amp;apos;;
+			}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	script+=&amp;quot;&amp;lt;script&amp;gt;(function() { 
+				$.get(&amp;apos;&amp;quot;+onurl+&amp;quot;&amp;apos;,function(data,status){
+					document.getElementById(\&amp;quot;divme1&amp;quot;+cdcnt+&amp;quot;\&amp;quot;).innerHTML=data;
+				}); 
+				})();
+	&amp;lt;/script&amp;gt;&amp;quot;;
+	var style=&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;
+
+
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	var loyhtml=&amp;quot;&amp;quot;;
+	html+=&amp;quot;&amp;lt;div style=\&amp;quot;position:relative ;width:100%;margin:0px;height:100%;border:1px solid #d7d7dc; \&amp;quot;&amp;gt;
+			&amp;lt;div style=\&amp;quot;margin:0px;padding:0px;float:left;width:25%;height:100%;\&amp;quot; &amp;gt;
+				&amp;lt;table id=tbhower style=\&amp;quot;width:100%;height:100%\&amp;quot;&amp;gt;
+				 	&amp;lt;tr valign=\&amp;quot;top\&amp;quot;&amp;gt;
+						&amp;lt;td&amp;gt;&amp;quot;+divli+&amp;quot;&amp;lt;/td&amp;gt;
+					&amp;lt;tr&amp;gt;	
+				 &amp;lt;/table&amp;gt;
+			 &amp;lt;/div&amp;gt;
+			 &amp;lt;div  id=\&amp;quot;divme1&amp;quot;+cdcnt+&amp;quot;\&amp;quot; style=\&amp;quot;margin:0px;padding:0px;float:left;width:74%;height:100%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		 &amp;lt;/div&amp;gt;&amp;quot;;
+	return style+script+html;
+}
+
+
+function os()
+{
+	var eas = new pub.EAScript(null);
+	eas.DefineScopeVar(&amp;quot;request&amp;quot;, request);
+	eas.DefineScopeVar(&amp;quot;deforg&amp;quot;, deforg);
+	eas.DefineScopeVar(&amp;quot;OSPARAM&amp;quot;, OSPARAM);
+	
+	return eas .CallClassFunc(OSMWID,OSFUNC,null).castToString();
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,508 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >L_TreeNode</MWID><NAME >树菜单</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >L_TreeNode.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+function GetBody(){
+	var sb=new langpack.StringBuffer();
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;hidde\&amp;quot; style=\&amp;quot;margin-left:10%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;frist\&amp;quot; style=\&amp;quot;margin-left:10%;width:100px;height:20px;\&amp;quot; &amp;gt;&amp;lt;div onclick=&amp;apos;tree(0,0)&amp;apos;&amp;gt;&amp;lt;font&amp;gt;药理分类&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;tree\&amp;quot; style=\&amp;quot;margin-left:10%;margin-right:10%;float:left;width:1000px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);//显示菜单
+	sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;dru\&amp;quot; style=\&amp;quot;margin-left:10%;float:left;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);//
+	sb.append(&amp;quot;&amp;lt;input type=\&amp;quot;hidden\&amp;quot; id=\&amp;quot;inp\&amp;quot;&amp;quot;);//用来得到菜单
+	
+	
+	sb.append(&amp;quot;&amp;lt;script src=\&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	function manu(id){
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.manu.osp?id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	
+	}
+	//取同类药品
+	function dru(id,page){
+		//隐藏上级菜单
+		document.getElementById(\&amp;quot;tree\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.dru.osp?id=&amp;apos;+id+&amp;apos;&amp;page&amp;apos;+page,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	}
+	//直接显示药品
+	function drugShow(id){
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.drugShow.osp?id=&amp;apos;+id,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		//默认有&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;相当于判空
+		if(result.length &amp;gt;36){
+			document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		}else{
+			document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=\&amp;quot;没有找到这个药品的信息\&amp;quot;;
+		}
+		}
+		});
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;//显示
+
+	}
+	
+	
+	function tree(id,ty){
+	
+	if(document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML != \&amp;quot;\&amp;quot;){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;//隐藏
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML =\&amp;quot;\&amp;quot;;//清空
+	}
+	document.getElementById(\&amp;quot;tree\&amp;quot;).style.display =\&amp;quot;\&amp;quot;;
+	document.getElementById(\&amp;quot;frist\&amp;quot;).style.display =\&amp;quot;none\&amp;quot;;
+	$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.node.osp?id=&amp;apos;+id+&amp;apos;&amp;ty=&amp;apos;+ty,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value+=result +\&amp;quot;&amp;lt;font&amp;gt;&amp;gt;&amp;lt;/font&amp;gt;\&amp;quot;;
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML = document.getElementById(\&amp;quot;inp\&amp;quot;).value;
+	
+		var spl = document.getElementById(\&amp;quot;inp\&amp;quot;).value.split(\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;);
+		
+		document.getElementById(\&amp;quot;hidde\&amp;quot;).innerHTML = spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;;
+
+		document.getElementById(\&amp;quot;inp\&amp;quot;).value = spl[0]+\&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=\&amp;quot;+id+\&amp;quot; /&amp;gt;\&amp;quot;;
+	}
+	});
+	
+	$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.treenode.osp?id=&amp;apos;+id+&amp;apos;&amp;ty=&amp;apos;+ty,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		
+		document.getElementById(\&amp;quot;tree\&amp;quot;).innerHTML =result;
+		
+		
+	}
+	});
+	
+	
+	}
+	//分页
+	function page(id,pagesize,count){
+		
+		$.ajax({
+		url: &amp;apos;http://cdms.xmidware.com/aca/x.L_TreeNode.page.osp?id=&amp;apos;+id+&amp;apos;&amp;pagesize=&amp;apos;+pagesize+&amp;apos;&amp;count=&amp;apos;+count,
+		type: &amp;apos;POST&amp;apos;,
+		error: function(){alert(&amp;apos;Error loading PHP document&amp;apos;);},
+		success: function(result){
+		document.getElementById(\&amp;quot;dru\&amp;quot;).innerHTML=result;
+		
+
+		}
+		});
+	}
+	&amp;lt;/script&amp;gt;&amp;quot;);
+	return sb;
+
+
+}
+
+
+
+//分类
+function node(){
+
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+	if(id==0){
+	html =&amp;quot;&amp;lt;a onclick=\&amp;quot;tree(&amp;quot;+id+&amp;quot;,&amp;quot;+ty+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font &amp;gt;药理分类&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=0 /&amp;gt;&amp;quot;;
+	return html;
+	}
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_PHA where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		
+		html = &amp;quot;&amp;lt;a  onclick=\&amp;quot;tree(&amp;quot;+id+&amp;quot;,&amp;quot;+ty+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font &amp;gt;&amp;quot;+ds.getValueAt(0,1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; value=&amp;quot;+ds.getValueAt(0,0)+&amp;quot;/&amp;gt;&amp;quot;;
+		
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+	
+	}
+
+function treenode(){
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+	
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_PHA where REFID=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		
+		if(ds.getRowCount() == 0){
+			var ty= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;ty&amp;quot;),&amp;quot;&amp;quot;);
+			var sql = &amp;quot;select * from CDMS_DRUNAM where id in(select DISTINCT A.catalog_id from cdms_phatyp A,CDMS_DRUTONOTE B where A.CATALOG_ID=B.CATALOG_ID AND  phacatalog_id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; )&amp;quot;;
+			var ds=db.QuerySQL(sql);
+			if(ty == 0){//药品说明书
+				for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;dru(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,1)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,4)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+				}
+			}else if(ty ==1){//药物专论
+				for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;drugShow(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,1)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,4)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+				}
+			}
+			
+			
+			
+			return html;
+		}
+		
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;table style=\&amp;quot;width:100px;height:100px; float:left;margin:5px; background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td onclick=\&amp;quot;tree(&amp;quot;+ds.getValueAt(i,0)+&amp;quot;,&amp;quot;+ty+&amp;quot;)\&amp;quot;&amp;gt;&amp;lt;font  size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot; style=\&amp;quot;margin-top:20px;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,1)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+			
+		}
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+
+}
+
+function dru(){
+		var html =&amp;quot;&amp;quot;;
+		var db = &amp;quot;&amp;quot;;
+		
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_DRUNOTEREF where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;) &amp;quot;;
+		var ds=db.QuerySQL(sql);
+	
+		//判断是否进行分页
+			if(ds.getRowCount() &amp;gt;15){
+				
+				var pagesize = 0;
+				
+				//总页数
+				var count = ds.getRowCount() % 15==0?ds.getRowCount() / 15:(ds.getRowCount() / 15)+1;
+				
+				//最小数
+				var pagemin = pagesize * 15;
+				//最大数
+				var pagemax = (pagesize+1) * 15;
+				var sql = &amp;quot;select * from (select rownum as r,CDMS_DRUNOTEREF.* from CDMS_DRUNOTEREF  where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;)and rownum&amp;lt;=&amp;quot;+pagemax +&amp;quot;) where r&amp;gt; &amp;quot;+pagemin;	
+			
+				var ds=db.QuerySQL(sql);
+					for(var i =0;i&amp;lt;ds.getRowCount();i++){
+					var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+					var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+					var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+					var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+					var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+					if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  href=\&amp;quot;http://cdms.xmidware.com/aca//ROOT_CDMS/L.sp?id=InstructionBook&amp;doc_id=&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;  \&amp;quot; target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+					}
+					html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;span&amp;gt;总页数&amp;quot;+count+&amp;quot;当前页&amp;quot;+pagesize +&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;select onchange=\&amp;quot;page(&amp;quot;+id+&amp;quot;,this.value-1,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;&amp;quot;;
+					for(var k = 1;k&amp;lt;=count;k++){
+						if(k == pagesize*1+1){
+							html += &amp;quot;&amp;lt;option selected=&amp;apos;selected&amp;apos;&amp;gt;&amp;quot;;
+							html += k;
+							html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+						}else{
+							html += &amp;quot;&amp;lt;option&amp;gt;&amp;quot;;
+							html += k;
+							html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+						}
+		
+					}
+					html += &amp;quot;&amp;lt;/select&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span  onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,0,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;首页&amp;lt;/span&amp;gt;&amp;quot;;
+					if(pagesize ==0){//没有上一页
+					html +=&amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					}
+					var bpage = pagesize * 1 +1;
+					html += &amp;quot;&amp;lt;span &amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+bpage +&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span &amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;span &amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+count+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;尾页&amp;lt;/a&amp;gt;&amp;lt;/span &amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+					return html;
+			}
+			html +=&amp;quot;&amp;lt;div width=\&amp;quot;1000px\&amp;quot;&amp;gt;&amp;quot;;
+			for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+			var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+			var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+			var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+			var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+			if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  href=\&amp;quot;http:cdms.xmidware.com/aca//ROOT_CDMS/L.sp?id=InstructionBook&amp;doc_id=&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;  \&amp;quot; target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			}
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+}
+
+function page(){
+
+		var db=&amp;quot;&amp;quot;;
+		
+		try{
+		//总页数
+		db = new pubpack.EADatabase();
+		var pag = pagesize*1 +1;
+		//最小数
+		var pagemin = pagesize * 15;
+		//最大数
+		var pagemax = pag* 15;
+		var sql = &amp;quot;select * from (select rownum as r,CDMS_DRUNOTEREF.* from CDMS_DRUNOTEREF  where DOC_ID in(select doc_id from CDMS_DRUTONOTE where CATALOG_ID = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;)and rownum&amp;lt;=&amp;quot;+pagemax +&amp;quot;) where r&amp;gt; &amp;quot;+pagemin;	
+		var ds=db.QuerySQL(sql);
+		html =&amp;quot;&amp;quot;;
+	
+
+
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var drug_name = ds.getValueAt(i,&amp;quot;drug_name&amp;quot;);
+			var manufacturer = ds.getValueAt(i,&amp;quot;manufacturer&amp;quot;);
+			var collectdate = ds.getValueAt(i,&amp;quot;collectdate&amp;quot;);
+			var doseform = ds.getValueAt(i,&amp;quot;doseform&amp;quot;);
+			var strength1 = ds.getValueAt(i,&amp;quot;strength1&amp;quot;);
+			if(doseform == &amp;quot;&amp;quot;||doseform ==null)doseform = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(collectdate == &amp;quot;&amp;quot;||collectdate ==null)collectdate = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(drug_name == &amp;quot;&amp;quot;||drug_name ==null)drug_name = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(manufacturer == &amp;quot;&amp;quot;||manufacturer ==null)manufacturer = &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			if(strength1 == &amp;quot;&amp;quot;||strength1 ==null)strength1= &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;a  href=\&amp;quot;http://cdms.xmidware.com/aca//ROOT_CDMS/L.sp?id=InstructionBook&amp;doc_id=&amp;quot;+ds.getValueAt(i,&amp;quot;DOC_ID&amp;quot;)+&amp;quot;  \&amp;quot; target=&amp;apos;_blank&amp;apos;  &amp;gt;&amp;lt;font color:#3366FF&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;商品名称:&amp;lt;/font&amp;gt;&amp;quot;+drug_name+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;生产厂家：&amp;lt;/font&amp;gt;&amp;quot;+manufacturer+&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;收集日期:&amp;lt;/font&amp;gt;&amp;quot;+collectdate +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;剂型:&amp;lt;/font&amp;gt;&amp;quot;+doseform +&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;规格&amp;lt;/font&amp;gt;:&amp;quot;+strength1+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  size=1 style=\&amp;quot;COLOR: #ffd306;border-style:outset;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			}
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;span&amp;gt;总页数&amp;quot;+count+&amp;quot;当前页&amp;quot;+pagesize +&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;select onchange=\&amp;quot;page(&amp;quot;+id+&amp;quot;,this.value-1,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;&amp;quot;;
+			for(var k = 1;k&amp;lt;=count;k++){
+				if(k == pagesize*1+1){
+					html += &amp;quot;&amp;lt;option selected=&amp;apos;selected&amp;apos;&amp;gt;&amp;quot;;
+					html += k;
+					html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+				}else{
+					html += &amp;quot;&amp;lt;option&amp;gt;&amp;quot;;
+					html += k;
+					html += &amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+				}
+	
+			}
+			html += &amp;quot;&amp;lt;/select&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span  onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,0,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;首页&amp;lt;/span&amp;gt;&amp;quot;;
+			var bpage = pagesize *1 +1;
+			var tpage = pagesize *1 -1;
+	
+			if(pagesize ==0){
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}else{
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+tpage+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}
+			var coun = count * 1 -1;
+			if(pagesize == coun){
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}else{
+				html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+bpage+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			}
+			
+			html += &amp;quot;&amp;lt;span&amp;gt;&amp;lt;a onclick=\&amp;quot;page(&amp;quot;+id+&amp;quot;,&amp;quot;+coun+&amp;quot;,&amp;quot;+count+&amp;quot;)\&amp;quot;&amp;gt;尾页&amp;lt;/a&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		
+		
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+		return html;	
+
+}
+
+//药物专论显示
+function drugShow(){
+	var html =&amp;quot;&amp;quot;;
+	var db=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_DRCONTENT  where CATALOG_ID =&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;quot;;
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+ds.getValueAt(i,&amp;quot;dr_title&amp;quot;)+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			var hql = &amp;quot;select bdata from formblob where guid =&amp;apos;&amp;quot;+ds.getValueAt(i,&amp;quot;dr_content&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+			var blo = db.getBlob2String(hql,&amp;quot;bdata&amp;quot;);
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+blo+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;hr  style=\&amp;quot;width:1000px;margin-right:20%\&amp;quot;&amp;gt;&amp;quot;;
+			
+		}
+		html +=&amp;quot;&amp;lt;div&amp;gt;&amp;quot;;
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+
+}
+
+function html(){
+
+	var html =&amp;quot;&amp;quot;;
+	var db = &amp;quot;&amp;quot;;
+		try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select DISTINCT A.* from cdms_phatyp A,CDMS_DRUTONOTE B where A.CATALOG_ID=B.CATALOG_ID AND  phacatalog_id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; &amp;quot;;
+		var ds=db.QuerySQL(sql);
+		for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			var hql = &amp;quot;select * from cdms_drunam where id =&amp;quot;+ds.getValueAt(i,1);
+			var dsa =db.QuerySQL(hql);
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+dsa.getValueAt(0,0)+&amp;quot;&amp;quot;+dsa.getValueAt(0,4)+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		}
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+	
+}
+
+//模糊查询
+function like(){
+	return likename;
+ 	var html =&amp;quot;&amp;quot;;
+	var db=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			//根节点-中药-西药1
+		var sql = &amp;quot;select * from CDMS_DRUNAM where name like &amp;apos;%&amp;quot;+likename+&amp;quot;%&amp;apos;&amp;quot;;
+		var ds=db.QuerySQL(sql);
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;width:1000px;\&amp;quot;&amp;gt;&amp;quot;;
+		for(var i=0;i&amp;lt;ds.getRowCount();i+3){
+			html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span style=\&amp;quot;width:100px;height:100px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span style=\&amp;quot;width:100px;height:100px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i+1,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;span style=\&amp;quot;width:100px;height:100px;background-color:#3399FF;\&amp;quot;&amp;gt;&amp;quot;+ds.getValueAt(i+2,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;	
+			html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		}
+		html +=&amp;quot;&amp;lt;div&amp;gt;&amp;quot;;
+		}catch ( ee ) {
+			db.Rollback();
+			//sb.append(ee.toString());
+			throw new pubpack.EAException ( ee.toString() );
+			return &amp;quot;出现错误&amp;quot;;
+		}
+		finally {
+		
+			if (db!=&amp;quot;&amp;quot;) db.Close();
+		}
+	return html;
+
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

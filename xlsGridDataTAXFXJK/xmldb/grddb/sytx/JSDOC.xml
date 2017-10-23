@@ -1,0 +1,222 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >JSDOC</MWID><NAME >ETL脚本编程文档</NAME><NOTE ></NOTE><FILE >JSDOC.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >saveToFile</ID><NAME >保存</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C7 >saveToFile</C7><C8 ></C8></ROW>
+<ROW num="1" ><ID >exit</ID><NAME >关闭</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C7 ></C7><C8 ></C8></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >funcName</ID><NAME >函数名</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var modified = 0;	//文件是否已修改
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToCodeEditor(&amp;quot;funcEditor&amp;quot;,sheet,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	var sh = _this.AddSheet(&amp;quot;ETL编程说明&amp;quot;);
+	_this.SetToCodeEditor(&amp;quot;note&amp;quot;,sh,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);	
+	_this.ShowTabBar(1);
+	
+	var temp0 = &amp;quot;function &amp;quot; + etlid + &amp;quot;()\r\n{\r\n&amp;quot;
+		+ &amp;quot;\t[cusFunction]&amp;quot;
+		+ &amp;quot;\r\n\r\n}&amp;quot;;
+
+	var temp = &amp;quot;\t//----------------------------ETL编程说明----------------------------//\r\n&amp;quot;
+		+ &amp;quot;\t//函数参数说明：\r\n&amp;quot;
+		+ &amp;quot;\t//elt 封装一个ETL\r\n&amp;quot;
+		+ &amp;quot;\t//db 数据库连接\r\n\r\n&amp;quot;
+		+ &amp;quot;\t//request http请求\r\n\r\n&amp;quot;
+		+ &amp;quot;\t//response http响应\r\n\r\n&amp;quot;
+		+ &amp;quot;\t//etl的相关方法：\r\n&amp;quot;
+		+ &amp;quot;\t//getEtlId();		/*ETL编号*/\r\n&amp;quot;
+		+ &amp;quot;\t//getEtlName();		/*ETL名称*/\r\n&amp;quot;
+		+ &amp;quot;\t//getEtlNote();		/*ETL说明*/\r\n&amp;quot;
+		+ &amp;quot;\t//getCls();		/*ETL分类*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpTyp();		/*下载类型FTP或WEB*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpCon();		/*下载远程连接的站点*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpConFile();	/*下载远程连接的文件*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpDiv();		/*下载文件分隔符*/	\r\n&amp;quot;	
+		+ &amp;quot;\t//getExpFmt();		/*下载格式txt或xml*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpLocal();	/*下载到本地的目录*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpLocalFile();	/*下载到本地的文件名*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpDel();		/*下载后是否删除文件*/\r\n&amp;quot;
+		+ &amp;quot;\t//getTranTab();		/*临时表名*/\r\n&amp;quot;
+		+ &amp;quot;\t//getLoadTab();		/*正式表名*/\r\n&amp;quot;
+		+ &amp;quot;\t//getLoadTabKey();	/*目标库的唯一主键字段列表*/\r\n&amp;quot;
+		+ &amp;quot;\t//getExpFunc();		/*下载后触发函数*/\r\n&amp;quot;
+		+ &amp;quot;\t//getTranFunc();	/*载入临时库后触发函数*/\r\n&amp;quot;
+		+ &amp;quot;\t//getLoadFunc();	/*载入正式库后触发函数*/\r\n&amp;quot;
+		+ &amp;quot;\t//\r\n&amp;quot;
+		+ &amp;quot;\t//getHdrDs();		/*ETL头信息，包括上面的所有信息，返回的类型是EAXmlDS*/\r\n&amp;quot;
+		+ &amp;quot;\t//getDtlDs();		/*ETL明细信息，返回的类型是EAXmlDS*/\r\n&amp;quot;
+		+ &amp;quot;\t//\r\n&amp;quot;
+		+ &amp;quot;\t//获取ETL定义的临时表字段或者是正式库表的字段，有带数据类型的和不带数据类型两种返回方式 \r\n&amp;quot;
+		+ &amp;quot;\t//flag  等于TEMP时返回临时表的字段，等于DEST时返回正式表的字段 \r\n&amp;quot;
+		+ &amp;quot;\t//withTyp 是否带数据类型;带数据类型:id varchar2(10),name varchar2(10)，不带：id,name \r\n&amp;quot;
+		+ &amp;quot;\t//getFields(String flag,boolean withTyp);\r\n\r\n&amp;quot;	;
+	_this.SetText(&amp;quot;note&amp;quot;,temp);
+	_this.SetCellLock(sh,-1,-1,1);
+
+	var str = &amp;quot;&amp;quot;;
+	var str0 = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	
+	var param = new Object();
+	param.osName = etlid;
+	ret = _this.invokeOSFuncExt(&amp;quot;getFuncFileToStr&amp;quot;,param);
+
+	if (ret == &amp;quot;&amp;quot; || ret == null){
+		str0 = &amp;quot;function &amp;quot; + funcName + &amp;quot;(etl,db,request,response)\r\n\t{\r\n\r\n\r\n\t}&amp;quot;;
+		str = temp0.replace(&amp;quot;[cusFunction]&amp;quot;,str0);
+		_this.SetText(&amp;quot;funcEditor&amp;quot;,str);
+	}else{
+		_this.SetText(&amp;quot;funcEditor&amp;quot;,ret);
+	}
+
+
+}
+
+
+
+//保存文件
+function saveToFile()
+{
+	//alert(_this.GetCellText(0,-1,-1));
+	var parm = new Object();
+	parm.osName = etlid;
+	parm.sytid = G_SYTID;
+	parm.str = _this.GetCellText(0,-1,-1);
+
+	var retmsg = &amp;quot;&amp;quot;;
+	try{
+		retmsg = _this.invokeOSFuncExt(&amp;quot;saveFuncToFile&amp;quot;,parm);
+	}
+	catch(e){
+		alert(e);
+	}
+	modified = 0;
+//	if (retmsg == undefined)
+//		alert(&amp;quot;OS有错误，请检查！&amp;quot;);
+//	else
+		alert(retmsg);
+
+
+	
+}
+
+//关闭退出窗口
+function exit()
+{
+	//window.returnValue = getFuncName();
+	if (modified == 1){
+		if (confirm(&amp;quot;文件已修改，是否保存？&amp;quot;))
+			saveToFile();
+	}
+	else 
+ 		close();   
+}
+
+//获取函数名
+function getFuncName()
+{
+	var func = &amp;quot;&amp;quot;;
+	var str = _this.GetCellText(0,-1,-1);
+	var pos0 = str.indexOf(&amp;quot;function&amp;quot;);
+	var pos1 = str.indexOf(&amp;quot;function&amp;quot;,pos0+1);
+	var pos2 = str.indexOf(&amp;quot;(etl,db)&amp;quot;);
+	func = str.substring(pos1+8,pos2);
+  
+  	return func;
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	modified = 1;
+//	window.returnValue = getFuncName();
+  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var iopack = new JavaPackage(&amp;quot;java.io.File&amp;quot;);
+var ospack = new JavaPackage(&amp;quot;oscript.*&amp;quot;);
+var osdatapack = new JavaPackage(&amp;quot;oscript.data.*&amp;quot;);
+
+var basePath = pub.EAOption.dynaDataRoot;
+
+//保存OS脚本到文件
+function saveFuncToFile()
+{
+	var path = &amp;quot;/&amp;quot; + basePath  + &amp;quot;xmldb/grddb/syt&amp;quot; + sytid + &amp;quot;/ETLOS/&amp;quot;;
+	var file =  basePath  + &amp;quot;xmldb/grddb/syt&amp;quot; + sytid + &amp;quot;/ETLOS/&amp;quot; + osName + &amp;quot;.os&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+
+//	var f = new java.io.File(file);
+//	if (f.exists() &amp;&amp; osName == &amp;quot;yourFuncName&amp;quot;)
+//		return &amp;quot;该函数已存在，请使用其他名字！&amp;quot;;
+	try{
+//		ret = checkOs(path,str);
+		pubpack.EAFunc.WriteToFile(file,str);		
+//		pubpack.EAScript.LoadSystemWideScript(file);
+	}catch(Exception e)
+	{
+		throw new pubpack.Exception(&amp;quot;保存出错：&amp;quot;+e.toString());
+	}
+//	if (ret != &amp;quot;&amp;quot;)
+//		return ret;
+//	else
+//		return &amp;quot;成功保存文件到 &amp;quot; + file;
+	return &amp;quot;OS保存成功！&amp;quot; + file;
+}
+
+//保存前检查OS语法正确性
+function checkOs(path,scriptStrings)
+{
+	var msg = &amp;quot;&amp;quot;;
+	try
+      	{
+		var eaDatabase = new pubpack.EADatabase();
+		var eaScript = new pubpack.EAScript(eaDatabase );
+//		pubpack.EAScript.AddScriptRootPath(path);
+		msg = (eaScript.LoadLocalScript(scriptStrings)).toString();
+	}
+	catch(Exception e )
+      	{
+	        msg += &amp;quot; [ OS脚本有错误 ]&amp;quot; + e.toString()+path+scriptStrings;
+      	}
+      	return msg;
+}
+
+function getFuncFileToStr()
+{
+	var file =  basePath  + &amp;quot;xmldb/grddb/syt&amp;quot; + sytid + &amp;quot;/ETLOS/&amp;quot; + osName + &amp;quot;.os&amp;quot;;
+	var str = &amp;quot;&amp;quot;;
+	try{
+		str = pubpack.EAFunc.readFile(file);
+		return str;
+	}
+	catch(e){
+		return &amp;quot;&amp;quot;;
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1" background="xlsgrid/images/xmidwarebk.jpg">
+ <rect id="roundrect_231216" x="327" y="21" width="280" height="45" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >疑似漏管处理流程
+newtyp=1</rect>
+ <rect id="rect_231222" x="84" y="201" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1"  属性="">11.发限改通知补办税证</rect>
+ <rect  id="rect_231223" x="84" y="271" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">12.纳税人电表维护</rect>
+ <rect  id="rect_231224" x="84" y="341" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">13.电力税负异常检查</rect>
+ <connector id="connector_208_231225" from="card_231217" to="rect_231222" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231226" from="rect_231222" to="rect_231223" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231227" from="rect_231223" to="rect_231224" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <polygon id="rhombus_231228" points="87,439 122,462 158,439 122,417 87,439" changeto="rhombus" stroke="#000000" fill="#CCFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >是否异常</polygon>
+ <rect id="roundrect_231230" x="87" y="492" width="70" height="35" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >9.任务完成</rect>
+ <connector id="connector_208_231231" from="rect_231224" to="rhombus_231228" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231232" from="rhombus_231228" to="roundrect_231230" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231234" from="rhombus_231228" to="rect_231233" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect  id="rect_231235" x="264" y="201" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">11.发限改通知补办税证</rect>
+ <rect  id="rect_231236" x="264" y="271" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">12.纳税人电表维护</rect>
+ <rect  id="rect_231237" x="264" y="341" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">13.电力税负异常检查</rect>
+ <polygon  id="polygon_231238" points="267,439 302,462 338,439 302,417 267,439 267,439" changeto="rhombus" stroke="#000000" fill="#CCFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">是否异常</polygon>
+ <rect  id="rect_231239" x="267" y="492" width="70" height="35" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">9.任务完成</rect>
+ <connector id="connector_208_231240" from="polygon_231218" to="rect_231235" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231241" from="rect_231235" to="rect_231236" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231242" from="rect_231236" to="rect_231237" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231243" from="rect_231237" to="polygon_231238" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231244" from="polygon_231238" to="rect_231239" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231245" from="polygon_231238" to="rect_231233" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <rect  id="rect_231246" x="424" y="201" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">12.纳税人电表维护</rect>
+ <rect  id="rect_231247" x="424" y="271" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">13.电力税负异常检查</rect>
+ <polygon  id="polygon_231248" points="427,369 462,392 498,369 462,347 427,369 427,369 427,369" changeto="rhombus" stroke="#000000" fill="#CCFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">是否异常</polygon>
+ <rect  id="rect_231249" x="427" y="422" width="70" height="35" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">9.任务完成</rect>
+ <connector id="connector_208_231251" from="polygon_231219" to="rect_231246" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231252" from="rect_231246" to="rect_231247" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231253" from="rect_231247" to="polygon_231248" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231254" from="polygon_231248" to="rect_231249" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231255" from="polygon_231248" to="rect_231250" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect  id="rect_231256" x="611" y="201" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">14.文字描述说明</rect>
+ <rect  id="rect_231257" x="611" y="271" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">15.电表号标识为“非国税管户”</rect>
+ <rect  id="rect_231258" x="614" y="353" width="70" height="35" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">9.任务完成</rect>
+ <connector id="connector_208_231259" from="polygon_231220" to="rect_231256" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231260" from="rect_231256" to="rect_231257" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231261" from="rect_231257" to="rect_231258" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <rect  id="rect_231262" x="764" y="201" width="77" height="48" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">14.文字描述说明</rect>
+ <rect  id="rect_231263" x="767" y="274" width="70" height="35" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">9.任务完成</rect>
+ <connector id="connector_208_231264" from="polygon_231221" to="rect_231262" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_231265" from="rect_231262" to="rect_231263" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_108_231266" from="roundrect_231216" to="card_231217" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_231267" from="roundrect_231216" to="polygon_231218" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_231268" from="roundrect_231216" to="polygon_231219" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_231269" from="roundrect_231216" to="polygon_231220" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_231270" from="roundrect_231216" to="polygon_231221" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <rect id="F1:TAXMON:TK:核实任务"  round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F"  fill="#EEEEEE"   fillto="#FFFFFF" x="62" y="109" width="120"  height="60" selectflag="mouseclick"  menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]"  属性="">有执照未办证
+newsubtyp=1</rect>
+ <rect  id="rect_494509" round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F" fill="#EEEEEE" fillto="#FFFFFF" x="242" y="109" width="120" height="60" selectflag="mouseclick" menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]" 属性="">无执照未办证
+newsubtyp=2</rect>
+ <rect  id="rect_494510" round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F" fill="#EEEEEE" fillto="#FFFFFF" x="402" y="109" width="120" height="60" selectflag="mouseclick" menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]" 属性="">电表信息不全
+newsubtyp=3</rect>
+ <rect  id="rect_494511" round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F" fill="#EEEEEE" fillto="#FFFFFF" x="589" y="109" width="120" height="60" selectflag="mouseclick" menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]" 属性="">非国税管户
+newsubtyp=4</rect>
+ <rect  id="rect_494512" round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F" fill="#EEEEEE" fillto="#FFFFFF" x="742" y="109" width="120" height="60" selectflag="mouseclick" menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]" 属性="">其他
+newsubtyp=9</rect>
+ <connector id="connector_108_494513" from="roundrect_231216" to="F1:TAXMON:TK:核实任务" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_494514" from="roundrect_231216" to="rect_494509" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_494515" from="roundrect_231216" to="rect_494510" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_494516" from="roundrect_231216" to="rect_494511" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_494517" from="roundrect_231216" to="rect_494512" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_208_494518" from="F1:TAXMON:TK:核实任务" to="rect_231222" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_494519" from="rect_494509" to="rect_231235" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_494520" from="rect_494510" to="rect_231246" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_494521" from="rect_494511" to="rect_231256" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_494522" from="rect_494512" to="rect_231262" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <polygon id="flow_trknewtyp2" selsytid="TAXMON"  points="241,452 235,452 235,456 241,452 241,422 182,422 182,456 235,456 241,452 241,452" flowid="trknewtyp2" flowname="trknewtyp2.dbflow的名称" changeto="page" stroke="#000000" fill="#FFFFCC"  xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:TAXMON:trknewtyp2[%quot]/[%right]" >自查补报流程</polygon>
+ <polygon  id="polygon_494524" selsytid="TAXMON" points="576,382 570,382 570,386 576,382 576,352 517,352 517,386 570,386 576,382 576,382 576,382" flowid="trknewtyp2" flowname="trknewtyp2.dbflow的名称" changeto="page" stroke="#000000" fill="#FFFFCC" xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:TAXMON:trknewtyp2[%quot]/[%right]">自查补报流程</polygon>
+ <connector id="connector_208_494525" from="rhombus_231228" to="flow_trknewtyp2" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_494526" from="polygon_231238" to="flow_trknewtyp2" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_208_494527" from="polygon_231248" to="polygon_494524" fromcp="32" tocp="12" type="208"  >
+ </connector>
+</svg>

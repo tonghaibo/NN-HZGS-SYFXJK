@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="1131采购预付款凭证科目转预付款往来单" ID="PZ2FW">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESC name="数据流描述"></DESC>
+				<SrcHdrFlds name="源单据头的转换">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,SUMMNY,CRTUSR,CRTUSRNAM</SrcHdrFlds>
+				<DestHdrFlds name="目标单据的对应转换字段">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</DestHdrFlds>
+				<DESTCLS name="待生成的目标单据">FW</DESTCLS>
+				<ValFld name="目标单据的字段">REFNAM1</ValFld>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生" comment="可用对象:eaContext,usrinf,srcdtl(源单据明细),bilhdr(目标单据的单据头),bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)"></OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生">//
+  //可用对象:eaContext,usrinf,bilhdr(目标单据的单据头),bildtl(目标单据的明细)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+   var srcid = flwstads.getStringAt(0,"SRCBIL");
+  bilhdr.setValueAt(0,"REFID1",srcid);
+  //如果eaContext有定义 kemuid,kemuname,kemumemo(从数据流执行的request传递过来),则自动增加一个明细
+  var kemu = eaContext.getAttribute("kemuid");
+  if(kemu != null)
+  {
+    bilhdr.setValueAt(0,"DAT",eaContext.getAttribute("bildat"));
+    var r=bildtl.AddNullRow(-1);
+    bildtl.setValueAt(r,"ITMID",kemu);
+    bildtl.setValueAt(r,"ITMNAM",eaContext.getAttribute("kemuname"));
+    bildtl.setValueAt(r,"TAXMNY",bilhdr.getStringAt(0,"REFNAM1"));
+    bildtl.setValueAt(r,"REFID2",""+eaContext.getAttribute("kemujsh"));
+    bilhdr.setValueAt(0,"NOTE",eaContext.getAttribute("kemumemo"));
+
+  }  
+  //end of func</OnConvert>
+				<OnDelete name="删除目标单据时发生" comment="可用对象:eaContext,_EADB"></OnDelete>
+				<MappedMode name="单据映射关系。0:(默认)多对一映射；1:一对一映射">1</MappedMode>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总"></Filter>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+</ROW>
+</ROWSET>
+</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">PZ</SRCCLS>
+				<ConvertMod name="单据转换模式:0=(默认)明细转换;1=整单转换;2=仅转换单据头">1</ConvertMod>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">TAXMNY</ValFld>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。"  >//
+  //可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)
+  //如果把bilhdr的BILID或bildtl的ITMID清空，则跳过该单据或明细
+  var db=eaContext.getEADatabase();
+  var flwid=bilhdr.getStringAt(0,"DATFLW");
+  var sql = "select FLW from datflw where id=&amp;apos;"+flwid+"&amp;apos;";
+  var ds=db.GetXMLSQL(sql);
+  var pub = new JavaPackage( "com.xlsgrid.net.pub" );
+  if(ds.getRowCount()&amp;gt;0)
+  {
+      var oldflw = ds.getStringAt(0,0);
+      var acc = bilhdr.getStringAt(0,"ACC");      
+      
+      if(oldflw=="PY2PZ")//由采购预付款单生成的凭证才允许生成 预付款往来单FW
+      {
+        var c = bildtl.getRowCount();
+        if( acc.substring(0,2)=="01" ) {// 如果是01开头的，是总部的系统
+              // 先扫描，看看有没有1131的科目
+              var flag = 0;
+              for(var i=0;i&amp;lt;c;i++)
+              {
+                    var 科目=bildtl.getStringAt(i,"ITMID").substring(0,4);
+                    if(科目=="1131") {
+                          flag=1;
+                                  
+                    }
+                    bildtl.setValueAt(i,"ITMID",""); //过滤数据流
+
+              }
+              if (flag == 1 ) {
+                    // 插入数据到总部系统的ＷＬ单
+                    var dfxdorgid=acc.substring(2,3) ;
+                    sql = "select chr(ascii(&amp;apos;A&amp;apos;)+"+dfxdorgid+"-1)||(10000+to_char( dfxd.WL" +dfxdorgid+"SEQ.nextval)) from dual"; // 得到如C10211的单号
+                    //throw new pub.EAException ( sql );
+                    var dfxdbilid = db.GetSQL(sql);
+                    var sql1 = "insert into dfxd.bilhdr(orgid,id,dat,biltyp,type,stat,refid,refnam,crtusr,crtusrnam,sumqty,summny,note) "+
+                         "select &amp;apos;"+dfxdorgid+"&amp;apos;,&amp;apos;"+dfxdbilid +"&amp;apos;,DAT,&amp;apos;WL&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;0&amp;apos;,SUBSTR( REFNAM2,3),&amp;apos;&amp;apos; refnam, crtusr, crtusrnam,0 sumqty,0 summny,&amp;apos;从采购预付凭证"+bilhdr.getStringAt(0,"BILID")+"生成&amp;apos; note from bilhdr where acc=&amp;apos;"+bilhdr.getStringAt(0,"ACC")+"&amp;apos; and bilid=&amp;apos;"+bilhdr.getStringAt(0,"BILID")+"&amp;apos; and biltyp=&amp;apos;"+bilhdr.getStringAt(0,"BILTYP")+"&amp;apos; ";
+                    db.ExcecutSQL( sql1 );
+                    var sql2 = " insert into dfxd.bildtl ( orgid,id,biltyp,seqid,itemid,itemnam,qty,qty1,qty2,qty3,unit,unit0,tonnum) "+
+      	      	      	 " select &amp;apos;"+dfxdorgid+"&amp;apos;,&amp;apos;"+dfxdbilid +"&amp;apos;, &amp;apos;WL&amp;apos;, seqid, itmid, itmnam,taxmny-mny qty,taxmny qty1,mny qty2,taxmny-mny qty, &amp;apos;□&amp;apos;,&amp;apos;■&amp;apos;,1 from bildtl where acc=&amp;apos;"+bilhdr.getStringAt(0,"ACC")+"&amp;apos; and bilid=&amp;apos;"+bilhdr.getStringAt(0,"BILID")+"&amp;apos; and biltyp=&amp;apos;"+bilhdr.getStringAt(0,"BILTYP")+"&amp;apos; ";     
+                    db.ExcecutSQL( sql2 );    
+                    var sql3 = " update dfxd.bilhdr set summny=(select sum(qty1) from dfxd.bildtl where biltyp=&amp;apos;WL&amp;apos; and orgid=&amp;apos;"+dfxdorgid+"&amp;apos; and id=&amp;apos;"+dfxdbilid +"&amp;apos; ) where biltyp=&amp;apos;WL&amp;apos; and orgid=&amp;apos;"+dfxdorgid+"&amp;apos; and id=&amp;apos;"+dfxdbilid +"&amp;apos; " ;
+                    var sql4 = " update dfxd.bilhdr a set refnam=(select name from dfxd.corp where id=a.refid ) where biltyp=&amp;apos;WL&amp;apos; and orgid=&amp;apos;"+dfxdorgid+"&amp;apos; and id=&amp;apos;"+dfxdbilid +"&amp;apos; " ;
+                    db.ExcecutSQL( sql3 );
+                    db.ExcecutSQL( sql4 );
+                    
+                            	      	      	 
+                    
+              }
+        }
+        else {
+              for(var i=0;i&amp;lt;c;i++)
+              {
+                //凭证中的1131科目才允许生成结算单。
+                //相应的金额必须填写在 借方-TAXMNY
+                var 科目=bildtl.getStringAt(i,"ITMID").substring(0,4);
+                if(科目!="1131")
+                  bildtl.setValueAt(i,"ITMID",""); //不是1131科目，则过滤掉
+              }
+         }
+      }
+  }
+  return "";
+  //end of func</OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生">//
+  //可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);
+  //返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息
+  //如果把ds的BILID或ITMID清空，则跳过该单据或明细
+  if(sta==1)
+  {
+    return "科目："+ds.getStringAt(row,"ITMID")+" "+ds.getStringAt(row,"ITMNAM")+" 发生额："+ds.getStringAt(row,"TAXMNY");
+  }
+  else
+  {
+    return " 备注："+ds.getStringAt(0,"NOTE");
+  }
+  //end of func</OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生" comment="可用对象:eaContext,_EADB"></OnUnCkeck>
+</ROW>
+</ROWSET>
+</srcBil>
+</dataFlow>

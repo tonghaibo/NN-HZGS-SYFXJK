@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >EAImgBlob</MWID><NAME >图库处理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >EAImgBlob.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+//EAImgBlob.sp?guid= 
+function Response() {
+		var  db = null;
+		var  ret = &amp;quot;&amp;quot;;
+		var guid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;guid&amp;quot;),&amp;quot;&amp;quot;);//layimghdr 的guid
+		try {
+			db = new pubpack.EADatabase();
+				var  skinguid = guid;
+				//2014 modify by scott add skinguid support
+				// find if skin session exist
+				var  userskin = &amp;quot;&amp;quot;;
+				// 可以在服务端os中request.getSession().setAttribute(&amp;quot;USERSKIN&amp;quot;, &amp;quot;blue&amp;quot;)
+				if(request.getSession().getAttribute(&amp;quot;USERSKIN&amp;quot;)!=null)
+					userskin =&amp;quot;&amp;quot;+request.getSession().getAttribute(&amp;quot;USERSKIN&amp;quot;);
+
+					try {
+						var  imgurl = &amp;quot;&amp;quot;;
+						var hdrds = db.QuerySQL(&amp;quot;select defimg from layimghdr where guid=&amp;apos;&amp;quot;+skinguid+&amp;quot;&amp;apos;&amp;quot;);
+						if(hdrds.getRowCount()&amp;gt;0){
+							//find if dtl has data
+							var dtlds = db.QuerySQL(&amp;quot;select imgurl from layimgdtl where formguid=&amp;apos;&amp;quot;+skinguid+&amp;quot;&amp;apos; and skinguid=&amp;apos;&amp;quot;+userskin+&amp;quot;&amp;apos;&amp;quot;);
+							if(dtlds.getRowCount()&amp;gt;0){
+								imgurl = dtlds.getStringAt(0,&amp;quot;imgurl&amp;quot;);
+							}
+							else {
+								imgurl = hdrds.getStringAt(0,&amp;quot;defimg&amp;quot;);
+							}
+						}
+						if(imgurl.length()&amp;gt;0&amp;&amp;imgurl.startsWith(&amp;quot;EAFormBlob.sp?guid=&amp;quot;)){
+							guid = imgurl.substring(&amp;quot;EAFormBlob.sp?guid=&amp;quot;.length(), &amp;quot;EAFormBlob.sp?guid=&amp;quot;.length()+32);
+						}
+					} catch (Exception e2) {
+						e2.printStackTrace();
+					}
+				var blobds = db.QuerySQL(&amp;quot;select fileurl,filename,sytid,grdid from FORMBLOB where guid=&amp;apos;&amp;quot; + guid + &amp;quot;&amp;apos;&amp;quot;);
+
+				if (blobds.getRowCount() == 0) {
+					return &amp;quot;guid=&amp;quot; + guid + &amp;quot;附件没有找到&amp;quot;;
+				}
+				
+				var fileurl = blobds.getStringAt(0, &amp;quot;FILEURL&amp;quot;);
+				var fileurl1 = pubpack.EAFunc.Replace(fileurl, &amp;quot;\\&amp;quot;, &amp;quot;@@@&amp;quot;);
+				var filenames = pubpack.EAFunc.SplitString(fileurl1, &amp;quot;@@@&amp;quot;);
+
+				if (filenames.length == 0) {
+					filenames = fileurl.split(&amp;quot;/&amp;quot;);
+				}
+				var filename = filenames[filenames.length() - 1];
+				 //new String(filename.getBytes(&amp;quot;GBK&amp;quot;),&amp;quot;ISO8859-1&amp;quot;);
+				// new String(filename.getBytes(&amp;quot;GBK&amp;quot;),&amp;quot;ISO8859-1&amp;quot;)
+				response.setHeader(&amp;quot;Content-Disposition&amp;quot;,&amp;quot;attachment;filename=&amp;quot; +filename );
+				
+				response.setHeader(&amp;quot;File&amp;quot;, filename );
+
+				var b = db.getBlob2Byte(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot; + guid + &amp;quot;&amp;apos; for update&amp;quot;, &amp;quot;bdata&amp;quot;);
+				response.getOutputStream().write(b);
+				// 需要解压缩?
+				// EAZip.deCompressFileToStream(filename,response.getOutputStream());
+
+		} catch (Exception e) {
+			ret += e.toString();
+			if (db != null) db.Rollback();
+			System.out.println(&amp;quot;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt;&amp;gt; EAFormBlob.sp Exception:&amp;quot; + ret);
+
+		} finally {
+			if (db != null) db.Close();
+		}
+		return ret;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

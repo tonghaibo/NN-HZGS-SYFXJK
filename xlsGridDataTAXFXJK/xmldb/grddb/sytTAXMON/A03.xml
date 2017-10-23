@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >A03</MWID><NAME >税收年度环比</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >A03.zxg</FILE><SCENE ></SCENE><FIXED >4,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYYY</ID><NAME >查询年度</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YYYY</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YYYY</C13><C14 >YYYY</C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >UNIT</ID><NAME >金额单位</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_MONEYUNIT</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >10000</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >UNIT</C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >TAXTYP</ID><NAME >税种</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_TAXTYP</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >TAXTYP</C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >2</NROW><NCOL >3</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,2</C20></ROW>
+<ROW num="1" ><ID >0,2,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%UNIT]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP >COMBOBOX</CTLTYP><DYNCTL ></DYNCTL><LISTID >V_TAX_MONEYUNIT</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(sheet,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot;);
+	cal();
+	showChar(1);
+}
+
+function init(sheet)
+{
+	for (var i=2;i&amp;lt;2+12;i++) {
+		var mnystr = _this.GetCellText(sheet,4,i);
+		if (mnystr != &amp;quot;&amp;quot;) {
+			var m = mnystr.split(&amp;quot;_&amp;quot;);
+			_this.SetCellText(sheet,4,i,m[0]);
+			_this.SetCellText(sheet,5,i,m[1]);
+		}
+	}
+	_this.RefreshFormula();
+}
+
+function showChar(sheet) 
+{
+	var xml = getxml();
+	var title = YYYY + &amp;quot;税收年度环比&amp;quot;;
+	var xtitle = &amp;quot;月份&amp;quot;;
+	var ytitle = &amp;quot;金额&amp;quot;;
+	var chart = new SVGChart(&amp;quot;CHART1&amp;quot;,sheet,-1,-1,1,title,xtitle,ytitle,1000,300,xml );
+	chart.m_bShowSeralName = 1;
+
+	chart.load();
+}
+
+function getxml()
+{
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	for (var r=4;r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		xml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(r-3)+&amp;quot;\&amp;quot; name=\&amp;quot;&amp;quot;+_this.GetCellText(0,r,1)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;本月缴纳税额&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/本月缴纳税额&amp;gt;\n&amp;quot;;
+		//xml += &amp;quot;&amp;lt;环比增长&amp;gt;&amp;quot;+(1*_this.GetCellText(0,r,3))*_this.GetCellText(0,r-1,2)+&amp;quot;&amp;lt;/环比增长&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;环比增长&amp;gt;&amp;quot;+_this.GetCellText(0,r,4)+&amp;quot;&amp;lt;/环比增长&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+	}
+	xml += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xml;
+
+}
+
+
+//计算增长率
+function cal()
+{
+	var old = 0.0;
+	for(var i = 4;i&amp;lt; _this.GetRowCount(0)-1;i++){
+		var cur = 1.0*_this.GetCellText(0,i,2);
+		//if ( _this.GetCellText(0,i,2)==&amp;quot;&amp;quot;||_this.GetCellText(0,i,2)==&amp;quot;0&amp;quot; ) break;
+		if ( old!=0 ) {
+			var val = (cur-old)/old;
+			_this.SetCellText(0,i,3,convertRound(val,2) );
+			_this.SetCellText(0,i,4,convertRound(cur-old,2) );
+		}
+		old= cur;
+	}
+}
+
+function convertRound(ADoubleInput,ADotNumber){
+    var tmpValue1=1;
+    var tmpValue2=1;
+    if (ADotNumber&amp;lt;0) return ADoubleInput;
+    if (0==ADoubleInput) return Math.round(ADoubleInput);
+    for (i=0;i&amp;lt;ADotNumber;i++){
+      tmpValue1=tmpValue1*10;
+    }
+    tmpValue2=ADoubleInput*tmpValue1;
+    return Math.round(tmpValue2)/tmpValue1;
+  }
+
+//test
+// ***************************************************************************
+// SVGChart(objid,sheet,row,col,type,title,xtitle,ytitle,width,height,xml)
+// objid: SetToSvgform 的Object ID编号
+// sheet,row,col, 图表所在的表格位置
+// type: =0 线图 =1 直方图 =2 立方图　=3 饼图
+// title: 标题 xtitle x轴名称 ytitle y轴名称
+// width,height: 要求固定的高度和宽度，如果是自动适应窗口的大小，设置为-1，-1
+// xml: xmlds描述的数据字符串
+// ***************************************************************************
+function SVGChart(objid,sheet,row,col,type,title,xtitle,ytitle,width,height,xml)
+{
+	this.m_objid = objid;
+	this.m_sheet = sheet;
+	this.m_row = row;
+	this.m_col = col;
+	this.m_width  = width;
+	this.m_height = height;  
+	this.m_title = title;
+	this.xml = xml;
+	this.m_xtitle=xtitle;
+	this.m_ytitle=ytitle;
+	this.m_type = type;
+	
+	// 系列的颜色列表如果超过循环
+	this.m_color = new Array(&amp;quot;#00cc99&amp;quot;,&amp;quot;#C2CC0D&amp;quot;,&amp;quot;#71CC16&amp;quot;,&amp;quot;#FFCCFF&amp;quot;,&amp;quot;#CC68CC&amp;quot;,&amp;quot;#66FFCC&amp;quot;,&amp;quot;#DD0000&amp;quot;,&amp;quot;#FF9966&amp;quot;,&amp;quot;#C2A00D&amp;quot;,&amp;quot;#71A216&amp;quot;,&amp;quot;#66FFCC&amp;quot;);	
+	this.m_color1 = new Array(&amp;quot;#0D767E&amp;quot;,&amp;quot;#999966&amp;quot;,&amp;quot;#006600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#CC6744&amp;quot;,&amp;quot;#669999&amp;quot;,&amp;quot;#880000&amp;quot;,&amp;quot;#FF6600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#666633&amp;quot;,&amp;quot;#66FF99&amp;quot;);	
+	this.m_bacolor = &amp;quot;#F0F0F7&amp;quot;;	// 背景颜色
+	this.m_fkcolor = &amp;quot;#DDE6EF&amp;quot;;	// 前景颜色
+	this.m_titlefontname = lang_svgchart.fontsong;  //&amp;quot;宋体&amp;quot;;	// 标题字体
+	this.m_titlefontsize = 14;	// 标题字体大小	
+	this.m_xtitlefontname = &amp;quot;Arial&amp;quot;;	// X标题字体
+	this.m_xtitlefontsize = 12;	// X标题字体大小	
+	this.m_ytitlefontname = &amp;quot;Arial&amp;quot;;	// Y标题字体
+	this.m_ytitlefontsize = 12;	// Y标题字体大小	
+	this.m_xscalefontname = &amp;quot;Arial&amp;quot;;	// X刻度字体
+	this.m_xscalefontsize = 12;	// X刻度字体大小	
+	this.m_yscalefontname = &amp;quot;Arial&amp;quot;;	// Y刻度字体
+	this.m_yscalefontsize = 9;	// Y刻度字体大小	
+	this.m_main_x = 100;		// 主图的左边位置
+	this.m_main_y = 100;		// 主图的左边位置
+	this.m_ysacle = 10;		// y轴保留的刻度个数
+	this.m_titlex = 5;		// 标题的Y位置
+	this.m_ymulti = 1;		// 坐标轴的被除数，比如要显示　万元那么设为１００００
+	this.m_xsubstrleft = 0;		// X坐标轴的从左开始截取多少个字符，一般用于仅显示部分字符
+	this.m_xsubstrright = 0;		// X坐标轴的从右开始截取多少个字符，比如为2，那么2007-01-03则显示03
+	this.PieSelectCol = -1;		// 饼图的当前选择列，一个饼图之显示一个列
+	this.m_bShowLinePoint = 0 ;		// 在线图是否显示点
+	this.m_bShowSeralName = 0 ;		// 是否在右边显示系列名称
+	this.m_bSeralNamePercent = 0.2 ;	// 系列名称占宽度的百分比,如果系列名称比较长，建议调大
+	this.m_maxhscalenum = 40 ;       // 横坐标最大刻度个数，一般用于当横坐标很多时候,如横坐标共150,m_maxhscalenum=30,那么每隔5个显示一个横坐标
+  
+	_this.XMLDS_Reset();
+	_this.XMLDS_Parse(this.xml);
+	
+	this.load = svgchart_load;			// 重新载入
+	this.hidecol = svgchart_hidcol;			// 在载入的DS中不显示某一列，一般用于表格的某一列数据不进入某个系列
+}
+
+function svgchart_hidcol(col) 
+{
+	_this.XMLDS_DeleteColumn(col);
+}
+
+// ***************************************************************************
+// 解析重新生成svgchar
+// ***************************************************************************
+function svgchart_load()
+{
+	if ( _this.GetReleaseNo()&amp;lt;&amp;quot;4.42&amp;quot;) {
+		//alert ( &amp;quot;要正确显示图表，要求您的控件在4.42以上，请升级您的硕格控件&amp;quot; );
+    alert(lang_svgchart.ctlversion);
+		return;
+	}
+	var width = this.m_width;
+	var height = this.m_height;
+	_this.SetToSVGForm(this.m_objid ,this.m_sheet,this.m_row,this.m_col,&amp;quot;&amp;quot;);
+	if ( width == -1 ) width  = _this.GetObjectWidth(this.m_objid);
+	if ( height == -1 ) height = _this.GetObjectHeight(this.m_objid);  
+	var x1 = this.m_main_x;
+	if ( x1 &amp;gt; width /10 ) x1 = width/10;
+	var y1 = this.m_main_y ;
+	if ( y1 &amp;gt; height /10 ) y1 = height/10;
+	var x2 = 1*(width-x1-this.m_bShowSeralName*width *this.m_bSeralNamePercent);// 
+	
+	var y2 = 1*(height-2*y1);
+	// 根据xmlds得到一个svg图的xml字符串
+	var svg= &amp;quot;&amp;quot;;
+	svg = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt;&amp;lt;svg  &amp;gt; &amp;quot;;//bgcolor=\&amp;quot;#D3E5FA\&amp;quot; 
+
+	// 背景
+//	svg+= &amp;quot;&amp;lt;path fill=\&amp;quot;&amp;quot;+this.m_fkcolor+&amp;quot;\&amp;quot; opacity=\&amp;quot;0.1\&amp;quot; d=\&amp;quot;M148.9,261l305.6-58.5l152.8,117l-305.6,58.5L148.9,261z\&amp;quot;/&amp;gt;&amp;quot;;
+//	svg+= &amp;quot;&amp;lt;path fill=\&amp;quot;&amp;quot;+this.m_fkcolor+&amp;quot;\&amp;quot; opacity=\&amp;quot;0.1\&amp;quot; style=\&amp;quot;&amp;st72;\&amp;quot; d=\&amp;quot;M148.9,110v151l305.6-58.5v-151L148.9,110z\&amp;quot;/&amp;gt;&amp;quot;;
+//	svg+= &amp;quot;&amp;lt;path fill=\&amp;quot;&amp;quot;+this.m_fkcolor+&amp;quot;\&amp;quot; opacity=\&amp;quot;0.1\&amp;quot; style=\&amp;quot;&amp;st54;\&amp;quot; d=\&amp;quot;M481.9,72.5l-27.5-21v151l152.8,117v-151l-125.4-96z\&amp;quot;/&amp;gt;&amp;quot;;
+	
+	var rowcount = _this.XMLDS_GetRowCount();
+	var colcount = _this.XMLDS_GetColumnCount();
+	var max = 0 ;// 最大的真实值
+	var min = 0 ;// 最小的真实值
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		for ( var j=0;j&amp;lt;_this.XMLDS_GetColumnCount();j++ ) {
+			var val = _this.XMLDS_GetStringAt(i,j);
+			if ( 1.0*val&amp;gt;max ) max = 1.0*val;
+			if ( 1.0*val&amp;lt;min ) min = 1.0*val;
+		}	
+	}
+	max = max*1.1;
+
+	if( this.m_type==&amp;quot;0&amp;quot;||this.m_type==&amp;quot;1&amp;quot;||this.m_type==&amp;quot;2&amp;quot; ){ // 坐标类
+		svg+= &amp;quot;&amp;lt;rect x=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot;  y=\&amp;quot;&amp;quot;+y1+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+(x2-x1)+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+(y2-y1)+&amp;quot;\&amp;quot; fill=\&amp;quot;&amp;quot;+this.m_bacolor+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;; //fill=\&amp;quot;&amp;quot;+this.m_bacolor+&amp;quot;\&amp;quot;  opacity=\&amp;quot;0.1\&amp;quot; 
+		// X 轴线	
+		svg+= &amp;quot;&amp;lt;line x1=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; y1=\&amp;quot;&amp;quot;+y2+&amp;quot;\&amp;quot; x2=\&amp;quot;&amp;quot;+(x2+12)+&amp;quot;\&amp;quot; y2=\&amp;quot;&amp;quot;+y2+&amp;quot;\&amp;quot; endcap=\&amp;quot;8\&amp;quot; stroke-width=\&amp;quot;1.2\&amp;quot;&amp;gt;&amp;lt;/line&amp;gt;&amp;quot;; 	
+		// y 轴线	
+		svg+= &amp;quot;&amp;lt;line x1=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; y1=\&amp;quot;&amp;quot;+y2+&amp;quot;\&amp;quot; x2=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; y2=\&amp;quot;&amp;quot;+(y1-12)+&amp;quot;\&amp;quot; endcap=\&amp;quot;8\&amp;quot; stroke-width=\&amp;quot;1.2\&amp;quot;&amp;gt;&amp;lt;/line&amp;gt;&amp;quot;; 	
+		var nMax = max ;// 最大的刻度值 
+		var nMin = 0 ;// 最小的刻度值
+		var tickSpace = 0 ;// 每个刻度值
+		if ( max &amp;gt; 0 ) {
+			var ss= &amp;quot;&amp;quot;+ Math.floor(max);
+			var nnn = 5* Math.pow(this.m_ysacle,ss.length-2);;
+			var n = 0;
+			if (nnn!=0 ) n=nnn - nMax%(nnn);
+			nMax += n;	
+			if ( nMax&amp;gt;=0 &amp;&amp; nMax &amp;lt; this.m_ysacle ) nMax = this.m_ysacle;
+			tickSpace = nMax/this.m_ysacle;
+			}
+		else {//  负数支持？
+			tickSpace = nMax/this.m_ysacle;
+			nMin = nMax; nMax= 0;
+		}
+		// y轴刻度		
+		var oneheight = (y2-y1)/this.m_ysacle;
+		for ( var i=0;i&amp;lt;=this.m_ysacle;i++ ){
+			var y = y1+i*oneheight;
+			if ( i &amp;gt; 0 &amp;&amp; i&amp;lt;this.m_ysacle ) {
+				svg+= &amp;quot;&amp;lt;line x1=\&amp;quot;&amp;quot;+(x1-2)+&amp;quot;\&amp;quot; y1=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; x2=\&amp;quot;&amp;quot;+(x1+2)+&amp;quot;\&amp;quot; y2=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/line&amp;gt;&amp;quot;; 	
+				svg+= &amp;quot;&amp;lt;line x1=\&amp;quot;&amp;quot;+(x1+2)+&amp;quot;\&amp;quot; y1=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; x2=\&amp;quot;&amp;quot;+x2+&amp;quot;\&amp;quot; y2=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; linestyle=\&amp;quot;1\&amp;quot; stroke=\&amp;quot;#CCCCCC\&amp;quot;&amp;gt;&amp;lt;/line&amp;gt;&amp;quot;; 	
+			}
+			svg+= &amp;quot;&amp;lt;text x=\&amp;quot;1\&amp;quot; y=\&amp;quot;&amp;quot;+(y-6)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+oneheight+&amp;quot;\&amp;quot; align=\&amp;quot;right\&amp;quot; font-farmily=\&amp;quot;&amp;quot;+this.m_yscalefontname+&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_yscalefontsize+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+1*((tickSpace *(this.m_ysacle-i))/this.m_ymulti)+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+		}
+		// x轴刻度
+		var onewidth = 1.0*(x2-x1)/(rowcount+1);
+		var x_width = onewidth;
+		var bMaxhscalenum = -1;
+		
+		if ( this.m_maxhscalenum != -1 &amp;&amp; rowcount&amp;gt;=this.m_maxhscalenum ) {
+			bMaxhscalenum  = Math.ceil(rowcount/this.m_maxhscalenum) ;
+			x_width = 1.0*(x2-x1)/(this.m_maxhscalenum+1);
+			
+		}
+		for( var r=0;r&amp;lt;rowcount;r++){
+			var label = _this.XMLDS_GetRowName(r);
+			if ( label.length==0 ) label = _this.XMLDS_GetStringAt(r,0);
+			if ( this.m_xsubstrleft != 0 ) label = label.substring(0,this.m_xsubstrleft);
+			if ( this.m_xsubstrright != 0 ) label = label.substring(label.length-this.m_xsubstrright,label.length);
+      
+			svg+= &amp;quot;&amp;lt;line x1=\&amp;quot;&amp;quot;+(x1+(r+1)*onewidth )+&amp;quot;\&amp;quot; y1=\&amp;quot;&amp;quot;+(y2-2)+&amp;quot;\&amp;quot; x2=\&amp;quot;&amp;quot;+(x1+(r+1)*onewidth )+&amp;quot;\&amp;quot; y2=\&amp;quot;&amp;quot;+(y2+2)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/line&amp;gt;&amp;quot;;  
+			
+			// 决定显示多少个刻度
+			if ( (bMaxhscalenum !=-1 &amp;&amp;r%bMaxhscalenum==0)||bMaxhscalenum ==-1  ) {
+				svg+= &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+(x1+(r+1)*onewidth -onewidth/2)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y2+5)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+x_width+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+(height-y2-5)+&amp;quot;\&amp;quot; align=\&amp;quot;center\&amp;quot; font-farmily=\&amp;quot;&amp;quot;+this.m_xscalefontname+&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_xscalefontsize+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+label+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+			}
+			
+		}
+		if ( this.m_type == &amp;quot;0&amp;quot; ) {// 显示线图
+			var point = &amp;quot;&amp;quot;;
+			for ( var c=0;c&amp;lt;colcount;c++ ) {
+				svg += &amp;quot;&amp;lt;polyline stroke=\&amp;quot;&amp;quot;+this.m_color[c%this.m_color.length]+&amp;quot;\&amp;quot;  points=\&amp;quot;&amp;quot;;
+				for ( var r=0;r&amp;lt;rowcount;r++ ){
+					var x = 1*(x1+(r+1)*onewidth) ;
+					var val = 1*_this.XMLDS_GetStringAt(r,c);
+					if ( isNaN(val ) ) val  = 0 ;
+				
+					var y = y2-1*(val*(y2-y1)/nMax);
+					svg += &amp;quot;&amp;quot;+Math.floor(x)+&amp;quot;,&amp;quot;+ Math.floor(y)+&amp;quot; &amp;quot;;
+					//2010修改，如果需要显示点，并且线条是白色
+					if(this.m_color[c%this.m_color.length]==&amp;quot;#FFFFFF&amp;quot; )
+						point+=&amp;quot;&amp;lt;rect fill=\&amp;quot;#FF0000\&amp;quot; x=\&amp;quot;&amp;quot;+(x-2)+&amp;quot;\&amp;quot;  y=\&amp;quot;&amp;quot;+(y-2)+&amp;quot;\&amp;quot; width=\&amp;quot;4\&amp;quot; height=\&amp;quot;4\&amp;quot; tip=\&amp;quot;&amp;quot;+val +&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+
+				}
+				svg+=&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+
+			}
+			svg+=point;
+//			if ( this.m_bShowLinePoint == 1 ) // 在线图是否显示点
+//				svg+=point;		
+		}
+		else if ( this.m_type == &amp;quot;1&amp;quot; ||this.m_type == &amp;quot;2&amp;quot; ) {// 显示 直方图 
+				for ( var r=0;r&amp;lt;rowcount;r++ ){
+				//svg += &amp;quot;&amp;lt;polyline stroke=\&amp;quot;&amp;quot;+this.m_color[c%this.m_color.length]+&amp;quot;\&amp;quot; points=\&amp;quot;&amp;quot;;
+				var p = 0.5;//+colcount*0.1;//空歇比率
+				if ( p&amp;gt;0.8 )p=0.8;// 
+				var Margin = onewidth*p;
+				var startloc = 1*(x1+(r+1)*onewidth) - onewidth/2 +Margin /2;
+				var percolwidth = (onewidth-Margin )/colcount;
+				for ( var c=0;c&amp;lt;colcount;c++ ) {
+					var s =1*_this.XMLDS_GetStringAt(r,c);
+					if ( isNaN(s) ) s = 0 ;
+					var h = y2-(s*(y2-y1)/nMax);
+					svg += &amp;quot;&amp;lt;rect fill=\&amp;quot;&amp;quot;+this.m_color[c%this.m_color.length]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(startloc+c*percolwidth )+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+h+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+percolwidth +&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+(y2-h)+&amp;quot;\&amp;quot; tip=\&amp;quot;&amp;quot;+s+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+					//alert ( &amp;quot;&amp;lt;rect fill=\&amp;quot;&amp;quot;+this.m_color[c%this.m_color.length]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(startloc+c*percolwidth )+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+h+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+percolwidth +&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+(y2-h)+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot; );
+					if ( this.m_type == &amp;quot;2&amp;quot; ){	//立方图
+						var nlet = 1*percolwidth/2; // 斜角计算的
+						if ( h!= y2 ) {
+              //后背
+							svg += &amp;quot;&amp;lt;polygon fill=\&amp;quot;&amp;quot;+this.m_color1[c%this.m_color.length]+&amp;quot;\&amp;quot;  points=\&amp;quot;&amp;quot;;
+							svg +=(startloc+c*percolwidth+percolwidth-1)+&amp;quot;,&amp;quot;+(h)+&amp;quot; &amp;quot;;
+							svg +=(startloc+c*percolwidth+percolwidth-1)+&amp;quot;,&amp;quot;+(y2)+&amp;quot; &amp;quot;;
+							svg +=(startloc+c*percolwidth+percolwidth+nlet-1 )+&amp;quot;,&amp;quot;+(y2-nlet)+&amp;quot; &amp;quot;
+							svg +=(startloc+c*percolwidth+percolwidth+nlet-1 )+&amp;quot;,&amp;quot;+(h-nlet)+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+							//上面
+							svg += &amp;quot;&amp;lt;polygon fill=\&amp;quot;&amp;quot;+this.m_color[c%this.m_color.length]+&amp;quot;\&amp;quot;  points=\&amp;quot;&amp;quot;;
+							svg +=(startloc+c*percolwidth)+&amp;quot;,&amp;quot;+(h)+&amp;quot; &amp;quot;;
+							svg +=(startloc+c*percolwidth+percolwidth-1)+&amp;quot;,&amp;quot;+(h)+&amp;quot; &amp;quot;;
+							svg +=(startloc+c*percolwidth+percolwidth+nlet-1 )+&amp;quot;,&amp;quot;+(h-nlet)+&amp;quot; &amp;quot;
+							svg +=(startloc+c*percolwidth+nlet )+&amp;quot;,&amp;quot;+(h-nlet)+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+						}
+					}
+
+				}
+			}
+		}
+		
+		// 显示右边的颜色说明
+		if (this.m_bShowSeralName == 1 ) {		// 是否在右边显示系列名称
+			for ( var c=0;c&amp;lt;colcount;c++ ) {
+				var colnam= _this.XMLDS_GetColumnName(c);
+				svg += &amp;quot;&amp;lt;rect fill=\&amp;quot;&amp;quot;+this.m_color[c%this.m_color.length]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(x2+10)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y1+c*20)+&amp;quot;\&amp;quot; width=\&amp;quot;10\&amp;quot; height=\&amp;quot;10\&amp;quot; /&amp;gt;&amp;quot;;
+				svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+(x2+25)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y1+c*20-2)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+(width-x2-25)+&amp;quot;\&amp;quot; height=\&amp;quot;20\&amp;quot; &amp;gt;&amp;quot;+colnam+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+			}
+		}
+		// 标题
+		//svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; y=\&amp;quot;5\&amp;quot; width=\&amp;quot;&amp;quot;+(x2-x1)+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+(x1-20)+&amp;quot;\&amp;quot; font-family=\&amp;quot;&amp;quot;+this.m_titlefontname +&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_titlefontsize+&amp;quot;\&amp;quot; align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;quot;+this.m_title+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+		svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; y=\&amp;quot;5\&amp;quot; width=\&amp;quot;&amp;quot;+(x2-x1)+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+y1+&amp;quot;\&amp;quot; font-family=\&amp;quot;&amp;quot;+this.m_titlefontname +&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_titlefontsize+&amp;quot;\&amp;quot; align=\&amp;quot;center\&amp;quot; valign=\&amp;quot;middle\&amp;quot;&amp;gt;&amp;quot;+this.m_title+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+		var ytitle= this.m_ytitle;
+		if ( this.m_ymulti ==10000 ) ytitle += &amp;quot;(&amp;quot;+lang_main.wan+&amp;quot;)&amp;quot;;
+		else if ( this.m_ymulti ==1000 ) ytitle += &amp;quot;(&amp;quot;+lang_main.thousand+&amp;quot;)&amp;quot;;
+		else if ( this.m_ymulti ==100 ) ytitle += &amp;quot;(&amp;quot;+lang_main.hendred+&amp;quot;)&amp;quot;;
+		else if ( this.m_ymulti ==1000000) ytitle += &amp;quot;(&amp;quot;+lang_main.baiwan+&amp;quot;)&amp;quot;;
+		else if ( this.m_ymulti ==100000000) ytitle += &amp;quot;(&amp;quot;+lang_main.yi+&amp;quot;)&amp;quot;;
+		svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+(x1+5)+&amp;quot;\&amp;quot; y=\&amp;quot;5\&amp;quot; height=\&amp;quot;&amp;quot;+y1+&amp;quot;\&amp;quot; align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;middle\&amp;quot; font-family=\&amp;quot;&amp;quot;+this.m_ytitlefontname +&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_ytitlefontsize+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+ytitle+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+		svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+(x2-8)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y2+5)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+(width-x2)+&amp;quot;\&amp;quot; heigth=\&amp;quot;&amp;quot;+(height-y2)+&amp;quot;\&amp;quot; font-family=\&amp;quot;&amp;quot;+this.m_xtitlefontname +&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_xtitlefontsize+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+this.m_xtitle+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+	}
+	svg+=&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	_this.SetToSVGForm(this.m_objid ,this.m_sheet,this.m_row,this.m_col,svg);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select id,mny from (
+select b.id,b.name,nvl(sum(decode(&amp;apos;[%TAXTYP]&amp;apos;,&amp;apos;1&amp;apos;,sdtaxmny,&amp;apos;2&amp;apos;,taxmny,0)),0)/[%UNIT] mny
+from tax_taxdata a,v_mm b
+where substr(a.yymm(+),0,4)= NVL(&amp;apos;[%YYYY]&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;))
+  and substr(a.yymm(+),-2)=b.id
+group by b.id,b.name
+) 
+order by id</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

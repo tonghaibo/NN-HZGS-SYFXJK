@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >HR_BASEINF</MWID><NAME >人事基础资料</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >HR_BASEINF.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG >29,2,31,6</DTLRNG><BATINP >0</BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >HR_USR</BILHDRTABLE><BILDTLTABLE >HR_USRWORK</BILDTLTABLE><COLLIST >id 员工编号,name 姓名,sex 性别,(select name from v_loc where id=a.dpmt) 部门仓库,(select name from v_usr_job where id=a.job) 职位,indate 进公司时间,idcard 身份证,INITADDS 籍贯,INSURANCE_TYP 保险类型,OFFDATE 离职日期</COLLIST><ORDER >id</ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL >1</IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,3</ID><NAME >姓名</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN >15</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,3,3</C15><C16 >0,3,3</C16></ROW>
+<ROW num="1" ><ID >0,3,5</ID><NAME >性别</NAME><VALFLD >SEX</VALFLD><DEFVAL ></DEFVAL><NOTNULL >0</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_HR_SEX</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><FLD ></FLD><C15 >0,3,5</C15><C16 >0,3,5</C16></ROW>
+<ROW num="2" ><ID >0,4,3</ID><NAME >民族</NAME><VALFLD >NATIONAL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,4,3</C15><C16 >0,4,3</C16></ROW>
+<ROW num="3" ><ID >0,4,5</ID><NAME >身高</NAME><VALFLD >HIGH</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,4,5</C15><C16 >0,4,5</C16></ROW>
+<ROW num="4" ><ID >0,5,3</ID><NAME >政治面貌</NAME><VALFLD >TYPE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,5,3</C15><C16 >0,5,3</C16></ROW>
+<ROW num="5" ><ID >0,5,5</ID><NAME >出生年月</NAME><VALFLD >BIRTH</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,5,5</C15><C16 >0,5,5</C16></ROW>
+<ROW num="6" ><ID >0,6,3</ID><NAME >身份证号码</NAME><VALFLD >IDCARD</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP >STRING</VALTYP><MAXLEN >20</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,6,3</C15><C16 >0,6,3</C16></ROW>
+<ROW num="7" ><ID >0,6,5</ID><NAME >籍贯</NAME><VALFLD >INITADDS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,6,5</C15><C16 >0,6,5</C16></ROW>
+<ROW num="8" ><ID >0,7,3</ID><NAME >手机</NAME><VALFLD >MOBILE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP >NUMBER</VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,7,3</C15><C16 >0,7,3</C16></ROW>
+<ROW num="9" ><ID >0,7,5</ID><NAME >电话</NAME><VALFLD >PHONE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP >NUMBER</VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,7,5</C15><C16 >0,7,5</C16></ROW>
+<ROW num="10" ><ID >0,8,3</ID><NAME >电子邮箱</NAME><VALFLD >EMAIL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >30</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,8,3</C15><C16 >0,8,3</C16></ROW>
+<ROW num="11" ><ID >0,9,3</ID><NAME >现住址</NAME><VALFLD >ADDS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >45</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,9,3</C15><C16 >0,9,3</C16></ROW>
+<ROW num="12" ><ID >0,10,3</ID><NAME >毕业院校</NAME><VALFLD >SCHOOL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >30</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,10,3</C15><C16 >0,10,3</C16></ROW>
+<ROW num="13" ><ID >0,10,5</ID><NAME >专业</NAME><VALFLD >PREF</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >20</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,10,5</C15><C16 >0,10,5</C16></ROW>
+<ROW num="14" ><ID >0,11,3</ID><NAME >学历</NAME><VALFLD >QUA</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_HR_XL</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,11,3</C16></ROW>
+<ROW num="15" ><ID >0,11,5</ID><NAME >毕业时间</NAME><VALFLD >OVERDATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,11,5</C16></ROW>
+<ROW num="16" ><ID >0,12,2</ID><NAME >工作经历</NAME><VALFLD >JOB_EXP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >500</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,12,2</C16></ROW>
+<ROW num="17" ><ID >0,19,3</ID><NAME >部门仓库</NAME><VALFLD >DPMT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,19,3</C16></ROW>
+<ROW num="18" ><ID >0,19,5</ID><NAME >职位</NAME><VALFLD >JOB</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,19,5</C16></ROW>
+<ROW num="19" ><ID >0,20,3</ID><NAME >进公司日期</NAME><VALFLD >INDATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,20,3</C16></ROW>
+<ROW num="20" ><ID >0,20,5</ID><NAME >离职日期</NAME><VALFLD >OFFDATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,20,5</C16></ROW>
+<ROW num="21" ><ID >0,21,3</ID><NAME >合同起始日期</NAME><VALFLD >CONTRACT_BEGDATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,21,3</C16></ROW>
+<ROW num="22" ><ID >0,21,5</ID><NAME >合同到期日期</NAME><VALFLD >CONTRACT_OVERDATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,21,5</C16></ROW>
+<ROW num="23" ><ID >0,22,3</ID><NAME >聘用形式</NAME><VALFLD >EMPLOYMENT</VALFLD><DEFVAL >全职</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,22,3</C16></ROW>
+<ROW num="24" ><ID >0,22,5</ID><NAME >是否已调档</NAME><VALFLD >MYFILE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_YESNO</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,22,5</C16></ROW>
+<ROW num="25" ><ID >0,23,3</ID><NAME >档案所在地</NAME><VALFLD >FILE_PLACE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >60</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,23,3</C16></ROW>
+<ROW num="26" ><ID >0,24,3</ID><NAME >保险类别</NAME><VALFLD >INSURANCE_TYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,24,3</C16></ROW>
+<ROW num="27" ><ID >0,24,5</ID><NAME >缴金日期</NAME><VALFLD >PAY_DATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,24,5</C16></ROW>
+<ROW num="28" ><ID >0,25,3</ID><NAME >退金日期</NAME><VALFLD >RETURN_DATE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,25,3</C16></ROW>
+<ROW num="29" ><ID >0,27,2</ID><NAME >备注</NAME><VALFLD >REMARK</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN >300</MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,27,2</C16></ROW>
+<ROW num="30" ><ID >0,2,2</ID><NAME >员工编号</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL >0</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_CORPCLASS</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 >0,2,2</C16></ROW>
+<ROW num="31" ><ID >0,26,2</ID><NAME >是否使用</NAME><VALFLD >flag1</VALFLD><DEFVAL >1</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_YESNO</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 >0,26,2</C15><C16 ></C16></ROW>
+<ROW num="32" ><ID >0,8,5</ID><NAME >工龄</NAME><VALFLD >FLAG2</VALFLD><DEFVAL ></DEFVAL><NOTNULL >0</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><FLD ></FLD><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grdcelds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,2</ID><NAME >开始日期</NAME><VALFLD >DAT1</VALFLD><NOTNULL >0</NOTNULL><COLTYP >DATE</COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 >0,2</C11><C12 >0,2</C12><C13 >0,2</C13><C14 >0,2</C14></ROW>
+<ROW num="1" ><ID >0,3</ID><NAME >结束日期</NAME><VALFLD >DAT2</VALFLD><NOTNULL ></NOTNULL><COLTYP >DATE</COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14></ROW>
+<ROW num="2" ><ID >0,4</ID><NAME >工作单位</NAME><VALFLD >COMPANY</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14></ROW>
+<ROW num="3" ><ID >0,6</ID><NAME >岗位</NAME><VALFLD >DUTY</VALFLD><NOTNULL ></NOTNULL><COLTYP >COMBOBOX</COLTYP><LISTID >V_USR_JOB</LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14></ROW>
+</ROWSET>
+</grdcolds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	var usrid = _this.GetCellText(sheet,2,2);
+	var loc = newvalue;
+	if(row == 19 &amp;&amp; (col == 3||col==5))
+  	{
+		if(usrid ==&amp;quot;&amp;quot; || usrid == null){
+//			alert(&amp;quot;loc&amp;quot;+loc+&amp;quot; usr=&amp;quot;+usrid);
+			_sql.querytods(&amp;quot;GetMaxID&amp;quot;,&amp;quot;LOCID=&amp;quot;+loc);
+	       		var id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+			_this.SetCellText(sheet,2,2,id);
+		}
+		else{
+			var newjob = _this.GetCellText(sheet,19,5);  
+			var useflg = _this.GetCellText(sheet,26,2);  
+			var newloc = _this.GetCellText(sheet,19,3); 
+//			_sql.querytods(&amp;quot;GetJob&amp;quot;,&amp;quot;ID=&amp;quot;+usrid);
+			alert(&amp;quot;newjob=&amp;quot;+newjob+&amp;quot;newloc=&amp;quot;+newloc);
+			if(_this.XMLDS_GetRowCount()&amp;gt;0){			
+			       	var oldjob = _this.XMLDS_GetString(0,&amp;quot;job&amp;quot;);
+			       	var oldloc = _this.XMLDS_GetString(0,&amp;quot;loc&amp;quot;);
+//			       	alert(&amp;quot;oldjob=&amp;quot;+oldjob+&amp;quot;oldloc=&amp;quot;+oldloc);
+				if( !(newjob == oldjob&amp;&amp;newloc == oldloc) &amp;&amp; useflg==&amp;quot;1&amp;quot;)	
+				      	_this.SetCellText(0,2,5,&amp;quot;U&amp;quot;);	
+				else
+					_this.SetCellText(0,19,0,&amp;quot;&amp;quot;);
+			}
+			else{ 
+				_this.SetCellText(0,2,2,&amp;quot;&amp;quot;);
+				_sql.querytods(&amp;quot;GetMaxID&amp;quot;,&amp;quot;LOCID=&amp;quot;+loc);
+	       			var id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+				_this.SetCellText(sheet,2,2,id);
+			}
+		}
+	}
+	else if(row == 2 &amp;&amp; col == 2)
+  	{	
+  		var id = _this.GetCellText(0,2,2);
+	    	var sql = &amp;quot;select * from hr_usr where id like &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+	    	_this.QuerySQLDS(sql);
+	    	if ( _this.XMLDS_GetRowCount() != 0 ) {
+		if(confirm(&amp;quot;编号&amp;quot;+id+&amp;quot;已存在，是否禁用该编号&amp;quot;))
+		{
+		  var sql = &amp;quot;update hr_usr set flag1 = &amp;apos;0&amp;apos; where id like &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+  		  _this.QuerySQLDS(sql);
+		}
+	     }
+	}
+
+
+}
+
+//数据加载完毕
+//function _thisOnpost_loaddata(sheet)
+//{
+//    var sql = &amp;quot; select TO_NUMBER(ID)+1 newId from (select max(id ) id from hr_usr where id not like&amp;apos;w%&amp;apos;)&amp;quot;;;
+//    _this.QuerySQLDS(sql);
+//    var newID = _this.xmlds_getString(0,&amp;quot;newId&amp;quot;);
+//    _this.SetCellText(sheet,2,2,newID);
+//}
+
+
+
+//保存单据数据前
+function f_dbeditbeforesave()
+{
+   		var sheet = 0;
+	    	var usrid = _this.GetCellText(sheet,2,2);
+ 	  	var jobtyp = _this.GetCellText(sheet,19,5);  
+	 	var usrname = _this.GetCellText(sheet,3,3); 
+	 	var loc = _this.GetCellText(sheet,19,3); 
+//		alert(&amp;quot;usrid=&amp;quot;+usrid);
+//		if(usrid ==&amp;quot;&amp;quot; || usrid == null){
+//		_sql.querytods(&amp;quot;GetMaxID&amp;quot;,&amp;quot;LOCID=&amp;quot;+loc);
+//       		var id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+//		_this.SetCellText(sheet,2,2,id);
+//				alert(id);
+//		}
+		
+		if((_this.GetCellText(sheet,2,5) == &amp;quot;U&amp;quot;)&amp;&amp; (usrid != &amp;quot;&amp;quot; &amp;&amp; usrid != null)){
+		  	_sql.querytods(&amp;quot;GETUJ&amp;quot;,&amp;quot;JOBTYP=&amp;quot;+jobtyp);
+	       	   	var jobnam = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+//	 	alert(&amp;quot;aaaad&amp;quot;);
+	       	   	var sql=&amp;quot;insert into log(str,typ) values(&amp;apos;修改员工&amp;quot;+usrid+usrname+&amp;quot;中心为[&amp;quot;+loc+&amp;quot;]职位为[&amp;quot;+jobtyp+&amp;quot;]&amp;apos;,&amp;apos;UPDATEUSR&amp;apos;)&amp;quot;;
+ 			QuerySQL(sql);
+			_this.QuerySQL(sql);
+          	}
+
+}
+//function f_dbeditaftersave()
+//{	  
+//		var sheet = 0;
+//	    	var usrid = _this.GetCellText(sheet,2,2);
+//	  	var jobtyp = _this.GetCellText(sheet,19,15);  
+//	 	var usrname = _this.GetCellText(sheet,3,3);  
+//		alert(&amp;quot;aaaaa&amp;quot;);
+//		  if(_this.GetCellText(sheet,2,5) == &amp;quot;U&amp;quot;){
+//		  	_sql.querytods(&amp;quot;GETUJ&amp;quot;,&amp;quot;JOBTYP=&amp;quot;+jobtyp);
+//	       	   	var jobnam = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+//			alert(&amp;quot;bbbbbbbbb&amp;quot;);
+//	       	   	var sql=&amp;quot;insert into log(str,typ) values(&amp;apos;修改员工&amp;quot;+usrid+usrname+&amp;quot;职位为&amp;quot;+jobtyp+&amp;quot;&amp;apos;,&amp;apos;UPDATEUSRTYP&amp;apos;)&amp;quot;;
+//			alert(sql);
+//			QuerySQL(sql);
+//
+//          }
+//}
+
+function _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where)
+{
+	_thisOnRunCellModify(sheet,row,col,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	
+	
+}
+
+//    	var loc = _this.GetCellText(sheet,19,3);
+//	var id =_this.GetCellText(sheet,2,2);
+//	var name = _this.GetCellText(sheet,3,3);
+
+//  	if(row == 2 &amp;&amp; col == 2)
+//	{	
+//		alert(&amp;quot;hhhh&amp;quot;);
+//		if(id ==&amp;quot;&amp;quot; || id == null){
+//		if(loc == null || loc == &amp;quot;&amp;quot;){
+//	    		    alert(&amp;quot;请先输入部门仓库，否则无法查询该仓库的最大编号&amp;quot;);}
+//		else{
+//			    var sql = &amp;quot; select TO_NUMBER(ID)+1 newId from (select max(id ) id from hr_usr where id not like&amp;apos;w%&amp;apos;)&amp;quot;;
+//			    _this.QuerySQLDS(sql);
+//			    var newID = _this.xmlds_getString(0,&amp;quot;newId&amp;quot;);
+//			    _this.SetCellText(sheet,2,2,newID);
+//    		     }
+//    		}
+//    		else{
+//	    	var id = _this.GetCellText(0,2,2);
+//	    	var sql = &amp;quot;select * from hr_usr where id like &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+//	    	_this.QuerySQLDS(sql);
+//	    	if ( _this.XMLDS_GetRowCount() != 0 ) {
+//		if(confirm(&amp;quot;编号&amp;quot;+id+&amp;quot;已存在，是否禁用该编号&amp;quot;))
+//		{
+//		  var sql = &amp;quot;update hr_usr set flag1 = &amp;apos;0&amp;apos; where id like &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+//  		  _this.QuerySQLDS(sql);
+//		}
+//	     }
+//	}
+//     }
+
+
+//保存单据数据前
+//function _thisOnbeforesave()
+//{
+//  		var sheet = 0;
+//	    	var usrid = _this.GetCellText(sheet,2,2);
+// 	  	var jobtyp = _this.GetCellText(sheet,19,5);  
+//	 	var usrname = _this.GetCellText(sheet,3,3); 
+//	 	var loc = _this.GetCellText(sheet,19,3); 
+//		if(usrid ==&amp;quot;&amp;quot; || usrid == null){
+//		_sql.querytods(&amp;quot;GetMaxID&amp;quot;,&amp;quot;LOCID=&amp;quot;+loc);
+//       		var id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+//		_this.SetCellText(sheet,2,2,id);
+//		}
+//		if((_this.GetCellText(sheet,2,5) == &amp;quot;U&amp;quot;)&amp;&amp; (usrid != &amp;quot;&amp;quot; &amp;&amp; usrid != null)){
+//	       	   	var sql=&amp;quot;insert into log(str,typ) values(&amp;apos;修改员工&amp;quot;+usrid+usrname+&amp;quot;中心为[&amp;quot;+loc+&amp;quot;]职位为[&amp;quot;+jobtyp+&amp;quot;]&amp;apos;,&amp;apos;UPDATEUSR&amp;apos;)&amp;quot;;
+//			_this.QuerySQL(sql);
+//          	}
+//		alert(&amp;quot;hjkl;k&amp;quot;);
+//		return &amp;quot;&amp;quot;;
+
+//}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GetJob</ID><NAME ></NAME><DATDSC >select job,dpmt loc from hr_usr where id =&amp;apos;[%ID]&amp;apos;</DATDSC><C4 >GetJob</C4><C5 >GetJob</C5></ROW>
+<ROW num="1" ><ID >GETUJ</ID><NAME ></NAME><DATDSC >SELECT NAME FROM V_USR_JOB WHERE ID=&amp;apos;[%JOBTYP]&amp;apos;
+</DATDSC><C4 ></C4><C5 ></C5></ROW>
+<ROW num="2" ><ID >GETLOC</ID><NAME ></NAME><DATDSC ></DATDSC><C4 ></C4><C5 ></C5></ROW>
+<ROW num="3" ><ID >GetMaxID</ID><NAME ></NAME><DATDSC >select TO_NUMBER(ID)+1 id 
+from (
+	select max(id ) id from hr_usr  
+	where dpmt like &amp;apos;[%LOCID]%&amp;apos;
+)</DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

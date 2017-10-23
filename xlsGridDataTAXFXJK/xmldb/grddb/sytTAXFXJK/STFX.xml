@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >STFX</MWID><NAME >石材风险识别</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >STFX.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >selParam</ID><NAME >行业参数维护</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >GRDBTNDS_0</C10><C11 ></C11><C12 >selParam</C12><C13 >selParam</C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >doFXSB</ID><NAME >开始识别</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >GRDBTNDS_1</C10><C11 >doQuery</C11><C12 ></C12><C13 >doFXSB</C13><C14 ></C14><C15 ></C15></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;//企业
+var win = null;
+var bl1 = 0;
+var bl2 = 0;
+var bl3 = 0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;15%&amp;quot;);
+	_this.SetColVisible(0,2,-1);
+	initHYSheet(&amp;quot;1&amp;quot;);
+	
+	//年月
+	var yymmList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YYYY_MM&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,yymmList);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,yymmList);
+	var defyymm = G_LOGDAT.substring(0,7);
+	_this.SetCellText(1,1,2,defyymm);
+	_this.SetCellText(1,1,4,defyymm);
+	
+	//税务机关
+	//_this.SetToSelectBox(&amp;quot;&amp;quot;,1,1,10,&amp;quot;V_SWJG&amp;quot;,&amp;quot;&amp;quot;);
+	var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,10,swjgList);
+	
+	//行业
+	//_this.SetToSelectBox(&amp;quot;&amp;quot;,1,3,2,&amp;quot;V_TAX_STONE_HY&amp;quot;,&amp;quot;&amp;quot;);
+	var hyList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_STONE_HY&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,3,2,hyList);
+	_this.SetCellText(1,3,2,&amp;quot;1&amp;quot;); //默认粉体行业
+	
+	//行业参数
+	var hydm = _this.GetCellText(1,3,2);
+	var hycsList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_STONE_PARAM&amp;where=hydm=&amp;quot;+hydm),&amp;quot;CSID&amp;quot;,&amp;quot;CSMC&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,5,2,hycsList);
+
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+
+	initHYSheet(1);
+	
+	var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+
+	}else{
+		_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+	}
+	
+	_this.AutoFixScreenWidth();
+}
+
+//等待时执行的任务
+function runWaitingTask()
+{
+	var hydm = _this.GetCellText(1,3,2);
+	var csid = _this.GetCellText(1,5,2);
+	var ym1 = _this.GetCellText(1,1,2);
+	var ym2 = _this.GetCellText(1,1,4);
+	
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;HYDM=&amp;quot;+hydm+&amp;quot;&amp;CSID=&amp;quot;+csid+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+	return xml;
+}
+
+//加载主数据
+function loadData()
+{	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetColVisible(0,2,-1);
+	_this.SetFixedRow(0,2);
+	_this.SetFixedCol(0,1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	var hydm = _this.GetCellText(1,3,2);
+	var csid = _this.GetCellText(1,5,2);
+	var ym1 = _this.GetCellText(1,1,2);
+	var ym2 = _this.GetCellText(1,1,4);
+	
+	if (ym1 == &amp;quot;&amp;quot; || ym2 == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择日期范围！&amp;quot;); return; }
+	if (hydm == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择所属行业！&amp;quot;); return; }
+	if (csid == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择行业计算参数！&amp;quot;); return; }
+	
+	var obj = new Object();
+	obj.HYDM = hydm;
+	obj.CSID = csid;
+	obj.YM1 = ym1;
+	obj.YM2 = ym2;
+	obj.MINYDL = _this.GetCellText(1,1,7);
+	obj.MINJE = _this.GetCellText(1,3,7);	
+	obj.SWJG = _this.GetCellText(1,1,10);	
+	obj.QY = _this.GetCellText(1,3,10);	
+	//var xml = window.showModalDialog(&amp;quot;show.sp?grdid=STFX_CX&amp;quot;,obj,&amp;quot;scroll:no;status:no;dialogWidth:100px;dialogHeight:30px&amp;quot;);	
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+
+	//var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;HYDM=&amp;quot;+hydm+&amp;quot;&amp;CSID=&amp;quot;+csid+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+	_this.SetMainCellRange(0,2,2,_this.GetRowCount(0)-1,_this.GetColCount(0)-1);
+	_this.SetXmlDS(0,2,2,_this.GetRowCount(0)-1,_this.GetColCount(0)-1,xml);
+//	_this.SetCellText(1,5,6,xml);
+//	alert(&amp;quot;xml=&amp;quot;+xml);
+	var row = 0;
+	_this.SetToBoolBox(0,1,0);
+	
+	_sql.querytods(&amp;quot;FXDJBL&amp;quot;,&amp;quot;&amp;quot;); //在循环外查询出等级比例
+	bl1 = _this.XMLDS_GetString(0,&amp;quot;BL&amp;quot;); //高
+	bl2 = _this.XMLDS_GetString(1,&amp;quot;BL&amp;quot;); //中
+	bl3 = _this.XMLDS_GetString(2,&amp;quot;BL&amp;quot;); //低
+
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,3) != &amp;quot;&amp;quot;) {
+			row ++;
+			_this.SetToBoolBox(0,r,0);
+			_this.SetCellText(0,r,1,row);		
+			
+			//测算
+			fxjs(hydm,r);	
+		}
+		else {
+			_this.SetRowVisible(0,r,-1);
+		}
+	}
+	
+	initHYSheet(hydm);
+	
+	_this.AutoFixColWidth(0,400);
+	_this.AutoFixScreenWidth();
+
+}
+
+//初始化界面显示列按行业
+function initHYSheet(hydm) 
+{
+	_this.SetColVisible(0,9,-1);
+	_this.SetColVisible(0,10,-1);
+	_this.SetColVisible(0,11,-1);
+	_this.SetColVisible(0,12,-1);
+	_this.SetColVisible(0,13,-1);
+	for (var c=25;c&amp;lt;_this.GetColCount(0);c++) {
+		_this.SetColVisible(0,c,-1);
+	}
+	
+	if (hydm != 1) {
+		_this.SetColVisible(0,15,-1);
+		_this.SetColVisible(0,16,-1);
+		_this.SetColVisible(0,21,-1);
+		_this.SetColVisible(0,22,-1);
+	}
+	
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 1) {
+		if(row == 3 &amp;&amp; col == 2) {
+			//行业参数
+			var hydm = _this.GetCellText(1,3,2);
+			var hycsList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_STONE_PARAM&amp;where=hydm=&amp;quot;+hydm),&amp;quot;CSID&amp;quot;,&amp;quot;CSMC&amp;quot;);
+			_this.SetToComboBox(&amp;quot;&amp;quot;,1,5,2,hycsList);
+			_this.SetCellText(1,5,6,&amp;quot;&amp;quot;);
+			_this.SetCellText(1,5,2,&amp;quot;1&amp;quot;);
+			_thisOnCellModify(sheet,5,2,&amp;quot;&amp;quot;,&amp;quot;1&amp;quot;);
+		}
+		else if (row == 5 &amp;&amp; col == 2) {
+			var hydm = _this.GetCellText(1,3,2);
+			_sql.querytods(&amp;quot;STONEPRARM&amp;quot;,&amp;quot;HYDM=&amp;quot;+hydm+&amp;quot;&amp;CSID=&amp;quot;+newvalue);
+			var paramstr =&amp;quot;&amp;quot;;
+			if (hydm == 1) {
+				paramstr += &amp;quot;高目电耗:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;GMDH&amp;quot;);			
+				paramstr += &amp;quot; / 低目电耗:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DMDH&amp;quot;);
+				paramstr += &amp;quot; / 高目售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;GMSJ&amp;quot;);
+				paramstr += &amp;quot; / 低目售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DMSJ&amp;quot;);
+			}
+			if (hydm == 2 || hydm == 3) {
+				paramstr += &amp;quot;单位电耗:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DWDH&amp;quot;);
+				paramstr += &amp;quot; / 单位物耗:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DWWH&amp;quot;);
+				paramstr += &amp;quot; / 单位油耗:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DWYH&amp;quot;);
+				paramstr += &amp;quot; / 平均售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;PJSJ&amp;quot;);
+			}
+			if (hydm == 4) {
+				paramstr += &amp;quot;荒料售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;HLSJ&amp;quot;);
+				paramstr += &amp;quot; / 碎石售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;SSSJ&amp;quot;);
+			}
+			_this.SetCellText(1,5,6,paramstr);
+		}
+	}
+	else if (sheet == 0) {
+		//全选
+		if (row == 1 &amp;&amp; col == 0) {
+			for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+				_this.SetCellText(0,r,0,newvalue);			
+			}
+		}
+	}
+}
+
+//选择计算参数
+function selParam()
+{
+	 window.showModalDialog(&amp;quot;show.sp?grdid=selParam&amp;&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:800px;dialogHeight:600px&amp;quot;);
+}
+
+//开始识别
+function doFXSB()
+{
+	loadData();	
+}
+
+//测算方法 hydm-行业代码 row-行号
+function fxjs(hydm,row)
+{
+	var ftzl = _this.GetCellText(0,row,8); //粉体总量=碎石量
+	var zydl = _this.GetCellText(0,row,14); //总用电量
+	var gmdh = _this.GetCellText(0,row,25); //高目电耗
+	var dmdh = _this.GetCellText(0,row,26); //低目电耗
+	var gmsj = _this.GetCellText(0,row,27); //高目售价
+	var dmsj = _this.GetCellText(0,row,28); //低目售价
+	
+	var dwdh = _this.GetCellText(0,row,30); //单位电耗
+	var dwwh = _this.GetCellText(0,row,31); //单位物耗
+	var dwyh = _this.GetCellText(0,row,32); //单位油耗
+	
+	var hlsj = _this.GetCellText(0,row,33); //荒料售价
+	var bcsj = _this.GetCellText(0,row,34); //板材售价
+	var sssj = _this.GetCellText(0,row,35); //碎石售价
+	
+	var bczl = _this.GetCellText(0,row,6); //板材总量
+	var hlzl = _this.GetCellText(0,row,7); //荒料总量
+	var sszl = _this.GetCellText(0,row,8); //碎石总量
+		
+	if (hydm == 1) { //粉体
+
+		//设x=高目产量，y=低目产量，a=石材总量，b=总用电量，g=高目电耗，d=低目电耗
+		//x + y = a
+		//gx + dy = b
+		//x = (a-b/d)/(1-g/d);
+		//y = (a-b/g)/(1-d/g)
+		
+		if (ftzl &amp;gt; 0) {
+			var x = (ftzl - zydl/dmdh) / (1 - gmdh/dmdh);
+			var y = (ftzl - zydl/gmdh) / (1 - dmdh/gmdh);
+			
+			_this.SetCellText(0,row,15,x*gmdh);	//高目用电量
+			_this.SetCellText(0,row,16,y*dmdh);	//低目用电量
+			
+			_this.SetCellText(0,row,21,x*gmsj);		//高目销售金额
+			_this.SetCellText(0,row,22,y*dmsj);		//低目销售金额
+			_this.SetCellText(0,row,20,x*gmsj+y*dmsj);	//销售总金额
+		}
+	}
+	else if (hydm == 2 || hydm == 3) { //板材和岗石
+		//var cl = zydl / dwdh; //产量=总用电量 /单位电耗 
+		var cl = hlzl / dwwh;	//产量=荒料总量 /单位物耗
+		if (cl == 0) cl = zydl / dwdh;
+		var csydl = hlzl * dwdh; //测算的用电量
+		var somny = (cl + (bczl - bczl / dwwh)) * bcsj; //销售金额
+		
+		_this.SetCellText(0,row,17,csydl); 	//测算电量
+		_this.SetCellText(0,row,20,somny);	//销售总金额
+
+	}
+	else if (hydm == 4) { //矿企
+		//测算油耗=出卡总量/单位油耗
+		//销售金额=荒料*荒料售价+碎石*碎石售价+板材*板材售价
+		var ckzl = _this.GetCellText(0,row,5); //总量
+		var csyh = ckzl / dwyh; //测算油耗
+		var somny = bczl*bcsj+hlzl*hlsj+sszl*sssj;
+		
+		_this.SetCellText(0,row,18,csyh);
+		_this.SetCellText(0,row,20,somny);
+		
+	}
+	
+	//预警等级
+	var cssomny = _this.GetCellText(0,row,20);
+	var sbmny = _this.GetCellText(0,row,23); 
+	var cz = Math.abs(cssomny - sbmny);
+	var bl = (cz / cssomny).toFixed(2);
+	if (bl &amp;gt; 0) {
+		if (bl &amp;gt;= bl1) { _this.SetCellText(0,row,24,&amp;quot;高&amp;quot;); _this.SetCellColor(0,row,24,255,0,0); }
+		else if (bl &amp;gt;= bl2) { _this.SetCellText(0,row,24,&amp;quot;中&amp;quot;); _this.SetCellColor(0,row,24,230,165,25); }
+		else if (bl &amp;gt;= bl3) { _this.SetCellText(0,row,24,&amp;quot;低&amp;quot;); _this.SetCellColor(0,row,24,220,220,110); }
+	}
+}
+
+
+//生成核实任务
+function genTasks()
+{	
+	var param = new Object();	
+	
+	var xmlds = getXmlStr(0,2,2,_this.GetMainCellRangeRow2(0),24);
+	param.xmlstr = xmlds;	
+	param.usrids = G_USRID;
+	param.usrnams = G_USRNAM;
+	param.accids = G_ACCID;
+	param.orgs = G_ORGID;
+	param.syts = G_SYTID;
+	param.typ = &amp;quot;4&amp;quot;; //【行业税负异常】
+	param.yymm1 = _this.GetCellText(1,1,2);
+	param.yymm2 = _this.GetCellText(1,1,4);
+	param.swjg_dm = G_DEPTID;
+	
+	var enddat = window.showModalDialog(&amp;quot;show.sp?grdid=TKParam&amp;typ=&amp;quot;+param.typ,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	if (enddat != &amp;quot;undefined&amp;quot; &amp;&amp; enddat != null) {
+		param.toswjg = &amp;quot;&amp;quot;;
+		param.enddat = enddat.substr(0,enddat.indexOf(&amp;quot;,&amp;quot;));
+		param.tousr = enddat.substr(enddat.indexOf(&amp;quot;_&amp;quot;)+1);
+		var msg = invokeOSFuncExt(&amp;quot;TAXFXJK.PUBTRK.createTask&amp;quot;,param);
+		alert(msg);
+	}
+	
+	
+}
+
+
+function getXmlStr(sheet,row1,col1,row2,col2)
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var i = 0;
+	for (var r=row1;r&amp;lt;=row2;r++) {
+		if (_this.GetCellText(sheet,r,0) == &amp;quot;1&amp;quot;) {
+			xmlstr += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(++i)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+			var nsrsbh = _this.GetCellText(sheet,r,3);
+			var nsrmc = _this.GetCellText(sheet,r,4);
+			var note = getTaskNote(sheet,r);
+			xmlstr += &amp;quot;&amp;lt;NSRSBH&amp;gt;&amp;quot;+nsrsbh+&amp;quot;&amp;lt;/NSRSBH&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;NSRMC&amp;gt;&amp;quot;+nsrmc+&amp;quot;&amp;lt;/NSRMC&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;NOTE&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/NOTE&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}
+
+//构造任务说明
+function getTaskNote(sheet,row)
+{
+	var csxsje = 1.0*_this.GetCellText(sheet,row,20); //测算销售金额
+	var sbje = 1.0*_this.GetCellText(sheet,row,23); //申报金额
+	var cyje = Math.abs(sbje - csxsje); //差异金额
+	var note = &amp;quot;测算销售金额：&amp;quot;+csxsje+&amp;quot;，申报金额：&amp;quot;+sbje+&amp;quot;，差异金额：&amp;quot;+cyje.toFixed(2);
+	return note;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >STONEPRARM</ID><NAME ></NAME><DATDSC >select * from tax_stone_param where hydm=&amp;apos;[%HYDM]&amp;apos; and csid=&amp;apos;[%CSID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >STONEPRARM</C10><C11 ></C11></ROW>
+<ROW num="1" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select djxh,nsrsbh,nsrmc,
+	sum(zlhj) zlhj,sum(bc) bc,sum(hl) hl,sum(ss) ss,sum(ss2l) ss2l,
+       sum(tk) tk,sum(fxfl) fxfl,sum(jzydls) jzydls,sum(jzys) jzys,sum(eleqty) eleqty,
+       gmydl,dmydl,csydl,csyh,sum(dzdz) dzdz,xszje,gmxsje,dmxsje,sum(sbje) sbje,yjdj,
+       sum(gmdh) gmdh,sum(dmdh) dmdh,sum(gmsj) gmsj,sum(dmsj) dmsj,sum(pjsj) pjsj,
+       sum(dwdh) dwdh,sum(dwwh) dwwh,sum(dwyh) dwyh,sum(hlsj) hlsj,sum(sssj) sssj
+from (  
+select t1.djxh,t1.nsrsbh,t1.nsrmc,t1.zlhj,t1.bc,t1.hl,t1.ss,t1.ss2l,
+	t1.tk,t1.fxfl,t1.jzydls,t1.jzys,
+	t2.eleqty,&amp;apos;&amp;apos; gmydl,&amp;apos;&amp;apos; dmydl,&amp;apos;&amp;apos; csydl,&amp;apos;&amp;apos; csyh,
+	t5.je dzdz,
+       &amp;apos;&amp;apos; xszje,&amp;apos;&amp;apos; gmxsje,&amp;apos;&amp;apos; dmxsje,t4.somny sbje,&amp;apos;&amp;apos; yjdj,
+       t3.gmdh,t3.dmdh,t3.gmsj,t3.dmsj,t3.pjsj,t3.dwdh,t3.dwwh,t3.dwyh,t3.hlsj,t3.sssj
+from (
+  select a.yymm,a.djxh,a.nsrsbh,b.name nsrmc,
+         sum(a.zlhj) zlhj,sum(a.bc) bc,sum(a.hl) hl,sum(a.ss) ss,
+         sum(a.ss2l) ss2l,sum(a.tk) tk,sum(a.fxfl) fxfl,sum(a.jzydls) jzydls,sum(a.jzys) jzys       
+  from tax_stonedata a,tax_company b
+  where (a.djxh=b.djxh or a.nsrsbh=b.id)
+    and b.djxh in (select djxh from DJ_DJHGLGL where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) 
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,a.djxh,a.nsrsbh,b.name  
+) t1,(
+  select a.yymm,b.cmid nsrsbh,max(b.cmnam) nsrmc,sum(eleqty) eleqty 
+  from tax_eledata a,tax_cmpammno b
+  where a.usrid=b.ammno
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,b.cmid
+) t2,(
+  select yymm,id nsrsbh,sum(somny) somny,sum(taxmny) taxmny from tax_taxdata 
+  where yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; group by yymm,id
+) t4, (
+  select kpyf,xfsbh,sum(je) je,sum(se) se from (
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_PTFP a,DZDZ_HWXX_PTFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( /*销方是石油制品批发行业的*/
+        select id nsrsbh from tax_company where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select nvl(shxydm,nsrsbh) nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+    union all
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_ZZSFP a,DZDZ_HWXX_ZZSFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( /*销方是石油制品批发行业的*/
+        select nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select shxydm from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+  ) group by kpyf,xfsbh
+) t5,
+(select * from tax_stone_param sp where sp.hydm=&amp;apos;[%HYDM]&amp;apos; and sp.csid=&amp;apos;[%CSID]&amp;apos;) t3
+where t1.nsrsbh=t2.nsrsbh and t1.yymm=t2.yymm
+  and t1.nsrsbh=t4.nsrsbh(+) and t1.yymm=t4.yymm(+)
+  and t1.nsrsbh=t5.xfsbh(+) and replace(t1.yymm,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)=t5.kpyf(+)
+order by t1.nsrsbh  
+) group by djxh,nsrsbh,nsrmc</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11></ROW>
+<ROW num="2" ><ID >FXDJBL</ID><NAME ></NAME><DATDSC >select * from TAX_CS_FXYJJB order by bl desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,18 @@
+<script language="javascript">function checkform(form){
+ return true
+}
+function linkSubmit(form){
+	var query=document.getElementsByName("search")[0].value;
+	var url="Layout.sp?id=SearchTrk&trktyp=&crtusr=&trkprj=&query="+query+"";
+	//alert(url);
+    window.location = url;
+}
+function linkSubmitAPI(form){
+	var query=document.getElementsByName("search")[0].value;
+	var url="Layout.sp?id=SearchAPI&apilang=&apiflag=&apisubtyp=&query="+query+"";
+	//alert(url);
+    window.location = url;
+}</script>
+<input id="search" style='COLOR: #aaaaaa;border: 1px solid #0A246A; font-family:宋体; font-size:9pt'
+onfocus="if(document.all('query').value=='输入日期,关键字...')document.all('query').value='';" size="20" value="输入日期,关键字..." name="query" onclick=" if(this.value=='输入日期,关键字...')this.value=''" >
+<a href="#" onclick="linkSubmit(formsearch)"><a href="#" onclick="linkSubmit()">搜索</a><a href="#" onclick="linkSubmitAPI()">API</a><a href="#"></a>

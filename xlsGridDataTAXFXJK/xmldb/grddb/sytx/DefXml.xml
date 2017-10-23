@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >DefXml</MWID><NAME >XML文件修改器</NAME><NOTE ></NOTE><FILE >DefXml.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><TIP ></TIP><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >del</ID><NAME >删除</NAME><TIP ></TIP><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >candel=&amp;quot;0&amp;quot;;
+//
+//      需要传入参数 xmlfil
+//      如果xmlfil=&amp;quot;&amp;quot;，提示选择一个文件
+//
+
+
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：初始化
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/30/05 23:58:54
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata()
+{
+  	// 显示工具栏
+	_this.Showtoolbar(1);
+	// 显示分页栏
+	_this.ShowTabBar(1);
+        var sheet = 0 ;
+	_this.SetSheetName(0,&amp;quot;XML树&amp;quot;);
+	//_this.LoadToTreeCtrl(&amp;quot;tree_1&amp;quot;,sheet,-1,-1,&amp;quot;&amp;quot;);
+	var param = &amp;quot;xmlfile=&amp;quot;+xmlfile;
+	var xml = _this.invokeOSFunc(&amp;quot;loadBilDef&amp;quot;,param,true);
+	//alert ( &amp;quot;Defxml:invokeOSFunc 后返回的文本&amp;quot; );
+	//alert(xml);
+	_this.SetToTreeCtrl(&amp;quot;tree_1&amp;quot;,sheet,-1,-1,xml);
+
+	sheet = _this.AddSheet(&amp;quot;XML代码&amp;quot;);
+	_this.SetToCodeEditor(&amp;quot;xml_1&amp;quot;,sheet,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+}
+
+  r0=new RegExp(&amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;,&amp;quot;g&amp;quot;);
+  r1=new RegExp(&amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;,&amp;quot;g&amp;quot;);
+  function  XmlToStd(xml)
+  {
+      xml = xml.replace( r0, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = xml.replace( r1, &amp;quot;&amp;apos;&amp;quot; );
+    return xml;
+  }
+
+//================================================================// 
+// 函数：_thisOnSheetShow
+// 说明：同步tree 到代码
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/30/05 23:58:59
+// 修改日志：
+//================================================================// 
+function _thisOnSheetShow(sheet,name)
+{
+  	if ( sheet== 1 ){
+		_this.SetText( &amp;quot;xml_1&amp;quot;, XmlToStd(_this.GetText(&amp;quot;tree_1&amp;quot;)) );
+		_this.Redraw();
+	}
+}
+
+//================================================================// 
+// 函数：_thisOnCellModify
+// 说明：同步代码 到tree
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/30/05 23:59:03
+// 修改日志：
+//================================================================// 
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( sheet==1 &amp;&amp; row==-1 &amp;&amp; col==-1 ) {
+		//if ( confirm(&amp;quot;xml的内容已修改，是否更新到树结构?&amp;quot;)==1 )
+			_this.SetText( &amp;quot;tree_1&amp;quot;,_this.GetText(&amp;quot;xml_1&amp;quot;)  );
+	}  
+}
+
+function save()
+{
+  //建立一个参数对象
+  var param = new Object();
+  var sheet = _this.GetCurrentSheet();
+  //添加一个参数,参数名=flwname ,参数值=&amp;quot;test&amp;quot;
+  param.xmlfile=xmlfile;
+  param.isDatFlw = candel;
+  switch(sheet)
+  {
+    case 0:
+     //添加一个参数,参数名=xmlstr ,参数值=_this.GetText(&amp;quot;tree_1&amp;quot;)的结果
+     param.xmlstr = _this.GetText(&amp;quot;tree_1&amp;quot;);
+      break;
+    case 1:
+      param.xmlstr = _this.GetText(&amp;quot;xml_1&amp;quot;);
+      break;
+  }
+  //debugger;
+  var msg = invokeOSFuncExt(&amp;quot;saveBilDef&amp;quot;,param);
+  alert(msg);
+}
+
+function del()
+{
+  if(candel!=&amp;quot;1&amp;quot;)
+  {
+    alert(&amp;quot;不能删除系统配置文件.&amp;quot;);
+    return;
+  }
+  if(confirm(&amp;quot;确实要删除这个项目吗？&amp;quot;))
+  {
+    var msg = _this.invokeOSFunc(&amp;quot;delBilDef&amp;quot;,&amp;quot;xmlfile=&amp;quot;+xmlfile+&amp;quot;&amp;isDatFlw=&amp;quot;+candel);
+    alert(msg);
+  }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+//var flwLnkdbpath = pub.EAOption.getRealpath()+pub.EAOption.get(&amp;quot;xmldb.file.flwLnkdb&amp;quot;);
+var basePath = pub.EAOption.dynaDataRoot;
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+  
+function saveBilDef()
+{
+  //xmlstr = pub.EAFunc.XmlToStd(xmlstr);
+  xmlstr = XmlToStd(xmlstr);
+  var path = basePath + xmlfile;
+  pub.EAFunc.WriteToFile(path,xmlstr);
+//throw new pub.EAException(xmlstr);
+  if(isDatFlw==&amp;quot;1&amp;quot;)
+  {
+     xmldb.EAXmlDB.initFlwLnkDB();
+  }
+  return &amp;quot;保存成功!&amp;quot;;
+}
+ 
+function delBilDef()
+{
+  var path = basePath + xmlfile;
+  var f = new java.io.File(path);
+  var ok = f.delete();
+  if(ok &amp;&amp; isDatFlw==&amp;quot;1&amp;quot;)
+  {
+     xmldb.EAXmlDB.initFlwLnkDB();
+  }
+  if(ok)
+    return &amp;quot;删除成功！&amp;quot; ;
+  else
+    return &amp;quot;删除失败，可能文件正在使用。&amp;quot;;
+}
+
+function loadBilDef()
+{
+  var path = basePath + xmlfile;
+  try
+  {
+    return pub.EAFunc.readFile(path);
+  }
+  catch(e)
+  {
+    var temp = pub.EAOption.dynaDataRoot + pub.EAOption.get(&amp;quot;xmldb.file.flwLnkdb&amp;quot;) + &amp;quot;/sytx/template.xml&amp;quot;;
+    return pub.EAFunc.readFile(temp );
+  }
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

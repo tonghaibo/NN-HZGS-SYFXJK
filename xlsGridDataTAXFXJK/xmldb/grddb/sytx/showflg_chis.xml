@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_chis</MWID><NAME >医疗组件显示风格</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_chis.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot; );
+var servletpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+
+
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+//
+// 
+//
+function SJAPPTYP(){
+		
+	var typ =DSMOD ;
+	var ds=db.QuerySQL(&amp;quot;select * from lsysurl where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and refid=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos; order by id&amp;quot;);
+
+	var div=&amp;quot;&amp;quot;;
+	var displaydiv=&amp;quot;&amp;quot;;
+	var rowcnt=ds.getRowCount();
+	var st = new Array(); 
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	var css=&amp;quot;&amp;lt;style&amp;gt;
+		    .nav_a&amp;quot;+cdcnt+&amp;quot; {
+		        color:#666666;
+		        cursor: pointer;
+		        float: left;
+		        font-size: 14px;
+		        height:40px;
+		        line-height:40px;
+		        padding: 0px 15px;
+		        position: relative;
+		        border-right:1px solid #CFCFCF;
+		    }
+		    .nav_a&amp;quot;+cdcnt+&amp;quot;_1{
+		        color:#666666;
+		        cursor: pointer;
+		        float: left;
+		        font-size: 14px;
+		        height:40px;
+		        line-height:40px;
+		        padding: 0px 15px;
+		        position: relative;
+			background:#999999;
+			border-right:1px solid #CFCFCF;
+		    }
+		
+		    .nav&amp;quot;+cdcnt+&amp;quot; {
+		        height:40px;
+		
+		    }
+		    #dr&amp;quot;+cdcnt+&amp;quot; div:hover{
+		        cursor:pointer;
+		    }
+		    &amp;lt;/style&amp;gt;&amp;quot;;
+	var menulog= MENUID;
+	for(var i=0; i&amp;lt;rowcnt;i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+		var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		url=pub.EAFunc.Replace(url,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		st[i]=id;
+		var onmo=&amp;quot;&amp;quot;;
+		var loyhtml=&amp;quot;&amp;quot;;
+		if(url!=&amp;quot;&amp;quot;){
+			var layoutid=url.split(&amp;quot;&amp;&amp;quot;)[0];
+			layoutid=layoutid.split(&amp;quot;=&amp;quot;)[1];
+	
+			loyhtml=getlayout(request,layoutid);
+		}
+		if(i==0){
+			div+=&amp;quot;&amp;lt;DIV onclick=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot;_1\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+			displaydiv+=&amp;quot;&amp;lt;div id=\&amp;quot;dsy_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		}
+		else{
+			div+=&amp;quot;&amp;lt;DIV onclick=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+			displaydiv+=&amp;quot;&amp;lt;div id=\&amp;quot;dsy_&amp;quot;+id+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; frameborder=\&amp;quot;0\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;&amp;quot;+loyhtml+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		}
+	}
+	var html=&amp;quot;&amp;lt;div id=\&amp;quot;dsy_menu\&amp;quot; style=\&amp;quot;width:100%; height:100%; float:left;display:none\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+	
+	html+=&amp;quot;&amp;lt;div id=\&amp;quot;sjapp_menu\&amp;quot; &amp;gt;&amp;quot;+displaydiv+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;div style=\&amp;quot;position:fixed; OVERFLOW: hidden;bottom:0;right: 0px; BACKGROUND-COLOR:#E8E8E8; width:100%\&amp;quot;&amp;gt;&amp;lt;DIV id=dr&amp;quot;+cdcnt+&amp;quot; class=nav&amp;quot;+cdcnt+&amp;quot; style=\&amp;quot;FLOAT: left\&amp;quot;&amp;gt;&amp;quot;+div+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+			var onclickid=&amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;id&amp;quot;)+&amp;quot;&amp;apos;;
+			var refids = new Array(); 
+			function swithpage&amp;quot;+typ+cdcnt+&amp;quot;(frameid,url){
+				if(onclickid!=frameid){
+					document.getElementById(frameid).style.background=\&amp;quot;#999999\&amp;quot;;
+					document.getElementById(onclickid).style.background=\&amp;quot;#E8E8E8\&amp;quot;;
+					var bkdivid=\&amp;quot;dsy_\&amp;quot;+frameid;
+					var nodivid=\&amp;quot;dsy_\&amp;quot;+onclickid;
+					document.getElementById(bkdivid).style.display=\&amp;quot;block\&amp;quot;;
+					document.getElementById(nodivid).style.display=\&amp;quot;none\&amp;quot;;
+					onclickid=frameid;
+				}
+			}
+	&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	return css+html+script;
+}
+
+function ImgArr(){
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var html = &amp;quot;&amp;quot;;
+	
+	sql = SQLTXT;
+	sql = pubpack.EAFunc.Replace(sql,&amp;quot;#$amp;lt;&amp;quot;,&amp;quot;&amp;lt;&amp;quot;);
+	db = new pubpack.EADatabase();
+	ds = db.QuerySQL(sql);
+	
+	html += &amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;tr align=\&amp;quot;center\&amp;quot; &amp;gt;&amp;quot;;
+	for (var r = 0;r &amp;lt; ds.getRowCount(); r ++) {
+		var nam = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+		var post = ds.getStringAt(r,&amp;quot;postnote&amp;quot;);
+		var imgguid = ds.getStringAt(r,&amp;quot;imgguid&amp;quot;);
+		var sr = &amp;quot;EAFormBlob.sp?guid=&amp;quot;+imgguid;
+		html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+sr+&amp;quot;\&amp;quot; width=\&amp;quot;80px\&amp;quot;style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot; /&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;quot;+nam+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;quot;+post+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+	}	
+	html +=	&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	return html;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

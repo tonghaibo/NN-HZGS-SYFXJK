@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CR08</MWID><NAME >有缴税无电力</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CR08.zxg</FILE><SCENE ></SCENE><FIXED >6,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >guid</ID><NAME >生成</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,6,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN1</DSKEY><NROW >3</NROW><NCOL >6</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,6,1</C20><C21 >0,6,1</C21><C22 >0,6,1</C22><C23 ></C23><C24 >0,6,1</C24><C25 >0,7,1</C25></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet =0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	for(var i=5;i&amp;lt;=_this.GetMainCellRangeRow2(sheet);i++)
+	{
+           _this.SetToBoolBox(sheet,i,1);
+	 }
+}
+
+//生成
+function guid()
+{
+ 	 for(var row=5;row&amp;lt;_this.GetMainCellRangeRow2(sheet);row++){
+		if(_this.GetCellText(sheet,row,1)==1){
+			var id=_this.GetCellText(sheet,row,2);
+			var name=_this.GetCellText(sheet,row,3);
+			var taxmony=_this.GetCellText(sheet,row,4);
+			var taxmny=_this.GetCellText(sheet,row,5);
+			var taxman=_this.GetCellText(sheet,row,6);
+			var star=_this.GetCellText(sheet,row,7);
+			var usrid=G_USRID;
+			var accid=G_ACCID; //帐套号
+			var org=G_ORGID; //组织号
+			var syt = G_SYTID; //系统号
+			
+			var param = new Object();
+			param.id=id;
+			param.name=name;
+			param.taxmony=taxmony;
+			param.taxmny=taxmny;
+			param.taxman=taxman;
+			param.star=star;
+			param.usrid=usrid;
+			param.accid=accid;
+			param.org=org;
+			param.syt=syt;
+			
+			var msg = invokeOSFuncExt(&amp;quot;insert&amp;quot;,param);
+			alert(msg);
+		}
+	}
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage(&amp;quot;com.xlsgrid.net.xlsdb&amp;quot;);
+
+
+function insert()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var id = id;
+	var name = name;
+	var taxmony = taxmony;
+	var taxmny = taxmny;
+	var taxman = taxman;
+	var star =star;
+	var usrid = usrid;
+	var accid = accid;
+	var org=org;
+	var syt=syt;
+	
+	try{
+		db = new pubpack.EADatabase();
+		var chkusr =db.GetBillid(accid,&amp;quot;&amp;quot;,&amp;quot;1&amp;quot;);    //随机产生审批人编号
+		var sysdat=db.GetSQL(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) from dual&amp;quot;);
+		
+		sql = &amp;quot;insert into tax_trkhdr(ACC,ORG,SYT,CHKUSR,CHKUSRNAM,CHKDAT,Cmid,Cmnam,Tousr,SUBTYP) 
+		select &amp;apos;&amp;quot;+accid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+chkusr+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,to_date(&amp;apos;&amp;quot;+sysdat+&amp;quot;&amp;apos;,&amp;apos;yyyy-MM-dd hh24:mi:ss&amp;apos;),&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; ,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+taxman+&amp;quot;&amp;apos;,&amp;apos;2&amp;apos;  
+		from dual where not exists (select 1 from tax_trkhdr a where a.Cmid = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;)&amp;quot;;
+		
+		var count = db.ExcecutSQL(sql);
+	
+		if(count&amp;gt;0)
+			return &amp;quot;生成成功&amp;quot;;
+		else
+			return &amp;quot;以生成&amp;quot;;
+	}catch(e){
+		if(db != null) db.Rollback();
+			return e.toString();
+
+	}finally{
+		if(db != null)	db.Close();
+	}
+	
+}
+
+
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN1</ID><NAME ></NAME><DATDSC >SELECT ID,name,somny,taxmny,taxman,decode(stat,3,&amp;apos;处理&amp;apos;,&amp;apos;未处理&amp;apos;) from(
+select b.id ID,b.name name,sum(b.somny) somny,sum(b.taxmny) taxmny,max(b.taxman) taxman from 
+  (select a.yymm,b.id,b.name,a.elemny from tax_eledata a,tax_company b 
+   where a.usrid=b.ammno and a.eleqty&amp;lt;&amp;gt;0) a,
+  (select a.yymm,a.id,b.name,a.somny,a.taxmny,b.taxman from tax_taxdata a,v_tax_company b 
+   where a.id=b.id 
+   and b.ammno is not null
+   ) b
+where a.id(+)=b.id
+and a.yymm(+)=b.yymm
+and a.id is null
+and b.somny !=0
+group by b.id,b.name
+order by somny desc
+) a, tax_trkhdr b where a.ID=b.cmid(+)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 >MAIN1</C19><C20 >MAIN1</C20><C21 >MAIN1</C21><C22 >MAIN1</C22><C23 >MAIN1</C23><C24 >MAIN1</C24><C25 >MAIN1</C25><C26 >MAIN1</C26><C27 >MAIN1</C27><C28 >MAIN1</C28><C29 >MAIN1</C29><C30 >MAIN1</C30><C31 >MAIN1</C31><C32 >MAIN1</C32><C33 >MAIN1</C33><C34 >MAIN1</C34><C35 >MAIN1</C35><C36 >MAIN1</C36><C37 >MAIN1</C37><C38 >MAIN1</C38><C39 >MAIN1</C39><C40 >MAIN1</C40></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

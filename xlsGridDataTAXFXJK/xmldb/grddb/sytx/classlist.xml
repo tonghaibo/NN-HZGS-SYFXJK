@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >classlist</MWID><NAME >列出某个类的所有函数</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >classlist.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot; );
+
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+	var classname = request.getParameter(&amp;quot;classname&amp;quot;);
+	var cls = langpack.Class.forName(classname);
+	var Methods = cls.getMethods();
+	var ds = new pubpack.EAXmlDS();
+	
+	for ( var i=0;i&amp;lt;Methods.length;i++ ) {
+		var methos = Methods[i];
+		
+      		row = ds.AddRow(ds.getRowCount()-1);
+      		ds.setValueAt(row,&amp;quot;NAME&amp;quot;, methos .getName() );
+      		ds.setValueAt(row,&amp;quot;RETURN&amp;quot;, methos.getReturnType().toString());
+
+      	}
+      	
+      	return ds.GetXml();
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

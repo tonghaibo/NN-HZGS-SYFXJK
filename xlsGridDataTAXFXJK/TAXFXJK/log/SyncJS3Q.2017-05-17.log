@@ -1,0 +1,7 @@
+0:10:7 执行第1次.开始
+0:10:7 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+0:10:7 参数xmlstr=
+5:26:30 操作结束,返回:数据采集失败：执行SQL出错delete from CJ_FXJK.DZDZ_HWXX_PTFP where 1=1  and (KPYF>=to_char(sysdate-1,''yyyymm'') and xf_sjswjg_dm like ''14511%'')java.sql.SQLSyntaxErrorException: ORA-00942: 表或视图不存在
+
+8:0:0 任务已取消 
+8:0:0 任务发布,从0:10开始执行

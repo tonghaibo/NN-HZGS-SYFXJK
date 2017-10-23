@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_wap</MWID><NAME >微网站显示风格</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_wap.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot; );
+var servletpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+//================================================================// 
+// 函数：GetBody
+// 说明：实现类似show.sp的功能
+// 参数：MWID（中间件编号） VAL(参数列表 guid=131241&amp;bilid=12131&amp;)
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/28/15 17:58:16
+// 修改日志：
+//================================================================// 
+function Toolbar(){
+	var html = &amp;quot;&amp;quot;;
+	var sb = new StringBuffer();
+	sb.append(&amp;quot;&amp;lt;div class=\&amp;quot;top_bar\&amp;quot;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;ul id=\&amp;quot;top_menu\&amp;quot; class=\&amp;quot;top_menu\&amp;quot;&amp;gt;&amp;quot;);
+	
+//		&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;images/plugmenu6.png\&amp;quot;&amp;gt;&amp;lt;label&amp;gt;首页&amp;lt;/label&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+//		&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;javascript:void(0)\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;images/plugmenu5.png\&amp;quot;&amp;gt;&amp;lt;label&amp;gt;分享&amp;lt;/label&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+//		&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;tel:13888888888\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;images/plugmenu1.png\&amp;quot;&amp;gt;&amp;lt;label&amp;gt;拨号&amp;lt;/label&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+//		&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;javascript:void(0)\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;images/plugmenu8.png\&amp;quot;&amp;gt;&amp;lt;label&amp;gt;短信&amp;lt;/label&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;  
+	sb.append(&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);
+	return sb.toString() ;
+} 
+
+//
+// 
+//
+function imgscroll()
+{
+	var sql = SQLTXT;
+	var db = new pubpack.EADatabase();
+	var ds = db.QuerySQL(sql);
+	var sb = new StringBuffer();
+	var images = &amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos; rel=&amp;apos;stylesheet&amp;apos;&amp;gt;&amp;quot;;
+	for (var r=0;r&amp;lt;ds.getRowCount();r++){
+		var img=ds.getStringAt(r,&amp;quot;icon&amp;quot;);
+		if(r == 0) images += &amp;quot;.main_image li .img_1{background:url(&amp;apos;&amp;quot;+img+&amp;quot;&amp;apos;) }&amp;quot;;//center top no-repeat
+		if(r == 1) images += &amp;quot;.main_image li .img_2{background:url(&amp;apos;&amp;quot;+img+&amp;quot;&amp;apos;) }&amp;quot;;
+		if(r == 2) images += &amp;quot;.main_image li .img_3{background:url(&amp;apos;&amp;quot;+img+&amp;quot;&amp;apos;) }&amp;quot;;
+		if(r == 3) images += &amp;quot;.main_image li .img_4{background:url(&amp;apos;&amp;quot;+img+&amp;quot;&amp;apos;) }&amp;quot;;
+		if(r == 4) images += &amp;quot;.main_image li .img_5{background:url(&amp;apos;&amp;quot;+img+&amp;quot;&amp;apos;) }&amp;quot;;
+		if(r == 5) break;
+	}
+	images+=&amp;quot;&amp;lt;/style&amp;gt;&amp;quot;;
+	
+	sb.append(images);
+	sb.append(&amp;quot;		
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+$(document).ready(function(){
+	
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeIn()
+	},function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeOut()
+	});
+	
+	$dragBln = false;
+	
+	$(\&amp;quot;.main_image\&amp;quot;).touchSlider({
+		flexible : true,
+		speed : 200,
+		btn_prev : $(\&amp;quot;#btn_prev\&amp;quot;),
+		btn_next : $(\&amp;quot;#btn_next\&amp;quot;),
+		paging : $(\&amp;quot;.flicking_con a\&amp;quot;),
+		counter : function (e){
+			$(\&amp;quot;.flicking_con a\&amp;quot;).removeClass(\&amp;quot;on\&amp;quot;).eq(e.current-1).addClass(\&amp;quot;on\&amp;quot;);
+		}
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;mousedown\&amp;quot;, function() {
+		$dragBln = false;
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;dragstart\&amp;quot;, function() {
+		$dragBln = true;
+	});
+	
+	$(\&amp;quot;.main_image a\&amp;quot;).click(function(){
+		if($dragBln) {
+			return false;
+		}
+	});
+	
+	timer = setInterval(function(){
+		$(\&amp;quot;#btn_next\&amp;quot;).click();
+	}, 5000);
+	
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		clearInterval(timer);
+	},function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		},5000);
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;touchstart\&amp;quot;,function(){
+		clearInterval(timer);
+	}).bind(\&amp;quot;touchend\&amp;quot;, function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		}, 5000);
+	});
+	
+});
+&amp;lt;/script&amp;gt;
+&amp;lt;div class=\&amp;quot;main_visual\&amp;quot;&amp;gt;
+			&amp;lt;div class=\&amp;quot;flicking_con\&amp;quot;&amp;gt;
+				&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+			&amp;lt;/div&amp;gt;
+			&amp;lt;div class=\&amp;quot;main_image\&amp;quot;&amp;gt;
+				&amp;lt;ul&amp;gt;
+					&amp;lt;li&amp;gt;&amp;lt;span class=\&amp;quot;img_1\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+					&amp;lt;li&amp;gt;&amp;lt;span class=\&amp;quot;img_2\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+					&amp;lt;li&amp;gt;&amp;lt;span class=\&amp;quot;img_3\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+					&amp;lt;li&amp;gt;&amp;lt;span class=\&amp;quot;img_4\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+					&amp;lt;li&amp;gt;&amp;lt;span class=\&amp;quot;img_5\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;/ul&amp;gt;
+				&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_prev\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_next\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+			&amp;lt;/div&amp;gt;
+		&amp;lt;/div&amp;gt;&amp;quot;);
+
+	return sb.toString();
+	
+}
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

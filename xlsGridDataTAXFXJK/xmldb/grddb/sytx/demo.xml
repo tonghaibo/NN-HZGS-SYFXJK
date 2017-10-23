@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >demo</MWID><NAME >ddd</NAME><NOTE ></NOTE><FILE >demo.zxg</FILE><FIXED >3,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >demo</ID><NAME >demo</NAME><TIP ></TIP><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DATE1</ID><NAME >Date</NAME><KEYVAL >DATE</KEYVAL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >DATE2</ID><NAME >Date2</NAME><KEYVAL >DATE</KEYVAL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >USRID</ID><NAME >ITEM</NAME><KEYVAL >V_ITEM</KEYVAL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL >000010400</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="3" ><ID >GRDPAMDS_3</ID><NAME >aa</NAME><KEYVAL ></KEYVAL><DISPORD >0</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="4" ><ID >ddd</ID><NAME >fff</NAME><KEYVAL ></KEYVAL><DISPORD >5</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,0,0</ID><NAME >dd</NAME><DSKEY >DSC:DETAIL,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><ISPAGE >1</ISPAGE><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><ISMAIN ></ISMAIN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_USR</LISTID></ROW>
+<ROW num="1" ><ID >0,3,0</ID><NAME ></NAME><DSKEY >DSC:DETAIL</DSKEY><NROW >5</NROW><NCOL >5</NCOL><ISPAGE ></ISPAGE><ISCROSS >1</ISCROSS><HCOLS >biltyp,bilid</HCOLS><VCOLS >locid,itmid</VCOLS><VALUECOL >qty</VALUECOL><ISMAIN >1</ISMAIN><CTLTYP ></CTLTYP><LISTID ></LISTID></ROW>
+<ROW num="2" ><ID >0,0,3</ID><NAME >itmid</NAME><DSKEY >[%USRID]</DSKEY><NROW ></NROW><NCOL ></NCOL><ISPAGE ></ISPAGE><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><ISMAIN ></ISMAIN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_ITEM</LISTID></ROW>
+<ROW num="3" ><ID >0,0,1</ID><NAME ></NAME><DSKEY >DSC:DETAIL,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><ISPAGE ></ISPAGE><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><ISMAIN ></ISMAIN><CTLTYP ></CTLTYP><LISTID ></LISTID></ROW>
+<ROW num="4" ><ID >0,9,2</ID><NAME ></NAME><DSKEY >DSC:heji,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><ISPAGE ></ISPAGE><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><ISMAIN ></ISMAIN><CTLTYP ></CTLTYP><LISTID ></LISTID></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >function demo()
+{
+  alert(invokeOSFunc(&amp;quot;demo&amp;quot;,&amp;quot;msg=&amp;quot;+_this.GetCellText(0,1,1)));
+}
+function _thisOnSelectMainCellRangeRow(sheet,row)
+{
+  alert(row);
+  
+}
+function _thisOnpost_loaddata(sheet)
+	var row = _this.GetCurrentRow(sheet)	;
+	_thisOnSelectMainCellRangeRow(sheet,row)
+)
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function demo()
+{
+  var url = &amp;quot;/login.jsp?msg=&amp;quot;+msg;
+  var nurl = java.net.URLEncoder.encode(url,&amp;quot;UTF-8&amp;quot;);
+  var rd = request.getRequestDispatcher(nurl);
+  return url + rd + nurl;
+
+    var sun = new JavaPackage(&amp;quot;sun.io&amp;quot;);
+  
+  var de = sun.ByteToCharConverter.getDefault().getCharacterEncoding();
+  url=new String(url.getBytes(encoding),defaultencoding);
+  var rd = request.getRequestDispatcher(url);
+  return url + rd;
+
+//	var ret = 1;
+//	for(var i=2;i&amp;lt;5;i++)
+//	{
+//		for(var j=2;j&amp;lt;5;j++)
+//		{
+//			if(i==3)
+//			break;
+//		}
+//		ret += i ;
+//	}
+//	return ret;
+//  return &amp;quot;ok&amp;quot;;
+//  throw Exception(&amp;quot;Exception&amp;quot;);
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DETAIL</ID><NAME ></NAME><DATDSC >select biltyp,bilid,locid,itmid,itmnam,qty from bildtl 
+where itmid like &amp;apos;[%USRID]%&amp;apos; 
+and dat&amp;gt;= to_date(decode(&amp;apos;[%DATE1]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-1-1&amp;apos;,&amp;apos;[%DATE1]&amp;apos;) ,&amp;apos;yyyy-mm-dd&amp;apos;)
+and dat&amp;lt;= to_date(decode(&amp;apos;[%DATE2]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2900-1-1&amp;apos;,&amp;apos;[%DATE2]&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;)</DATDSC></ROW>
+<ROW num="1" ><ID >heji</ID><NAME ></NAME><DATDSC >select sum(qty) from [@demo.DETAIL]</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

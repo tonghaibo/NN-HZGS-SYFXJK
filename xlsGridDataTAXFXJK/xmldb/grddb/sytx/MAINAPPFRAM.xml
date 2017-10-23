@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >MAINAPPFRAM</MWID><NAME >公用模版</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >MAINAPPFRAM.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+/****
+首页打开布局用f_openLocalURL(url)
+子页面打开布局用openWindow(url)
+****/
+function GetBody(){
+//组件里的参数直接使用
+var menu5str=MENU5;
+var menu4str=MENU4;
+var menu2str=MENU2;
+var menu3str=MENU3;
+var menu1str=MENU1;
+var htmltitle=HTMLTITLE;//网页标题
+var title1=TITLE1;
+var title2=TITLE2;
+var title3=TITLE3;
+var title4=TITLE4;
+var title5=TITLE5;
+var qty=DIVQTY;
+var html=&amp;quot;
+&amp;lt;!--HTML5 doctype--&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;&amp;quot;+htmltitle+&amp;quot;&amp;lt;/title&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;Content-type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot; /&amp;gt;
+    &amp;lt;META HTTP-EQUIV=\&amp;quot;Pragma\&amp;quot; CONTENT=\&amp;quot;no-cache\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot; /&amp;gt;
+    &amp;lt;!--这两个css 是必须的！！！--&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/js/icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/js/cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    	&amp;lt;!--这三个js 是http的--&amp;gt;
+    	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;!--这个appframework.ui.js必须放在前面--&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot; &amp;gt;
+	.copyright {
+	padding: 8px;
+	text-align: center;
+	font-size: 14px;
+	color:#B2B2B2;
+	}
+	&amp;lt;/style&amp;gt;
+	
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+var curwinid=0;
+var maxwinid=10;
+function f_openWebURL(url){
+	curwinid ++;
+	if(curwinid&amp;gt;maxwinid)curwinid=1;
+	$.get(url,function(data,status){				
+	document.getElementById(\&amp;quot;DOCWIN\&amp;quot;+curwinid).innerHTML=data;
+	});			
+	document.all(&amp;apos;a_gotoitem&amp;apos;+curwinid).click();
+}
+function f_openLocalURL(url) {
+        curwinid ++;
+        if (curwinid&amp;gt;maxwinid) curwinid=1;
+        var data = \&amp;quot;&amp;lt;iframe src=&amp;apos;\&amp;quot;+url+\&amp;quot;&amp;apos; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;\&amp;quot;;
+        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).innerHTML=data;
+        document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click();
+}     
+&amp;lt;/script&amp;gt;	
+&amp;lt;!--公用js--&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;script type=text/javascript&amp;gt;
+function clicul(id){
+	var li=document.getElementById(id);
+	if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+		li.style.display=&amp;apos;block&amp;apos;;
+	}
+	else{
+	 	li.style.display=&amp;apos;none&amp;apos;;
+	}
+
+}
+&amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt;
+&amp;lt;body &amp;gt; 
+    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+        &amp;lt;header&amp;gt;
+            &amp;lt;h1&amp;gt;&amp;quot;+htmltitle+&amp;quot;&amp;lt;/h1&amp;gt;
+        &amp;lt;/header&amp;gt;
+        &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+        	    &amp;quot;;	
+        	    if(title1!=&amp;quot;&amp;quot; &amp;&amp; title1!=null){			
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第一个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title1+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel1\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-selected=\&amp;quot;true\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu1str!=&amp;quot;&amp;quot; &amp;&amp; menu1str!=null){   		
+		          	html+=getlayout(request,menu1str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+        	    if(title2!=&amp;quot;&amp;quot; &amp;&amp; title2!=null){			
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第二个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title2+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel2\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu2str!=&amp;quot;&amp;quot; &amp;&amp; menu2str!=null){   		
+		          	html+=getlayout(request,menu2str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+        	    if(title3!=&amp;quot;&amp;quot; &amp;&amp; title3!=null){			
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第三个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title3+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel3\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu3str!=&amp;quot;&amp;quot; &amp;&amp; menu3str!=null){   		
+		          	html+=getlayout(request,menu3str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+		     
+        	    if(title4!=&amp;quot;&amp;quot; &amp;&amp; title4!=null){			
+         	   	  
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第四个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title4+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel4\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu4str!=&amp;quot;&amp;quot; &amp;&amp; menu4str!=null){   		
+		          	html+=getlayout(request,menu4str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+		      if(title5!=&amp;quot;&amp;quot; &amp;&amp; title5!=null){			
+         	   	  
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第五个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title5+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel4\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu4str!=&amp;quot;&amp;quot; &amp;&amp; menu4str!=null){   		
+		          	html+=getlayout(request,menu5str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }	
+		          
+		          html+=&amp;quot;
+		     		
+		     &amp;lt;!--10个循环的div---------&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;连接内部窗口不显示\&amp;quot; id=\&amp;quot;WININNER\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;;
+		          if(qty==0 || qty==null || qty==&amp;quot;&amp;quot;){
+		          	qty=10;
+		          }
+		          for(var i=1;i&amp;lt;=qty;i++){
+		          	html+=&amp;quot;&amp;lt;a href=&amp;apos;#PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; id=&amp;apos;a_gotopanel&amp;quot;+i+&amp;quot;&amp;apos; style=\&amp;quot;display：none;\&amp;quot;&amp;gt;直接跳转到win&amp;quot;+i+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+		          }
+		     html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;     
+			   for(var i=1;i&amp;lt;=qty;i++){
+			   	html+=&amp;quot;
+			          	&amp;lt;div class=&amp;apos;panel&amp;apos; data-title=&amp;apos;子页面&amp;apos; id=&amp;apos;PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; data-footer=&amp;apos;none&amp;apos; style=&amp;apos;padding:0;&amp;apos;&amp;gt;
+				        &amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos; &amp;gt;
+				        &amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
+			        &amp;quot;;
+		          }
+		      html+=&amp;quot;;
+		      &amp;lt;/div&amp;gt;&amp;lt;!--这个是pages 的结束--------------------------------------------------------------------------------&amp;gt;	         
+		         
+		         &amp;lt;!--Footer to add tabs if desired--&amp;gt;
+		        &amp;lt;footer&amp;gt;
+		            &amp;lt;!--五个div固定的菜单---------&amp;gt;
+		            &amp;quot;;
+		            if(title1!=&amp;quot;&amp;quot; &amp;&amp; title1!=null){
+		            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel1\&amp;quot; class=\&amp;quot;icon home\&amp;quot; id=&amp;apos;tab1&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title1+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;	
+		            }
+		            if(title2!=&amp;quot;&amp;quot; &amp;&amp; title2!=null){
+		            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel2\&amp;quot; class=\&amp;quot;icon heart\&amp;quot; id=&amp;apos;tab2&amp;apos; data-transition=\&amp;quot;up-reveal\&amp;quot;&amp;gt;&amp;quot;+title2+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			    }
+			    if(title3!=&amp;quot;&amp;quot; &amp;&amp; title3!=null){
+			    	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel3\&amp;quot; class=\&amp;quot;icon pencil\&amp;quot; id=&amp;apos;tab3&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title3+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+		            }
+		            if(title4!=&amp;quot;&amp;quot; &amp;&amp; title4!=null){
+		            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel4\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title4+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			    }
+		            if(title5!=&amp;quot;&amp;quot; &amp;&amp; title5!=null){
+		            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel5\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab5&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title5+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			    }
+
+			    html+=&amp;quot;
+	
+		        &amp;lt;/footer&amp;gt;
+    &amp;lt;/div&amp;gt;&amp;lt;!--这个是view 的结束-------------------------------------------------------------------------------------&amp;gt;
+
+&amp;lt;/body&amp;gt;
+
+&amp;lt;/html&amp;gt;	
+&amp;quot;;
+return html;
+
+}
+
+
+//获取每个布局的编号
+function genSTR(str){
+
+	var sql=&amp;quot;&amp;quot;;
+	var ds=&amp;quot;&amp;quot;;
+	var db=null;
+	db = new pubpack.EADatabase();
+	var layid=&amp;quot;&amp;quot;;
+	try{
+		sql=&amp;quot;
+			SELECT B.* FROM LAYOBJ A ,LAYOBJDTL B  
+			WHERE A.GUID=B.FORMGUID 
+			AND A.ID =&amp;apos;MAINAPPFRAM&amp;apos; AND A.CLS=&amp;apos;CHIS&amp;apos;and B.id =&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;
+		&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()==1){
+			layid=ds.getStringAt(0,&amp;quot;VAL&amp;quot;);
+			return layid; 
+		}
+	}
+	catch(e){return &amp;quot;&amp;quot;;}
+	if(db!=null){db.Close();}
+}
+//获取布局的html
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(&amp;quot;&amp;quot;);
+						
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

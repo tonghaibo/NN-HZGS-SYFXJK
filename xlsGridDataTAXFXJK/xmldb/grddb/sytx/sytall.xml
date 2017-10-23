@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >sytall</MWID><NAME >系统所有功能定义入口</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >sytall.zxg</FILE><SCENE ></SCENE><FIXED >1,3</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	 var ret = invokeOSFunc(&amp;quot;GetSytList&amp;quot;,&amp;quot;&amp;quot; ) ;	  
+	 _this.SetXmlDS(0,1,0,2,2, ret );
+
+	 for ( var r=2;r&amp;lt;_this.GetRowCount(0);r++ ) 
+		 for ( var c=3;c&amp;lt;_this.GetColCount(0);c++ ) 
+		 	_this.SetCellText(0,r,c,_this.GetCellText(0,1,c) ) ;
+	 _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	//	 子系统菜单	流程图	数据流	数据库连接	后台计划任务	URL重定向	WEB连接	FTP连接
+	
+
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	var str = _this.GetCellText(sheet,row,col );
+	var sytid = _this.GetCellText(sheet,row,0 );
+	if ( sytid == &amp;quot;&amp;quot; ) return &amp;quot;&amp;quot;;
+	if( str == &amp;quot;子系统菜单&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=subsyt&amp;MYSYTID=&amp;quot;+sytid);
+	}
+	else if ( str == &amp;quot;流程图&amp;quot; ) {
+		//openWindow(&amp;quot;show.sp?grdid=subsyt&amp;MYSYTID=&amp;quot;+sytid);
+
+	}  
+	else if ( str == &amp;quot;数据流&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=sytall_datflw&amp;MYSYTID=&amp;quot;+sytid);
+
+	}
+	else if ( str == &amp;quot;数据库连接&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=XMLEDITOR&amp;xmlfile=&amp;quot;+sytid+&amp;quot;/data-sources.xml&amp;script=xlsgrid/js/dataSourceEdit.js&amp;fullrewrite=1&amp;quot;);
+	}
+	else if ( str == &amp;quot;后台计划任务&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=XMLEDITOR&amp;xmlfile=&amp;quot;+sytid+&amp;quot;/timerTask.xml&amp;script=xlsgrid/js/timerTask.js&amp;fullrewrite=1&amp;quot;);
+	}
+	else if ( str == &amp;quot;URL重定向&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=XMLEDITOR&amp;xmlfile=&amp;quot;+sytid+&amp;quot;/urldb.xml&amp;script=xlsgrid/js/urlEdit.js&amp;quot;);
+
+	}
+	else if ( str == &amp;quot;WEB连接&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=XMLEDITOR&amp;xmlfile=&amp;quot;+sytid+&amp;quot;/webdb.xml&amp;script=xlsgrid/js/webEdit.js&amp;quot;);
+	}
+	else if ( str == &amp;quot;FTP连接&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=XMLEDITOR&amp;xmlfile=&amp;quot;+sytid+&amp;quot;/ftpdb.xml&amp;script=xlsgrid/js/ftpEdit.js&amp;quot;);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+
+
+function GetSytList()
+{
+//&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;;
+//        xml+=&amp;quot;&amp;lt;中间件对象&amp;gt;&amp;quot;;
+        var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EASYTXmlDB.getSytDS();
+        var ds = new pubpack.EAXmlDS();
+        for ( var i=0;i&amp;lt;sytds.getRowCount();i++ ) {
+        	var row = ds.AddRow(ds.getRowCount()-1 );
+        	ds.setValueAt(row,&amp;quot;ID&amp;quot;, sytds.getStringAt(i,&amp;quot;ID&amp;quot; ));
+        	ds.setValueAt(row,&amp;quot;NAME&amp;quot;, sytds.getStringAt(i,&amp;quot;NAME&amp;quot; ));
+        	ds.setValueAt(row,&amp;quot;REFID&amp;quot;, sytds.getStringAt(i,&amp;quot;INHERTEDFROM&amp;quot; ));
+        	
+        
+        }
+        return ds.GetXml();
+        
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

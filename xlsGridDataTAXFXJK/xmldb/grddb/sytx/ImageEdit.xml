@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ImageEdit</MWID><NAME >图片编辑工具</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ImageEdit.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >IMG</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var sheet1 = 1;
+var sheet2 = 2;
+var sheet3 = 3;
+var G_FORMGUID = &amp;quot;&amp;quot;;	//来源于库图片
+var G_SRCURL = &amp;quot;&amp;quot;;	//图片访问地址
+var G_FORMAT = &amp;quot;&amp;quot;;	//图片格式
+var G_W = 0;		//图片宽度
+var G_H = 0;		//图片高度
+var G_BW = 0;		//大图宽度
+var G_BH = 0;		//大图高度
+var G_SW = 0;		//小图宽度
+var G_SH = 0;		//小图高度
+var G_SCEENW = 0;
+var G_SCEENH = 0;
+var G_AUTOFIX = &amp;quot;0&amp;quot;;	//是否自动适应大小
+	
+//2014/3 修改：
+//	返回值改为 bigguid,guid,smlguid,bigw,bigh,w,h,smlw,smlh
+//	增加autofix传入参数，=1，载入的时候制动适应大小
+//载入ZXG之后
+function _thisOnpost_LoadZXGFile(sheet)
+{
+	
+	setLayout();
+	
+	_this.SetCellBkColor(sheet,-1,-1,250,250,250);
+	_this.SetCellColor(sheet,1,1,166,166,166);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,2);
+	
+	try { G_FORMGUID = formguid; } catch ( e ) { }
+	try { G_W = imgw; } catch ( e ) { G_W = &amp;quot;&amp;quot;; }
+	try { G_H = imgh; } catch ( e ) { G_H = &amp;quot;&amp;quot;; }
+	try { G_BW = bigimgw; } catch ( e ) { G_BW = &amp;quot;400&amp;quot;; }
+	try { G_BH = bigimgh; } catch ( e ) { G_BH = &amp;quot;400&amp;quot;; }
+	try { G_SW = smlimgw; } catch ( e ) { G_SW = &amp;quot;&amp;quot;; }
+	try { G_SH = smlimgh; } catch ( e ) { G_SH = &amp;quot;&amp;quot;; }
+	try { G_AUTOFIX = autofix; } catch ( e ) { G_AUTOFIX = &amp;quot;0&amp;quot;; }
+	_this.SetRedraw(1);
+	
+	_this.SetCellText(sheet,5,2,G_BW);
+	_this.SetCellText(sheet,5,4,G_BH);
+	_this.SetCellText(sheet,7,2,G_W);
+	_this.SetCellText(sheet,7,4,G_H);
+	_this.SetCellText(sheet,9,2,G_SW);
+	_this.SetCellText(sheet,9,4,G_SH);
+	_this.SetToBoolBox(sheet,11,2);
+	_this.SetCellText(sheet,11,2,G_AUTOFIX);
+	
+	var list =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_IMAGE_FORMAT&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,sheet,13,2,list);
+	_this.SetCellText(sheet,13,2,&amp;quot;no&amp;quot;);
+	G_FORMAT = _this.GetCellText(sheet,13,2);
+	
+	G_SCEENW = _this.GetColWidth(sheet1,-1);
+	G_SCEENH = _this.GetRowHeight(sheet1,-1);
+	
+
+	
+
+	_this.SetToSVGForm(&amp;quot;svgform1&amp;quot;,sheet1,-1,-1,&amp;quot;&amp;quot;);
+	_this.SetToSVGForm(&amp;quot;svgform2&amp;quot;,sheet2,-1,-1,&amp;quot;&amp;quot;);
+	_this.SetToSVGForm(&amp;quot;svgform3&amp;quot;,sheet3,-1,-1,&amp;quot;&amp;quot;);
+	if(G_BW!=&amp;quot;&amp;quot;)
+		_this.SVGFORM_SetClipWH(&amp;quot;svgform1&amp;quot;,0,0,G_BW,G_BH);
+	if(G_W!=&amp;quot;&amp;quot;)
+		_this.SVGFORM_SetClipWH(&amp;quot;svgform2&amp;quot;,0,0,G_W,G_H);
+	if (G_SW!=&amp;quot;&amp;quot;)
+		_this.SVGFORM_SetClipWH(&amp;quot;svgform3&amp;quot;,0,0,G_SW,G_SH);
+
+
+	
+	if (G_FORMGUID != &amp;quot;&amp;quot;) G_SRCURL = &amp;quot;EAFormBlob.sp?guid=&amp;quot;+G_FORMGUID;
+
+	if (G_SRCURL != &amp;quot;&amp;quot;){ 
+		//延时调用的方法
+		setTimeout(function(){
+			setImage(G_SRCURL,sheet1,&amp;quot;svgform1&amp;quot;,G_BW,G_BH);//延时载入图片
+			setImage(G_SRCURL,sheet2,&amp;quot;svgform2&amp;quot;,G_W,G_H);
+			setImage(G_SRCURL,sheet3,&amp;quot;svgform3&amp;quot;,G_SW,G_SH);
+		},500); 
+	}
+	
+	_this.SetDesignMode(1);
+	_this.SetSheetName(sheet1,&amp;quot;大图片&amp;quot;);
+	_this.SetSheetName(sheet2,&amp;quot;中图片&amp;quot;);
+	_this.SetSheetName(sheet3,&amp;quot;小图片&amp;quot;);
+
+	if(G_W==&amp;quot;&amp;quot;||G_SW==&amp;quot;&amp;quot;){
+		_this.SetRowVisible(0,7,0);
+		_this.SetRowVisible(0,8,0);
+		_this.SetRowVisible(0,9,0);
+		_this.SetRowVisible(0,10,0);
+
+		
+		_this.ShowTabBar(0);
+	}
+	else _this.ShowTabBar(1);
+
+	
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	_this.ShowTabBar(1);
+//	_this.ShowToolBar(0);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;确定&amp;quot; ) {
+		var msg = &amp;quot;&amp;quot;;
+		var dir = &amp;quot;&amp;quot;;
+		var desturl = &amp;quot;&amp;quot;;
+		var srcurl = &amp;quot;&amp;quot;;
+		var srcloc = &amp;quot;&amp;quot;;
+		var ret = &amp;quot;&amp;quot;;
+		
+		G_FORMAT = _this.GetCellText(sheet,13,2);
+		if (G_FORMAT == &amp;quot;no&amp;quot;) G_FORMAT = &amp;quot;jpg&amp;quot;;
+		_this.SetAttribe(&amp;quot;&amp;quot;,_this.ATTR_EXPORT_IMAGE_FORMAT,G_FORMAT);
+		
+		dir = _this.GetWindowTempFile();
+		desturl = dir+&amp;quot;.&amp;quot;+G_FORMAT;
+		srcurl = _this.SVGFORM_SaveImageFile(&amp;quot;svgform1&amp;quot;,desturl,0,0,G_BW,G_BH);//-1,-1,-1,-1
+		ret = saveImage(srcurl); //上传大图片
+		if (ret != null &amp;&amp; ret != &amp;quot;&amp;quot;) {
+			if (msg != &amp;quot;&amp;quot;) msg += &amp;quot;,&amp;quot;;
+			msg += ret;
+			srcloc = srcurl;
+		}
+		
+		if (srcloc != &amp;quot;&amp;quot;&amp;&amp;G_W!=&amp;quot;&amp;quot;) {					
+			setImage(srcloc,sheet2,&amp;quot;svgform2&amp;quot;,G_W,G_H);
+			dir = _this.GetWindowTempFile();
+			desturl = dir+&amp;quot;.&amp;quot;+G_FORMAT;
+			_this.SetRedraw(1);
+			_this.SetCellFocus(sheet2,-1,-1);
+			_thisOnRunCellFocusChange(sheet2,-1,-1,-1,-1);
+			srcurl = _this.SVGFORM_SaveImageFile(&amp;quot;svgform2&amp;quot;,desturl,-1,-1,-1,-1);
+			ret = saveImage(srcurl); //上传中图片
+			if (ret != null &amp;&amp; ret != &amp;quot;&amp;quot;) {
+				if (msg != &amp;quot;&amp;quot;) msg += &amp;quot;,&amp;quot;;
+				msg += ret;
+			}
+			
+			
+			setImage(srcloc,sheet3,&amp;quot;svgform3&amp;quot;,G_SW,G_SH);
+			dir = _this.GetWindowTempFile();
+			desturl = dir+&amp;quot;.&amp;quot;+G_FORMAT;
+			_this.SetRedraw(1);
+			_this.SetCellFocus(sheet3,-1,-1);
+			_thisOnRunCellFocusChange(sheet3,-1,-1,-1,-1);
+			srcurl = _this.SVGFORM_SaveImageFile(&amp;quot;svgform3&amp;quot;,desturl,-1,-1,-1,-1);
+			ret = saveImage(srcurl); //上传小图片
+			if (ret != null &amp;&amp; ret != &amp;quot;&amp;quot;) {
+				if (msg != &amp;quot;&amp;quot;) msg += &amp;quot;,&amp;quot;;
+				msg += ret;
+			}
+		}
+		else msg+=&amp;quot;,,&amp;quot;;
+		msg+=&amp;quot;,&amp;quot;+G_BW+&amp;quot;,&amp;quot;+G_BH+&amp;quot;,&amp;quot;+G_W+&amp;quot;,&amp;quot;+G_H+&amp;quot;,&amp;quot;+G_SW+&amp;quot;,&amp;quot;+G_SH;
+		
+		window.status = msg;  //返回大、中、小图片
+		window.returnValue = msg;
+		window.close();
+	}
+}
+
+//设计图片
+//	SVGForm	实现
+//	srcurl	图片来源位置
+function setImage(srcurl,sheet,svgform,w,h)
+{
+
+	var ret = &amp;quot;&amp;quot;;
+	var ix = 0; //图片位置x
+	var iy = 0; //图片位置y
+	var px = _this.GetColWidth(sheet1,-1); //窗口宽
+	var py = _this.GetRowHeight(sheet1,-1); //窗口高
+
+//	var px = G_SCEENW;
+//	var py = G_SCEENH;
+	_this.LogString( srcurl+&amp;quot;,w=&amp;quot;+w+&amp;quot;,h=&amp;quot;+h+&amp;quot;,G_SCEENW=&amp;quot;+px+&amp;quot;,G_SCEENH=&amp;quot;+py );
+	if (w != 0) ix = Math.round((px-w)/2);
+	if (h != 0) iy = Math.round((py-h)/2);
+	if (ix &amp;lt;= 0) ix = 0;
+	if (iy &amp;lt;= 0) iy = 0;
+	//alert(&amp;quot;sheet=&amp;quot;+sheet+&amp;quot;,px=&amp;quot;+px+&amp;quot;,py=&amp;quot;+py+&amp;quot;,w=&amp;quot;+w+&amp;quot;,h=&amp;quot;+h+&amp;quot;,ix=&amp;quot;+ix+&amp;quot;,iy=&amp;quot;+iy);
+	
+	ix = 0;
+	iy = 0;
+	var svg = &amp;quot;&amp;lt;svg&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+srcurl+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+ix+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+iy+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+	_this.LogString( svg );
+	if (_this.GetCellText(0,11,2) == &amp;quot;1&amp;quot; &amp;&amp; w != 0 &amp;&amp; h != 0) { //自动调整图片大小
+		svg = &amp;quot;&amp;lt;svg&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+srcurl+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+w+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+h+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+ix+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+iy+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;//
+		_this.LogString(&amp;quot;自动调整图片大小&amp;quot;+svg );		
+	}
+	_this.SetToSVGForm(svgform,sheet,-1,-1,svg);
+//	_this.SVGFORM_SetClipWH(svgform,-1,-1,w,h);
+	_this.SVGFORM_SetClipWH(svgform,0,0,w,h);
+
+
+	return ret;
+}
+
+//保存图片到数据库
+//	srcurl	图片位置
+function saveImage(srcurl)
+{
+	// 上传图片到formBlob表
+	_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+	_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+	_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,srcurl,1);
+	_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,&amp;quot;&amp;quot;,0);
+	_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+	_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+	_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,srcurl,0);
+	var ret = _this.SendHttpRequest();
+	_this.CloseHttpRequest();
+	
+	return ret;
+}
+
+//设置页面布局
+function setLayout()
+{
+	var layoutxml = &amp;quot;&amp;quot;;
+	
+	layoutxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROWSET&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C1  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;300\&amp;quot; colspan=\&amp;quot;2\&amp;quot;&amp;gt;&amp;quot;+sheet+&amp;quot;&amp;lt;/C1&amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C2  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;100%\&amp;quot; colspan=\&amp;quot;2\&amp;quot;&amp;gt;&amp;quot;+sheet1+&amp;quot;,&amp;quot;+sheet2+&amp;quot;,&amp;quot;+sheet3+&amp;quot;&amp;lt;/C2&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;/ROW&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	_this.SetLayoutDS(layoutxml);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp; row == 3) {
+		if (newvalue != &amp;quot;&amp;quot;) G_SRCURL = newvalue;
+		if (G_SRCURL != &amp;quot;&amp;quot;){
+			 setImage(G_SRCURL,sheet1,&amp;quot;svgform1&amp;quot;,G_BW,G_BH);
+			 setImage(G_SRCURL,sheet2,&amp;quot;svgform2&amp;quot;,G_W,G_H);
+			 setImage(G_SRCURL,sheet3,&amp;quot;svgform3&amp;quot;,G_SW,G_SH);
+		}
+	}
+	if (sheet == 0 &amp;&amp; row == 5) {
+		if (!isNaN(newvalue) &amp;&amp; 1*newvalue &amp;gt; 0) {
+			G_BW = 1*_this.GetCellText(sheet,5,2);
+			G_BH = 1*_this.GetCellText(sheet,5,4);
+
+			_this.SVGFORM_SetClipWH(&amp;quot;svgform1&amp;quot;,0,0,G_BW,G_BH);
+
+		}
+	}
+	if (sheet == 0 &amp;&amp; row == 7) {
+		if (!isNaN(newvalue) &amp;&amp; 1*newvalue &amp;gt; 0) {
+			G_W = 1*_this.GetCellText(sheet,7,2);
+			G_H = 1*_this.GetCellText(sheet,7,4);
+			_this.SVGFORM_SetClipWH(&amp;quot;svgform2&amp;quot;,0,0,G_W,G_H);
+
+		}
+	}
+	if (sheet == 0 &amp;&amp; row == 9) {
+		if (!isNaN(newvalue) &amp;&amp; 1*newvalue &amp;gt; 0) {
+			G_SW = 1*_this.GetCellText(sheet,9,2);
+			G_SH = 1*_this.GetCellText(sheet,9,4);
+			_this.SVGFORM_SetClipWH(&amp;quot;svgform3&amp;quot;,0,0,G_SW,G_SH);
+
+		}
+	}
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >getItems</ID><NAME ></NAME><DATDSC >select id,replace(name,&amp;apos;　&amp;apos;,&amp;apos;&amp;apos;) name,nvl(width,0) width,
+       nvl(height,0) height,nvl(depth,0) depth
+  from item
+ where org=&amp;apos;[%SYS_DEFORG]&amp;apos; and bascat1 like &amp;apos;[%BASCAT]%&amp;apos;
+   and (id like &amp;apos;%[%NOTE]%&amp;apos; or name like &amp;apos;%[%NOTE]%&amp;apos;)
+ order by id</DATDSC><C4 >getItems</C4><C5 >getItems</C5><C6 >getItems</C6><C7 >getItems</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

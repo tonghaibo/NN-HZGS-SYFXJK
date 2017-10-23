@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >BIHome</MWID><NAME >BI分析首页</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BIHome.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+//作为.sp服务时的入口	
+//预定义变量：request,response
+function Response()
+{
+	var db = null;
+	var ds = null;
+	var _ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	var sTitle = &amp;quot;&amp;quot;;
+	var sRight = &amp;quot;&amp;quot;;
+	var rCount = 5;
+	
+	var clienttype = pub.EAFunc.NVL(request.getParameter(&amp;quot;clienttype&amp;quot;),&amp;quot;&amp;quot;);
+	if (clienttype != &amp;quot;&amp;quot;) clienttype = &amp;quot;&amp;clienttype=HTML&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		sql = &amp;quot;select * from dim_model where guid=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;&amp;quot;;
+		_ds = db.QuerySQL(sql);
+		sTitle = _ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		sRight = _ds.getStringAt(0,&amp;quot;NOTE&amp;quot;);
+		if (_ds.getStringAt(0,&amp;quot;ROWCOUNT&amp;quot;) != &amp;quot;&amp;quot;) rCount = 1*_ds.getStringAt(0,&amp;quot;ROWCOUNT&amp;quot;);
+		
+		sql = &amp;quot;select rownum seq,a.* from (select id,name from dim_topic where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos; and refid is null order by id) a&amp;quot;;
+		_ds = db.QuerySQL(sql);
+		
+		ds = new pub.EADS();
+		var r = ds.AddRow(-1);
+		ds.setValueAt(r, &amp;quot;ID0&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME0&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON0&amp;quot;, &amp;quot;&amp;quot;);
+		ds.setValueAt(r, &amp;quot;ID1&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME1&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON1&amp;quot;, &amp;quot;&amp;quot;);
+		ds.setValueAt(r, &amp;quot;ID2&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME2&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON2&amp;quot;, &amp;quot;&amp;quot;);
+		ds.setValueAt(r, &amp;quot;ID3&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME3&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON3&amp;quot;, &amp;quot;&amp;quot;);
+		ds.setValueAt(r, &amp;quot;ID4&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME4&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON4&amp;quot;, &amp;quot;&amp;quot;);
+		r = ds.AddRow(-1);
+		
+		var cnt = 0;
+		for (var ii = 0;ii &amp;lt; _ds.getRowCount();ii ++) {
+			var id = _ds.getStringAt(ii,&amp;quot;ID&amp;quot;);
+			var name = _ds.getStringAt(ii,&amp;quot;NAME&amp;quot;);
+			
+			var seq = cnt%rCount;
+			if (seq == 0 &amp;&amp; cnt &amp;gt;= 2*rCount) {
+				r = ds.AddRow(ds.getRowCount()-1);
+				ds.setValueAt(r, &amp;quot;ID0&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME0&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON0&amp;quot;, &amp;quot;&amp;quot;);
+				ds.setValueAt(r, &amp;quot;ID1&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME1&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON1&amp;quot;, &amp;quot;&amp;quot;);
+				ds.setValueAt(r, &amp;quot;ID2&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME2&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON2&amp;quot;, &amp;quot;&amp;quot;);
+				ds.setValueAt(r, &amp;quot;ID3&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME3&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON3&amp;quot;, &amp;quot;&amp;quot;);
+				ds.setValueAt(r, &amp;quot;ID4&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;NAME4&amp;quot;, &amp;quot;&amp;quot;);ds.setValueAt(r, &amp;quot;ICON4&amp;quot;, &amp;quot;&amp;quot;);
+			} else if (seq == 0 &amp;&amp; cnt &amp;gt;= rCount) {
+				r ++;
+			}
+			
+			ds.setValueAt(r, &amp;quot;ID&amp;quot;+seq, id);ds.setValueAt(r, &amp;quot;NAME&amp;quot;+seq, name);ds.setValueAt(r, &amp;quot;ICON&amp;quot;+seq, &amp;quot;&amp;quot;);
+			cnt ++;
+		}
+		
+		for (var ii = 0;ii &amp;lt; ds.getRowCount();ii ++) {
+			ret += &amp;quot;&amp;lt;tr height=150&amp;gt;\r&amp;quot;;
+			
+			var td_w = 150;
+			if (rCount == 3 || _ds.getRowCount() == 3) td_w = 260;
+			else if (rCount == 4 || _ds.getRowCount() == 4) td_w = 192.5;
+			
+			for (var jj = 0;(jj &amp;lt; rCount &amp;&amp; jj &amp;lt; _ds.getRowCount()) || ((rCount &amp;lt; 3 || _ds.getRowCount() &amp;lt; 3) &amp;&amp; jj &amp;lt; 5);jj ++) {
+				var id = ds.getStringAt(ii,&amp;quot;ID&amp;quot;+jj);
+				var name = ds.getStringAt(ii,&amp;quot;NAME&amp;quot;+jj);
+				
+				var icon = &amp;quot;&amp;quot;;
+				var iconurl = &amp;quot;&amp;quot;;
+				if (id != &amp;quot;&amp;quot;) {
+					icon = &amp;quot;xlsgrid/images/entry/&amp;quot;+(ii*5+ii+jj)%10+&amp;quot;.png&amp;quot;;
+					iconurl = &amp;quot;&amp;lt;img border=0 src=\&amp;quot;&amp;quot;+icon+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+				}
+				
+				ret += &amp;quot;&amp;lt;td width=&amp;quot;+td_w+&amp;quot; bgcolor=&amp;apos;#FFFFFF&amp;apos; &amp;quot;;
+				
+				if (id != &amp;quot;&amp;quot;) {
+					ret += &amp;quot;onmouseover=\&amp;quot;this.style.backgroundColor=&amp;apos;#DBEBFA&amp;apos;;this.style.cursor=&amp;apos;hand&amp;apos;;title=&amp;apos;&amp;apos;\&amp;quot; onmouseout=\&amp;quot;this.style.backgroundColor=&amp;apos;#FFFFFF&amp;apos;;\&amp;quot; onclick=\&amp;quot;javascript:show_right(&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;);\&amp;quot;&amp;quot;;
+				}
+				ret += &amp;quot;&amp;gt;\r&amp;quot;;
+				
+				ret += &amp;quot;&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; style=&amp;apos;border-collapse: collapse&amp;apos; bordercolor=&amp;apos;#E4E4E4&amp;apos;&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;&amp;lt;tr height=150&amp;gt;&amp;lt;td style=&amp;apos;border: 1px solid #E4E4E4; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px&amp;apos;&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;	&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;	&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;quot;+iconurl+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;	&amp;lt;tr&amp;gt;&amp;lt;td align=center height=50&amp;gt;&amp;lt;span style=&amp;apos;font-size: 10.5pt&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;	&amp;lt;/table&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;&amp;lt;/table&amp;gt;\r&amp;quot;;
+				ret += &amp;quot;&amp;lt;/td&amp;gt;\r&amp;quot;;
+			}
+			
+			ret += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pub.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	
+	ret = &amp;quot;&amp;lt;html&amp;gt;
+	&amp;lt;head&amp;gt;
+		&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html; charset=GB2312&amp;apos;&amp;gt;
+		&amp;lt;script&amp;gt;
+			// 主题的触发事件
+			function show_right(topic){
+				parent.show_right(topic);
+			}
+			function show_algs(){
+				window.open(&amp;apos;show.sp?grdid=BIAlgs&amp;FORMGUID=&amp;quot;+FORMGUID+clienttype+&amp;quot;&amp;apos;);
+			}
+		&amp;lt;/script&amp;gt;
+	&amp;lt;/head&amp;gt;
+	
+	&amp;lt;body bgcolor=&amp;apos;#F6F6F6&amp;apos; link=&amp;apos;#000000&amp;apos; vlink=&amp;apos;#000000&amp;apos; alink=&amp;apos;#000000&amp;apos;&amp;gt;
+		&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+			&amp;lt;tr&amp;gt;&amp;lt;td align=&amp;apos;center&amp;apos; valign=&amp;apos;middle&amp;apos;&amp;gt;
+				&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;860&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+					&amp;lt;tr&amp;gt;&amp;lt;td height=&amp;apos;72&amp;apos;&amp;gt;
+						&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;0&amp;apos;&amp;gt;
+							&amp;lt;tr&amp;gt;
+								&amp;lt;td valign=&amp;apos;bottom&amp;apos;&amp;gt;&amp;lt;font size=&amp;apos;5&amp;apos; color=&amp;apos;#1188FF&amp;apos;&amp;gt;&amp;quot;+sTitle+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+								&amp;lt;td align=&amp;apos;right&amp;apos;&amp;gt;&amp;lt;a href=&amp;apos;javascript:show_algs();&amp;apos;&amp;gt;&amp;lt;font size=&amp;apos;2&amp;apos; color=&amp;apos;#FF0000&amp;apos;&amp;gt;指标说明&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;
+							&amp;lt;/tr&amp;gt;
+							&amp;lt;tr&amp;gt;&amp;lt;td valign=&amp;apos;bottom&amp;apos; colspan=&amp;apos;2&amp;apos;&amp;gt;&amp;lt;hr&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;font size=&amp;apos;3&amp;apos; color=&amp;apos;#696969&amp;apos;&amp;gt;&amp;quot;+sRight+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+						&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+					&amp;lt;tr&amp;gt;&amp;lt;td valign=&amp;apos;top&amp;apos;&amp;gt;
+						&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;20&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos;&amp;gt;
+							&amp;quot;+ret+&amp;quot;
+						&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+					&amp;lt;tr&amp;gt;&amp;lt;td height=&amp;apos;60&amp;apos;&amp;gt;
+						&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+							&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;hr&amp;gt;&amp;lt;font size=&amp;apos;2&amp;apos; color=&amp;apos;#363636&amp;apos;&amp;gt;&amp;nbsp;&amp;nbsp;帮助：选择分析主题点击进入分析主页&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+						&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+				&amp;lt;/table&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		&amp;lt;/table&amp;gt;
+	&amp;lt;/body&amp;gt;\r&amp;lt;/html&amp;gt;&amp;quot;;
+	
+	return ret;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

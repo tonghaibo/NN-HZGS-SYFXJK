@@ -1,0 +1,2159 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >BBS</MWID><NAME >BBS论坛</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BBS.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+
+// 插入日志
+// logtyp: 日志分类，比如TRKHDR
+// logtypnam: 日志分类,如已读
+// guid: 参考编号
+// name: 事务的说明，比如新建的事务的标题
+// note: 事务的详细内容，删除一个事务的时候，这里保存事务的明细
+// prj 项目
+function OALOG( db,loginorgid ,loginusrid,logtyp,logtypnam,guid,name,note ,prj ) 
+{
+	var sql = &amp;quot;insert into OALOG(org,usrid,usrnam,mwtyp,action,bilid,name,note,prj)&amp;quot;+
+	       &amp;quot;select a.org,a.id,a.name,&amp;apos;&amp;quot;+logtyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+logtypnam+&amp;quot;&amp;apos; ,&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;, &amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+prj+&amp;quot;&amp;apos; from usr a where a.id=&amp;apos;&amp;quot;+loginusrid +&amp;quot;&amp;apos; and a.org=&amp;apos;&amp;quot;+loginorgid +&amp;quot;&amp;apos; &amp;quot;;
+	//throw new Exception(&amp;quot;log错误:&amp;quot;+sql );
+	db.ExcecutSQL(sql);
+}
+
+function test()
+{
+	return txt ;
+
+}
+
+
+function MyLoginInfo()
+{
+	var ret= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+	var usrorgid = usrinfo.getusrOrg();
+	var db = null;
+	ret = &amp;quot;欢迎您，&amp;quot;+usrinfo.getUsrnam()+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from( select to_char(crtdat,&amp;apos;MM/DD HH24:MI&amp;apos;) tim from usrlog where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and action=&amp;apos;登录系统&amp;apos; order by crtdat desc) where rownum&amp;lt;=2 &amp;quot;;
+		var ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 1 ) {
+			ret+=&amp;quot;您最后一次登录时间是&amp;quot;+ds.getStringAt(1,&amp;quot;TIM&amp;quot;) +&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		ret+=&amp;quot;&amp;lt;a href=&amp;apos;../Layout.sp?id=index&amp;apos;&amp;gt;重新登录&amp;lt;/a&amp;gt;&amp;lt;BR&amp;gt;&amp;quot;;
+		ret+=&amp;quot;&amp;lt;a href=&amp;apos;http://www.xlsgrid.net/activex/inst.html&amp;apos;&amp;gt;如果您第一次登陆系统,请配置&amp;lt;/a&amp;gt;&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return ret;
+}
+
+
+// 得到某个trk的主界面
+// 客户端: trkguid 对应trkhdr的guid
+function trkquery()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.noteblob,a.guid,a.id,a.title,a.note,a.prio,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,b.name crtusr,b.id crtusrid,a.stat,a.dtlusr,a.project,A.filepath,A.filenote,A.imagepath,A.imagenote,a.show,a.selforg from trkhdr a,usr b where a.crtusr=b.id(+) and a.SELFORG=b.org(+) and  a.guid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos;&amp;quot;;
+		sql += &amp;quot;union all
+			select null noteblob,a.guid,a.bilid id,a.name title,a.note,&amp;apos;0&amp;apos; prio,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,
+			       b.name crtusr,b.id crtusrid,a.stat,a.sacrtusr,a.prj project,&amp;apos;&amp;apos; filepath,&amp;apos;&amp;apos; filenote,&amp;apos;&amp;apos; imagepath,&amp;apos;&amp;apos; imagenote,&amp;apos;TRK_SAMODIFY&amp;apos; show,a.org selforg
+			       from TRK_SAMODIFY a,usr b where a.crtusr=b.id(+) and a.ORG=b.org(+) and  a.guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;;
+
+		var ds = db.QuerySQL(sql);
+//		throw new Exception(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			var id = ds.getStringAt(0,&amp;quot;id&amp;quot;);
+//			throw new Exception(sql);
+			msg += &amp;quot;&amp;lt;p align=center &amp;gt;&amp;lt;font size=3&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;title&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;font color=#808080&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;crtusr&amp;quot;)+&amp;quot; &amp;quot;+ds.getStringAt(0,&amp;quot;crttim&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			
+			var note = ds.getStringAt(0,&amp;quot;note&amp;quot;); 
+			if(note==&amp;quot;&amp;quot;) note += db.getBlob2String(sql,&amp;quot;noteblob&amp;quot;);
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+			msg += &amp;quot;&amp;lt;font size=2 &amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			var filenote = ds.getStringAt(0,&amp;quot;filenote&amp;quot;);
+//			var filenotes = filenote.split(&amp;quot;\&amp;quot;);
+//			if (filenotes.length&amp;gt;0 )
+//				 filenote = filenotes[filenotes.length-1];
+			var imagenote = ds.getStringAt(0,&amp;quot;imagenote&amp;quot;);
+//			var imagenotes = imagenote.split(&amp;quot;\\&amp;quot;);
+//			if ( imagenotes.length&amp;gt;0 ) 
+//				imagenote = imagenotes[imagenotes.length-1];
+			
+			
+			var filepath = ds.getStringAt(0,&amp;quot;filepath&amp;quot;);
+			if ( filepath !=&amp;quot;&amp;quot; ) {
+				var idx = filenote.indexOf(&amp;quot;\\&amp;quot;);
+				while(idx&amp;gt;=0 ) {
+					var idx1 = filenote.indexOf(&amp;quot;\\&amp;quot;,idx+1);
+					if ( idx1&amp;gt;= 0 ) idx = idx1;
+					else break;
+				}
+				if ( idx&amp;gt;=0 ) 
+					filenote = filenote.substring(idx+1);
+				msg += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=#FF0000 &amp;gt;下载附件：&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+filenote+&amp;quot;&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			}
+			if ( ds.getStringAt(0,&amp;quot;imagepath&amp;quot;)!=&amp;quot;&amp;quot; ) 
+				msg += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=#FF0000 &amp;gt;屏幕截图：&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+ds.getStringAt(0,&amp;quot;imagepath&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;format=rtf&amp;filename=&amp;quot;+ds.getStringAt(0,&amp;quot;imagepath&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;原始下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+				
+//			if ( loginusrid ==ds.getStringAt(0,&amp;quot;crtusrid&amp;quot;)&amp;&amp; ds.getStringAt(0,&amp;quot;selforg&amp;quot;)== loginorgid  )
+//				msg+=&amp;quot;&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;show.sp?grdid=TRK_TRKDTL&amp;datacc=XLSGRID&amp;guid=&amp;quot;+ds.getStringAt(row,&amp;quot;guid&amp;quot;)+&amp;quot;\&amp;quot;  target=_blank &amp;gt;编辑&amp;lt;/a&amp;gt;&amp;quot;;
+		
+			if ( loginusrid ==ds.getStringAt(0,&amp;quot;crtusrid&amp;quot;)&amp;&amp; ds.getStringAt(0,&amp;quot;selforg&amp;quot;)== loginorgid  )
+				msg+=&amp;quot;&amp;lt;p align=&amp;apos;right&amp;apos;&amp;gt;&amp;lt;a href=\&amp;quot;show.sp?grdid=HDRTRK&amp;datacc=XLSGRID&amp;&amp;edit=modify&amp;id=&amp;quot;+ds.getStringAt(0,&amp;quot;id&amp;quot;)+&amp;quot;&amp;style=2&amp;dd=0\&amp;quot;  target=_blank &amp;gt;编辑&amp;lt;/a&amp;gt;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(confirm(&amp;apos;结束该事务，是否继续？&amp;apos;)==1)window.location=&amp;apos;XLSGRID.TRKLAYOUT.DelTrk.osp?trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot; &amp;gt;删除&amp;lt;a/&amp;gt;&amp;nbsp;&amp;nbsp;&amp;quot;+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			else {
+				var cnt = 1* db.GetSQL( &amp;quot;select count(*) from OALOG where mwtyp=&amp;apos;READ&amp;apos; and bilid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos; and usrid=&amp;apos;&amp;quot;+loginusrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+loginorgid +&amp;quot;&amp;apos; &amp;quot;);
+				if( cnt == 0 ){
+					//throw new Excetpion(ds.getStringAt(0,&amp;quot;title&amp;quot;));
+					OALOG( db,loginorgid ,loginusrid,&amp;quot;READ&amp;quot;,&amp;quot;已读&amp;quot;,trkguid,ds.getStringAt(0,&amp;quot;title&amp;quot;),&amp;quot;&amp;quot;,ds.getStringAt(0,&amp;quot;project&amp;quot;) ) ;
+					db.Commit();
+				}	                
+			
+			}
+		}
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+// 处理过程
+function trkquerydtl()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.title,a.pro_note,b.name tousr,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,c.name crtusr,c.id crtusrid,dtltyp,a.guid ,a.selforg,a.filepath, a.filenote,a.imagepath, a.imagenote &amp;quot;+
+		&amp;quot;from trkdtl a , usr b, usr c where a.trkguid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos; and a.tousr=b.id(+) and a.AIMORG=b.org(+) and a.crtusr=c.id and a.selforg=c.org and NVL(a.dtltyp,&amp;apos; &amp;apos;)&amp;lt;&amp;gt;&amp;apos;2&amp;apos; order by a.crtdat asc&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() == 0 ) msg+=&amp;quot;没有处理记录&amp;quot; ;
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+			msg +=&amp;quot;&amp;lt;p&amp;gt;&amp;quot;+(row+1)+&amp;quot;.&amp;quot;+ds.getStringAt(row,&amp;quot;crtusr&amp;quot;)+&amp;quot;于&amp;quot;+ds.getStringAt(row,&amp;quot;crttim&amp;quot;);
+			var dtltyp  = ds.getStringAt(row,&amp;quot;dtltyp&amp;quot;);
+			var guid = ds.getStringAt(row,&amp;quot;guid&amp;quot;);
+
+			if (dtltyp   == &amp;quot;2&amp;quot; ) 
+				msg += &amp;quot;发表评论&amp;quot;;
+			else 
+				msg += &amp;quot;处理过，并转发给&amp;quot;+ds.getStringAt(row,&amp;quot;tousr&amp;quot;);
+			msg +=&amp;quot;&amp;lt;br&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;标题：&amp;quot;+ds.getStringAt(row,&amp;quot;title&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+
+			var note = ds.getStringAt(row,&amp;quot;pro_note&amp;quot;);
+			if ( note.length() &amp;gt; 0 ) {
+				note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);
+				msg +=&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			}
+			var filepath = ds.getStringAt(row,&amp;quot;filepath&amp;quot;);
+			var filenote = ds.getStringAt(row,&amp;quot;filenote&amp;quot;);
+			var imagepath = ds.getStringAt(row,&amp;quot;imagepath&amp;quot;);
+			var imagenote= ds.getStringAt(row,&amp;quot;imagenote&amp;quot;);
+			
+			if ( filepath!=&amp;quot;&amp;quot; ) 
+				msg += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=#FF0000 size=2&amp;gt;下载附件：&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+filenote+&amp;quot;&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;;
+			if ( imagepath !=&amp;quot;&amp;quot; ) 
+				msg += &amp;quot;&amp;lt;BR&amp;gt;&amp;lt;font color=#FF0000 size=2&amp;gt;屏幕截图：&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+imagepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;format=rtf&amp;filename=&amp;quot;+imagepath+&amp;quot;\&amp;quot;&amp;gt;原始下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;;			
+			
+			//show.sp?grdid=TRK_TRKDTL&amp;datacc=XLSGRID&amp;guid=28518ADFEFA0FC9DE040007F01006EA8&amp;
+			if ( loginusrid ==ds.getStringAt(row,&amp;quot;crtusrid&amp;quot;)&amp;&amp; ds.getStringAt(row,&amp;quot;selforg&amp;quot;)== loginorgid  )
+				msg+=&amp;quot;&amp;lt;p align=&amp;apos;right&amp;apos;&amp;gt;&amp;lt;a href=\&amp;quot;show.sp?grdid=TRK_TRKDTL&amp;datacc=XLSGRID&amp;guid=&amp;quot;+guid+&amp;quot;\&amp;quot;  target=_blank &amp;gt;编辑&amp;lt;/a&amp;gt;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(confirm(&amp;apos;结束该事务，是否继续？&amp;apos;)==1)window.location=&amp;apos;XLSGRID.TRKLAYOUT.DelTrkDtl.osp?guid=&amp;quot;+guid+&amp;quot;&amp;trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot; &amp;gt;删除&amp;lt;a/&amp;gt;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			msg+=&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+		}
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+// 事务的评论，和处理过程类似
+function trkquerydtlpl()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.title,a.pro_note,b.name tousr,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,c.name crtusr,c.id crtusrid,dtltyp,a.guid ,a.filepath, a.filenote,a.imagepath, a.imagenote ,a.crtusr, a.selforg &amp;quot;+
+		&amp;quot;from trkdtl a , usr b, usr c where a.trkguid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos; and a.tousr=b.id(+) and a.AIMORG=b.org(+) and a.crtusr=c.id and a.selforg=c.org and a.dtltyp=&amp;apos;2&amp;apos; order by a.crtdat asc&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() == 0 ) msg+=&amp;quot;没有处理记录&amp;quot; ;
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+			msg +=&amp;quot;&amp;lt;p align=&amp;apos;center&amp;apos;&amp;gt;&amp;lt;font size=&amp;apos;3&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(row,&amp;quot;title&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			msg +=&amp;quot;&amp;lt;p align=&amp;apos;center&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(row,&amp;quot;crtusr&amp;quot;)+&amp;quot;　&amp;quot;+ds.getStringAt(row,&amp;quot;crttim&amp;quot;)+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+			var note = ds.getStringAt(row,&amp;quot;pro_note&amp;quot;);
+			var guid = ds.getStringAt(row,&amp;quot;guid&amp;quot;);
+
+			if ( note.length() &amp;gt; 0 ) {
+				note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;);
+				msg +=&amp;quot;&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			}
+			var filepath = ds.getStringAt(row,&amp;quot;filepath&amp;quot;);
+			var filenote = ds.getStringAt(row,&amp;quot;filenote&amp;quot;);
+			var imagepath = ds.getStringAt(row,&amp;quot;imagepath&amp;quot;);
+			var imagenote= ds.getStringAt(row,&amp;quot;imagenote&amp;quot;);
+			
+			if ( filepath!=&amp;quot;&amp;quot; ) 
+				msg += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=#FF0000 size=2&amp;gt;下载附件：&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+filenote+&amp;quot;&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;;
+			if ( imagepath !=&amp;quot;&amp;quot; ) 
+				msg += &amp;quot;&amp;lt;BR&amp;gt;&amp;lt;font color=#FF0000 size=2&amp;gt;屏幕截图：&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+imagepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;format=rtf&amp;filename=&amp;quot;+imagepath+&amp;quot;\&amp;quot;&amp;gt;原始下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;;			
+
+			//show.sp?grdid=TRK_TRKDTL&amp;datacc=XLSGRID&amp;guid=28518ADFEFA0FC9DE040007F01006EA8&amp;
+			if ( loginusrid ==ds.getStringAt(row,&amp;quot;crtusrid&amp;quot;)&amp;&amp; ds.getStringAt(row,&amp;quot;selforg&amp;quot;)== loginorgid  )
+				msg+=&amp;quot;&amp;lt;p align=&amp;apos;right&amp;apos;&amp;gt;&amp;lt;a href=\&amp;quot;show.sp?grdid=TRK_TRKDTL&amp;datacc=XLSGRID&amp;guid=&amp;quot;+ds.getStringAt(row,&amp;quot;guid&amp;quot;)+&amp;quot;\&amp;quot;  target=_blank &amp;gt;编辑&amp;lt;/a&amp;gt;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(confirm(&amp;apos;结束该事务，是否继续？&amp;apos;)==1)window.location=&amp;apos;XLSGRID.TRKLAYOUT.DelTrkDtl.osp?guid=&amp;quot;+guid+&amp;quot;&amp;trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot; &amp;gt;删除&amp;lt;a/&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;/p&amp;gt;&amp;quot;;
+			msg+=&amp;quot;&amp;lt;HR&amp;gt;&amp;quot;;
+		}
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+// 得到某个trk的头信息，主要列在trk主界面的左边，包括有操作按钮
+// 客户端: trkguid 对应trkhdr的guid
+function trkhdr()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	
+	var browser =pubpack.EAFunc.getBroswerType(request);
+	
+
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.id,a.title,b.id prjid,b.name prjnam,a.prio,e.name trktyp,e.id trktypid,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,a.crtusr,d.name statname,a.stat,a.dtlusr,c.name dtlusrnam,a.aimorg,a.project,a.filepath,a.filenote,a.imagepath,a.imagenote,a.show,a.selforg from trkhdr a, prj b,usr c,v_trkstat d,v_trktyp e where a.show=e.id and a.stat=d.id and a.dtlusr=c.id(+) and a.aimorg=c.org(+) and a.project=b.id and a.guid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount() == 0){
+			sql = &amp;quot;select &amp;apos;&amp;apos; id,a.crtusr dtlusr,&amp;apos;&amp;apos; aimorg,a.crtusr,a.org selforg,&amp;apos;&amp;apos;show,a.prj prjid,&amp;apos;&amp;apos; stat,&amp;apos;需求单&amp;apos; trktyp,&amp;apos;TRK_SAMODIFY&amp;apos; trktypid ,b.name prjnam
+				,&amp;apos;&amp;apos;prio ,&amp;apos;&amp;apos; statname,c.name dtlusrnam
+				from TRK_SAMODIFY a, prj b,usr c 
+				where a.crtusr=c.id(+) 
+					and a.org=c.org(+) and a.prj=b.id 
+					and a.guid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos;&amp;quot;;
+			ds = db.QuerySQL(sql);
+		} 
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			var id = ds.getStringAt(0,&amp;quot;id&amp;quot;);
+			var usrid = ds.getStringAt(0,&amp;quot;DTLUSR&amp;quot;);
+			var usrorgid = ds.getStringAt(0,&amp;quot;AIMORG&amp;quot;);
+			var crtid = ds.getStringAt(0,&amp;quot;CRTUSR&amp;quot;);
+			var crtorgid = ds.getStringAt(0,&amp;quot;SELFORG&amp;quot;);
+			var show = ds.getStringAt(0,&amp;quot;SHOW&amp;quot;);
+			var prjid = ds.getStringAt(0,&amp;quot;PRJID&amp;quot;);
+			var stat = ds.getStringAt(0,&amp;quot;STAT&amp;quot;);
+			var trktyp = ds.getStringAt(0,&amp;quot;TRKTYP&amp;quot;);
+			var trktypid = ds.getStringAt(0,&amp;quot;TRKTYPID&amp;quot;);
+			msg += &amp;quot;&amp;lt;p align=left&amp;gt;&amp;lt;font size=2 color=#808080&amp;gt;项目:&amp;quot;+ds.getStringAt(0,&amp;quot;prjnam&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;类型：&amp;quot;+trktyp+&amp;quot;&amp;lt;BR&amp;gt;编号:&amp;quot;+ds.getStringAt(0,&amp;quot;id&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;优先级:&amp;quot;+ds.getStringAt(0,&amp;quot;prio&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;状态:&amp;quot;+ds.getStringAt(0,&amp;quot;statname&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;流转到:&amp;quot;+ds.getStringAt(0,&amp;quot;dtlusrnam&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot; ;
+			if (stat != &amp;quot;3&amp;quot; ) {
+				if ( loginusrid ==usrid &amp;&amp; usrorgid == loginorgid  ){
+					if(browser==&amp;quot;4&amp;quot;){
+						//msg += &amp;quot;&amp;lt;p align=center&amp;gt;您该处理该事务&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos; target=_blank&amp;gt;处理事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+						msg += &amp;quot;&amp;lt;p align=center&amp;gt;您该处理该事务&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=j2me_newtrk&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;browser=4&amp;apos; target=_blank&amp;gt;处理事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+						msg += &amp;quot;&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=j2me_newtrk&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;tousrid=&amp;quot;+ds.getStringAt(0,&amp;quot;crtusr&amp;quot;)+&amp;quot;&amp;action=reply&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos; target=_blank&amp;gt;回复事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+					}else{
+						//msg += &amp;quot;&amp;lt;p align=center&amp;gt;您该处理该事务&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=j2me_newtrk&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;browser=4&amp;apos; target=_blank&amp;gt;手机处理事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+
+						msg += &amp;quot;&amp;lt;p align=center&amp;gt;您该处理该事务&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos; target=_blank&amp;gt;处理事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+						msg += &amp;quot;&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;tousrid=&amp;quot;+ds.getStringAt(0,&amp;quot;crtusr&amp;quot;)+&amp;quot;&amp;action=reply&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos; target=_blank&amp;gt;回复事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+					}
+					
+					msg += &amp;quot;&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=2&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;tousrid=&amp;quot;+ds.getStringAt(0,&amp;quot;dtlusr&amp;quot;)+&amp;quot;&amp;action=waiting&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos; target=_blank&amp;gt;设为处理中&amp;lt;/a&amp;gt;】&amp;quot; ;//todoing=y
+					msg+&amp;quot;&amp;lt;/p&amp;gt;&amp;quot;;
+
+				}
+				
+				if ( loginusrid ==crtid &amp;&amp; usrorgid == crtorgid  ){
+					if(browser==&amp;quot;4&amp;quot;){
+						msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以结束该事务&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;XLSGRID.TRKLAYOUT.EndTrk.osp?trkguid=&amp;quot;+trkguid+&amp;quot;\&amp;quot;  &amp;gt;结束事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+					}else{
+						msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以结束该事务&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(confirm(&amp;apos;结束该事务，是否继续？&amp;apos;)==1)window.location=&amp;apos;XLSGRID.TRKLAYOUT.EndTrk.osp?trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot; &amp;gt;结束事务&amp;lt;/a&amp;gt;】&amp;quot; ;
+					}//msg += &amp;quot;&amp;lt;BR&amp;gt;【&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=2&amp;style=&amp;quot;+show +&amp;quot;&amp;edit=&amp;dd=&amp;apos; target=_blank&amp;gt;评分&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+				}
+				if ( loginusrid ==crtid &amp;&amp; usrorgid == crtorgid  ){
+					msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以评分&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;show.sp?grdid=trkeffects&amp;trkguid=&amp;quot;+trkguid+&amp;quot;\&amp;quot;  &amp;gt;绩效考核&amp;lt;/a&amp;gt;】&amp;quot; ;
+				}
+				if (trktypid ==&amp;quot;1&amp;quot; ){
+					msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以分解需求&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;show.sp?grdid=TRK_SAMODIFY&amp;prjid=&amp;quot;+prjid+&amp;quot;&amp;trkid=&amp;quot;+id +&amp;quot;\&amp;quot;  &amp;gt;需求调整单录入&amp;lt;/a&amp;gt;】&amp;quot; ;
+				}
+
+			}
+			if(browser==&amp;quot;4&amp;quot;){
+				msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以发表评论&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;show.sp?grdid=j2me_newtrk&amp;hdrordtl=3&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=\&amp;quot; &amp;gt;发表评论&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+				
+			}else{
+				msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以发表评论&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.open(&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=3&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos;);\&amp;quot;&amp;gt;发表评论&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+			}
+			if ( loginusrid ==crtid &amp;&amp; usrorgid == crtorgid  ){
+				msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以评分&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;show.sp?grdid=trkeffects&amp;trkguid=&amp;quot;+trkguid+&amp;quot;\&amp;quot;  &amp;gt;绩效考核&amp;lt;/a&amp;gt;】&amp;quot; ;
+			}
+			msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以发送到邮箱&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.open(&amp;apos;show.sp?grdid=SendEMail&amp;guid=&amp;quot;+trkguid+&amp;quot;&amp;apos;);\&amp;quot;&amp;gt;发送到邮箱&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+
+		}
+		sql = &amp;quot;select title,pro_note,tousr,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,crtusr from trkdtl a where trkguid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos; order by crtdat asc&amp;quot;;
+		
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+//显示当前位置
+function trklocal()//按分类查询的&amp;quot;我的位置&amp;quot;显示
+{
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;} catch ( e ) {DATE=&amp;quot;&amp;quot;;}
+	var TRKUSR=&amp;quot;&amp;quot;;
+	try {TRKUSR= trkusr;} catch ( e ) {TRKUSR=loginusrid ;}
+	var TRKPRJ=&amp;quot;&amp;quot;;
+	try {TRKPRJ= trkprj;} catch ( e ) {TRKPRJ=&amp;quot;&amp;quot; ;}
+	var TRKTYP=&amp;quot;&amp;quot;;
+	try {TRKTYP= trktyp;} catch ( e ) {TRKTYP=&amp;quot;&amp;quot; ;}
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;&amp;quot;;
+		
+		// 日期
+		if ( DATE!=&amp;quot;&amp;quot; ) {
+			msg +=&amp;quot;创建日期:&amp;quot;+ DATE+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		// 查找项目
+		sql = &amp;quot;select &amp;apos;项目:&amp;apos;||b.name name from prj b where b.id = &amp;apos;&amp;quot;+TRKPRJ+&amp;quot;&amp;apos;&amp;quot; ;
+		var ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		// 查找创建人
+		sql = &amp;quot;select &amp;apos;创建人:&amp;apos;||b.name name  from usr b where b.id = &amp;apos;&amp;quot;+TRKUSR+&amp;quot;&amp;apos;&amp;quot; ;
+
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		
+		// 查找事务类型
+		sql = &amp;quot;select &amp;apos;类型:&amp;apos;||b.name||&amp;apos;&amp;lt;BR&amp;gt;说明:&amp;apos;||b.note||&amp;apos;&amp;lt;BR&amp;gt;&amp;apos; name from trktyp b where b.id = &amp;apos;&amp;quot;+TRKTYP+&amp;quot;&amp;apos;&amp;quot; ;
+		ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;);
+			msg+=&amp;quot;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;style=&amp;quot;+trktyp+&amp;quot;&amp;edit=save&amp;dd=0&amp;prj=&amp;quot;+trkprj+&amp;quot;&amp;apos; target=\&amp;quot;_blank\&amp;quot;&amp;gt;新增事务&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}
+		//新增日报按钮
+		if(id==&amp;quot;mydaly&amp;quot;){
+			msg+=&amp;quot;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;a href=&amp;apos;http://www.xlsgrid.net/xlsgrid/ROOT_XLSGRID.11/show.sp?grdid=HDRTRK&amp;style=7&amp;edit=save&amp;dd=0&amp;apos; target=\&amp;quot;_blank\&amp;quot;&amp;gt;新增日报&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}
+		
+		
+			
+		
+//		var sql = &amp;quot;  SELECT MAX(a.ID) ID,MAX(A.GUID) GUID,&amp;quot;+
+//        	&amp;quot;a.name||&amp;apos;&amp;apos;||(case MAX(C.COU) when 1 then &amp;apos;--&amp;gt;&amp;apos;||max(c.name)||&amp;apos;&amp;apos; else &amp;apos;&amp;apos; end)||&amp;apos;&amp;lt;BR&amp;gt;&amp;apos;||note||&amp;apos;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;a href=&amp;apos;&amp;apos;show.sp?grdid=HDRTRK&amp;style=&amp;quot;+trktyp+&amp;quot;&amp;edit=save&amp;dd=0&amp;prj=&amp;quot;+trkprj+&amp;quot;&amp;apos;&amp;apos;&amp;gt;新增事务&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&amp;apos; NAME &amp;quot;+
+//        	&amp;quot;FROM (select &amp;apos;类型:&amp;apos;||b.name name,b.guid,b.id,&amp;apos;说明:&amp;apos;||b.note note from trktyp b where b.id = &amp;apos;&amp;quot;+trktyp+&amp;quot;&amp;apos;) A,&amp;quot;+
+//       		&amp;quot;(select max(d.name) name,count(*) COU from prj d where d.id = &amp;apos;&amp;quot;+trkprj+&amp;quot;&amp;apos; ) C &amp;quot;+
+//  		&amp;quot;group by a.name,a.note&amp;quot;;
+//		var ds = db.QuerySQL(sql);
+//		if ( ds.getRowCount() &amp;gt; 0 ) {
+//			msg = ds.getStringAt(0,&amp;quot;name&amp;quot;);
+//		}
+//		
+	}
+	
+
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	msg+=&amp;quot;&amp;lt;BR&amp;gt;&amp;lt;a href=&amp;apos;http://www.xlsgrid.net/activex/inst.html&amp;apos;&amp;gt;如果您第一次登陆系统,请配置&amp;lt;/a&amp;gt;&amp;quot;;
+	return msg;
+}
+// 首页的登录信息
+function LoginInfo()
+{
+	var ret= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+	var usrorgid = usrinfo.getusrOrg();
+	var db = null;
+	ret = &amp;quot;欢迎您，&amp;quot;+usrinfo.getUsrnam()+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from( select to_char(crtdat,&amp;apos;MM/DD HH24:MI&amp;apos;) tim from usrlog where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and action=&amp;apos;登录系统&amp;apos; order by crtdat desc) where rownum&amp;lt;=2 &amp;quot;;
+		var ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 1 ) {
+			ret+=&amp;quot;您最后一次登录时间是&amp;quot;+ds.getStringAt(1,&amp;quot;TIM&amp;quot;) +&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		sql = &amp;quot; select count(*) CNT from OALOG where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and ( mwtyp=&amp;apos;TRKDTL1&amp;apos; or mwtyp=&amp;apos;TRKHDR&amp;apos;) and to_char(crtdat,&amp;apos;YYMM&amp;apos;)=to_char(sysdate,&amp;apos;YYMM&amp;apos;)  &amp;quot;;
+		ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			ret+=&amp;quot;本月事务处理量&amp;quot;+ds.getStringAt(0,&amp;quot;CNT&amp;quot;) +&amp;quot;条 &amp;quot;;
+		}
+		sql = &amp;quot; select count(*) CNT from OALOG where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and to_char(crtdat,&amp;apos;YYMM&amp;apos;)=to_char(sysdate,&amp;apos;YYMM&amp;apos;) &amp;quot;;
+		ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			ret+=&amp;quot;活跃度&amp;quot;+ds.getStringAt(0,&amp;quot;CNT&amp;quot;) +&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		sql = &amp;quot; select to_char(crtdat,&amp;apos;HH24:MI&amp;apos;) TIM from SIGNIN where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and to_char(crtdat,&amp;apos;YYMMDD&amp;apos;)=to_char(sysdate,&amp;apos;YYMMDD&amp;apos;) order by crtdat asc&amp;quot;;
+		ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			ret+=&amp;quot;今天&amp;quot;+ds.getStringAt(0,&amp;quot;TIM&amp;quot;)+&amp;quot;已签到&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		else 
+			ret+=&amp;quot;&amp;lt;a href=\&amp;quot;show.sp?grdid=TRK_SIGNIN\&amp;quot;  target=_blank&amp;gt;&amp;lt;font color=&amp;apos;#FF0000&amp;apos;&amp;gt;您今天没签到，点击签到&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;BR&amp;gt;&amp;quot;;
+		//ret+=&amp;quot;&amp;nbsp;&amp;quot;;
+		//ret+=&amp;quot;&amp;lt;form name=&amp;apos;fsearch&amp;apos; action=&amp;apos;Layout.sp&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;input id=\&amp;quot;query\&amp;quot; style=&amp;apos;COLOR: #aaaaaa;border: 1px solid #0A246A; font-family:宋体; font-size:9pt&amp;apos; onfocus=\&amp;quot;if(document.all(&amp;apos;query&amp;apos;).value==&amp;apos;请输入...&amp;apos;)document.all(&amp;apos;query&amp;apos;).value=&amp;apos;&amp;apos;;\&amp;quot; size=\&amp;quot;18\&amp;quot; value=\&amp;quot;请输入...\&amp;quot; onclick=\&amp;quot; if(this.value==&amp;apos;请输入...&amp;apos;)this.value=&amp;apos;&amp;apos;\&amp;quot; name=\&amp;quot;query\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;fsearch.submit();\&amp;quot;&amp;gt;开始搜索&amp;lt;/a&amp;gt;&amp;quot;;
+		//ret+=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;fsearch.submit();\&amp;quot;&amp;gt;开始搜索&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;id&amp;apos; value=&amp;apos;SearchTrk&amp;apos;&amp;gt;&amp;quot;;
+		//ret+=&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;encoding&amp;apos; value=&amp;apos;UTF-8&amp;apos;&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;;
+		//		ret+=&amp;quot;&amp;lt;form name=&amp;apos;fsearch&amp;apos; action=&amp;apos;Layout.sp&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;input id=\&amp;quot;query\&amp;quot; style=&amp;apos;COLOR: #aaaaaa;border: 1px solid #0A246A; font-family:宋体; font-size:9pt&amp;apos; onfocus=\&amp;quot;if(document.all(&amp;apos;query&amp;apos;).value==&amp;apos;请输入...&amp;apos;)document.all(&amp;apos;query&amp;apos;).value=&amp;apos;&amp;apos;;\&amp;quot; size=\&amp;quot;18\&amp;quot; value=\&amp;quot;请输入...\&amp;quot; onclick=\&amp;quot; if(this.value==&amp;apos;请输入...&amp;apos;)this.value=&amp;apos;&amp;apos;\&amp;quot; name=\&amp;quot;query\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;fsearch.submit();\&amp;quot;&amp;gt;开始搜索&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;id&amp;apos; value=&amp;apos;SearchTrk&amp;apos;&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;ignoreencoding&amp;apos; value=&amp;apos;1&amp;apos;&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;encoding&amp;apos; value=&amp;apos;UTF-8&amp;apos;&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;;
+
+	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	ret+=&amp;quot;&amp;lt;a href=&amp;apos;http://www.xlsgrid.net/activex/inst.html&amp;apos;&amp;gt;如果您第一次登陆系统,请配置&amp;lt;/a&amp;gt;&amp;quot;;
+
+
+	return ret;
+}
+
+//按项目分类列表 有全部按钮
+function trkprjlist(){
+
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;} catch ( e ) {DATE=&amp;quot;&amp;quot;;}
+	var WORKTYPE=&amp;quot;1&amp;quot;;
+	//当worktype=1:只显示title 2:title,note都显示
+	try {WORKTYPE  = worktype ;} catch ( e ) {WORKTYPE=&amp;quot;1&amp;quot;;}
+
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;trkusr=&amp;quot;+trkusr+&amp;quot;&amp;trktyp=&amp;quot;+trktyp+&amp;quot;&amp;worktyp=&amp;quot;+worktyp+&amp;quot;&amp;worktype=&amp;quot;+WORKTYPE+&amp;quot;&amp;date=&amp;quot;+DATE;
+	//worktyp   1 待办事务 2 创建的事务 3 日志
+	var where=&amp;quot;&amp;quot;;
+	if (worktyp==&amp;quot;1&amp;quot;){
+		where =&amp;quot; and b.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; and e.id not in (&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;;
+	}
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;SELECT A.ID,A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,A.GUID ,&amp;apos;&amp;quot;+
+		url+&amp;quot;&amp;trkprj=&amp;apos;|| A.id  url &amp;quot;+
+		&amp;quot;FROM PRJ A,TRKHDR B ,trktyp e,v_trkstat d &amp;quot;+
+		&amp;quot;WHERE B.PROJECT=A.ID AND B.SHOW LIKE &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot;and b.crtusr like &amp;apos;&amp;quot;+trkusr+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and b.dtlusr like &amp;apos;&amp;quot;+trkusr+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and b.show=e.id &amp;quot;+
+		&amp;quot;and  b.stat=d.id  &amp;quot;+
+		where +
+		&amp;quot;and to_char(b.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) like &amp;apos;%&amp;quot;+DATE+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;GROUP BY A.ID,A.NAME,A.GUID &amp;quot;+
+		&amp;quot;ORDER BY A.ID&amp;quot;;
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//按类型分类列表 有全部按钮
+function trktyplist(){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql=&amp;quot;select ID,&amp;apos; &amp;apos;||name NAME,GUID,&amp;apos;Layout.sp?id=trklist&amp;worktyp=&amp;trkusr=&amp;trkprj=&amp;trktyp=&amp;apos;|| ID  url FROM trktyp WHERE finkey=&amp;apos;bbs&amp;apos;&amp;quot;;
+		var ds=db.QuerySQL(sql);
+		msg+=&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;;
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) 
+		{
+			var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+			var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+			msg+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkusr=&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		msg+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//按创建人分类列表 有全部按钮
+function trkusrlist(){
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;} catch ( e ) {DATE=&amp;quot;&amp;quot;;}
+	var WORKTYPE=&amp;quot;1&amp;quot;;
+	//当worktype=1:只显示title 2:title,note都显示
+	try {WORKTYPE  = worktype ;} catch ( e ) {WORKTYPE=&amp;quot;1&amp;quot;;}
+	
+	
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;trktyp=&amp;quot;+trktyp+&amp;quot;&amp;trkprj=&amp;quot;+trkprj+&amp;quot;&amp;worktyp=&amp;quot;+worktyp+&amp;quot;&amp;worktype=&amp;quot;+WORKTYPE+&amp;quot;&amp;date=&amp;quot;+DATE;
+	var where=&amp;quot;&amp;quot;;
+	//worktyp   1 待办事务 2 创建的事务 3 日志
+	if (worktyp==&amp;quot;1&amp;quot;){
+		where =&amp;quot; and b.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; and e.id not in (&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;;
+	}
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;SELECT distinct max(a.id) id,&amp;apos; &amp;apos;||A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,max(A.GUID) guid ,&amp;apos;&amp;quot;+
+		url+&amp;quot;&amp;trkusr=&amp;apos;|| max(A.id)  url &amp;quot;+
+		&amp;quot;FROM v_usr9 A,TRKHDR B ,trktyp e,v_usr9 cc ,v_trkstat d &amp;quot;+
+		&amp;quot;WHERE B.crtusr=A.ID and b.project like &amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot;and b.show like &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and b.show=e.id &amp;quot;+
+		&amp;quot;and b.crtusr=cc.id  &amp;quot;+
+		&amp;quot;and  b.stat=d.id  &amp;quot;+
+		where+
+		&amp;quot;and to_char(b.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) like &amp;apos;%&amp;quot;+DATE+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;GROUP BY A.NAME &amp;quot;;
+//		&amp;quot;ORDER BY A.ID&amp;quot;;
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//编写格式,对齐方式为左对齐,置顶
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkusr=&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//按日期查询
+function trkdate(){
+	//获取当前日期
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;
+		if (DATE==&amp;quot;&amp;quot;){//当DATE为空时,同时也要设定为默认值
+			throw new Exception();//抛出错误执行catch
+		}
+	} catch ( e ) {
+		var db=null;
+		var sqldate=&amp;quot;select sysdate from dual&amp;quot;;
+		db = new pubpack.EADatabase();
+		var ds = db.QuerySQL(sqldate);
+		var dat=&amp;quot;&amp;quot;;
+		if ( ds.getRowCount() &amp;gt; 0 ) 
+		dat =  ds.getStringAt(0,&amp;quot;sysdate&amp;quot;);
+		DATE=dat;
+	}
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;trkusr=&amp;quot;+trkusr+&amp;quot;&amp;trktyp=&amp;quot;+trktyp+&amp;quot;&amp;trkprj=&amp;quot;+trkprj+&amp;quot;&amp;worktyp=&amp;quot;+worktyp;
+	//throw new Exception(DATE);
+	var msg=&amp;quot;日期&amp;quot;; 
+	msg+=&amp;quot;&amp;lt;script language=\&amp;quot;javascript\&amp;quot;&amp;gt;
+	function dateSubmit(form){
+	var DATE=document.getElementsByName(\&amp;quot;date\&amp;quot;)[0].value;
+	var url=\&amp;quot;&amp;quot;+url+&amp;quot;&amp;worktype=2&amp;date=\&amp;quot;+DATE+\&amp;quot;\&amp;quot;;
+	window.location = url;
+	}&amp;lt;/script&amp;gt;&amp;quot;;
+	msg+=&amp;quot;&amp;lt;input name=\&amp;quot;date\&amp;quot; type=\&amp;quot;\&amp;quot; value=\&amp;quot;&amp;quot;+DATE+&amp;quot;\&amp;quot;&amp;gt; &amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;dateSubmit()\&amp;quot;&amp;gt;查找&amp;lt;/a&amp;gt; &amp;quot;;
+	
+	
+	
+	
+	//显示最近7天的记录
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;} catch ( e ) {DATE=&amp;quot;&amp;quot;;}
+	var WORKTYPE=&amp;quot;1&amp;quot;;
+	//当worktype=1:只显示title 2:title,note都显示
+	try {WORKTYPE  = worktype ;} catch ( e ) {WORKTYPE=&amp;quot;1&amp;quot;;}
+
+	var db = null;
+	//var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	//worktyp=区分用来只显示当前用户的事务
+	//worktype 是否显示事务的内容
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;trkusr=&amp;quot;+trkusr+&amp;quot;&amp;trkprj=&amp;quot;+trkprj+&amp;quot;&amp;worktyp=&amp;quot;+worktyp+&amp;quot;&amp;worktype=2&amp;trktyp=&amp;quot;+trktyp;
+	var where=&amp;quot;&amp;quot;;
+	if (worktyp==&amp;quot;1&amp;quot;){
+		where =&amp;quot; and b.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; and e.id not in (&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;;
+	}
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;SELECT &amp;apos;&amp;apos; id,&amp;apos; &amp;apos;||to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,&amp;apos;&amp;apos; guid ,&amp;apos;&amp;quot;+
+		url+&amp;quot;&amp;date=&amp;apos;|| to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;)  url &amp;quot;+
+		&amp;quot;FROM trktyp A,TRKHDR B,trktyp e,v_trkstat d  &amp;quot;+
+		&amp;quot;WHERE B.SHOW=A.ID and b.project like &amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot;and b.crtusr like &amp;apos;&amp;quot;+trkusr+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot;and b.show like &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and b.show=e.id &amp;quot;+
+		&amp;quot;and  b.stat=d.id  &amp;quot;+
+		where+
+		&amp;quot;and to_char(b.crtdat, &amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) &amp;gt; to_char(sysdate-7,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;+
+		&amp;quot;GROUP BY to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;+
+		&amp;quot;ORDER BY to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;) desc&amp;quot;;
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+
+
+	
+	
+	return msg;
+}
+//显示事务的列表,包含有显示title,not,或者只显示title的列表, 当worktype=1:只显示title 2:title,note,处理过程等都显示
+function trkall(){ 
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var TRKTYP=&amp;quot;&amp;quot;;
+	try {TRKTYP= trktyp;} catch ( e ) {TRKTYP=&amp;quot;&amp;quot; ;}
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;&amp;quot;;	
+		// 查找事务类型
+		sql = &amp;quot;select name from trktyp where id = &amp;apos;&amp;quot;+TRKTYP+&amp;quot;&amp;apos;&amp;quot; ;
+		var ds = db.QuerySQL(sql);
+		var project= ds.getStringAt(0,&amp;quot;name&amp;quot;);
+//		msg+=&amp;quot;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;style=&amp;quot;+trktyp+&amp;quot;&amp;edit=save&amp;dd=0&amp;prj=&amp;quot;+trkprj+&amp;quot;&amp;apos; target=\&amp;quot;_blank\&amp;quot;&amp;gt;新增事务&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		sql=&amp;quot;select name,note from BBS_ZT where TYPE=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;&amp;quot;;
+
+		ds = db.QuerySQL(sql);
+		var name= ds.getStringAt(0,&amp;quot;name&amp;quot;);
+		msg+=&amp;quot;&amp;lt;a href=&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;apos;&amp;gt;主题：《&amp;quot;+name+&amp;quot;》楼主：&amp;quot;+ds.getStringAt(0,&amp;quot;note&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+		//Layout.sp?id=trklist&amp;worktyp=&amp;trkusr=&amp;trkprj=&amp;trktyp=ADD_01
+	}
+	
+
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+
+}
+
+
+
+//远程调用结束一个事务
+//输入参数：trkguid
+function EndTrk()
+{
+
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		var trkds =null;
+		try {
+			trkds=db.QuerySQL(&amp;quot;select formtablename ,formtostat ,formguid  from trkhdr where  guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;);
+			var formguid = trkds.getStringAt(0,&amp;quot;formguid&amp;quot;);
+			var formtostat = trkds.getStringAt(0,&amp;quot;formtostat&amp;quot;);
+			var formtablename= trkds.getStringAt(0,&amp;quot;formtablename&amp;quot;);
+	
+			if ( formguid!=&amp;quot;&amp;quot;){
+				//判断是否需要更改工作流，先找到该数据该动作的目标状态
+				db.ExcecutSQL(&amp;quot;update &amp;quot;+formtablename +&amp;quot; set stat=&amp;apos;&amp;quot;+formtostat +&amp;quot;&amp;apos; where guid=&amp;apos;&amp;quot;+formguid  +&amp;quot;&amp;apos;&amp;quot;);
+			}
+		}
+		catch ( e ) {}
+		var ret =db.ExcecutSQL(&amp;quot;update trkhdr set stat=&amp;apos;3&amp;apos; where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;);
+		db.ExcecutSQL(&amp;quot;update trkhdr set stat=&amp;apos;3&amp;apos; where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;);
+		var ds = db.QuerySQL( &amp;quot;select title,project from trkhdr where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;);
+		
+		
+		
+		
+		OALOG( db,loginorgid ,loginusrid,&amp;quot;ENDTRK&amp;quot;,&amp;quot;结束事务&amp;quot;,trkguid,ds.getStringAt(0,&amp;quot;title&amp;quot;),&amp;quot;&amp;quot; ,ds.getStringAt(0,&amp;quot;project&amp;quot;) ) ;
+                  
+		msg += &amp;quot;操作成功，更新了&amp;quot;+ret+&amp;quot;笔记录&amp;lt;BR&amp;gt;&amp;lt;a href=\&amp;quot;javascript:window.location=&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;点击返回&amp;lt;/a&amp;gt;&amp;quot; ; 
+		db.Commit();			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+//远程调用删除一个事务
+//输入参数：trkguid
+function DelTrk()
+{
+
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = db.QuerySQL( &amp;quot;select title,note,project from trkhdr where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot; );
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			OALOG( db,loginorgid ,loginusrid,&amp;quot;DELTRKHDR&amp;quot;,&amp;quot;删除事务&amp;quot;,trkguid,ds.getStringAt(0,&amp;quot;title&amp;quot;),ds.getStringAt(0,&amp;quot;note&amp;quot;) ,ds.getStringAt(0,&amp;quot;project&amp;quot;)  ) ;
+		}
+                
+                var ret =db.ExcecutSQL(&amp;quot;delete from trkhdr  where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;);
+		
+		msg += &amp;quot;操作成功，更新了&amp;quot;+ret+&amp;quot;笔记录&amp;lt;BR&amp;gt;&amp;lt;a href=\&amp;quot;javascript:window.location=&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;点击返回&amp;lt;/a&amp;gt;&amp;quot; ; 
+		db.Commit();			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+//远程调用删除一个事务
+//输入参数：trkguid
+function DelTrkDtl()
+{
+
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = db.QuerySQL( &amp;quot;select title,pro_note note,dtltyp,project from trkdtl where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot; );
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			if ( ds.getStringAt(0,&amp;quot;dtltyp&amp;quot;)==&amp;quot;2&amp;quot; ) 
+				OALOG( db,loginorgid ,loginusrid,&amp;quot;DELTRKDTL1&amp;quot;,&amp;quot;删除评论&amp;quot;,guid,ds.getStringAt(0,&amp;quot;title&amp;quot;),ds.getStringAt(0,&amp;quot;note&amp;quot;),ds.getStringAt(0,&amp;quot;project&amp;quot;)  ) ;
+			else OALOG( db,loginorgid ,loginusrid,&amp;quot;DELTRKDTL1&amp;quot;,&amp;quot;删除处理记录&amp;quot;,guid,ds.getStringAt(0,&amp;quot;title&amp;quot;),ds.getStringAt(0,&amp;quot;note&amp;quot;),ds.getStringAt(0,&amp;quot;project&amp;quot;)  ) ;
+		}
+
+		
+		var ret =db.ExcecutSQL(&amp;quot;delete from trkdtl  where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;);
+		
+		msg += &amp;quot;操作成功，更新了&amp;quot;+ret+&amp;quot;笔记录&amp;lt;BR&amp;gt;&amp;lt;a href=\&amp;quot;javascript:window.location=&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;quot;+trkguid+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;点击返回&amp;lt;/a&amp;gt;&amp;quot; ; 
+		db.Commit();			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+//我的待办事务,我创建的事务,日志的显示列表
+function trkmylist(){
+	
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	//	listtyp:  1 为我的待办事务 2 为我创建的事务 3为 日志
+	var sql = &amp;quot;&amp;quot;;
+	if(trkusr==&amp;quot;curusr&amp;quot;){//只显示当前用户
+		var usr=web.EASession.GetLoginInfo(request);//获取当前用户信息
+		trkusr=usr.getUsrid();
+	}
+	
+	
+	if(worktyp==&amp;quot;1&amp;quot;){
+		sql=&amp;quot;select a.title|| &amp;apos; &amp;apos;||cc.name ||to_char(a.crtdat,&amp;apos;mm/dd hh24:mi&amp;apos;) name,substr(a.note,1,25) note ,&amp;quot;+
+		&amp;quot;a.guid ,a.id,&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;apos;||a.guid url&amp;quot;+
+		&amp;quot; from  &amp;quot;+
+		&amp;quot;trkhdr a,v_usr c ,trktyp e,v_usr cc &amp;quot;+
+		&amp;quot;where &amp;quot;+
+		&amp;quot;a.dtlusr=c.id  and a.AIMORG=c.orgid and a.crtusr=cc.id  and a.AIMORG=cc.orgid &amp;quot;+
+//		&amp;quot;and c.id=lower(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;)   &amp;quot;+
+//		&amp;quot;and c.orgid=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;&amp;quot;+
+		&amp;quot;and a.show =e.id   &amp;quot;+
+		&amp;quot;and a.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; &amp;quot;+//-- 0：新建，1：处理中，2：已处理，3：处理完，4：未处理&amp;quot;+
+		&amp;quot;and e.id not in (&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;+
+		&amp;quot;and a.project like &amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot;and a.show like &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos; &amp;quot;+
+		&amp;quot;and a.dtlusr like &amp;apos;&amp;quot;+trkusr+&amp;quot;%&amp;apos;
+		 and c.org= &amp;apos;XLSGRID&amp;apos;
+		&amp;quot;+
+		&amp;quot;order by to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) desc &amp;quot;;
+
+	}else if(worktyp==&amp;quot;2&amp;quot;){
+		sql=&amp;quot;select a.title|| &amp;apos; &amp;apos;||to_char(a.crtdat,&amp;apos;mm/dd&amp;apos;)||&amp;apos; -》&amp;apos;||c.name||&amp;apos; 状态&amp;apos;||d.name name,substr(a.note,1,25) note ,&amp;quot;+
+		&amp;quot;a.guid ,a.id,&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;apos;||a.guid url&amp;quot;+
+		&amp;quot; from  &amp;quot;+
+		&amp;quot;trkhdr a,v_usr c ,trktyp e,v_usr cc, v_trkstat d &amp;quot;+
+		&amp;quot;where &amp;quot;+
+		&amp;quot;a.dtlusr=c.id  and a.AIMORG=c.orgid and a.crtusr=cc.id  and a.SELFORG=cc.orgid &amp;quot;+
+		&amp;quot;and a.stat=d.id &amp;quot;+
+//		&amp;quot;and cc.id=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   &amp;quot;+
+//		&amp;quot;and cc.orgid=&amp;apos;[%SYS_ORGID]&amp;apos;&amp;quot;+
+		&amp;quot;and a.show like&amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and a.project like&amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and a.crtusr like &amp;apos;&amp;quot;+trkusr+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and a.show =e.id  
+		AND C.ORG = &amp;apos;XLSGRID&amp;apos; &amp;quot;+
+		&amp;quot;&amp;quot;+
+		&amp;quot;order by to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) desc &amp;quot;;
+	}else if(worktyp==&amp;quot;3&amp;quot;){
+		sql=&amp;quot;select  distinct &amp;apos;&amp;apos;||a.usrnam ||&amp;apos;  &amp;apos;||to_char(a.crtdat,&amp;apos;mm/dd hh24:mi&amp;apos;)||&amp;apos;  &amp;apos;||a.action||substr(a.name,1,16)   name, &amp;quot;+
+		&amp;quot;a.guid,a.usrid id,a.crtdat &amp;quot;+
+		&amp;quot;,&amp;apos;Layout.sp?id=trkquery&amp;guid=&amp;apos;||a.bilid||&amp;apos;&amp;trkguid=&amp;apos;||a.bilid url &amp;quot;+
+		&amp;quot;from OALOG a ,trkhdr b where mwtyp in( &amp;apos;TRKHDR&amp;apos;,&amp;apos;TRKDTL1&amp;apos;,&amp;apos;TRKDTL2&amp;apos;,&amp;apos;ENDTRK&amp;apos; ) &amp;quot;+
+		&amp;quot; and &amp;quot;+
+		&amp;quot; b.guid=a.bilid &amp;quot;+
+		&amp;quot;and b.show like&amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and b.project like&amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;and b.crtusr like &amp;apos;&amp;quot;+trkusr+&amp;quot;%&amp;apos;&amp;quot;+
+		&amp;quot;AND B.CRTUSR IN (SELECT ID FROM USR WHERE ORG=&amp;apos;XLSGRID&amp;apos;) &amp;quot;+
+		&amp;quot;order by crtdat desc&amp;quot;; 
+	}
+	
+//	throw new Exception(sql);
+	
+
+	var url=&amp;quot;Layout.sp?id=trkquery&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//编写格式,对齐方式为左对齐,置顶
+		var ds = db.QuerySQL(sql);
+		//
+		for( var i=0 ;i&amp;lt;ds.getRowCount()&amp;&amp;i&amp;lt;=500; i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+//		msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;guid=&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+
+
+//搜索事务结果的列表
+function searchtrk(){ 
+	
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	//	listtyp:  1 为我的待办事务 2 为我创建的事务 3为 日志
+	var sql = &amp;quot;&amp;quot;;
+	var	querywhere = &amp;quot; and (&amp;quot;;
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){//concat(UTL_RAW.CAST_TO_VARCHAR2(a.noteblob),
+					querywhere+=&amp;quot;  lower( concat(utl_raw.cast_to_varchar2(dbms_lob.substr(a.noteblob,2000,1))/*转换截取blob一段为varchar.(太长会出错)*/
+						,concat(a.title,concat(a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(UTL_RAW.CAST_TO_VARCHAR2(a.noteblob),concat(a.title,concat( a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	
+	
+	sql=&amp;quot;SELECT A.id ,&amp;quot;;//查询事务的sql语句
+		sql+=&amp;quot;a.title|| &amp;apos; &amp;apos;||cc.name||&amp;apos;(&amp;apos;||d.name ||&amp;apos;)&amp;apos;||to_char(a.crtdat,&amp;apos;yyyy/mm/dd hh24:mi&amp;apos;) name,&amp;quot;;
+		sql+=&amp;quot;A.GUID,&amp;quot;;
+		sql+=&amp;quot;&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;apos;||a.guid url &amp;quot;;
+
+		sql+=&amp;quot;FROM  TRKHDR A,v_usr c ,trktyp e,v_usr cc,trktyp d &amp;quot;;
+		sql+=&amp;quot;where &amp;quot;;
+		sql+=&amp;quot;a.dtlusr=c.id(+)  and a.AIMORG=c.orgid(+) and a.crtusr=cc.id  and a.AIMORG=cc.orgid &amp;quot;;
+		sql+=&amp;quot;and a.show =e.id &amp;quot;;
+		sql+=&amp;quot;and d.id=a.show &amp;quot;;
+		sql+=&amp;quot;and a.PROJECT like &amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos;&amp;quot;;
+		sql+=&amp;quot;and a.show like &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;;
+		sql+=&amp;quot;and a.crtusr like &amp;apos;&amp;quot;+crtusr+&amp;quot;%&amp;apos;&amp;quot;;
+		sql+=querywhere;
+		sql+=&amp;quot; order by a.crtdat desc &amp;quot;;
+	
+	var querywhere = &amp;quot;  (&amp;quot;;//查询函数库的sql的条件的where语句
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(a.name,concat(a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(a.name,concat( a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	
+	
+	var sqlapi=&amp;quot;select &amp;apos;&amp;apos; id,&amp;apos;&amp;apos; guid,a.name name,&amp;apos;Layout.sp?id=apiquery&amp;apiguid=&amp;apos;||a.guid url from FUNCLIST a where &amp;quot;+querywhere;
+	
+	//throw new Exception(sqlapi+&amp;quot;|&amp;quot;+sql);
+	
+//	msg= this.list(sql);
+	var url=&amp;quot;Layout.sp?id=trkquery&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//编写格式,对齐方式为左对齐,置顶
+//		var ds = db.QuerySQL(sqlapi);
+//		//
+//		for( var i=0 ;i&amp;lt;ds.getRowCount()&amp;&amp;i&amp;lt;=100; i++ ) {
+//			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+//		}
+//		msg += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td width=100%  &amp;gt;------------------------------&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		
+		
+		var ds = db.QuerySQL(sql);
+		//
+		for( var i=0 ;i&amp;lt;ds.getRowCount()&amp;&amp;i&amp;lt;=500; i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+//		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;guid=&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//显示搜索事务的条件
+function searchquery(){
+	var db = null;
+	db = new pubpack.EADatabase();
+	var msg= &amp;quot;全部结果 &amp;lt;br&amp;gt; 关键字 \&amp;quot;&amp;quot;+query+&amp;quot;\&amp;quot; &amp;lt;/br&amp;gt;&amp;quot;;//是显示的html语句
+	var sql=&amp;quot;&amp;quot;; 
+	// 查找项目
+		sql = &amp;quot;select &amp;apos;项目:&amp;apos;||b.name name from prj b where b.id = &amp;apos;&amp;quot;+trkprj+&amp;quot;&amp;apos;&amp;quot; ;
+		var ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+	// 查找创建人
+		sql = &amp;quot;select &amp;apos;创建人:&amp;apos;||b.name name  from usr b where b.id = &amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos;&amp;quot; ;
+		ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		
+	// 查找事务类型
+		sql = &amp;quot;select &amp;apos;类型:&amp;apos;||b.name||&amp;apos;&amp;lt;BR&amp;gt;说明:&amp;apos;||b.note||&amp;apos;&amp;lt;BR&amp;gt;&amp;apos; name from trktyp b where b.id = &amp;apos;&amp;quot;+trktyp+&amp;quot;&amp;apos;&amp;quot; ;
+		ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;);
+			msg+=&amp;quot;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;style=&amp;quot;+trktyp+&amp;quot;&amp;edit=save&amp;dd=0&amp;prj=&amp;quot;+trkprj+&amp;quot;&amp;apos; target=\&amp;quot;_blank\&amp;quot;&amp;gt;新增事务&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}
+
+	return msg;
+}
+//搜索事务的按项目分类列表 有全部按钮
+function searchprjlist(){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=SearchTrk&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;crtusr=&amp;quot;+crtusr+&amp;quot;&amp;trktyp=&amp;quot;+trktyp;//单击的链接
+	var sql=&amp;quot;&amp;quot;;
+	var querywhere=&amp;quot;&amp;quot;;
+	var category=&amp;quot;&amp;quot;;//分类的查询条件
+	// //添加查询条件
+	querywhere = &amp;quot; and (&amp;quot;;
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(B.title,concat(B.note,to_char(b.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(B.title,concat( B.note,to_char(b.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	category = &amp;quot;and b.crtusr like &amp;apos;&amp;quot;+crtusr+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and b.show like &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from (&amp;quot;;
+				sql+=&amp;quot;SELECT A.ID,A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,A.GUID ,&amp;apos;&amp;quot;+
+					url+&amp;quot;&amp;trkprj=&amp;apos;|| A.id  url &amp;quot;+
+					&amp;quot;FROM PRJ A,TRKHDR B ,v_usr c ,v_usr cc &amp;quot;+
+					&amp;quot;WHERE B.PROJECT=A.ID &amp;quot;+
+					&amp;quot; and c.id= b.crtusr  &amp;quot;+
+					&amp;quot; and cc.id(+)= b.dtlusr &amp;quot;+
+					&amp;quot; and b.AIMORG=c.orgid &amp;quot;+
+					&amp;quot; and b.AIMORG=cc.orgid(+) &amp;quot;+
+					category;
+					
+				sql+=querywhere;
+				
+				sql+=&amp;quot;GROUP BY A.ID,A.NAME,A.GUID &amp;quot;+
+				&amp;quot;ORDER BY A.ID&amp;quot;;
+		sql+=&amp;quot;) a&amp;quot;;
+		
+		sql+=&amp;quot; union &amp;quot;;
+		sql+=&amp;quot;select &amp;apos;&amp;apos; id ,&amp;quot;+
+                &amp;quot; &amp;apos;全部 &amp;apos; || &amp;apos;(&amp;apos; || COUNT(*) || &amp;apos;)&amp;apos; NAME , &amp;quot;+
+                &amp;quot; &amp;apos;&amp;apos; guid, &amp;quot;+
+                &amp;quot; &amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;apos; url &amp;quot;+
+		&amp;quot;from TRKHDR B, v_usr c, v_usr cc WHERE   &amp;quot;+
+		&amp;quot;c.id = b.crtusr &amp;quot;+
+		&amp;quot;and cc.id(+) = b.dtlusr &amp;quot;+
+		&amp;quot;and b.AIMORG = c.orgid  &amp;quot;+
+		&amp;quot;and b.AIMORG = cc.orgid(+) &amp;quot;+
+		category;
+           	sql+=querywhere;
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+
+//搜索事务的按事务类型分类列表 有全部按钮
+function searchtyplist(){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=SearchTrk&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;crtusr=&amp;quot;+crtusr+&amp;quot;&amp;trkprj=&amp;quot;+trkprj;//单击的链接
+	var sql=&amp;quot;&amp;quot;;
+	var querywhere = &amp;quot;&amp;quot;;
+	var category = &amp;quot;&amp;quot;;//分类查询条件
+	// //添加查询条件
+	querywhere = &amp;quot; and (&amp;quot;;
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(B.title,concat(B.note,to_char(b.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(B.title,concat(B.note,to_char(b.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	category = &amp;quot;and b.crtusr like &amp;apos;&amp;quot;+crtusr+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and b.project like &amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos;&amp;quot;;
+
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from (&amp;quot;;
+				sql+=&amp;quot;SELECT A.ID,A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,A.GUID ,&amp;apos;&amp;quot;+
+					url+&amp;quot;&amp;trktyp=&amp;apos;|| A.id  url &amp;quot;+
+					&amp;quot;FROM trktyp A,TRKHDR B ,v_usr c ,v_usr cc &amp;quot;+
+					&amp;quot;WHERE B.show=A.ID &amp;quot;+
+					&amp;quot; and c.id= b.crtusr  &amp;quot;+
+					&amp;quot; and cc.id(+)= b.dtlusr &amp;quot;+
+					&amp;quot; and b.AIMORG=c.orgid &amp;quot;+
+					&amp;quot; and b.AIMORG=cc.orgid(+) &amp;quot;+
+					category;
+				
+				sql+=querywhere;
+				
+				sql+=&amp;quot;GROUP BY A.ID,A.NAME,A.GUID &amp;quot;+
+				&amp;quot;ORDER BY A.ID&amp;quot;;
+		sql+=&amp;quot;) a&amp;quot;;
+		
+		sql+=&amp;quot; union &amp;quot;;
+		sql+=&amp;quot;select &amp;apos;&amp;apos; id ,&amp;quot;+
+                &amp;quot; &amp;apos;全部 &amp;apos; || &amp;apos;(&amp;apos; || COUNT(*) || &amp;apos;)&amp;apos; NAME , &amp;quot;+
+                &amp;quot; &amp;apos;&amp;apos; guid, &amp;quot;+
+                &amp;quot; &amp;apos;&amp;quot;+url+&amp;quot;&amp;trktyp=&amp;apos; url &amp;quot;+
+		&amp;quot;from TRKHDR B, v_usr c, v_usr cc WHERE   &amp;quot;+
+		&amp;quot;c.id = b.crtusr &amp;quot;+
+		&amp;quot;and cc.id(+) = b.dtlusr &amp;quot;+
+		&amp;quot;and b.AIMORG = c.orgid  &amp;quot;+
+		&amp;quot;and b.AIMORG = cc.orgid(+) &amp;quot;+
+		category;
+           	sql+=querywhere;
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		
+//		throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//搜索事务的创建人分类列表 有全部按钮
+function searchcrtusrlist(){ 
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=SearchTrk&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;trktyp=&amp;quot;+trktyp+&amp;quot;&amp;trkprj=&amp;quot;+trkprj;//单击的链接
+	var sql=&amp;quot;&amp;quot;;
+	var querywhere = &amp;quot;&amp;quot;;
+	var category = &amp;quot;&amp;quot;;//分类查询条件
+	// //添加查询条件
+	querywhere = &amp;quot; and (&amp;quot;;
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(B.title,concat(B.note,to_char(b.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(B.title,concat(B.note,to_char(b.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;)))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	category = &amp;quot;and b.show like &amp;apos;&amp;quot;+trktyp+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and b.project like &amp;apos;&amp;quot;+trkprj+&amp;quot;%&amp;apos;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from (&amp;quot;;
+				sql+=&amp;quot;SELECT A.ID,A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,A.GUID ,&amp;apos;&amp;quot;+
+					url+&amp;quot;&amp;crtusr=&amp;apos;|| A.id  url &amp;quot;+
+					&amp;quot;FROM v_usr9 A,TRKHDR B ,v_usr c ,v_usr cc &amp;quot;+
+					&amp;quot;WHERE B.crtusr=A.ID &amp;quot;+
+					&amp;quot; and c.id= b.crtusr  &amp;quot;+
+					&amp;quot; and cc.id(+)= b.dtlusr &amp;quot;+
+					&amp;quot; and b.AIMORG=c.orgid &amp;quot;+
+					&amp;quot; and b.AIMORG=cc.orgid(+) &amp;quot;+
+					category;
+				
+				sql+=querywhere;
+				
+				sql+=&amp;quot;GROUP BY A.ID,A.NAME,A.GUID &amp;quot;+
+				&amp;quot;ORDER BY A.ID&amp;quot;;
+		sql+=&amp;quot;) a&amp;quot;;
+		
+		sql+=&amp;quot; union &amp;quot;;
+		sql+=&amp;quot;select &amp;apos;&amp;apos; id ,&amp;quot;+
+                &amp;quot; &amp;apos;全部 &amp;apos; || &amp;apos;(&amp;apos; || COUNT(*) || &amp;apos;)&amp;apos; NAME , &amp;quot;+
+                &amp;quot; &amp;apos;&amp;apos; guid, &amp;quot;+
+                &amp;quot; &amp;apos;&amp;quot;+url+&amp;quot;&amp;crtusr=&amp;apos; url &amp;quot;+
+		&amp;quot;from TRKHDR B, v_usr c, v_usr cc WHERE   &amp;quot;+
+		&amp;quot;c.id = b.crtusr &amp;quot;+
+		&amp;quot;and cc.id(+) = b.dtlusr &amp;quot;+
+		&amp;quot;and b.AIMORG = c.orgid  &amp;quot;+
+		&amp;quot;and b.AIMORG = cc.orgid(+) &amp;quot;+
+		category;
+           	sql+=querywhere;
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+
+// 得到某个api的主界面
+// 客户端: apiguid 对应FUNCLIST的guid
+function apiquery()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();	
+	try {
+	
+		//msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;B&amp;gt;&amp;lt;font size=3 &amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;title&amp;quot;)+&amp;quot;&amp;lt;font&amp;gt;&amp;lt;/B&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+		//msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;font size=2 color=#808080&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;crtusr&amp;quot;)+&amp;quot; &amp;quot;+ds.getStringAt(0,&amp;quot;crttim&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.SAMPLE,a.PARAMETER,a.PARAMNOTE,a.FUNCTION,a.return,a.note,a.name,a.FUNCNOTE,a.CRTDAT,a.id from FUNCLIST a where a.guid=&amp;apos;&amp;quot;+apiguid+&amp;quot;&amp;apos;&amp;quot;;
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			var id = ds.getStringAt(0,&amp;quot;id&amp;quot;);
+			//if(ds.getStringAt(0,&amp;quot;name&amp;quot;)!=&amp;quot;&amp;quot;)
+				msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;B&amp;gt;&amp;lt;font size=3 &amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;font&amp;gt;&amp;lt;/B&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			//msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;font size=2 color=#808080&amp;gt;&amp;quot;+&amp;quot;创建日期 &amp;quot;+ds.getStringAt(0,&amp;quot;CRTDAT&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			msg += &amp;quot;&amp;lt;font size=2 &amp;gt;&amp;lt;br&amp;gt;&amp;quot;+&amp;quot;名称:&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;gt; &amp;quot;+ds.getStringAt(0,&amp;quot;FUNCTION&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			msg += &amp;quot;&amp;lt;font size=2 &amp;gt;&amp;lt;br&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;方法定义:&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;FUNCNOTE&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			msg += &amp;quot;&amp;lt;br&amp;gt;&amp;quot;+&amp;quot;返回值:&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;return&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			msg += &amp;quot;&amp;lt;br&amp;gt;&amp;quot;+&amp;quot;功能说明:&amp;lt;/font&amp;gt;&amp;quot;;
+			var note = ds.getStringAt(0,&amp;quot;note&amp;quot;);
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+			msg += &amp;quot;&amp;lt;br&amp;gt;&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			
+			
+			//var id = ds.getStringAt(0,&amp;quot;id&amp;quot;);
+			var note = ds.getStringAt(0,&amp;quot;PARAMETER&amp;quot;);
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+			msg += &amp;quot;&amp;lt;br&amp;gt;&amp;lt;p align=left&amp;gt;&amp;lt;font size=2  &amp;gt;参数:&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			//msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;font size=1 color=#808080&amp;gt;&amp;quot;+&amp;quot; &amp;quot;+ds.getStringAt(0,&amp;quot;PARAMNOTE&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			
+			var PARAMNOTE = ds.getStringAt(0,&amp;quot;PARAMNOTE&amp;quot;);
+			PARAMNOTE = pubpack.EAFunc.Replace(PARAMNOTE,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			PARAMNOTE = pubpack.EAFunc.Replace(PARAMNOTE,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			PARAMNOTE = pubpack.EAFunc.Replace(PARAMNOTE,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+			//throw new Exception(note+&amp;quot;&amp;quot;);
+			msg += &amp;quot;&amp;lt;br&amp;gt;&amp;lt;font size=2&amp;gt;参数说明:&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+PARAMNOTE+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			
+			var note = ds.getStringAt(0,&amp;quot;SAMPLE&amp;quot;);
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+			//throw new Exception(note+&amp;quot;&amp;quot;);
+			msg += &amp;quot;&amp;lt;br&amp;gt;&amp;lt;font size=2 &amp;gt;例子:&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;lt;font size=2 color=&amp;apos;#333333&amp;apos;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+
+		}
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+// 得到某个api的类别,属性
+function apiqueryclass()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();	
+	try {
+
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.guid,a.function, a.class, D.NAME flag, a.RLSNO, C.NAME lang, b.name SUBTYP, a.id
+			  from FUNCLIST a ,V_FUNCSUBTYP B,V_FUNCLANG c,V_FUNCFLAG d 
+			 where c.id(+)=a.lang and d.id(+)=a.flag AND B.ID(+)=A.SUBTYP and a.guid=&amp;apos;&amp;quot;+apiguid+&amp;quot;&amp;apos;&amp;quot;;
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			var id = ds.getStringAt(0,&amp;quot;id&amp;quot;);
+			msg +=&amp;quot;&amp;lt;font color=#014E82 size=2&amp;gt;&amp;quot;;
+			msg +=&amp;quot;语言:&amp;quot;+ ds.getStringAt(0,&amp;quot;LANG&amp;quot;)+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			//msg +=&amp;quot;名称:&amp;quot;+ ds.getStringAt(0,&amp;quot;function&amp;quot;)+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			msg +=&amp;quot;类名:&amp;quot;+ ds.getStringAt(0,&amp;quot;class&amp;quot;)+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			msg +=&amp;quot;标志:&amp;quot;+ ds.getStringAt(0,&amp;quot;flag&amp;quot;)+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			msg +=&amp;quot;分类:&amp;quot;+ ds.getStringAt(0,&amp;quot;SUBTYP&amp;quot;)+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			msg +=&amp;quot;支持版本:&amp;quot;+ ds.getStringAt(0,&amp;quot;RLSNO&amp;quot;)+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			msg +=&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+
+			var guid = ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+			msg+=&amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;a href=&amp;apos;show.sp?grdid=ACTIVEX&amp;guid=&amp;quot;+guid+&amp;quot;&amp;apos;&amp;gt;编辑&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+
+		}
+		
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+
+//搜索函数库api的列表
+function searchapi(){ 
+	
+	var CLASS = &amp;quot;&amp;quot;;
+	try{CLASS=class;}catch(e){CLASS=&amp;quot;&amp;quot;;}
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	//	listtyp:  1 为我的待办事务 2 为我创建的事务 3为 日志
+	var sql = &amp;quot;&amp;quot;;
+	var querywhere = &amp;quot;  (&amp;quot;;//查询函数库的sql的条件语句
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(a.function, concat(a.name,concat(a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(a.function, concat(a.name,concat( a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	var category = &amp;quot; and decode(a.lang,null,&amp;apos; &amp;apos;,a.lang) like &amp;apos;&amp;quot;+apilang+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.flag,null,&amp;apos; &amp;apos;, a.flag) like &amp;apos;&amp;quot;+apiflag+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.class,null,&amp;apos; &amp;apos;, a.class) like &amp;apos;&amp;quot;+CLASS+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.subtyp,null,&amp;apos; &amp;apos;, a.subtyp) like&amp;apos;&amp;quot;+apisubtyp+&amp;quot;%&amp;apos;&amp;quot;;
+	
+	var sqlapi=&amp;quot;select &amp;apos;&amp;apos; id,&amp;apos;&amp;apos; guid,&amp;apos;&amp;lt;li&amp;gt;&amp;apos;||a.function||&amp;apos;  (类名:&amp;apos;||a.CLASS||&amp;apos;)&amp;apos;||&amp;apos;(&amp;apos;||c.name||&amp;apos;)&amp;apos;||&amp;apos;&amp;lt;br&amp;gt; &amp;nbsp; &amp;apos;||a.name  name,&amp;apos;Layout.sp?id=apiquery&amp;apiguid=&amp;apos;||a.guid url from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+			 where c.id(+) = a.lang
+			   and d.id(+) = a.flag
+			   AND B.ID(+) = A.SUBTYP and &amp;quot;+querywhere+category;
+	
+	//throw new Exception(sqlapi);
+	
+	var url=&amp;quot;Layout.sp?id=trkquery&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//编写格式,对齐方式为左对齐,置顶
+		var ds = db.QuerySQL(sqlapi);
+		//
+		for( var i=0 ;i&amp;lt;ds.getRowCount()&amp;&amp;i&amp;lt;=500; i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td width=100%  &amp;gt;------------------------------&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		//		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;guid=&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//搜索api的语言分类列表 有全部按钮
+function searchapilanglist(){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=SearchAPI&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;apiflag=&amp;quot;+apiflag+&amp;quot;&amp;apisubtyp=&amp;quot;+apisubtyp;//单击的链接
+	var sql=&amp;quot;&amp;quot;;
+	var querywhere = &amp;quot;&amp;quot;;
+	var category = &amp;quot;&amp;quot;;//分类查询条件
+	// //添加查询条件
+	var querywhere = &amp;quot;  (&amp;quot;;//查询函数库的sql的条件语句
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(a.function, concat(a.name,concat(a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(a.function, concat(a.name,concat( a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	category = //&amp;quot;and decode(a.lang,null,&amp;apos; &amp;apos;,a.lang) like &amp;apos;&amp;quot;+apilang+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.flag,null,&amp;apos; &amp;apos;, a.flag) like &amp;apos;&amp;quot;+apiflag+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.subtyp,null,&amp;apos; &amp;apos;, a.subtyp) like&amp;apos;&amp;quot;+apisubtyp+&amp;quot;%&amp;apos;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from (&amp;quot;;
+				sql+=&amp;quot;SELECT c.ID,c.NAME||&amp;apos;)&amp;apos; NAME,c.GUID ,&amp;apos;&amp;quot;+
+					url+&amp;quot;&amp;apilang=&amp;apos;|| c.id  url &amp;quot;+
+					&amp;quot;from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+					 where c.id(+) = a.lang
+					   and d.id(+) = a.flag
+					   AND B.ID(+) = A.SUBTYP &amp;quot;+
+					category;
+				
+				sql+=&amp;quot; and &amp;quot;+querywhere;
+				
+				sql+=&amp;quot;GROUP BY c.ID,c.NAME,c.GUID &amp;quot;+
+				&amp;quot;ORDER BY c.ID&amp;quot;;
+		sql+=&amp;quot;) a&amp;quot;;
+		
+		sql+=&amp;quot; union &amp;quot;;
+		sql+=&amp;quot;select &amp;apos;&amp;apos; id ,&amp;quot;+
+                &amp;quot; &amp;apos;全部 &amp;apos; || &amp;apos;(&amp;apos; || &amp;apos;)&amp;apos; NAME , &amp;quot;+
+                &amp;quot; &amp;apos;&amp;apos; guid, &amp;quot;+
+                &amp;quot; &amp;apos;&amp;quot;+url+&amp;quot;&amp;apilang=&amp;apos; url &amp;quot;+
+		&amp;quot;from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+					 where c.id(+) = a.lang
+					   and d.id(+) = a.flag
+					   AND B.ID(+) = A.SUBTYP &amp;quot;+
+		category;
+           	sql+=&amp;quot; and &amp;quot;+querywhere;
+
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//搜索api的标志分类列表 有全部按钮
+function searchapiflaglist(){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=SearchAPI&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;apilang=&amp;quot;+apilang+&amp;quot;&amp;apisubtyp=&amp;quot;+apisubtyp;//单击的链接
+
+	var sql=&amp;quot;&amp;quot;;
+	var querywhere = &amp;quot;&amp;quot;;
+	var category = &amp;quot;&amp;quot;;//分类查询条件
+	// //添加查询条件
+	var querywhere = &amp;quot;  (&amp;quot;;//查询函数库的sql的条件语句
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(a.function, concat(a.name,concat(a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(a.function, concat(a.name,concat( a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	category = &amp;quot;and decode(a.lang,null,&amp;apos; &amp;apos;,a.lang) like &amp;apos;&amp;quot;+apilang+&amp;quot;%&amp;apos;&amp;quot;+
+			//&amp;quot;and decode(a.flag,null,&amp;apos; &amp;apos;, a.flag) like &amp;apos;&amp;quot;+apiflag+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.subtyp,null,&amp;apos; &amp;apos;, a.subtyp) like&amp;apos;&amp;quot;+apisubtyp+&amp;quot;%&amp;apos;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from (&amp;quot;;
+				sql+=&amp;quot;SELECT d.ID,d.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,d.GUID ,&amp;apos;&amp;quot;+
+					url+&amp;quot;&amp;apiflag=&amp;apos;|| d.id  url &amp;quot;+
+					&amp;quot;from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+					 where c.id(+) = a.lang
+					   and d.id(+) = a.flag
+					   AND B.ID(+) = A.SUBTYP &amp;quot;+
+					category;
+				
+				sql+=&amp;quot; and &amp;quot;+querywhere;
+
+				
+				sql+=&amp;quot;GROUP BY d.ID,d.NAME,d.GUID &amp;quot;+
+				&amp;quot;ORDER BY d.ID&amp;quot;;
+		sql+=&amp;quot;) a&amp;quot;;
+		
+		sql+=&amp;quot; union &amp;quot;;
+		sql+=&amp;quot;select &amp;apos;&amp;apos; id ,&amp;quot;+
+                &amp;quot; &amp;apos;全部 &amp;apos; || &amp;apos;(&amp;apos; || COUNT(*) || &amp;apos;)&amp;apos; NAME , &amp;quot;+
+                &amp;quot; &amp;apos;&amp;apos; guid, &amp;quot;+
+                &amp;quot; &amp;apos;&amp;quot;+url+&amp;quot;&amp;apiflag=&amp;apos; url &amp;quot;+
+		&amp;quot;from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+					 where c.id(+) = a.lang
+					   and d.id(+) = a.flag
+					   AND B.ID(+) = A.SUBTYP &amp;quot;+
+		category;
+           	sql+=&amp;quot; and &amp;quot;+querywhere;
+
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//搜索api按分类列表 有全部按钮
+function searchAPIsubtyplist(){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=SearchAPI&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;apiflag=&amp;quot;+apiflag+&amp;quot;&amp;apilang=&amp;quot;+apilang;//单击的链接
+	var sql=&amp;quot;&amp;quot;;
+	var querywhere = &amp;quot;&amp;quot;;
+	var category = &amp;quot;&amp;quot;;//分类查询条件
+	// //添加查询条件
+	var querywhere = &amp;quot;  (&amp;quot;;//查询函数库的sql的条件语句
+			var str=query.split(&amp;quot; &amp;quot;);
+			  //throw new Exception(str);
+			for(var i=0;i&amp;lt;str.length();i++)    
+			{	
+				if(i==0){
+					querywhere+=&amp;quot;  lower( concat(a.function, concat(a.name,concat(a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}else{
+					querywhere+=&amp;quot; and lower( concat(a.function, concat(a.name,concat( a.note,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;))))) like lower(&amp;apos;%&amp;quot;+str[i]+&amp;quot;%&amp;apos;)&amp;quot;; 
+				}
+			} 
+		querywhere+=&amp;quot;) &amp;quot;;
+	category = &amp;quot;and decode(a.lang,null,&amp;apos; &amp;apos;,a.lang) like &amp;apos;&amp;quot;+apilang+&amp;quot;%&amp;apos;&amp;quot;+
+			&amp;quot;and decode(a.flag,null,&amp;apos; &amp;apos;, a.flag) like &amp;apos;&amp;quot;+apiflag+&amp;quot;%&amp;apos;&amp;quot;;
+			//&amp;quot;and decode(a.subtyp,null,&amp;apos; &amp;apos;, a.subtyp) like&amp;apos;&amp;quot;+apisubtyp+&amp;quot;%&amp;apos;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from (&amp;quot;;
+				sql+=&amp;quot;SELECT b.ID,b.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,b.GUID ,&amp;apos;&amp;quot;+
+					url+&amp;quot;&amp;apisubtyp=&amp;apos;|| b.id  url &amp;quot;+
+					&amp;quot;from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+					 where c.id(+) = a.lang
+					   and d.id(+) = a.flag
+					   AND B.ID(+) = A.SUBTYP &amp;quot;+
+					category;
+				
+				sql+=&amp;quot; and &amp;quot;+querywhere;
+
+				
+				sql+=&amp;quot;GROUP BY b.ID,b.NAME,b.GUID &amp;quot;+
+				&amp;quot;ORDER BY b.ID&amp;quot;;
+		sql+=&amp;quot;) a&amp;quot;;
+		sql+=&amp;quot; union &amp;quot;;
+		sql+=&amp;quot;select &amp;apos;&amp;apos; id ,&amp;quot;+
+                &amp;quot; &amp;apos;全部 &amp;apos; || &amp;apos;(&amp;apos; || COUNT(*) || &amp;apos;)&amp;apos; NAME , &amp;quot;+
+                &amp;quot; &amp;apos;&amp;apos; guid, &amp;quot;+
+                &amp;quot; &amp;apos;&amp;quot;+url+&amp;quot;&amp;apisubtyp=&amp;apos; url &amp;quot;+
+		&amp;quot;from FUNCLIST a , V_FUNCSUBTYP B, V_FUNCLANG c, V_FUNCFLAG d
+					 where c.id(+) = a.lang
+					   and d.id(+) = a.flag
+					   AND B.ID(+) = A.SUBTYP &amp;quot;+
+		category;
+           	sql+=&amp;quot; and &amp;quot;+querywhere;
+
+		
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//
+		
+		//throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//显示搜索api的条件
+function searchapiquery(){
+	var db = null;
+	db = new pubpack.EADatabase();
+	var msg= &amp;quot;全部结果 &amp;lt;br&amp;gt; 关键字 \&amp;quot;&amp;quot;+query+&amp;quot;\&amp;quot; &amp;lt;/br&amp;gt;&amp;quot;;//是显示的html语句
+	var sql=&amp;quot;&amp;quot;; 
+	// 查找项目
+		sql = &amp;quot;select &amp;apos;语言:&amp;apos;||b.name name from V_FUNCLANG b where b.id = &amp;apos;&amp;quot;+apilang+&amp;quot;&amp;apos;&amp;quot; ;
+		var ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+	// 查找创建人
+		sql = &amp;quot;select &amp;apos;标志:&amp;apos;||b.name name  from V_FUNCFLAG b where b.id = &amp;apos;&amp;quot;+apiflag+&amp;quot;&amp;apos;&amp;quot; ;
+		ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		
+	// 查找事务类型
+		sql = &amp;quot;select &amp;apos;类型:&amp;apos;||b.name||&amp;apos;&amp;lt;BR&amp;gt;说明:&amp;apos;||b.note||&amp;apos;&amp;lt;BR&amp;gt;&amp;apos; name from V_FUNCSUBTYP b where b.id = &amp;apos;&amp;quot;+apisubtyp+&amp;quot;&amp;apos;&amp;quot; ;
+		ds = db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			msg += ds.getStringAt(0,&amp;quot;name&amp;quot;);
+			//msg+=&amp;quot;&amp;lt;BR&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRK&amp;style=&amp;quot;+trktyp+&amp;quot;&amp;edit=save&amp;dd=0&amp;prj=&amp;quot;+trkprj+&amp;quot;&amp;apos; target=\&amp;quot;_blank\&amp;quot;&amp;gt;新增事务&amp;gt;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}
+
+	return msg;
+}
+
+//手机端快捷新增事务的列表
+function wapNewTrklist(){
+	//return &amp;quot;&amp;quot;;
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	
+	//var url=&amp;quot;Layout.sp?id=SearchAPI&amp;query=&amp;quot;+query+&amp;quot;&amp;quot;+&amp;quot;&amp;apilang=&amp;quot;+apilang+&amp;quot;&amp;apisubtyp=&amp;quot;+apisubtyp;//单击的链接
+
+	var sql=&amp;quot;select name,url,id,guid from SYSURL where refid=&amp;apos;3A事务快速新增&amp;apos; order by seqid&amp;quot;;
+	
+	try{ 
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;
+		
+		db = new pubpack.EADatabase();
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			if(i!=0&amp;&amp;(i%2==&amp;quot;0&amp;quot;)){
+				msg = msg+&amp;quot;&amp;lt;br&amp;gt;&amp;quot;;
+			}
+			msg = msg + &amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			msg += &amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;;
+		}
+		
+		//msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkprj=&amp;quot;+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+//显示日报的日期
+function mydalydate(){
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	
+	//显示查询日期的按钮
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;
+		if (DATE==&amp;quot;&amp;quot;){//当DATE为空时,同时也要设定为默认值
+			throw new Exception();//抛出错误执行catch
+		}
+	} catch ( e ) {
+		var db=null;
+		var sqldate=&amp;quot;select sysdate from dual&amp;quot;;
+		db = new pubpack.EADatabase();
+		var ds = db.QuerySQL(sqldate);
+		var dat=&amp;quot;&amp;quot;;
+		if ( ds.getRowCount() &amp;gt; 0 ) 
+		dat =  ds.getStringAt(0,&amp;quot;sysdate&amp;quot;);
+		DATE=dat;
+	}
+	var TRKUSR=&amp;quot;&amp;quot;;
+	try {TRKUSR= trkusr;} catch ( e ) {TRKUSR=loginusrid ;}
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;trkusr=&amp;quot;+TRKUSR+&amp;quot;&amp;trktyp=7&amp;trkprj=&amp;quot;;
+	//throw new Exception(DATE);
+	var msg=&amp;quot;日期&amp;quot;; 
+	msg+=&amp;quot;&amp;lt;script language=\&amp;quot;javascript\&amp;quot;&amp;gt;
+	function dateSubmit(form){
+	var DATE=document.getElementsByName(\&amp;quot;date\&amp;quot;)[0].value;
+	var url=\&amp;quot;&amp;quot;+url+&amp;quot;&amp;worktype=2&amp;date=\&amp;quot;+DATE+\&amp;quot;\&amp;quot;;
+	window.location = url;
+	}&amp;lt;/script&amp;gt;&amp;quot;;
+	msg+=&amp;quot;&amp;lt;input name=\&amp;quot;date\&amp;quot; type=\&amp;quot;\&amp;quot; value=\&amp;quot;&amp;quot;+DATE+&amp;quot;\&amp;quot;&amp;gt; &amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;dateSubmit()\&amp;quot;&amp;gt;查找&amp;lt;/a&amp;gt; &amp;quot;;
+	
+	
+	
+	
+	//显示最近30天的记录
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;} catch ( e ) {DATE=&amp;quot;&amp;quot;;}
+	var WORKTYPE=&amp;quot;1&amp;quot;;
+	//当worktype=1:只显示title 2:title,note都显示
+	try {WORKTYPE  = worktype ;} catch ( e ) {WORKTYPE=&amp;quot;1&amp;quot;;}
+
+	var db = null;
+	//var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	//worktyp=区分用来只显示当前用户的事务
+	//worktype 是否显示事务的内容
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;trkusr=&amp;quot;;
+	var where=&amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+//		var sql = &amp;quot;SELECT &amp;apos;&amp;apos; id,&amp;apos; &amp;apos;||to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,&amp;apos;&amp;apos; guid ,&amp;apos;&amp;quot;+
+//		url+&amp;quot;&amp;date=&amp;apos;|| to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;)  url  &amp;quot;+
+//		&amp;quot;FROM trktyp A,TRKHDR B,trktyp e,v_trkstat d  &amp;quot;+
+//		&amp;quot;WHERE B.SHOW=A.ID &amp;quot;+
+//		&amp;quot;and b.crtusr like &amp;apos;&amp;quot;+TRKUSR+&amp;quot;%&amp;apos; &amp;quot;+
+//		&amp;quot;and b.show like &amp;apos;7&amp;apos; &amp;quot;+
+//		&amp;quot;and b.show=e.id &amp;quot;+
+//		&amp;quot;and  b.stat=d.id  &amp;quot;+
+//		where+
+//		&amp;quot;and to_char(b.crtdat, &amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) &amp;gt; to_char(sysdate-30,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;+
+//		&amp;quot;GROUP BY to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;+
+//		&amp;quot;ORDER BY to_char(b.crtdat, &amp;apos;YYYY-MM-DD&amp;apos;) desc&amp;quot;;
+
+//		sql = &amp;quot;SELECT TRUNC(sysdate-30) + ROWNUM - 1 AS name  
+//			,&amp;apos;&amp;quot;+url+&amp;quot;&amp;date=&amp;apos;|| to_char((TRUNC(sysdate - 30) + ROWNUM - 1),&amp;apos;yyyy-mm-dd&amp;apos;)   url 
+//			FROM   ALL_OBJECTS    
+//			WHERE  TRUNC(sysdate-30) + ROWNUM - 1 &amp;lt;   
+//			       TRUNC(sysdate)order by name desc &amp;quot;; 
+			       
+			       
+		var sql = &amp;quot;select substr(title,0,10)||&amp;apos;&amp;apos;as name,max(title) 
+			,&amp;apos;&amp;quot;+url+&amp;quot;&amp;date=&amp;apos;|| substr(title,0,10)||&amp;apos;&amp;apos;as url
+			from trkhdr 
+ 			where show=&amp;apos;7&amp;apos; and to_date(substr(title,0,10),&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;sysdate-20  
+			group by substr(title,0,10) order by name desc&amp;quot;;
+//		throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+//		throw new Exception(ds.getRowCount());
+		msg +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+		for( var i=0 ;i&amp;lt;ds.getRowCount()&amp;&amp;i&amp;lt;10; i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		msg += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+
+}
+//日报按创建人分类列表 有全部按钮
+function mydalyusrlist(){
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	var DATE=&amp;quot;&amp;quot;;
+	try {DATE  = date ;} catch ( e ) {DATE=&amp;quot;&amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;)||&amp;apos;&amp;quot;;}
+	if(DATE  ==&amp;quot;&amp;quot;)DATE=&amp;quot;&amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;)||&amp;apos;&amp;quot;;
+	var TRKUSR=&amp;quot;&amp;quot;;
+	try {TRKUSR= trkusr;} catch ( e ) {TRKUSR=loginusrid ;}
+	
+	
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	var url=&amp;quot;Layout.sp?id=&amp;quot;+id+&amp;quot;&amp;date=&amp;quot;+DATE;
+	var where=&amp;quot;&amp;quot;;
+
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;SELECT distinct a.id id,&amp;apos; &amp;apos;||A.NAME NAME,&amp;apos;&amp;apos; guid ,&amp;apos;&amp;quot;+
+			url+&amp;quot;&amp;trkusr=&amp;apos;|| A.id  url &amp;quot;+
+			&amp;quot;FROM v_usr9 A &amp;quot;;
+//		&amp;quot;ORDER BY A.ID&amp;quot;;
+		msg=msg+&amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;font color=\&amp;quot;#014E82\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; align=\&amp;quot;left\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;tbody&amp;gt;&amp;quot;;//编写格式,对齐方式为左对齐,置顶
+//		throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		for( var i=0 ;i&amp;lt;ds.getRowCount(); i++ ) {
+			msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		msg = msg+&amp;quot;&amp;lt;tr&amp;gt; &amp;lt;td width=100%  &amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;trkusr=&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+&amp;quot;全部&amp;quot;+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//添加全部按钮
+		msg=msg+&amp;quot;&amp;lt;/tbody&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+
+//显示当天处理的事务,同时还有日报.通过v_trk查询
+function mydalyall2(){ 
+
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	var DATE=&amp;quot;&amp;quot;;
+	
+	var TRKUSR=&amp;quot;&amp;quot;;
+	try {TRKUSR= trkusr;} catch ( e ) {TRKUSR=&amp;quot;&amp;quot; ;}
+	if(DATE==&amp;quot;&amp;quot;)DATE=&amp;quot;&amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;)||&amp;apos;&amp;quot;;
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;//是显示的html语句
+	//	listtyp:  1 为我的待办事务 2 为我创建的事务 3为 日志
+	var sql = &amp;quot;&amp;quot;;
+	var precrtusr = &amp;quot;&amp;quot;;//记录前一个事务创建人的名称
+	
+	//throw new Exception(sql);
+	
+//	msg= this.list(sql);
+	var url=&amp;quot;Layout.sp?id=trkquery&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		//默认显示日期
+		try {DATE  = date ;} catch ( e ) {DATE=db.GetSQL(&amp;quot;select to_char(crtdat,&amp;apos;yyyy-mm-dd&amp;apos;) title from v_trk    order by crtdat  desc &amp;quot;);}
+		
+		//显示结果的sql 
+		sql = &amp;quot;select a.guid,&amp;apos;&amp;lt;li&amp;gt;&amp;apos; || a.name || &amp;apos; &amp;apos; || to_char(a.crtdat, &amp;apos;YY/MM/DD&amp;apos;) ||
+			&amp;apos;    &amp;apos; || b.name name,
+			a.id,
+			a.guid,
+			&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;apos; || a.guid url,
+			to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat,nvl(a.noteblob,empty_blob()) noteblob ,a.note,a.name title,b.name crtusr,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,a.filenote,a.filepath,
+			a.crtusr crtusrid,u.name tousr ,tp.name trktyp,pj.name project
+			from v_trk a, usr b ,v_usr_xlsgrid u ,v_trktyp tp,v_prj pj&amp;quot;;
+		var where = &amp;quot; where b.id(+) = a.crtusr
+				and u.id(+) = a.tousr
+				and tp.id(+) = a.trktyp
+				and a.trktyp=&amp;apos;7&amp;apos;
+				and pj.id(+) = a.project
+				 &amp;quot;;
+		
+		
+		var sql2 = sql;//用于读取blob需要的guid 
+		sql += where;
+
+		var ds = db.QuerySQL(sql+&amp;quot; and B.org=&amp;apos;XLSGRID&amp;apos;
+				/*and a.trktyp =&amp;apos;7&amp;apos;*/
+				and NVL(a.crtusr, &amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+TRKUSR+&amp;quot;%&amp;apos;
+				and (a.name LIKE &amp;apos;%&amp;quot;+DATE+&amp;quot;%&amp;apos;or 
+					(a.crtdat &amp;gt;=to_date(&amp;apos;&amp;quot;+DATE+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)
+						and a.crtdat &amp;lt;=(to_date(&amp;apos;&amp;quot;+DATE+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)+1)
+						AND a.trktyp !=&amp;apos;7&amp;apos;)) order by a.crtusr   desc &amp;quot;);
+//		throw new Exception(sql);
+
+			for( var i=0 ;i&amp;lt;ds.getRowCount()&amp;&amp;i&amp;lt;=500; i++ ) {
+					var crtusr = ds.getStringAt(i,&amp;quot;crtusr&amp;quot;);
+					if(! (crtusr == precrtusr) ){
+						msg += &amp;quot;&amp;lt;font size=3 &amp;gt;&amp;quot;+&amp;quot;&amp;quot;+crtusr+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;//按创建人分类显示
+						msg += &amp;quot;_____________________________________________________________________________________________________&amp;lt;br&amp;gt;&amp;quot;;
+						precrtusr = crtusr ;
+					}
+					var guid = ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+					sql = &amp;quot;select noteblob from v_trk where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos; &amp;quot;;
+					var id = ds.getStringAt(i,&amp;quot;id&amp;quot;);
+					
+					msg += &amp;quot;&amp;lt;p align=left&amp;gt;&amp;lt;font size=3 &amp;gt;[&amp;quot;+ds.getStringAt(i,&amp;quot;trktyp&amp;quot;)+&amp;quot;：&amp;quot;+ds.getStringAt(i,&amp;quot;project&amp;quot;)+&amp;quot;]&amp;quot;+ds.getStringAt(i,&amp;quot;title&amp;quot;)+&amp;quot;   &amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;//标题
+					msg += &amp;quot;&amp;lt;p align=left&amp;gt;&amp;lt;font size=2 color=&amp;apos;gray&amp;apos; &amp;gt;&amp;quot;+&amp;quot;转发给：&amp;quot;+ds.getStringAt(i,&amp;quot;tousr&amp;quot;)+&amp;quot; 时间：&amp;quot;+ds.getStringAt(i,&amp;quot;crtdat&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;//标题
+					
+					//msg += &amp;quot;&amp;lt;p align=center&amp;gt;&amp;lt;font size=2 color=#808080&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;crtusr&amp;quot;)+&amp;quot; &amp;quot;+ds.getStringAt(i,&amp;quot;crttim&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+					var url = ds.getStringAt(i,&amp;quot;url&amp;quot;);
+					var note = ds.getStringAt(i,&amp;quot;note&amp;quot;);//内容
+					
+					if(note==&amp;quot;&amp;quot;) note += db.getBlob2String(sql,&amp;quot;noteblob&amp;quot;);
+//					throw new Exception(note+&amp;quot;|&amp;quot;+sql);
+//					if(i==1)throw new Exception(sql);
+					note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;);
+					msg += &amp;quot;&amp;lt;font size=2 &amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+					var filenote = ds.getStringAt(i,&amp;quot;filenote&amp;quot;);
+
+					
+					//读取附件
+					var filepath = ds.getStringAt(i,&amp;quot;filepath&amp;quot;);
+					if ( filepath !=&amp;quot;&amp;quot; ) {
+						var idx = filenote.indexOf(&amp;quot;\\&amp;quot;);
+						while(idx&amp;gt;=0 ) {
+							var idx1 = filenote.indexOf(&amp;quot;\\&amp;quot;,idx+1);
+							if ( idx1&amp;gt;= 0 ) idx = idx1;
+							else break;
+						}
+						if ( idx&amp;gt;=0 ) 
+							filenote = filenote.substring(idx+1);
+						msg += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font color=#FF0000 size=2&amp;gt;下载附件：&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+filenote+&amp;quot;&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+					}
+					msg += &amp;quot;&amp;lt;BR&amp;gt;&amp;lt;BR&amp;gt;&amp;quot;;
+
+			}
+			
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString()+sql );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;//直接返回html语句
+
+}
+
+
+// 得到某个trk的头信息，主要列在trk主界面的左边，包括有操作按钮
+// 客户端: trkguid 对应trkhdr的guid
+function bbshdr()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var loginusrid = usrinfo.getUsrid();
+	var loginorgid = usrinfo.getusrOrg();
+	
+	var browser =pubpack.EAFunc.getBroswerType(request);
+	
+
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select a.id,a.title,b.id prjid,b.name prjnam,a.prio,e.name trktyp,e.id trktypid,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,a.crtusr,d.name statname,a.stat,a.dtlusr,c.name dtlusrnam,a.aimorg,a.project,a.filepath,a.filenote,a.imagepath,a.imagenote,a.show,a.selforg from trkhdr a, prj b,usr c,v_trkstat d,v_trktyp e where a.show=e.id and a.stat=d.id and a.dtlusr=c.id(+) and a.aimorg=c.org(+) and a.project=b.id and a.guid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos;&amp;quot;;
+//		throw new Exception(sql);
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount() == 0){
+			sql = &amp;quot;select &amp;apos;&amp;apos; id,a.crtusr dtlusr,&amp;apos;&amp;apos; aimorg,a.crtusr,a.org selforg,&amp;apos;&amp;apos;show,a.prj prjid,&amp;apos;&amp;apos; stat,&amp;apos;需求单&amp;apos; trktyp,&amp;apos;TRK_SAMODIFY&amp;apos; trktypid ,b.name prjnam
+				,&amp;apos;&amp;apos;prio ,&amp;apos;&amp;apos; statname,c.name dtlusrnam
+				from TRK_SAMODIFY a, prj b,usr c 
+				where a.crtusr=c.id(+) 
+					and a.org=c.org(+) and a.prj=b.id 
+					and a.guid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos;&amp;quot;;
+			
+			ds = db.QuerySQL(sql);
+		} 
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			var id = ds.getStringAt(0,&amp;quot;id&amp;quot;);
+			var usrid = ds.getStringAt(0,&amp;quot;DTLUSR&amp;quot;);
+			var usrorgid = ds.getStringAt(0,&amp;quot;AIMORG&amp;quot;);
+			var crtid = ds.getStringAt(0,&amp;quot;CRTUSR&amp;quot;);
+			var crtorgid = ds.getStringAt(0,&amp;quot;SELFORG&amp;quot;);
+			var show = ds.getStringAt(0,&amp;quot;SHOW&amp;quot;);
+			var prjid = ds.getStringAt(0,&amp;quot;PRJID&amp;quot;);
+			var stat = ds.getStringAt(0,&amp;quot;STAT&amp;quot;);
+			var trktyp = ds.getStringAt(0,&amp;quot;TRKTYP&amp;quot;);
+			var trktypid = ds.getStringAt(0,&amp;quot;TRKTYPID&amp;quot;);
+			msg += &amp;quot;&amp;lt;p align=left&amp;gt;&amp;lt;font size=2 color=#808080&amp;gt;项目:&amp;quot;+ds.getStringAt(0,&amp;quot;prjnam&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;类型：&amp;quot;+trktyp+&amp;quot;&amp;lt;BR&amp;gt;编号:&amp;quot;+ds.getStringAt(0,&amp;quot;id&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;优先级:&amp;quot;+ds.getStringAt(0,&amp;quot;prio&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;状态:&amp;quot;+ds.getStringAt(0,&amp;quot;statname&amp;quot;)+&amp;quot;&amp;lt;BR&amp;gt;流转到:&amp;quot;+ds.getStringAt(0,&amp;quot;dtlusrnam&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot; ;
+			if(browser==&amp;quot;4&amp;quot;){
+				msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以发表评论&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;show.sp?grdid=j2me_newtrk&amp;hdrordtl=3&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=\&amp;quot; &amp;gt;发表评论&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+				
+			}else{
+				msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以发表评论&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.open(&amp;apos;show.sp?grdid=HDRTRK&amp;hdrordtl=3&amp;hdrguid=&amp;quot;+trkguid+&amp;quot;&amp;style=&amp;quot;+show +&amp;quot;&amp;prjid=&amp;quot;+prjid +&amp;quot;&amp;edit=&amp;dd=&amp;apos;);\&amp;quot;&amp;gt;发表评论&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+			}
+			msg += &amp;quot;&amp;lt;p align=center&amp;gt;您可以发送到邮箱&amp;lt;BR&amp;gt;【&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.open(&amp;apos;show.sp?grdid=SendEMail&amp;guid=&amp;quot;+trkguid+&amp;quot;&amp;apos;);\&amp;quot;&amp;gt;发送到邮箱&amp;lt;/a&amp;gt;】&amp;lt;/p&amp;gt;&amp;quot; ;
+
+		}
+		sql = &amp;quot;select title,pro_note,tousr,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) crttim,crtusr from trkdtl a where trkguid=&amp;apos;&amp;quot;+trkguid +&amp;quot;&amp;apos; order by crtdat asc&amp;quot;;
+		
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >BBS-TIT</ID><NAME ></NAME><DATDSC >select * from trkhdr where project=&amp;apos;BBS&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8></ROW>
+<ROW num="1" ><ID >BBS_RT</ID><NAME >查询论坛</NAME><DATDSC >select ID,&amp;apos; &amp;apos;||name NAME,GUID,&amp;apos;Layout.sp?id=prjbbs&amp;&amp;trktyp=&amp;apos;|| ID  url FROM trktyp WHERE finkey=&amp;apos;bbs&amp;apos;</DATDSC><C4 ></C4><C5 >BBS_RT</C5><C6 >BBS_RT</C6><C7 ></C7><C8 ></C8></ROW>
+<ROW num="2" ><ID >BBS_ZT</ID><NAME >论坛添加主题</NAME><DATDSC >select ID,&amp;apos; &amp;apos;||name NAME,GUID,&amp;apos;ROOT_MSG3/show.sp?grdid=BBSZT&amp;trktyp=&amp;apos;|| ID  url 
+FROM trktyp WHERE finkey=&amp;apos;bbs&amp;apos;</DATDSC><C4 ></C4><C5 >BBS_ZT</C5><C6 >BBS_ZT</C6><C7 ></C7><C8 ></C8></ROW>
+<ROW num="3" ><ID >allprjbbs</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;lt;a href=Layout.sp?id=bbsquery&amp;trkguid=&amp;apos;||a.guid||&amp;apos; target=_blank&amp;gt;&amp;apos;||a.title||&amp;apos;&amp;lt;/a&amp;gt;&amp;apos; 标题,
+(select max(e.name) from usr e where e.id=a.crtusr) 创建人,
+(select max(f.name) from usr f where f.id=a.dtlusr) 处理人,
+to_char(a.crtdat,&amp;apos;YY/MM/DD HH24:MI:SS&amp;apos;) 创建日期,b.name 类型
+
+from trkhdr a ,v_trktyp b
+where  a.show=b.id
+and a.project=&amp;apos;[%SYS_ORGID]&amp;apos;
+and a.show like &amp;apos;[%trktyp]%&amp;apos;
+order by a.crtdat desc</DATDSC><C4 >allprjbbs</C4><C5 ></C5><C6 >allprjbbs</C6><C7 >allprjbbs</C7><C8 ></C8></ROW>
+<ROW num="4" ><ID >MYCRTWORK</ID><NAME >我创建的事务</NAME><DATDSC >select a.title|| &amp;apos; &amp;apos;||to_char(a.crtdat,&amp;apos;mm/dd&amp;apos;)||&amp;apos; -&amp;gt;&amp;gt;&amp;apos;||c.name||&amp;apos;  &amp;apos;||d.name name,substr(a.note,1,25) note ,
+a.guid ,a.id,&amp;apos;Layout.sp?id=bbsquery&amp;trkguid=&amp;apos;||a.guid url,&amp;apos;_blank&amp;apos; target
+ from  
+trkhdr a,v_usr c ,trktyp e,v_usr cc, v_trkstat d
+where 
+a.dtlusr=c.id  and a.AIMORG=c.orgid and a.crtusr=cc.id  and a.SELFORG=cc.orgid 
+and a.stat=d.id
+and cc.id=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   
+and cc.orgid=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.show like&amp;apos;[%trktyp]%&amp;apos;
+--and a.project like&amp;apos;[%trkprj]%&amp;apos;
+and a.show =e.id   
+--and e.id not in (&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) 
+order by to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >MYCRTWORK</C8></ROW>
+<ROW num="5" ><ID >trkhdrlog</ID><NAME ></NAME><DATDSC >select  distinct &amp;apos;&amp;apos;||a.usrnam ||&amp;apos;  &amp;apos;||to_char(a.crtdat,&amp;apos;mm/dd hh24:mi&amp;apos;)||&amp;apos;&amp;lt;BR&amp;gt;  &amp;apos;||a.action||&amp;apos;&amp;lt;BR&amp;gt;&amp;apos;   name,
+a.guid,a.usrid id,a.crtdat
+,&amp;apos;Layout.sp?id=trkquery&amp;guid=&amp;apos;||a.bilid||&amp;apos;&amp;trkguid=&amp;apos;||a.bilid url
+from OALOG a where mwtyp in(&amp;apos;READ&amp;apos;,&amp;apos;ENDTRK&amp;apos;,&amp;apos;DELTRKHDR&amp;apos;,&amp;apos;DELTRKDTL1&amp;apos;,&amp;apos;DELTRKDTL2&amp;apos;) and bilid=&amp;apos;[%trkguid]&amp;apos;
+order by crtdat desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

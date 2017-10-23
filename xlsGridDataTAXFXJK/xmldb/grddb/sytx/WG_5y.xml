@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_5y</MWID><NAME >伍缘</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_5y.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);  
+	_this.SetCellText(0,0,0,msg);
+//	_this.SaveTextFile( &amp;quot;d:/GMS.htm&amp;quot;,msg,&amp;quot; (*.htm)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var util = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var HtmlParser = new x_WG_HtmlParser();
+var httpcall = new webget.HttpCall();
+var pageSize = 15;
+function start()
+{
+	return getOrderStr(&amp;quot;JQPX&amp;quot;,&amp;quot;2010-08-30&amp;quot;,&amp;quot;0033&amp;quot;,&amp;quot;JQ10&amp;quot;,&amp;quot;70018210&amp;quot;,&amp;quot;5&amp;quot;,&amp;quot;&amp;quot;); 
+}
+var order = new pubpack.EAXmlDS();
+var links = new util.ArrayList();
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{ 
+	var db = null;
+	try{
+		db = new pubpack.EADatabase();
+		var map = new util.HashMap();						
+		var ret = HtmlParser.doRequest(httpcall,kaid,userid,passwd,code);
+		//得到总页数
+		var totalSize = 1 * getPageNumber(ret);
+		var totalPage = (totalSize+pageSize)/pageSize;
+		var pageNo = 0;
+		//得有所有订单号的列表
+		while( pageNo &amp;lt; totalPage )
+		{
+			var select_page = pageSize * pageNo +1;
+			links = getOrderList(&amp;quot;http://61.129.104.202:82/b2b/numerous/order/listOrderAction.do&amp;quot;,&amp;quot;startIndex=&amp;quot;+select_page+&amp;quot;&amp;pageSize=&amp;quot;+pageSize+&amp;quot;&amp;select_page=&amp;quot;+select_page,&amp;quot;GBK&amp;quot;,dat);
+			pageNo++;
+		}
+		//取订单明细
+		var order = new pubpack.EAXmlDS();//订单对象
+		var row = -1;		
+		for (var e = 0;e &amp;lt; links.size();e++)
+		{
+ 			ret = httpcall.Get(links.get(e),&amp;quot;GBK&amp;quot;);
+ 			var base  = HtmlParser.parserHtml(ret,&amp;quot;GBK&amp;quot;);
+ 			var tablist = HtmlParser.filterHtml(base,&amp;quot;table&amp;quot;);
+ 			var header = HtmlParser.parserTableTitle(tablist,&amp;quot;GBK&amp;quot;,new Array(0));
+ 			var ordlist = HtmlParser.parserTable(tablist,&amp;quot;GBK&amp;quot;,new Array(1),&amp;quot;O&amp;quot;);
+ 			var footer = HtmlParser.parserTableTitle(tablist,&amp;quot;GBK&amp;quot;,new Array(2));
+			for (var i = 0;i&amp;lt;ordlist.getRowCount();i++)
+			{
+				
+				var itmid = ordlist.getStringAt(i,&amp;quot;_商品编码&amp;quot;);
+				if (itmid != &amp;quot;合计&amp;quot;)
+				{
+					row = order.AddNullRow(row);					
+					for (var j = 0;j&amp;lt;header.length();j++)
+					{
+						var key = header[j];
+						if (key.indexOf(&amp;quot;订货单号&amp;quot;) &amp;gt; -1) 
+						{
+							order.setValueAt(row,&amp;quot;ORDID&amp;quot;,key.substring(key.indexOf(&amp;quot;订货单号&amp;quot;)+5,key.length()));
+							order.setValueAt(row,&amp;quot;BILID&amp;quot;,key.substring(key.indexOf(&amp;quot;订货单号&amp;quot;)+5,key.length()));
+						}	
+						if (key.indexOf(&amp;quot;订货日期&amp;quot;) &amp;gt; -1) 
+							order.setValueAt(row,&amp;quot;DAT&amp;quot;,key.substring(key.indexOf(&amp;quot;订货日期&amp;quot;)+5,key.length()));
+						if (key.indexOf(&amp;quot;截止送货日期&amp;quot;) &amp;gt; -1)
+							 order.setValueAt(row,&amp;quot;ARRDAT&amp;quot;,key.substring(key.indexOf(&amp;quot;截止送货日期&amp;quot;)+7,key.length()));	
+					}
+					order.setValueAt(row,&amp;quot;ECORPID&amp;quot;,&amp;quot;伍缘&amp;quot;);
+					order.setValueAt(row,&amp;quot;ECORPNAM&amp;quot;,&amp;quot;伍缘&amp;quot;);
+					order.setValueAt(row,&amp;quot;EITMID&amp;quot;,itmid);	
+					order.setValueAt(row,&amp;quot;EITMNAM&amp;quot;,ordlist.getStringAt(i,&amp;quot;_商品名称&amp;quot;));
+					var spec = ordlist.getStringAt(i,&amp;quot;_规格&amp;quot;);	
+					order.setValueAt(row,&amp;quot;SPEC&amp;quot;,spec);
+					var untnum = spec.substring(spec.indexOf(&amp;quot;*&amp;quot;)+1,spec.length());
+					order.setValueAt(row,&amp;quot;UNTNUM&amp;quot;,untnum);					
+					order.setValueAt(row,&amp;quot;QTY&amp;quot;,1 * ordlist.getStringAt(i,&amp;quot;_数量&amp;quot;) * untnum);	
+					order.setValueAt(row,&amp;quot;ZPQTY&amp;quot;,&amp;quot;0&amp;quot;);
+					order.setValueAt(row,&amp;quot;EPRICE&amp;quot;,&amp;quot;0&amp;quot;);	
+					order.setValueAt(row,&amp;quot;QTYFLG&amp;quot;,&amp;quot;N&amp;quot;);
+					order.setValueAt(row,&amp;quot;NOTE&amp;quot;,&amp;quot;None&amp;quot;);																													
+					order.setValueAt(row,&amp;quot;CODE&amp;quot;,&amp;quot;&amp;quot;);	
+					order.setValueAt(row,&amp;quot;USERID&amp;quot;,userid);					
+					order.setValueAt(row,&amp;quot;KAID&amp;quot;,kaid);
+					order.setValueAt(row,&amp;quot;DEPTID&amp;quot;,deptid);									
+					order.setValueAt(row,&amp;quot;SEQID&amp;quot;,i+1);	
+					order.setValueAt(row,&amp;quot;SRFLG&amp;quot;,&amp;quot;NR&amp;quot;);
+	//				order.setValueAt(row,&amp;quot;CONTENT&amp;quot;,tablist.toHtml());
+					for (var k = 0;k&amp;lt;footer.length()-1;k++)
+					{
+						var key = footer[k];
+						var val = footer[k+1];
+						if (key.indexOf(&amp;quot;仓库地址&amp;quot;) &amp;gt; -1) 
+							order.setValueAt(row,&amp;quot;CORPADDR&amp;quot;,key.substring(key.indexOf(&amp;quot;仓库地址&amp;quot;)+5,key.length()));
+											
+					}														
+				}
+			}			
+		}
+		return HtmlParser.parserDsToString(order,&amp;quot;&amp;quot;,&amp;quot;EITMID&amp;quot;,&amp;quot;合计&amp;quot;);			 	
+	}catch(e){
+		throw new Exception(e);
+	}
+	finally
+	{
+		if(db != null)
+			db.Close();
+	}
+}
+//得到总共的记录数
+function getPageNumber(ret)
+{
+	var page = HtmlParser.parserHtml(ret,&amp;quot;GBK&amp;quot;);
+	var form = HtmlParser.filterHtml(page,&amp;quot;form&amp;quot;);
+	var table = HtmlParser.filterHtml(form,&amp;quot;table&amp;quot;);
+	var tablist = table.elementAt(1);
+	var content = HtmlParser.ReplaceStrToNull(tablist.toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;));
+	if (content.indexOf (&amp;quot;共&amp;quot;) &amp;gt; -1)		
+		return content.substring(content.lastIndexOf(&amp;quot;共&amp;quot;)+1,content.indexOf(&amp;quot;条，列&amp;quot;));
+}
+
+//取得符合日期的订单链接 
+function getOrderList(url,params,encode,dat)
+{
+	var ret = httpcall.Post(url,params,encode);
+	var page = HtmlParser.parserHtml(ret,&amp;quot;GBK&amp;quot;);
+	var tablist = HtmlParser.filterHtml(page,&amp;quot;table&amp;quot;);
+	var No = 0;
+	for (var t = 0;t&amp;lt;tablist.size();t++)
+	{
+		var attr = tablist.elementAt(t).getAttribute(&amp;quot;class&amp;quot;);
+		if ( attr != null &amp;&amp; attr.equals(&amp;quot;list&amp;quot;))
+		{
+			var TR = tablist.elementAt(t).getRows();
+			for (var i = 0;i&amp;lt;TR.length();i++)
+			{
+				var TD = TR[i].getColumns();
+				for (var j = 0;j&amp;lt;TD.length();j++)
+				{
+					if (j == 4)
+					{
+						if (TD[j].toPlainTextString().trim() == dat)
+						{
+							links.add(&amp;quot;http://61.129.104.202:82/b2b/numerous/order/listOrderDtlAction.do?proc=searchFixedDtl&amp;orderNo=&amp;quot;+TD[0].toPlainTextString().trim());
+						}
+					}
+				}
+			}
+		}			
+	}
+	return links;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

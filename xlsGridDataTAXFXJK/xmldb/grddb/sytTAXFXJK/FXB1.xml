@@ -1,0 +1,343 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FXB1</MWID><NAME >需求表1</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FXB1.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >主题分析</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE2 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;40%&amp;quot;);
+//	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;50%&amp;quot;);
+	
+	var layoutxml=&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+			&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;ROW &amp;gt;&amp;quot;+
+			 &amp;quot;&amp;lt;C0  height=\&amp;quot;30%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;1&amp;lt;/C0&amp;gt;&amp;quot;+
+			 &amp;quot;&amp;lt;C1  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;2\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;0&amp;lt;/C1&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;ROW &amp;gt;&amp;quot;+
+			 &amp;quot;&amp;lt;C0  height=\&amp;quot;70%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;2&amp;lt;/C0&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	_this.SetLayoutDS(layoutxml);
+	
+	
+	var ymlist = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YYYY_MM&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);	
+	var ym1 = G_LOGDAT.substring(0,5)+&amp;quot;01&amp;quot;;
+	var ym2 = G_LOGDAT.substring(0,7);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,3,2,ymlist);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,5,2,ymlist);
+	_this.SetCellText(1,3,2,ym1);
+	_this.SetCellText(1,5,2,ym2);
+	
+	_this.SetMainCellRange(0,1,0,6,2);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetColVisible(0,3,-1);
+	
+	ZXGFILE2 = _this.SaveTempZXGFile(2);
+	
+	loadLog();
+
+}
+
+//等待时执行的任务
+function runWaitingTask()
+{
+	var ym1 = _this.GetCellText(1,3,2);
+	var ym2 = _this.GetCellText(1,5,2);
+	var ret = _this.invokeOSFunc(&amp;quot;genFxData&amp;quot;,&amp;quot;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2+&amp;quot;&amp;usrid=&amp;quot;+G_USRID);
+	return ret;
+}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	var ym1 = _this.GetCellText(1,3,2);
+	var ym2 = _this.GetCellText(1,5,2);
+	
+	if (sheet == 1 &amp;&amp; id == &amp;quot;生成分析数据&amp;quot;) {
+		if (!confirm(&amp;quot;生成&amp;quot;+ym1+&amp;quot;至&amp;quot;+ym2+&amp;quot;的分析数据，是否继续？&amp;quot;)) return;
+		
+//		_this.SetCellText(1,7,1,&amp;quot;正在生成...&amp;quot;);
+//		var ret = _this.invokeOSFunc(&amp;quot;genFxData&amp;quot;,&amp;quot;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2+&amp;quot;&amp;usrid=&amp;quot;+G_USRID);
+//		alert(ret);
+		var ret = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+		alert(ret);
+		
+		loadLog();
+		_this.AutoFixScreenWidth();
+		_this.SetCellText(1,7,1,ret);
+	}
+	else if (sheet == 0) {
+		var mwid = _this.GetCellText(sheet,row,3);
+		var param = &amp;quot;SWJG=&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2+&amp;quot;&amp;pagesize=100&amp;loaddata=1&amp;YYYY=&amp;quot;+ym1.substring(0,4);
+		window.open(&amp;quot;show.sp?grdid=&amp;quot;+mwid+&amp;quot;&amp;&amp;quot;+param);
+	}
+}
+
+
+function loadLog()
+{
+	_this.LoadZXGFile(ZXGFILE2,-1,2);
+	_this.SetFixedRow(2,2);
+
+	_this.SetMainCellRange(2,2,0,4,4);
+	_this.SetAttribe(&amp;quot;SHEET_2&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	var xml = _sql.query(&amp;quot;SCLOG&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetXmlDS(2,2,0,4,4,xml);
+	_this.AutoFixScreenWidth();
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var servletPack = new JavaPackage(&amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+
+function genFxData()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();
+		
+		var mwsql = new servletPack.MWSQL();
+
+		var mwid = &amp;quot;FXB1&amp;quot;; //中间件的编号
+		for (var i=1;i&amp;lt;=4;i++) {
+			var dsid = &amp;quot;TAX_FXB1&amp;quot; + i; //数据源ID=表名
+			var dssql = &amp;quot;&amp;quot;;
+			try { dssql = mwsql.GetQuerySQL(request,db,&amp;quot;TAXFXJK&amp;quot;,mwid,dsid); } catch (e1) { }
+			if (dssql != &amp;quot;&amp;quot; &amp;&amp; dssql != null) {
+				dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%YM1]&amp;quot;,YM1);
+				dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%YM2]&amp;quot;,YM2);
+				
+				if (dsid == &amp;quot;TAX_FXB11&amp;quot; || dsid == &amp;quot;TAX_FXB12&amp;quot; || dsid == &amp;quot;TAX_FXB14&amp;quot;) {
+					sql = &amp;quot;delete from &amp;quot; + dsid + &amp;quot; where yymm&amp;gt;=replace(&amp;apos;&amp;quot;+YM1+&amp;quot;&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;) and yymm&amp;lt;=replace(&amp;apos;&amp;quot;+YM2+&amp;quot;&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)&amp;quot;;
+					db.ExcecutSQL(sql);
+				}
+				else if (dsid == &amp;quot;TAX_FXB13&amp;quot;) {
+					sql = &amp;quot;delete from &amp;quot; + dsid + &amp;quot; where yyyy=substr(&amp;apos;&amp;quot;+YM1+&amp;quot;&amp;apos;,0,4)&amp;quot;;
+					db.ExcecutSQL(sql);
+				}
+				
+				db.ExcecutSQL(dssql); //insert into
+				
+			}	
+		}
+		
+		//记录生成日志
+		sql = &amp;quot;insert into tax_scfxsj_log(crtusr,ym1,ym2,fxlx) values(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+YM1+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+YM2+&amp;quot;&amp;apos;,&amp;apos;TAX_FXB1&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return &amp;quot;生成分析数据成功！&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >TAX_FXB11</ID><NAME ></NAME><DATDSC >insert into tax_fxb11 (yymm,nsrsbh,nsrmc,swjg_dm,xse,kpsr,wkpsr,hj_xxynse,jxse,ncpsgdje,bqfse,gdzcdk,yfdkje,yydkje,jsyj,ynse,sf)
+select tb1.yymm,nvl(ybnsr.SHXYDM,ybnsr.nsrsbh) nsrsbh,ybnsr.nsrmc,trim(ybnsr.zgswskfj_dm) zgswskfj_dm,sum(xse) xse,sum(kpsr) kpsr,sum(wkpsr) wkpsr,sum(hj_xxynse) hj_xxynse,
+       sum(jxse) jxse,sum(ncpsgdje) ncpsgdje,sum(bqfse) bqfse,sum(gdzcdk) gdzcdk,sum(yfdkje) yfdkje,sum(yydkje) yydkje,
+       sum(tb3.jsyj) jsyj,sum(tb3.ynse) ynse,
+       (case when sum(tb3.jsyj)=0 then 0 else round(sum(tb3.ynse)/sum(tb3.jsyj),4) end) sf
+from v_tax_ybnsr_djxx ybnsr /*一般纳税人认定信息表*/,
+(
+  select t0.djxh,to_char(t0.skssqq,&amp;apos;yyyymm&amp;apos;) yymm,
+         t1.xse,t1.kpsr,t1.wkpsr,t1.hj_xxynse,t2.jxse,t2.ncpsgdje,t3.bqfse,t4.gdzcdk,t5.yfdkje
+  from sb_sbb t0,
+  (
+    /*增值税主营营业收入 | 开票收入 | 销项税额*/
+    select sbuuid,pzxh,xse,(kjskzzszyfp_xse + kjqtfp_xse) kpsr,wkjfp_xse wkpsr,hj_xxynse                            
+    from SB_ZZS_YBNSR_FB1_BQXSQKMX
+    where ewbhxh=1
+  ) t1, 
+  (
+    /*进项税额 | 农产品收购抵扣额*/
+    select sbuuid,sum(decode(ewbhxh,1,se,0)) jxse,sum(decode(ewbhxh,6,se,0)) ncpsgdje
+    from SB_ZZS_YBNSR_FB2_BQJXSEMX
+    where ewbhxh in (1,6)
+    group by sbuuid
+  ) t2,
+  (
+    /*一般纳税人防伪税控抵减额*/
+    select sbuuid,pzxh,bqfse 
+    from SB_ZZS_YBNSR_FB4_SEDJQK 
+    where ewbhxh=1
+  ) t3,
+  (
+    /*固定资产抵扣*/
+    select sbuuid,pzxh,(hgjkzzszyjks_jxse+zzszyfp_jxse) gdzcdk from SB_ZZS_YBNSR_FB_GDZCJXDK          
+    --where sbuuid=&amp;apos;14500000000000004500130068589741&amp;apos;
+  ) t4,
+  (
+    /*运费抵扣*/
+    select sbuuid,pzxh,sum(jsdk_yfje) yfdkje from SB_ZZS_YBNSR_FB_YSFPDKQD group by sbuuid,pzxh
+  ) t5
+  where t0.sbuuid=t1.sbuuid(+) 
+    and t0.sbuuid=t2.sbuuid(+) 
+    and t0.sbuuid=t3.sbuuid(+)
+    and t0.sbuuid=t4.sbuuid(+)
+    and t0.sbuuid=t5.sbuuid(+)
+    and t0.gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and t0.skssqq&amp;gt;=to_date(&amp;apos;[%YM1]&amp;apos;,&amp;apos;yyyy-mm&amp;apos;)
+    and t0.skssqz&amp;lt;=to_date(&amp;apos;[%YM2]&amp;apos;,&amp;apos;yyyy-mm&amp;apos;)
+    and t0.zfbz_1=&amp;apos;N&amp;apos;    
+) tb1,
+(                     
+  /*用油抵扣*/
+  select a.djxh,kpyf,sum(hwje) yydkje
+  from tax_company a,(
+    select b.gfsbh nsrsbh,b.gfmc nsrmc,b.xfsbh,b.xfmc,b.je,a.je hwje,a.kpyf,a.hwmc,a.fpdm,a.fphm
+    from dzdz_hwxx_ptfp a,dzdz_fpxx_ptfp b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and b.xfsbh in ( /*销方是石油制品批发行业的*/
+      select nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos;
+      union 
+      select shxydm from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+      )               
+    union all  
+    select b.gfsbh nsrsbh,b.gfmc nsrmc,b.xfsbh,b.xfmc,b.je,a.je hwje,a.kpyf,a.hwmc,a.fpdm,a.fphm
+    from dzdz_hwxx_zzsfp a,dzdz_fpxx_zzsfp b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and b.xfsbh in ( /*销方是石油制品批发行业的*/
+      select nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos;
+      union 
+      select shxydm from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+      )   
+            
+  ) b 
+  where (a.id=b.nsrsbh or a.name=b.nsrmc) 
+  group by a.djxh,kpyf      
+) tb2, 
+(
+  select djxh,to_char(skssqq,&amp;apos;yyyymm&amp;apos;) yymm,sum(jsyj) jsyj,sum(ynse) ynse
+  from sb_sbxx 
+  where gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and skssqq&amp;gt;=to_date(&amp;apos;[%YM1]&amp;apos;,&amp;apos;yyyy-mm&amp;apos;)
+    and skssqz&amp;lt;=to_date(&amp;apos;[%YM2]&amp;apos;,&amp;apos;yyyy-mm&amp;apos;)
+    and zfbz_1=&amp;apos;N&amp;apos;
+  group by djxh,to_char(skssqq,&amp;apos;yyyymm&amp;apos;)
+) tb3                        
+where tb1.djxh=tb2.djxh(+)    
+  and tb1.yymm=tb2.kpyf(+)
+  and tb1.djxh=tb3.djxh
+  and tb1.yymm=tb3.yymm
+  and ybnsr.djxh=tb1.djxh
+group by tb1.yymm,nvl(ybnsr.SHXYDM,ybnsr.nsrsbh),ybnsr.nsrmc,ybnsr.zgswskfj_dm</DATDSC><C4 >TAX_FXB11</C4><C5 >TAX_FXB11</C5><C6 >TAX_FXB11</C6><C7 >TAX_FXB11</C7><C8 ></C8><C9 >TAX_FXB11</C9></ROW>
+<ROW num="1" ><ID >TAX_FXB12</ID><NAME ></NAME><DATDSC >insert into tax_fxb12(yymm,nsrsbh,nsrmc,swjg_dm,bqfse,bqydjse,bqsjdjse,jsyj,ynse,sf)
+select yymm,nsrsbh,nsrmc,zgswskfj_dm swjg_dm,
+       sum(bqfse) bqfse,        --本期发生额
+       sum(bqydjse) bqydjse,    --本期应抵减税额
+       sum(bqsjdjse) bqsjdjse,  --本期实际抵减税额
+       sum(jsyj) jsyj,          --计税依据
+       sum(ynse) ynse,          --应纳税额
+       (case when sum(jsyj)=0 then 0 else round(sum(ynse)/sum(jsyj),4) end) sf       
+from (                
+  select a.sbuuid,a.nsrsbh,a.nsrmc,to_char(skssqq,&amp;apos;yyyymm&amp;apos;) yymm,a.zgswskfj_dm,
+         bqfse,bqydjse,bqsjdjse,b.xgrq 
+  from  sb_sbb a,SB_ZZS_XGM_FB_SEDJQK b
+  where b.ewbhxh=1 --增值税税控系统专用设备费及技术维护费
+    and a.sbuuid=b.sbuuid
+    and a.gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and to_char(a.skssqq,&amp;apos;yyyymm&amp;apos;)&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and to_char(a.skssqq,&amp;apos;yyyymm&amp;apos;)&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and a.zfbz_1=&amp;apos;N&amp;apos;
+) t1,
+( 
+  select sbuuid,sum(jsyj) jsyj,sum(ynse) ynse
+  from sb_sbxx a
+  where a.gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and to_char(a.skssqq,&amp;apos;yyyymm&amp;apos;)&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and to_char(a.skssqq,&amp;apos;yyyymm&amp;apos;)&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and a.zfbz_1=&amp;apos;N&amp;apos;
+  group by sbuuid
+) t2
+where t1.sbuuid=t2.sbuuid
+group by yymm,nsrsbh,nsrmc,zgswskfj_dm</DATDSC><C4 >FXB2</C4><C5 >TAX_FXB12</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >TAX_FXB12</C9></ROW>
+<ROW num="2" ><ID >TAX_FXB13</ID><NAME ></NAME><DATDSC >insert into tax_fxb13(yyyy,nsrsbh,nsrmc,swjg_dm,yysr,yycb,xsfy,glfy,
+	cwfy,yylr,yywsr,yywzc,lrze,NSTZZJE,NSTZJSE,YNSSDE,YNSE)
+SELECT yyyy,nsrsbh,nsrmc,zgswskfj_dm swjg_dm,
+    sum(yysr) yysr,
+    sum(YYCB) yycb,
+    sum(XSFY) xsfy,
+    sum(GLFY) glfy,
+    sum(cwfy) cwfy,
+    sum(yylr) yylr,
+    sum(yywsr) yywsr,
+    sum(yywzc) yywzc,
+    sum(lrze) lrze,
+    sum(NSTZZJE) NSTZZJE,
+    sum(NSTZJSE) NSTZJSE,
+    sum(YNSSDE) YNSSDE,
+    sum(YNSE) YNSE
+FROM (
+  select sbuuid,djxh, nsrsbh, nsrmc, to_char(skssqq,&amp;apos;yyyy&amp;apos;) yyyy,skssqz, gzlx_dm_1, zfbz_1, sjgsdq, zgswskfj_dm,
+  (case when zgswskfj_dm like &amp;apos;14511%&amp;apos; then zgswskfj_dm else sjgsdq end )zgswjg 
+  from sb_sbb a
+  where (zgswskfj_dm like &amp;apos;14511%&amp;apos; or sjgsdq like &amp;apos;14511%&amp;apos;)
+    and gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and zfbz_1 !=&amp;apos;Y&amp;apos;
+    and to_char(a.skssqq,&amp;apos;yyyymm&amp;apos;)&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and to_char(a.skssqq,&amp;apos;yyyymm&amp;apos;)&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+)T1,
+( select sbuuid,yysr,YYCB,YYSJ_FJ,XSFY,GLFY, CWFY,ZCJZSS,GYJZBDSY,TZSY,YYLR,YYWSR,YYWZC,
+   LRZE,NSTZJSE,NSTZZJE,YNSSDE,SL_1,YNSE,LRRQ,&amp;apos;14年版&amp;apos;
+  from SB_SDS_JMCZ_14ND_QYSDSNDNSSBZB
+  
+  union all
+  select sbuuid,yysr,YYCB,YYSJ_FJ,XSFY,GLFY, CWFY,ZCJZSS,GYJZBDSY,TZSY,YYLR,YYWSR,YYWZC,
+   LRZE,NSTZJSE,NSTZZJE,YNSSDE,SL_1,YNSE,LRRQ,&amp;apos;14年前版&amp;apos;
+  from SB_SDS_JMCZ_ND  
+) T2
+WHERE T1.SBUUID=T2.Sbuuid
+group by yyyy,nsrsbh,nsrmc,zgswskfj_dm</DATDSC><C4 >TAX_FXB13</C4><C5 >TAX_FXB13</C5><C6 ></C6><C7 >TAX_FXB13</C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="3" ><ID >TAX_FXB14</ID><NAME ></NAME><DATDSC >insert into tax_fxb14(yymm,nsrsbh, nsrmc,swjg_dm,xse,ynse)
+select yymm,nsrsbh, nsrmc,zgswskfj_dm swjg_dm,sum(xse) xse ,sum(ynse) ynse
+from (
+  select sbuuid,djxh,nsrsbh,nsrmc,to_char(skssqq,&amp;apos;yyyymm&amp;apos;) yymm,gzlx_dm_1,zfbz_1,sjgsdq, zgswskfj_dm,
+  (case when zgswskfj_dm like &amp;apos;14511%&amp;apos; then zgswskfj_dm else sjgsdq end )zgswjg 
+  from sb_sbb 
+  where (zgswskfj_dm like &amp;apos;14511%&amp;apos; or sjgsdq like &amp;apos;14511%&amp;apos;)
+    and gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and zfbz_1 !=&amp;apos;Y&amp;apos;
+    and to_char(skssqq,&amp;apos;yyyymm&amp;apos;)&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and to_char(skssqq,&amp;apos;yyyymm&amp;apos;)&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+ ) T1,  
+(select sbuuid,sum(xse)xse,sum(YNSE) ynse from SB_XFS_ZB group by sbuuid) T2 
+where T1.sbuuid=T2.Sbuuid
+group by yymm,nsrsbh, nsrmc,zgswskfj_dm</DATDSC><C4 >GRDDSCDS_3</C4><C5 ></C5><C6 ></C6><C7 >TAX_FXB14</C7><C8 >TAX_FXB14</C8><C9 >TAX_FXB14</C9></ROW>
+<ROW num="4" ><ID >SCLOG</ID><NAME ></NAME><DATDSC >select rownum,ym1,ym2,crtdat,crtusr 
+from (
+select ym1,ym2,crtdat,crtusr 
+from  tax_scfxsj_log 
+where fxlx=&amp;apos;TAX_FXB1&amp;apos;
+order by crtdat desc
+) t</DATDSC><C4 ></C4><C5 >SCLOG</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

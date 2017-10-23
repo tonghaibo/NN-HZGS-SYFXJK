@@ -1,0 +1,8 @@
+0:10:0 执行第1次.开始
+0:10:0 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+0:10:0 参数xmlstr=
+6:41:42 操作结束,返回:数据采集失败：执行SQL出错insert into CJ_FXJK.DJ_ZRR select * from GS_CXTJ.DJ_ZRR@JS3Q where 1=1  and (  SJGSDQ like ''14511%'' ) java.sql.SQLSyntaxErrorException: ORA-02068: 以下严重错误源于 
+ORA-03113: 通信通道的文件结束
+
+8:0:0 任务已取消 
+8:0:0 任务发布,从0:10开始执行

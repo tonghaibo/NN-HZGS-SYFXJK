@@ -1,0 +1,64 @@
+<?xml version = "1.0" encoding="GBK"?>
+<ROWSET>
+	<ROW>
+		<GUID>F6C653F172D63066446A84B95230EAF2</GUID>
+		<URL>/DEMO.HTML</URL>
+		<NEWURL>/xlsweb?action=ShowXlsGrid&amp;grdid=demo&amp;usrid=anyone&amp;userpwd=123</NEWURL>
+		<虚拟编号>newdemo</虚拟编号>
+		<名称>示范名称</名称>
+		<类型>M</类型>
+		<分类>01</分类>
+		<备注>使用范例，请修改后使用。
+范例提供了usrid和userpwd参数，可以在未登录的情况下自动登录。</备注>
+	</ROW>
+	<ROW>
+		<GUID>6D1A66EA9AA0D77E7D89EBA2B2BE0E66</GUID>
+		<URL>/APICLIENT</URL>
+		<NEWURL>/xlsweb?action=XmlDB&amp;bind=funclist&amp;usrid=guest&amp;userpwd=0&amp;canzip=1&amp;collist=CLASS,FUNCTION,NAME,FLAG,NOTE,FUNCTION,RETURN,PARAMETER&amp;where=LANG=&amp;apos;ACTIVEX&amp;apos; or LANG=&amp;apos;JS&amp;apos;</NEWURL>
+		<虚拟编号>APICLIENT</虚拟编号>
+		<名称>获取Funclist</名称>
+		<类型>M</类型>
+		<分类>01</分类>
+		<备注></备注>
+	</ROW>
+	<ROW>
+		<GUID>054CC81068CC63D232C369607B89ECCB</GUID>
+		<URL>/APISERVER</URL>
+		<NEWURL>/xlsweb?action=XmlDB&amp;bind=funclist&amp;usrid=guest&amp;userpwd=0&amp;canzip=1&amp;collist=CLASS,FUNCTION,NAME,FLAG,NOTE,FUNCTION,RETURN,PARAMETER&amp;where=LANG=&amp;apos;JAVA&amp;apos; or LANG=&amp;apos;OS&amp;apos;</NEWURL>
+		<虚拟编号>APISERVER</虚拟编号>
+		<名称>获取中间件服务端代码</名称>
+		<类型>M</类型>
+		<分类>1</分类>
+		<备注></备注>
+	</ROW>
+	<ROW>
+		<GUID>ADEE243B12AA668EA060ABD90F596C44</GUID>
+		<URL>/APICODE</URL>
+		<NEWURL>/xlsweb?action=XmlDB&amp;bind=v_insertcode&amp;usrid=guest&amp;userpwd=0&amp;canzip=1</NEWURL>
+		<虚拟编号>APICODE</虚拟编号>
+		<名称>获取代码提示</名称>
+		<类型>M</类型>
+		<分类>1</分类>
+		<备注></备注>
+	</ROW>
+	<ROW>
+		<GUID>7F58AB2F8D1D059EFA21BFCBDDF40C20</GUID>
+		<URL>/APIMYCODE</URL>
+		<NEWURL>/xlsweb?action=XmlDB&amp;bind=v_insertmycode&amp;usrid=guest&amp;userpwd=0&amp;canzip=1</NEWURL>
+		<虚拟编号>APIMYCODE</虚拟编号>
+		<名称>获取我的代码提示</名称>
+		<类型>M</类型>
+		<分类>1</分类>
+		<备注>调入时传入where= RLSNO=&amp;apos;USERID&amp;apos;</备注>
+	</ROW>
+	<ROW>
+		<GUID>BA657EE2BCE1DABD295628DE29A43FD7</GUID>
+		<URL>/APIFINDBYGUID</URL>
+		<NEWURL>/xlsweb?action=XmlDB&amp;bind=funclist&amp;usrid=guest&amp;userpwd=0&amp;canzip=1</NEWURL>
+		<虚拟编号>APIFINDBYGUID</虚拟编号>
+		<名称>条件查询某个API</名称>
+		<类型>M</类型>
+		<分类>1</分类>
+		<备注>调入时传入where= GUID=&amp;apos;&amp;apos;</备注>
+	</ROW>
+</ROWSET>

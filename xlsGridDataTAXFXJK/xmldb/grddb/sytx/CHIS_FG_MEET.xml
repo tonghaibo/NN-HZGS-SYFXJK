@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_FG_MEET</MWID><NAME >MENU3</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_FG_MEET.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+
+//
+// 
+//
+function GetBody(){
+var html=&amp;quot;
+&amp;lt;!--这两个css 是必须的--&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-ss.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    &amp;lt;!--这三个js 是http下载的jquery211.min.js不能去掉--&amp;gt;
+    &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/jquery211.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+	&amp;lt;!--这个appframework.ui.js必须放在前面--&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;	
+&amp;lt;!--公用js--&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/showflgapp_jquery1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+&amp;lt;script type=text/javascript&amp;gt;
+function clicul(id){
+	var li=document.getElementById(id);
+	if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+		li.style.display=&amp;apos;block&amp;apos;;
+	}
+	else{
+	 	li.style.display=&amp;apos;none&amp;apos;;
+	}
+
+}
+&amp;lt;/script&amp;gt;
+
+
+
+
+	&amp;lt;!--&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;--&amp;gt;
+	&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+         &amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul1&amp;apos;);\&amp;quot; &amp;gt;
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p class=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span&amp;gt;心血管&amp;lt;/span&amp;gt;&amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;i class=\&amp;quot;\&amp;quot;&amp;gt;心血管专家&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul1\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+
+			&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul2&amp;apos;);\&amp;quot; &amp;gt;
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p class=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span&amp;gt;神经内科&amp;lt;/span&amp;gt;&amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;i class=\&amp;quot;\&amp;quot;&amp;gt;神经内科专家&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			
+			
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul2\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+
+			
+			&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul3&amp;apos;);\&amp;quot; &amp;gt;
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p class=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span&amp;gt;骨科&amp;lt;/span&amp;gt;&amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;i class=\&amp;quot;\&amp;quot;&amp;gt;骨科专家&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+
+			
+			
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul3\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+						&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul4&amp;apos;);\&amp;quot; &amp;gt;
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p class=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span&amp;gt;神经外科&amp;lt;/span&amp;gt;&amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;i class=\&amp;quot;\&amp;quot;&amp;gt;神经外科专家&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul4\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+&amp;quot;;
+return html;
+
+}
+//获取滚动图片
+function genSTR(str){
+
+	var sql=&amp;quot;&amp;quot;;
+	var ds=&amp;quot;&amp;quot;;
+	var db=null;
+	db = new pubpack.EADatabase();
+	var layid=&amp;quot;&amp;quot;;
+	try{
+		sql=&amp;quot;
+			SELECT B.* FROM LAYOBJ A ,LAYOBJDTL B  
+			WHERE A.GUID=B.FORMGUID 
+			AND A.ID =&amp;apos;CHIS_FGos&amp;apos; AND A.CLS=&amp;apos;CHIS&amp;apos;and B.id =&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;
+		&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()==1){
+			layid=ds.getStringAt(0,&amp;quot;VAL&amp;quot;);
+			return layid; 
+		}
+	}
+	catch(e){ throw new Exception(e);}
+	if(db!=null){db.Close();}
+}
+
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

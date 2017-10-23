@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >weixinGxZhenLong</MWID><NAME >广西真龙</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >weixinGxZhenLong.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >微信</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var resp = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin.message.resp&amp;quot;);
+var weixin = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin&amp;quot;);
+
+/**
+ * 微信的接口消息响应处理中间件
+ * @author Harry
+ * @date 2013-10-11
+*/
+
+
+//响应微信服务器的业务逻辑处理方法
+//function doPost()
+function coreService(request,response)
+{
+	//防止中文乱码
+	response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+	
+	var respMessage = null;
+	var textMessage = null;
+	var db = null;
+	
+	try {
+		// xml请求解析
+		var requestMap = weixin.MessageUtil.parseXml(request);	
+		// 发送方帐号（open_id）
+		var fromUserName = requestMap.get(&amp;quot;FromUserName&amp;quot;);
+		// 公众帐号
+		var toUserName = requestMap.get(&amp;quot;ToUserName&amp;quot;);
+		// 消息类型
+		var msgType = requestMap.get(&amp;quot;MsgType&amp;quot;);
+		// 文本消息内容
+		var content = requestMap.get(&amp;quot;Content&amp;quot;);
+		var dt = new java.util.Date();
+
+		request.getSession().setAttribute(&amp;quot;WEIXIN_FROMUSERNAME&amp;quot;,fromUserName);
+
+		// 回复文本消息
+		textMessage = new resp.TextMessage();
+		textMessage.setToUserName(fromUserName);
+		textMessage.setFromUserName(toUserName);
+		var dt = new java.util.Date();
+		textMessage.setCreateTime(dt.getTime());
+		textMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+		textMessage.setFuncFlag(0);
+		
+		//绑定用户
+		if (content.indexOf(&amp;quot;/&amp;quot;) &amp;gt; -1) {
+			db = new pub.EADatabase();
+			var id = content.split(&amp;quot;/&amp;quot;)[0];
+			var pwd = content.split(&amp;quot;/&amp;quot;)[1];
+			var ds = db.QuerySQL(&amp;quot;select * from weixin_userbind where fromusername=&amp;apos;&amp;quot;+fromUserName+&amp;quot;&amp;apos;&amp;quot;);
+			//检查是否已绑定系统
+			if (ds.getRowCount() &amp;lt;= 0) {
+				var usrds = db.QuerySQL(&amp;quot;select * from usr where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; and passwd=&amp;apos;&amp;quot;+pwd+&amp;quot;&amp;apos;&amp;quot;);
+				if (usrds.getRowCount() &amp;lt;= 0) {
+					textMessage.setContent(&amp;quot;用户名或密码不正确，请检查！&amp;quot;);
+				}
+				else {
+					db.ExcecutSQL(&amp;quot;insert into weixin_userbind(org,syt,FromUserName,usrid,passwd,TOUSERNAME)values(&amp;apos;XLSGRID&amp;apos;,&amp;apos;XLSGRID&amp;apos;,&amp;apos;&amp;quot;+fromUserName+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+pwd+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+toUserName+&amp;quot;&amp;apos;)&amp;quot;);
+					textMessage.setContent(usrds.getStringAt(0, &amp;quot;NAME&amp;quot;)+&amp;quot; 您好，您的帐号绑定成功！&amp;quot;);
+				}
+			}
+			else {
+				textMessage.setContent(&amp;quot;您的帐号已经绑定，不需要重复绑定！&amp;quot;);
+			}
+			respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+			return respMessage;
+		}
+		
+		// 创建图文消息  
+		var newsMessage = new resp.NewsMessage();  
+		newsMessage.setToUserName(fromUserName);  
+		newsMessage.setFromUserName(toUserName);  
+		newsMessage.setCreateTime(dt.getTime());  
+		newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+		newsMessage.setFuncFlag(0);  
+		
+		if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
+			// 事件类型
+			var eventType = requestMap.get(&amp;quot;Event&amp;quot;);
+			// 订阅
+			if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
+				textMessage.setContent(&amp;quot;您好！感谢关注中烟工业真龙官方微信！&amp;quot;);
+				respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+				return respMessage;
+			}
+			// 取消订阅
+			else if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
+				// TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+			}
+			// 自定义菜单点击事件
+			else if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_CLICK)) {             
+
+				// 事件KEY值，与创建自定义菜单时指定的KEY值对应  
+		                var eventKey = requestMap.get(&amp;quot;EventKey&amp;quot;);  
+		  		// 一键进入
+		                if (eventKey.equals(&amp;quot;11&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;一键进入菜单项被点击！&amp;quot;);
+				} 
+				// 拍码攻略
+				else if (eventKey.equals(&amp;quot;12&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;拍码攻略菜单项被点击！&amp;quot;);
+				} 
+				// 联系我们
+				else if (eventKey.equals(&amp;quot;13&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;联系我们菜单项被点击！&amp;quot;);
+				} 
+				// 走进真龙
+				else if (eventKey.equals(&amp;quot;21&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;走进真龙菜单项被点击！&amp;quot;);
+				} 
+				// 微社区 
+				else if (eventKey.equals(&amp;quot;22&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;微社区菜单项被点击！&amp;quot;);
+				} 
+				// 真龙大讲堂
+				else if (eventKey.equals(&amp;quot;23&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;真龙大讲堂菜单项被点击！&amp;quot;);
+				} 
+				// 精彩美文
+				else if (eventKey.equals(&amp;quot;31&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;精彩美文菜单项被点击！&amp;quot;);  
+				} 
+				// 新浪微博
+				else if (eventKey.equals(&amp;quot;32&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;新浪微博菜单项被点击！&amp;quot;);  
+				} 
+				// 腾讯微博
+				else if (eventKey.equals(&amp;quot;33&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;腾讯微博菜单项被点击！&amp;quot;);  
+				}
+				
+  				respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+				return respMessage;
+			}
+		}
+		// 发送地理位置信息
+		else if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) { 
+			
+		}
+		//文本信息
+		else {
+			if (content == &amp;quot;@1000&amp;quot;) { //领取任务代码
+				// 创建图文消息  
+		                var newsMessage = new resp.NewsMessage();  
+		                newsMessage.setToUserName(fromUserName);  
+		                newsMessage.setFromUserName(toUserName);  
+		                newsMessage.setCreateTime(dt.getTime());  
+		                newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+		                newsMessage.setFuncFlag(0);  
+	
+				var articleList = new java.util.ArrayList(); 
+		                    	
+				var ds = pub.EADbTool.QuerySQL(&amp;quot;select * from weixin_appmsg where mid in (select mid from zywx_trklist where sysdate-dat1&amp;gt;=0 and dat2-sysdate&amp;gt;=0)&amp;quot;);
+				for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+					var mid = ds.getStringAt(i,&amp;quot;MID&amp;quot;);
+					var title = ds.getStringAt(i,&amp;quot;TITLE&amp;quot;);
+					var desc = ds.getStringAt(i,&amp;quot;SUMMARY&amp;quot;);
+					var imgurl = ds.getStringAt(i,&amp;quot;IMGURL&amp;quot;);
+					
+					var article = new resp.Article();  
+		                    	article.setTitle(title);  
+		                    	article.setDescription(desc);  
+		                    	article.setPicUrl(imgurl);  
+		                    	article.setUrl(&amp;quot;http://gxzy.xmidware.com/xlsgrid/ROOT_ZYWX/getmsg.sp?usrid=xlsgrid&amp;userpwd=0&amp;openid=&amp;quot;+fromUserName+&amp;quot;&amp;mid=&amp;quot;+mid);  
+		                    	articleList.add(article);  
+	                    	}
+
+	                    	// 设置图文消息个数  
+	                    	newsMessage.setArticleCount(articleList.size());  
+	                    	// 设置图文消息包含的图文集合  
+	                    	newsMessage.setArticles(articleList);  
+	                   	// 将图文消息对象转换成xml字符串  
+	                   	respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage); 
+				return respMessage;
+
+			}
+		}
+		
+	}
+	catch (Exception e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	textMessage.setContent(&amp;quot;非常抱歉，我正在成长过程中，您的问题可能已经超出了我的知识范围，请多多关照！&amp;quot;);
+	respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+	return respMessage;
+	
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

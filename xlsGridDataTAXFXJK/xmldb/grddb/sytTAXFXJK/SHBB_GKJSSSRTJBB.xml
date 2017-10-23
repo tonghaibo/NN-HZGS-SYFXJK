@@ -1,0 +1,259 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SHBB_GKJSSSRTJBB</MWID><NAME >各口径税收收入统计报表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SHBB_GKJSSSRTJBB.zxg</FILE><SCENE ></SCENE><FIXED >4,1</FIXED><CATTYP >收核报表</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >DAT1</C13><C14 ></C14></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14></ROW>
+<ROW num="2" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD >99</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >ZGSWJG</C14></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+	
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;10%&amp;quot;);
+
+	DAT1 = G_LOGDAT.substring(0,7)+&amp;quot;-01&amp;quot;;
+	DAT2 = G_LOGDAT;
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,2,DAT1);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,4,DAT2);
+	_this.SetCellText(0,2,2,DAT1+&amp;quot; 至 &amp;quot;+DAT2);
+	
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+
+	//showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+
+}
+
+
+//等待时执行的任务
+function runWaitingTask()
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	var dat1 = _this.GetCellText(1,1,2);
+	var dat2 = _this.GetCellText(1,1,4);	
+	_this.SetCellText(0,2,2,dat1+&amp;quot; 至 &amp;quot;+dat2);
+		
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;DAT1=&amp;quot;+dat1+&amp;quot;&amp;DAT2=&amp;quot;+dat2);
+	_this.SetXmlDS(0,4,1,8,8,xml);
+	_this.RefreshFormula();//报表中中设置有公式时用
+	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >
+with tmp_srks_gsrkj_tjbb as (
+select skssswjg,
+   (sum(case when typ in (&amp;apos;入库&amp;apos;,&amp;apos;免抵调&amp;apos;,&amp;apos;税款开票&amp;apos;) then zjkj else 0 end)-sum(decode(typ,&amp;apos;退库&amp;apos;,zjkj,0)))zjkj_tjje ,
+   (sum(case when typ in (&amp;apos;入库&amp;apos;,&amp;apos;免抵调&amp;apos;,&amp;apos;税款开票&amp;apos;) then zzqkj else 0 end)-sum(decode(typ,&amp;apos;退库&amp;apos;,zzqkj,0)))zzqkj_tjje ,
+   (sum(case when typ in (&amp;apos;入库&amp;apos;,&amp;apos;免抵调&amp;apos;,&amp;apos;税款开票&amp;apos;) then szfkj else 0 end)-sum(decode(typ,&amp;apos;退库&amp;apos;,szfkj,0)))szfkj_tjje ,
+   (sum(case when typ in (&amp;apos;入库&amp;apos;,&amp;apos;免抵调&amp;apos;,&amp;apos;税款开票&amp;apos;) then sbjkj else 0 end)-sum(decode(typ,&amp;apos;退库&amp;apos;,sbjkj,0)))sbjkj_tjje ,
+   
+   ((sum(case when typ in (&amp;apos;入库&amp;apos;,&amp;apos;免抵调&amp;apos;,&amp;apos;税款开票&amp;apos;) then szfkj else 0 end)-sum(decode(typ,&amp;apos;退库&amp;apos;,zjkj,0)))-
+   (sum(case when typ in (&amp;apos;入库&amp;apos;,&amp;apos;免抵调&amp;apos;,&amp;apos;税款开票&amp;apos;) then sbjkj else 0 end)-sum(decode(typ,&amp;apos;退库&amp;apos;,zjkj,0)))) xzfkj_tjje
+from (
+select &amp;apos;入库&amp;apos;typ, substr(ZSRK.skssswjg_dm,1,7)skssswjg,
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,sjje,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10116&amp;apos;,sjje,0)))zjkj,         --总局口径
+
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,sjje,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,sjje,0)))zzqkj,                                            --自治区口径
+
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,sjje,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,sjje,0))+0.7*sum(decode(zsxm_dm,&amp;apos;30221&amp;apos;,sjje,0))) szfkj,  --市政府口径
+
+(sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10101&amp;apos; then sjje else 0 end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10102&amp;apos; then sjje else 0  end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10104&amp;apos; then sjje else 0  end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;30221&amp;apos; then sjje else 0  end)*0.7)sbjkj--市本级口径
+from HX_ZTSJ.V_ZS_SP_CX@js3q  ZSRK
+WHERE ZSRK.RKRQ &amp;gt;= TO_DATE(&amp;apos;[%DAT1]&amp;apos;, &amp;apos;YYYY-MM-DD&amp;apos;) 
+AND ZSRK.RKRQ &amp;lt;= TO_DATE(&amp;apos;[%DAT2]&amp;apos;, &amp;apos;YYYY-MM-DD&amp;apos;)
+and zsxm_dm in (&amp;apos;10101&amp;apos;,&amp;apos;10102&amp;apos;,&amp;apos;10104&amp;apos;,&amp;apos;10116&amp;apos;,&amp;apos;30221&amp;apos;)    
+and ZSRK.skssswjg_dm like &amp;apos;14511%&amp;apos;       
+group by  &amp;apos;入库&amp;apos;,substr(ZSRK.skssswjg_dm,1,7)  
+
+
+union all
+
+--免抵调增值税
+select &amp;apos;免抵调&amp;apos;typ,substr(skssswjg_dm,1,7)skssswjg, sum(mdtkse) zjkj,sum(mdtkse) zzqkj,sum(mdtkse) szfkj,sum(mdtkse) sbjkj
+from(
+select distinct mdt.djxh, mdt.se,mdt.mdtkse,mdt.zgswskfj_dm,mdt.ZSSWJG_DM,dj.nsrsbh,dj.nsrmc,mdt.zsxm_dm,mdt.skssswjg_dm
+from ZS_MDTKMXB mdt,dj_nsrxx dj
+where mdt.djxh=dj.djxh(+)
+and mdt.lrrq&amp;gt;=date&amp;apos;[%DAT1]&amp;apos;
+and mdt.lrrq&amp;lt;=date&amp;apos;[%DAT2]&amp;apos;
+and mdt.SKSSSWJG_DM like &amp;apos;14511%&amp;apos;
+and tzlx_dm in (&amp;apos;1&amp;apos;,&amp;apos;4&amp;apos;)
+and mdt.zsxm_dm in (&amp;apos;10101&amp;apos;)
+)group by &amp;apos;免抵调&amp;apos;,substr(skssswjg_dm,1,7)
+
+--select * from ZS_MDTKMXB
+
+union all
+--退库处理信息表
+select &amp;apos;退库&amp;apos;typ,substr(skssswjg_dm,1,7)skssswjg,
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,se,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,se,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,se,0))+sum(decode(zsxm_dm,&amp;apos;10116&amp;apos;,se,0)))zjkj,         --总局口径
+
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,se,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,se,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,se,0)))zzqkj,                                            --自治区口径
+
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,se,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,se,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,se,0))+0.7*sum(decode(zsxm_dm,&amp;apos;30221&amp;apos;,se,0))) szfkj,  --市政府口径
+
+(sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10101&amp;apos; then se else 0 end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10102&amp;apos; then se else 0  end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10104&amp;apos; then se else 0  end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;30221&amp;apos; then se else 0  end)*0.7)sbjkj--市本级口径
+from(
+select ts.* ,dj.nsrsbh,dj.nsrmc
+from ZS_SRTHS ts,dj_nsrxx dj
+where ts.djxh=dj.djxh(+)
+and zsxm_dm in (&amp;apos;10101&amp;apos;,&amp;apos;10102&amp;apos;,&amp;apos;10104&amp;apos;,&amp;apos;10116&amp;apos;,&amp;apos;30221&amp;apos;) 
+and ttsjlx_dm in (&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;,&amp;apos;05&amp;apos;,&amp;apos;99&amp;apos;)
+and ts.SKSSSWJG_DM like&amp;apos;14511%&amp;apos;
+and tzlx_dm in (&amp;apos;1&amp;apos;,&amp;apos;4&amp;apos;)
+and kprq&amp;gt;=date &amp;apos;[%DAT1]&amp;apos;
+and kprq&amp;lt;=date &amp;apos;[%DAT2]&amp;apos;
+)group by &amp;apos;退库&amp;apos;, substr(skssswjg_dm,1,7)
+
+union all
+--税款开票
+SELECT &amp;apos;税款开票&amp;apos;typ,substr(skssswjg_dm,1,7)skssswjg,
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,sjje,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10116&amp;apos;,sjje,0)))zjkj,         --总局口径
+
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,sjje,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,sjje,0)))zzqkj,                                            --自治区口径
+
+(sum(decode(zsxm_dm,&amp;apos;10101&amp;apos;,sjje,0))+sum(decode(zsxm_dm,&amp;apos;10102&amp;apos;,sjje,0))
+   +sum(decode(zsxm_dm,&amp;apos;10104&amp;apos;,sjje,0))+0.7*sum(decode(zsxm_dm,&amp;apos;30221&amp;apos;,sjje,0))) szfkj,  --市政府口径
+
+(sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10101&amp;apos; then sjje else 0 end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10102&amp;apos; then sjje else 0  end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;10104&amp;apos; then sjje else 0  end)+
+sum( case when skgk_dm=&amp;apos;1451100001&amp;apos; and zsxm_dm =&amp;apos;30221&amp;apos; then sjje else 0  end)*0.7)sbjkj--市本级口径
+
+FROM(
+SELECT SP.DJXH, NSR.NSRSBH, NSR.NSRMC, SP.ZSXM_DM, SP.ZSPM_DM, sp.skgk_dm,
+       SP.JSYJ, SP.SJJE, 
+       TO_CHAR(SP.SKSSQZ,&amp;apos;YYYY-MM-DD&amp;apos;)SKSSQZ, SP.skssswjg_dm,
+       (CASE WHEN SP.YZCLRQ IS NULL THEN &amp;apos;已开票未缴款&amp;apos; 
+       WHEN SP.YZCLRQ IS NOT NULL AND SP.SJRQ_1 IS NULL THEN &amp;apos;已缴款未上解&amp;apos; 
+       WHEN SP.SJRQ_1 IS NOT NULL AND SP.RKRQ IS NULL THEN &amp;apos;已上解未入库&amp;apos; 
+       WHEN SP.RKRQ IS NOT NULL THEN &amp;apos;已入库&amp;apos; END) SKZT  
+FROM HX_ZTSJ.V_ZS_SP_CX @js3q SP , dj_nsrxx NSR
+WHERE SP.DJXH=NSR.DJXH(+)
+AND SP.TZLX_DM IN (&amp;apos;1&amp;apos;, &amp;apos;4&amp;apos;)
+AND SP.skssswjg_dm like &amp;apos;14511%&amp;apos;
+AND SP.KJRQ &amp;gt;= DATE&amp;apos;[%DAT1]&amp;apos;
+AND SP.KJRQ &amp;lt; (DATE&amp;apos;[%DAT2]&amp;apos;+1)
+AND SP.ZSXM_DM IN (&amp;apos;10101&amp;apos;,&amp;apos;10102&amp;apos;,&amp;apos;10104&amp;apos;,&amp;apos;10116&amp;apos;,&amp;apos;30221&amp;apos;) )  
+where skzt in (&amp;apos;已开票未缴款&amp;apos;,&amp;apos;已缴款未上解&amp;apos;,&amp;apos;已上解未入库&amp;apos;)
+group by &amp;apos;税款开票&amp;apos;,substr(skssswjg_dm,1,7)
+) group by skssswjg
+)
+
+select a.tjkj,a.八步,b.平桂,c.钟山,d.富川,e.昭平,f.车购 from 
+(select &amp;apos;总局口径&amp;apos; tjkj,wm_concat(zjkj_tjje)&amp;quot;八步&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451102&amp;apos;) a,
+(select &amp;apos;总局口径&amp;apos; tjkj,wm_concat(zjkj_tjje)&amp;quot;平桂&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451101&amp;apos; )b,
+(select &amp;apos;总局口径&amp;apos; tjkj,wm_concat(zjkj_tjje)&amp;quot;钟山&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451122&amp;apos; )c,
+(select &amp;apos;总局口径&amp;apos; tjkj,wm_concat(zjkj_tjje)&amp;quot;富川&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451123&amp;apos; )d,
+(select &amp;apos;总局口径&amp;apos; tjkj,wm_concat(zjkj_tjje)&amp;quot;昭平&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451121&amp;apos; )e,
+(select &amp;apos;总局口径&amp;apos; tjkj,wm_concat(zjkj_tjje)&amp;quot;车购&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451100&amp;apos; )f
+where a.tjkj=b.tjkj
+and b.tjkj=c.tjkj
+and c.tjkj=d.tjkj
+and d.tjkj=e.tjkj
+and e.tjkj=f.tjkj
+
+union all
+select a.tjkj,a.八步,b.平桂,c.钟山,d.富川,e.昭平,f.车购 from 
+(select &amp;apos;自治区口径&amp;apos; tjkj,wm_concat(zzqkj_tjje)&amp;quot;八步&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451102&amp;apos;) a,
+(select &amp;apos;自治区口径&amp;apos; tjkj,wm_concat(zzqkj_tjje)&amp;quot;平桂&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451101&amp;apos; )b,
+(select &amp;apos;自治区口径&amp;apos; tjkj,wm_concat(zzqkj_tjje)&amp;quot;钟山&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451122&amp;apos; )c,
+(select &amp;apos;自治区口径&amp;apos; tjkj,wm_concat(zzqkj_tjje)&amp;quot;富川&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451123&amp;apos; )d,
+(select &amp;apos;自治区口径&amp;apos; tjkj,wm_concat(zzqkj_tjje)&amp;quot;昭平&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451121&amp;apos; )e,
+(select &amp;apos;自治区口径&amp;apos; tjkj,wm_concat(zzqkj_tjje)&amp;quot;车购&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451100&amp;apos; )f
+where a.tjkj=b.tjkj
+and b.tjkj=c.tjkj
+and c.tjkj=d.tjkj
+and d.tjkj=e.tjkj
+and e.tjkj=f.tjkj
+
+union all
+select a.tjkj,a.八步,b.平桂,c.钟山,d.富川,e.昭平,f.车购 from 
+(select &amp;apos;市政府口径&amp;apos; tjkj,wm_concat(szfkj_tjje)&amp;quot;八步&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451102&amp;apos;) a,
+(select &amp;apos;市政府口径&amp;apos; tjkj,wm_concat(szfkj_tjje)&amp;quot;平桂&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451101&amp;apos; )b,
+(select &amp;apos;市政府口径&amp;apos; tjkj,wm_concat(szfkj_tjje)&amp;quot;钟山&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451122&amp;apos; )c,
+(select &amp;apos;市政府口径&amp;apos; tjkj,wm_concat(szfkj_tjje)&amp;quot;富川&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451123&amp;apos; )d,
+(select &amp;apos;市政府口径&amp;apos; tjkj,wm_concat(szfkj_tjje)&amp;quot;昭平&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451121&amp;apos; )e,
+(select &amp;apos;市政府口径&amp;apos; tjkj,wm_concat(szfkj_tjje)&amp;quot;车购&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451100&amp;apos; )f
+where a.tjkj=b.tjkj
+and b.tjkj=c.tjkj
+and c.tjkj=d.tjkj
+and d.tjkj=e.tjkj
+and e.tjkj=f.tjkj
+
+union all
+select a.tjkj,a.八步,b.平桂,c.钟山,d.富川,e.昭平,f.车购 from 
+(select &amp;apos;市本级口径&amp;apos; tjkj,wm_concat(sbjkj_tjje)&amp;quot;八步&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451102&amp;apos;) a,
+(select &amp;apos;市本级口径&amp;apos; tjkj,wm_concat(sbjkj_tjje)&amp;quot;平桂&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451101&amp;apos; )b,
+(select &amp;apos;市本级口径&amp;apos; tjkj,wm_concat(sbjkj_tjje)&amp;quot;钟山&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451122&amp;apos; )c,
+(select &amp;apos;市本级口径&amp;apos; tjkj,wm_concat(sbjkj_tjje)&amp;quot;富川&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451123&amp;apos; )d,
+(select &amp;apos;市本级口径&amp;apos; tjkj,wm_concat(sbjkj_tjje)&amp;quot;昭平&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451121&amp;apos; )e,
+(select &amp;apos;市本级口径&amp;apos; tjkj,wm_concat(sbjkj_tjje)&amp;quot;车购&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451100&amp;apos; )f
+where a.tjkj=b.tjkj
+and b.tjkj=c.tjkj
+and c.tjkj=d.tjkj
+and d.tjkj=e.tjkj
+and e.tjkj=f.tjkj
+
+union all
+select a.tjkj,a.八步,b.平桂,c.钟山,d.富川,e.昭平,f.车购 from 
+(select &amp;apos;县政府口径&amp;apos; tjkj,wm_concat(xzfkj_tjje)&amp;quot;八步&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451102&amp;apos;) a,
+(select &amp;apos;县政府口径&amp;apos; tjkj,wm_concat(xzfkj_tjje)&amp;quot;平桂&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451101&amp;apos; )b,
+(select &amp;apos;县政府口径&amp;apos; tjkj,wm_concat(xzfkj_tjje)&amp;quot;钟山&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451122&amp;apos; )c,
+(select &amp;apos;县政府口径&amp;apos; tjkj,wm_concat(xzfkj_tjje)&amp;quot;富川&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451123&amp;apos; )d,
+(select &amp;apos;县政府口径&amp;apos; tjkj,wm_concat(xzfkj_tjje)&amp;quot;昭平&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451121&amp;apos; )e,
+(select &amp;apos;县政府口径&amp;apos; tjkj,wm_concat(xzfkj_tjje)&amp;quot;车购&amp;quot; from tmp_srks_gsrkj_tjbb where skssswjg=&amp;apos;1451100&amp;apos; )f
+where a.tjkj=b.tjkj
+and b.tjkj=c.tjkj
+and c.tjkj=d.tjkj
+and d.tjkj=e.tjkj
+and e.tjkj=f.tjkj
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >BIJs</MWID><NAME >BI附加脚本</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BIJs.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.SetToCodeEditor(&amp;quot;&amp;quot;,sheet,2,1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	
+	try {
+		var msg = invokeOSFunc(&amp;quot;GetXml&amp;quot;,&amp;quot;FORMGUID=&amp;quot;+FORMGUID);
+		
+		_this.SetCellText(sheet,1,1,msg.split(&amp;quot;~~~&amp;quot;)[0]+&amp;quot;　－　附加脚本&amp;quot;);
+		_this.SetCellText(sheet,2,1,msg.split(&amp;quot;~~~&amp;quot;)[1]);
+	} catch ( e ) {
+		alert ( e );
+	}
+	
+	_this.AutoFixScreenWidth();
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;确定&amp;quot;) {
+		try {
+			var fil = _this.SaveTextFile(_this.GetWindowTempFile(),_this.GetCellText(sheet,2,1),&amp;quot;Text Files(*.txt)|*.txt|All Files(*.*)||&amp;quot;);
+			var msg = formBlobUpload(fil,FORMGUID,G_SYTID,G_GRDID);
+			invokeOSFunc(&amp;quot;save&amp;quot;,&amp;quot;FORMGUID=&amp;quot;+FORMGUID+&amp;quot;&amp;JSGUID=&amp;quot;+msg);
+		} catch ( e ) {
+			alert ( e );
+		}
+		window.close();
+	}
+	if (id == &amp;quot;取消&amp;quot;) {
+		window.close();
+	}
+}
+
+//上传一个文件到FORMBLOB
+//	参数guid：表单的guid
+//	返回FORMBLOB表的guid
+function formBlobUpload(file,guid,sytid,grdid)
+{
+	_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+	_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+	_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,file,1);
+	_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,guid,0);
+	_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,sytid,0);
+	_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,grdid,0);
+	_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,file,0);
+	var ret = _this.SendHttpRequest();
+	_this.CloseHttpRequest();
+	
+	if ( ret == &amp;quot;&amp;quot; ) {
+		return &amp;quot;操作错误,可能是网络连接错误.&amp;quot;;
+	}
+	return ret;
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function GetXml()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		sql = &amp;quot;select name,jsguid from DIM_MODEL where guid=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;&amp;quot;;
+		
+		ds = db.QuerySQL(sql);
+		ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		
+		if (ds.getStringAt(0,&amp;quot;JSGUID&amp;quot;) != null &amp;&amp; ds.getStringAt(0,&amp;quot;JSGUID&amp;quot;) != &amp;quot;&amp;quot;) {
+			var b = db.getBlob2Byte(&amp;quot;select bdata from FORMBLOB where guid=&amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;JSGUID&amp;quot;)+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;);
+			ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;)+&amp;quot;~~~&amp;quot;+new langpack.String(b,&amp;quot;GB2312&amp;quot;);
+		}
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return ret;
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		sql = &amp;quot;update DIM_MODEL set jsguid=&amp;apos;&amp;quot;+JSGUID+&amp;quot;&amp;apos; where guid=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;&amp;quot;;
+		ret = db.ExcecutSQL(sql);
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return ret;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

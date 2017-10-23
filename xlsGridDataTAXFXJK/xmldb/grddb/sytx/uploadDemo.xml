@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >uploadDemo</MWID><NAME >upload</NAME><NOTE ></NOTE><FILE >uploadDemo.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >upload</ID><NAME >上传</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 >upload</C7></ROW>
+<ROW num="1" ><ID >down</ID><NAME >下载</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="2" ><ID >addsheet</ID><NAME >增加sheet</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >path</ID><NAME >路径</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >/tmp/</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >file</ID><NAME >文件名</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >demo.txt</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >down</ID><NAME >测试下载</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var downed;
+function _thisOnpost_loaddata(sheet)
+{
+  downed = document.all(&amp;quot;down&amp;quot;);
+  alert(downed);
+  _this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,0,0);
+  var btn = document.all(&amp;quot;searchbut&amp;quot;);
+  btn.onclick = upload;
+  btn.value = &amp;quot;上传&amp;quot;;
+  var td = downed.parentElement;
+  td.innerHTML = &amp;quot;&amp;lt;a href=downloadFile.sp?filename=/tmp/demo.txt&amp;gt;demo.txt&amp;lt;/a&amp;gt;&amp;quot;;
+}
+
+function upload()
+{
+  _this.OpenHttpRequest(&amp;quot;uploadFile.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);                  //打开上传页面
+  var file = _this.GetCellText(0,0,0);                              //获取文件名
+  _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);                  //上传选定文件
+  _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,document.all(&amp;apos;path&amp;apos;).value,0);      //设定服务端的绝对保存路径，如 \tmp\,注意，路径后必须有符号 \
+  _this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,document.all(&amp;apos;file&amp;apos;).value,0);  //设定服务端的保存文件名
+  var ret = _this.SendHttpRequest();                              //开始上传
+  _this.CloseHttpRequest();
+  if(ret==&amp;quot;&amp;quot;)
+  {
+    alert(&amp;quot;操作错误,可能是网络连接错误.&amp;quot;);
+  }
+  else
+  {
+    _this.XMLDS_Parse(ret);
+    var msg = _this.XMLDS_GetString(0,&amp;quot;topic&amp;quot;);
+    alert(msg);
+  }
+}
+
+function down()
+{
+  _this.DownLoadFile();
+  
+  //window.location=&amp;quot;downloadFile.sp?filename=/tmp/demo.txt&amp;quot;;
+  //无效 _this.DownLoadFile(&amp;quot;http://127.0.0.1:8988/xlsweb/ROOT_0/downloadFile.sp?filename=/tmp/demo.txt&amp;quot;,&amp;quot;tt.txt&amp;quot;,0);
+}
+
+//undefined
+function addsheet()
+{
+	var xml=_this.XMLDS_GetXml();
+	alert(xml);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

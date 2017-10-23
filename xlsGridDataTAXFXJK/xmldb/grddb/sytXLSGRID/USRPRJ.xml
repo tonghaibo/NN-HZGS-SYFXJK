@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>R</MWTYP><MWID>USRPRJ</MWID><NAME>项目人员</NAME><NOTE></NOTE><FILE>USRPRJ.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>save</ID><NAME>确定</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID>org</ID><NAME>组织号</NAME><NOTNULL>1</NOTNULL><KEYVAL>V_ORG</KEYVAL><INPCTL>list</INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="1" ><ID>usr</ID><NAME>参与人员</NAME><NOTNULL>1</NOTNULL><KEYVAL>V_USR</KEYVAL><INPCTL>select</INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID>0,2,1</ID><NAME></NAME><DBNAME></DBNAME><DSKEY>DSC:DETAIL2</DSKEY><NROW>3</NROW><NCOL>6</NCOL><ISMAIN>1</ISMAIN><ISCROSS></ISCROSS><HROW></HROW><HCOLS></HCOLS><ROWORDER></ROWORDER><VCOLS></VCOLS><VCOLSQL></VCOLSQL><VALUECOL></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0;
+var rowno = &amp;quot;&amp;quot;;
+
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/06/07 15:17:04
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+        _this.SetCellBkColor(0,-1,-1,255,255,255);
+        _this.SetFixedCol(sheet,1);
+        _this.SetFixedRow(sheet,2);
+        _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX);
+        _this.SetColVisible(sheet,1,-1);
+        _this.SetColVisible(sheet,4,-1);  
+
+}
+
+//================================================================// 
+// 函数：save
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/08/07 10:55:55
+// 修改日志：
+//================================================================// 
+function save() 
+{        
+        var orgid = _this.GetCellText(sheet,rowno,2);        
+        var usrid = _this.GetCellText(sheet,rowno,5);
+        var usrlvl =  _this.GetCellText(sheet,rowno,7);
+        var note = _this.GetCellText(sheet,rowno,8);
+        var cost = _this.GetCellText(sheet,rowno,9);
+        QuerySQLDS(&amp;quot;select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;);
+        var usrguid = _this.XMLDS_GetString(0,&amp;quot;guid&amp;quot;);
+        var prj = prjid;
+        QuerySQLDS(&amp;quot;select guid from prj where id=&amp;apos;&amp;quot;+prj+&amp;quot;&amp;apos;&amp;quot;);
+        var prjguid = _this.XMLDS_GetString(0,&amp;quot;guid&amp;quot;);
+        var param = new Object();
+        param.usrguid = usrguid;
+        param.prjguid = prjguid;
+        param.usrlvl = usrlvl;
+        param.note = note;
+        param.cost = cost;
+        param.crtusr = G_USRID;
+        param.org = orgid;
+        try
+        {
+              ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param) ; 
+              alert (&amp;quot;以保存&amp;quot;+ret+&amp;quot;份记录&amp;quot;);
+              window.location.reload();
+          
+        }
+        catch(e) 
+        {
+              alert (e);
+        }        
+}
+
+//================================================================// 
+// 函数：_thisOnMouseLClick
+// 说明：记录单选框所在的行数
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/08/07 14:06:09
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col) 
+{ 
+     var row1 = _this.GetMainCellRangeRow1(sheet); 
+     var row2 = _this.GetMainCellRangeRow2(sheet); 
+     if ( row&amp;gt;=row1&amp;&amp;row&amp;lt;=row2&amp;&amp;col==0 )   
+     {   
+          if ( _this.SetRowSelected(sheet,row,1) == 0 )    //=0 被选中 
+          { 
+                 rowno = row;//rowno保存行号  
+          } 
+     } 
+ 
+} 
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包  
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );  
+
+function save() 
+{
+       var db = null;
+       var ds = null;
+       var ps1 = null;
+       var ps2 = null;
+       var sql1 = &amp;quot;&amp;quot;;
+       var sql2 = &amp;quot;&amp;quot;;
+       var ret = 0;
+      try
+      {              
+             db = new pubpack.EADatabase();
+             sql1 = &amp;quot;insert into prjusr(prj,usr,usrlvl,note,cost,crtusr,org) values(?,?,?,?,?,?,?)&amp;quot;;             
+             ps1 = db.prepareStatement(sql1);
+             ps1.setString(1,prjguid);
+             ps1.setString(2,usrguid);
+             ps1.setString(3,usrlvl);
+             ps1.setString(4,note);
+             ps1.setString(5,cost);
+             ps1.setString(6,crtusr);       
+             ps1.setString(7,org);      
+             ret = ps1.executeUpdate();    
+             ps1.close();
+             db.Commit();         
+             return ret ;   
+      }
+      catch(e)
+      {
+            throw e;
+      }
+      finally
+      {
+            db.Close(); 
+      }  
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID>DETAIL</ID><NAME></NAME><DATDSC>select b.id,b.name,a.usrlvl,a.note,a.cost  from prjusr a,v_usr b,v_org c 
+where a.usr(+)=b.guid 
+and c.id=b.org 
+and b.id=&amp;apos;[%usr]&amp;apos; 
+and c.id=&amp;apos;[%org]&amp;apos; </DATDSC></ROW>
+<ROW num="1" ><ID>DETAIL2</ID><NAME></NAME><DATDSC>select * from 
+(select rownum num1, id aa ,name bb from v_org where id=&amp;apos;[%org]&amp;apos;) a,
+
+(select rownum num2 ,id ,name from v_usr where id =&amp;apos;[%usr]&amp;apos; ) b
+
+where a.num1=b.num2(+)
+</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

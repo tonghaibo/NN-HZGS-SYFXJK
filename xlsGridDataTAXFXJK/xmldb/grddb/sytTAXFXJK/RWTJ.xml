@@ -1,0 +1,331 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >RWTJ</MWID><NAME >任务统计</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >RWTJ.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var ZXGFILE1 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;50%&amp;quot;);
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	ZXGFILE1 = _this.SaveTempZXGFile(1);
+	
+	loadData();
+
+}
+
+
+//加载电力数据
+function loadData()
+{
+	$(&amp;apos;#chart1&amp;apos;).html(&amp;quot;&amp;lt;div style=\&amp;quot;text-align:center;heigth=100%\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;正在生成，请稍候...&amp;lt;/div&amp;gt;&amp;quot;);
+	$(&amp;apos;#chart2&amp;apos;).html(&amp;quot;&amp;lt;div style=\&amp;quot;text-align:center;heigth=100%\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;正在生成，请稍候...&amp;lt;/div&amp;gt;&amp;quot;);
+	$(&amp;apos;#chart3&amp;apos;).html(&amp;quot;&amp;lt;div style=\&amp;quot;text-align:center;heigth=100%\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;正在生成，请稍候...&amp;lt;/div&amp;gt;&amp;quot;);
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedCol(0,0);
+	_this.SetFixedRow(0,3);	
+	//加载数据
+	var xml = _sql.query(&amp;quot;MAIN1&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetMainCellRange(0,1,0,2,3);
+	_this.SetXmlDS(0,1,0,2,3,xml);	
+	_this.RefreshFormula();
+	_this.AutoFixScreenWidth();	
+	//计算比例
+	var sumsl = _this.GetCellText(0,_this.GetMainCellRangeRow2(0)+1,2);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var sl = 1.0 * _this.GetCellText(0,r,2);
+		_this.SetCellText(0,r,3,(sl/sumsl*100).toFixed(2));
+	}
+		
+	setChart1();
+	
+	/////////////////////////////////////////////////////////////////////////////////
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,1);
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedCol(1,0);
+	_this.SetFixedRow(1,3);
+	//加载数据
+	var xml = _sql.query(&amp;quot;MAIN2&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetMainCellRange(1,1,0,2,3);
+	_this.SetXmlDS(1,1,0,2,3,xml);	
+	_this.RefreshFormula();
+	_this.AutoFixScreenWidth();	
+	//计算比例
+	var sumsl = _this.GetCellText(1,_this.GetMainCellRangeRow2(1)+1,2);
+	for (var r=_this.GetMainCellRangeRow1(1);r&amp;lt;=_this.GetMainCellRangeRow2(1);r++) {
+		var sl = 1.0 * _this.GetCellText(1,r,2);
+		_this.SetCellText(1,r,3,(sl/sumsl*100).toFixed(2));
+	}
+		
+	setChart2();
+
+	/////////////////////////////////////////////////////////////////////////////////
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,2);
+	_this.SetAttribe(&amp;quot;SHEET_2&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedCol(2,0);
+	_this.SetFixedRow(2,3);
+	//加载数据
+	var xml = _sql.query(&amp;quot;MAIN3&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetMainCellRange(2,1,0,2,3);
+	_this.SetXmlDS(2,1,0,2,3,xml);	
+	_this.RefreshFormula();
+	_this.AutoFixScreenWidth();	
+	//计算比例
+	var sumsl = _this.GetCellText(2,_this.GetMainCellRangeRow2(2)+1,2);
+	for (var r=_this.GetMainCellRangeRow1(2);r&amp;lt;=_this.GetMainCellRangeRow2(2);r++) {
+		var sl = 1.0 * _this.GetCellText(2,r,2);
+		_this.SetCellText(2,r,3,(sl/sumsl*100).toFixed(2));
+	}
+		
+	setChart3();
+
+
+}
+
+//生成分析图
+function setChart1() 
+{
+
+	var bldata = getBLData();	
+
+	$(&amp;apos;#chart1&amp;apos;).highcharts({
+		        chart: {
+		            zoomType: &amp;apos;xy&amp;apos;
+		        },
+		        title: {
+		            text:&amp;apos;状态统计分析&amp;apos;
+		        },
+		        subtitle: {
+		            text: &amp;apos;&amp;apos;
+		        },
+		        plotOptions: {
+		            pie: {
+		                allowPointSelect: true,
+		                cursor: &amp;apos;pointer&amp;apos;,
+		                events: {
+		                    click: function(event) {
+		                    	//alert(&amp;apos;x=&amp;apos;+event.point.x+&amp;apos; y=&amp;apos;+event.point.y+&amp;apos;data=&amp;apos;+this.data[event.point.x].name);
+		                    	//var hy = this.data[event.point.x].name;		                    	
+		                    	//setChart1();
+		                    }
+		                }
+		            }
+		        },		
+		        series: [{
+		            name: &amp;apos;占比&amp;apos;,
+		            type: &amp;apos;pie&amp;apos;,
+			    data: bldata    
+		        }],
+			exporting: {
+		                enabled: true
+		        }	
+		    });
+
+}
+
+
+function getBLData()
+{
+	var data = new Array();
+	for(var i = _this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++) {
+		var rwzt = _this.GetCellText(0,i,1);
+		var bl = 1.0*_this.GetCellText(0,i,3);
+		var rowdata = new Array();
+		rowdata.push(rwzt);
+		rowdata.push(bl);		
+		data.push(rowdata);
+	}
+	return data;
+}
+
+function setChart2() 
+{
+
+	var bldata = getBLData2();	
+
+	$(&amp;apos;#chart2&amp;apos;).highcharts({
+		        chart: {
+		            zoomType: &amp;apos;xy&amp;apos;
+		        },
+		        title: {
+		            text:&amp;apos;风险类型统计分析&amp;apos;
+		        },
+		        subtitle: {
+		            text: &amp;apos;&amp;apos;
+		        },
+		        plotOptions: {
+		            pie: {
+		                allowPointSelect: true,
+		                cursor: &amp;apos;pointer&amp;apos;,
+		                events: {
+		                    click: function(event) {
+		                    	//alert(&amp;apos;x=&amp;apos;+event.point.x+&amp;apos; y=&amp;apos;+event.point.y+&amp;apos;data=&amp;apos;+this.data[event.point.x].name);
+		                    	//var hy = this.data[event.point.x].name;		                    	
+		                    	//setChart1();
+		                    }
+		                }
+		            }
+		        },		
+		        series: [{
+		            name: &amp;apos;占比&amp;apos;,
+		            type: &amp;apos;pie&amp;apos;,
+			    data: bldata    
+		        }],
+			exporting: {
+		                enabled: true
+		        }	
+		    });
+
+}
+
+function getBLData2()
+{
+	var data = new Array();
+	for(var i = _this.GetMainCellRangeRow1(1);i&amp;lt;=_this.GetMainCellRangeRow2(1);i++) {
+		var rwzt = _this.GetCellText(1,i,1);
+		var bl = 1.0*_this.GetCellText(1,i,3);
+		var rowdata = new Array();
+		rowdata.push(rwzt);
+		rowdata.push(bl);		
+		data.push(rowdata);
+	}
+	return data;
+}
+
+
+function setChart3() 
+{
+
+	var bldata = getBLData3();	
+
+	$(&amp;apos;#chart3&amp;apos;).highcharts({
+		        chart: {
+		            zoomType: &amp;apos;xy&amp;apos;
+		        },
+		        title: {
+		            text:&amp;apos;风险等级统计分析&amp;apos;
+		        },
+		        subtitle: {
+		            text: &amp;apos;&amp;apos;
+		        },
+		        plotOptions: {
+		            pie: {
+		                allowPointSelect: true,
+		                cursor: &amp;apos;pointer&amp;apos;,
+		                events: {
+		                    click: function(event) {
+		                    	//alert(&amp;apos;x=&amp;apos;+event.point.x+&amp;apos; y=&amp;apos;+event.point.y+&amp;apos;data=&amp;apos;+this.data[event.point.x].name);
+		                    	//var hy = this.data[event.point.x].name;		                    	
+		                    	//setChart1();
+		                    }
+		                }
+		            }
+		        },		
+		        series: [{
+		            name: &amp;apos;占比&amp;apos;,
+		            type: &amp;apos;pie&amp;apos;,
+			    data: bldata    
+		        }],
+			exporting: {
+		                enabled: true
+		        }	
+		    });
+
+}
+
+function getBLData3()
+{
+	var data = new Array();
+	for(var i = _this.GetMainCellRangeRow1(2);i&amp;lt;=_this.GetMainCellRangeRow2(2);i++) {
+		var rwzt = _this.GetCellText(2,i,1);
+		var bl = 1.0*_this.GetCellText(2,i,3);
+		var rowdata = new Array();
+		rowdata.push(rwzt);
+		rowdata.push(bl);		
+		data.push(rowdata);
+	}
+	return data;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+var servletPack = new JavaPackage(&amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts-3d.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	//sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/exporting.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+
+	//窗口上下分割，上面显示图表，下面显示中间件数据
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;dataTable\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;quot;); //上面窗口高度占的比例
+	//sb.append(&amp;quot;&amp;lt;td&amp;gt;&amp;lt;span style=&amp;apos;color:red&amp;apos;&amp;gt;【注：分析前请先生成数据】&amp;lt;/span&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=right&amp;gt;&amp;lt;button type=&amp;apos;button&amp;apos; onclick=&amp;apos;genData()&amp;apos;&amp;gt;生成数据&amp;lt;/button&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;button type=&amp;apos;button&amp;apos; onclick=&amp;apos;filter()&amp;apos;&amp;gt;统计条件&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=33% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top;&amp;gt;&amp;lt;div id=&amp;apos;chart1&amp;apos; style=\&amp;quot;height=100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=33% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top;&amp;gt;&amp;lt;div id=&amp;apos;chart2&amp;apos; style=\&amp;quot;height=100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=33% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top;&amp;gt;&amp;lt;div id=&amp;apos;chart3&amp;apos; style=\&amp;quot;height=100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);	
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN1</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select nvl(b.name,a.stat) rwzt,
+	count(*) cnt,&amp;apos;&amp;apos; bl
+from tax_trkhdr a,v_tax_rwzt b
+where a.stat=b.id(+)
+  and to_char(crtdat,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+group by nvl(b.name,a.stat)
+) t</DATDSC><C4 >MAIN</C4><C5 ></C5></ROW>
+<ROW num="1" ><ID >MAIN2</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select nvl(b.name,a.subtyp) rwzt,
+	count(*) cnt,&amp;apos;&amp;apos; bl
+from tax_trkhdr a,v_tax_rwfxlx b
+where a.subtyp=b.id(+)
+  and to_char(crtdat,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+group by nvl(b.name,a.subtyp)
+) t</DATDSC><C4 ></C4><C5 >MAIN2</C5></ROW>
+<ROW num="2" ><ID >MAIN3</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select fxdj,
+	count(*) cnt,&amp;apos;&amp;apos; bl
+from tax_trkhdr 
+where to_char(crtdat,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+group by fxdj
+) t
+</DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

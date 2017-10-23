@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >iconbatch</MWID><NAME >图标批量转换程序</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >iconbatch.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//载入ZXG之后
+function _thisOnpost_LoadZXGFile(sheet)
+{
+	
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,200);
+	_this.SplitSheet(1,&amp;quot;H&amp;quot;,800);
+	_this.SetToSVGForm(&amp;quot;svgform1&amp;quot;,2,-1,-1,&amp;quot;&amp;quot;);
+	_this.SetDesignMode(1);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;查询文件&amp;quot; ) {
+		var srcdir = _this.GetCellText(0,3,2);
+		var srcfile = _this.GetCellText(0,3,7);
+		var xml = _this.FindFile(srcdir+&amp;quot;\\&amp;quot;+srcfile );
+		_this.SetMainCellRange(1,1,0,5,8);
+		_this.SetXmlDS(1,1,0,5,8,xml);
+		for(var i=_this.GetMainCellRangeCol1(1);i&amp;lt;=_this.GetMainCellRangeCol2(1);i++){
+			_this.SetCellText(1,0,i,_this.GetColName(1,i) );
+		}
+	}
+	else 	if(id==&amp;quot;生成&amp;quot; ) {
+		var destdir = _this.GetCellText(0,5,2);
+		var destfile = _this.GetCellText(0,5,7);
+		var seq = 0;
+		_this.SetAttribe(&amp;quot;&amp;quot;,_this.ATTR_EXPORT_IMAGE_FORMAT,_this.GetCellText(0,7,7));
+		for(var r=_this.GetMainCellRangeRow1(1);r&amp;lt;=_this.GetMainCellRangeRow2(1);r++){
+			var fileurl = _this.GetCellText(1,r,1);
+			
+			var svg = &amp;quot;&amp;lt;svg&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+fileurl+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+_this.GetCellText(0,7,2)+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+_this.GetCellText(0,7,4)+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+			_this.SetToSVGForm(&amp;quot;svgform1&amp;quot;, 2, -1, -1 , svg );
+			_this.SVGFORM_SetClipWH(&amp;quot;svgform1&amp;quot;, 0,0,_this.GetCellText(0,7,2),_this.GetCellText(0,7,4));
+			var destfileurl = destdir +&amp;quot;\\&amp;quot;+destfile+seq +&amp;quot;.&amp;quot;+_this.GetCellText(0,7,7);
+			_this.SetToolbarString(&amp;quot;正在转换&amp;quot;+fileurl+&amp;quot;到&amp;quot;+destfileurl  );
+			//_this.svgform_s	
+			alert (destfileurl  );
+			var retfile = _this.SVGFORM_SaveImageFile(&amp;quot;svgform1&amp;quot;,destfileurl , -1,-1,-1,-1);	
+			alert ( retfile);	
+			seq++;
+			//Sleep(1000);
+			//break;
+			_this.SetRedraw(1);
+		}	
+		var srcdir = _this.GetCellText(0,3,2);
+		var srcfile = _this.GetCellText(0,3,7);
+		var xml = _this.FindFile(srcdir+&amp;quot;\\&amp;quot;+srcfile );
+		_this.SetMainCellRange(1,1,0,5,8);
+		_this.SetXmlDS(1,1,0,5,8,xml);
+		for(var i=_this.GetMainCellRangeCol1(1);i&amp;lt;=_this.GetMainCellRangeCol2(1);i++){
+			_this.SetCellText(1,0,i,_this.GetColName(1,i) );
+		}
+	}
+
+	
+	else 	if(id==&amp;quot;选择&amp;quot;) {
+		var ret = _this.SelectDir();
+		if(ret!=&amp;quot;&amp;quot;)
+			_this.SetCellText(0,row,2,ret);
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+//iconbatch.sp?rettyp=WEBPATH&amp;path=
+function Response()
+{
+      var path = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;path&amp;quot;),&amp;quot;xlsgrid/images/flash/icon/&amp;quot;);//&amp;quot;xmidware/flash/icon/&amp;quot;
+      var rettyp = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rettyp&amp;quot;),&amp;quot;RESPATH&amp;quot;);// 默认时候返回资源编号,如果=WEBPATH 返回路径
+      var issub= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;issub&amp;quot;),&amp;quot;0&amp;quot;);//是否子页面
+      var db = null;
+      var ret= &amp;quot;&amp;quot;;
+      var sql=&amp;quot;&amp;quot;;
+      var ds=&amp;quot;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+          
+            
+            
+            if(issub==&amp;quot;0&amp;quot;){
+            	ret+=&amp;quot;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=gb2312\&amp;quot;&amp;gt;&amp;lt;title&amp;gt;图片资源选择&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body &amp;gt;\n&amp;quot;;
+            	ret+=&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;\n&amp;quot;;
+		ret+=&amp;quot;A { COLOR: #FFFFFF;TEXT-DECORATION: none}\n&amp;quot;;
+		ret+=&amp;quot;A:link { COLOR: #FFFFFF;TEXT-DECORATION: none}\n&amp;quot;;
+		ret+=&amp;quot;A:visited { COLOR: #FFFFFF;TEXT-DECORATION: none}\n&amp;quot;;
+		ret+=&amp;quot;A:hover { COLOR: #FFFF00;TEXT-DECORATION: underline}\n&amp;quot;;
+		ret+=&amp;quot;TD {FONT-SIZE: 10.5pt}\n&amp;quot;;
+		ret+=&amp;quot;BODY {FONT-SIZE: 10.5pt}\n&amp;quot;;
+		ret+=&amp;quot;&amp;lt;/style&amp;gt;\n&amp;quot;;
+		ret+=&amp;quot;&amp;lt;body&amp;gt;\n&amp;quot;;
+	        ret+=&amp;quot;&amp;lt;table width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td height=30 align=left style=\&amp;quot;border-bottom: 1px solid #C0C0C0; padding-bottom: 1px\&amp;quot; bgcolor=\&amp;quot;#666666\&amp;quot;&amp;gt;&amp;lt;font color=#FFFFFF&amp;gt;当前目录：&amp;quot;+path+&amp;quot;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td height=30 align=right style=\&amp;quot;border-bottom: 1px solid #C0C0C0; padding-bottom: 1px\&amp;quot;  bgcolor=\&amp;quot;#666666\&amp;quot;&amp;gt;&amp;lt;font color=#FFFFFF&amp;gt;&amp;quot;;
+	        
+	        ret+=&amp;quot;选择其他&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/flash/icon/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;wp8icon&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/flash/appicon/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;白色透明图标&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/flash/images/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;background&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/entry/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;entry&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/button/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;button&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/file/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;fileicon&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/icon/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;smlicon&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/toolbar/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;toolbar&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;images&amp;lt;/a&amp;gt;&amp;nbsp;&amp;quot;;    
+	       	        ret+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td colspan=2&amp;gt;&amp;lt;iframe width=100% height=100% src=\&amp;quot;iconbatch.sp?path=&amp;quot;+path+&amp;quot;&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;issub=1\&amp;quot; frameborder=0&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;;
+            	
+            }
+            else {
+            	var fileds = getfilelist (pub.AppStartListener.approot + path,path);
+            	ret +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+	            for ( var i=0;i&amp;lt;fileds.getRowCount();i++ ) {
+	            	if(i%8==0&amp;&amp;i!=0) 
+	            		ret+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+	
+	            	if(i%8==0)
+	            		ret+=&amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+	            	//DBEBFA  EFF7FF
+	            	ret +=&amp;quot;&amp;lt;td&amp;gt;&amp;lt;table&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=&amp;apos;#808080&amp;apos; align=center onmouseover=\&amp;quot;this.style.backgroundColor=&amp;apos;#0000FF&amp;apos;;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; onmouseout=\&amp;quot;this.style.backgroundColor=&amp;apos;#808080&amp;apos;;\&amp;quot;  onclick=\&amp;quot;javascript:window.returnValue=&amp;apos;&amp;quot;+fileds.getStringAt(i,rettyp)+&amp;quot;&amp;apos;;window.close();\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+fileds.getStringAt(i,&amp;quot;URL&amp;quot;)+&amp;quot;\&amp;quot; border=0 width=120 height=120 /&amp;gt;&amp;lt;BR&amp;gt;&amp;lt;font color=#FFFFFF&amp;gt;&amp;quot;+fileds.getStringAt(i,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+			            
+	            	
+	            }
+	        ret+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	    }            
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+function getfilelist (fileurl,path){
+	var folds = (new java.io.File(fileurl)).listFiles();
+	var ds = new pubpack.EAXmlDS();
+	if ( folds != null ) {
+		folds=pub.EAFunc.sort(folds);
+		var c = folds.length();
+		for(var i=0;i&amp;lt;c;i++) {
+			var f=folds[i];
+			if(!f.isDirectory() ) {
+				var filename = f.getName();
+            			var index = filename.indexOf(&amp;quot;.png&amp;quot;);
+            			if(index&amp;lt;0)index =filename.indexOf(&amp;quot;.jpg&amp;quot;);
+            			if(index&amp;lt;0)index =filename.indexOf(&amp;quot;.gif&amp;quot;);
+            			if(index&amp;lt;0)index =filename.indexOf(&amp;quot;.bmp&amp;quot;);
+				if ( index &amp;gt;=0 ) {
+					var row= ds.AddRow(ds.getRowCount()-1);
+				
+					//ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+					var layoutid = filename.substring(0,index);
+					ds.setValueAt(row,&amp;quot;ID&amp;quot;,layoutid );
+					ds.setValueAt(row,&amp;quot;RESPATH&amp;quot;,&amp;quot;resource://&amp;quot;+layoutid  );
+					ds.setValueAt(row,&amp;quot;WEBPATH&amp;quot;,path+filename );
+
+					ds.setValueAt(row,&amp;quot;URL&amp;quot;,path+filename  );
+
+					
+				}	
+			}
+		}
+	}
+	return ds;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

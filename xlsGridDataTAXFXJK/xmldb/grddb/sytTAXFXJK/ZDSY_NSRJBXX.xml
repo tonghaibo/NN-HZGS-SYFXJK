@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDSY_NSRJBXX</MWID><NAME >纳税人基本信息</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDSY_NSRJBXX.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >重点税源管理</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >filter</ID><NAME >查询条件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;20%&amp;quot;);
+//	_this.SplitSheet(2,&amp;quot;H&amp;quot;,&amp;quot;20%&amp;quot;);
+//	_this.ShowToolBar(0);
+//      _this.SetCellText(0,1,2,DJXH);
+        loadData();
+	
+
+}
+
+//查询条件
+function filter()
+{
+	//window.location.href = &amp;quot;Layout.sp?id=zdsyyhs&amp;nsrdjxh=10114511000045916682&amp;dat1=2017-01&amp;dat2=2017-07&amp;quot;;
+	
+
+}
+
+//加载查询数据
+function loadData()
+{	
+     // _this.SetFixedRow(0,2);
+    //  alert(&amp;quot;DJXH=&amp;quot;+DJXH);
+	_sql.querytods(&amp;quot;DJXX&amp;quot;,&amp;quot;djxh=&amp;quot;+DJXH);
+	
+	var nsrsbh = _this.XMLDS_GetString(0,&amp;quot;nsrsbh&amp;quot;);
+	_this.SetCellText(0,1,2,nsrsbh);
+	
+	var nsrmc = _this.XMLDS_GetString(0,&amp;quot;nsrmc&amp;quot;);
+	_this.SetCellText(0,1,4,nsrmc);
+	
+	var shxydm = _this.XMLDS_GetString(0,&amp;quot;shxydm&amp;quot;);
+	_this.SetCellText(0,1,6,shxydm);
+	
+	var fddbrxm = _this.XMLDS_GetString(0,&amp;quot;fddbrxm&amp;quot;);
+	_this.SetCellText(0,2,2,fddbrxm);
+
+	var zcdz = _this.XMLDS_GetString(0,&amp;quot;zcdz&amp;quot;);
+	_this.SetCellText(0,2,4,zcdz);	
+		
+	var lxdh = _this.XMLDS_GetString(0,&amp;quot;lxdh&amp;quot;);
+	_this.SetCellText(0,2,6,lxdh);
+	
+		
+	
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+/*
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+{
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts-3d.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	//sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/exporting.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+
+	//窗口上下分割，上面显示中间件数据，下面显示图表
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;quot;); //上面窗口高度占的比例
+	sb.append(&amp;quot;&amp;lt;td width=100% height=50% style=\&amp;quot;border:solid 0px gray\&amp;quot; valign=top;&amp;gt;&amp;quot;);
+
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+{
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=100% bgcolor=\&amp;quot;FEFEFE\&amp;quot; style=\&amp;quot;border:1px solid #DEDEDE\&amp;quot; align=left valign=top&amp;quot;);	
+	
+	sb.append(&amp;quot;&amp;lt;h1&amp;gt;ddaaddf&amp;lt;/h1&amp;gt;&amp;quot;);
+
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);	
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+*/
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DJXX</ID><NAME ></NAME><DATDSC >
+select nsrsbh,nsrmc,shxydm,fddbrxm,zcdz,nvl(fddbryddh,fddbrgddh)lxdh 
+from dj_nsrxx dj,dj_nsrxx_kz kz
+where dj.djxh=kz.djxh
+and dj.djxh=&amp;apos;[%djxh]&amp;apos;</DATDSC><C4 >DJXX</C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

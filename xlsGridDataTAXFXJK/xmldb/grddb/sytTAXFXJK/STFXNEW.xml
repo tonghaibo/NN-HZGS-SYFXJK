@@ -1,0 +1,777 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >STFXNEW</MWID><NAME >石材风险识别</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >STFXNEW.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >风险识别</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >NSRPP</ID><NAME >纳税人匹配</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >3</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >GRDBTNDS_0</C10><C11 ></C11><C12 >selParam</C12><C13 >selParam</C13><C14 ></C14><C15 ></C15><C16 >NSRPP</C16><C17 >NSRPP</C17><C18 ></C18><C19 >NSRPP</C19></ROW>
+<ROW num="1" ><ID >selParam</ID><NAME >行业参数维护</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >4</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >GRDBTNDS_1</C10><C11 >doQuery</C11><C12 ></C12><C13 >doFXSB</C13><C14 ></C14><C15 ></C15><C16 >selParam</C16><C17 ></C17><C18 ></C18><C19 >selParam</C19></ROW>
+<ROW num="2" ><ID >doFXSB</ID><NAME >开始识别</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >1</BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 >GRDBTNDS_2</C16><C17 ></C17><C18 ></C18><C19 >doFXSB</C19></ROW>
+<ROW num="3" ><ID >SCdysjcx</ID><NAME >石材调运数据查询</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >2</BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >SCdysjcx</C17><C18 >SCdysjcx</C18><C19 >SCdysjcx</C19></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;//企业
+var win = null;
+var bl1 = 0;
+var bl2 = 0;
+var bl3 = 0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;16%&amp;quot;);
+	_this.SetColVisible(0,2,-1);
+	initHYSheet(&amp;quot;1&amp;quot;);
+	
+	//年月
+	var yymmList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YYYY_MM&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,yymmList);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,yymmList);
+	var defyymm = G_LOGDAT.substring(0,7);
+	_this.SetCellText(1,1,2,defyymm);
+	_this.SetCellText(1,1,4,defyymm);
+	
+	//税务机关
+	//_this.SetToSelectBox(&amp;quot;&amp;quot;,1,1,10,&amp;quot;V_SWJG&amp;quot;,&amp;quot;&amp;quot;);
+	var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;where=sjid=&amp;quot;+G_DEPTID+&amp;quot; or id=&amp;quot;+G_DEPTID),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,10,swjgList);
+	_this.SetCellText(1,1,10,G_DEPTID);
+	
+	//行业
+	//_this.SetToSelectBox(&amp;quot;&amp;quot;,1,3,2,&amp;quot;V_TAX_STONE_HY&amp;quot;,&amp;quot;&amp;quot;);
+	var hyList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_STONE_HY&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,3,2,hyList);
+	_this.SetCellText(1,3,2,&amp;quot;1&amp;quot;); //默认粉体行业
+	
+	//行业参数
+	var hydm = _this.GetCellText(1,3,2);
+	var hycsList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_STONE_PARAM&amp;where=hydm=&amp;quot;+hydm),&amp;quot;CSID&amp;quot;,&amp;quot;CSMC&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,5,2,hycsList);
+
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+
+	initHYSheet(1);
+	
+	var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+
+	}else{
+		_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+	}
+	
+	_this.AutoFixScreenWidth();
+}
+
+//等待时执行的任务
+function runWaitingTask()
+{
+	var hydm = _this.GetCellText(1,3,2);
+	var csid = _this.GetCellText(1,5,2);
+	var ym1 = _this.GetCellText(1,1,2);
+	var ym2 = _this.GetCellText(1,1,4);
+	var minydl = _this.GetCellText(1,1,7);
+	var minxsje = _this.GetCellText(1,3,7);
+	var swjg = _this.GetCellText(1,1,10);
+	var nsrmc = _this.GetCellText(1,3,10);
+	var params = &amp;quot;HYDM=&amp;quot;+hydm+&amp;quot;&amp;CSID=&amp;quot;+csid+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2+&amp;quot;&amp;MINYDL=&amp;quot;+minydl+&amp;quot;&amp;MINXSJE=&amp;quot;+minxsje+&amp;quot;&amp;SWJG=&amp;quot;+swjg+&amp;quot;&amp;NSRMC=&amp;quot;+nsrmc;
+	
+	var xml = &amp;quot;&amp;quot;;
+	if (hydm == 1) { //粉体
+		xml = _sql.query(&amp;quot;MAIN1&amp;quot;,params);
+	}
+	else if (hydm == 2) { //板材
+		xml = _sql.query(&amp;quot;MAIN2&amp;quot;,params);
+		_this.SetCellText(0,0,18,&amp;quot;测算应纳税额&amp;quot;);
+		_this.SetCellText(0,0,19,&amp;quot;应纳税额&amp;quot;);
+	}
+	else if (hydm == 3) { //岗石
+		xml = _sql.query(&amp;quot;MAIN3&amp;quot;,params);
+	}
+	else if (hydm == 4) { //矿企 
+		xml = _sql.query(&amp;quot;MAIN4&amp;quot;,params);
+	}
+	
+	return xml;
+}
+
+//加载主数据
+function loadData()
+{	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetColVisible(0,2,-1);
+	_this.SetFixedRow(0,2);
+	_this.SetFixedCol(0,1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	var hydm = _this.GetCellText(1,3,2);
+	var csid = _this.GetCellText(1,5,2);
+	var ym1 = _this.GetCellText(1,1,2);
+	var ym2 = _this.GetCellText(1,1,4);
+	
+	if (ym1 == &amp;quot;&amp;quot; || ym2 == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择日期范围！&amp;quot;); return; }
+	if (hydm == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择所属行业！&amp;quot;); return; }
+	if (csid == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择行业计算参数！&amp;quot;); return; }
+	
+	var obj = new Object();
+	obj.HYDM = hydm;
+	obj.CSID = csid;
+	obj.YM1 = ym1;
+	obj.YM2 = ym2;
+	obj.MINYDL = _this.GetCellText(1,1,7);
+	obj.MINJE = _this.GetCellText(1,3,7);	
+	obj.SWJG = _this.GetCellText(1,1,10);	
+	obj.QY = _this.GetCellText(1,3,10);	
+	//var xml = window.showModalDialog(&amp;quot;show.sp?grdid=STFX_CX&amp;quot;,obj,&amp;quot;scroll:no;status:no;dialogWidth:100px;dialogHeight:30px&amp;quot;);	
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+
+	//var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;HYDM=&amp;quot;+hydm+&amp;quot;&amp;CSID=&amp;quot;+csid+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+	_this.SetMainCellRange(0,2,2,_this.GetRowCount(0)-1,_this.GetColCount(0)-1);
+	_this.SetXmlDS(0,2,2,_this.GetRowCount(0)-1,_this.GetColCount(0)-1,xml);
+//	_this.SetCellText(1,5,6,xml);
+//	alert(&amp;quot;xml=&amp;quot;+xml);
+	var row = 0;
+	_this.SetToBoolBox(0,1,0);
+	
+	_sql.querytods(&amp;quot;FXDJBL&amp;quot;,&amp;quot;&amp;quot;); //在循环外查询出等级比例
+	bl1 = _this.XMLDS_GetString(0,&amp;quot;BL&amp;quot;); //高
+	bl2 = _this.XMLDS_GetString(1,&amp;quot;BL&amp;quot;); //中
+	bl3 = _this.XMLDS_GetString(2,&amp;quot;BL&amp;quot;); //低
+
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,3) != &amp;quot;&amp;quot;) {
+			row ++;
+			_this.SetToBoolBox(0,r,0);
+			_this.SetCellText(0,r,1,row);		
+			
+			//测算
+			fxjs(hydm,r);	
+		}
+		else {
+			_this.SetRowVisible(0,r,-1);
+		}
+	}
+	
+	initHYSheet(hydm);
+	
+	//_this.AutoFixColWidth(0,400);
+	_this.AutoFixScreenWidth();
+
+}
+
+//初始化界面显示列按行业
+function initHYSheet(hydm) 
+{
+	_this.SetColVisible(0,9,-1);
+	_this.SetColVisible(0,10,-1);
+	_this.SetColVisible(0,11,-1);
+	_this.SetColVisible(0,12,-1);
+	_this.SetColVisible(0,13,-1);
+	_this.SetColVisible(0,15,-1);
+	_this.SetColVisible(0,16,-1);
+	_this.SetColVisible(0,17,-1);
+		
+	for (var c=22;c&amp;lt;_this.GetColCount(0);c++) {
+		_this.SetColVisible(0,c,-1);
+	}
+	if (hydm == 1) {
+		_this.SetColVisible(0,25,1); //显示单价列
+	}
+	
+	if (hydm != 1) {
+		_this.SetColVisible(0,22,-1);
+		_this.SetColVisible(0,23,-1);
+	}
+	
+}
+
+
+//测算方法 hydm-行业代码 row-行号
+function fxjs(hydm,row)
+{
+	var ftzl = 1.0*_this.GetCellText(0,row,8); //粉体总量=碎石量
+	var zydl = 1.0*_this.GetCellText(0,row,14); //总用电量
+	var bczl = 1.0*_this.GetCellText(0,row,6); //板材总量
+	var hlzl = 1.0*_this.GetCellText(0,row,7); //荒料总量
+	var sszl = 1.0*_this.GetCellText(0,row,8); //碎石总量
+	var whbl = 1.0*_this.GetCellText(0,row,22); //物耗比例
+	var lft = 1.0*_this.GetCellText(0,row,23); //1立方=多少吨
+	var lfm = 1.0*_this.GetCellText(0,row,24); //1立方=多少平米
+	var dj = 1.0*_this.GetCellText(0,row,25); //单价		
+				
+	var xsje = 0; //测算销售金额
+	
+	if (hydm == 1) { //粉体
+		if (sszl &amp;gt; 0) {
+			xsje = 1.0*((1 - whbl) * sszl * dj).toFixed(2);
+			_this.SetCellText(0,row,18,xsje);	//销售总金额
+		}
+	}
+	else if (hydm == 2) { //板材		
+//		if (hlzl &amp;gt; 0) {
+//			xsje = 1.0*((1.0*hlzl*(1-whbl)/lft*lfm * dj).toFixed(2));			
+//		}
+//		_this.SetCellText(0,row,18,xsje);	//销售总金额
+		
+		//计算方式在数据源SQL里，这里不再计算
+		
+	}
+	else if (hydm == 3) { //岗石
+		var dhy = _this.GetCellText(0,row,26); //1度电产出价值
+		if (zydl &amp;gt; 0) {
+			xsje = (zydl * dhy).toFixed(2);
+		}
+//		else if (sszl &amp;gt; 0) {			
+//			xsje = 1.0*(sszl*(1-whbl)/lft*lfm * dj).toFixed(2);	
+//		}
+		_this.SetCellText(0,row,18,xsje);	//销售总金额
+	}
+	else if (hydm == 4) { //矿企
+		var hlsj = 1.0*_this.GetCellText(0,row,27); //荒料售价
+		var bcsj = 1.0*_this.GetCellText(0,row,28); //板材售价
+		var sssj = 1.0*_this.GetCellText(0,row,29); //碎石售价
+		var ckzl = 1.0*_this.GetCellText(0,row,5); //总量
+		
+		var dwyh = _this.GetCellText(0,row,30); //单位油耗		
+		if (dwyh &amp;gt; 0) {
+			var csyh = ckzl / dwyh; //测算油耗
+			_this.SetCellText(0,row,16,csyh);
+			xsje = xsje - csyh;
+		}
+		
+		//if (bczl &amp;gt; 0) xsje += 1.0*(bcsj*bczl).toFixed(2);
+		if (hlzl &amp;gt; 0) xsje += 1.0*(hlsj*hlzl).toFixed(2);
+		if (sszl &amp;gt; 0) xsje += 1.0*(sssj*sszl).toFixed(2);
+		
+		_this.SetCellText(0,row,18,xsje);
+		
+	}
+	
+	//预警等级
+	var cssomny = _this.GetCellText(0,row,18);
+	var sbmny = _this.GetCellText(0,row,19); 
+	var cz = (cssomny - sbmny).toFixed(2);
+	_this.SetCellText(0,row,20,cz); //设置差异金额
+	var bl = (cz / cssomny).toFixed(2);
+	if (bl &amp;gt; 0) {
+		if (bl &amp;gt;= bl1) { _this.SetCellText(0,row,21,&amp;quot;高&amp;quot;); _this.SetCellColor(0,row,21,255,0,0); }
+		else if (bl &amp;gt;= bl2) { _this.SetCellText(0,row,21,&amp;quot;中&amp;quot;); _this.SetCellColor(0,row,21,230,165,25); }
+		else if (bl &amp;gt;= bl3) { _this.SetCellText(0,row,21,&amp;quot;低&amp;quot;); _this.SetCellColor(0,row,21,220,220,110); }
+	}
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 1) {
+		if(row == 3 &amp;&amp; col == 2) {
+			//行业参数
+			var hydm = _this.GetCellText(1,3,2);
+			var hycsList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_STONE_PARAM&amp;where=hydm=&amp;quot;+hydm),&amp;quot;CSID&amp;quot;,&amp;quot;CSMC&amp;quot;);
+			_this.SetToComboBox(&amp;quot;&amp;quot;,1,5,2,hycsList);
+			_this.SetCellText(1,5,6,&amp;quot;&amp;quot;);
+			_this.SetCellText(1,5,2,&amp;quot;1&amp;quot;);
+			_thisOnCellModify(sheet,5,2,&amp;quot;&amp;quot;,&amp;quot;1&amp;quot;);
+		}
+		else if (row == 5 &amp;&amp; col == 2) {
+			var hydm = _this.GetCellText(1,3,2);
+			_sql.querytods(&amp;quot;STONEPRARM&amp;quot;,&amp;quot;HYDM=&amp;quot;+hydm+&amp;quot;&amp;CSID=&amp;quot;+newvalue);
+			var paramstr =&amp;quot;&amp;quot;;
+			if (hydm == 1) {
+				paramstr += &amp;quot;物耗比例:&amp;quot;+100*_this.XMLDS_GetString(0,&amp;quot;WHBL&amp;quot;)+&amp;quot;%&amp;quot;;			
+				paramstr += &amp;quot; | 单价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DJ&amp;quot;)+&amp;quot;元&amp;quot;;
+			}
+			if (hydm == 2) {
+				//paramstr += &amp;quot;物耗比例:&amp;quot;+100*_this.XMLDS_GetString(0,&amp;quot;WHBL&amp;quot;)+&amp;quot;%&amp;quot;;			
+				paramstr += &amp;quot;1度电产出税款:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DHY&amp;quot;)+&amp;quot;元&amp;quot;;
+				//paramstr += &amp;quot; | 1立方=&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;LFT&amp;quot;)+&amp;quot;吨&amp;quot;;
+				//paramstr += &amp;quot; | 1立方=&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;LFM&amp;quot;)+&amp;quot;平方&amp;quot;;
+				//paramstr += &amp;quot; | 单价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DJ&amp;quot;)+&amp;quot;元&amp;quot;;
+			}
+			if (hydm == 3) {
+				//paramstr += &amp;quot;物耗比例:&amp;quot;+100*_this.XMLDS_GetString(0,&amp;quot;WHBL&amp;quot;)+&amp;quot;%&amp;quot;;			
+				paramstr += &amp;quot;1度电产出值:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DHY&amp;quot;)+&amp;quot;元&amp;quot;;
+				//paramstr += &amp;quot; | 1立方=&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;LFT&amp;quot;)+&amp;quot;吨&amp;quot;;
+				//paramstr += &amp;quot; | 1立方=&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;LFM&amp;quot;)+&amp;quot;平方&amp;quot;;
+				//paramstr += &amp;quot; | 单价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DJ&amp;quot;)+&amp;quot;元&amp;quot;;
+			}
+			if (hydm == 4) {
+				paramstr += &amp;quot;荒料售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;HLSJ&amp;quot;)+&amp;quot;元&amp;quot;;
+				paramstr += &amp;quot; | 碎石售价:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;SSSJ&amp;quot;)+&amp;quot;元&amp;quot;;
+				//paramstr += &amp;quot; | 单位油耗:&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;DWYH&amp;quot;)+&amp;quot;元&amp;quot;;
+			}
+			_this.SetCellText(1,5,6,paramstr);
+		}
+	}
+	else if (sheet == 0) {
+		//全选
+		if (row == 1 &amp;&amp; col == 0) {
+			for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+				_this.SetCellText(0,r,0,newvalue);			
+			}
+		}
+	}
+}
+
+//选择计算参数
+function selParam()
+{
+	 window.showModalDialog(&amp;quot;show.sp?grdid=CS_STONE&amp;&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:800px;dialogHeight:600px&amp;quot;);
+}
+
+//开始识别
+function doFXSB()
+{
+	loadData();	
+}
+//纳税人匹配
+function NSRPP()
+{
+	//window.showModalDialog(&amp;quot;show.sp?grdid=STONE_NSRPP&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:1000px;dialoHeight:800px&amp;quot;);
+	window.open(&amp;quot;show.sp?grdid=STONE_NSRPP&amp;quot;);
+}
+
+//生成核实任务
+function genTasks()
+{	
+	var param = new Object();	
+	
+	var xmlds = getXmlStr(0,2,0,_this.GetMainCellRangeRow2(0),30);
+	param.xmlstr = xmlds;	
+	param.usrids = G_USRID;
+	param.usrnams = G_USRNAM;
+	param.accids = G_ACCID;
+	param.orgs = G_ORGID;
+	param.syts = G_SYTID;
+	param.typ = &amp;quot;2&amp;quot;;     //决策二包任务
+	param.subtyp = &amp;quot;03&amp;quot;; //石材类 
+	param.yymm1 = _this.GetCellText(1,1,2);
+	param.yymm2 = _this.GetCellText(1,1,4);
+	param.swjg_dm = G_DEPTID;
+	param.toswjg = &amp;quot;&amp;quot;;
+	param.tousr=&amp;quot;&amp;quot;;
+	
+	var retobj = window.showModalDialog(&amp;quot;show.sp?grdid=RWParam&amp;typ=&amp;quot;+param.typ+&amp;quot;&amp;subtyp=&amp;quot;+param.subtyp,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	try {
+	//if (retobj != &amp;quot;undefined&amp;quot; &amp;&amp; retobj != null) {		
+		param.enddat = retobj.enddat;
+		param.note = retobj.note;
+		param.typ = retobj.typ;
+		param.subtyp = retobj.subtyp;
+		var msg = invokeOSFuncExt(&amp;quot;TAXFXJK.PUBTRK.createTask&amp;quot;,param);
+		alert(msg);
+	//}
+	} catch (e) { }
+	
+}
+
+
+function getXmlStr(sheet,row1,col1,row2,col2)
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var i = 0;
+	for (var r=row1;r&amp;lt;=row2;r++) {
+		if (_this.GetCellText(sheet,r,0) == &amp;quot;1&amp;quot;) {
+			xmlstr += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(++i)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+			var nsrsbh = _this.GetCellText(sheet,r,3);
+			var nsrmc = _this.GetCellText(sheet,r,4);
+			var csxsje = 1.0*_this.GetCellText(sheet,r,18); //测算收入金额
+			var sbje = 1.0*_this.GetCellText(sheet,r,19); //申报金额
+			var cyje = Math.abs(sbje - csxsje).toFixed(2); //差异金额
+			var note = &amp;quot;测算收入金额：&amp;quot;+csxsje+&amp;quot;，申报金额：&amp;quot;+sbje+&amp;quot;，差异金额：&amp;quot;+cyje;
+			var fxdj = _this.GetCellText(sheet,r,21);
+			
+			xmlstr += &amp;quot;&amp;lt;NSRSBH&amp;gt;&amp;quot;+nsrsbh+&amp;quot;&amp;lt;/NSRSBH&amp;gt;\n&amp;quot;; //纳税人识别号
+			xmlstr += &amp;quot;&amp;lt;NSRMC&amp;gt;&amp;quot;+nsrmc+&amp;quot;&amp;lt;/NSRMC&amp;gt;\n&amp;quot;;	   //纳税人名称
+			xmlstr += &amp;quot;&amp;lt;NOTE&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/NOTE&amp;gt;\n&amp;quot;;       //说明
+			xmlstr += &amp;quot;&amp;lt;FXDJ&amp;gt;&amp;quot;+fxdj+&amp;quot;&amp;lt;/FXDJ&amp;gt;\n&amp;quot;;       //风险等级
+			xmlstr += &amp;quot;&amp;lt;CYJE&amp;gt;&amp;quot;+cyje+&amp;quot;&amp;lt;/CYJE&amp;gt;\n&amp;quot;;       //差异金额
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}
+
+
+//石材调运数据查询
+function SCdysjcx()
+{
+	window.open(&amp;quot;show.sp?grdid=SCDYSJ_CX&amp;pagesize=100&amp;quot;);
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >STONEPRARM</ID><NAME ></NAME><DATDSC >select * from tax_stone_param where hydm=&amp;apos;[%HYDM]&amp;apos; and csid=&amp;apos;[%CSID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >STONEPRARM</C10><C11 ></C11><C12 ></C12><C13 >STONEPRARM</C13><C14 ></C14><C15 >STONEPRARM</C15><C16 >STONEPRARM</C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="1" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select * from (
+select djxh,nsrsbh,nsrmc,
+	sum(zlhj) zlhj,sum(bc) bc,sum(hl) hl,sum(ss) ss,sum(ss2l) ss2l,
+       sum(tk) tk,sum(fxfl) fxfl,sum(jzydls) jzydls,sum(jzys) jzys,sum(eleqty) eleqty,
+       csydl,csyh,sum(dzdz) dzdz,xszje,sum(sbje) sbje,&amp;apos;&amp;apos; cyje,yjdj,
+       max(whbl) whbl,max(lft) lft,max(lfm) lfm,max(dj) dj,
+       max(dhy) dhy,max(hlsj) hlsj,max(bcsj) bcsj,max(sssj) sssj,
+       max(dwyh) dwyh
+from (  
+select t1.djxh,t1.nsrsbh,t1.nsrmc,t1.zlhj,t1.bc,t1.hl,t1.ss,t1.ss2l,
+	t1.tk,t1.fxfl,t1.jzydls,t1.jzys,
+	t2.eleqty,&amp;apos;&amp;apos; gmydl,&amp;apos;&amp;apos; dmydl,&amp;apos;&amp;apos; csydl,&amp;apos;&amp;apos; csyh,
+	/*t5.je dzdz,*/ &amp;apos;&amp;apos; dzdz,
+       &amp;apos;&amp;apos; xszje,&amp;apos;&amp;apos; gmxsje,&amp;apos;&amp;apos; dmxsje,t4.somny sbje,&amp;apos;&amp;apos; yjdj,
+       t3.whbl,t3.LFT,t3.LFM,t3.DJ,t3.DHY,t3.hlsj,t3.bcsj,t3.sssj,t3.dwyh
+from (
+  select a.yymm,a.djxh,a.nsrsbh,b.name nsrmc,
+         sum(a.zlhj) zlhj,sum(a.bc) bc,sum(a.hl) hl,sum(a.ss) ss,
+         sum(a.ss2l) ss2l,sum(a.tk) tk,sum(a.fxfl) fxfl,sum(a.jzydls) jzydls,sum(a.jzys) jzys       
+  from tax_stonedata a,tax_company b
+  where a.nsrsbh=b.id
+    and b.djxh in (select djxh from DJ_DJHGLGL where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) 
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,a.djxh,a.nsrsbh,b.name  
+) t1,(
+  select a.yymm,b.cmid nsrsbh,max(b.cmnam) nsrmc,sum(eleqty) eleqty 
+  from tax_eledata a,tax_cmpammno b
+  where a.usrid=b.ammno
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,b.cmid
+) t2,(
+  select djxh,yymm,sum(somny) somny,sum(taxmny) taxmny from tax_taxdata 
+  where yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; group by yymm,djxh
+) t4, /*(
+  select kpyf,xfsbh,sum(je) je,sum(se) se from (
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_PTFP a,DZDZ_HWXX_PTFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( --销方是石油制品批发行业的
+        select id nsrsbh from tax_company where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select nvl(shxydm,nsrsbh) nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+    union all
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_ZZSFP a,DZDZ_HWXX_ZZSFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( --销方是石油制品批发行业的
+        select nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select shxydm from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+  ) group by kpyf,xfsbh
+) t5,*/
+(select * from tax_stone_param sp where sp.hydm=&amp;apos;[%HYDM]&amp;apos; and sp.csid=&amp;apos;[%CSID]&amp;apos;) t3
+where t1.nsrsbh=t2.nsrsbh(+) and t1.yymm=t2.yymm(+)
+  --and t1.nsrsbh=t4.nsrsbh(+) 
+  and t1.djxh=t4.djxh(+)
+  and t1.yymm=t4.yymm(+)
+  /*and t1.nsrsbh=t5.xfsbh(+) and replace(t1.yymm,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)=t5.kpyf(+)*/
+order by t1.nsrsbh  
+) group by djxh,nsrsbh,nsrmc
+
+) tab 
+where nsrmc like &amp;apos;%[%NSRMC]%&amp;apos; 
+  and eleqty &amp;gt;=decode(&amp;apos;[%MINYDL]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%MINYDL]&amp;apos;) 
+  and nvl(sbje,0)&amp;gt;decode(&amp;apos;[%MINXSJE]&amp;apos;*10000,&amp;apos;&amp;apos;,-1,&amp;apos;[%MINXSJE]&amp;apos;*10000)
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 ></C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16><C17 >MAIN</C17><C18 >MAIN</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >MAIN</C24><C25 >MAIN</C25><C26 >MAIN</C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="2" ><ID >FXDJBL</ID><NAME ></NAME><DATDSC >select * from TAX_CS_FXYJJB order by bl desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 >FXDJBL</C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="3" ><ID >MAIN1</ID><NAME >粉体行业</NAME><DATDSC >select * from (
+select djxh,nvl(shxydm,nsrsbh)nsrsbh,nsrmc,
+  sum(zlhj) zlhj,sum(bc) bc,sum(hl) hl,sum(ss) ss,sum(ss2l) ss2l,
+       sum(tk) tk,sum(fxfl) fxfl,sum(jzydls) jzydls,sum(jzys) jzys,sum(eleqty) eleqty,
+       &amp;apos;&amp;apos;csydl,&amp;apos;&amp;apos;csyh,&amp;apos;&amp;apos; dzdz,&amp;apos;&amp;apos;xszje,sum(somny) sbje,&amp;apos;&amp;apos; cyje,&amp;apos;&amp;apos;yjdj,
+       max(whbl) whbl,max(lft) lft,max(lfm) lfm,
+       round(nvl(max(nsr_dj),max(dj)),2) nsr_dj, /*取每一户的电子底账单价*/
+       max(dhy) dhy,max(hlsj) hlsj,max(bcsj) bcsj,max(sssj) sssj,
+       max(dwyh) dwyh
+from(
+select t.*,dj.nsrsbh,dj.shxydm,dj.nsrmc,dzdj.nsr_dj, 
+t3.whbl,t3.LFT,t3.LFM,t3.DJ,t3.DHY,t3.hlsj,t3.bcsj,t3.sssj,t3.dwyh
+from (
+select t1.djxh,sum(t1.zlhj)zlhj,sum(t1.bc) bc,sum(t1.hl) hl,sum(t1.ss) ss,
+         sum(t1.ss2l) ss2l,sum(t1.tk) tk,sum(t1.fxfl) fxfl,sum(t1.jzydls) jzydls,sum(t1.jzys) jzys,
+         sum(t2.eleqty) eleqty,sum(t4.somny)somny,sum(t4.taxmny)taxmny
+from (
+--取调运系统数据
+  select a.djxh,
+         sum(a.zlhj) zlhj,sum(a.bc) bc,sum(a.hl) hl,sum(a.ss) ss,
+         sum(a.ss2l) ss2l,sum(a.tk) tk,sum(a.fxfl) fxfl,sum(a.jzydls) jzydls,sum(a.jzys) jzys        
+  from tax_stonedata a
+  where a.djxh in (select djxh from DJ_DJHGLGL where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) 
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+    and crbz=&amp;apos;2&amp;apos;
+  group by a.djxh  
+) t1,(
+--取电力数据
+  select b.djxh,sum(eleqty) eleqty 
+  from tax_eledata a,tax_cmpammno b
+  where a.usrid=b.ammno
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by b.djxh
+) t2,
+(--取申报销售额
+  select djxh,sum(somny) somny,sum(taxmny) taxmny from tax_taxdata 
+  where yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; 
+  group by djxh
+) t4
+where t1.djxh=t2.djxh(+)
+and t1.djxh=t4.djxh(+)
+group by t1.djxh ) t,
+(select cmp.djxh,avg(nsr_dj)nsr_dj
+from( --取电子底账
+  select xfsbh,sum(je)/sum(sl) nsr_dj
+  from (
+    select a.xfsbh,b.dj,b.dw,b.je,b.sl
+    from DZDZ_FPXX_PTFP a,DZDZ_HWXX_PTFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and b.dw=&amp;apos;吨&amp;apos;
+      and zfbz=&amp;apos;N&amp;apos;
+      and a.xfsbh in (select id from tax_company where djxh in (select djxh from DJ_DJHGLGL 
+          where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) )
+    union all
+    select a.xfsbh,b.dj,b.dw,b.je,b.sl
+    from DZDZ_FPXX_ZZSFP a,DZDZ_HWXX_ZZSFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and b.dw=&amp;apos;吨&amp;apos; 
+      and zfbz=&amp;apos;N&amp;apos;
+      and a.xfsbh in (select id from tax_company where djxh in (select djxh from DJ_DJHGLGL 
+          where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) )
+  ) group by xfsbh
+) jg,tax_company cmp 
+where cmp.id=jg.xfsbh
+group by cmp.djxh
+)dzdj,dj_nsrxx dj,(select * from tax_stone_param sp where sp.hydm=&amp;apos;[%HYDM]&amp;apos; and sp.csid=&amp;apos;[%CSID]&amp;apos;) t3
+where t.djxh=dzdj.djxh(+)
+and t.djxh=dj.djxh
+) group by djxh,nvl(shxydm,nsrsbh),nsrmc
+) tab 
+where nsrmc like &amp;apos;%[%NSRMC]%&amp;apos; 
+  and eleqty &amp;gt;=decode(&amp;apos;[%MINYDL]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%MINYDL]&amp;apos;) 
+  and nvl(sbje,0)&amp;gt;decode(&amp;apos;[%MINXSJE]&amp;apos;*10000,&amp;apos;&amp;apos;,-1,&amp;apos;[%MINXSJE]&amp;apos;*10000)
+
+
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >MAIN1</C17><C18 ></C18><C19 >MAIN1</C19><C20 >MAIN1</C20><C21 >MAIN1</C21><C22 >MAIN1</C22><C23 >MAIN1</C23><C24 >MAIN1</C24><C25 ></C25><C26 >MAIN1</C26><C27 >MAIN1</C27><C28 >MAIN1</C28></ROW>
+<ROW num="4" ><ID >MAIN2</ID><NAME >板材行业</NAME><DATDSC >select * from (
+select djxh,nsrsbh,nsrmc,
+	sum(zlhj) zlhj,sum(bc) bc,sum(hl) hl,sum(ss) ss,sum(ss2l) ss2l,
+       sum(tk) tk,sum(fxfl) fxfl,sum(jzydls) jzydls,sum(jzys) jzys,sum(eleqty) eleqty,
+       csydl,csyh,sum(dzdz) dzdz,
+       (sum(eleqty)*max(dhy)) xszje,sum(taxmny) sbje,&amp;apos;&amp;apos; cyje,yjdj,
+       max(whbl) whbl,max(lft) lft,max(lfm) lfm,max(dj) dj,
+       max(dhy) dhy,max(hlsj) hlsj,max(bcsj) bcsj,max(sssj) sssj,
+       max(dwyh) dwyh
+from (  
+select t1.djxh,t1.nsrsbh,t1.nsrmc,t1.zlhj,t1.bc,t1.hl,t1.ss,t1.ss2l,
+	t1.tk,t1.fxfl,t1.jzydls,t1.jzys,
+	t2.eleqty,&amp;apos;&amp;apos; gmydl,&amp;apos;&amp;apos; dmydl,&amp;apos;&amp;apos; csydl,&amp;apos;&amp;apos; csyh,
+	&amp;apos;&amp;apos; dzdz,
+       &amp;apos;&amp;apos; xszje,&amp;apos;&amp;apos; gmxsje,&amp;apos;&amp;apos; dmxsje,t4.somny sbje,t4.taxmny,&amp;apos;&amp;apos; yjdj,
+       t3.whbl,t3.LFT,t3.LFM,t3.DJ,t3.DHY,t3.hlsj,t3.bcsj,t3.sssj,t3.dwyh
+from (
+  select a.yymm,a.djxh,a.nsrsbh,b.name nsrmc,
+         sum(a.zlhj) zlhj,sum(a.bc) bc,sum(a.hl) hl,sum(a.ss) ss,
+         sum(a.ss2l) ss2l,sum(a.tk) tk,sum(a.fxfl) fxfl,sum(a.jzydls) jzydls,sum(a.jzys) jzys       
+  from tax_stonedata a,tax_company b
+  where a.nsrsbh=b.id
+    and b.djxh in (select djxh from DJ_DJHGLGL where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) 
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+    and a.crbz=&amp;apos;2&amp;apos;
+  group by a.yymm,a.djxh,a.nsrsbh,b.name  
+) t1,(
+  select a.yymm,b.cmid nsrsbh,max(b.cmnam) nsrmc,sum(eleqty) eleqty 
+  from tax_eledata a,tax_cmpammno b
+  where a.usrid=b.ammno
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,b.cmid
+) t2,(
+  select djxh,yymm,sum(somny) somny,sum(taxmny) taxmny from tax_taxdata 
+  where yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; group by yymm,djxh
+) t4,
+(select * from tax_stone_param sp where sp.hydm=&amp;apos;[%HYDM]&amp;apos; and sp.csid=&amp;apos;[%CSID]&amp;apos;) t3
+where t1.nsrsbh=t2.nsrsbh(+) and t1.yymm=t2.yymm(+)
+  and t1.djxh=t4.djxh(+)
+  and t1.yymm=t4.yymm(+)
+order by t1.nsrsbh  
+) group by djxh,nsrsbh,nsrmc
+) tab 
+where nsrmc like &amp;apos;%[%NSRMC]%&amp;apos; 
+  and eleqty &amp;gt;=decode(&amp;apos;[%MINYDL]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%MINYDL]&amp;apos;) 
+  and nvl(sbje,0)&amp;gt;decode(&amp;apos;[%MINXSJE]&amp;apos;*10000,&amp;apos;&amp;apos;,-1,&amp;apos;[%MINXSJE]&amp;apos;*10000)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >MAIN2</C17><C18 >MAIN2</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 >MAIN2</C25><C26 ></C26><C27 >MAIN2</C27><C28 ></C28></ROW>
+<ROW num="5" ><ID >MAIN3</ID><NAME >岗石</NAME><DATDSC >select * from (
+select djxh,nsrsbh,nsrmc,
+	sum(zlhj) zlhj,sum(bc) bc,sum(hl) hl,sum(ss) ss,sum(ss2l) ss2l,
+       sum(tk) tk,sum(fxfl) fxfl,sum(jzydls) jzydls,sum(jzys) jzys,sum(eleqty) eleqty,
+       csydl,csyh,sum(dzdz) dzdz,xszje,sum(sbje) sbje,&amp;apos;&amp;apos; cyje,yjdj,
+       max(whbl) whbl,max(lft) lft,max(lfm) lfm,max(dj) dj,
+       max(dhy) dhy,max(hlsj) hlsj,max(bcsj) bcsj,max(sssj) sssj,
+       max(dwyh) dwyh
+from (  
+select t1.djxh,t1.nsrsbh,t1.nsrmc,t1.zlhj,t1.bc,t1.hl,t1.ss,t1.ss2l,
+	t1.tk,t1.fxfl,t1.jzydls,t1.jzys,
+	t2.eleqty,&amp;apos;&amp;apos; gmydl,&amp;apos;&amp;apos; dmydl,&amp;apos;&amp;apos; csydl,&amp;apos;&amp;apos; csyh,
+	/*t5.je dzdz,*/ &amp;apos;&amp;apos; dzdz,
+       &amp;apos;&amp;apos; xszje,&amp;apos;&amp;apos; gmxsje,&amp;apos;&amp;apos; dmxsje,t4.somny sbje,&amp;apos;&amp;apos; yjdj,
+       t3.whbl,t3.LFT,t3.LFM,t3.DJ,t3.DHY,t3.hlsj,t3.bcsj,t3.sssj,t3.dwyh
+from (
+  select a.yymm,a.djxh,a.nsrsbh,b.name nsrmc,
+         sum(a.zlhj) zlhj,sum(a.bc) bc,sum(a.hl) hl,sum(a.ss) ss,
+         sum(a.ss2l) ss2l,sum(a.tk) tk,sum(a.fxfl) fxfl,sum(a.jzydls) jzydls,sum(a.jzys) jzys       
+  from tax_stonedata a,tax_company b
+  where a.nsrsbh=b.id
+    and b.djxh in (select djxh from DJ_DJHGLGL where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) 
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+    and crbz=&amp;apos;2&amp;apos;
+  group by a.yymm,a.djxh,a.nsrsbh,b.name  
+) t1,(
+  select a.yymm,b.cmid nsrsbh,max(b.cmnam) nsrmc,sum(eleqty) eleqty 
+  from tax_eledata a,tax_cmpammno b
+  where a.usrid=b.ammno
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,b.cmid
+) t2,(
+  select djxh,yymm,sum(somny) somny,sum(taxmny) taxmny from tax_taxdata 
+  where yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; group by yymm,djxh
+) t4, /*(
+  select kpyf,xfsbh,sum(je) je,sum(se) se from (
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_PTFP a,DZDZ_HWXX_PTFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( --销方是石油制品批发行业的
+        select id nsrsbh from tax_company where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select nvl(shxydm,nsrsbh) nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+    union all
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_ZZSFP a,DZDZ_HWXX_ZZSFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( --销方是石油制品批发行业的
+        select nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select shxydm from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+  ) group by kpyf,xfsbh
+) t5,*/
+(select * from tax_stone_param sp where sp.hydm=&amp;apos;[%HYDM]&amp;apos; and sp.csid=&amp;apos;[%CSID]&amp;apos;) t3
+where t1.nsrsbh=t2.nsrsbh(+) and t1.yymm=t2.yymm(+)
+  --and t1.nsrsbh=t4.nsrsbh(+) 
+  and t1.djxh=t4.djxh(+)
+  and t1.yymm=t4.yymm(+)
+  /*and t1.nsrsbh=t5.xfsbh(+) and replace(t1.yymm,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)=t5.kpyf(+)*/
+order by t1.nsrsbh  
+) group by djxh,nsrsbh,nsrmc
+
+) tab 
+where nsrmc like &amp;apos;%[%NSRMC]%&amp;apos; 
+  and eleqty &amp;gt;=decode(&amp;apos;[%MINYDL]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%MINYDL]&amp;apos;) 
+  and nvl(sbje,0)&amp;gt;decode(&amp;apos;[%MINXSJE]&amp;apos;*10000,&amp;apos;&amp;apos;,-1,&amp;apos;[%MINXSJE]&amp;apos;*10000)
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >MAIN3</C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="6" ><ID >MAIN4</ID><NAME >矿企</NAME><DATDSC >select * from (
+select djxh,nsrsbh,nsrmc,
+	sum(zlhj) zlhj,sum(bc) bc,sum(hl) hl,sum(ss) ss,sum(ss2l) ss2l,
+       sum(tk) tk,sum(fxfl) fxfl,sum(jzydls) jzydls,sum(jzys) jzys,sum(eleqty) eleqty,
+       csydl,csyh,sum(dzdz) dzdz,xszje,sum(sbje) sbje,&amp;apos;&amp;apos; cyje,yjdj,
+       max(whbl) whbl,max(lft) lft,max(lfm) lfm,max(dj) dj,
+       max(dhy) dhy,max(hlsj) hlsj,max(bcsj) bcsj,max(sssj) sssj,
+       max(dwyh) dwyh
+from (  
+select t1.djxh,t1.nsrsbh,t1.nsrmc,t1.zlhj,t1.bc,t1.hl,t1.ss,t1.ss2l,
+	t1.tk,t1.fxfl,t1.jzydls,t1.jzys,
+	t2.eleqty,&amp;apos;&amp;apos; gmydl,&amp;apos;&amp;apos; dmydl,&amp;apos;&amp;apos; csydl,&amp;apos;&amp;apos; csyh,
+	/*t5.je dzdz,*/ &amp;apos;&amp;apos; dzdz,
+       &amp;apos;&amp;apos; xszje,&amp;apos;&amp;apos; gmxsje,&amp;apos;&amp;apos; dmxsje,t4.somny sbje,&amp;apos;&amp;apos; yjdj,
+       t3.whbl,t3.LFT,t3.LFM,t3.DJ,t3.DHY,t3.hlsj,t3.bcsj,t3.sssj,t3.dwyh
+from (
+  select a.yymm,a.djxh,a.nsrsbh,b.name nsrmc,
+         sum(a.zlhj) zlhj,sum(a.bc) bc,sum(a.hl) hl,sum(a.ss) ss,
+         sum(a.ss2l) ss2l,sum(a.tk) tk,sum(a.fxfl) fxfl,sum(a.jzydls) jzydls,sum(a.jzys) jzys       
+  from tax_stonedata a,tax_company b
+  where a.nsrsbh=b.id
+    and b.djxh in (select djxh from DJ_DJHGLGL where lb_dm in (select gxhhydm from tax_stone_hy where hydm=&amp;apos;[%HYDM]&amp;apos;)) 
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+    and crbz=&amp;apos;1&amp;apos;
+  group by a.yymm,a.djxh,a.nsrsbh,b.name  
+) t1,(
+  select a.yymm,b.cmid nsrsbh,max(b.cmnam) nsrmc,sum(eleqty) eleqty 
+  from tax_eledata a,tax_cmpammno b
+  where a.usrid=b.ammno
+    and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  group by a.yymm,b.cmid
+) t2,(
+  select djxh,yymm,sum(somny) somny,sum(taxmny) taxmny from tax_taxdata 
+  where yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; group by yymm,djxh
+) t4, /*(
+  select kpyf,xfsbh,sum(je) je,sum(se) se from (
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_PTFP a,DZDZ_HWXX_PTFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( --销方是石油制品批发行业的
+        select id nsrsbh from tax_company where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select nvl(shxydm,nsrsbh) nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+    union all
+    select b.kpyf,a.xfsbh,sum(nvl(b.je,0)) je,sum(nvl(b.se,0)) se
+    from DZDZ_FPXX_ZZSFP a,DZDZ_HWXX_ZZSFP b
+    where a.fpdm=b.fpdm and a.fphm=b.fphm
+      and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+      and a.xfsbh in ( --销方是石油制品批发行业的
+        select nsrsbh from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos;
+        union 
+        select shxydm from dj_nsrxx where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        )
+    group by b.kpyf,a.xfsbh
+  ) group by kpyf,xfsbh
+) t5,*/
+(select * from tax_stone_param sp where sp.hydm=&amp;apos;[%HYDM]&amp;apos; and sp.csid=&amp;apos;[%CSID]&amp;apos;) t3
+where t1.nsrsbh=t2.nsrsbh(+) and t1.yymm=t2.yymm(+)
+  --and t1.nsrsbh=t4.nsrsbh(+) 
+  and t1.djxh=t4.djxh(+)
+  and t1.yymm=t4.yymm(+)
+  /*and t1.nsrsbh=t5.xfsbh(+) and replace(t1.yymm,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)=t5.kpyf(+)*/
+order by t1.nsrsbh  
+) group by djxh,nsrsbh,nsrmc
+
+) tab 
+where nsrmc like &amp;apos;%[%NSRMC]%&amp;apos; 
+  and eleqty &amp;gt;=decode(&amp;apos;[%MINYDL]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%MINYDL]&amp;apos;) 
+  and nvl(sbje,0)&amp;gt;decode(&amp;apos;[%MINXSJE]&amp;apos;*10000,&amp;apos;&amp;apos;,-1,&amp;apos;[%MINXSJE]&amp;apos;*10000)
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >MAIN4</C26><C27 >MAIN4</C27><C28 ></C28></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

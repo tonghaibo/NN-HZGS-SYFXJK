@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >LAYIMG</MWID><NAME >图片库</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >LAYIMG.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG >6,1,8,5</DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >LAYIMGHDR</BILHDRTABLE><BILDTLTABLE >LAYIMGDTL</BILDTLTABLE><COLLIST >a.TYPID &amp;quot;分类&amp;quot;,a.TITLE &amp;quot;标题&amp;quot;,a.CRTDAT &amp;quot;创建修改时间&amp;quot;,a.DAT &amp;quot;单据日期&amp;quot;,a.CRTUSR &amp;quot;制单人&amp;quot;,a.DEFORG &amp;quot;默认组织号&amp;quot;,a.DEFIMG &amp;quot;默认图片&amp;quot;,a.IMGNOTE &amp;quot;图片描述&amp;quot;</COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL >3</IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >默认图片</NAME><VALFLD >DEFIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,3,2</C17></ROW>
+<ROW num="1" ><ID >0,2,2</ID><CELLID ></CELLID><NAME >图片描述</NAME><VALFLD >IMGNOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,2,2</C17></ROW>
+<ROW num="2" ><ID >0,2,9</ID><CELLID ></CELLID><NAME >默认组织号</NAME><VALFLD >DEFORG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,2,9</C17></ROW>
+<ROW num="3" ><ID >0,1,2</ID><CELLID ></CELLID><NAME >表单号</NAME><VALFLD >BILID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,1,2</C17></ROW>
+<ROW num="4" ><ID >0,1,4</ID><CELLID ></CELLID><NAME >标题</NAME><VALFLD >TITLE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17></ROW>
+<ROW num="5" ><ID >0,1,6</ID><CELLID ></CELLID><NAME >分类编号</NAME><VALFLD >TYPID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17></ROW>
+<ROW num="6" ><ID >0,1,9</ID><CELLID ></CELLID><NAME >帐套号</NAME><VALFLD >ACC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17></ROW>
+<ROW num="7" ><ID >0,1,10</ID><CELLID ></CELLID><NAME >系统号</NAME><VALFLD >SYT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17></ROW>
+<ROW num="8" ><ID >0,1,11</ID><CELLID ></CELLID><NAME >组织号</NAME><VALFLD >ORG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17></ROW>
+</ROWSET>
+</grdcelds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,1</ID><NAME >皮肤编号</NAME><VALFLD >SKINGUID</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C13 ></C13></ROW>
+<ROW num="1" ><ID >0,2</ID><NAME >图片地址</NAME><VALFLD >IMGURL</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C13 ></C13></ROW>
+</ROWSET>
+</grdcolds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet=0;
+var G_IMAGEMENUXML = &amp;quot;&amp;lt;item id=\&amp;quot;m_img_modify\&amp;quot; name=\&amp;quot;编辑图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_preview\&amp;quot; name=\&amp;quot;预览图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_upload\&amp;quot; name=\&amp;quot;选择本地图片上传\&amp;quot;/&amp;gt;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{	
+	_this.SetColVisible(sheet,9,-1);
+	_this.SetColVisible(sheet,10,-1);
+	_this.SetColVisible(sheet,11,-1);
+	_this.SetToButton(&amp;quot;&amp;quot;,sheet,3,7,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+	for( var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++)
+		_this.SetToButton(&amp;quot;&amp;quot;,sheet,r,7,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+		
+	if(_this.GetCellText(0,2,9)==&amp;quot;&amp;quot;){
+		_this.SetCellText(0,2,9,G_DEFORG);
+	}
+	if(_this.GetCellText(0,1,9)==&amp;quot;&amp;quot;){
+		_this.SetCellText(0,2,9,G_ACCID);
+	}
+	if(_this.GetCellText(0,1,10)==&amp;quot;&amp;quot;){
+		_this.SetCellText(0,2,9,G_SYTID);
+	}
+	if(_this.GetCellText(0,1,11)==&amp;quot;&amp;quot;){
+		_this.SetCellText(0,2,9,G_ORGID);
+	}
+	//_this.SetCellText();
+	//
+}
+
+
+
+//点击菜单项
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	var id=menuitemid;
+	//&amp;quot;&amp;lt;item id=\&amp;quot;m_img_select\&amp;quot; name=\&amp;quot;选择图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_modify\&amp;quot; name=\&amp;quot;编辑图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_preview\&amp;quot; name=\&amp;quot;预览图片\&amp;quot;/&amp;gt;&amp;quot;;
+
+	if(id==&amp;quot;m_img_modify&amp;quot;){
+		var imgurl = _this.GetCellText(sheet,row,col-5);
+		var imgguid = &amp;quot;&amp;quot;;
+		var prestr = &amp;quot;EAFormBlob.sp?guid=&amp;quot;;
+		if(imgurl.substring(0,prestr.length)==prestr){
+			imgguid = imgurl.substring(prestr.length );
+		}
+		try{
+			var bw = _this.GetCellText(sheet,1,9);
+			var bh = _this.GetCellText(sheet,1,10);
+			if(bh==&amp;quot;&amp;quot;)bh= &amp;quot;120&amp;quot;;
+			if(bw==&amp;quot;&amp;quot;)bw= &amp;quot;120&amp;quot;;
+
+			var url = &amp;quot;show.sp?grdid=ImageEdit&amp;formguid=&amp;quot;+imgguid +&amp;quot;&amp;bigimgw=&amp;quot;+bw+&amp;quot;&amp;bigimgh=&amp;quot;+bh+&amp;quot;&amp;imgw=&amp;imgh=&amp;smlimgw=&amp;smlimgh=&amp;quot;;
+			
+			var ret = window.showModalDialog(url,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+			if(ret!=undefined){
+				
+				var ss = ret.split(&amp;quot;,&amp;quot;);
+				_this.SetCellText(sheet,row,col-5,prestr+ss[0]);
+			}
+		}catch(e){}
+	}
+	//图库维护的地方不能选择web图片只能选择本地图片
+//	else if(id==&amp;quot;m_img_select&amp;quot;){
+//		var retval=window.showModalDialog(&amp;quot;iconbatch.sp?rettyp=WEBPATH&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=500pt; dialogWidth=800pt;status=no&amp;quot;); 
+//		if (retval!=&amp;quot;&amp;quot; &amp;&amp; retval!=undefined ){
+//			_this.SetCellText(sheet,row,col-5, retval );
+//		}
+//	}
+	else if(id==&amp;quot;m_img_preview&amp;quot;){
+		previewimg(_this.GetCellText(sheet,row,col-5));
+	}
+	else if(id==&amp;quot;m_img_upload&amp;quot;){//选择本地图片上传
+		var filename = _this.SelectFile(&amp;quot;&amp;quot;);
+		if (filename !=&amp;quot;&amp;quot; ) {
+			_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+			_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,filename ,1);
+			_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,&amp;quot;&amp;quot;,0);
+			_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+			_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+			_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,filename ,0);
+			var ret = _this.SendHttpRequest();
+			_this.CloseHttpRequest();
+			if(ret!=&amp;quot;&amp;quot; ) {
+				_this.SetCellText(sheet,row,col-5, &amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret);
+			}
+		}
+	}
+	else if ( id==&amp;quot;HTML编辑器&amp;quot; ) {
+		var guid=_this.GetCellText(sheet,row,3);
+		var ret = window.showModalDialog(&amp;quot;show.sp?grdid=HtmlEdit&amp;guid=&amp;quot;+guid,null,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+		if(ret!=undefined)
+		{
+			_this.SetCellText(sheet,row,3,ret);
+			_this.SetCellShowText(sheet,row,3,_this.HttpCall(&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret));
+		}
+	}
+}
+//预览图片
+function previewimg(url){
+	window.open(url);
+	//var w = window.open(&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;width:800;height:600&amp;quot;);
+	//w.document.body.innerHTML=&amp;quot;&amp;lt;img src=&amp;apos;http://www.xlsgrid.net/xlsgrid/ROOT_XLSGRID/&amp;quot;+url+&amp;quot;&amp;apos;&amp;gt;&amp;quot;;
+}
+
+
+
+//点击按钮（保存前删除空行）
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;F_run_savebutton1&amp;quot;){
+		var row1=_this.GetMainCellRangeRow1(sheet);
+		var row2=_this.GetMainCellRangeRow2(sheet);
+		for(var r=row1;r&amp;lt;=row2;r++){
+			if((_this.GetCellText(sheet,r,1)==&amp;quot;&amp;quot; || _this.GetCellText(sheet,r,1)==&amp;quot; &amp;quot;|| _this.GetCellText(sheet,r,1)==null)&amp;&amp;(_this.GetCellText(sheet,r,2)==&amp;quot;&amp;quot; || _this.GetCellText(sheet,r,2)==&amp;quot; &amp;quot;|| _this.GetCellText(sheet,r,2)==null)){
+				_this.DeleteRow(sheet,r);
+			}
+			if((_this.GetCellText(sheet,r,1)==&amp;quot;&amp;quot; || _this.GetCellText(sheet,r,1)==&amp;quot; &amp;quot;|| _this.GetCellText(sheet,r,1)==null)&amp;&amp; _this.GetCellText(sheet,r,2)!=&amp;quot;&amp;quot;){
+				alert(&amp;quot;皮肤编号必填！&amp;quot;);
+				return 1;
+			}
+		}
+	}
+}
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+//iconbatch.sp?rettyp=WEBPATH&amp;path=
+function Response()
+{
+      var path = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;path&amp;quot;),&amp;quot;xlsgrid/images/flash/icon/&amp;quot;);//&amp;quot;xmidware/flash/icon/&amp;quot;
+      var typ = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;typ&amp;quot;),&amp;quot;&amp;quot;);// 皮肤的分类
+      var issub= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;issub&amp;quot;),&amp;quot;0&amp;quot;);//是否子页面
+      var db = null;
+      var ret= &amp;quot;&amp;quot;;
+      var sql=&amp;quot;&amp;quot;;
+      var ds=&amp;quot;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+          
+
+            if(issub==&amp;quot;0&amp;quot;){
+            	ret+=&amp;quot;&amp;lt;html&amp;gt;&amp;lt;head&amp;gt;&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=gb2312\&amp;quot;&amp;gt;&amp;lt;title&amp;gt;图片资源选择&amp;lt;/title&amp;gt;&amp;lt;/head&amp;gt;&amp;lt;body&amp;gt;\n&amp;quot;;
+            	ret+=&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;\n&amp;quot;;
+		ret+=&amp;quot;A { COLOR: #FFFFFF;TEXT-DECORATION: none}\n&amp;quot;;
+		ret+=&amp;quot;A:link { COLOR: #FFFFFF;TEXT-DECORATION: none}\n&amp;quot;;
+		ret+=&amp;quot;A:visited { COLOR: #FFFFFF;TEXT-DECORATION: none}\n&amp;quot;;
+		ret+=&amp;quot;A:hover { COLOR: #FFFF00;TEXT-DECORATION: underline}\n&amp;quot;;
+		ret+=&amp;quot;TD {FONT-SIZE: 10.5pt}\n&amp;quot;;
+		ret+=&amp;quot;BODY {FONT-SIZE: 10.5pt}\n&amp;quot;;
+		ret+=&amp;quot;&amp;lt;/style&amp;gt;\n&amp;quot;;
+		ret+=&amp;quot;&amp;lt;body&amp;gt;\n&amp;quot;;
+	        ret+=&amp;quot;&amp;lt;table width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;5\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td height=30 align=right style=\&amp;quot;border-bottom: 1px solid #C0C0C0; padding-bottom: 1px\&amp;quot;  bgcolor=\&amp;quot;#666666\&amp;quot;&amp;gt;&amp;lt;font color=#FFFFFF&amp;gt;当前目录：&amp;quot;+path+&amp;quot;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td height=30 align=right style=\&amp;quot;border-bottom: 1px solid #C0C0C0; padding-bottom: 1px\&amp;quot;  bgcolor=\&amp;quot;#666666\&amp;quot;&amp;gt;&amp;lt;font color=#FFFFFF&amp;gt;&amp;quot;;
+	        sql=&amp;quot;select distinct typid typ from layimghdr&amp;quot;;
+	        ds=db.QuerySQL(sql);
+	        if(ds.getRowCount()&amp;gt;0){
+	        	if(typ==&amp;quot;&amp;quot;){
+	            		typ=ds.getStringAt(0,&amp;quot;typ&amp;quot;);
+	            	}
+	        	for(var r=0;r&amp;lt;ds.getRowCount();r++){
+	        		ret+=&amp;quot;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;LAYIMG.sp?path=xlsgrid/images/flash/icon/&amp;issub=1&amp;typ=&amp;quot;+ds.getStringAt(r,&amp;quot;typ&amp;quot;)+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;typ&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;nbsp;&amp;quot;;
+	        	}
+	        }
+	     //   ret+=&amp;quot;选择其他&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/flash/icon/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;wp8icon&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/flash/images/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;background&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/entry/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;entry&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/button/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;button&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/file/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;fileicon&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/icon/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;smlicon&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/toolbar/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;toolbar&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;frames[0].location=&amp;apos;iconbatch.sp?path=xlsgrid/images/&amp;issub=1&amp;rettyp=&amp;quot;+rettyp+&amp;quot;&amp;apos;;\&amp;quot;&amp;gt;images&amp;lt;/a&amp;gt;&amp;nbsp;&amp;quot;;    
+	       	  ret+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td colspan=2&amp;gt;&amp;lt;iframe width=100% height=100% src=\&amp;quot;LAYIMG.sp?path=&amp;quot;+path+&amp;quot;&amp;typ=&amp;quot;+typ+&amp;quot;&amp;issub=1\&amp;quot; frameborder=0&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;;
+            }
+            else {
+            	//throw new Exception(typ);
+            	var fileds = getfilelist (db,typ);
+            	ret +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+	            for ( var i=0;i&amp;lt;fileds.getRowCount();i++ ) {
+	            	if(i%8==0&amp;&amp;i!=0) 
+	            		ret+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+	            	if(i%8==0)
+	            		ret+=&amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+	            	ret +=&amp;quot;&amp;lt;td&amp;gt;&amp;lt;table&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center onmouseover=\&amp;quot;this.style.backgroundColor=&amp;apos;#DBEBFA&amp;apos;;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; onmouseout=\&amp;quot;this.style.backgroundColor=&amp;apos;#EFF7FF&amp;apos;;\&amp;quot;  onclick=\&amp;quot;javascript:window.returnValue=&amp;apos;&amp;quot;+fileds.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;;window.close();\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+fileds.getStringAt(i,&amp;quot;img&amp;quot;)+&amp;quot;\&amp;quot; border=0 width=120 height=120 /&amp;gt;&amp;lt;BR&amp;gt;&amp;quot;+fileds.getStringAt(i,&amp;quot;id&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+	            }
+	        ret+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	    }            
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+function getfilelist (db,typ){
+	var ds=&amp;quot;&amp;quot;;
+	var sql=&amp;quot;&amp;quot;;
+	sql=&amp;quot;select &amp;apos;EAImgBlob.sp?guid=&amp;apos;||guid url,typid typ,imgnote id,guid,defimg img from LAYIMGHDR where TYPID=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos;&amp;quot;;
+	ds=db.QuerySQL(sql);
+	return ds;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

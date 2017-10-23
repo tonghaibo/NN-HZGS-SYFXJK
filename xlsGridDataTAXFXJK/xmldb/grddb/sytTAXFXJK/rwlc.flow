@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1" background="xlsgrid/images/xmidwarebk.jpg">
+ <polygon id="userhand_450016" points="71,26 95,97 146,97 173,26 71,26 71,26 71,26 71,26 71,26" changeto="userhand" stroke="#000000" fill="#FFFFE8" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >风险特殊
+识别</polygon>
+ <rect id="rect_450017" x="414" y="43" width="99" height="37" round="" stroke="#000000" fill="#D2E9FF" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >任务推送</rect>
+ <rect id="rect_450018" x="406" y="145" width="0" height="-1" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >
+ </rect>
+ <polygon id="rhombus_450019" points="559,61 592,82 625,61 592,40 559,61 559,61 559,61 559,61" changeto="rhombus" stroke="#000000" fill="#E6FFF2" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >决策二包</polygon>
+ <rect id="roundrect_450020" x="685" y="41" width="72" height="41" round="15" stroke="#000000" fill="#DFEFFF" fillto="" opacity="1" stroke-dash="1" stroke-dash="1"  url="" target="_blank">导出到决策二包</rect>
+ <polygon id="userhand_450022" points="671,150 694,222 745,222 772,150 671,150 671,150 671,150 671,150 671,150" changeto="userhand" stroke="#000000" fill="#F2F2F2" fillto="" opacity="1" stroke-dash="3" stroke-dash="1" >金三系统
+决策二包
+流程处理</polygon>
+ <rect  id="rect_160816" x="680" y="279" width="82" height="41" round="15" stroke="#000000" fill="#C0E4E1" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">导入决策二包的处理结果</rect>
+ <rect id="roundrect_160817" x="545" y="170" width="94" height="30" round="15" stroke="#000000" fill="#FFDDDD" fillto="" opacity="1" stroke-dash="1" stroke-dash="1"  url="">应对处理</rect>
+ <rect  id="rect_160819" x="312" y="284" width="94" height="30" round="15" stroke="#000000" fill="#E6E6E6" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" url="">结束</rect>
+ <connector id="connector_208_160821" from="rhombus_450019" to="roundrect_450020" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_160822" from="rhombus_450019" to="roundrect_160817" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_160823" from="polygon_160818" to="rect_160819" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_160824" from="userhand_450022" to="rect_160816" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_160825" from="roundrect_450020" to="userhand_450022" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_160826" from="rect_450017" to="rhombus_450019" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_160827" from="roundrect_160817" to="polygon_160818" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_160828" from="polygon_160818" to="rect_450017" fromcp="12" tocp="23" type="208"  >
+ </connector>
+ <text id="text_160829" x="625" y="42" width="20" height="20" font-size="14"  属性="">Y</text>
+ <text  id="text_160831" x="577" y="82" width="20" height="20" font-size="14" 属性="">N</text>
+ <text id="text_160834" x="85" y="109" width="190" height="100" font-size="12" >根据发票类风险、电力风险、石材风险等其他第三方涉税风险特征识别出风险后，生成核实任务。</text>
+ <rect id="roundrect_283822" x="265" y="45" width="88" height="33" round="15" stroke="#000000" fill="#D1E9E9" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >生成核实任务</rect>
+ <connector id="connector_208_283823" from="userhand_450016" to="roundrect_283822" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_283824" from="roundrect_283822" to="rect_450017" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <text  id="text_593009" x="177" y="41" width="80" height="30" font-size="10" 属性="">风险扫描识别</text>
+ <rect id="roundrect_81411" x="553" y="280" width="79" height="39" round="15" stroke="#000000" fill="#BFFFDF" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >应对成效评价</rect>
+ <connector id="connector_208_501215" from="rect_160816" to="polygon_81412" fromcp="23" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_208_501216" from="polygon_81412" to="rect_160819" fromcp="21" tocp="23" type="208"  >
+ </connector>
+ <connector id="connector_208_501217" from="polygon_81412" to="roundrect_81411" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_208_501218" from="roundrect_81411" to="polygon_501214" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_208_501220" from="polygon_501214" to="roundrect_283822" fromcp="12" tocp="23" type="208"  >
+ </connector>
+ <text  id="text_501227" x="512" y="328" width="300" height="100" font-size="12">导入后，根据任务发布时的差异金额和已追补税款金额相比较，比较差异在设置范围内的系统自动结束任务，如果超出设定范围，则由风险应对人员做出应对成效评价，决定是否结束任务或重新再次发布任务。</text>
+ <connector id="connector_208_580815" from="roundrect_160817" to="roundrect_81411" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_580816" from="roundrect_81411" to="rect_160819" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_208_580817" from="rect_160816" to="roundrect_81411" fromcp="12" tocp="32" type="208"  >
+ </connector>
+</svg>

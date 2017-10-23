@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>REQLST</MWID><NAME>需求清单</NAME><NOTE></NOTE><FILE>REQLST.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet=0;
+//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+order = &amp;quot; order by ID&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+       setButton();
+       // 构造3个 SQL
+       // 查询客户数据表记录
+       selectSQL =  &amp;quot;select GUID,                         &amp;quot;+
+            &amp;quot;TITLEID   as 标题号            ,&amp;quot;+
+            &amp;quot;ID        as 需求编号          ,&amp;quot;+
+            &amp;quot;NAME      as \&amp;quot;名　　称\&amp;quot;              ,&amp;quot;+
+            &amp;quot;NOTE      as \&amp;quot;需求详细说明（双击打开）\&amp;quot;,&amp;quot;+
+            &amp;quot;RISK      as 风险              ,&amp;quot;+
+            &amp;quot;PRIORITY  as 优先级            ,&amp;quot;+
+            &amp;quot;WORKLOAD  as 层数          ,&amp;quot;+
+            &amp;quot;REQSTA    as \&amp;quot;状　态\&amp;quot;              ,&amp;quot;+
+            &amp;quot;REQDAT    as 需求提出日期      ,&amp;quot;+
+            &amp;quot;REQUSR    as 需求提出人        ,&amp;quot;+
+            &amp;quot;REQUSRORG as 需求提出人所属单位,&amp;quot;+
+            &amp;quot;DEALUSR   as 需求处理人        ,&amp;quot;+
+            &amp;quot;DEALDAT   as 需求处理日期      ,&amp;quot;+
+            &amp;quot;DEALNOTE  as 需求处理意见      &amp;quot;+
+            &amp;quot;from REQLST                     &amp;quot;+
+            &amp;quot;where syt=&amp;apos;&amp;quot;+sytid+&amp;quot;&amp;apos;&amp;quot;;
+       //新增数据表记录
+       insertSQL = &amp;quot;INSERT INTO REQLST( GUID     ,SYT      ,TITLEID  ,ID       ,NAME     ,&amp;quot;+
+            &amp;quot;NOTE     ,RISK     ,PRIORITY   ,&amp;quot;+
+            &amp;quot;WORKLOAD ,REQSTA   ,REQDAT   ,REQUSR   ,REQUSRORG,DEALUSR  ,DEALDAT  ,&amp;quot;+
+            &amp;quot;DEALNOTE )&amp;quot; +
+            &amp;quot;VALUES( sys_guid(),&amp;apos;&amp;quot;+sytid+&amp;quot;&amp;apos;,?,?,?,?,?,?,?,?,?,?,?,?,?,? ) &amp;quot;;
+       // 修改数据表记录
+       updateSQL = &amp;quot;UPDATE REQLST SET TITLEID  =?,ID       =?,NAME     =?,NOTE     =?,RISK     =?,PRIORITY   =?,&amp;quot;+
+           &amp;quot; WORKLOAD =?,REQSTA   =?,REQDAT   =?,REQUSR   =?,REQUSRORG=?,DEALUSR  =?,DEALDAT  =?,DEALNOTE =?,&amp;quot;+
+           &amp;quot; CRTUSR   =?,&amp;quot;+
+            &amp;quot;where guid=?&amp;quot;;
+       //删除数据表记录
+       deleteSQL = &amp;quot;delete REQLST where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       
+       
+       
+       
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_RISK&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_PRIORITY&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);       
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+       {                
+                   var loc = 7;
+                   
+                   var str = _this.GetCellText(sheet,row,loc);                
+                   _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,loc,listid1);
+                   _this.SetCellText(sheet,row,loc,str);
+                   loc=10;
+                   str = _this.GetCellText(sheet,row,loc);                
+                   _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,loc,listid2 );
+                   _this.SetCellText(sheet,row,loc,str);                   
+                   loc=11;      _this.SetToDateBox(&amp;quot;&amp;quot;,sheet,row,loc,&amp;quot;&amp;quot;);
+                   loc=15;      _this.SetToDateBox(&amp;quot;&amp;quot;,sheet,row,loc,&amp;quot;&amp;quot;);
+                   loc=16;       _this.SetAttribe(&amp;quot;CELL&amp;quot;+sheet+&amp;quot;_&amp;quot;+row+&amp;quot;_&amp;quot;+loc,_this.ATTR_CELL_READONLY,&amp;quot;1&amp;quot;);
+                   loc=6;       _this.SetCellLock(sheet,row,loc,1);
+                   
+      }
+      _this.SetColVisible(sheet,9,0);
+      _this.AddToolbarButton(&amp;quot;com_left&amp;quot;,&amp;quot;升&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,40);
+      _this.AddToolbarButton(&amp;quot;com_right&amp;quot;,&amp;quot;降&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,40);
+      _this.AddToolbarButton(&amp;quot;com_up&amp;quot;,&amp;quot;上&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,40);
+      _this.AddToolbarButton(&amp;quot;com_down&amp;quot;,&amp;quot;下&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,40);
+      
+}
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+//      if( sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==3 ){
+//            _this.SetCellText(sheet,row,3,orgid+newvalue);
+//      }
+}
+//================================================================// 
+// 函数：thisOnDblClickMainCellRangeRow
+// 说明：编辑
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/27/06 13:59:11
+// 修改日志：
+//================================================================// 
+function _thisOnDblClickMainCellRangeRow(sheet,row)
+{
+            
+}
+
+function _thisOnMouseDClick(sheet,row,col)
+{
+      if ( col ==6 || col == 16  ){
+            var str = _this.GetCellText(sheet,row,col);
+            str = &amp;quot;确认&amp;quot;;
+            var width = 800;
+            var height= 600;
+            var param = new Object();
+            param.rtf = str;
+            url = &amp;quot;ShowXlsGrid.sp?grdid=RTFEDIT&amp;quot;;
+            var ret   = window.showModalDialog( url , param, &amp;quot;dialogwidth:&amp;quot; + width + &amp;quot;px;dialogheight:&amp;quot; + height + &amp;quot;px;help: yes; resizable:yes;&amp;quot; );   
+            alert ( ret );            
+      }
+}
+//================================================================// 
+// 函数：f_dbedit_afternewrow
+// 说明：插入新行时触发，可以设置默认值
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/27/06 14:13:27
+// 修改日志：
+//================================================================// 
+function f_dbeditafternewrow(sheet,row )
+{
+      _this.SetCellText(sheet,row,10,&amp;quot;1&amp;quot; );
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

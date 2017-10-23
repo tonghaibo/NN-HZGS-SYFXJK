@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >procStat</MWID><NAME >工作流状态处理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >procStat.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//要求传入参数：
+//biltyp,actionid
+
+var usertbl = &amp;quot;V_USR&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+  _this.SetCellBkColor(0,-1,-1,255,255,255);
+  _this.SetCellText(0,3,2,biltyp);
+  _this.SetCellText(0,4,2,bilid);
+  _this.SetCellText(0,5,2,G_USRID);
+  _this.SetCellText(0,6,2,logdat);
+  _this.SetCellText(0,1,1,title);
+  _this.SetToSelectBox(&amp;quot;&amp;quot;,0,8,2,usertbl,&amp;quot;&amp;quot;);
+  _this.SetCellText(0,8,2,to_usr);
+  _this.SetToSelectBox(&amp;quot;&amp;quot;,0,9,2,usertbl,&amp;quot;&amp;quot;);
+  _this.SetCellText(0,9,2,to_rol);
+  //_this.SetToCodeEditor(&amp;quot;&amp;quot;,0,9,2,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+  _this.SetAttribe(&amp;quot;CELL_0_10_2&amp;quot;,_this.ATTR_CELL_MULTLINE,1);
+  _this.SetCellText(0,10,2,title);
+  _this.SetToButton(&amp;quot;udf_process&amp;quot;,0,12,2,&amp;quot;确定&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+  _this.SetToButton(&amp;quot;udf_cancel&amp;quot;,0,12,4,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+  for(var i=3;i&amp;lt;=6;i++)
+  {
+    _this.SetRowVisible(0,i,-1);
+  }
+}
+
+//点击选择框按钮
+function _thisOnSelectBoxButtonClicked(sheet,row,col,value,key,where)
+{
+  if(key==usertbl)
+  {
+     ret = showSelectbox(key,&amp;quot;orgid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;,0,&amp;quot;&amp;quot;);
+     if(!ret)
+       return;
+     try
+     {
+     _this.SetCellText(sheet,row,col,ret.join(&amp;quot;,&amp;quot;));
+     _this.SetCellShowText(sheet,row,col,ret.names.join(&amp;quot;,&amp;quot;));
+     }
+     catch(e)
+     {
+     _this.SetCellText(sheet,row,col,ret[0]);
+     _this.SetCellShowText(sheet,row,col,ret.value);
+     }
+     return true;
+  }
+}
+
+function cancel()
+{
+  window.close();
+}
+
+function process()
+{
+  var param = new Object();
+  param.biltyp=biltyp;
+  param.bilid =bilid;
+  param.usrid = G_USRID;
+  param.dat   = logdat;
+  param.tousr = _this.GetCellText(0,8,2);
+  param.note  = _this.GetCellText(0,10,2);
+  param.actionid = actionid;
+  param.tostat = tostat;
+  param.stat = stat;
+  param.title = title;
+  var ret = invokeOSFuncExt(&amp;quot;process&amp;quot;,param);
+  alert(&amp;quot;提交成功。&amp;quot;);
+  window.close();
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >//处理工作流
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//1. 修改单据状态
+//2. 在事务系统中为事务接收人建立事务
+function process()
+{
+  if(bilid==&amp;quot;&amp;quot;)
+    throw new Exception(&amp;quot;找不到单据。&amp;quot;);
+  pub.EAFunc.asserts(tousr!=&amp;quot;&amp;quot;,&amp;quot;请指定事务接收人。&amp;quot;);
+  var usr=web.EASession.GetLoginInfo(request);
+  //todo: tousr的org
+  var toorg=usr.getOrgid();
+  var accid=usr.getAccid();
+  var usrid=usr.getUsrid();
+  var db = new pub.EADatabase();
+  try 
+  {
+    var action=&amp;quot;&amp;quot;;
+    if(stat==1 &amp;&amp; tostat==2) action=&amp;quot;CHECK&amp;quot;;
+    if(stat==2 &amp;&amp; tostat==1) action=&amp;quot;UNCHECK&amp;quot;;
+    //1. 更新单据状态
+    if(action!=&amp;quot;&amp;quot;)
+    {
+      var eaContext = new pub.EAContext(request);
+      eaContext.setEADatabase(db);
+      var servlet = new JavaPackage(&amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+      ret=servlet.EAGridAction.doAction(action, eaContext);
+      throw new Exception(ret);
+    }
+    else
+    {
+      var sql = &amp;quot;update %s set stat=&amp;apos;%s&amp;apos; where acc=&amp;apos;%s&amp;apos; and biltyp=&amp;apos;%s&amp;apos; and bilid=&amp;apos;%s&amp;apos; and stat=&amp;apos;%s&amp;apos;&amp;quot;.
+      	format([&amp;quot;%s&amp;quot;,tostat,accid,biltyp,bilid,stat]);
+      var c=db.ExcecutSQL(sql.format([&amp;quot;bilhdr&amp;quot;]));
+      if(c&amp;lt;=0)
+        throw new Exception(&amp;quot;\n该事务已建立，请到事务系统中查询处理结果。&amp;quot;);
+      db.ExcecutSQL(sql.format([&amp;quot;bildtl&amp;quot;]));
+    }
+    //2 在事务系统中为事务接收人建立事务
+    var grd = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+    var mwname = grd.EAMidWareUtil.mwid2nameByAcc(accid,biltyp);
+    var sql = &amp;quot;select guid from trkhdr where acc=&amp;apos;%s&amp;apos; and id=&amp;apos;%s.%s&amp;apos;&amp;quot;.format([accid,biltyp,bilid]);
+    var trkguid;
+    var 事务id = biltyp+&amp;quot;.&amp;quot;+bilid;
+    var newtask = false;
+    try
+    {
+      trkguid = db.GetSQL(sql);
+    }
+    catch(e)
+    {
+      newtask = true;
+      //var inssql = &amp;quot;insert into trkhdr(project,id,title,note,syt,org,acc,stat,prio,show,crtusr,dtlusr)&amp;quot;+
+      //  &amp;quot;values(&amp;apos;BILFLW&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s[%s] %s&amp;apos;,&amp;apos;单据审批流程&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,0,1,0,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;
+      //  &amp;quot;format([事务id,mwname,biltyp,bilid,usr.getSytid(),usr.getOrgid(),accid,usrid,usrid]);
+      //db.ExcecutSQL(inssql);
+      //trkguid = db.GetSQL(sql);
+    }
+    var dtlkey = title+&amp;quot;```&amp;quot;+mwname+&amp;quot;.&amp;quot;+biltyp+&amp;quot;.&amp;quot;+bilid+&amp;quot;.&amp;quot;;
+    if(!newtask)
+    {
+      //更新原事务为已完成状态
+      //var oldkey = dtlkey+stat;
+      sql = &amp;quot;update trkdtl set style=2,tousr=&amp;apos;%s&amp;apos; where trkguid=&amp;apos;%s&amp;apos; and crtusr=&amp;apos;%s&amp;apos; and review=&amp;apos;%s&amp;apos;&amp;quot;.
+      	format([tousr,trkguid,usrid,stat]);
+      var c = db.ExcecutSQL(sql);
+      pub.EAFunc.asserts(c==1,&amp;quot;修改事务状态错误。请确认该事务是否分配给您的。&amp;quot;+sql);
+    }
+    dtlkey += tostat;
+    sql = &amp;quot;select guid from trkdtl where acc=&amp;apos;%s&amp;apos; and title=&amp;apos;%s&amp;apos; and crtusr=&amp;apos;%s&amp;apos; and crtusrorg=&amp;apos;%s&amp;apos;&amp;quot;.
+    	format([accid,dtlkey,tousr,toorg]);
+ //   sql = &amp;quot;insert into trkdtl(trkguid,pro_note,tousr,style,crtusr,crtusrorg,project,title,syt,org,acc,id,result,review)
+  //  	values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;BILFLW&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.
+  //  	format([trkguid,note,tousr,toorg,dtlkey,usr.getSytid(),usr.getOrgid(),accid,事务id,tostat]);
+  //  db.ExcecutSQL(sql);
+//    sql = &amp;quot;update trkhdr set dtlusr=&amp;apos;%s&amp;apos; where guid=&amp;apos;%s&amp;apos;&amp;quot;.format([usrid,trkguid]);
+ //   db.ExcecutSQL(sql);
+    db.Commit();
+    return 1;
+  }
+  catch(e)
+  {
+    db.Rollback();
+    throw e;
+  }
+  finally
+  {
+    db.Close();
+  }
+}
+
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  var biltyp = request.getParameter(&amp;quot;biltyp&amp;quot;);
+  var actionid = request.getParameter(&amp;quot;actionid&amp;quot;);
+  var usr=web.EASession.GetLoginInfo(request);
+  var wsds= xmldb.EAXmlDB.getActionDs(usr.getSytid(),biltyp);
+  if(wsds==null)
+    throw new Exception(&amp;quot;缺少工作流定义。&amp;quot;);
+  wsds = wsds.filterDS(&amp;quot;ID&amp;quot;,actionid);
+  var user = wsds.getStringAt(0,&amp;quot;TOUSR&amp;quot;);
+  var rol = wsds.getStringAt(0,&amp;quot;TOROL&amp;quot;);
+  bodysb.append(&amp;quot;&amp;lt;script&amp;gt;var to_usr=&amp;apos;%s&amp;apos;; var to_rol=&amp;apos;%s&amp;apos;&amp;lt;/script&amp;gt;&amp;quot;.format([user,rol]));
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >UptBillStat</ID><NAME >更改单据中间件的状态</NAME><DATDSC >update bilhdr set stat=&amp;apos;[%STAT2]&amp;apos; where bilid=&amp;apos;[%BILID]&amp;apos; and acc=&amp;apos;[%ACCID]&amp;apos; and biltyp=&amp;apos;[%BILTYP]&amp;apos;  ;
+update bildtl set stat=&amp;apos;[%STAT2]&amp;apos; where bilid=&amp;apos;[%BILID]&amp;apos; and acc=&amp;apos;[%ACCID]&amp;apos; and biltyp=&amp;apos;[%BILTYP]&amp;apos; </DATDSC><C4 >UptBillStat</C4><C5 >UptBillStat</C5></ROW>
+<ROW num="1" ><ID >UptFormStat</ID><NAME >更改表单中间件的状态</NAME><DATDSC >update [%TABLENAME] set stat=&amp;apos;[%STAT2]&amp;apos; where guid=&amp;apos;[%GUID]&amp;apos; 
+
+
+</DATDSC><C4 >UptFormStat</C4><C5 ></C5></ROW>
+<ROW num="2" ><ID >UptFormDTLStat</ID><NAME ></NAME><DATDSC >update [%TABLENAME] set stat=&amp;apos;[%STAT2]&amp;apos; where formguid=&amp;apos;[%GUID]&amp;apos; </DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

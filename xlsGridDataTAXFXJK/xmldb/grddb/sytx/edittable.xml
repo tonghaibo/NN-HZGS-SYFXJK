@@ -1,0 +1,667 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >edittable</MWID><NAME >table结构编辑</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >edittable.zxg</FILE><FIXED >2,9</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >SAVE</ID><NAME >保存</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C7 ></C7><C8 >SAVE</C8><C9 >SAVE</C9><C10 >SAVE</C10><C11 >SAVE</C11></ROW>
+<ROW num="1" ><ID >Option</ID><NAME >选项</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >Option</C11></ROW>
+<ROW num="2" ><ID >ADDROW</ID><NAME >追加行</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C7 >ADDROW</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >ADDROW</C11></ROW>
+<ROW num="3" ><ID >DELROW</ID><NAME >删除行</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >DELROW</C11></ROW>
+<ROW num="4" ><ID >GetCollist</ID><NAME >得到字段列表</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >GetCollist</C11></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >table_name</ID><NAME >表名称</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >connid</ID><NAME >数据库链接ID</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >fixcoltype</ID><NAME >要强制追加表单需要的字段</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >=HDR 保存的时候要追加头信息的列　=DTL明细信息</TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,0,3</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%table_name]</DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16></ROW>
+<ROW num="1" ><ID >0,0,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:tab,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >0,0,1</C16></ROW>
+<ROW num="2" ><ID >1,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:IDX</DSKEY><NROW >6</NROW><NCOL >3</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16></ROW>
+<ROW num="3" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >4</NROW><NCOL >13</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >0,2,0</C16></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var G_OLDTABLENAME = &amp;quot;&amp;quot;;
+var G_OLDTABLENOTE = &amp;quot;&amp;quot;;
+var G_DROPTABLE = &amp;quot;0&amp;quot;;
+var G_DSID = &amp;quot;&amp;quot;;
+var G_TABTYPE = &amp;quot;TABLE&amp;quot;;//当前处理的是视图还是表格
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	G_OLDTABLENAME = _this.GetCellText(sheet,0,3);
+	
+	try {G_DSID = connid;}catch ( e ) {}
+	try{	G_TABTYPE=tabtype;} catch ( e ) {}
+	_this.SetSheetName(0,&amp;quot;字段列表COLUMN&amp;quot;);
+	_this.SetSheetName(1,&amp;quot;索引INDEX&amp;quot;);
+	_this.SetSheetName(2,&amp;quot;SQL&amp;quot;);
+	_this.SetSheetName(3,&amp;quot;运行日志&amp;quot;);
+	_this.SetToCodeEditor(&amp;quot;&amp;quot;,2,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetToCodeEditor(&amp;quot;&amp;quot;,3,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	if ( G_TABTYPE==&amp;quot;TABLE&amp;quot; ) {
+		_sql.querytods(&amp;quot;IFEXISTTAB&amp;quot;,&amp;quot;table_name=&amp;quot;+G_OLDTABLENAME );
+		if ( _this.XMLDS_GetRowCount()&amp;gt; 0 ) {//已存在该表格
+			
+		}
+		else {
+			G_OLDTABLENAME = &amp;quot;&amp;quot;;
+			_this.SetCellText(0,0,1,&amp;quot;新表格&amp;quot; );
+		}
+		_this.ShowTabBar(1);
+		
+	
+		var nListIndexType = _this.CreateListValue();
+		_this.SetListValue(nListIndexType ,&amp;quot;NUMBER&amp;quot;,&amp;quot;数字&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;VARCHAR2&amp;quot;,&amp;quot;字符串&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;CHAR&amp;quot;,&amp;quot;CHAR字符&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;DATE&amp;quot;,&amp;quot;日期&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;CLOB&amp;quot;,&amp;quot;clob&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;BLOB&amp;quot;,&amp;quot;blob&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;LONG&amp;quot;,&amp;quot;long&amp;quot; );
+		_this.SetListValue(nListIndexType ,&amp;quot;LONG RAW&amp;quot;,&amp;quot;long raw&amp;quot; );
+		G_OLDTABLENOTE = _this.GetCellText(sheet,0,1);
+		_this.SetColVisible(0,7,0);
+		if( _this.GetCellText(0,_this.GetMainCellRangeRow1(0),0)==&amp;quot;&amp;quot; ) {	//没有找到记录
+			// 初始化
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),0,&amp;quot;GUID&amp;quot;);
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),1,&amp;quot;主键&amp;quot;);
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),2,&amp;quot;CHAR&amp;quot;);
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),3,&amp;quot;32&amp;quot;);
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),5,&amp;quot;SYS_GUID()&amp;quot;);
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),6,&amp;quot;1&amp;quot;);
+			_this.SetCellText(0,_this.GetMainCellRangeRow1(0),7,&amp;quot;1&amp;quot;);
+			G_OLDTABLENAME = &amp;quot;&amp;quot;;
+			
+		}
+		// 得到key 和唯一性索引的ID
+		for ( var row=_this.GetMainCellRangeRow1(0) ;row&amp;lt;=_this.GetMainCellRangeRow2(0);row++ ) {
+			if ( _this.GetCellText(0,row,8)!= &amp;quot;&amp;quot; ) 
+				_this.SetCellText(0,0,9,_this.GetCellText(0,row,8) );
+			if ( _this.GetCellText(0,row,10)!= &amp;quot;&amp;quot; ) 
+				_this.SetCellText(0,0,11,_this.GetCellText(0,row,10) );
+			_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,2,nListIndexType );
+		}
+		_this.SetColVisible(0,8,0);
+		_this.SetColVisible(0,10,0);
+		_this.SetColVisible(0,12,0);
+			
+		GenSQL ();		
+	}
+	else {
+		_sql.querytods(&amp;quot;IFEXISTVIEW&amp;quot;,&amp;quot;table_name=&amp;quot;+G_OLDTABLENAME );
+		if ( _this.XMLDS_GetRowCount()&amp;gt;= 0 ) {//已存在该视图
+			
+			var code = &amp;quot;&amp;quot;;
+		            try {
+		            	  
+		                  code = invokeOSFunc(&amp;quot;GetViewCode&amp;quot;,&amp;quot;tablename=&amp;quot;+G_OLDTABLENAME+&amp;quot;&amp;dsid=&amp;quot; + G_DSID) ;       
+				
+		            }
+		            catch ( e ) {
+		                  alert ( &amp;quot;error=&amp;quot;+e );
+		            }
+			_this.SetCellText(2,-1,-1,&amp;quot;CREATE OR REPLACE VIEW &amp;quot;+ G_OLDTABLENAME +&amp;quot; AS &amp;quot;+code );
+		}
+		else {
+			G_OLDTABLENAME = &amp;quot;&amp;quot;;
+			_this.SetCellText(2,-1,-1,&amp;quot;CREATE OR REPLACE VIEW &amp;quot;+ G_OLDTABLENAME +&amp;quot; AS &amp;quot;);
+
+		}
+		_this.ShowTabBar(0);
+		_this.SetCurrentSheet(2);
+
+	}
+	
+	for (var r = _this.GetMainCellRangeRow1(0); r &amp;lt;= _this.GetMainCellRangeRow2(0); r ++) {
+		var str = _this.GetCellText(0,r,1);
+		if ( str.indexOf(&amp;quot;~&amp;quot;) != -1 ) {
+			var imp = str.split(&amp;quot;~&amp;quot;)[2];
+			var chk = str.split(&amp;quot;~&amp;quot;)[1];
+			var defin = str.split(&amp;quot;~&amp;quot;)[3];
+			_this.SetCellText(0,r,13,defin);
+			_this.SetCellText(0,r,14,chk);
+			_this.SetCellText(0,r,15,imp);
+		}
+	}
+	
+	_this.AutoFixScreenWidth();
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	
+	if ( sheet == 0 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) &amp;&amp; col &amp;gt; 12){
+		var imp = _this.GetCellText(sheet,row,15);
+		var chk = _this.GetCellText(sheet,row,14);
+		var defin = _this.GetCellText(sheet,row,13);
+		var old = _this.GetCellText(sheet,row,1);
+		var stat= _this.GetCellText(sheet,row,7);
+		
+
+		_this.SetCellText( sheet,row,7,&amp;quot;modify&amp;quot;);
+		if (old.indexOf(&amp;quot;~&amp;quot;) != -1) {
+			var seq = old.split(&amp;quot;~&amp;quot;)[0];
+			var str = seq+&amp;quot;~&amp;quot;+chk+&amp;quot;~&amp;quot;+imp+&amp;quot;~&amp;quot;+defin;
+			_this.SetCellText(sheet,row,1,str);
+		} else {
+			var str = old+&amp;quot;~&amp;quot;+chk+&amp;quot;~&amp;quot;+imp+&amp;quot;~&amp;quot;+defin;
+			_this.SetCellText(sheet,row,1,str);
+		}
+	}
+	
+	if ( sheet == 0 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) &amp;&amp; col&amp;lt;7 ) {
+		var stat= _this.GetCellText(sheet,row,7);
+		if ( stat == &amp;quot;-&amp;quot; ) {
+			_this.SetCellText( sheet,row,7,&amp;quot;modify&amp;quot;); 	// 修改
+		}
+		else if ( stat == &amp;quot;&amp;quot; ) {
+			_this.SetCellText( sheet,row,7,&amp;quot;add&amp;quot;);	// 新增 	
+		}
+
+	}
+	else if ( sheet == 0 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) &amp;&amp; col==9 ) {
+		// 修改了主键和索引
+		if ( _this.GetCellText(0,0,col) == &amp;quot;&amp;quot; ) {
+			_this.SetCellText(0,0,col, _this.GetCellText(sheet,0,3) +&amp;quot;_PRIMARY_KEY&amp;quot; );
+		}
+		_this.SetCellText(0,1,col,&amp;quot;[主键]&amp;quot;);
+
+	}	
+	else if ( sheet == 0 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) &amp;&amp; col==11 ) {
+		// 修改了主键和索引
+		if ( _this.GetCellText(0,0,col) == &amp;quot;&amp;quot; ) {
+			_this.SetCellText(0,0,col, _this.GetCellText(sheet,0,3) +&amp;quot;_UNIQUE_KEY&amp;quot; );
+		}
+		_this.SetCellText(0,1,col,&amp;quot;[唯一键]&amp;quot;);
+		
+	}	
+	//_this.SetCellColor(sheet,row,col,255,255,222);
+	GenSQL();
+}
+// 构造
+function GenSQL ( ) 
+{
+	if ( G_TABTYPE==&amp;quot;TABLE&amp;quot; ) {
+
+		var sheet = 0 ;
+		var sql = &amp;quot;&amp;quot;;
+		var tableid = _this.GetCellText(sheet,0,3) ;
+	
+		if ( G_DROPTABLE==&amp;quot;1&amp;quot; || G_OLDTABLENAME != tableid )  {
+			// Create table 
+			sql+= &amp;quot;drop table &amp;quot;+ tableid + &amp;quot; cascade constraints;\n&amp;quot; ;
+			sql+= &amp;quot;create table &amp;quot;+ tableid + &amp;quot; ( \n&amp;quot; ;
+	
+			for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+				if ( _this.GetCellText(sheet,row,0)!= &amp;quot;&amp;quot; ) {
+					if ( row!=_this.GetMainCellRangeRow1(sheet) )
+						sql += &amp;quot;,\n&amp;quot;;	
+					sql+= &amp;quot;\t&amp;quot; + _this.GetCellText(sheet,row,0)  + &amp;quot; &amp;quot;+ _this.GetCellText(sheet,row,2) ;
+					if ( _this.GetCellText(sheet,row,2)!=&amp;quot;DATE&amp;quot; &amp;&amp; _this.GetCellText(sheet,row,3) != &amp;quot;&amp;quot; ) {// 长度
+						sql+= &amp;quot;(&amp;quot;+_this.GetCellText(sheet,row,3) ;
+						
+						if ( _this.GetCellText(sheet,row,2)!=&amp;quot;CHAR&amp;quot;&amp;&amp;_this.GetCellText(sheet,row,2)!=&amp;quot;VARCHAR&amp;quot;&amp;&amp; _this.GetCellText(sheet,row,2)!=&amp;quot;VARCHAR2&amp;quot; 
+							&amp;&amp; _this.GetCellText(sheet,row,4) != &amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(sheet,row,4) != &amp;quot;0&amp;quot;) {
+							sql+= &amp;quot;,&amp;quot;+_this.GetCellText(sheet,row,4) ;
+						}
+						sql+= &amp;quot;)&amp;quot;;
+					}
+					
+					if ( _this.GetCellText(sheet,row,5) != &amp;quot;&amp;quot; ) // default
+						sql+= &amp;quot; default &amp;quot; + _this.GetCellText(sheet,row,5);
+					if ( _this.GetCellText(sheet,row,6) == &amp;quot;1&amp;quot; ) // not null
+						sql+= &amp;quot; not null &amp;quot;;
+				}
+				
+			}
+			sql += &amp;quot; );\n &amp;quot; ;
+			for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+				if ( _this.GetCellText(sheet,row,0)!= &amp;quot;&amp;quot; ) {
+					sql += &amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.&amp;quot;+_this.GetCellText(sheet,row,0)+&amp;quot; is &amp;apos;&amp;quot;+_this.GetCellText(sheet,row,1)+&amp;quot;&amp;apos; ;\n&amp;quot; ;
+	 			}
+			}
+			_this.SetCellText(2,-1,-1,sql);
+			
+		}
+		else {	// alter table 
+	
+			for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+				if ( _this.GetCellText(sheet,row,0)!= &amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(sheet,row,7)!=&amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(sheet,row,7)!=&amp;quot;-&amp;quot;) {
+	
+					sql+= &amp;quot;alter table &amp;quot; +tableid+&amp;quot; &amp;quot;+_this.GetCellText(sheet,row,7)+&amp;quot; &amp;quot;+ _this.GetCellText(sheet,row,0)  + &amp;quot; &amp;quot;+ _this.GetCellText(sheet,row,2) ;
+					if ( _this.GetCellText(sheet,row,2)!=&amp;quot;DATE&amp;quot; &amp;&amp; _this.GetCellText(sheet,row,3) != &amp;quot;&amp;quot; ) {// 长度
+						sql+= &amp;quot;(&amp;quot;+_this.GetCellText(sheet,row,3) ;
+						if ( _this.GetCellText(sheet,row,2)!=&amp;quot;CHAR&amp;quot;&amp;&amp;_this.GetCellText(sheet,row,2)!=&amp;quot;VARCHAR&amp;quot;&amp;&amp; _this.GetCellText(sheet,row,2)!=&amp;quot;VARCHAR2&amp;quot; 
+							&amp;&amp; _this.GetCellText(sheet,row,4) != &amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(sheet,row,4) != &amp;quot;0&amp;quot;) {
+							sql+= &amp;quot;,&amp;quot;+_this.GetCellText(sheet,row,4) ;
+						}
+						sql+= &amp;quot;)&amp;quot;;
+					}
+					if ( _this.GetCellText(sheet,row,5) != &amp;quot;&amp;quot; ) // default
+						sql+= &amp;quot; default &amp;quot; + _this.GetCellText(sheet,row,5);
+					if ( _this.GetCellText(sheet,row,6)!=  _this.GetCellText(sheet,row,12)  ){
+						if ( _this.GetCellText(sheet,row,6) == &amp;quot;1&amp;quot; ) // not null
+							sql+= &amp;quot; not null &amp;quot;;
+						else sql+= &amp;quot; null &amp;quot;;
+					}
+					sql+=&amp;quot; ;\n&amp;quot;;
+					sql += &amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.&amp;quot;+_this.GetCellText(sheet,row,0)+&amp;quot; is &amp;apos;&amp;quot;+_this.GetCellText(sheet,row,1)+&amp;quot;&amp;apos; ;\n&amp;quot; ;
+					
+				}
+				
+			}
+	
+			
+			
+		}
+		
+		if ( _this.GetCellText(0,1,9)== &amp;quot;[主键]&amp;quot; ) { //说明被修改过了 
+			var sList = &amp;quot;&amp;quot;;
+			var n = 0;
+			for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+				if ( _this.GetCellText(sheet,row,0)!= &amp;quot;&amp;quot;  &amp;&amp; _this.GetCellText(sheet,row,9)==&amp;quot;1&amp;quot;) {
+					if ( n&amp;gt; 0 ) 
+						sList +=&amp;quot;,&amp;quot;;
+					sList +=_this.GetCellText(sheet,row,0);
+					n ++;
+				}
+			}
+			if ( sList.length &amp;gt; 0 ) {
+				sql+= &amp;quot;alter table &amp;quot;+tableid+&amp;quot;  drop constraint &amp;quot;+_this.GetCellText(0,0,9)+&amp;quot; cascade; \n&amp;quot;;
+				sql+= &amp;quot;alter table &amp;quot;+tableid+&amp;quot;  add constraint &amp;quot;+_this.GetCellText(0,0,9)+&amp;quot; primary key (&amp;quot;+sList+&amp;quot;);\n&amp;quot;;
+			}		
+		}
+		if ( _this.GetCellText(0,1,11)== &amp;quot;[唯一键]&amp;quot; ) { //说明被修改过了 
+			var sList = &amp;quot;&amp;quot;;
+			var n = 0;
+			for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+				if ( _this.GetCellText(sheet,row,0)!= &amp;quot;&amp;quot;  &amp;&amp; _this.GetCellText(sheet,row,11)==&amp;quot;1&amp;quot;) {
+					if ( n&amp;gt; 0 ) 
+						sList +=&amp;quot;,&amp;quot;;
+					sList +=_this.GetCellText(sheet,row,0);
+					n ++;
+				}
+			}
+			if ( sList.length &amp;gt; 0 ) {
+				sql+= &amp;quot;drop index &amp;quot;+_this.GetCellText(0,0,11)+&amp;quot; ; \n&amp;quot;;
+				sql+= &amp;quot;create unique index  &amp;quot;+_this.GetCellText(0,0,11)+&amp;quot; on &amp;quot;+tableid+&amp;quot;(&amp;quot;+sList+&amp;quot;);\n&amp;quot;;
+			}		
+		}	
+		if (G_OLDTABLENOTE != _this.GetCellText(sheet,0,1) &amp;&amp; _this.GetCellText(sheet,0,1)!=&amp;quot;新表格&amp;quot; ){
+			sql+= &amp;quot; comment on table &amp;quot;+tableid +&amp;quot; is &amp;apos;&amp;quot;+_this.GetCellText(sheet,0,1) +&amp;quot;&amp;apos; ;\n&amp;quot; ;
+		}
+		_this.SetCellText(2,-1,-1,sql);
+	}
+}
+// 检查数据是否合法
+function CheckIt()
+{
+	var ret = 1;
+	var sheet = 0 ;
+	for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+		var coltyp =  _this.GetCellText(sheet,row,2 );
+		var collen = _this.GetCellText(sheet,row,3 );
+
+		if ( ( coltyp == &amp;quot;NUMBER&amp;quot; ||coltyp == &amp;quot;VARCHAR2&amp;quot;||coltyp == &amp;quot;CHAR&amp;quot;  ) &amp;&amp; (collen == &amp;quot;&amp;quot;||collen==&amp;quot;0&amp;quot;) ) {
+			alert ( &amp;quot;第&amp;quot;+(row-_this.GetMainCellRangeRow1(sheet)+1) +&amp;quot;行,长度不能为空&amp;quot; );
+			return 0;
+		}
+
+	}
+	return ret;	
+}
+
+//undefined
+function SAVE()
+{
+      var tableid = _this.GetCellText(sheet,0,3);
+      var param = new Object();
+      var sheet = 0;
+      if ( CheckIt() ==0 ) return;
+      param.typ = &amp;quot;SQL&amp;quot;;
+      param.runsql = _this.GetCellText(2, -1,-1);
+      param.buttontype = &amp;quot;bat&amp;quot;;
+      param.sqlid=&amp;quot;SQLINTPUT&amp;quot;;
+      param.dsid=connid;
+
+      try {param.tableid = tableid;} catch(e) {param.tableid = table_name;}
+      param.besytid = G_SYTID;
+      param.tabletype = G_TABTYPE;
+      ret = invokeOSFuncExt(&amp;quot;Run&amp;quot;,param ) ;   
+      _this.SetCellText(3,-1,-1,ret+&amp;quot;\n&amp;quot;+_this.GetCellText(3,-1,-1) ) ;  
+      if( ret.substring(0,6)==&amp;quot;ERROR:&amp;quot; ) {
+      	alert (  &amp;quot;运行结束！具体运行结果请查看页【运行日志】&amp;quot;);
+      	_this.SetCurrentSheet(3);  
+      } 
+      else {
+      	alert ( ret );
+      	// 恢复数据
+     	for ( var row=_this.GetMainCellRangeRow1(sheet) ;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++ ) {
+     		_this.SetCellText(sheet,row,12,_this.GetCellText(sheet,row,12) );
+     		if ( _this.GetCellText(sheet,row,7)!= &amp;quot;&amp;quot; ) 
+	     		_this.SetCellText(sheet,row,7,&amp;quot;-&amp;quot; );
+	     		
+	}
+	_this.SetCellText(0,1,9,&amp;quot;主键&amp;quot; );
+	_this.SetCellText(0,1,11,&amp;quot;唯一键&amp;quot; );
+
+	G_OLDTABLENAME = tableid;
+	G_OLDTABLENOTE = _this.GetCellText(sheet,0,1);
+      }	
+      //_this.GetCellText(sheet,row,12)=  _this.GetCellText(sheet,row,12);
+      var crtflg = &amp;quot;&amp;quot;;
+      try{ crtflg=fixcoltype;   }catch ( e ) {}
+
+      	
+      if ( crtflg == &amp;quot;HDR&amp;quot; ) {	//=HDR 保存的时候要追加头信息的列　=DTL明细信息
+      	
+      	sql =  &amp;quot;alter table &amp;quot; +tableid+&amp;quot; add guid char(32) default sys_guid() not null ; &amp;quot;+
+		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.guid is &amp;apos;内部唯一编号&amp;apos; ;&amp;quot; ;
+      	 
+	if ( ifbill!= &amp;quot;0&amp;quot; &amp;&amp; ifbill!=&amp;quot;&amp;quot; ) { // 如果是单据型     	
+      		sql+=&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add bilid varchar2(20) default &amp;apos;初始化单号&amp;apos; not null  ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add crtdat date default sysdate not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add dat date default sysdate not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add crtusr varchar2(20) default &amp;apos;xlsgrid&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add stat char(1) default &amp;apos;1&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add acc varchar2(20) default &amp;apos;&amp;quot;+G_ACCID+&amp;quot;&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add org varchar2(20) default &amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add syt varchar2(20) default &amp;apos;&amp;quot;+G_SYTID+&amp;quot;&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add chkusr varchar2(20)  ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add chkusrnam varchar2(20)  ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add chkdat date   ; &amp;quot;+
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.bilid is &amp;apos;表单号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.crtdat is &amp;apos;创建修改时间&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.dat is &amp;apos;单据日期&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.crtusr is &amp;apos;制单人&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.chkusr is &amp;apos;审核人编号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.chkusrnam is &amp;apos;审核人&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.chkdat is &amp;apos;审核日期&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.stat is &amp;apos;状态&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.acc is &amp;apos;帐套号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.syt is &amp;apos;系统号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.org is &amp;apos;组织号&amp;apos; ;&amp;quot; ;
+	}
+
+
+	param.runsql = sql;
+	ret = invokeOSFuncExt(&amp;quot;Run&amp;quot;,param ) ;  
+	//alert ( &amp;quot;由于是单据型表头，自动追加guid bilid crtdat crtusr stat acc org syt dat chkdat chkusr chkusrnam 字段&amp;quot; );
+      }
+      else if ( crtflg == &amp;quot;DTL&amp;quot; ) {
+      	sql =  &amp;quot;alter table &amp;quot; +tableid+&amp;quot; add guid char(32) default sys_guid() not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add seqid int ; &amp;quot;+
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.seqid is &amp;apos;明细顺序号&amp;apos; ;&amp;quot; +
+		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.guid is &amp;apos;内部唯一编号&amp;apos; ;&amp;quot; +
+		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add formguid char(32) default sys_guid() not null ; &amp;quot;+
+		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.formguid is &amp;apos;参考头信息唯一编号&amp;apos; ;&amp;quot; ;
+      	if (  ifbill!= &amp;quot;0&amp;quot; &amp;&amp; ifbill!=&amp;quot;&amp;quot;  ) { // 如果是单据型     	
+      		sql+=     		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add formguid char(32)  ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add bilid varchar2(20)  default &amp;apos;初始化单号&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add crtdat date default sysdate not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add dat date default sysdate not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add crtusr varchar2(20)  default &amp;apos;xlsgrid&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add stat char(1) default &amp;apos;1&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add acc varchar2(20) default &amp;apos;&amp;quot;+G_ACCID+&amp;quot;&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add org varchar2(20) default &amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; not null ; &amp;quot;+
+      		&amp;quot;alter table &amp;quot; +tableid+&amp;quot; add syt varchar2(20) default &amp;apos;&amp;quot;+G_SYTID+&amp;quot;&amp;apos; not null ; &amp;quot;+
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.formguid is &amp;apos;参考头信息唯一编号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.bilid is &amp;apos;表单号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.crtdat is &amp;apos;创建修改时间&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.dat is &amp;apos;单据日期&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.crtusr is &amp;apos;制单人&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.stat is &amp;apos;状态&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.acc is &amp;apos;帐套号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.syt is &amp;apos;系统号&amp;apos; ;&amp;quot; +
+      		&amp;quot; comment on column &amp;quot;+tableid+&amp;quot;.org is &amp;apos;组织号&amp;apos; ;&amp;quot; ;
+      	}
+	param.runsql = sql;
+      		ret = invokeOSFuncExt(&amp;quot;Run&amp;quot;,param ) ;  
+		//alert ( &amp;quot;由于是单据型表体，自动追加formguid bilid crtdat crtusr stat acc org syt 字段&amp;quot;);
+      		
+      		//_this.SetCellText(3,-1,-1,ret+&amp;quot;\n&amp;quot;+_this.GetCellText(3,-1,-1) ) ;        		
+      }      
+}
+
+
+//undefined
+function Option()
+{
+	if ( prompt ( &amp;quot;是否强制重新建表？如果是，请输入1\n注意：该操作会删除表格的所有数据，一定要小心！&amp;quot;,G_DROPTABLE  ) == 1 ){
+		 G_DROPTABLE = &amp;quot;1&amp;quot;; 
+		 GenSQL();
+	}
+}
+
+//最后一个输入焦点按回车
+function _thisOnLastEditFocus(row,col)
+{
+	_this.AppendRow(0,_this.GetRowCount(0)-1 );  
+}
+
+//undefined
+function DELROW()
+{
+  	var sheet = _this.GetCurrentSheet();
+	var row = _this.GetCurrentRow(sheet);
+
+	if ( sheet == 0 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) ) {
+		var n = row-_this.GetMainCellRangeRow1(sheet)+1;
+		if ( confirm( &amp;quot;删除第&amp;quot;+n+&amp;quot;行，是否继续?&amp;quot; )== 1 ) 
+			_this.DeleteRow(sheet,row );
+	}
+
+}
+//
+////undefined
+function ADDROW()
+{
+	var sheet = _this.GetCurrentSheet();
+	var row = _this.GetCurrentRow(sheet);
+
+	if ( sheet == 0 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) ) {
+		_this.AppendRow(0,row );
+	}
+}
+
+//得到字段列表
+function GetCollist()
+{
+	var str = &amp;quot;1. 字段列表是：用于查询的SELECT 语句，或insert into xx()的子句\r\n====================================================\r\n&amp;quot;;
+	for( var i=2;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( i != 2 ) {
+			str += &amp;quot;,&amp;quot;;
+		}
+		str += _this.GetCellText( 0,i,0);	
+	}
+	str+= &amp;quot;\r\n\r\n2. 带注释字段列表，用于查询或报表中间件的Select语句\r\n====================================================\r\n&amp;quot;;
+	for( var i=2;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( i != 2 ) {
+			str += &amp;quot;,&amp;quot;;
+		}
+		str += _this.GetCellText( 0,i,0)+&amp;quot; \&amp;quot;&amp;quot;+_this.GetCellText( 0,i,1)+&amp;quot;\&amp;quot;&amp;quot;;	
+	}
+	
+	str+= &amp;quot;\r\n\r\n2. 注释列表\r\n====================================================\r\n&amp;quot;;
+	for( var i=2;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( i != 2 ) {
+			str += &amp;quot;,&amp;quot;;
+		}
+		str += _this.GetCellText( 0,i,1);	
+	}
+
+	str+= &amp;quot;\r\n\r\n转日期，用于从一个表插入到本表，把下面字符复制到insert into .. select 的后面\r\n====================================================\r\n&amp;quot;;
+
+	for( var i=2;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( i != 2 ) {
+			str += &amp;quot;,&amp;quot;;
+		}
+		if (_this.GetCellText(0,i,2)==&amp;quot;DATE&amp;quot; )  
+			str += &amp;quot;TO_DATE(&amp;quot;+_this.GetCellText( 0,i,0)+&amp;quot;,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;;	
+		else 			str += _this.GetCellText( 0,i,0);	
+
+	}
+	str+= &amp;quot;\r\n\r\n日期转字符，用于查询的Select语句\r\n====================================================\r\n&amp;quot;;
+	for( var i=2;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( i != 2 ) {
+			str += &amp;quot;,&amp;quot;;
+		}
+		if (_this.GetCellText(0,i,2)==&amp;quot;DATE&amp;quot; )  
+			str += &amp;quot;TO_CHAR(&amp;quot;+_this.GetCellText( 0,i,0)+&amp;quot;,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;;	
+		else 			str += _this.GetCellText( 0,i,0);	
+
+	}
+	str+= &amp;quot;\r\n\r\n从ds取数，用于把 DS的数据插入到表中，可以复制到插入语句的VALUE()中间\r\n====================================================\r\n&amp;quot;;
+
+	for( var i=2;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( i != 2 ) {
+			str += &amp;quot;,&amp;quot;;
+		}
+		if (_this.GetCellText(0,i,2)==&amp;quot;DATE&amp;quot; )  
+			str += &amp;quot;TO_DATE(&amp;apos;\&amp;quot;+ds.getStringDef(row,\&amp;quot;&amp;quot;+_this.GetCellText( 0,i,0)+&amp;quot;\&amp;quot;,\&amp;quot;\&amp;quot;)+\&amp;quot;&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;quot;;	
+		else 			str += &amp;quot;&amp;apos;\&amp;quot;+ds.getStringDef(row,\&amp;quot;&amp;quot;+_this.GetCellText( 0,i,0)+&amp;quot;\&amp;quot;,\&amp;quot;\&amp;quot;)+\&amp;quot;&amp;apos;&amp;quot;;	
+
+	}
+	_this.SetRedraw(0);
+	_this.SetCellText(3,-1,-1,str );
+	_this.SetRedraw(1);
+	_this.SetCurrentSheet(3);
+
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+
+//在服务端OS中引用其他中间件的服务端脚本
+function Run() 
+{
+	
+	//说明：x_SQLINPUT是指x系统SQLINPUT中间件
+	var parent = new x_SQLINPUT();
+	var ret = parent.Run();
+	//记录表所属系统
+	
+	try {
+		tableLog(tableid,besytid,tabletype);
+		
+	} 
+	catch(e) {
+		//return e.toString();
+	}
+
+	return ret;
+}
+
+//记录表所属系统
+function tableLog(tableid,besytid,tabletype)
+{
+	var db = null;
+	try {
+		db = new pubpack.EADatabase();
+		var sql = &amp;quot;select * from user_objects where object_name=upper(&amp;apos;&amp;quot;+tableid+&amp;quot;&amp;apos;) and object_type=&amp;apos;&amp;quot;+tabletype+&amp;quot;&amp;apos;&amp;quot;;
+		var cnt = db.GetSQLRowCount(sql);
+		if (cnt &amp;gt; 0) {
+			sql = &amp;quot;update sysxdbinfo set sytid=&amp;apos;&amp;quot;+besytid+&amp;quot;&amp;apos; where objid=&amp;apos;&amp;quot;+tableid+&amp;quot;&amp;apos; and typ=&amp;apos;&amp;quot;+tabletype+&amp;quot;&amp;apos;&amp;quot;;
+			var ret = db.ExcecutSQL(sql);
+			if (ret == 0) {
+				sql = &amp;quot;insert into sysxdbinfo(sytid,objid,typ)values(&amp;apos;&amp;quot;+besytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+tableid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+tabletype+&amp;quot;&amp;apos;)&amp;quot;;
+				db.ExcecutSQL(sql);
+			}
+			db.Commit();
+		}
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//================================================================// 
+// 函数：GetViewCode
+// 说明：得到视图的代码
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/02/06 15:57:54
+// 修改日志：
+//================================================================// 
+function GetViewCode()
+{
+	var db = null;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)  dsid
+		var ds=db.QuerySQL( &amp;quot;select TEXT from user_views where view_name=UPPER(&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;)&amp;quot; );
+		if ( ds.getRowCount()&amp;gt; 0 ) 
+	              return ds.getStringAt(0,&amp;quot;TEXT&amp;quot;);
+	        else return &amp;quot; &amp;quot; ;
+
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot; &amp;quot;;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select a.COLUMN_NAME COLUMN_NAME,b.COMMENTS COMMENTS,a.DATA_TYPE DATA_TYPE,
+NVL(a.DATA_PRECISION,a.DATA_LENGTH),a.DATA_SCALE,DATA_DEFAULT ,
+decode(a.NULLABLE,&amp;apos;Y&amp;apos;,&amp;apos;0&amp;apos;,&amp;apos;1&amp;apos;) NULLABLE,&amp;apos;-&amp;apos; action ,
+c.constraint_name,decode(c.column_name,NULL,0,1) ifkey,
+d.index_name,decode(d.column_name,NULL,0,1) ifunqidx ,
+decode(a.NULLABLE,&amp;apos;Y&amp;apos;,&amp;apos;0&amp;apos;,&amp;apos;1&amp;apos;) NULLABLE0
+from user_tab_columns a,user_col_comments b ,
+	(select a.constraint_name,a.column_name from user_cons_columns a,USER_CONSTRAINTS b 
+	where a.constraint_name=b.constraint_name and b.table_name=upper(&amp;apos;[%table_name]&amp;apos;) 
+	and b.status=&amp;apos;ENABLED&amp;apos; and b.constraint_type=&amp;apos;P&amp;apos;) c,
+	(select a.index_name,a.column_name from user_ind_columns a,USER_INDEXES b 
+	where a.index_name=b.index_name and b.table_name=upper(&amp;apos;[%table_name]&amp;apos;)  
+	and b.UNIQUENESS=&amp;apos;UNIQUE&amp;apos; /*and a.index_name not in( select index_name from USER_CONSTRAINTS 
+		where table_name=upper(&amp;apos;[%table_name]&amp;apos;) and status=&amp;apos;ENABLED&amp;apos; and constraint_type=&amp;apos;P&amp;apos; ) */
+	) d
+	
+where a.Table_Name=b.Table_Name(+) and a.column_name=b.column_name(+) 
+and a.column_name=c.column_name(+)
+and a.column_name=d.column_name(+)
+
+and b.table_name=UPPER(&amp;apos;[%table_name]&amp;apos;) ORDER BY a.COLUMN_ID</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 ></C7></ROW>
+<ROW num="1" ><ID >tab</ID><NAME ></NAME><DATDSC >select COMMENTS
+  from user_tab_comments where table_name =UPPER(&amp;apos;[%table_name]&amp;apos;)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="2" ><ID >IDX</ID><NAME ></NAME><DATDSC >select index_name,index_type,&amp;apos;仅作查询&amp;apos; note from USER_INDEXES where table_name = upper(&amp;apos;[%table_name]&amp;apos;) 
+--and index_type=&amp;apos;NORMAL&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="3" ><ID >IFEXISTTAB</ID><NAME >是否存在某个table</NAME><DATDSC >select table_name from user_tables where table_name=UPPER(&amp;apos;[%table_name]&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >IFEXISTTAB</C7></ROW>
+<ROW num="4" ><ID >IFEXISTVIEW</ID><NAME >是否存在该视图</NAME><DATDSC >select view_name from user_views where view_name=UPPER(&amp;apos;[%table_name]&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >EXPRW2JS</MWID><NAME >导出风险信息到决策二包</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >EXPRW2JS.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >expFile</ID><NAME >导出文件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >expNote</C10></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >rwids</ID><NAME >任务ID</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_2</C13><C14 >RWLX</C14></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >2</NROW><NCOL >10</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	var xxsrcList = _this.CreateListValue();
+//	_this.SetListValue(xxsrcList,&amp;quot;人民来信&amp;quot;,&amp;quot;人民来信&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;协查案件&amp;quot;,&amp;quot;协查案件&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;应对案件&amp;quot;,&amp;quot;应对案件&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;政府部门&amp;quot;,&amp;quot;政府部门&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;媒体&amp;quot;,&amp;quot;媒体&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;网络&amp;quot;,&amp;quot;网络&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;报刊杂志&amp;quot;,&amp;quot;报刊杂志&amp;quot;);
+//	_this.SetListValue(xxsrcList,&amp;quot;其他&amp;quot;,&amp;quot;其他&amp;quot;);
+	
+	var pch = getPCH();
+	_this.SetCellText(0,0,2,pch);
+	
+	//_this.AutoFixColWidth(0,200);
+	_this.AutoFixScreenWidth();
+	
+	_this.SetToolbarString(&amp;quot;提示：导出文件后请用Excel打开，然后另存为“Excel 97-2003 工作簿”格式后，再导入到决策二包系统.&amp;quot;);
+
+}
+
+//导出文件
+function expFile()
+{
+	//alert(&amp;quot;导出操作提示：点击左边的【开始】按钮，选择使用Excel打开！&amp;quot;);
+	var path = browseFolder();
+	if (path == null) {
+		alert(&amp;quot;不能获取该位置信息，请使用其它目录！&amp;quot;);
+		return;
+	}
+	var filename = _this.GetCellText(0,0,2)+&amp;quot;.xls&amp;quot;;
+	var ret = _this.SaveXmlExcelFile(path + filename,-1);
+	var rst = setPCH();
+	if (rst == 1) {
+		alert(&amp;quot;导出成功！\n文件保存位置：&amp;quot;+ret);
+	}
+	else {
+		alert(&amp;quot;更新任务批次号失败，请重新导出！\n&amp;quot;+rst);
+	}
+}
+
+function getPCH()
+{
+	var pch = _this.invokeOSFunc(&amp;quot;getRWPCH&amp;quot;,&amp;quot;rwids=&amp;quot;+rwids+&amp;quot;&amp;swjg=&amp;quot;+G_DEPTID);
+	return pch;	
+}
+
+function setPCH()
+{
+	var pch = _this.GetCellText(0,0,2);
+	var ret = _this.invokeOSFunc(&amp;quot;setRWPCH&amp;quot;,&amp;quot;rwids=&amp;quot;+rwids+&amp;quot;&amp;rwpch=&amp;quot;+pch);	
+	return ret;
+}
+
+function browseFolder()
+{
+	try {
+		var Message = &amp;quot;\u8bf7\u9009\u62e9\u6587\u4ef6\u5939&amp;quot;; //选择框提示信息
+		var Shell = new ActiveXObject(&amp;quot;Shell.Application&amp;quot;);
+		var Folder = Shell.BrowseForFolder(0, Message, 64, 17); //起始目录为：我的电脑
+		//var Folder = Shell.BrowseForFolder(0, Message, 0); //起始目录为：我的桌面
+		if (Folder != null) {
+			Folder = Folder.items();
+			Folder = Folder.item();
+			Folder = Folder.Path;
+			if (Folder.charAt(Folder.length - 1) != &amp;quot;\\&amp;quot;) {
+				Folder = Folder + &amp;quot;\\&amp;quot;;
+			}
+			return Folder;
+		}
+		return null;
+	}
+	catch (e) {
+		return e.toString();
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//替换SQL参数
+function replaceParam(mwobj,request,sql)
+{
+	var rwids = request.getParameter(&amp;quot;rwids&amp;quot;);
+	rwids  = pub.EAFunc.SQLIN(rwids);
+	sql = pub.EAFunc.Replace(sql,&amp;quot;[%RWIDS]&amp;quot;,&amp;quot; and a.bilid in (&amp;quot;+rwids+&amp;quot;)&amp;quot;);
+	return sql;
+}
+
+function getRWPCH()
+{
+	//return &amp;quot;17HZSJ001_FKPT&amp;quot;;
+	
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select nvl(max(pch),&amp;apos;-1&amp;apos;) pch from tax_trkhdr where bilid in (&amp;quot;+pub.EAFunc.SQLIN(rwids)+&amp;quot;)&amp;quot;;
+		var tmppch = db.GetSQL(sql);
+		if (tmppch != &amp;quot;-1&amp;quot;) return tmppch;
+		var pch = &amp;quot;&amp;quot;;	
+		sql = &amp;quot;select to_char(sysdate,&amp;apos;yy&amp;apos;)||&amp;apos;HZ&amp;apos;
+			       ||decode(substr(&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;,0,7),&amp;apos;1451100&amp;apos;,&amp;apos;SJ&amp;apos;,&amp;apos;1451101&amp;apos;,&amp;apos;PG&amp;apos;,&amp;apos;1451102&amp;apos;,&amp;apos;BB&amp;apos;,&amp;apos;1451121&amp;apos;,&amp;apos;ZP&amp;apos;,&amp;apos;1451122&amp;apos;,&amp;apos;ZS&amp;apos;,&amp;apos;1451123&amp;apos;,&amp;apos;FC&amp;apos;,&amp;apos;&amp;apos;)
+			       ||to_char(max(substr(pch,7,3))+1,&amp;apos;FM000&amp;apos;) 
+			       ||&amp;apos;_FKPT&amp;apos; pch
+			from tax_trkhdr 
+			where to_char(crtdat,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;) and swjg_dm like substr(&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;,0,7)||&amp;apos;%&amp;apos;
+			  and pch is not null&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if (ds.getRowCount() &amp;gt; 0) {
+			pch = ds.getStringAt(0,&amp;quot;PCH&amp;quot;);
+		}
+		return pch;
+		
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	
+}
+
+function setRWPCH()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+
+		var sql = &amp;quot;update tax_trkhdr set pch=&amp;apos;&amp;quot;+rwpch+&amp;quot;&amp;apos;,stat=&amp;apos;4&amp;apos; where bilid in (&amp;quot;+pub.EAFunc.SQLIN(rwids)+&amp;quot;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		return 1;
+		
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select a.cmid nsrsbh,
+       a.note,
+       &amp;apos;应对案件&amp;apos; xxsrc,
+       to_char(dat,&amp;apos;yyyy-mm-dd&amp;apos;) xxcjrq,
+       crtusr||&amp;apos;(&amp;apos;||crtusrnam||&amp;apos;)&amp;apos; xxcjry,
+       a.fxdj,
+        substr(nvl(a.yymm1,to_char(sysdate,&amp;apos;yyyy-mm&amp;apos;)),0,7)||&amp;apos;-01&amp;apos; dat1,
+       to_char(last_day(to_date(substr(nvl(a.yymm2,to_char(sysdate,&amp;apos;yyyy-mm&amp;apos;)),0,7),&amp;apos;yyyy-mm&amp;apos;)),&amp;apos;yyyy-mm-dd&amp;apos;) dat2,
+       dj.djxh
+from tax_trkhdr a,v_tax_rwlx b,v_tax_rwfxlx c,dj_nsrxx dj
+where a.typ=b.id(+) and a.subtyp=c.id(+)
+  and (a.cmid=dj.nsrsbh or a.cmid=dj.shxydm)
+  --and a.stat=&amp;apos;1&amp;apos;
+  [%RWIDS]
+) t  </DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

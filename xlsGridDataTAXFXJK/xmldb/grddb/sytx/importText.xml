@@ -1,0 +1,138 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >importText</MWID><NAME >导文本示例</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >importText.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//点击按钮       客户端
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	
+	if ( id== &amp;quot;数据导入&amp;quot; ) {
+		var val = &amp;quot;&amp;quot;;
+		var fn = _this.GetCellText(0,3,1);
+		if(fn != &amp;quot;&amp;quot;) {
+			val = _this.LoadTextFile(fn);
+		}
+
+		if ( val == &amp;quot;&amp;quot; ) {
+	        	alert(&amp;apos;请选择导入文件！&amp;apos;);
+	        	return;
+		}
+		try{
+		var param = new Object();
+		param.txt = val;
+		param.sbh = G_ORGID;
+//		alert(G_ORGID);
+		param.zth = G_ACCID.replace(G_ORGID,&amp;quot;&amp;quot;);
+		param.org = G_ORGID;
+		param.acc = G_ACCID;
+		param.jsfs = &amp;quot;&amp;quot;;//_this.GetCellText(sheet_param,1,6);
+		}
+		catch(e){
+			alert(e.toString());
+		}
+		var ret = invokeOSFuncExt(&amp;quot;importText&amp;quot;,param);
+		alert(ret);	
+	
+	}
+}
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,1);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb = new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var web = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+
+
+function importText()
+{
+	if(txt == null || txt == &amp;quot;&amp;quot;) return &amp;quot;&amp;quot;;
+	var db = null;
+	var ps = null;
+  	var sr = null;
+	var br = null;
+	var sql = &amp;quot;&amp;quot;;  
+	var row = 0;
+
+	try {
+		var usr = web.EASession.GetLoginInfo(request); //获取操作用户信息
+		var acc = usr.getAccid();
+		var username = usr.getUsrnam();	
+		
+		db = new pub.EADatabase();
+		sql=&amp;quot;insert into cw_jk_rjzb(sbh,zth,lsh,yy,mm,dd,sxh,czyxm,pch,zy,kmbh,lxbh,dwbh,dwmc,je,jsfs,qcbz,fkbz,dybz,xz,jefx,czxh,yefx,OLD_PCH,ORG,ACC)
+		values (&amp;apos;&amp;quot;+sbh+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+zth+&amp;quot;&amp;apos;,seq_rjz_lsh.nextval,?,?,?,0,&amp;apos;&amp;quot;+username+&amp;quot;&amp;apos;,0,?,(&amp;apos;J&amp;apos;||seq_dwbh_lsh.nextval),&amp;apos;87&amp;apos;,?,?,?,&amp;apos;&amp;quot;+jsfs+&amp;quot;&amp;apos;,0,0,0,1,&amp;apos;借&amp;apos;,seq_jkczxh.nextval,0,0,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;) &amp;quot;;
+		
+		ps = db.prepareStatement(sql); //初始化
+		
+		var sr = new java.io.StringReader(txt);
+		var br = new java.io.BufferedReader(sr);
+		var line = &amp;quot;&amp;quot;;
+		
+		line=br.readLine();
+		
+		while( (line=br.readLine()) != null) { //读取文本行记录
+			row++;
+
+			if(line == &amp;quot;&amp;quot;) continue;
+//			line = String.valueOf(line);
+//			var str = line.split(&amp;quot; &amp;quot;); //分隔行记录 处理
+
+//			sql = &amp;quot;select substrb(&amp;apos;&amp;quot;+line+&amp;quot;&amp;apos;,1,4) yy,trim(substrb(&amp;apos;&amp;quot;+line+&amp;quot;&amp;apos;,58,100)) dwmc from dual&amp;quot;;
+//			var ds = db.QuerySQL(sql);
+			
+//			var dwmc = ds.getStringAt(0,&amp;quot;dwmc&amp;quot;);
+			var yy = pub.EAFunc.Replace(line.substring(0,4),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			var mm = pub.EAFunc.Replace(line.substring(4,6),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			var dd = pub.EAFunc.Replace(line.substring(6,8),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			var zy = pub.EAFunc.Replace(line.substring(278),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			var dwbh = pub.EAFunc.Replace(line.substring(47,57),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			var dwmc = pub.EAFunc.Replace(line.substring(57,157),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			var je = pub.EAFunc.Replace(line.substring(270,273),&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+			
+			return yy +&amp;quot;,&amp;quot;+mm + &amp;quot;,&amp;quot;+dd + &amp;quot;,&amp;quot;+zy+ &amp;quot;,&amp;quot;+dwbh+&amp;quot;,&amp;quot;+dwmc+&amp;quot;,&amp;quot;+je;
+			
+			
+			
+    			ps.setString(1,yy.trim());
+    			ps.setString(2,mm.trim());
+    			ps.setString(3,dd.trim());
+    			ps.setString(4,zy.trim());
+    			ps.setString(5,dwbh.trim());
+    			ps.setString(6,dwmc.trim());
+    			ps.setString(7,je.trim());
+    			ps.execute(); //执行SQL语句
+
+		}
+		db.Commit();
+		return &amp;quot;导入成功！&amp;quot;;
+		
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	
+	
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

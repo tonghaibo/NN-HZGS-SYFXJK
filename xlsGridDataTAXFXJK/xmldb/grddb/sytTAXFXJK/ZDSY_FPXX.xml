@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDSY_FPXX</MWID><NAME >发票信息</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDSY_FPXX.zxg</FILE><SCENE ></SCENE><FIXED >2,1</FIXED><CATTYP >重点税源管理</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DJXH</ID><NAME >登记序号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >YM1</ID><NAME >起始年月</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >YM2</ID><NAME >截止年月</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.AutoFixScreenWidth();	
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	setTimeout(&amp;quot;loadData()&amp;quot;,100);
+}
+
+function loadData() 
+{
+	_this.SetCellText(0,0,1,&amp;quot;发票信息  正在查询...&amp;quot;);
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;YM1=&amp;quot;+YM1+&amp;quot;&amp;YM2=&amp;quot;+YM2+&amp;quot;&amp;DJXH=&amp;quot;+DJXH);
+	_this.SetXmlDS(0,2,1,3,11,xml);
+	
+	_this.SetCellText(0,0,1,&amp;quot;发票信息&amp;quot;);
+	_this.AutoFixScreenWidth();	
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--发票信息
+select rownum,fpzljc,MCZGGPSL,MYZGGPSL,DFFPZGKPXE,YXQQ,YXQZ,fpsl,fpjcfs,yjfs,yjje
+from (
+  select dj.nsrsbh,dj.nsrmc,dj.djxh,
+         pzdj.fpzl_dm, --&amp;quot;发票种类代码&amp;quot;
+         (select fpzljc from DM_FP_FPZL where fpzl_dm=pzdj.fpzl_dm) fpzljc,
+         MCZGGPSL,     --&amp;quot;每月最高购票数量&amp;quot;
+         MYZGGPSL,     --&amp;quot;每次最高购票数量&amp;quot;
+         DFFPZGKPXE,   -- &amp;quot;单份发票最高开票限额&amp;quot;
+         DFFPZGKPXE_DM,-- &amp;quot;单份发票最高开票限额代码&amp;quot;
+         to_char(YXQQ,&amp;apos;yyyy-mm-dd&amp;apos;) YXQQ, --&amp;quot;有效期起&amp;quot;
+         to_char(YXQZ,&amp;apos;yyyy-mm-dd&amp;apos;) YXQZ, --&amp;quot;有效期止&amp;quot;
+         fpsl,         --&amp;quot;最近一次购票数量&amp;quot;
+         dj.lrrq ,
+         fpjcfs        --&amp;quot;结存份数&amp;quot;
+  from dj_nsrxx dj,( 
+    select CPZGSL,MCZGGPSL,MYZGGPSL, FPZL_DM,DJXH, YXBZ, DFFPZGKPXE, DFFPZGKPXE_DM,YXQZ, YXQQ  
+    from FP_PZHDXX
+    where yxbz=&amp;apos;Y&amp;apos;
+    ) pzdj,
+  (--取不同发票种类的最近一次购票时间和数量
+    select djxh,fpzl_dm,fpsl,lrrq from (
+    SELECT djxh,fpzl_dm,fp_dm,fpsl,fpqshm,fpzzhm,lrrq,ROW_NUMBER()OVER (PARTITION BY djxh,fpzl_dm ORDER BY lrrq DESC ) RN
+    from (
+      select a.djxh,b.fpzl_dm,b.fp_dm,b.fpsl,b.fpqshm,b.fpzzhm,b.lrrq
+      FROM FP_LY a,FP_LY_MX b
+      where trim(a.fplyuuid)=b.fplyuuid
+    ) )where RN=1
+  )zjgp,
+  (--纳税人发票结存
+    select djxh,fpzl_dm,sum(fs) fpjcfs from (
+      select to_char(djxh)djxh,NSRJCUUID,fpzl_dm,fs,FPQSHM,FPZZHM,
+      FPZT_DM,lrrq ,xgrq 
+      from FP_NSRFPJC
+    )group by djxh,fpzl_dm
+  ) fpjc 
+  where dj.djxh=pzdj.djxh
+  and pzdj.djxh=zjgp.djxh(+)
+  and pzdj.fpzl_dm=zjgp.fpzl_dm(+)
+  and pzdj.djxh=fpjc.djxh(+)
+  and pzdj.fpzl_dm=fpjc.fpzl_dm(+)
+  and dj.djxh=10114511000045519030
+) t1,
+(--购票总量
+  select a.djxh,b.fpzl_dm,sum(b.fpsl) gpsl
+  FROM FP_LY a,FP_LY_MX b 
+  where trim(a.fplyuuid)=b.fplyuuid
+  and to_char(b.lrrq,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;[%YM1]&amp;apos;
+  and to_char(b.lrrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  and a.djxh=[%DJXH]
+  group by a.djxh,b.fpzl_dm
+) d,
+(--发票验旧
+  SELECT zb.djxh,
+       MX.FPZL_DM,
+       sum(MX.FS) yjfs,
+       sum(MX.KPJE) yjje
+  FROM FP_YJJCYQK ZB, FP_YJJCYQK_MX MX
+  WHERE ZB.FPCYUUID = MX.FPCYUUID
+   AND MX.ZFBZ_1 = &amp;apos;N&amp;apos;
+   AND to_char(ZB.CYRQ,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;[%YM1]&amp;apos;
+   AND to_char(ZB.CYRQ,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+   AND ZB.CYSWJG_DM like&amp;apos;14511%&amp;apos;
+   and zb.djxh=[%DJXH]
+   group by zb.djxh, MX.FPZL_DM
+) f
+where t1.djxh=d.djxh(+)
+  and t1.fpzl_dm=d.fpzl_dm(+)
+  and t1.djxh=f.djxh(+)
+  and t1.fpzl_dm=f.fpzl_dm(+)</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

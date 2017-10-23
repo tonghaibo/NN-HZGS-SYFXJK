@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >WG_URLCONF</MWID><NAME >电子订单URL配置</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_URLCONF.zxg</FILE><SCENE ></SCENE><FIXED >2,2</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >INSERT</ID><NAME >新增</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >INSERT</C10></ROW>
+<ROW num="1" ><ID >SAVE</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10></ROW>
+</ROWSET>
+</grdbtnds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:Main</DSKEY><NROW >4</NROW><NCOL >11</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(sheet,&amp;quot;V&amp;quot;,&amp;quot;70%&amp;quot;); 
+//	_this.SetColVisible(sheet,0,-1);
+//	_this.SetColVisible(sheet,1,-1);
+//	_this.SetColVisible(sheet+1,0,-1);		
+//	_this.SetColVisible(sheet+1,1,-1); 
+	_this.SetCellBkColor(sheet,-1,-1,255,255,255);
+	_this.SetCellBkColor(sheet+1,-1,-1,255,255,255);
+
+	for (var r = _this.GetMainCellRangeRow1(sheet);r&amp;lt;_this.GetMainCellRangeRow2(sheet);r++)
+	{
+		var guid = _this.GetCellText(sheet,r,1);
+		if (guid != &amp;quot;&amp;quot;)
+			_this.SetToButton(&amp;quot;G_DEL&amp;quot;,sheet,r,11,&amp;quot;查询&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1);
+	}	
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	var guid = &amp;quot;&amp;quot;;
+	var ka = &amp;quot;&amp;quot;;
+	var uri = &amp;quot;&amp;quot;;
+	if ( row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet) &amp;&amp; 
+	     col &amp;gt;= _this.GetMainCellRangeCol1(sheet)+3 &amp;&amp; col &amp;lt; _this.GetMainCellRangeCol2(sheet))
+	{
+		guid = _this.GetCellText(sheet,row,1);
+		ka = _this.GetCellText(sheet,row,2);
+		uri = _this.GetCellText(sheet,row,col);
+		var xml = _sql.query(&amp;quot;SUB&amp;quot;,&amp;quot;GUID=&amp;quot;+guid+&amp;quot;&amp;KA=&amp;quot;+ka+&amp;quot;&amp;URI=&amp;quot;+uri);
+		_sql.querytods(&amp;quot;SUB&amp;quot;,&amp;quot;GUID=&amp;quot;+guid+&amp;quot;&amp;KA=&amp;quot;+ka+&amp;quot;&amp;URI=&amp;quot;+uri);
+		_this.LoadZXGFile(zxgRoot +&amp;quot;WG_PARAMSCONF.zxg&amp;quot;,-1,1);
+		if (_this.XMLDS_GetRowCount() == 0)
+		{
+			_this.SetCellText(sheet+1,1,3,_this.GetCellText(sheet,row,col));
+			_this.SetCellText(sheet+1,1,2,_this.GetCellText(sheet,row,2));
+		}
+		_this.SetXmlDS(sheet+1,1,0,3,6,xml);
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	var guid = _this.GetCellText(sheet,row,1);
+	if (guid != &amp;quot;&amp;quot;)
+		_this.SetCellText(sheet,row,0,&amp;apos;U&amp;apos;);
+	else{
+		_this.SetCellText(sheet,row,0,&amp;apos;I&amp;apos;);
+	}
+	var flag = _this.GetCellText(sheet,row,0);		
+	if (flag == &amp;apos;I&amp;apos;)
+	{
+		_this.SetCellText(sheet+1,1,3,_this.GetCellText(sheet,row,col));
+		_this.SetCellText(sheet+1,1,0,&amp;apos;I&amp;apos;);	
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if ( id == &amp;quot;userBtn_INSERT&amp;quot;)
+	{
+		var rowNo = _this.AppendRow(sheet,_this.GetMainCellRangeRow2(sheet));
+		_this.SetCellText(sheet,rowNo,0,&amp;quot;I&amp;quot;);
+	}  
+	if (id == &amp;quot;userBtn_SAVE&amp;quot;)
+	{
+		var xml1 = _this.GetXml(sheet,_this.GetMainCellRangeRow1(sheet),_this.GetMainCellRangeCol1(sheet),
+					      _this.GetMainCellRangeRow2(sheet),_this.GetMainCellRangeCol2(sheet)-1);
+		var xml2 = _this.GetXml(sheet+1,_this.GetMainCellRangeRow1(sheet+1),_this.GetMainCellRangeCol1(sheet+1),
+					      _this.GetMainCellRangeRow2(sheet+1),_this.GetMainCellRangeCol2(sheet+1));
+		var params = new Object();
+		params.xml1 = xml1;
+		params.xml2 = xml2;	
+		invokeOSFuncExt(&amp;quot;Save&amp;quot;,params);						      
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+function Save()
+{
+	var db = null;
+	var ds1 = null;
+	var ds2 = null;
+	var sql = &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		throw new Exception(xml1);
+		ds1 = new pubpack.EAXmlDS(xml1);
+		ds2 = new pubpack.EAXmlDS(xml2);
+		for (var r = 0;r&amp;lt; ds1.getRowCount();r++)
+		{
+			var flag = ds1.getStringAt(r,&amp;quot;FLAG&amp;quot;);
+			var guid = ds1.getStringAt(r,&amp;quot;GUID&amp;quot;);
+			if (flag.equals(&amp;quot;I&amp;quot;))
+			{
+				sql = &amp;quot; insert into WG_CONF(ka,uri1,uri2,uri3,uri4,uri5,uri6,uri7,uri8)
+					values(&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;KA&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI1&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI2&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI3&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI4&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI5&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI6&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI7&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI8&amp;quot;)+&amp;quot;&amp;apos;)
+				      &amp;quot;;
+				db.ExcecutSQL(sql);					
+			}
+			if (flag.euqals(&amp;quot;U&amp;quot;))
+			{
+				sql = &amp;quot;update WG_CONF SET KA=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;KA&amp;quot;)+&amp;quot;&amp;apos;,URI1=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI1&amp;quot;)+&amp;quot;&amp;apos;,URI2=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI2&amp;quot;)+&amp;quot;&amp;apos;,URI3=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI3&amp;quot;)+&amp;quot;&amp;apos;,URI4=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI4&amp;quot;)+&amp;quot;&amp;apos;,URI5=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI5&amp;quot;)+&amp;quot;&amp;apos;,URI6=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI6&amp;quot;)+&amp;quot;&amp;apos;,URI7=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI7&amp;quot;)+&amp;quot;&amp;apos;,URI8=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI8&amp;quot;)+&amp;quot;&amp;apos; 
+					where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;
+				      &amp;quot;;
+				db.ExcecutSQL(sql);				      
+			}
+			if (flag.euqals(&amp;quot;D&amp;quot;))
+			{
+				sql = &amp;quot;delete from WG_CONF where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);				
+				sql = &amp;quot;delete from WG_CONF_EXT where ka=&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;KA&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);				
+			}
+			sql = &amp;quot; delete from WG_CONF_EXT where uri not in (&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI1&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI2&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI3&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI4&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI5&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI6&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI7&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(r,&amp;quot;URI8&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+
+		}
+		
+		for (var j = 0;j&amp;lt;ds2.getRowCount();j++)
+		{
+			var flag = ds2.getStringAt(j,&amp;quot;FLAG&amp;quot;);
+			var guid = ds2.getStringAt(j,&amp;quot;GUID&amp;quot;);
+			if (flag.equals(&amp;quot;U&amp;quot;))
+			{
+				sql = &amp;quot;update WG_CONF_EXT set ka=&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;KA&amp;quot;)+&amp;quot;&amp;apos;,URI=&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;URI&amp;quot;)+&amp;quot;&amp;apos;,PARAMS=&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;PARAMS&amp;quot;)+&amp;quot;&amp;apos;,CODE=&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;CODE&amp;quot;)+&amp;quot;&amp;apos;,METHOD=&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;METHOD&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);
+			}
+			if (flag.equals(&amp;quot;I&amp;quot;))
+			{
+				sql = &amp;quot;insert into WG_CONF_EXT(ka,uri,params,code,method) values(&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;KA&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;URI&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;PARAMS&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;CODE&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ ds2.getStringAt(j,&amp;quot;METHOD&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;;
+				db.ExcecutSQL(sql);
+			}
+		}
+		
+		
+		db.Commit();
+	}catch(e)
+	{
+		db.Rollback();
+		throw new Exception(e);
+	}
+	
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Main</ID><NAME ></NAME><DATDSC >select &amp;apos;S&amp;apos; flag,guid,ka,uri1,uri2,uri3,uri4,uri5,uri6,uri7,uri8 from WG_CONF</DATDSC><C4 >Main</C4></ROW>
+<ROW num="1" ><ID >SUB</ID><NAME ></NAME><DATDSC >select &amp;apos;S&amp;apos; flag,guid,ka,uri,params,code,method
+  from WG_CONF_EXT
+ where guid=&amp;apos;[%GUID]&amp;apos;
+   and ka = &amp;apos;[%KA]&amp;apos;
+   and uri = &amp;apos;[%URI]&amp;apos;</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,460 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_MAINFRAM</MWID><NAME >云医院主页</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_MAINFRAM.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+//
+// 
+//
+function GetBody(){
+
+var html=&amp;quot;
+
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;空中医院&amp;lt;/title&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;Content-type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot; /&amp;gt;
+    &amp;lt;META HTTP-EQUIV=\&amp;quot;Pragma\&amp;quot; CONTENT=\&amp;quot;no-cache\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot; /&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/ss.css\&amp;quot; /&amp;gt;
+	&amp;lt;link href=\&amp;quot;sytx/js/chis/css/cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+     &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;sytx/js/chis/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot; &amp;gt;
+	.copyright {
+	padding: 8px;
+	text-align: center;
+	font-size: 14px;
+	color:#B2B2B2;
+	}
+	&amp;lt;/style&amp;gt;
+
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery-1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+$(document).ready(function(){
+
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeIn()
+	},function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeOut()
+	});
+	
+	$dragBln = false;
+	
+	$(\&amp;quot;.main_image\&amp;quot;).touchSlider({
+		flexible : true,
+		speed : 200,
+		btn_prev : $(\&amp;quot;#btn_prev\&amp;quot;),
+		btn_next : $(\&amp;quot;#btn_next\&amp;quot;),
+		paging : $(\&amp;quot;.flicking_con a\&amp;quot;),
+		counter : function (e){
+			$(\&amp;quot;.flicking_con a\&amp;quot;).removeClass(\&amp;quot;on\&amp;quot;).eq(e.current-1).addClass(\&amp;quot;on\&amp;quot;);
+		}
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;mousedown\&amp;quot;, function() {
+		$dragBln = false;
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;dragstart\&amp;quot;, function() {
+		$dragBln = true;
+	});
+	
+	$(\&amp;quot;.main_image a\&amp;quot;).click(function(){
+		if($dragBln) {
+			return false;
+		}
+	});
+	
+	timer = setInterval(function(){
+		$(\&amp;quot;#btn_next\&amp;quot;).click();
+	}, 5000);
+	
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		clearInterval(timer);
+	},function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		},5000);
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;touchstart\&amp;quot;,function(){
+		clearInterval(timer);
+	}).bind(\&amp;quot;touchend\&amp;quot;, function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		}, 5000);
+	});
+	
+});
+&amp;lt;/script&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+&amp;lt;script type=text/javascript&amp;gt;
+function clicul(id){
+	var li=document.getElementById(id);
+	if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+		li.style.display=&amp;apos;block&amp;apos;;
+	}
+	else{
+	 	li.style.display=&amp;apos;none&amp;apos;;
+	}
+
+}
+
+&amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt;
+&amp;lt;body &amp;gt; 
+    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+        &amp;lt;header&amp;gt;
+            &amp;lt;h1&amp;gt;空中医院&amp;lt;/h1&amp;gt;
+        &amp;lt;/header&amp;gt;
+
+        &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+             &amp;lt;!--Initial List of items--&amp;gt;
+            &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;空中医院\&amp;quot; id=\&amp;quot;list\&amp;quot; data-selected=\&amp;quot;true\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;
+			&amp;lt;div class=\&amp;quot;main_visual\&amp;quot; id=\&amp;quot;test\&amp;quot; style=\&amp;quot;margin-left:0;margin-right:0\&amp;quot;&amp;gt;
+					&amp;lt;div class=\&amp;quot;flicking_con\&amp;quot;&amp;gt;
+						&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;1&amp;lt;/a&amp;gt;
+						&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;2&amp;lt;/a&amp;gt;
+						&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;3&amp;lt;/a&amp;gt;
+						&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;4&amp;lt;/a&amp;gt;
+					&amp;lt;/div&amp;gt;
+					&amp;lt;div class=\&amp;quot;main_image\&amp;quot;&amp;gt;
+						&amp;lt;ul&amp;gt;
+							&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg//3.jpg\&amp;quot; style=\&amp;quot;width:100%;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+							&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/4.jpg\&amp;quot; style=\&amp;quot;width:100%;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+							&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/1.jpg\&amp;quot; style=\&amp;quot;width:100%;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+							&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/2.jpg\&amp;quot; style=\&amp;quot;width:100%;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+						&amp;lt;/ul&amp;gt;
+						&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_prev\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+						&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_next\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+					&amp;lt;/div&amp;gt;
+				&amp;lt;/div&amp;gt;
+
+
+				&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=MYROOM&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span &amp;gt;进入虚拟场景&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;就诊向导、医院场景&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=CHARTWE&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;预诊&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;预检人员协助您进行&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+				
+				&amp;lt;!--&amp;lt;li&amp;gt;--&amp;gt;
+					&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;  height=100% cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;
+					&amp;lt;table id=\&amp;quot;PAGE_MAIN_HAPP_Tool\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;  height=10% id=\&amp;quot;TABLE_MAIN\&amp;quot; cellspacing=\&amp;quot;7\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;  bgcolor=\&amp;quot;#EEEEEE\&amp;quot;&amp;gt;
+					&amp;lt;tr &amp;gt;
+						&amp;lt;td width=50% onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SJNK&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;\&amp;quot;&amp;gt;
+							&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; width=50 width=\&amp;quot;120\&amp;quot;&amp;gt;&amp;lt;img width=50px height=50px src=\&amp;quot;sytx/chisimg/icon1.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;神经内科&amp;lt;br&amp;gt;&amp;lt;font size=2 color=#666666&amp;gt;5位医生当班&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+						&amp;lt;/td&amp;gt;
+						&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SJNK&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;\&amp;quot; &amp;gt;
+							&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; width=50 width=\&amp;quot;159\&amp;quot;&amp;gt;&amp;lt;img width=50px height=50px src=\&amp;quot;sytx/chisimg/icon2.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;神经外科&amp;lt;br&amp;gt;&amp;lt;font size=2 color=#666666&amp;gt;3位医生当班&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+						&amp;lt;/td&amp;gt;
+					&amp;lt;/tr&amp;gt;
+					&amp;lt;tr &amp;gt;
+						&amp;lt;td width=50%  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SJNK&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;center\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;\&amp;quot;&amp;gt;
+							&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; width=50 width=\&amp;quot;120\&amp;quot;&amp;gt;&amp;lt;img width=50px height=50px src=\&amp;quot;sytx/chisimg/icon3.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;感染科&amp;lt;br&amp;gt;&amp;lt;font size=2 color=#666666&amp;gt;3位医生当班&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+						&amp;lt;/td&amp;gt;
+						&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SJNK&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;\&amp;quot;&amp;gt;
+							&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; width=50 width=\&amp;quot;158\&amp;quot;&amp;gt;&amp;lt;img width=50px height=50px src=\&amp;quot;sytx/chisimg/icon4.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;呼吸内科&amp;lt;br&amp;gt;&amp;lt;font size=2 color=#666666&amp;gt;3位医生当班&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+
+						&amp;lt;/td&amp;gt;
+						
+					&amp;lt;/tr&amp;gt;
+					&amp;lt;tr &amp;gt;
+						&amp;lt;td width=50%  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SJNK&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;\&amp;quot;&amp;gt;
+							&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; width=50 width=\&amp;quot;158\&amp;quot;&amp;gt;&amp;lt;img width=50px height=50px src=\&amp;quot;sytx/chisimg/icon4.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;呼吸内科&amp;lt;br&amp;gt;&amp;lt;font size=2 color=#666666&amp;gt;3位医生当班&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+
+						&amp;lt;/td&amp;gt;
+						&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SJNK&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;\&amp;quot;&amp;gt;
+							&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot; bgcolor=\&amp;quot;#FFFFFF\&amp;quot; width=50 width=\&amp;quot;121\&amp;quot;&amp;gt;&amp;lt;img width=50px height=50px src=\&amp;quot;sytx/chisimg/icon5.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;骨科&amp;lt;br&amp;gt;&amp;lt;font size=2 color=#666666&amp;gt;3位医生当班&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+						&amp;lt;/td&amp;gt;
+					&amp;lt;/tr&amp;gt;
+
+					&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+				&amp;lt;!--&amp;lt;/li&amp;gt;--&amp;gt;
+				
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#onetoone\&amp;quot; target=\&amp;quot;_Blank\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;找医生&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;关键字、按科室查找专家&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;div id=\&amp;quot;DIV_2_0\&amp;quot; style=\&amp;quot;margin:0;border:0;overflow-x:auto;\&amp;quot;&amp;gt;
+				&amp;lt;!-- layout item 2_0--&amp;gt;
+				&amp;lt;table width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;tbody&amp;gt;&amp;lt;tr align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob.png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;华霄磊&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;主任医师&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(1).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;柏泉&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;主任医师&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(2).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;陈海&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;主任医师&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(3).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;高敏&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;主任医师&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(4).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;乌越&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;主任医师&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(5).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;钱岸&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;主任医师&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(7).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;叶建国&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;副主任&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(8).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;金晶&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;基建文员&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(9).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;张敏a&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;护士&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ABOUTDOC&amp;apos;;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;
+				&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;sytx/chisimg/EAFormBlob(10).png\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;张敏b&amp;lt;/div&amp;gt;
+				&amp;lt;div&amp;gt;护士&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/tbody&amp;gt;&amp;lt;/table&amp;gt;
+				&amp;lt;!-- end layout item 2_0--&amp;gt;
+				&amp;lt;/div&amp;gt;&amp;lt;!-- 单元格 DIVMOBILE--&amp;gt;
+
+				&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=MAPFIND&amp;apos;;\&amp;quot; target=\&amp;quot;_Blank\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;找医院&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;地图快速找到我们&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;/ul&amp;gt;
+			&amp;lt;div class=\&amp;quot;copyright\&amp;quot;&amp;gt;Copyright ? 2004-2015 &amp;lt;a&amp;gt;硕格云开发&amp;lt;/a&amp;gt; All rights reserved.&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;
+            &amp;lt;/div&amp;gt;
+        &amp;lt;!--Detail View Pages for each list item--&amp;gt;
+
+       
+
+        &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;我的\&amp;quot; id=\&amp;quot;szinfo\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;
+        	&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;&amp;lt;/ul&amp;gt;
+		&amp;lt;table id=\&amp;quot;PAGE_MAIN_app\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;  height=100% id=\&amp;quot;TABLE_MAIN\&amp;quot; cellspacing=\&amp;quot;3\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;
+			&amp;lt;tr &amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=CHARTCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;CENTER\&amp;quot; valign=\&amp;quot;MIDDLE\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#1859B7;\&amp;quot; colspan=2&amp;gt;
+			&amp;lt;!-- layout item 0_0--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_146.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;体征检测图&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 0_0--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=SVGCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;CENTER\&amp;quot; valign=\&amp;quot;MIDDLE\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#04AEDA;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 0_2--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_120.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;病程分析图&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 0_2--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr &amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ME_BASICCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;CENTER\&amp;quot; valign=\&amp;quot;MIDDLE\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#00A9EC;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 1_0--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_119.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;既往病史&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 1_0--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ME_BASICCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#E4696A;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 1_1--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_47.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;门急诊及住院信息&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 1_1--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ME_BASICCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#00A8EC;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 1_2--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_134.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;检查检验信息&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 1_2--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr &amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ME_BASICCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;CENTER\&amp;quot; valign=\&amp;quot;MIDDLE\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#36729E;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 2_0--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_111.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;线上诊断&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 2_0--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ME_BASICCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;CENTER\&amp;quot; valign=\&amp;quot;MIDDLE\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#AA3F41;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 2_1--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_112.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;穿戴设备&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 2_1--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=ME_BASICCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#04AEDA;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 2_2--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_136.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;家庭自测数据&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 2_2--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr &amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=LOGINCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;CENTER\&amp;quot; valign=\&amp;quot;MIDDLE\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#54C104;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 3_0--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_253.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;注册信息&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 3_0--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=LOGINCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#009F3C;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 3_1--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_150.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;个人信息&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+
+
+			&amp;lt;!-- end layout item 3_1--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;td  onclick=\&amp;quot;javascript:window.location=&amp;apos;L.sp?id=BKLOGINCHIS&amp;apos;;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; width=\&amp;quot;0\&amp;quot; height=0 align=\&amp;quot;\&amp;quot; valign=\&amp;quot;\&amp;quot; style=\&amp;quot;margin:0;border:0;background-color:#009F3C;\&amp;quot;&amp;gt;
+			&amp;lt;!-- layout item 3_1--&amp;gt;
+			&amp;lt;table cellpadding=0 cellspacing=0 height=100% width=100%&amp;gt;&amp;lt;tr height=80%&amp;gt;&amp;lt;td align=center valign=bottom&amp;gt;&amp;lt;img  width=\&amp;quot;80\&amp;quot; height=\&amp;quot;80\&amp;quot;  src=&amp;apos;sytx/chisimg/icon_26.png&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr height=20%&amp;gt;&amp;lt;td align=center style=\&amp;quot;background-color: rgba(66,66,66,0.5);\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;3\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;登录系统&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+
+
+			&amp;lt;!-- end layout item 3_1--&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;!-- 单元格 TABLE--&amp;gt;
+			&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+		
+
+
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;健康管理\&amp;quot; id=\&amp;quot;item12\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;
+           &amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=MEDICATION&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;用药(10)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;把信赖交给我，把健康交给你&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=DIETCHIS&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;饮食(9)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;均衡饮食运动，健康常伴你左右&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=MOTIONCHIS&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;运动(5)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;源泉运动是健康的&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=MONITORCHIS&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;监测(3)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;您的健康卫士&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=MISSIONCHIS&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;宣教(1)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;预防保健生活化，享受健康一路发&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=RESERVATIONCHIS&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;预约提醒(13)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;预防保健生活化，享受健康一路发&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;/ul&amp;gt;	
+		&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+		&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;00\&amp;quot; id=\&amp;quot;item13\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;
+            &amp;lt;p&amp;gt;This is detail view for 健康管理&amp;lt;/p&amp;gt;
+        &amp;lt;/div&amp;gt;
+		&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;沟通\&amp;quot; id=\&amp;quot;onetoone\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;
+         &amp;lt;ul class=\&amp;quot;uls\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul1&amp;apos;);\&amp;quot; &amp;gt;
+				&amp;lt;li class=\&amp;quot;lis\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot;&amp;gt;心血管&amp;lt;span class=\&amp;quot;spans\&amp;quot;&amp;gt;495&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul1\&amp;quot; style=\&amp;quot;display:block;\&amp;quot;&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul2&amp;apos;);\&amp;quot;&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot;&amp;gt;神经内科&amp;lt;span class=\&amp;quot;spans\&amp;quot;&amp;gt;130&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul2\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul3&amp;apos;);\&amp;quot;&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot;&amp;gt;骨科&amp;lt;span class=\&amp;quot;spans\&amp;quot;&amp;gt;205&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul3\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot;  onclick=\&amp;quot;clicul(&amp;apos;ul4&amp;apos;);\&amp;quot;&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa\&amp;quot;&amp;gt;神经外科&amp;lt;span class=\&amp;quot;spans\&amp;quot;&amp;gt;35&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;ul4\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; &amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot; &amp;gt;01 李伟&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;5&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;02 黄医生&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+				&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;03 张主任&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;9&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;04 李欣&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;20&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;05 吴桐&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;15&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;06 张燕&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;6&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;asa2\&amp;quot;&amp;gt;07 李军&amp;lt;span class=\&amp;quot;spans2\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+				&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;/div&amp;gt;
+         &amp;lt;!--Footer to add tabs if desired--&amp;gt;
+        &amp;lt;footer&amp;gt;
+            &amp;lt;a href=\&amp;quot;#list\&amp;quot; class=\&amp;quot;icon home\&amp;quot; id=&amp;apos;tab1&amp;apos; data-transition=\&amp;quot;slide\&amp;quot;&amp;gt;空中医院&amp;lt;/a&amp;gt;
+            &amp;lt;a href=\&amp;quot;#item12\&amp;quot; class=\&amp;quot;icon heart\&amp;quot; id=&amp;apos;tab2&amp;apos; data-transition=\&amp;quot;up-reveal\&amp;quot;&amp;gt;健康管理&amp;lt;/a&amp;gt;
+	    &amp;lt;a href=\&amp;quot;#onetoone\&amp;quot; class=\&amp;quot;icon pencil\&amp;quot; id=&amp;apos;tab3&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;沟通&amp;lt;/a&amp;gt;
+	    &amp;lt;a href=\&amp;quot;#szinfo\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;我的&amp;lt;/a&amp;gt;
+        &amp;lt;/footer&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+
+&amp;lt;/html&amp;gt;
+&amp;quot;;
+return html;
+
+
+
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

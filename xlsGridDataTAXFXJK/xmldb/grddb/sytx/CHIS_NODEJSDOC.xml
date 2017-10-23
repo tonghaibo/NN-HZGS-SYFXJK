@@ -1,0 +1,361 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_NODEJSDOC</MWID><NAME >病人端</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_NODEJSDOC.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >// PeerJS server location
+var SERVER_IP = &amp;apos;db.xmidware.com&amp;apos;;
+var SERVER_PORT = 9001;
+
+// DOM elements manipulated as user interacts with the app
+var remoteVideo = null;
+var localVideo = null;
+
+// the ID set for this client
+var callerId = null;
+
+// PeerJS object, instantiated when this client connects with its
+// caller ID
+var peer = null;
+
+// the local video stream captured with getUserMedia()
+var localStream = null;
+
+// get the local video and audio stream and show preview in the
+// &amp;quot;LOCAL&amp;quot; video element
+// successCb: has the signature successCb(stream); receives
+// the local video stream as an argument
+var getLocalStream = function (successCb) {
+	if (localStream &amp;&amp; successCb) {
+		successCb(localStream);
+	}
+	else {
+		navigator.webkitGetUserMedia(
+			{
+				audio: true,
+				video: true
+			},
+			function (stream) {
+				localStream = stream;
+				localVideo.src = window.URL.createObjectURL(stream);
+			  if (successCb) {
+				successCb(stream);
+			  }
+			},
+			function (err) {
+				
+			}
+		);
+	}
+};
+
+// set caller ID and connect to the PeerJS server
+var connect = function (id) {
+	try {
+		// create connection to the ID server
+		peer = new Peer(callerId, {host: SERVER_IP, port: SERVER_PORT});
+		peer.socket._socket.onclose = function () {
+		peer = null;
+	};
+
+	peer.socket._socket.onopen = function () {
+		getLocalStream();
+	};
+	
+	peer.on(&amp;apos;call&amp;apos;, answer);
+}
+	catch (e) {
+		peer = null;
+	}
+};
+
+// set the &amp;quot;REMOTE&amp;quot; video element source
+var showRemoteStream = function (stream) {
+	remoteVideo.src = window.URL.createObjectURL(stream);
+};
+
+var dial = function (id) {
+    getLocalStream(function (stream) {
+      var call = peer.call(recipientId, stream);
+      call.on(&amp;apos;stream&amp;apos;, showRemoteStream);
+    });
+};
+
+var answer = function (call) {
+	call.on(&amp;apos;stream&amp;apos;, showRemoteStream);
+	call.answer(localStream);
+};
+  
+function init(str,tmp,flag){
+	if(str==&amp;apos;&amp;apos;||tmp==&amp;apos;&amp;apos;){
+		alert (&amp;apos;连接没有建立，不能打开视频&amp;apos;);
+		return;
+	}
+	remoteVideo = document.querySelector(&amp;apos;#other1&amp;apos;);
+	localVideo = document.querySelector(&amp;apos;#you1&amp;apos;);
+	document.getElementById(&amp;apos;videos1&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+	callerId = str;
+	recipientId = tmp;
+	if(flag == &amp;apos;1&amp;apos;){
+		connect();
+		dial();
+	} else {
+		connect();
+	}
+	
+	
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+//
+function GetBody(){
+var userName = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;USERID&amp;quot;),&amp;quot;&amp;quot;);
+var ro = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;ro&amp;quot;),&amp;quot;&amp;quot;);
+//图片地址
+var html=&amp;quot;
+&amp;lt;!DOCTYPE HTML&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;诊疗室&amp;lt;/title&amp;gt;
+    &amp;lt;meta charset=\&amp;quot;UTF-8\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0\&amp;quot;&amp;gt;
+    
+&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/wechart/css2/bootstrap.min.css\&amp;quot;&amp;gt;    
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/wechart/css2/style.css\&amp;quot;&amp;gt;    
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/wechart/css2/jquery.mobile.flatui.css\&amp;quot; /&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+        #bottomNav {
+            z-index:999;
+            position:fixed;
+            bottom:0;
+            left:0;
+            width:100%;
+            _position:absolute;
+            _top: expression_r(documentElement.scrollTop + documentElement.clientHeight-this.offsetHeight);
+            overflow:visible;
+        }
+        #bottomNav input{
+            width: 90%;
+        }
+    &amp;lt;/style&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;div data-role=\&amp;quot;page\&amp;quot; id=\&amp;quot;mainpage\&amp;quot;&amp;gt;
+    &amp;lt;div class=\&amp;quot;header linear-g\&amp;quot;&amp;gt;
+        &amp;lt;a href=\&amp;quot;#panel-left\&amp;quot; data-iconpos=\&amp;quot;notext\&amp;quot; class=\&amp;quot;glyphicon glyphicon-th-large col-xs-2 text-right\&amp;quot;&amp;gt; &amp;lt;/a&amp;gt;
+        &amp;lt;a class=\&amp;quot;text-center col-xs-8\&amp;quot;&amp;gt;诊疗室&amp;lt;/a&amp;gt;
+        &amp;lt;a href=\&amp;quot;#panel-right\&amp;quot; data-iconpos=\&amp;quot;notext\&amp;quot; class=\&amp;quot;glyphicon glyphicon-user col-xs-2 text-left\&amp;quot;&amp;gt; &amp;lt;/a&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;left\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;list-group shortcut_menu dn linear-g\&amp;quot; id=\&amp;quot;panel-left\&amp;quot;&amp;gt;
+        &amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;chart.html\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;体征检测图&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;chartframe.html\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;病程分析图&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;基础信息&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;既往病史&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;门急诊及住院信息&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;检查检验信息&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;线上诊断&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; &amp;gt;&amp;lt;span&amp;gt;穿戴设备&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+            &amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=&amp;apos;init(&amp;apos;029&amp;apos;,&amp;apos;fangkun&amp;apos;,&amp;apos;1&amp;apos;)&amp;apos;&amp;gt;&amp;lt;span&amp;gt;视频问诊&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;right\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;user_box text-center dn linear-g\&amp;quot; id=\&amp;quot;panel-right\&amp;quot; style=\&amp;quot;border:1px solid #F2F2F2;background:#F2F2F2\&amp;quot; &amp;gt;
+        &amp;lt;ul class=\&amp;quot;user_menu\&amp;quot;  &amp;gt;
+            &amp;lt;li class=\&amp;quot;menu\&amp;quot; onclick=\&amp;quot;init(&amp;apos;029&amp;apos;,&amp;apos;fangkun&amp;apos;,&amp;apos;2&amp;apos;)\&amp;quot;&amp;gt;&amp;lt;a&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-cog\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;视频问诊&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+        
+        &amp;lt;!--
+		&amp;lt;div id=\&amp;quot;videos1\&amp;quot; style=\&amp;quot;display:none;width:200px;height:200px;float:left;\&amp;quot;&amp;gt;
+			&amp;lt;video id=\&amp;quot;you1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;top:200px;width:200px;height:200px\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+		&amp;lt;/div&amp;gt;
+			
+		
+		&amp;lt;div id=\&amp;quot;videos1\&amp;quot; style=\&amp;quot;display:none;width:200px;height:200px;\&amp;quot;&amp;gt;
+			&amp;lt;video id=\&amp;quot;other1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;top:400px;width:200px;height:200px\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+		&amp;lt;/div&amp;gt;
+		
+	--&amp;gt;	
+		
+		
+		
+		
+		
+		&amp;lt;div id=\&amp;quot;videos1\&amp;quot; style=\&amp;quot;display:none;width:100%;height:auto;float:left;\&amp;quot;&amp;gt;
+			&amp;lt;div&amp;gt;&amp;lt;video id=\&amp;quot;you1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:100%;height:auto;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+			&amp;lt;!--
+				&amp;lt;div id=\&amp;quot;tstart-toolbar-bottom\&amp;quot;&amp;gt;
+					&amp;lt;div class=\&amp;quot;tstart-right\&amp;quot;&amp;gt;
+					&amp;lt;video id=\&amp;quot;other1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:30%;height:auto;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+					&amp;lt;/div&amp;gt;
+				&amp;lt;/div&amp;gt;
+			--&amp;gt;
+			&amp;lt;/div&amp;gt;
+			&amp;lt;p&amp;gt;&amp;nbsp;&amp;lt;/p&amp;gt;
+			&amp;lt;video id=\&amp;quot;other1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:100%;height:auto;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+
+		&amp;lt;/div&amp;gt;
+
+		
+		
+		
+		
+		
+		
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div data-role=\&amp;quot;content\&amp;quot; class=\&amp;quot;container\&amp;quot; role=\&amp;quot;main\&amp;quot;&amp;gt;
+        &amp;lt;ul class=\&amp;quot;content-reply-box mg10\&amp;quot; id=\&amp;quot;list\&amp;quot;&amp;gt;
+        &amp;lt;/ul&amp;gt;
+    &amp;lt;/div&amp;gt;
+    &amp;lt;div id=\&amp;quot;bottomNav\&amp;quot;&amp;gt;
+        &amp;lt;input type=\&amp;quot;text\&amp;quot; style=\&amp;quot;float: left\&amp;quot; id=\&amp;quot;text\&amp;quot;/&amp;gt;
+        &amp;lt;a style=\&amp;quot;cursor:pointer;float: right;width: 8%;margin-right: 3px;border: 1px solid #000000; text-align: center\&amp;quot; id=\&amp;quot;send\&amp;quot;&amp;gt;回复&amp;lt;/a&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/wechart/js2/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/wechart/js2/jquery.mobile-1.4.0-rc.1.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/wechart/js/peer.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;;
+var sql=&amp;quot;&amp;quot;;
+var ds=null;
+var db=null;
+db = new pubpack.EADatabase();
+sql=&amp;quot;select a.guid,a.name from usr a where a.id=&amp;apos;&amp;quot;+userName+&amp;quot;&amp;apos;&amp;quot;;
+ds = db.QuerySQL(sql);
+html+=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		$(document).ready(function() {
+			var rooms = &amp;apos;&amp;quot;+ro+&amp;quot;&amp;apos;;
+			var socket = null;
+			var currentUid = &amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;guid&amp;quot;)+&amp;quot;&amp;apos;;
+			var user = null;
+			var currentuser = null;
+			
+			if(typeof WebSocket === &amp;apos;undefined&amp;apos;) {
+				alert(\&amp;quot;当前浏览器不支持websocket\&amp;quot;);
+				return;
+			}
+			
+			function appendMessage(msg) {
+				var d = new Date();
+				var tim=d.getFullYear()+\&amp;quot;-\&amp;quot;+d.getMonth()+\&amp;quot;-\&amp;quot;+d.getDate()+\&amp;quot; \&amp;quot;+d.getHours()+\&amp;quot;:\&amp;quot;+d.getMinutes()+\&amp;quot;:\&amp;quot;+d.getSeconds();
+				var str = \&amp;quot;\&amp;quot;;
+				str=&amp;apos;&amp;lt;li class=\&amp;quot;even\&amp;quot;&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;a class=\&amp;quot;user\&amp;quot; href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;img class=\&amp;quot;img-responsive avatar_\&amp;quot; src=\&amp;quot;images/doc.png\&amp;quot; alt=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;user-name\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;div class=\&amp;quot;reply-content-box\&amp;quot; align=\&amp;quot;right\&amp;quot;&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;span class=\&amp;quot;reply-time\&amp;quot;&amp;gt;&amp;apos;+tim+&amp;apos;&amp;lt;/span&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;div class=\&amp;quot;reply-content pr\&amp;quot;&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;span class=\&amp;quot;arrow\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;apos;;
+				str=str+msg;
+				str=str+&amp;apos; &amp;lt;/div&amp;gt;&amp;apos;;
+				str=str+&amp;apos;  &amp;lt;/div&amp;gt;&amp;apos;;
+				str=str+&amp;apos;    &amp;lt;/li&amp;gt;&amp;apos;;
+				document.getElementById(\&amp;quot;list\&amp;quot;).innerHTML=document.getElementById(\&amp;quot;list\&amp;quot;).innerHTML+str;
+				document.getElementById(\&amp;quot;text\&amp;quot;).value=\&amp;quot;\&amp;quot;;
+				window.scrollTo(0,9999);
+			}
+			function appendMessage1(msg,name) {
+				var d = new Date();
+				var tim=d.getFullYear()+\&amp;quot;-\&amp;quot;+d.getMonth()+\&amp;quot;-\&amp;quot;+d.getDate()+\&amp;quot; \&amp;quot;+d.getHours()+\&amp;quot;:\&amp;quot;+d.getMinutes()+\&amp;quot;:\&amp;quot;+d.getSeconds();
+				var str = \&amp;quot;\&amp;quot;;
+				str=&amp;apos;&amp;lt;li class=\&amp;quot;odd\&amp;quot;&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;a class=\&amp;quot;user\&amp;quot; href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;img class=\&amp;quot;img-responsive avatar_\&amp;quot; src=\&amp;quot;images/doc.png\&amp;quot; alt=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;user-name\&amp;quot;&amp;gt;&amp;apos;+name+&amp;apos;&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;div class=\&amp;quot;reply-content-box\&amp;quot; align=\&amp;quot;right\&amp;quot;&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;span class=\&amp;quot;reply-time\&amp;quot;&amp;gt;&amp;apos;+tim+&amp;apos;&amp;lt;/span&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;div class=\&amp;quot;reply-content pr\&amp;quot;&amp;gt;&amp;apos;;
+				str=str+&amp;apos;&amp;lt;span class=\&amp;quot;arrow\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;apos;;
+				str=str+msg;
+				str=str+&amp;apos; &amp;lt;/div&amp;gt;&amp;apos;;
+				str=str+&amp;apos;  &amp;lt;/div&amp;gt;&amp;apos;;
+				str=str+&amp;apos;    &amp;lt;/li&amp;gt;&amp;apos;;
+				document.getElementById(\&amp;quot;list\&amp;quot;).innerHTML=document.getElementById(\&amp;quot;list\&amp;quot;).innerHTML+str;
+				document.getElementById(\&amp;quot;text\&amp;quot;).value=\&amp;quot;\&amp;quot;;
+				window.scrollTo(0,9999);
+			}
+			
+			socket = new WebSocket(\&amp;quot;ws://114.80.114.43:8000/\&amp;quot;);
+			
+			socket.onopen = function(event) {
+				currentuser = {
+					&amp;apos;EVENT&amp;apos;: &amp;apos;LOGIN&amp;apos;,
+					&amp;apos;GUID&amp;apos;: currentUid,
+					&amp;apos;NAME&amp;apos;: &amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;apos;,
+					&amp;apos;ROOM&amp;apos;: rooms
+				}
+				socket.send(JSON.stringify({
+					&amp;apos;EVENT&amp;apos;: &amp;apos;LOGIN&amp;apos;,
+					&amp;apos;GUID&amp;apos;: currentUid,
+					&amp;apos;NAME&amp;apos;: &amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;apos;,
+					&amp;apos;ROOM&amp;apos;: rooms
+				}));
+			};
+			
+			socket.onmessage = function(event) {
+				var mData = JSON.parse(event.data);
+				if(mData &amp;&amp; mData.event) {
+					user = mData.user;
+					switch(mData.event) {
+						case &amp;apos;LOGIN&amp;apos;:
+						var room = user.ROOM;
+						if(room == rooms){
+							alert(user.NAME+\&amp;quot;进入房间！\&amp;quot;);
+						} else{
+							return;
+						}
+						break;
+					
+						case &amp;apos;SPEAK&amp;apos;:
+						var content = mData.values;
+						var newUser = mData.user;
+						var uid = newUser.GUID;
+						if(newUser.ROOM == rooms) {
+							if(uid != currentUid) {
+									appendMessage1(content,newUser.NAME);
+								}
+						}
+						break;
+					}
+				}
+			};
+			
+		function sendMsg(msg) {
+			if(msg) {
+				socket.send(JSON.stringify({
+					&amp;apos;EVENT&amp;apos;: &amp;apos;SPEAK&amp;apos;,
+					&amp;apos;USER&amp;apos;: currentuser,
+					&amp;apos;VALUES&amp;apos;:msg
+				}));
+			}
+		};
+		
+		$(\&amp;quot;#send\&amp;quot;).click(function(event) {
+			var value = $.trim($(\&amp;quot;#text\&amp;quot;).val());
+			sendMsg(value);
+			appendMessage(value);
+		});
+	});
+&amp;lt;/script&amp;gt;
+ &amp;lt;/body&amp;gt;&amp;quot;;
+if(db!=null){db.Close();}
+return html;
+
+
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

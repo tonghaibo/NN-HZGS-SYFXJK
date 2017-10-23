@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>TRKLOGIN</MWID><NAME>登陆事务</NAME><NOTE></NOTE><FILE>TRKLOGIN.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet =0;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/04/06 08:58:33
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{   
+               
+        _this.SetToButton(&amp;quot;udf_okbtn&amp;quot;,sheet,6,2,&amp;quot;登录&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1); 
+        _this.SetToButton(&amp;quot;udf_cancelbtn&amp;quot;,sheet,6,4,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1); 
+  
+}
+
+//================================================================// 
+// 函数：login
+// 说明：登录到我的事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/04/06 09:07:29
+// 修改日志：
+//================================================================// 
+function login()
+{
+      var id = _this.GetCellText(sheet,2,2);
+      var passwd = _this.GetCellText(sheet,4,2);
+      if( id == &amp;quot;&amp;quot; || id.length == 0)
+      {
+            alert (&amp;quot;输入用户名&amp;quot;);
+            return ;
+      }
+      if( passwd == &amp;quot;&amp;quot; || passwd.length == 0)
+      {
+            alert (&amp;quot;输入密码&amp;quot;);
+            return ;
+      }
+      QuerySQLDS(&amp;quot;select * from usr where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; and passwd=&amp;apos;&amp;quot;+passwd+&amp;quot;&amp;apos;&amp;quot;); 
+     
+      if ( _this.XMLDS_GetRowCount() &amp;gt; 0)
+      {
+            var url = &amp;quot;ShowXlsGrid.sp?grdid=TRKQRY&amp;usrid=&amp;quot;+id;  //此处传参，参数是用户登录的用户名
+            window.open( url ,&amp;quot;我的事务&amp;quot;,&amp;quot;WIDTH=1000,HEIGHT=600,left=0,top=0,toolbar=no,menu=no&amp;quot;);
+             
+      }
+      else
+      {
+            alert (&amp;quot;用户名与密码不正确，重新输入&amp;quot;);
+            reset();
+      }
+}
+
+
+
+//================================================================//  
+// 函数：thisOnButtonCtrlClick 
+// 说明： 单击登录 
+// 参数：
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/04/06 09:11:30 
+// 修改日志： 
+//================================================================//  
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+      if( id == &amp;quot;udf_okbtn&amp;quot;)
+      {
+            login();  
+            reset();   //此处作用是刷新表格       
+      }
+      if ( id == &amp;quot;udf_cancelbtn&amp;quot;)
+      {
+            reset();
+      }
+}
+
+//================================================================//  
+// 函数：reset 
+// 说明：刷新表格 
+// 参数： 
+// 返回： 
+// 样例：  
+// 作者： 
+// 创建日期：11/06/06 09:12:08  
+// 修改日志： 
+//================================================================//  
+function reset()
+{
+       _this.SetCellText(sheet,2,2,&amp;quot;&amp;quot;);
+       _this.SetCellText(sheet,4,2,&amp;quot;&amp;quot;);
+
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

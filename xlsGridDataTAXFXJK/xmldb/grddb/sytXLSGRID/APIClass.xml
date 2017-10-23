@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>R</MWTYP><MWID>APIClass</MWID><NAME>API分类检索</NAME><NOTE></NOTE><FILE>APIClass.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID>0,4,3</ID><NAME></NAME><DBNAME></DBNAME><DSKEY>DSC:DETAIL</DSKEY><NROW>21</NROW><NCOL>2</NCOL><ISMAIN>1</ISMAIN><ISCROSS></ISCROSS><HCOLS></HCOLS><VCOLS></VCOLS><VALUECOL></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/05/07 10:03:26
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+        _this.SetCellText(sheet,1,1,&amp;quot;关键字&amp;quot;);
+        _this.SetMainCellRange(sheet,4,1,29,1);
+         _this.SetCellBkColor(0,-1,-1,255,255,255); 
+        
+}
+
+//================================================================// 
+// 函数：thisOnMouseLClick
+// 说明：鼠标单击，跳转页面并查询相关记录
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/05/07 10:09:09
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col)
+{
+    var r1 = _this.GetMainCellRangeRow1(sheet);
+    var r2 = _this.GetMainCellRangeRow2(sheet);
+    var url = &amp;quot;&amp;quot;;
+    var count = 0;
+    var sql = &amp;quot;select * from funclist &amp;quot;;
+    if ( sheet == 0 &amp;&amp; row&amp;gt;=r1 &amp;&amp; row&amp;lt;=r2 &amp;&amp; col ==1 )
+    {
+          var keyword = _this.GetCellText(sheet,row,col);
+          keyword = keyword.RTrim();
+          var sql1 = &amp;quot; where function like &amp;apos;&amp;quot;+keyword+&amp;quot;%&amp;apos;&amp;quot;;
+          QuerySQLDS(sql+sql1);
+          count = _this.XMLDS_GetRowCount();
+          if ( count &amp;gt; 0 )
+          {
+                url = &amp;quot;ShowXlsGrid.sp?grdid=APICheck&amp;keyword=&amp;quot;+keyword; 
+                window.open(url,&amp;quot;查看API&amp;quot;,&amp;quot;WIDTH=950,HEIGHT=680,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;);
+          }
+          else
+          {
+                alert (&amp;quot; 没有记录！&amp;quot;);
+                return ;
+          }
+    }
+    if ( sheet == 0 &amp;&amp; row&amp;gt;=r1 &amp;&amp; row&amp;lt;=r2 &amp;&amp; col == 3 || col == 4)
+    {
+          var listid = _this.GetCellText(sheet,row,3);
+          var listname = _this.GetCellText(sheet,row,4);
+          var sql2 = &amp;quot; where subtyp like &amp;apos;&amp;quot;+listid+&amp;quot;%&amp;apos;&amp;quot;;
+          QuerySQLDS(sql+sql2);
+          count = _this.XMLDS_GetRowCount();
+          if ( count &amp;gt; 0 )
+          {
+                url = &amp;quot;ShowXlsGrid.sp?grdid=APICheck&amp;listid=&amp;quot;+listid+&amp;quot;&amp;listname=&amp;quot;+listname;     
+                window.open(url,&amp;quot;查看API&amp;quot;,&amp;quot;WIDTH=950,HEIGHT=680,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;);  
+          } 
+          else
+          {
+                alert ( &amp;quot; 没有记录！&amp;quot; );
+                return ;
+          }
+    }
+    if ( sheet == 0 &amp;&amp; row == 1 &amp;&amp; col == 6  )
+    {
+          var word = _this.GetCellText(sheet,1,2);
+          if ( word == &amp;quot;&amp;quot; || word.length == 0 )
+          {      
+                alert (&amp;quot;关键字不能为空！&amp;quot;);
+                return ;
+          }
+          else
+          {
+                var sql3 = &amp;quot; where class like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; or flag like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; &amp;quot; +   
+                           &amp;quot; or return  like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; or function like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos;&amp;quot;+ 
+                           &amp;quot; or note like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; or name like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos;&amp;quot;+ 
+                           &amp;quot; or parameter like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; or sample like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; &amp;quot;+  
+                           &amp;quot; or rlsno like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; or lang like &amp;apos;%&amp;quot;+word+&amp;quot;%&amp;apos; &amp;quot;; 
+                QuerySQLDS(sql+sql3);
+                count = _this.XMLDS_GetRowCount();
+                if ( count &amp;gt; 0 )
+                {
+                      url = &amp;quot;ShowXlsGrid.sp?grdid=APICheck&amp;word=&amp;quot;+word; 
+                      window.open(url,&amp;quot;查看API&amp;quot;,&amp;quot;WIDTH=950,HEIGHT=680,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;);
+                }
+                else
+                {
+                      alert (&amp;quot; 没有记录！&amp;quot;);
+                      return ;   
+                }
+          }
+
+    }
+    
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID>DETAIL</ID><NAME></NAME><DATDSC>select id,name from v_funcsubtyp
+</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

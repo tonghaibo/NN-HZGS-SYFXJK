@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >UpdateROLSUBSYT</MWID><NAME >角色菜单权限编辑</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >UpdateROLSUBSYT.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var listSubsytType;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;20%&amp;quot;);
+	_this.SplitSheet(1,&amp;quot;H&amp;quot;,&amp;quot;50%&amp;quot;);
+	//_this.SplitSheet(2,&amp;quot;V&amp;quot;,&amp;quot;40%&amp;quot;);
+	
+	//_this.SetColVisible(1,0,-1);
+	_this.SetColVisible(1,2,-1);
+	//_this.SetColVisible(2,0,-1);
+	_this.SetColVisible(2,2,-1);
+	_this.SetColVisible(1,5,-1);
+	_this.SetColVisible(2,5,-1);
+	
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	_this.SetAttribe(&amp;quot;SHEET_2&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	
+	_sql.querytods(&amp;quot;ROL&amp;quot;,&amp;quot;ROLGUID=&amp;quot;+thisrolguid);
+	_this.SetCellText(0,3,2,_this.XMLDS_GetString(0,&amp;quot;ID&amp;quot;));
+	_this.SetCellText(0,5,2,_this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;));
+	_this.SetCellText(0,7,2,_this.XMLDS_GetString(0,&amp;quot;NOTE&amp;quot;));
+	
+	listSubsytType = _this.CreateListValue();
+	_this.SetListValue(listSubsytType ,&amp;quot;ALL&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;PC&amp;quot;,&amp;quot;浏览器支持控件&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;PCHTML&amp;quot;,&amp;quot;纯HTML格式&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;PDA&amp;quot;,&amp;quot;PDA手机&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;WAP&amp;quot;,&amp;quot;WAP手机&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;J2ME&amp;quot;,&amp;quot;J2ME手机&amp;quot;);
+	
+	setSubSytMenu(G_SYTID);
+	
+	_this.AutoFixScreenWidth();
+	
+	_this.SetColName(1,1,&amp;quot;SUBID&amp;quot;);
+	_this.SetColName(1,2,&amp;quot;TYP&amp;quot;);
+	_this.SetColName(1,3,&amp;quot;NAME&amp;quot;);
+	_this.SetColName(1,4,&amp;quot;AUTH&amp;quot;);
+	_this.SetColName(1,5,&amp;quot;SHOW&amp;quot;);
+	
+	_this.SetColName(2,0,&amp;quot;ORDER&amp;quot;);
+	_this.SetColName(2,1,&amp;quot;SUBID&amp;quot;);
+	_this.SetColName(2,2,&amp;quot;TYP&amp;quot;);
+	_this.SetColName(2,3,&amp;quot;NAME&amp;quot;);
+	_this.SetColName(2,4,&amp;quot;AUTH&amp;quot;);
+	_this.SetColName(2,5,&amp;quot;SHOW&amp;quot;);
+}
+
+
+function setSubSytMenu(sytid)
+{
+	//加载授权信息
+	var rolsubxml = _sql.query(&amp;quot;ROLSUBSYT&amp;quot;,&amp;quot;ROLGUID=&amp;quot;+thisrolguid+&amp;quot;&amp;SYTID=&amp;quot;+G_SYTID);
+	_this.SetXmlDS(3,0,0,4,5,rolsubxml);
+
+	var ret = invokeOSFunc(&amp;quot;load&amp;quot;,&amp;quot;mysytid=&amp;quot;+sytid) ;
+	_this.XMLDS_Parse(ret);
+	var numsubsyt= 3;
+
+	var numsubsheet = 0;
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		//subid	typ	order	name	TITLE	ICON	URL
+		var subid = _this.XMLDS_GetString(i,&amp;quot;subid&amp;quot;);
+		var typ= _this.XMLDS_GetString(i,&amp;quot;typ&amp;quot;);
+		var order= _this.XMLDS_GetString(i,&amp;quot;order&amp;quot;);
+		var name= _this.XMLDS_GetString(i,&amp;quot;name&amp;quot;);
+		if(order == &amp;quot;0&amp;quot; ) {
+			numsubsyt ++;
+			if (numsubsyt &amp;gt; 3+15 ) {
+				_this.AppendRow(1,_this.GetRowCount(1)-1 );
+			}
+			_this.SetToComboBox(&amp;quot;&amp;quot;,1,numsubsyt,2,listSubsytType );
+			_this.SetCellText(1,numsubsyt,1,subid );
+			_this.SetCellText(1,numsubsyt,2,typ);
+			_this.SetCellText(1,numsubsyt,3,name);
+			_this.SetToBoolBox(1,numsubsyt,4);
+			_this.SetToBoolBox(1,numsubsyt,5);
+			
+			for (var k=0;k&amp;lt;_this.GetRowCount(3);k++) {
+				if (subid == _this.GetCellText(3,k,2) &amp;&amp; _this.GetCellText(3,k,5) == &amp;quot;0&amp;quot;) {
+					_this.SetCellText(1,numsubsyt,4,_this.GetCellText(3,k,3));
+					_this.SetCellText(1,numsubsyt,5,_this.GetCellText(3,k,4));
+				}
+			}
+		}
+	}	
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == 1) {
+		var cursubid = _this.GetCellText(sheet,row,1);
+		var cursubnam = _this.GetCellText(sheet,row,3);
+		_this.SetCellText(2,3,3,cursubid+&amp;quot;-&amp;quot;+cursubnam);
+		
+		_this.SetRowCount(2,9);
+		for (var r=6;r&amp;lt;9;r++) {
+			for (var c=0;c&amp;lt;_this.GetColCount(2);c++) {
+				_this.SetCellText(2,r,c,&amp;quot;&amp;quot;);
+			}
+		}
+		
+		var ret = invokeOSFunc(&amp;quot;load&amp;quot;,&amp;quot;mysytid=&amp;quot;+sytid) ;
+		_this.XMLDS_Parse(ret);
+		var numsubsyt= 5;
+		for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+			//subid	typ	order	name	TITLE	ICON	URL
+			var subid = _this.XMLDS_GetString(i,&amp;quot;subid&amp;quot;);
+			var typ= _this.XMLDS_GetString(i,&amp;quot;typ&amp;quot;);
+			var order= _this.XMLDS_GetString(i,&amp;quot;order&amp;quot;);
+			var name= _this.XMLDS_GetString(i,&amp;quot;name&amp;quot;);
+			if(order != &amp;quot;0&amp;quot; &amp;&amp; subid == cursubid) {
+				numsubsyt ++;
+				if (numsubsyt &amp;gt; 3+5 ) {
+					_this.AppendRow(2,_this.GetRowCount(2)-1 );
+				}
+				_this.SetToComboBox(&amp;quot;&amp;quot;,2,numsubsyt,2,listSubsytType );
+				_this.SetCellText(2,numsubsyt,0,order );
+				_this.SetCellText(2,numsubsyt,1,subid );
+				_this.SetCellText(2,numsubsyt,2,typ);
+				_this.SetCellText(2,numsubsyt,3,name);
+				_this.SetToBoolBox(2,numsubsyt,4);
+				_this.SetToBoolBox(2,numsubsyt,5);
+				
+				for (var k=0;k&amp;lt;_this.GetRowCount(3);k++) {
+					if (subid == _this.GetCellText(3,k,2) &amp;&amp; _this.GetCellText(3,k,5) == order) {
+						_this.SetCellText(2,numsubsyt,4,_this.GetCellText(3,k,3));
+						_this.SetCellText(2,numsubsyt,5,_this.GetCellText(3,k,4));
+					}
+				}
+			}
+		}
+	}
+}
+
+//保存
+function save()
+{
+	if (!confirm(&amp;quot;保存当前设置，是否确定？&amp;quot;)) return;
+	try {
+		var param = new Object();
+		param.subsytxml = _this.GetXml(1,4,1,_this.GetRowCount(1)-1,5);
+		param.subitemxml = _this.GetXml(2,6,0,_this.GetRowCount(2)-1,5);
+		param.thissytid = G_SYTID;
+		param.rolguid = thisrolguid;
+		
+		var ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert(ret);
+	
+	}
+	catch(e) {
+		alert(&amp;quot;保存失败!&amp;quot;+e);
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if((sheet == 1 &amp;&amp; row==1 &amp;&amp; col==4 )||(sheet == 2 &amp;&amp; row==3 &amp;&amp;col==4)){
+		for (var i=row+3;i&amp;lt;_this.GetRowCount(sheet);i++){
+			if(_this.GetCellText(sheet,i,1)!=&amp;quot;&amp;quot; )_this.SetCellText(sheet,i,4,newvalue );
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var xmldbpack = new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function load( ) { 
+	var ds0 = xmldbpack.EAXmlDB.getSubSytDB(mysytid);
+	if( ds0 == null )
+		return pub.EAFunc.readFile(pub.EAOption.dynaDataRoot+&amp;quot;/xmldb/sytdb/nullsubsytdb.xml&amp;quot;);
+	
+	//if ( ds0!=null &amp;&amp; ds0.GetRowCount()==0 )
+	//	return pub.EAFunc.readFile(pub.EAOption.dynaDataRoot+&amp;quot;/xmldb/sytdb/nullsubsytdb.xml&amp;quot;);
+		
+	return ds0.GetXml();
+}  
+
+function save( ) { 
+//	pub.EAFunc.WriteToFile(pub.EAOption.dynaDataRoot+&amp;quot;/&amp;quot;+mysytid+&amp;quot;/subsytdb.xml&amp;quot;,xml);
+//	return &amp;quot;保存成功&amp;quot; ;
+
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();
+		
+		var subds = null;
+		var itmds = null;		
+		if (subsytxml != &amp;quot;&amp;quot;) subds = new pub.EAXmlDS(subsytxml);
+		if (subitemxml != &amp;quot;&amp;quot;) itmds = new pub.EAXmlDS(subitemxml);
+		
+		if (subds != null) {
+			sql = &amp;quot;delete from rolsubsyt where rol=&amp;apos;&amp;quot;+rolguid+&amp;quot;&amp;apos; and syt=&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos; and ord=&amp;apos;0&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			for (var i=0;i&amp;lt;subds.getRowCount();i++) {
+				var subid = subds.getStringAt(i,&amp;quot;SUBID&amp;quot;);
+				var auth = subds.getStringAt(i,&amp;quot;AUTH&amp;quot;);
+				var show = subds.getStringAt(i,&amp;quot;SHOW&amp;quot;);
+				if (subid != &amp;quot;&amp;quot; &amp;&amp; auth == &amp;quot;1&amp;quot;) {
+					sql = &amp;quot;insert into rolsubsyt(rol,syt,subsytid,show,ord,auth) values (&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;0&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([rolguid,thissytid,subid,show,auth]);
+					db.ExcecutSQL(sql);
+				}
+			}
+		}
+		
+		if (itmds != null) {
+			if (itmds.getRowCount() &amp;gt; 0) {
+				var subsytid = itmds.getStringAt(0,&amp;quot;SUBID&amp;quot;);
+				sql = &amp;quot;delete from rolsubsyt where rol=&amp;apos;&amp;quot;+rolguid+&amp;quot;&amp;apos; and syt=&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos; and ord!=&amp;apos;0&amp;apos; and subsytid=&amp;apos;&amp;quot;+subsytid+&amp;quot;&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);
+			}
+			for (var i=0;i&amp;lt;itmds.getRowCount();i++) {
+				var subid = itmds.getStringAt(i,&amp;quot;SUBID&amp;quot;);
+				var auth = itmds.getStringAt(i,&amp;quot;AUTH&amp;quot;);
+				var show = itmds.getStringAt(i,&amp;quot;SHOW&amp;quot;);
+				var ord = itmds.getStringAt(i,&amp;quot;ORDER&amp;quot;);
+				if (subid != &amp;quot;&amp;quot; &amp;&amp; auth == &amp;quot;1&amp;quot;) {
+					sql = &amp;quot;insert into rolsubsyt(rol,syt,subsytid,show,ord,auth) values (&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([rolguid,thissytid,subid,show,ord,auth]);
+					db.ExcecutSQL(sql);
+				}
+			}
+		}
+		
+		db.Commit();
+		return &amp;quot;保存成功!&amp;quot;;
+		
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}  
+
+function genguid(){
+	var db = null;
+	try
+	{
+            db = new pub.EADatabase();
+            var sql = &amp;quot;SELECT sys_guid() FROM DUAL&amp;quot; ; 
+            var guid = db.GetSQL(sql);
+            return guid;
+	}catch(e){
+		if( db!= null ) db.Rollback();
+		throw new Exception(e);
+	}
+	finally{
+		if(db!=null)db.Close(); 
+	}       
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >ROL</ID><NAME ></NAME><DATDSC >select * from rol where guid=&amp;apos;[%ROLGUID]&amp;apos;</DATDSC><C4 >genGUID</C4></ROW>
+<ROW num="1" ><ID >ROLSUBSYT</ID><NAME ></NAME><DATDSC >select rol,syt,subsytid,auth,show,ord 
+from rolsubsyt where rol=&amp;apos;[%ROLGUID]&amp;apos; and syt=&amp;apos;[%SYTID]&amp;apos;</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_PAIT</MWID><NAME >病人</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_PAIT.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+//
+// 
+//
+function GetBody(){
+	
+	var html = &amp;quot;&amp;quot;;
+	var db = null;
+	var ds = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();
+		sql=&amp;quot;select id,name,CRTDAT from usr where org=&amp;apos;SNPTC&amp;apos;&amp;quot;;
+		ds=db.QuerySQL(sql);
+		
+		//throw new Exception(sql);
+		
+		if(ds.getRowCount()==0){
+			
+		}
+		
+		//&amp;lt;hr style=\&amp;quot;border:0.5px #CCCCCC solid;margin-left:10px; margin-right:10px\&amp;quot;&amp;gt;&amp;lt;/hr&amp;gt;
+		if(ds.getRowCount()&amp;gt;0){
+			html = &amp;quot;
+				&amp;lt;html&amp;gt;
+				&amp;lt;head&amp;gt;
+				&amp;lt;meta http-equiv=\&amp;quot;Content-Language\&amp;quot; content=\&amp;quot;zh-cn\&amp;quot;&amp;gt;
+				&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;textml; charset=gb2312\&amp;quot;&amp;gt;
+				&amp;lt;/head&amp;gt;
+				&amp;lt;body&amp;gt;
+				
+			&amp;quot;;
+			for(var i =0;i&amp;lt;ds.getRowCount();i++){
+			
+			var name  = ds.getStringAt(i,&amp;quot;name&amp;quot;);
+			var dat = ds.getStringAt(i,&amp;quot;CRTDAT&amp;quot;);
+			html += &amp;quot;
+				
+					&amp;lt;table style=\&amp;quot;border:1px #CCCCCC solid;border-width:1px 0px 0px 0px;\&amp;quot; width=\&amp;quot;90%\&amp;quot; height=\&amp;quot;101\&amp;quot; align=center&amp;gt;
+				
+					&amp;lt;tr&amp;gt;
+						&amp;lt;td rowspan=2 width=\&amp;quot;50%\&amp;quot;&amp;gt;&amp;lt;IMG SRC=\&amp;quot;xlsgrid/images/flash/icon/icon_103.png\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+						&amp;lt;td width=\&amp;quot;50%\&amp;quot; valign=bottom align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/td&amp;gt;
+					&amp;lt;/tr&amp;gt;
+					&amp;lt;tr&amp;gt;
+						&amp;lt;td width=\&amp;quot;50%\&amp;quot; valign=top align=\&amp;quot;center\&amp;quot; &amp;gt;&amp;quot;+dat+&amp;quot;&amp;lt;/td&amp;gt;
+					&amp;lt;/tr&amp;gt;
+					
+					&amp;lt;/table&amp;gt;
+				&amp;quot;;
+			}
+			html += &amp;quot;
+			&amp;lt;/body&amp;gt;
+			&amp;lt;/html&amp;gt;
+			&amp;quot;;
+		}
+		return html;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	
+	
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

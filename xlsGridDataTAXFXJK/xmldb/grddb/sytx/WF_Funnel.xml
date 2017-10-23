@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WF_Funnel</MWID><NAME >工作流状态漏斗分析</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WF_Funnel.zxg</FILE><SCENE ></SCENE><FIXED >1,2</FIXED><CATTYP >CRM</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >corpid</ID><NAME >客户编码</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >20</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >corpname</ID><NAME >客户名称</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >20</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >corpsubtyp</ID><NAME >客户状态</NAME><NOTNULL ></NOTNULL><KEYVAL >V_CRM_SUBTYP</KEYVAL><INPCTL >idlist</INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var startsheet =2;
+
+var zxgfile=&amp;quot;&amp;quot;;
+var G_WFGRDID = &amp;quot;&amp;quot;;
+var G_WFSYTID = &amp;quot;&amp;quot;;
+var G_STATIDLIST = &amp;quot;&amp;quot;;
+var G_STATNAMELIST = &amp;quot;&amp;quot;;
+var G_STATCNTLIST = &amp;quot;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	try{G_WFSYTID=wfsytid;}catch(e){G_WFSYTID=G_SYTID;}
+	try{G_WFGRDID=wfgrdid;}catch(e){alert(&amp;quot;参数wfgrdid必须传入&amp;quot;);}
+
+	zxgfile = _this.SaveTempZXGFile(0);
+		
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;0&amp;quot;);
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;50&amp;quot;);
+	_this.ShowTabBar(1);
+	_this.ShowToolBar(0);
+	
+	_sql.querytods(&amp;quot;GetDATE&amp;quot;,&amp;quot;wfsytid=&amp;quot;+G_WFSYTID+&amp;quot;&amp;wfgrdid=&amp;quot;+G_WFGRDID);
+	if (_this.XMLDS_GetRowCount()== 0 ){alert(&amp;quot;该中间件没有定义状态，退出&amp;quot;);return ;}
+	_this.SetCellText(1,1,1,_this.XMLDS_GetString(0,&amp;quot;DAT1&amp;quot;));
+	_this.SetCellText(1,1,3,_this.XMLDS_GetString(0,&amp;quot;DAT2&amp;quot;));
+	for(var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++){
+		if(i!=0 ){ G_STATIDLIST+=&amp;quot;,&amp;quot;;G_STATNAMELIST+=&amp;quot;,&amp;quot;; }
+		G_STATIDLIST+=_this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+		G_STATNAMELIST+=_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+		var s = _this.AddSheet(_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+	}
+	
+		
+	loaddata();
+
+	_this.SetCellBkColor(1,-1,-1,0xee,0xee,0xee );
+}
+
+function loaddata ()
+{
+	var dat1 = _this.GetCellText(1,1,1);
+	var dat2 = _this.GetCellText(1,1,3);
+	//var enddat = _this.GetCellText(1,1,5);
+	
+	//查询数据流中间件的基础信息
+	// 通过Get的方式调用服务端的一个函数
+	var xml = &amp;quot;&amp;quot;;
+	try {
+		xml = invokeOSFunc(&amp;quot;querydtl&amp;quot;,&amp;quot;wfsytid=&amp;quot;+wfsytid+&amp;quot;&amp;wfgrdid=&amp;quot;+wfgrdid+&amp;quot;&amp;thisaccid=&amp;quot;+G_ACCID+&amp;quot;&amp;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2);  
+		
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+	
+	var sID = G_STATIDLIST.split(&amp;quot;,&amp;quot;);
+	var sNAME = G_STATNAMELIST.split(&amp;quot;,&amp;quot;);
+	G_STATCNTLIST = &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;sID .length;i++){
+		_this.LoadZXGFile(zxgfile,0,startsheet+i); _this.SetSheetName(startsheet+i,sNAME [i]);
+		_this.SetXmlDS(startsheet+i,1,0,20,3,xml);
+		_this.SetColVisible(startsheet+i,0,0);
+		var colcount = _this.GetColCount(startsheet+i);
+		var rowcount = _this.GetRowCount(startsheet+i)-1;
+
+		for ( var c=0;c&amp;lt;colcount ;c++){
+			_this.SetCellText(startsheet+i,0,c,_this.GetColName(startsheet+i,c));
+		}
+		for ( var r=1;r&amp;lt;_this.GetRowCount(startsheet+i);r++){
+			var stat0= _this.GetCellText(startsheet+i,r,colcount -3);
+			if( stat0 &amp;lt; sID[i] ) {
+				_this.SetRowVisible(startsheet+i,r,0);
+				rowcount --;
+			}
+		}
+		if(i!=0 ) G_STATCNTLIST+=&amp;quot;,&amp;quot;;
+		G_STATCNTLIST+=&amp;quot;&amp;quot;+rowcount;
+		//_this.AutoFixColWidth(startsheet+i,250);
+	}
+	
+	
+//	_this.LoadZXGFile(zxgfile,0,sheet1); _this.SetSheetName(sheet1,&amp;quot;潜在客户&amp;quot;);_this.SetColVisible(sheet1,4,0);
+//	_this.LoadZXGFile(zxgfile,0,sheet2); _this.SetSheetName(sheet2,&amp;quot;意向客户&amp;quot;);_this.SetColVisible(sheet2,4,0);
+//	_this.LoadZXGFile(zxgfile,0,sheet3); _this.SetSheetName(sheet3,&amp;quot;签约客户&amp;quot;);_this.SetColVisible(sheet3,4,0);
+//	var xml1=_sql.query(&amp;quot;DETAIL1&amp;quot;,&amp;quot;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2+&amp;quot;&amp;enddat=&amp;quot;+enddat);
+//	_this.SetXmlDS(sheet1,1,0,20,8,xml1);
+//	var xml2=_sql.query(&amp;quot;DETAIL2&amp;quot;,&amp;quot;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2+&amp;quot;&amp;enddat=&amp;quot;+enddat);
+//	_this.SetXmlDS(sheet2,1,0,20,8,xml2);
+//	var xml3=_sql.query(&amp;quot;DETAIL3&amp;quot;,&amp;quot;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2+&amp;quot;&amp;enddat=&amp;quot;+enddat);
+//	_this.SetXmlDS(sheet3,1,0,20,8,xml3);
+	
+	parent.frames[0].location = &amp;quot;show.sp?grdid=WF_FunnelChart&amp;quot;;
+	
+	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;统计&amp;quot;) loaddata ();
+}
+function f_getcntxml()
+{
+
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var sID = G_STATIDLIST.split(&amp;quot;,&amp;quot;);
+	var sNAME = G_STATNAMELIST.split(&amp;quot;,&amp;quot;);
+	var sCNT = G_STATCNTLIST.split(&amp;quot;,&amp;quot;);
+	for ( var i=0;i&amp;lt;sID.length;i++ ) 
+		xml += &amp;quot;&amp;lt;row num=\&amp;quot;1\&amp;quot;&amp;gt;&amp;lt;colnam&amp;gt;&amp;quot;+sNAME[i]+&amp;quot;&amp;lt;/colnam&amp;gt;&amp;lt;cnt&amp;gt;&amp;quot;+sCNT[i]+&amp;quot;&amp;lt;/cnt&amp;gt;&amp;lt;action&amp;gt;双击查询&amp;lt;/action&amp;gt;&amp;lt;/row&amp;gt;&amp;quot;;
+	xml+=&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	return xml;
+
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet &amp;gt; 1 &amp;&amp; row &amp;gt;=1 &amp;&amp; _this.GetCellText(sheet,row,0)!=&amp;quot;&amp;quot; ){
+		openWindow(&amp;quot;show.sp?grdid= &amp;guid=&amp;quot;+_this.GetCellText(sheet,row,0));
+	}
+}
+
+function f_showsheet(sheet ) 
+{
+	_this.SetCurrentSheet(sheet);
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var dbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+// 客户端param传入的参数可以直接使用
+//wfsytid ,wfgrdid, thisaccid,dat1,dat2
+function querydtl()
+{
+	var db = null;
+	var msg= &amp;quot;RUN OK&amp;quot;;
+	var xml = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		//var usrinfo = webpack.GetLogin
+		var grdxml = new dbpack.EAGRDXmlDB(wfsytid ,wfgrdid);
+		var tablename=grdxml.getGrdDS().getStringDef(0,&amp;quot;BILHDRTABLE&amp;quot;,&amp;quot;BILHDR&amp;quot;);
+		var collist = grdxml.getGrdDS().getStringDef(0,&amp;quot;COLLIST&amp;quot;,&amp;quot;&amp;quot;);
+		if(collist == &amp;quot;&amp;quot; ) collist = &amp;quot;a.BILID 编号,a.DAT 日期,to_char(a.CRTDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) 创建时间&amp;quot;;
+          	//String mysql = &amp;quot;select a.stat,count(*) cnt from &amp;quot;+tablename+&amp;quot; a where a.acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos; &amp;quot;;
+          	//mysql+=&amp;quot; group by a.stat &amp;quot;;
+
+          	//EAXmlDS ds=db.QuerySQL(mysql);
+		var sql = &amp;quot;select a.guid 内部编码,&amp;quot;+collist +&amp;quot;,c.name 创建人姓名,a.stat 状态码,b.name 状态 from &amp;quot;+tablename+&amp;quot; a, sysprocess b,usr c where b.sytid=&amp;apos;&amp;quot;+wfsytid +&amp;quot;&amp;apos; and b.grdid=&amp;apos;&amp;quot;+wfgrdid+&amp;quot;&amp;apos; and a.stat=b.id &amp;quot;+
+			&amp;quot; and a.org=c.org and a.crtusr=c.id &amp;quot;+
+			&amp;quot; and to_char(a.crtdat,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos; and  to_char(a.crtdat,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos; &amp;quot;+
+			&amp;quot; order by a.stat desc,a.crtdat desc &amp;quot;;
+		var statds = db.QuerySQL(sql);
+		return statds.GetXml();
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DETAIL1</ID><NAME ></NAME><DATDSC >select * from
+(select a.ID 单位编号,a.NAME 单位名称,a.LONNAME 全称,a.BUSINESSADDRESS 地址,a.GUID GUID,
+a.SALMANNAM 负责业务员名称,crtdat, &amp;apos;潜在客户&amp;apos; typ, &amp;apos;&amp;apos; note
+from crm_corp a , v_crm_subtyp b
+where a.corpsubtyp=b.id(+)
+and a.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.corpsubtyp like &amp;apos;[%corpsubtyp]%&amp;apos;
+--and a.id like &amp;apos;[%corpid]%&amp;apos;
+--and a.name like &amp;apos;[%corpname]%&amp;apos;
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=to_date(&amp;apos;[%dat1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%dat2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and (a.gendat2 is null or 
+to_date(to_char(a.gendat2,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;)
+)
+union all
+select a.ID 单位编号,a.NAME 单位名称,a.LONNAME 全称,a.BUSINESSADDRESS 地址,a.GUID GUID,
+
+a.SALMANNAM 负责业务员名称,crtdat, &amp;apos;意向客户&amp;apos; typ,to_char(gendat2 ,&amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;转为意向客户&amp;apos; note
+from crm_corp a , v_crm_subtyp b
+where a.corpsubtyp=b.id(+)
+and a.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.corpsubtyp like &amp;apos;[%corpsubtyp]%&amp;apos;
+--and a.id like &amp;apos;[%corpid]%&amp;apos;
+--and a.name like &amp;apos;[%corpname]%&amp;apos;
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=to_date(&amp;apos;[%dat1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%dat2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and a.gendat2 is not null and a.gendat3 is null
+and (
+to_date(to_char(a.gendat2,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) and
+(a.gendat3 is null or to_date(to_char(a.gendat3,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;))
+)
+union all
+select a.ID 单位编号,a.NAME 单位名称,a.LONNAME 全称,a.BUSINESSADDRESS 地址,a.GUID GUID,
+
+a.SALMANNAM 负责业务员名称,crtdat, &amp;apos;签约客户&amp;apos; typ,to_char(gendat3 ,&amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;转为签约客户&amp;apos; note
+from crm_corp a , v_crm_subtyp b
+where a.corpsubtyp=b.id(+)
+and a.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.corpsubtyp like &amp;apos;[%corpsubtyp]%&amp;apos;
+--and a.id like &amp;apos;[%corpid]%&amp;apos;
+--and a.name like &amp;apos;[%corpname]%&amp;apos;
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=to_date(&amp;apos;[%dat1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%dat2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and a.gendat3 is not null 
+and to_date(to_char(a.gendat3,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+) a
+order by a.crtdat desc </DATDSC><C4 >DETAIL1</C4><C5 ></C5><C6 >DETAIL1</C6><C7 ></C7><C8 >DETAIL1</C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="1" ><ID >DETAIL3</ID><NAME ></NAME><DATDSC >select a.ID 单位编号,a.NAME 单位名称,a.LONNAME 全称,a.BUSINESSADDRESS 地址,a.GUID GUID,
+a.SALMANNAM 负责业务员名称,crtdat, &amp;apos;签约客户&amp;apos; typ,to_char(gendat3 ,&amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;转为签约客户&amp;apos; note
+from crm_corp a , v_crm_subtyp b
+where a.corpsubtyp=b.id(+)
+and a.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.corpsubtyp like &amp;apos;[%corpsubtyp]%&amp;apos;
+--and a.id like &amp;apos;[%corpid]%&amp;apos;
+--and a.name like &amp;apos;[%corpname]%&amp;apos;
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=to_date(&amp;apos;[%dat1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%dat2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and a.gendat3 is not null 
+and to_date(to_char(a.gendat3,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+order by a.crtdat desc </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >DETAIL3</C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="2" ><ID >DETAIL2</ID><NAME ></NAME><DATDSC >select * from (
+select a.ID 单位编号,a.NAME 单位名称,a.LONNAME 全称,a.BUSINESSADDRESS 地址,a.GUID GUID,
+a.SALMANNAM 负责业务员名称,a.crtdat,&amp;apos;意向客户&amp;apos; typ,to_char(gendat2 ,&amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;转为意向客户&amp;apos; note
+from crm_corp a , v_crm_subtyp b
+where a.corpsubtyp=b.id(+)
+and a.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.corpsubtyp like &amp;apos;[%corpsubtyp]%&amp;apos;
+--and a.id like &amp;apos;[%corpid]%&amp;apos;
+--and a.name like &amp;apos;[%corpname]%&amp;apos;
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=to_date(&amp;apos;[%dat1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%dat2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and a.gendat2 is not null and a.gendat3 is null
+
+and (
+to_date(to_char(a.gendat2,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) and
+(a.gendat3 is null or to_date(to_char(a.gendat3,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;))
+)
+union all
+select a.ID 单位编号,a.NAME 单位名称,a.LONNAME 全称,a.BUSINESSADDRESS 地址,a.GUID GUID,
+a.SALMANNAM 负责业务员名称,a.crtdat,&amp;apos;签约客户&amp;apos; typ,to_char(gendat3 ,&amp;apos;YYYY-MM-DD&amp;apos;)||&amp;apos;转为签约客户&amp;apos; note
+from crm_corp a , v_crm_subtyp b
+where a.corpsubtyp=b.id(+)
+and a.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+--and a.corpsubtyp like &amp;apos;[%corpsubtyp]%&amp;apos;
+--and a.id like &amp;apos;[%corpid]%&amp;apos;
+--and a.name like &amp;apos;[%corpname]%&amp;apos;
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=to_date(&amp;apos;[%dat1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and to_date(to_char(a.gendat1,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%dat2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and a.gendat3 is not null 
+and to_date(to_char(a.gendat3,&amp;apos;YYYY-MM-DD&amp;apos;),&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=to_date(&amp;apos;[%enddat]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+) a order by a.crtdat desc 
+
+</DATDSC><C4 >GRDDSCDS_2</C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="3" ><ID >GetDATE</ID><NAME ></NAME><DATDSC >select id,name,nextname ,to_char(sysdate-365,&amp;apos;YYYY-MM-DD&amp;apos;) dat1,
+to_char(sysdate,&amp;apos;YYYY-MM-DD&amp;apos;) dat2,
+to_char(sysdate,&amp;apos;YYYY-MM-DD&amp;apos;) dat3
+from sysprocess where sytid=&amp;apos;[%wfsytid]&amp;apos; and grdid=&amp;apos;[%wfgrdid]&amp;apos; order by id 
+</DATDSC><C4 ></C4><C5 >GetDATE</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >GetDATE</C9><C10 >GetDATE</C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

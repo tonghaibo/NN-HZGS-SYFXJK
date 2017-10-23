@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >B03</MWID><NAME >核实处理结果报表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >B03.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYMM1</ID><NAME >开始时间</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_0</C13><C14 >YYMM1</C14><C15 >YYMM1</C15><C16 >YYMM1</C16></ROW>
+<ROW num="1" ><ID >YYMM2</ID><NAME >截至时间</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_1</C13><C14 >YYMM2</C14><C15 >YYMM2</C15><C16 >YYMM2</C16></ROW>
+<ROW num="2" ><ID >TYP</ID><NAME >处理类型</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_TAX_TRKSUBTYP</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_2</C13><C14 >TYP</C14><C15 >TYP</C15><C16 >TYP</C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,-1,-1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:GRDDSCDS</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+<ROW num="1" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >4</NROW><NCOL >5</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+<ROW num="2" ><ID >0,2,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%TYP]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP >COMBOBOX</CTLTYP><DYNCTL ></DYNCTL><LISTID >V_TAX_TRKSUBTYP</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(&amp;quot;0&amp;quot;,&amp;quot;V&amp;quot;,&amp;quot;40%&amp;quot;);
+//	_this.SetCellText(sheet,4,1,_this.GetCellText(sheet,5,1));
+	//_this.SetCellText(sheet,4,3,str+str1);
+//	var str2=_this.GetCellText(sheet,4,3);
+//	for (var r=_this.GetMainCellRangeRow1(sheet);r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+//		var str=1.0*_this.GetCellText(sheet,r,3);
+//		_this.SetCellText(sheet,r,4,(str/str2).toFixed(2));
+//	}
+	showChar(1);
+	
+	if (_this.GetCellText(sheet,2,2) == &amp;quot;&amp;quot;) {
+		_this.SetToStandardCell(sheet,2,2);
+		_this.SetCellText(sheet,2,2,&amp;quot;全部事务&amp;quot;);
+	}
+	
+
+}
+function showChar(sheet) 
+{
+	var xml = getxml();
+
+	var title = &amp;quot;核实处理结果分析图&amp;quot;;
+	var xtitle = &amp;quot;状态&amp;quot;;
+	var ytitle = &amp;quot;数量&amp;quot;;
+	var chart = new SVGChart(&amp;quot;CHART1&amp;quot;,sheet,-1,-1,3,title,xtitle,ytitle,800,400,xml );
+	chart.m_bShowSeralName = 1;
+	chart.load();
+}
+
+function getxml()
+{
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+//	var row1 = _this.GetMainCellRangeRow1(0);
+//	for (var r=row1;r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+//		xml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(r-row1)+&amp;quot;\&amp;quot; name=\&amp;quot;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+//		xml += &amp;quot;&amp;lt;数量&amp;gt;&amp;quot;+_this.GetCellText(0,r,3)+&amp;quot;&amp;lt;/数量&amp;gt;\n&amp;quot;;
+//		xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+//	}
+	
+	var row2 = _this.GetMainCellRangeRow2(0);
+	for (var c=3;c&amp;lt;=4;c++) {
+		xml += &amp;quot;&amp;lt;ROW num=\&amp;quot;1\&amp;quot; name=\&amp;quot;&amp;quot;+_this.GetCellText(0,3,c)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;数量&amp;gt;&amp;quot;+_this.GetCellText(0,row2+1,c)+&amp;quot;&amp;lt;/数量&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+	}
+	return xml;
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >select yymm,name,cnt2,cnt3,decode(cnt1,0,&amp;apos;&amp;apos;,round(cnt3/cnt1*100,2)||&amp;apos;%&amp;apos;) from (
+select &amp;apos;[%YYMM1]&amp;apos;||&amp;apos;~&amp;apos;||&amp;apos;[%YYMM2]&amp;apos; yymm,b.id,b.name,
+       sum(decode(a.stat,&amp;apos;2&amp;apos;,1,&amp;apos;3&amp;apos;,1,&amp;apos;8&amp;apos;,1,&amp;apos;9&amp;apos;,1,0)) cnt1, 
+       sum(decode(a.stat,&amp;apos;3&amp;apos;,1,&amp;apos;8&amp;apos;,1,0)) cnt2,
+       sum(decode(a.stat,&amp;apos;9&amp;apos;,1,0)) cnt3
+from tax_trkhdr a,v_tax_trksubtyp b
+where a.typ(+)=b.id
+  and to_char(a.dat(+),&amp;apos;yyyy-MM&amp;apos;) &amp;gt;= decode(&amp;apos;[%YYMM1]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01&amp;apos;,&amp;apos;[%YYMM1]&amp;apos;) 
+  and to_char(a.dat(+),&amp;apos;yyyy-MM&amp;apos;) &amp;lt;= decode(&amp;apos;[%YYMM2]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01&amp;apos;,&amp;apos;[%YYMM2]&amp;apos;) 
+  and nvl(typ(+),&amp;apos;%&amp;apos;) like &amp;apos;[%TYP]%&amp;apos;
+group by b.id,b.name
+) order by id</DATDSC><C4 >GRDDSCDS_0</C4><C5 >main</C5><C6 >main</C6><C7 >main</C7><C8 >main</C8><C9 >main</C9><C10 >main</C10><C11 >main</C11><C12 >main</C12></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

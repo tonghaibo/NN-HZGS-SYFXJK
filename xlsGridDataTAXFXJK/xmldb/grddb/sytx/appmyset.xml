@@ -1,0 +1,294 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >appmyset</MWID><NAME >个人设置</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >appmyset.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+//
+// 
+//
+function GetBody()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	var nextguid=&amp;quot;&amp;quot;;
+	var url=&amp;quot;&amp;quot;;
+	try {
+	
+		var usrinfo = web.EASession.GetLoginInfo(request);
+		var usrid = usrinfo.getUsrid();
+	   	var accid = usrinfo.getAccid();
+	   	var sytid = usrinfo.getSytid();
+		var orgid = usrinfo.getOrgid();
+
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”);
+		//判断是否有基本信息如果没有就insert 
+		sql=&amp;quot;select * from chis_patinfo where formguid=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; )&amp;quot;;
+		ds=db.QuerySQL(sql);
+		
+		if(ds.getRowCount()&amp;gt;0){
+			nextguid=ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+		}else{
+		      sql=&amp;quot;insert into chis_patinfo (patnam,formguid,org,crtdat) select name,guid,org,sysdate from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; &amp;quot;;
+		      	db.ExcecutSQL(sql);
+		      	sql=&amp;quot;select * from chis_patinfo where formguid=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; )&amp;quot;;
+			ds=db.QuerySQL(sql);
+			if(ds.getRowCount()&amp;gt;0){
+				nextguid=ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+			}
+			else{
+			nextguid=&amp;quot;&amp;quot;;
+			}
+		      	db.Commit();
+		}
+		url=&amp;quot;L.sp?grdid=CHIS_SETPATINFO&amp;guid=&amp;quot;+nextguid;
+		
+		ret+=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		
+		function loadusrnam(){
+			document.getElementById(&amp;apos;genlocalusrnam&amp;apos;).innerHTML=G_APP_USRNAM;
+			if(G_APP_USRIMG!=\&amp;quot;\&amp;quot;){
+				document.getElementById(&amp;apos;genlocalusrimg&amp;apos;).src=\&amp;quot;EAFormBlob.sp?guid=\&amp;quot;+G_APP_USRIMG;
+			}
+		}
+		window.onload=loadusrnam;
+		&amp;lt;/script&amp;gt;&amp;quot;;
+		
+		ret+=&amp;quot;
+		
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;cordova.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;cordova_plugins.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		        function uploadPic(){
+		        	//$(&amp;apos;#upPicture&amp;apos;).show();
+		        	//$(&amp;apos;#bgcoloropa&amp;apos;).show();
+		        	document.getElementById(&amp;apos;upPicture&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+		        	document.getElementById(&amp;apos;bgcoloropa&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+		        }
+		        			
+		      function cancleUploadPic(){
+		//        	$(&amp;apos;#upPicture&amp;apos;).hide();
+		//        	$(&amp;apos;#bgcoloropa&amp;apos;).hide();
+				document.getElementById(&amp;apos;upPicture&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+				document.getElementById(&amp;apos;bgcoloropa&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+		      }
+        			
+
+		    var pictureSource;  //设定图片来源  
+		    var destinationType; //选择返回数据的格式  
+		  
+		    document.addEventListener(\&amp;quot;deviceready\&amp;quot;,onDeviceReady,false);  
+		  
+		    // Cordova准备好了可以使用了  
+		    function onDeviceReady() { 
+			pictureSource=navigator.camera.PictureSourceType;  
+		        destinationType=navigator.camera.DestinationType;  
+		    }
+		      
+		    // 拍照 capture(50,1,0,-1,-1);
+		    // 摄影 capture(50,1,1,-1,-1);
+		    // 从图库选择 capture(100,0,0,-1,-1)
+		    
+		    // qua 清晰度 100;
+		    // src:=0 图片库 =1 摄像头 =2 相册  
+		    // mtype = 0 照相  = 1 摄像 =2 全部
+		    // width height 如果为-1表示取照相机默认像素大小
+		    
+		    function capture(qua,src,mtype,width,height) {alert(\&amp;quot;进入\&amp;quot;); 
+			navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: qua,  destinationType:destinationType.FILE_URI,sourceType:src, targetWidth:width,targetHeight:height,encodingType:0,mediaType:mtype });
+		   	alert(\&amp;quot;结束\&amp;quot;);
+		    }
+		    
+		    // 图片获取成功  
+		    function onPhotoURISuccess(imageURI) {  				
+		//	appendMessage(\&amp;quot;&amp;lt;div &amp;gt;&amp;lt;img src=&amp;apos;+imageURI+&amp;apos; width=120 height=120&amp;gt;&amp;lt;div id=&amp;apos;process_info&amp;apos;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;\&amp;quot;,G_USRID,G_USRIMG,&amp;apos;right&amp;apos;);
+			alert(\&amp;quot;图片获取成功\&amp;quot;); 
+			uploadfile(imageURI,\&amp;quot;image/jpeg\&amp;quot;);
+		    }  
+		    // 图片获取失败     
+		    function onFail(message) {
+		    	 alert(\&amp;quot;图片获取失败\&amp;quot;); 
+		     	 log(&amp;apos;Failed because: &amp;apos; + message);  
+		    }  
+			
+		    function captureAudio() {  
+				document.all(&amp;apos;addwnd&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+				document.all(&amp;apos;recordwnd&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+		    }  
+		  
+		    // 上传一个文件到数据库	
+		    function uploadfile(fileName,mimeType)
+		    {		
+				var ft = new FileTransfer();
+				var options = new FileUploadOptions();
+				options.fileKey = \&amp;quot;data\&amp;quot;;//图片域名！！！
+				if(fileName.indexOf(&amp;apos;?&amp;apos;)==-1){
+					options.fileName = fileName;
+				}else{
+					options.fileName = fileName.substr(0,fileName.indexOf(&amp;apos;?&amp;apos;));
+				}
+				
+				 options.mimeType = mimeType;//
+				 options.chunkedMode = false;
+				 
+				 var params = {};
+				 params.fileurl = fileName;
+				 params.grdid = \&amp;quot;APP_IMGUPLOAD\&amp;quot;;
+				 params.sytid = \&amp;quot;x\&amp;quot;;
+				 options.params = params;
+				 ft.upload(fileName, G_WEBBASE+\&amp;quot;EAFormBlobUpload.sp?usrid=\&amp;quot;+G_APP_USRID+\&amp;quot;&amp;userpwd=\&amp;quot;+G_APP_USERPWD, onFileUploadSuccess, onFileUploadFail, options);
+				 ft.onprogress = uploadProcessing;
+		}
+		function onFileUploadSuccess(result)
+		{alert(\&amp;quot;图片上传\&amp;quot;);
+			$.get(&amp;apos;L.sp?osp=CHIS_appmyset_uploadUsrPhoto&amp;imgguid=&amp;apos;+result.response,function(data,status){
+				alert(data);
+				window.location.reload();
+			});
+		}
+		function onFileUploadFail(error)
+		{
+			
+		}
+		function uploadProcessing(progressEvent){
+			if (progressEvent.lengthComputable) { 
+				//已经上传 
+				var loaded=progressEvent.loaded; 
+				//文件总长度 
+				var total=progressEvent.total; 
+				//计算百分比，用于显示进度条 
+				var percent=parseInt((loaded/total)*100); 
+				//换算成MB 
+				loaded=(loaded/1024/1024).toFixed(2); 
+				total=(total/1024/1024).toFixed(2); 
+//				$(&amp;apos;#process_info&amp;apos;).html(loaded+&amp;apos;/&amp;apos;+total); 
+				document.getElementById(&amp;apos;process_info&amp;apos;).html(loaded+&amp;apos;/&amp;apos;+total); 
+				//$(&amp;apos;.upload_current_process&amp;apos;).css({&amp;apos;width&amp;apos;:percent+&amp;apos;%&amp;apos;}); 
+			}
+		}       
+		&amp;lt;/script&amp;gt;
+		&amp;quot;;
+		
+		ret += &amp;quot;
+
+		&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		      .avatar{border: 2px solid #999;border-radius: 50%;padding: .8em;}
+		      .username{display: inline-block;width: 100%;padding: 10px 0 20px;font-size: 1.2em;color: #999;border-bottom: 1px solid #e6e6e6;}
+		      .menu{border-bottom: 1px solid #e6e6e6;box-shadow: 0 0 1px #fff;}
+		       ul{padding: 0;margin: 0;}
+		       li{list-style: none;}
+		       div {display: block;}
+		       img {vertical-align: middle;}
+		      .menu a{color: #333;padding: 1em 0;font-size: 1em;display: block;}
+		      .glyphicon{position: relative;top: 1px;display: inline-block;font-family: &amp;apos;Glyphicons Halflings&amp;apos;;-webkit-font-smoothing: antialiased;font-style: normal;font-weight: normal;line-height: 1;}
+		      .glyphicon-cog:before {content: \&amp;quot;\\e019\&amp;quot;;}
+		      .glyphicon-lock:before {content: \&amp;quot;\\e033\&amp;quot;;}
+		      .glyphicon-picture:before {content: \&amp;quot;\\e060\&amp;quot;;}
+		      .glyphicon-off:before {content: \&amp;quot;\\e017\&amp;quot;;}
+		&amp;lt;/style&amp;gt;
+			
+		&amp;lt;div style=\&amp;quot;position:relative;height:100%;width:100%;z-index:1;\&amp;quot; data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;right\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;user_box text-center dn linear-g ui-panel ui-panel-position-right ui-panel-display-push ui-body-inherit ui-panel-animate ui-panel-open\&amp;quot; id=\&amp;quot;panel-right\&amp;quot;&amp;gt;
+        		 
+        		 &amp;lt;div onclick=\&amp;quot;cancleUploadPic()\&amp;quot; id=\&amp;quot;bgcoloropa\&amp;quot; style=\&amp;quot;position:absolute;height:100%;width:100%;background:#A0A0A0;display:none;z-index:50;opacity: 0.7;overflow:visible;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+        		 
+        		 &amp;lt;div class=\&amp;quot;ui-panel-inner\&amp;quot; style=\&amp;quot;height:60%;\&amp;quot;&amp;gt;
+        			&amp;lt;div style=\&amp;quot;padding-top:20px;\&amp;quot;&amp;gt;
+            				&amp;lt;img class=\&amp;quot;avatar\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/icon/icon_151.png\&amp;quot; alt=\&amp;quot;头像\&amp;quot;  onclick=\&amp;quot;uploadPic()\&amp;quot; id=\&amp;quot;genlocalusrimg\&amp;quot; style=\&amp;quot;height:10%;width: 20%;cursor:pointer;\&amp;quot;&amp;gt;
+            				&amp;lt;span class=\&amp;quot;username\&amp;quot; id=\&amp;quot;genlocalusrnam\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        			&amp;lt;/div&amp;gt;
+	        		&amp;lt;ul class=\&amp;quot;user_menu\&amp;quot;&amp;gt; 		
+			          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;  onclick=\&amp;quot;javascript:openWindow(&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; class=\&amp;quot;ui-link\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-cog\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;基本设置&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:openWindow(&amp;apos;xlsgrid/jsp/pages/chgpassnew.jsp?flag=USR&amp;grdid=PASSWD&amp;apos;)\&amp;quot; class=\&amp;quot;ui-link\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-lock\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;修改密码&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;uploadPic()\&amp;quot; class=\&amp;quot;ui-link\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-picture\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;上传头像&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a onclick=\&amp;quot;javascript:window.parent.location.href=&amp;apos;L.sp?id=SICKLOGIN&amp;apos;;\&amp;quot; class=\&amp;quot;ui-link\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-off\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;重新登录&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a onclick=\&amp;quot;javascript:navigator.app.exitApp();\&amp;quot; class=\&amp;quot;ui-link\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-off\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;安全退出&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+	        		&amp;lt;/ul&amp;gt;
+        		&amp;lt;/div&amp;gt;
+        		
+        		&amp;lt;div id=\&amp;quot;upPicture\&amp;quot; style=\&amp;quot;display:none;width:100%;height:40%;position:absolute;z-index:10000;\&amp;quot; align=\&amp;quot;center\&amp;quot;&amp;gt;
+			
+				&amp;lt;div style=\&amp;quot;background:#FFFFFF;width:92%;border-radius:7px;cursor:pointer;\&amp;quot;&amp;gt;
+					&amp;lt;div onclick=\&amp;quot;javascript:capture(50,1,0,-1,-1)\&amp;quot;&amp;gt;
+						&amp;lt;hr style=\&amp;quot;margin-bottom:15px;margin-top:15px;width:98%;height:0px;border:none;border-top:1px solid #e6e6e6;\&amp;quot;/&amp;gt;
+						&amp;lt;a style=\&amp;quot;text-decoration: none;cursor:pointer;color: blue;font-size: 1em;\&amp;quot;&amp;gt;&amp;lt;font&amp;gt;&amp;lt;b&amp;gt;&amp;nbsp;&amp;nbsp;拍照&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;
+						&amp;lt;hr style=\&amp;quot;margin-bottom:15px;margin-top:15px;width:100%;height:1px;border:none;border-top:1px solid #e6e6e6;\&amp;quot;/&amp;gt;
+					&amp;lt;/div&amp;gt;
+				
+					&amp;lt;div onclick=\&amp;quot;capture(100,0,0,-1,-1);\&amp;quot;&amp;gt;	
+						&amp;lt;a style=\&amp;quot;text-decoration: none;cursor:pointer;color: blue;font-size: 1em;\&amp;quot;&amp;gt;&amp;lt;font&amp;gt;&amp;lt;b&amp;gt;&amp;nbsp;&amp;nbsp;从相册选择&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;
+						&amp;lt;hr style=\&amp;quot;margin-bottom:15px;margin-top:15px;width:98%;height:0px;border:none;border-top:1px solid #e6e6e6;\&amp;quot;/&amp;gt;
+					&amp;lt;/div&amp;gt;
+				&amp;lt;/div&amp;gt;
+				
+				&amp;lt;div onclick=\&amp;quot;cancleUploadPic()\&amp;quot; style=\&amp;quot;background:#FFFFFF;width:92%;border-radius:7px;cursor:pointer;\&amp;quot;&amp;gt;
+					&amp;lt;hr style=\&amp;quot;margin-bottom:15px;margin-top:15px;width:98%;height:1px;border:none;border-top:0px solid #e6e6e6;\&amp;quot;/&amp;gt;
+					&amp;lt;div&amp;gt;&amp;lt;a style=\&amp;quot;text-decoration: none;cursor:pointer;color: blue;font-size: 1em;\&amp;quot;&amp;gt;&amp;lt;font&amp;gt;&amp;lt;b&amp;gt;&amp;nbsp;&amp;nbsp;取消&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
+					&amp;lt;hr style=\&amp;quot;margin-bottom:15px;margin-top:15px;width:98%;height:0px;border:none;border-top:1px solid #e6e6e6;\&amp;quot;/&amp;gt;
+				&amp;lt;/div&amp;gt;
+			&amp;lt;/div&amp;gt;
+        	&amp;lt;/div&amp;gt;
+        	&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	
+	return ret;
+}
+
+//数据库交互：上传或修改头像
+function uploadUsrPhoto(){
+	var sql=&amp;quot;&amp;quot;;
+	var db=null;
+	var ds=null;
+	var msg=&amp;quot;&amp;quot;;
+	
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+	
+	var imgguid= pubpack.EAFunc.NVL(request.getParameter(&amp;quot;imgguid&amp;quot;),&amp;quot;&amp;quot;) ;
+//	throw new Exception(&amp;quot;图片guid=&amp;quot;+imgguid+&amp;quot;用户名为：&amp;quot;+usrid);
+	try{
+		db = new pubpack.EADatabase();
+		sql=&amp;quot;update usr set imgguid=&amp;apos;&amp;quot;+imgguid+&amp;quot;&amp;apos; where org=&amp;apos;CHIS&amp;apos; and id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;;
+		
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		msg=&amp;quot;上传成功！&amp;quot;;
+	}catch(e){
+		msg=&amp;quot;上传失败！&amp;quot;;
+		db.Rollback();
+		throw new Exception(e.toString());
+	}finally{
+		if(db != null)
+			db.Close();
+	}
+	return msg;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

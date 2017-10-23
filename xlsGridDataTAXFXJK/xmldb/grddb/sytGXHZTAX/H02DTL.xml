@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >H02DTL</MWID><NAME >重点税源纳税情况明细表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >H02DTL.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYMM1</ID><NAME >开始时间</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YEAR</C13><C14 >YYMM1</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="1" ><ID >SWJG_DM</ID><NAME >税务机构</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >SWJG</C13><C14 >SWJG</C14><C15 >SWJG</C15><C16 ></C16><C17 ></C17><C18 >SWJG</C18></ROW>
+<ROW num="2" ><ID >YYMM2</ID><NAME >结束时间</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >YYMM2</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="3" ><ID >HY</ID><NAME >个性化行业</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_HYCLASS</KEYVAL><INPCTL >select</INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >HY</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="4" ><ID >SEHJ1</ID><NAME >纳税金额大于(元)</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >98</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >GRDPAMDS_4</C16><C17 >SEHJ1</C17><C18 ></C18></ROW>
+<ROW num="5" ><ID >SEHJ2</ID><NAME >纳税金额小于(元)</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >99</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >SEHJ2</C17><C18 ></C18></ROW>
+<ROW num="6" ><ID >CMID</ID><NAME >纳税人编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,5,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >11</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,5,1</C21><C22 >0,5,1</C22></ROW>
+<ROW num="1" ><ID >0,2,4</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%YYMM1]~[%YYMM2]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,2,3</C21><C22 ></C22></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+//显示查询参数前预处理
+//用于在查询或报表显示查询参数前的预处理。
+//可以往sb（StringBuffer）中append HTML内容或额外附近脚本
+//可以修改paramDs的内容，决定哪些参数可见或修改默认值
+//  ID:编号;  NAME:标题; KEYVAL:关键字; SQLWHE:WHERE条件; DEFVAL:默认值
+//  TIP:提示; EDTFLG:是否可修改;  VISFLG:是否可显示; KEYFLG:关键字段(没有作用)
+//  DISPORD:参数显示次序号(修改无效); INPCTL:控件类型
+function beforeShowParam(request,sb,paramDs,usrinfo)
+//var request=javax.servlet.http.HttpServletRequest(); var sb = new java.lang.StringBuffer();var paramDs = new EAXmlDS();var usrinfo = new web.EAUserinfo();
+{
+	//throw new Exception(paramDs.GetXml());
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrorg = usrinfo.getusrOrg();
+	var usrid = usrinfo.getUsrid();
+	var ds = pub.EADbTool.QuerySQL(&amp;quot;select a.*,nvl(b.SCOPE,&amp;apos;NO&amp;apos;) SCOPE from usr a,v_depts b where a.deptid=b.id and a.org=b.org and a.org=&amp;apos;&amp;quot;+usrorg+&amp;quot;&amp;apos; and a.id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;);
+	if (ds.getRowCount() &amp;gt; 0) {
+		var scope = ds.getStringAt(0,&amp;quot;SCOPE&amp;quot;);
+		if (scope != &amp;quot;ALL&amp;quot;) {
+			paramDs.setValueAt(3,11,&amp;quot;0&amp;quot;);
+		}
+	}
+}
+
+
+
+//替换SQL参数
+function replaceParam(mwobj,request,sql)
+{
+var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrorg = usrinfo.getusrOrg();
+	var usrid = usrinfo.getUsrid();
+	var swjg_dm = request.getParameter(&amp;quot;SWJG_DM&amp;quot;);
+	var ds = pub.EADbTool.QuerySQL(&amp;quot;select a.*,nvl(b.SCOPE,&amp;apos;NO&amp;apos;) SCOPE from usr a,v_depts b where a.deptid=b.id and a.org=b.org and a.org=&amp;apos;&amp;quot;+usrorg+&amp;quot;&amp;apos; and a.id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;);
+	if (ds.getRowCount() &amp;gt; 0) {
+		var scope = ds.getStringAt(0,&amp;quot;SCOPE&amp;quot;);
+		if (scope == &amp;quot;ALL&amp;quot;) {
+			sql = pub.EAFunc.Replace(sql,&amp;quot;[%SWJGSTR]&amp;quot;,&amp;quot;and b.swjg_dm like &amp;apos;%[%SWJG_DM]%&amp;apos;&amp;quot;);
+			
+		}
+		else {
+			sql = pub.EAFunc.Replace(sql,&amp;quot;[%SWJGSTR]&amp;quot;,&amp;quot;and b.swjg_dm like (select decode(scope,&amp;apos;ALL&amp;apos;,&amp;apos;%&amp;apos;,substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,0,7 )||&amp;apos;%&amp;apos;) from v_depts where id=&amp;apos;[%SYS_DEPTID]&amp;apos;)&amp;quot;);
+		}
+	}
+	sql = pub.EAFunc.Replace(sql,&amp;quot;[%SWJGSTR]&amp;quot;,&amp;quot;and b.swjg_dm like (select decode(scope,&amp;apos;ALL&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%SYS_DEPTID]&amp;apos;) from v_depts where id=&amp;apos;[%SYS_DEPTID]&amp;apos;)&amp;quot;);
+	
+	return sql;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum rn,hynam,nsrsbh,to_char(jkfsrq,&amp;apos;YYYY-MM&amp;apos;),aa.name,sehj,zzs,xfs,sds,sdsw,bb.NAME swjg from(
+select max(c.NAME) hyNam,a.nsrsbh,jkfsrq,max(b.name) name,sum(zzs) zzs,sum(xfs) xfs,sum(sds) sds,sum(sdsw) sdsw,sum(sehj) sehj,substr(max(b.swjg_dm),0,7) swjg
+from tax_kpdata a,tax_company b,v_tax_hyclass c
+where a.NSRSBH=b.id(+)
+[%SWJGSTR]
+and b.typclsid=c.id(+)
+and jkfsrq &amp;gt;= to_date(&amp;apos;[%YYMM1]&amp;apos;,&amp;apos;YYYY-MM&amp;apos;)   
+and jkfsrq &amp;lt;= to_date(&amp;apos;[%YYMM2]&amp;apos;,&amp;apos;YYYY-MM&amp;apos;)
+group by a.nsrsbh,jkfsrq
+order by jkfsrq desc
+) aa,v_swjg bb
+--where sehj&amp;gt;=500000  and aa.swjg=bb.ID(+)
+where aa.nsrsbh=&amp;apos;[%CMID]&amp;apos;
+and aa.swjg=bb.ID(+)</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16><C17 >MAIN</C17><C18 >MAIN</C18><C19 >MAIN</C19></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

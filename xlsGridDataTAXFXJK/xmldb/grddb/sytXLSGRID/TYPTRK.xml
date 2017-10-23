@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >TYPTRK</MWID><NAME >定义事务类型</NAME><NOTE ></NOTE><FILE >TYPTRK.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS >xlsgrid/js/dbhelper.js,xlsgrid/js/x/JSFUNC.djs,xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0; 
+var num = 0;
+var id =&amp;quot;&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+        order = &amp;quot; order by ID &amp;quot;;     
+        setButton();          //设置中间件按钮 
+        var  fields =  
+            &amp;quot;GUID,GUID,sys_guid();&amp;quot;+
+             &amp;quot;ID,编号,,.+;&amp;quot;+	
+            &amp;quot;NAME,名称,,.+;&amp;quot;+
+            &amp;quot;NOTE,说明,,.+;&amp;quot;+ 
+            &amp;quot;FINKEY,查找关键字,,.+;&amp;quot;+  
+            &amp;quot;TRSFLG,事务处理方式,,.+;&amp;quot;+ 
+            &amp;quot;SENDTO,发送方式,,.+;&amp;quot;+
+            &amp;quot;ENDFLG,结束事务标志,,.+;&amp;quot;+
+            &amp;quot;RETFLG,回复事务标志,,.+;&amp;quot;+
+            &amp;quot;TOPTYP,标题格式,,.+;&amp;quot;+
+            &amp;quot;CRTDAT,创建日期,,.+;&amp;quot;+ 
+            &amp;quot;ASKFLG,事务提出标志,,.+;&amp;quot;+
+            &amp;quot;SORTID,排序&amp;quot;;
+
+            
+         _dbhelper.InitSQL(&amp;quot;trktyp&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false);       
+         _dbhelper.Load(1,1,2,2);
+          var row1 = _this.GetMainCellRangeRow1(0);
+          var row2 = _this.GetMainCellRangeRow2(0);
+         setFinkey(row1,row2);
+         setTrsflg(row1,row2);
+         setSendto(row1,row2);
+         setEnd(row1,row2);
+         setRetflg(row1,row2);
+         setToptyp(row1,row2);
+         setDate(row1,row2);
+         setAskflg(row1,row2);
+         QuerySQLDS(&amp;quot;select max(id) id from trktyp&amp;quot;);
+         id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;); 
+}
+
+
+//================================================================// 
+// 函数：setFinkey
+// 说明：查找关键字~如OA,SA,SD,BUG, 这样，我们可以查找OA的分类
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:33:49
+// 修改日志：
+//================================================================// 
+function setFinkey(row1,row2)
+{
+	var listid = setListCombox(&amp;quot;v_finkey&amp;quot;);
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+             _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,6,listid );
+       }
+        
+}
+//================================================================// 
+// 函数：setTrsflg
+// 说明：是否可以将事务转发其他人处理~0 可转发其他人=1 不能转发
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:07
+// 修改日志：
+//================================================================// 
+function setTrsflg(row1,row2)
+{
+	var listid = setListCombox(&amp;quot;v_trsflg&amp;quot;);
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+            _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,7,listid);
+       }
+
+}
+
+//================================================================// 
+// 函数：setSendto
+// 说明：发送给目标人的方式~=0 可以发送给任何人1个 =1 发送给任何人多个 =2 只能发送给自己 =3 发送给某个组织的所有人
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:22
+// 修改日志：
+//================================================================// 
+function setSendto(row1,row2)
+{
+	var listid= setListCombox(&amp;quot;v_sendto&amp;quot;);
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+            _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,8,listid);
+        }
+}
+//================================================================// 
+// 函数：setEnd
+// 说明：结束事务标志~=0 一定要创建事务者结束事务 =1 不用结束事务 =2 可以不结束事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:39
+// 修改日志：
+//================================================================// 
+function setEnd(row1,row2)
+{
+	var listid = setListCombox(&amp;quot;v_end&amp;quot;);
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+            _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,9,listid);
+       }  
+
+}
+//================================================================// 
+// 函数：setRetflg
+// 说明：回复事务标志~=0 一定要回复事务 =1 不用回复事务 =2 可以不回复事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:55
+// 修改日志：
+//================================================================// 
+function setRetflg(row1,row2)
+{
+	var listid=  setListCombox(&amp;quot;v_retflg&amp;quot;);
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+            _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,10,listid);
+       }
+
+}
+//================================================================// 
+// 函数：setToptyp
+// 说明：TOPTYP	标题的自动格式~=0 录入的文本 =1 标题是录入的一个日期 =2 标题是录入日期所在的周 =3 标题是录入的日期的所在月份 =4 标题是录入日期所在年	
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:35:06
+// 修改日志：
+//================================================================// 
+function setToptyp(row1,row2)
+{      
+	var listid = setListCombox(&amp;quot;v_toptyp&amp;quot;);
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+
+            _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,11,listid);
+       }
+
+}
+
+
+//================================================================// 
+// 函数：setDate
+// 说明：设置日期
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/30/06 10:21:57
+// 修改日志：
+//================================================================// 
+function setDate(row1,row2)
+{
+      var crtdat = &amp;quot;&amp;quot;;
+      for(var row=row1;row&amp;lt;=row2;row++)
+      {
+            QuerySQLDS(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) crtdat from dual &amp;quot;); 
+            var count = _this.XMLDS_GetRowCount(); 
+            crtdat =  _this.XMLDS_GetString(0,&amp;quot;crtdat&amp;quot;);
+            _this.SetToDateBox(&amp;quot;&amp;quot;,0,row,12,crtdat);　
+      }
+}
+
+//================================================================// 
+// 函数：dbeditafternewrow
+// 说明：自动编号
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/09/07 11:28:07
+// 修改日志：
+//================================================================// 
+function f_dbeditafternewrow(sheet,nowrow)
+{
+  if(_this.GetRowCount(0)&amp;gt;3)
+    SetAutoNo(nowrow);
+
+
+} 
+//================================================================//  
+// 函数：SetAutoNo 
+// 说明：设置编号
+// 参数： 
+// 返回： 
+// 样例：  
+// 作者： 
+// 创建日期：01/09/07 13:17:11 
+// 修改日志： 
+//================================================================//  
+function SetAutoNo(nowrow)
+{
+         // id = _this.GetCellText(sheet,nowrow-1,3); 
+          if ( id != &amp;quot;&amp;quot; )
+          {
+               
+                num = 1*id;
+                num++;
+                id = num;
+          }
+          else
+          {
+                num++;
+          }
+          _this.SetCellText(sheet,nowrow,3,num);
+
+}
+//================================================================// 
+// 函数：setAskflg
+// 说明：查找关键字~如OA,SA,SD,BUG, 这样，我们可以查找OA的分类
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:33:49
+// 修改日志：
+//================================================================// 
+function setAskflg(row1,row2)
+{
+       for (var i=row1;i&amp;lt;=row2;i++)
+       {
+             _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,i,13,setListCombox(&amp;quot;v_askflg&amp;quot;));
+       }
+        
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

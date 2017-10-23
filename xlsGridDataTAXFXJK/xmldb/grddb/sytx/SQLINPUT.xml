@@ -1,0 +1,828 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >SQLINPUT</MWID><NAME >SQL查询输入</NAME><NOTE ></NOTE><FILE >SQLINPUT.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var nSeq = 0 ;
+var sheetTree = 0 ;
+var sheetSQL = 1;
+var sheetResult = 2;
+var sheetLog ;
+var SQLID = &amp;quot;SQLINTPUT&amp;quot;
+var SQLRunning = &amp;quot;&amp;quot;;      // 正在运行的SQL
+var page = 1;
+var nrow= 20;
+var rowcount = 0;
+
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：载入数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/10/05 23:45:15
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+       window.onunload=pageunload;
+       document.title= &amp;quot;SQL数据库工具&amp;quot;; 
+        _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSNAME);
+       _this.ShowTabBar(1);
+       _this.SetSheetName(0,&amp;quot;数据库对象&amp;quot;);
+       
+       if ( treexml == null ) 
+             alert ( &amp;quot;无法载入表对象&amp;quot; );
+       else
+         _this.SetToTreeCtrl(&amp;quot;Tree_1&amp;quot;,sheetTree ,-1,-1,treexml);
+
+       sheetSQL  = _this.AddSheet(&amp;quot;SQL查询&amp;quot;);
+       _this.SetToCodeEditor(SQLID,sheetSQL,-1,-1 ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+       sheetResult = _this.AddSheet(&amp;quot;查询结果&amp;quot;);
+       _this.SetCellText( sheetSQL ,-1,-1,&amp;quot;&amp;quot;);//--输入 desc tablename 查看表结构\r\n--     desc viewname 编辑视图代码 
+       _this.SetCellBkColor(sheetResult,-1,-1,255,255,255);//211,219,250
+
+       _this.SetCurrentSheet(sheetResult);
+       _this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;25%&amp;quot;);
+       _this.SplitSheet(sheetSQL,&amp;quot;V&amp;quot;,&amp;quot;30%&amp;quot;);
+       
+       //_this.AddToolbarButton(&amp;quot;com_begintrans&amp;quot;,&amp;quot;启动事务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,90);
+       
+       _this.AddToolbarButton(&amp;quot;com_execute&amp;quot;,&amp;quot;F7执行单个SQL&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,105);
+       _this.AddToolbarButton(&amp;quot;com_executeall&amp;quot;,&amp;quot;F8执行多个SQL&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,105);
+      
+       _this.AddToolbarButton(&amp;quot;com_pre&amp;quot;,&amp;quot;上一页&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,60);
+       _this.AddToolbarButton(&amp;quot;com_next&amp;quot;,&amp;quot;下一页&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,60);
+       _this.AddToolbarButton(&amp;quot;com_setnpage&amp;quot;,&amp;quot;页行数&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,60);
+       //_this.AddToolbarButton(&amp;quot;com_closealldb&amp;quot;,&amp;quot;退出&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,50);
+       _this.AddToolbarButton(&amp;quot;com_commit&amp;quot;,&amp;quot;提交&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,50);
+       _this.AddToolbarButton(&amp;quot;com_rollback&amp;quot;,&amp;quot;回滚&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,50);
+       
+       //_this.SetSheetMargin(sheetSQL,10,5,10,5);
+       //_this.SetSheetMargin(sheetTree,5,5,5,5);
+       
+       var xmlmenu = &amp;quot;&amp;lt;item id=\&amp;quot;com_tabspace\&amp;quot; name=\&amp;quot;表空间\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;com_runbutton\&amp;quot; name=\&amp;quot;进程\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;com_tablecnt\&amp;quot; name=\&amp;quot;表记录数统计\&amp;quot;/&amp;gt;&amp;quot;;
+       _this.AddToolbarButton(&amp;quot;&amp;quot;,&amp;quot;选项&amp;quot;,&amp;quot;&amp;quot;,xmlmenu,0,0,1,60);
+
+
+       try {       
+             _this.SetText(SQLID,sql);
+       }
+       catch ( e ) {//alert(&amp;quot;sql参数不存在&amp;quot; );
+       }
+
+       _this.SetCellLock(sheetTree,-1,-1, 1);
+       sheetLog  = _this.AddSheet(&amp;quot;执行结果&amp;quot;);
+       _this.SetToCodeEditor(&amp;quot;&amp;quot;,sheetLog  ,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+
+
+}
+
+function pageunload()
+{
+  invokeOSFunc(&amp;quot;closealldb&amp;quot;,&amp;quot;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID);
+}
+/*
+function closealldb()
+{
+  alert(invokeOSFunc(&amp;quot;closealldb&amp;quot;,&amp;quot;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID));
+}
+*/
+function _thisOnF8KeyDown(fsheet,row,col)
+{
+  executeall();
+}
+
+function _thisOnF7KeyDown(sheet,row,col)
+{
+  execute();
+}
+
+// 执行查询
+function doexecute(typ)
+{
+  var sql = &amp;quot;&amp;quot;;
+  try{
+    sql = _this.CTRL_GetSelectedText(SQLID);
+  }catch ( e ) {}
+  if ( sql == &amp;quot;&amp;quot; )
+    sql = _this.GetCellText( sheetSQL ,-1,-1);
+
+  var sqltitle = sql.trim().substring(0,6).toUpperCase() ;
+  var descsql = sql.trim().substring(0,4).toUpperCase() ;
+  var tabsql = sql.trim().substring(5);
+  if(descsql==&amp;quot;DESC&amp;quot;){
+  	_sql.querytods(&amp;quot;TABLEORVIEW&amp;quot;, &amp;quot;id=&amp;quot;+tabsql);
+  	if ( _this.XMLDS_GetRowCount()&amp;gt;0 ) {
+  		var typ = _this.XMLDS_GetString(0,&amp;quot;TYP&amp;quot;);
+  		
+  		if ( typ==&amp;quot;TABLE&amp;quot;) 
+	  		window.open( &amp;quot;show.sp?grdid=edittable&amp;table_name=&amp;quot;+tabsql+&amp;quot;&amp;connid=&amp;quot;+G_DSID );
+	  	else if ( typ==&amp;quot;VIEW&amp;quot;) {
+//	  		window.open( &amp;quot;show.sp?grdid=edittable&amp;tabtype=VIEW&amp;table_name=&amp;quot;+tabsql+&amp;quot;&amp;connid=&amp;quot;+G_DSID );
+
+			    var code = &amp;quot;&amp;quot;;
+		            try {
+		                  code = invokeOSFunc(&amp;quot;GetViewCode&amp;quot;,&amp;quot;tablename=&amp;quot;+tabsql+&amp;quot;&amp;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID) ;       
+		            }
+		            catch ( e ) {
+		                  alert ( e );
+		            }
+	                  var oldtext = _this.GetText(SQLID);
+	                  _this.SetText(SQLID,&amp;quot;CREATE OR REPLACE VIEW &amp;quot;+tabsql+ &amp;quot; AS \n&amp;quot;+ code +&amp;quot;\r\n&amp;quot;+oldtext );
+	                  _this.Redraw();              
+	         }
+			
+  	}
+  	else 
+  		alert ( &amp;quot;该对象&amp;quot;+tabsql+&amp;quot;不是一个TABLE或VIEW!&amp;quot; );
+  	
+  } else {
+  if ( sqltitle == &amp;quot;SELECT&amp;quot;  ) 
+  {
+    // 第一次求所有的记录
+    SQLRunning = sql;
+    var param = new Object();
+    param.runsql = &amp;quot;SELECT COUNT(*) FROM (&amp;quot;+SQLRunning +&amp;quot;) t&amp;quot; ;
+    param.sqlid=G_SQLID;
+    param.dsid=G_DSID;
+    var ret = invokeOSFuncExt(&amp;quot;GetSQL&amp;quot;,param );
+    rowcount  = parseInt( ret ); 
+    //alert(rowcount);      
+    page = 1;
+    Load(SQLRunning,page,nrow,sheetResult,1,0,3,2)  
+  }
+  else 
+  {
+    //if ( confirm( &amp;quot;执行SQL，该操作不可回退，是否继续？&amp;quot; ) == 1 )
+    {
+      var param = new Object();
+      param.typ = &amp;quot;SQL&amp;quot;;
+      param.runsql = sql;
+      param.buttontype = typ;
+      param.sqlid=G_SQLID;
+      param.dsid=G_DSID;
+      ret = invokeOSFuncExt(&amp;quot;Run&amp;quot;,param ) ;    
+      
+      _this.SetCellText(sheetLog,-1,-1,ret+&amp;quot;\n&amp;quot; ) ;  
+      if( ret.substring(0,6)==&amp;quot;ERROR:&amp;quot; ) {
+      	alert (  &amp;quot;运行出现问题！具体运行结果请查看页【运行日志】&amp;quot;);
+      	_this.SetCurrentSheet(sheetLog);  
+      } 
+      else 
+      	alert ( ret );
+//      	      
+//      _this.SetCellText(sheetLog,-1,-1,_this.GetCellText(sheetLog,-1,-1)+&amp;quot;\n&amp;quot;+ret ) ;   
+//      alert (  &amp;quot;运行结束！具体运行结果请查看页【运行结果】\n如果更新了数据库，请尽快执行 “提交” 或 “回滚”操作，以免阻塞别人的操作。\n&amp;quot;);
+//      _this.SetCurrentSheet(sheetLog);
+    }
+  }
+ }
+}
+
+function execute()
+{
+  doexecute(&amp;quot;&amp;quot;);
+}
+
+
+function executeall()
+{
+  doexecute(&amp;quot;bat&amp;quot;);
+}
+
+function commit()
+{
+  alert(invokeOSFunc(&amp;quot;commit&amp;quot;,&amp;quot;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID));
+}
+
+function rollback()
+{
+  alert(invokeOSFunc(&amp;quot;rollback&amp;quot;,&amp;quot;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID));
+}
+
+function pre()
+{
+  if(page&amp;lt;=0)
+  {
+    alert(&amp;quot;已到首页。&amp;quot;);
+    return;
+  }
+  page --;
+  _this.SetRowCount(0,4);
+  Load( SQLRunning , page,nrow, sheetResult,1,0,3,2 );
+}
+
+function next()
+{
+  if( page*nrow&amp;gt;rowcount)
+  {
+    alert(&amp;quot;已到末页。&amp;quot;);
+    return;
+  }
+  page ++;
+  _this.SetRowCount(0,4);
+  Load( SQLRunning , page,nrow, sheetResult,1,0,3,2 );
+}
+
+function setnpage()
+{
+  var str=prompt(&amp;quot;请输入每页显示的纪录数:&amp;quot;,nrow);
+  if ( str!=&amp;quot;&amp;quot; ) 
+    nrow=str;
+}
+
+//================================================================// 
+// 函数：Load
+// 说明：在指定的位置载入SQL查询结果
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/05 23:03:00
+// 修改日志：
+//================================================================// 
+function Load(sql,page,nrow,sheet,row1,col1,row2,col2)
+{
+      _this.SetRowCount(sheet,0);
+      _this.SetColCount(sheet,0);
+      _this.SetRowCount(sheet,4);
+      _this.SetColCount(sheet,4);
+
+      var param = new Object();
+      param.runsql = sql ;
+      param.pageno=page;
+      param.pagesize=nrow;
+      param.sqlid=G_SQLID;
+      param.dsid=G_DSID;
+      try {
+//            ret = invokeOSFuncExt(&amp;quot;QuerySQL&amp;quot;,param ) ;       
+//            _this.SetXmlDS(sheet,row1,col1,row2,col2,ret);
+            ret = invokeOSFuncExt(&amp;quot;QuerySQL&amp;quot;,param ) ;
+            var p1 = ret.indexOf(&amp;quot;\t&amp;quot;);
+            if(p1&amp;gt;0)
+            {
+              var t = ret.substr(0,p1);
+              var str = &amp;quot;查询，总记录数：&amp;quot;+rowcount+&amp;quot;；本次执行耗时：&amp;quot;+t+&amp;quot;毫秒&amp;quot;;
+              window.status= str;
+              _this.SetCellText(sheetLog,-1,-1,str ) ;   
+              _this.SetToolbarString(str);
+		
+              ret = ret.substr(p1);
+            }
+            _this.SetXmlDS(sheet,row1,col1,row2,col2,ret);            
+            
+            
+      }
+      catch ( e ) {
+            alert ( e );
+      }
+
+      _this.LoadScene(sheet,4);
+
+}
+
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      var collist = &amp;quot;&amp;quot;;
+      var action = getXmlAttribute(attribe,&amp;quot;action&amp;quot;);
+      var conn  = getXmlAttribute(attribe,&amp;quot;conn&amp;quot;);
+  if(conn!=null) G_DSID=conn;
+     _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSID);
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+       if ( level == 3 ) {
+            xml = invokeOSFunc(&amp;quot;GetTableTree&amp;quot;,&amp;quot;tagid=&amp;quot; + tagid+&amp;quot;&amp;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID) ;
+            _this.XMLCTL_Append(id,xml,hItem,2);
+      }
+      else if ( action==&amp;quot;VIEWCODE&amp;quot; ) {
+            var code = &amp;quot;&amp;quot;;
+            try {
+                  code = invokeOSFunc(&amp;quot;GetViewCode&amp;quot;,&amp;quot;tablename=&amp;quot;+tagid+&amp;quot;&amp;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID) ;       
+            }
+            catch ( e ) {
+                  alert ( e );
+            }
+            
+            
+                  var oldtext = _this.GetText(SQLID);
+
+                  _this.SetText(SQLID,&amp;quot;CREATE OR REPLACE VIEW &amp;quot;+tagid+ &amp;quot; AS \n&amp;quot;+ code +&amp;quot;\r\n&amp;quot;+oldtext );
+                  _this.Redraw();
+
+      }
+      else if ( action == &amp;quot;TABLEEDIT&amp;quot; ) {
+      		window.open( &amp;quot;show.sp?grdid=edittable&amp;table_name=&amp;quot;+tagid+&amp;quot;&amp;connid=&amp;quot;+G_DSID );
+      }
+      else {
+            try {
+                  collist = invokeOSFunc(&amp;quot;GetColumnList&amp;quot;,&amp;quot;tablename=&amp;quot;+tagid+&amp;quot;&amp;dsid=&amp;quot; + G_DSID+&amp;quot;&amp;sqlid=&amp;quot;+G_SQLID) ;       
+            }
+            catch ( e ) {
+                  alert ( e );
+            }
+            var mysql = &amp;quot;SELECT &amp;quot;+collist+&amp;quot; \nFROM &amp;quot;+tagid;
+
+//                  _this.SetText(SQLID,&amp;quot;&amp;quot;);
+                  var oldtext = _this.GetText(SQLID);
+                
+                  _this.SetText(SQLID,mysql+&amp;quot;\r\n&amp;quot;+oldtext);
+                  _this.Redraw();
+
+      }
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            if(loc&amp;lt;0) return null;
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; , loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1 ) ;
+            return ret;
+}
+//点击树状控件项目
+function _thisOnTreeItemClick(id, hItem, tagid, attribe, value)
+{
+  var conn  = getXmlAttribute(attribe,&amp;quot;conn&amp;quot;);
+  if(conn!=null) G_DSID=conn;
+  _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSID);
+}
+
+function _thisOnTreeFolderClick(id,hItem,itemid,attribe,value)
+{
+  var conn  = getXmlAttribute(attribe,&amp;quot;conn&amp;quot;);
+  if(conn!=null) G_DSID=conn;
+  _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSID);
+
+}
+
+//表记录数统计
+function tablecnt()
+{
+     
+	var param = new Object();
+	var msg = &amp;quot;&amp;quot;;
+	param.sqlid=G_SQLID;
+        param.dsid=G_DSID;
+  	try {
+		msg = invokeOSFuncExt(&amp;quot;GetTabCnt&amp;quot;,param);
+		  Load( msg , page,nrow, sheetResult,1,0,3,2 );
+//		alert(G_SQLID);
+	}
+	catch (e) {
+		alert ( e );
+	}
+}  
+
+//表空间
+function tabspace()
+{
+  	var param = new Object();
+	var msg = &amp;quot;&amp;quot;;
+	var flg = 1;
+	param.sqlid=G_SQLID;
+        param.dsid=G_DSID;
+        param.flg = 1;
+  	try {
+		msg = invokeOSFuncExt(&amp;quot;GetButSQL&amp;quot;,param);
+		  Load( msg , page,nrow, sheetResult,1,0,3,2 );
+	}
+	catch (e) {
+		alert ( e );
+	}
+
+}
+
+//进程
+function runbutton()
+{
+  	var param = new Object();
+	var msg = &amp;quot;&amp;quot;;
+	param.sqlid=G_SQLID;
+        param.dsid=G_DSID;
+        param.flg = 2;
+  	try {
+		msg = invokeOSFuncExt(&amp;quot;GetButSQL&amp;quot;,param);
+		  Load( msg , page,nrow, sheetResult,1,0,3,2 );
+	}
+	catch (e) {
+		alert ( e );
+	}
+
+}
+
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	if (menuitemid == &amp;quot;com_tablecnt&amp;quot;) {
+		tablecnt();
+	}
+	else if (menuitemid == &amp;quot;com_tabspace&amp;quot;) {
+		tabspace();
+	}
+	else if (menuitemid == &amp;quot;com_runbutton&amp;quot;) {
+		runbutton();
+	}
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+var TABLETAG = &amp;quot;TABLE数据查询&amp;quot;;
+var TABLEEDITTAG = &amp;quot;TABLE表结构编辑&amp;quot;;
+var VIEWTAG = &amp;quot;VIEW数据查询&amp;quot;;
+var VIEWCODETAG = &amp;quot;VIEW代码编辑&amp;quot;;
+
+function getdatabase(sqlid,dsid)
+{ 
+  var session = request.getSession();
+  var sid = &amp;quot;hashmap_&amp;quot;+sqlid;
+  var map=session.getAttribute(sid);
+  if(map==null)
+  {
+    map = new java.util.HashMap();
+    session.setAttribute(sid,map);
+  }
+  var keyid=dsid;
+  if(dsid==&amp;quot;&amp;quot;) 
+    keyid=&amp;quot;_default_&amp;quot;;
+  var db = map.get(keyid);
+  if(db==null)
+  {
+  	
+    if(dsid==&amp;quot;&amp;quot;) dsid=null;
+    db = new pub.EADatabase(dsid);
+    map.put(keyid,db);
+//    throw new Exception(sqlid+&amp;quot;,&amp;quot;+dsid);
+  }
+  return db;
+}
+
+function closealldb()
+{
+  var session = request.getSession();
+  var sid = &amp;quot;hashmap_&amp;quot;+sqlid;
+  var map=session.getAttribute(sid);
+  var c=0;
+  if(map!=null)
+  {
+    var dbs = map.values().iterator();
+    while(dbs.hasNext())
+    {
+      var db=dbs.next();
+      db.Close();
+      c++;
+    }
+  }
+  return &amp;quot;&amp;quot;+c;
+}
+
+function commit()
+{
+   var db = getdatabase(sqlid,dsid);
+   db.GetConn().commit();
+   return &amp;quot;提交成功。&amp;quot;;
+}
+
+function rollback()
+{
+   var db = getdatabase(sqlid,dsid);
+   db.GetConn().rollback();
+   return &amp;quot;回滚成功。&amp;quot;;
+}
+
+
+//================================================================// 
+// 函数：Commit
+// 说明：执行SQL
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/27/05 17:15:03
+// 修改日志：
+//================================================================// 
+function Run()
+{
+  var sql = &amp;quot;&amp;quot;;//new String(&amp;quot;&amp;quot;);
+  var i = 0;
+  var db = null;
+  var nRun = 0;
+  var retcnt = 0;
+  var msg = &amp;quot;&amp;quot;;
+  db = getdatabase(sqlid,dsid);//new pubpack.EADatabase();
+  if ( buttontype == &amp;quot;bat&amp;quot; ) 
+  {
+    // 执行多个SQL，使用,分割
+    for(i=0;i&amp;lt; pubpack.EAFunc.GetListCount(runsql,&amp;quot;;&amp;quot;); i++) 
+    {
+    	
+      sql = pubpack.EAFunc.GetListValue(runsql,&amp;quot;;&amp;quot;,i);
+      sql = sql.trim();
+      if ( sql.length() &amp;gt; 0 ) 
+      {
+        try {
+          retcnt += db.ExcecutSQL(sql);
+          nRun ++;
+        }
+        catch ( e ) {
+          msg += &amp;quot;ERROR:&amp;quot;+ e.toString()+&amp;quot;\n&amp;quot;;
+        }
+      }
+    }
+  }
+  else 
+  {
+    // 执行单个SQL
+    retcnt += db.ExcecutSQL(runsql);
+    nRun  = 1;
+  }
+  return msg +&amp;quot;执行了&amp;quot;+nRun +&amp;quot;条SQL语句,共操作了&amp;quot; + retcnt + &amp;quot;条数据库记录&amp;quot;;
+}
+
+
+//================================================================// 
+// 函数：GetTableTree
+// 说明：得到数据的TABLE和TREE的列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/11/05 14:48:21
+// 修改日志：
+//================================================================// 
+function GetTableTree()
+{
+   var db = getdatabase(sqlid,dsid);
+        var xml = &amp;quot;&amp;quot;;
+        var sql = &amp;quot;&amp;quot;;
+        if( tagid==TABLETAG || tagid== TABLEEDITTAG ) 
+        {
+              var sql = &amp;quot;select a.table_name,a.typ,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note,substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)) comments from &amp;quot;+
+                  &amp;quot;( select TABLE_NAME,&amp;apos;TABLE&amp;apos; TYP from user_tables ) &amp;quot;+
+                  &amp;quot;a,user_tab_comments b &amp;quot;+
+                  &amp;quot;where a.TABLE_NAME=b.table_name(+) &amp;quot;+
+                  &amp;quot;order by a.TYP,a.TABLE_NAME  &amp;quot;;
+              var ds = db.QuerySQL(sql);  
+              var cnt = ds.getRowCount();
+              for( var i=0;i&amp;lt; cnt; i ++ ) {
+                    var sTableName = ds.getStringAt(i,&amp;quot;table_name&amp;quot;);
+                    var sNote = ds.getStringAt(i,&amp;quot;note&amp;quot;);
+                    var sComment = ds.getStringAt(i,&amp;quot;comments&amp;quot;);
+                    if ( tagid==TABLETAG )
+                    	xml+=&amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;+sTableName +\&amp;quot; name=\&amp;quot; &amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+                    else 
+                    	xml+=&amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;+sTableName +\&amp;quot; action=\&amp;quot;TABLEEDIT\&amp;quot; name=\&amp;quot; &amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+
+              }
+        }
+        else if ( tagid==VIEWTAG || tagid== VIEWCODETAG  ) {
+              sql = &amp;quot;select a.table_name,a.typ,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note,substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)) comments  from &amp;quot;+
+                  &amp;quot;( select VIEW_NAME TABLE_NAME,&amp;apos;VIEW&amp;apos; TYP from USER_VIEWS ) &amp;quot;+
+                  &amp;quot;a,user_tab_comments b &amp;quot;+
+                  &amp;quot;where a.TABLE_NAME=b.table_name(+) &amp;quot;+
+                  &amp;quot;order by a.TYP,a.TABLE_NAME  &amp;quot;;
+              var ds1 = db.QuerySQL(sql);        
+              var cnt = ds1.getRowCount();
+              for( var i=0;i&amp;lt; cnt; i ++ ) {
+                    var sTableName = ds1.getStringAt(i,&amp;quot;table_name&amp;quot;);
+                    var sNote = ds1.getStringAt(i,&amp;quot;note&amp;quot;);
+                    var sComment = ds1.getStringAt(i,&amp;quot;comments&amp;quot;);
+                    if ( tagid==VIEWTAG )
+                          xml+=&amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;&amp;quot;+sTableName +&amp;quot;\&amp;quot; name=\&amp;quot; &amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+                    else 
+                          xml += &amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;&amp;quot;+sTableName +&amp;quot;\&amp;quot; action=\&amp;quot;VIEWCODE\&amp;quot; name=\&amp;quot;&amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              }
+        }    
+        return xml;
+}
+
+
+//================================================================// 
+// 函数：GetColumnList
+// 说明：得到某个表格的字段列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/12/05 14:04:33
+// 修改日志：
+//================================================================// 
+function GetColumnList()
+{
+   var db = getdatabase(sqlid,dsid);
+        var sql = &amp;quot;select a.table_name,a.column_name,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note,&amp;quot;+
+            &amp;quot;substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)) comments from &amp;quot;+
+            &amp;quot;( select TABLE_NAME,COLUMN_NAME,COLUMN_ID from user_tab_columns) a,user_col_comments b &amp;quot;+
+            &amp;quot;where a.TABLE_NAME=b.table_name(+) and a.COLUMN_NAME=b.COLUMN_NAME(+) and a.TABLE_NAME=&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos; order by a.COLUMN_ID&amp;quot;;
+        var ds = db.QuerySQL(sql);        
+        var ret = &amp;quot;&amp;quot;;
+        for( var i=0;i&amp;lt; ds.getRowCount(); i ++ ) {
+              var sTableName = ds.getStringAt(i,&amp;quot;table_name&amp;quot;);
+              var sColumnName = ds.getStringAt(i,&amp;quot;column_name&amp;quot;);
+              var sNote = ds.getStringAt(i,&amp;quot;note&amp;quot;);
+              var sComment = ds.getStringAt(i,&amp;quot;comments&amp;quot;);
+              if ( i!=0 ) ret +=&amp;quot;,\t&amp;quot;;
+              ret+= sColumnName ;
+              if ( sNote.length() &amp;gt;16 ) sNote = sNote.substring(0,16);
+              if ( sNote.length() &amp;gt; 0 ) ret+= &amp;quot; AS \&amp;quot;&amp;quot; + sNote +&amp;quot;\&amp;quot;&amp;quot; ;
+              ret +=&amp;quot;\n&amp;quot; ;
+        }
+        return ret;
+}
+//================================================================// 
+// 函数：GetViewCode
+// 说明：得到视图的代码
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/02/06 15:57:54
+// 修改日志：
+//================================================================// 
+function GetViewCode()
+{
+   var db = getdatabase(sqlid,dsid);
+        var sql = &amp;quot;select TEXT from user_views where view_name=upper(&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;)&amp;quot;;
+        var ds = db.QuerySQL(sql);        
+        if ( ds.getRowCount()&amp;gt; 0 ) 
+              return ds.getStringAt(0,&amp;quot;TEXT&amp;quot;);
+        else return &amp;quot;&amp;quot;;
+}
+//================================================================// 
+// 函数：Commit
+// 说明：执行SQL
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/27/05 17:15:03
+// 修改日志：
+//================================================================// 
+function QuerySQL()
+{
+   var d1 = new java.util.Date();
+   d1 = d1.getTime();
+   var db = getdatabase(sqlid,dsid);
+   var xml = db.pageDS(runsql,pageno,pagesize).GetXml();//.QuerySQL(runsql).GetXml();
+   var d2 = new java.util.Date();
+   d2 = d2.getTime();
+   var t = d2 - d1;
+   return &amp;quot;&amp;quot;+t+&amp;quot;\t&amp;quot;+xml;
+   
+   //var db = getdatabase(sqlid,dsid);
+   //return db.pageDS(runsql,pageno,pagesize).GetXml();//.QuerySQL(runsql).GetXml();
+}
+
+function GetSQL()
+{
+   var db = getdatabase(sqlid,dsid);
+   return db.GetSQL(runsql);
+}
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  var sql = &amp;quot;select ID,NAME from v_dblist&amp;quot;;
+  var ds;
+  try{
+    ds = pub.EADbTool.QuerySQL(sql);
+  }catch(e){ ds = new pub.EAXmlDS();}
+  //var ds= new pub.EAXmlDS();
+  ds.AddNullRow(-1);
+  ds.setValueAt(0,&amp;quot;id&amp;quot;,&amp;quot;&amp;quot;);
+  ds.setValueAt(0,&amp;quot;name&amp;quot;,&amp;quot;默认连接&amp;quot;);
+  var c=ds.getRowCount();
+  sb.append(&amp;quot;&amp;lt;script&amp;gt;\nvar treexml=\&amp;quot;&amp;lt;数据库&amp;gt;&amp;quot;);
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    var connid=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;);sb.append(ds.getStringAt(i,&amp;quot;name&amp;quot;));sb.append(&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;+TABLETAG +&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot; imageid=\\\&amp;quot;1\\\&amp;quot;/&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;+TABLEEDITTAG +&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;/&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;+VIEWTAG+&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;/&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;+VIEWCODETAG+&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;/&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;/&amp;quot;);sb.append(ds.getStringAt(i,&amp;quot;name&amp;quot;));sb.append(&amp;quot;&amp;gt;&amp;quot;);
+  }
+  sb.append(&amp;quot;&amp;lt;/数据库&amp;gt;\&amp;quot;;\n&amp;quot;);
+  sb.append(&amp;quot;\nvar G_DSID=\&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar G_DSNAME=\&amp;quot;默认连接\&amp;quot;;&amp;quot;);
+  var sqlid=pub.EAFunc.DateToStr(new java.util.Date(),&amp;quot;MMddHHmmssSSS&amp;quot;);
+  sb.append(&amp;quot;\nvar G_SQLID=\&amp;quot;&amp;quot;+sqlid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+}
+
+function GetTabCnt()
+{
+   	var db = getdatabase(sqlid,dsid);
+  	var ds = new pubpack.EAXmlDS();
+//   var sql = &amp;quot;select table_name from dba_all_tables  order by table_name &amp;quot;;
+   	var sql = &amp;quot;select a.table_name,b.comments from &amp;quot;+
+                  &amp;quot;( select TABLE_NAME,&amp;apos;TABLE&amp;apos; TYP from user_tables ) &amp;quot;+
+                  &amp;quot;a,user_tab_comments b &amp;quot;+
+                  &amp;quot;where a.TABLE_NAME=b.table_name(+) &amp;quot;+
+                  &amp;quot;order by a.TYP,a.TABLE_NAME  &amp;quot;;
+   	var sql2 = &amp;quot;&amp;quot;;
+   	try{
+		ds = db.QuerySQL(sql);
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			var tabnam = ds.getStringAt(i,&amp;quot;table_name&amp;quot;);
+			 
+		if(i==0){
+			sql2 = &amp;quot;select c.表名,c.表记录数,d.comments 表说明 from ( select &amp;apos;&amp;quot;+tabnam+&amp;quot;&amp;apos; 表名 ,count(*) 表记录数 from &amp;quot;+tabnam;
+		
+		}
+		if(i&amp;gt;0){
+		sql2 += &amp;quot; union all select &amp;apos;&amp;quot;+tabnam+&amp;quot;&amp;apos; 表名 ,count(*) 表记录数 from &amp;quot;+tabnam;
+		}
+		if(i==(ds.getRowCount()-1)){
+			sql2 +=&amp;quot;) c,(&amp;quot;+sql+&amp;quot;) d	 where c.表名=d.table_name&amp;quot;; 
+		}
+	}
+//  ds = db.QuerySQL(sql2).GetXml();
+   }catch(e){}
+//   throw new Exception(sql2);
+   	return sql2;
+}
+
+function GetButSQL()
+{
+   	var db = getdatabase(sqlid,dsid);
+  	var ds = new pubpack.EAXmlDS();
+  	var sql = &amp;quot;&amp;quot;;
+  	if(flg==1){
+//   	 	sql = &amp;quot;select f.tablespace_name,a.total,u.used,f.free,round((u.used/a.total)*100)\&amp;quot;% used\&amp;quot;, round((f.free/a.total)*100)\&amp;quot;% Free\&amp;quot; 
+//			from (select tablespace_name, sum(bytes/(1024*1024)) total 
+//			from dba_data_files group by tablespace_name) a, 
+//			(select tablespace_name, round(sum(bytes/(1024*1024))) used 
+//			from dba_extents group by tablespace_name) u, 
+//			(select tablespace_name, round(sum(bytes/(1024*1024))) free 
+//			from dba_free_space group by tablespace_name) f 
+//			WHERE a.tablespace_name = f.tablespace_name and a.tablespace_name = u.tablespace_name &amp;quot;;    
+		sql = &amp;quot;select b.tablespace_name 表空间,
+				b.file_name 物理文件名,			
+				b.bytes/1024/1024 大小M,
+				(b.bytes-sum(nvl(a.bytes,0)))/1024/1024  已使用M,
+				sum(nvl(a.bytes,0))/1024/1024  剩余M,
+				substr((b.bytes-sum(nvl(a.bytes,0)))/(b.bytes)*100,1,5)  利用率 
+			from dba_free_space a,dba_data_files b 
+			where a.file_id=b.file_id 
+			group by b.tablespace_name,b.file_name,b.bytes 
+			order by b.tablespace_name&amp;quot;;		
+	}
+	else if(flg==2){
+		sql = &amp;quot;select ss.sid,se.command,ss.value CPU ,se.username,se.program,se.serial#,&amp;apos;ALTER SYSTEM KILL SESSION &amp;apos;&amp;apos;&amp;apos;||ss.sid||&amp;apos;,&amp;apos;||se.serial#||&amp;apos;&amp;apos;&amp;apos;;&amp;apos; com, 
+			(select max(q.sql_text) from v$session_wait w, v$session s, v$process p, v$sqlarea q 
+			where s.paddr=p.addr and 
+			s.sid=ss.sid and 
+			s.sql_address=q.address 
+			) SQLText
+			from v$sesstat ss, v$session se 
+			where ss.statistic# in 
+			(select statistic# 
+			from v$statname 
+			where name = &amp;apos;CPU used by this session&amp;apos;) 
+			and se.sid=ss.sid 
+			and ss.sid&amp;gt;6 
+			order by se.username,ss.value desc &amp;quot;;
+	}
+//   throw new Exception(sql2);
+   	return sql;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >TABLEORVIEW</ID><NAME ></NAME><DATDSC >select typ from ( 
+select &amp;apos;TABLE&amp;apos; typ,table_name id from USER_TABLES
+union 
+select &amp;apos;VIEW&amp;apos; typ,view_name id from USER_VIEWS
+) where upper(id)=upper(&amp;apos;[%id]&amp;apos;)
+</DATDSC><C4 >TABLEORVIEW</C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

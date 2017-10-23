@@ -1,0 +1,144 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >WF_FunnelChart</MWID><NAME >工作流漏斗分析图</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WF_FunnelChart.zxg</FILE><SCENE ></SCENE><FIXED >5,3</FIXED><CATTYP >CRM</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >ITMID</ID><NAME >商品编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >ITMID</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >ITMID</C18><C19 >ITMID</C19></ROW>
+<ROW num="1" ><ID >LOCID</ID><NAME >仓库号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >LOCID</C13><C14 >LOCID</C14><C15 ></C15><C16 ></C16><C17 >LOCNAM</C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="2" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >0</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >DAT</C15><C16 >DAT1</C16><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="3" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >5</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >DAT2</C16><C17 ></C17><C18 ></C18><C19 >DAT2</C19></ROW>
+<ROW num="4" ><ID >SSVAL</ID><NAME >安全库存</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >ssval</C18><C19 ></C19></ROW>
+<ROW num="5" ><ID >GRDPAMDS_5</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="6" ><ID >ENQ</ID><NAME >补货点</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >enq</C18><C19 ></C19></ROW>
+<ROW num="7" ><ID >AVGVAL</ID><NAME >平均出货量</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >avgval</C18><C19 ></C19></ROW>
+<ROW num="8" ><ID >INVQTY</ID><NAME >当天库存</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="9" ><ID >DAT3</ID><NAME >计划生效日期</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 >DAT3</C19></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,2</ID><NAME >1000</NAME><DBNAME ></DBNAME><DSKEY >DSC:ss_select</DSKEY><NROW >4</NROW><NCOL >4</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >0,2,2</C29><C30 >0,2,2</C30></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var TITLE=&amp;quot;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	try{
+		updateChart(3);
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+}
+
+//更新图
+function updateChart(xml )
+{
+	//alert ( parent.all(&amp;quot;_grid&amp;quot;) );
+	var xml = parent.frames[1]. f_getcntxml();
+	_this.SetMainCellRange(0,2,2,9,4);
+	_this.SetXmlDS(0,2,2,9,4,xml);
+	
+	var curcol =3;
+	//http://wenku.baidu.com/view/d39dee6c011ca300a6c390b1.html
+	var curvalcol = curcol;
+	
+	
+	var title = &amp;quot;分析图&amp;quot;;
+	
+	var xml1  = &amp;quot;&amp;lt;graph xaxisname=&amp;apos;&amp;apos; yaxisname=&amp;apos;&amp;apos; showValues=&amp;apos;0&amp;apos; hovercapbg=&amp;apos;DEDEBE&amp;apos; hovercapborder=&amp;apos;889E6D&amp;apos; rotateNames=&amp;apos;0&amp;apos; numdivlines=&amp;apos;9&amp;apos; divLineColor=&amp;apos;CCCCCC&amp;apos; divLineAlpha=&amp;apos;80&amp;apos; decimalPrecision=&amp;apos;0&amp;apos; showAlternateHGridColor=&amp;apos;1&amp;apos; AlternateHGridAlpha=&amp;apos;30&amp;apos; AlternateHGridColor=&amp;apos;CCCCCC&amp;apos; caption=&amp;apos;&amp;quot;+title +&amp;quot;&amp;apos; subcaption=&amp;apos;&amp;apos; baseFont=&amp;apos;Arial&amp;apos; baseFontSize=&amp;apos;12&amp;apos; &amp;gt; &amp;quot;;//yAxisMaxValue=&amp;apos;100&amp;apos; 
+	xml1+=&amp;quot; &amp;lt;categories font=&amp;apos;宋体&amp;apos; fontSize=&amp;apos;12&amp;apos; fontColor=&amp;apos;000000&amp;apos;&amp;gt;&amp;quot;;
+	for ( var i=_this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++ ) {
+		var str = _this.GetCellText(0,i,curvalcol -1);
+		if ( _this.GetCellText(0,i,2)!=&amp;quot;&amp;quot; ) {
+			xml1+=&amp;quot;&amp;lt;category name=&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos; /&amp;gt;&amp;quot;;
+		}
+//		if ( _this.GetCellText(0,i,1)!=&amp;quot;&amp;quot; )
+//			xml1+=&amp;quot;&amp;lt;category name=&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos; hoverText=&amp;apos;&amp;quot;+str&amp;quot;&amp;apos;/&amp;gt;&amp;quot;;
+	}
+	xml1+=&amp;quot; &amp;lt;/categories&amp;gt; &amp;quot;;
+
+	
+	
+		xml1+=&amp;quot; &amp;lt;dataset seriesname=&amp;apos;数量&amp;apos;&amp;quot;;
+		//if ( c== G_VALCOL2 &amp;&amp; G_VALCOL!=G_VALCOL2  ) 
+		//	xml1+=&amp;quot; parentYAxis=\&amp;quot;S\&amp;quot; &amp;quot;;
+		xml1+=&amp;quot; &amp;gt;&amp;quot;;//color=&amp;apos;FDC12E&amp;apos;
+		for ( var i=_this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++ ) {
+			var str = _this.GetCellText(0,i,curvalcol );
+			if ( _this.GetCellText(0,i,2)!=&amp;quot;&amp;quot; ) 
+				xml1+=&amp;quot;&amp;lt;set value=&amp;apos;&amp;quot;+str +&amp;quot;&amp;apos; /&amp;gt;&amp;quot;;
+		}
+		xml1+=&amp;quot;&amp;lt;/dataset&amp;gt;&amp;quot;;
+	xml1+=&amp;quot;&amp;lt;/graph&amp;gt;&amp;quot;;
+	parent.f_setchartxml1(xml1);
+	
+	
+	var sum = 0;
+	for ( var i=_this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++ ) {
+			var str = _this.GetCellText(0,i,curvalcol);
+			if ( _this.GetCellText(0,i,2)!=&amp;quot;&amp;quot; ) 
+				sum+=1.0*str;
+		
+	}
+
+	
+	var xml2  = &amp;quot;&amp;lt;graph showNames=&amp;apos;1&amp;apos;  decimalPrecision=&amp;apos;0&amp;apos; caption=&amp;apos;&amp;quot;+title +&amp;quot;&amp;apos; baseFont=&amp;apos;Arial&amp;apos; baseFontSize=&amp;apos;12&amp;apos; decimalPrecision=&amp;apos;0&amp;apos;  isSliced=&amp;apos;1&amp;apos; showPercentValues=&amp;apos;0&amp;apos; showPercentInToolTip=&amp;apos;1&amp;apos;&amp;gt;&amp;quot;;// 
+	xml2+=&amp;quot;&amp;lt;set name=&amp;apos;合计&amp;apos; value=&amp;apos;&amp;quot;+sum +&amp;quot;&amp;apos; /&amp;gt;&amp;quot;;
+	for ( var i=_this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++ ) {
+			var str = _this.GetCellText(0,i,curvalcol);
+			if ( _this.GetCellText(0,i,2)!=&amp;quot;&amp;quot; ) 
+				xml2+=&amp;quot;&amp;lt;set name=&amp;apos;&amp;quot;+_this.GetCellText(0,i,curvalcol-1)+&amp;quot;&amp;apos; value=&amp;apos;&amp;quot;+(1*str+1) +&amp;quot;&amp;apos; /&amp;gt;&amp;quot;;
+		
+	}
+  	xml2+=&amp;quot;&amp;lt;/graph&amp;gt;&amp;quot;;
+	
+	parent.f_setchartxml2(xml2);
+
+
+	parent.f_chgchart();
+	if( _this.GetReleaseNo()&amp;lt;&amp;quot;7.22&amp;quot;){
+		 if(confirm( &amp;quot;提示，要使用BI工具的所有功能，请升级控件到7.22以上版本，是否继续？&amp;quot; )==1){
+		 	openWindow( &amp;quot;http://xmidware.com/activex/xlsupdate.exe&amp;quot; );
+		 }
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if( _this.GetCellText(sheet,row,2)!=&amp;quot;&amp;quot; )
+		parent.frames[1].f_showsheet(row);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >ss_select</ID><NAME ></NAME><DATDSC >select DAT,SUM(QTY),&amp;apos;[%AVGVAL]&amp;apos; AV,0 DD
+from(
+select DAT,QTY from  v_ss_detail 
+where itmid = &amp;apos;[%ITMID]&amp;apos;and lOCID = &amp;apos;[%LOCID]&amp;apos; 
+and DAT &amp;lt;= to_date(&amp;apos;[%DAT2]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+and DAT &amp;gt;= to_date(&amp;apos;[%DAT1]&amp;apos;,&amp;apos;YYYY-MM-DD&amp;apos;) 
+) group by DAT order by DAT 
+  </DATDSC><C4 >ss_select</C4><C5 >ss_select</C5><C6 >ss_select</C6><C7 >ss_select</C7><C8 >ss_select</C8><C9 >ss_select</C9><C10 >ss_select</C10><C11 >ss_select</C11><C12 >ss_select</C12><C13 >ss_select</C13><C14 >ss_select</C14><C15 >ss_select</C15><C16 >ss_select</C16><C17 >ss_select</C17></ROW>
+<ROW num="1" ><ID >GetItem</ID><NAME ></NAME><DATDSC >SELECT ITMNAM FROM V_SS_ITEM WHERE ITMID=&amp;apos;[%ITMID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >GetItem</C17></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

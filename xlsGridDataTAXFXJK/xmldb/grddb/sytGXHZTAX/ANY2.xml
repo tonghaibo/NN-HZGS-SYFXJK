@@ -1,0 +1,277 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ANY2</MWID><NAME >税源分析主页</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ANY2.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >chart1</ID><NAME ></NAME><ACTTYP >CHART1</ACTTYP><URL >月份</URL><URLTARGET >税额</URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >chart1</C10><C11 >chart1</C11><C12 >chart1</C12><C13 >chart1</C13><C14 >chart1</C14><C15 >chart1</C15><C16 >chart1</C16><C17 >chart1</C17><C18 >chart1</C18><C19 >chart1</C19><C20 >chart1</C20><C21 >chart1</C21><C22 >chart1</C22><C23 >chart1</C23><C24 >chart1</C24></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYYY</ID><NAME >年</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >0</VISFLG><KEYFLG ></KEYFLG><C13 >YYMM</C13><C14 >YYMM</C14><C15 >YYYY</C15></ROW>
+<ROW num="1" ><ID >HY</ID><NAME >行业</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >QY</ID><NAME >企业</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,6,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >12</NROW><NCOL >5</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 >0,6,1</C23><C24 ></C24></ROW>
+<ROW num="1" ><ID >0,23,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main1</DSKEY><NROW >12</NROW><NCOL >5</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="2" ><ID >0,1,3</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%YYYY]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="3" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%HY]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="4" ><ID >0,1,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%QY]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="5" ><ID >1,-1,-1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >0,1,3</C24></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var _yyyy = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	try {_yyyy = YYYY;}catch(e) {}
+	if (_yyyy == &amp;quot;&amp;quot;) _yyyy = G_LOGDAT.substring(0,4);
+	
+	_this.ShowToolBar(0); 
+	showchart(0);
+	showchart(23-6);
+	_this.SetColVisible(sheet,0,-1);
+	_this.SetColVisible(sheet,6,-1);
+	
+	_this.SetRowVisible(sheet,0,-1);
+	_this.SetRowVisible(sheet,1,-1);
+	
+	var list1 = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YYYY&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot; );
+	_this.SetToComboBox(&amp;quot;&amp;quot;,0,1,4,list1);
+	var list2 = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=TAX_COMPCLASS&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot; );
+	_this.SetToComboBox(&amp;quot;&amp;quot;,0,1,1,list2);
+	
+	var hy = _this.GetCellText(sheet,1,1);
+	var where = &amp;quot;&amp;quot;;
+	if (hy != &amp;quot;&amp;quot;) where = &amp;quot; typclsid=&amp;apos;&amp;quot;+hy+&amp;quot;&amp;apos;&amp;quot;;
+	_this.SetToSelectBox(&amp;quot;&amp;quot;,sheet,1,2,&amp;quot;V_TAX_COMPANY&amp;quot;,where);
+	
+	cal(0);
+	cal(23-6);
+
+	
+}
+//计算增长率
+function cal(startrow)
+{
+	var old = 0.0;
+	for(var i = 6+startrow;i&amp;lt; 18+startrow;i++){
+		var cur = 1.0*_this.GetCellText(0,i,2);
+		var last = 1.0*_this.GetCellText(0,i,4);
+		if ( _this.GetCellText(0,i,2)==&amp;quot;&amp;quot;||_this.GetCellText(0,i,2)==&amp;quot;0&amp;quot; ) break;
+		if ( old!=0 ) {
+			var val = (cur-old)/old;
+			_this.SetCellText(0,i,3,convertRound(val,2));
+		}
+		if ( last !=&amp;quot;&amp;quot; &amp;&amp; last != &amp;quot;0&amp;quot;)
+			_this.SetCellText(0,i,5,convertRound((cur-last)/last,2));
+
+		old= cur;
+	}
+
+
+}
+
+function convertRound(ADoubleInput,ADotNumber){
+    var tmpValue1=1;
+    var tmpValue2=1;
+    if (ADotNumber&amp;lt;0) return ADoubleInput;
+    if (0==ADoubleInput) return Math.round(ADoubleInput);
+    for (i=0;i&amp;lt;ADotNumber;i++){
+      tmpValue1=tmpValue1*10;
+    }
+    tmpValue2=ADoubleInput*tmpValue1;
+    return Math.round(tmpValue2)/tmpValue1;
+}
+
+function getxml(startrow)
+{
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var rw = 0;
+	for ( var r =startrow+6;r&amp;lt;=startrow+17;r++ ) {
+		xml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(rw++)+&amp;quot;\&amp;quot; name=\&amp;quot;&amp;quot;+_this.GetCellText(0,r,1)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;本年&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/本年&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;上年&amp;gt;&amp;quot;+_this.GetCellText(0,r,4)+&amp;quot;&amp;lt;/上年&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+	}
+	xml += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	return xml;
+
+}
+  
+function showchart(startrow)
+{
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// 如果要自己定义分析图的程序，可以在附件脚本文件中添加如xlsgrid/js/x/SVGChart.djs ,通过修改x/SVGChart来建立个性化的分析图程序
+	// １、分析图来源的是一个XML
+
+	var xml = getxml(startrow);//_this.GetXml(0,startrow+6,1,startrow+17,1);alert(xml);
+//	var n =0;
+//	_this.XMLDS_Create();
+//	_this.XMLDS_Parse(xml);
+//	for ( var r =startrow+6;r&amp;lt;=startrow+17;r++ ) {
+//		_this.XMLDS_SetString(n,&amp;quot;本月&amp;quot;,_this.GetCellText(0,r,4));
+//		_this.XMLDS_SetString(n,&amp;quot;上月&amp;quot;,_this.GetCellText(0,r,2));
+//		n++;
+//	}
+//	xml=_this.XMLDS_GetXml();
+
+	// ２.建立分析图
+	// SVGChart(objid,sheet,row,col,type,title,xtitle,ytitle,width,height,xml)
+	// objid: SetToSvgform 的Object ID编号
+	// sheet,row,col, 图表所在的表格位置
+	// type: =0 线图 =1 直方图 =2 立方图　=3 饼图
+	// title: 标题 xtitle x轴名称 ytitle y轴名称
+	// width,height: 要求固定的高度和宽度，如果是自动适应窗口的大小，设置为-1，-1
+	// xml: xmlds描述的数据字符串
+	var title = _yyyy+&amp;quot;企业税收情况分析图（环比）&amp;quot;;
+	var ltitle = &amp;quot;税额（万元）&amp;quot;;
+	
+	if ( startrow&amp;gt;0 ) {
+		title = _yyyy+&amp;quot;企业电力情况分析图（环比）&amp;quot;;
+		ltitle = &amp;quot;电力（万度）&amp;quot;;
+	}
+	var w = document.body.offsetWidth*0.9;
+	var chart = new SVGChart(&amp;quot;CHART&amp;quot;+startrow,0 ,startrow+3,1,1,title,&amp;quot;月份&amp;quot;,ltitle,w ,220,xml );
+	//chart.hidecol(1);	chart.hidecol(2);chart.hidecol(3);	chart.hidecol(4);chart.hidecol(5);	chart.hidecol(7);
+	//chart.m_xscalefontsize = 8;	// 标题字体大小	
+	chart.m_bShowLinePoint = 1 ;
+	
+	chart.m_bshowyline = 1;
+	chart.m_bshowxline = 1;
+	chart.m_bShowLinePoint  = 1;
+//	chart.m_bShowSeralName = 1
+	
+	chart.load();
+	
+	setTimeout (&amp;quot;chgtoimg(&amp;quot;+startrow+&amp;quot;)&amp;quot;,500); 
+	
+}
+// 由于新空间的载入SVG改为后台，所以要用定时器来放到后台更行图片
+function chgtoimg(startrow)
+{
+	var imgfile=_this.SVGFORM_SaveImageTempFile(&amp;quot;CHART&amp;quot;+startrow);
+	if(imgfile!=&amp;quot;&amp;quot; ) 
+		_this.LoadToImage(&amp;quot;&amp;quot;,0 ,startrow+3,1,imgfile);
+}
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;刷新&amp;quot;) {
+		window.location = &amp;quot;show.sp?grdid=ANY2&amp;YYYY=&amp;quot;+_this.GetCellText(0,1,4)+&amp;quot;&amp;HY=&amp;quot;+_this.GetCellText(0,1,1)+&amp;quot;&amp;QY=&amp;quot;+_this.GetCellText(0,1,2);
+	}  
+}
+
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( row==1 &amp;&amp; col ==1 ) {
+		var hy = _this.GetCellText(0,1,1);
+//		var url = homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_COMPANY&amp;where= and TYPCLSID=&amp;apos;&amp;quot;+hy+&amp;quot;&amp;apos;&amp;quot;;		
+//		var list3 = _this.CreateListValueByXMLDS(_this.HttpCall(url),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot; );
+//		_this.SetToComboBox(&amp;quot;&amp;quot;,0,1,2,list3)  ;
+		_this.SetToSelectBox(&amp;quot;&amp;quot;,sheet,1,2,&amp;quot;V_TAX_COMPANY&amp;quot;,&amp;quot; typclsid=&amp;apos;&amp;quot;+hy+&amp;quot;&amp;apos;&amp;quot;);
+
+	}
+  
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+//	if(row&amp;gt;5 &amp;&amp; row&amp;lt;18){
+//	 	var yyyy = _this.GetCellText(sheet,row,1).substr(0,4);
+//	 	var HY=_this.GetCellText(sheet,1,1);
+//		if (yyyy != &amp;quot;&amp;quot;) {
+//	       		window.open(&amp;quot;show.sp?grdid=HYSXTB&amp;YYYY=&amp;quot;+yyyy+&amp;quot;&amp;HY=&amp;quot;+HY);
+//	        }
+//	  }
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >
+select mm 月份,sum(taxmny)/10000 本月增值税,0 a1,sum(lastememny)/10000 上月增值税 ,0 a2
+from (
+select * from (
+select c.id mm,a.taxmny,lastememny from (  
+  select a.yymm,nvl(sum(taxmny),0) taxmny,0 lastememny 
+  from tax_taxdata a,v_tax_company b,tax_compclass d
+  where  a.id=b.id(+)
+  and b.typclsid=d.id(+)
+  and nvl(b.typclsid,&amp;apos; &amp;apos;) like &amp;apos;[%HY]%&amp;apos;
+  and b.id like &amp;apos;[%QY]%&amp;apos;
+  and substr(a.yymm,0,4)= NVL(&amp;apos;[%YYYY]&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;))
+  group by a.yymm
+) a,v_mm c 
+where substr(a.yymm(+),-2)=c.id
+order by c.id
+) 
+a
+union
+select c.id,elemny,lastememny  from ( 
+  select  a.yymm,0 elemny,nvl(sum(taxmny),0) lastememny 
+  from tax_taxdata a,v_tax_company b,tax_compclass d
+  where a.id=b.id(+) and b.typclsid=d.id(+)
+  and nvl(b.typclsid,&amp;apos; &amp;apos;) like &amp;apos;[%HY]%&amp;apos;
+  and b.id like &amp;apos;[%QY]%&amp;apos;
+  and to_char(to_number(substr(a.yymm,0,4))+1)=NVL(&amp;apos;[%YYYY]&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;))
+  group by a.yymm
+) a,v_mm c
+ where substr(a.yymm(+),-2)=c.id
+)
+group by mm
+order by mm 
+          </DATDSC><C4 >main</C4><C5 >main</C5><C6 >main</C6><C7 >main</C7><C8 >main</C8><C9 >main</C9><C10 >main</C10><C11 >main</C11><C12 >main</C12><C13 >main</C13><C14 >main</C14><C15 >main</C15><C16 >main</C16><C17 >main</C17><C18 >main</C18><C19 >main</C19><C20 >main</C20><C21 >main</C21><C22 >main</C22><C23 ></C23><C24 >main</C24><C25 ></C25><C26 ></C26><C27 >main</C27><C28 >main</C28><C29 >main</C29><C30 >main</C30><C31 >main</C31><C32 >main</C32><C33 ></C33><C34 >main</C34></ROW>
+<ROW num="1" ><ID >main1</ID><NAME ></NAME><DATDSC >select mm 月份,sum(elemny)/10000 本月电力,0 a1,sum(lastememny)/10000 上月电力 ,0 a2
+from (
+select c.id mm,a.elemny,lastememny from (  
+  select a.yymm,nvl(sum(elemny),0) elemny,0 lastememny 
+  from tax_eledata a,tax_company b,tax_compclass d,tax_cmpammno e
+  where  a.usrid=e.ammno and b.id=e.cmid
+  and b.typclsid=d.id
+  and nvl(b.typclsid,&amp;apos; &amp;apos;) like &amp;apos;[%HY]%&amp;apos;
+  and b.id like &amp;apos;[%QY]%&amp;apos;
+  and substr(a.yymm,0,4)= NVL(&amp;apos;[%YYYY]&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;))
+  group by a.yymm
+) a,v_mm c where substr(a.yymm(+),-2)=c.id
+
+union all
+
+select c.id mm,elemny,lastememny  from ( 
+  select  a.yymm,0 elemny,nvl(sum(elemny),0) lastememny 
+  from tax_eledata a,tax_company b,tax_compclass d,tax_cmpammno e
+  where a.usrid=e.ammno and b.id=e.cmid 
+  and b.typclsid=d.id
+  and nvl(b.typclsid,&amp;apos; &amp;apos;) like &amp;apos;[%HY]%&amp;apos;
+  and b.id like &amp;apos;[%QY]%&amp;apos;
+  and to_char(to_number(substr(a.yymm,0,4))+1)=NVL(&amp;apos;[%YYYY]&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;))
+  group by a.yymm
+) a,v_mm c where substr(a.yymm(+),-2)=c.id
+)
+group by mm
+order by mm 
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >main1</C21><C22 >main1</C22><C23 >main1</C23><C24 >main1</C24><C25 >main1</C25><C26 >main1</C26><C27 >main1</C27><C28 >main1</C28><C29 >main1</C29><C30 >main1</C30><C31 ></C31><C32 >main1</C32><C33 >main1</C33><C34 ></C34></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

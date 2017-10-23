@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FX0111</MWID><NAME >法定代表人或财务负责人年龄小于16或者大于70的</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FX0111.zxg</FILE><SCENE ></SCENE><FIXED >4,2</FIXED><CATTYP >风险特征库</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD ></DISPORD><SQLWHE >id=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7) or sjid=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7)</SQLWHE><DEFVAL >[%SYS_DEPTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >ZGSWJG</C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >14</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,1</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+
+	var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+
+	}else{
+		_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+	}
+	
+	_this.SetToBoolBox(0,2,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--风险特征：法定代表人或财务负责人年龄小于16或者大于70的
+select rownum,nsrsbh,nsrmc,fddbrxm,fddbrsfzjhm,age1,CWFZRXM,CWFZRSFZJHM,age2,zcdz,
+     (select nsrztmc from DM_GY_NSRZT zt where t1.nsrzt_Dm=zt.nsrzt_dm) nsrztmc,
+     (select swryxm from DM_GY_SWRY swry where swry.swry_dm=t1.SSGLY_DM)ssglymc,
+     (select name from v_swjg where substr(t1.zgswskfj_dm,1,7)=id) zgswjg,
+     (select swjgmc from DM_GY_SWJG jg where t1.zgswskfj_dm=jg.swjg_dm)zgswskfjmc
+from (
+  select nvl(a.shxydm,a.nsrsbh) nsrsbh,a.nsrmc,
+         a.fddbrxm,a.fddbrsfzjhm,substr(a.fddbrsfzjhm,7,8) csny1,
+         decode(a.fddbrsfzjhm,null,null,decode(is_number(substr(a.fddbrsfzjhm,7,4)),-1,null,to_char(sysdate,&amp;apos;yyyy&amp;apos;)-substr(a.fddbrsfzjhm,7,4))) age1,
+         b.CWFZRXM,b.CWFZRSFZJHM,substr(b.CWFZRSFZJHM,7,8) csny2,
+         decode(b.CWFZRSFZJHM,null,null,decode(is_number(substr(b.CWFZRSFZJHM,7,4)),-1,null,to_char(sysdate,&amp;apos;yyyy&amp;apos;)-substr(b.CWFZRSFZJHM,7,4))) age2,
+         a.djzclx_dm,a.zcdz,a.ssgly_dm,a.zgswskfj_dm,a.nsrzt_dm
+  from dj_nsrxx a,dj_nsrxx_kz b 
+  where a.djxh=b.djxh
+    and a.yxbz=&amp;apos;Y&amp;apos;
+    and fddbrxm&amp;lt;&amp;gt;&amp;apos;迁移车购税&amp;apos;
+  order by nvl(a.shxydm,a.nsrsbh) 
+) t1
+where ( nvl(age1,18) &amp;lt; 16 or nvl(age1,18) &amp;gt; 70 or nvl(age2,18) &amp;lt; 16 or nvl(age2,18) &amp;gt; 70 )
+  and ( nvl(age1,18) &amp;gt; 0 and nvl(age1,18) &amp;lt; 1000 )
+  and ( nvl(age2,18) &amp;gt; 0 and nvl(age2,18) &amp;lt; 1000 )
+  and (substr(t1.zgswskfj_dm,1,7) in(&amp;apos;[%ZGSWJG]&amp;apos;) or substr(t1.zgswskfj_dm,1,7) 
+    in (select swjg.id from V_SWJG swjg start with swjg.id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg.id=swjg.sjid))</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

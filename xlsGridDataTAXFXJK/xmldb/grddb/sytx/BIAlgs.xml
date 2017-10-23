@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >BIAlgs</MWID><NAME >BI指标说明</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BIAlgs.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >2</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetColVisible(sheet,2,-1);
+	
+	_sql.querytods(&amp;quot;Main&amp;quot;,&amp;quot;FORMGUID=&amp;quot;+FORMGUID);
+	_this.SetCellText(sheet,1,1,&amp;quot;《&amp;quot;+_this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;)+&amp;quot;》 指标说明&amp;quot;);
+	
+	// 通过Get的方式调用服务端的一个函数
+	try {
+		var xml = invokeOSFunc(&amp;quot;GetAlg&amp;quot;,&amp;quot;FORMGUID=&amp;quot;+FORMGUID);
+		
+		_this.SetXmlDS(sheet,4,1,6,4,xml);
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+	
+	for (var r = 4; r &amp;lt; _this.GetRowCount(sheet); r ++) {
+		_this.AutoFixOneRowHeight(sheet,r);
+	}
+	modColor(sheet,4,1,_this.GetRowCount(sheet)-1,4);
+}
+
+//设置隔行换色
+function modColor(sheet,row0,col0,row1,col1)
+{
+	for(var i=row0;i&amp;lt;=row1;i++){
+		for(var j=col0;j&amp;lt;=col1;j++) {
+			_this.SetCellBkColor(sheet,i,j,255,255,255);
+		}
+		if(i%2==1) {
+			for(var j=col0;j&amp;lt;=col1;j++) {
+				_this.SetCellBkColor(sheet,i,j,250,250,250);
+			}
+		}
+	}
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function GetAlg()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var msg = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		sql = &amp;quot;select rownum,a.* from (select id,name,alg from DIM_TOPIC where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos; order by id) a&amp;quot;;
+		try {
+			ds = db.QuerySQL(sql);
+		} catch ( e ) {
+			db.ExcecutSQL(&amp;quot;alter table DIM_TOPIC add ALG VARCHAR2(2000)&amp;quot;);
+			db.ExcecutSQL(&amp;quot;comment on column DIM_TOPIC.ALG is &amp;apos;主题算法&amp;apos;&amp;quot;);
+			ds = db.QuerySQL(sql);
+		}
+		
+		msg = ds.GetXml();
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Main</ID><NAME ></NAME><DATDSC >select * from DIM_MODEL where guid=&amp;apos;[%FORMGUID]&amp;apos;</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

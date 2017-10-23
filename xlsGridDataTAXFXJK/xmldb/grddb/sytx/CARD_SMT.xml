@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CARD_SMT</MWID><NAME >斯玛特卡</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CARD_SMT.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,7,5,&amp;quot;&amp;quot;);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,7,8,&amp;quot;&amp;quot;);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;确定&amp;quot;) {
+		try {
+			
+		        
+			var startdat= _this.GetCellText(sheet,7,5);
+			var enddat  = _this.GetCellText(sheet,7,8);
+			var param = new Object();
+		        param.userid = &amp;quot;8854110297&amp;quot;;
+		        param.passwd = &amp;quot;110297&amp;quot;;
+		        param.startdat = startdat;
+		        param.enddat  = enddat;
+   
+			_this.SetCellText(sheet,16,3,&amp;quot;正在连接读取数据，请稍候...&amp;quot;);
+			
+			var msg = invokeOSFuncExt(&amp;quot;downLoad&amp;quot;,param);
+			_this.SaveTextFile( &amp;quot;d:/Tesco1.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+			_this.SetCellText(sheet,16,3,&amp;quot;读取成功!!!&amp;quot;);
+//			if (msg.indexOf(&amp;quot;用户名&amp;quot;) == -1) {
+//				alert(&amp;quot;对账单下载已完成！ 本次成功下载：&amp;quot;+ msg +&amp;quot; 张&amp;quot;);
+//				_this.SetCellText(sheet,16,3,&amp;quot; &amp;quot;);
+//			} else {
+//				alert(msg);
+//				_this.SetCellText(sheet,16,3,msg);
+//			}
+		}
+		catch( e ) {
+			alert(e);
+		}
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var httpcall = new webget.HttpCall();
+var HtmlParser = new x_WG_HtmlParser();
+
+var cvshome = pub.EAOption.dynaDataRoot;
+var hostname = &amp;quot;http://www.smartpass.com.cn&amp;quot;;
+
+
+//下载
+function downLoad()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	var dat = &amp;quot;&amp;quot;;
+	var code = &amp;quot;GBK&amp;quot;;
+	var pageNo = 10;//每一页显示的记录数
+	var pageCount = 0;//总的记录数
+	var pageSize = 0;//总的页数【（总的记录数+每一页显示的记录数-1）/每一页显示的记录数】
+	try {
+		db = new pub.EADatabase();
+		ret = httpcall.Post(hostname+&amp;quot;/cl_login.asp&amp;quot;,&amp;quot;btn1.x=44&amp;btn1.y=6&amp;mch_no=&amp;quot;+userid+&amp;quot;&amp;password=&amp;quot;+passwd,code);
+		ret = httpcall.Get(hostname+&amp;quot;/league/duizhang.asp&amp;quot;,code);
+		
+		pageCount = 1.0*db.GetSQL(&amp;quot;select to_date(&amp;apos;&amp;quot;+enddat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)-to_date(&amp;apos;&amp;quot;+startdat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)+1 from dual&amp;quot;);
+		pageSize = (pageCount+pageNo-1)/pageNo ; 
+		
+		for(var r = 1;r &amp;lt;= pageSize ;r ++)
+		{
+			ret = httpcall.Post(hostname+&amp;quot;/league/duizhang.asp&amp;quot;,&amp;quot;begin_date=&amp;quot;+startdat+&amp;quot;&amp;cmd=&amp;end_date=&amp;quot;+enddat+&amp;quot;&amp;pg=&amp;quot;+r+&amp;quot;&amp;x=30&amp;y=8&amp;quot;,code);
+			var nodelist = HtmlParser.parserHtml(ret,code);	
+			return ret ;
+			var tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;);
+			return tablist ;
+			var ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;2&amp;quot;),&amp;quot;O&amp;quot;);
+		}  
+		
+		
+	}
+	catch ( e ) 
+	{
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

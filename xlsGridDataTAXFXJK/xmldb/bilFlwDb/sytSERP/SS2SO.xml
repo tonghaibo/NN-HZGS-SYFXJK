@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="代送单转销售单" ID="SS2SO">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESTCLS name="待生成的目标单据">SO</DESTCLS>
+				<ValFld name="目标单据的字段">qty</ValFld>
+				<MappedMode name="单据映射关系。0:(默认)多对一映射；1:一对一映射"></MappedMode>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总"></Filter>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生" comment="可用对象:eaContext,usrinf,srcdtl(源单据明细),bilhdr(目标单据的单据头),bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)"></OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生">//
+  //设置税率 REFID1 为 17%
+  bilhdr.setValueAt(0,"REFID1",0.17);
+
+  var 注释 = bilhdr.getStringAt(0,"NOTE")+"; 从代送单"+srchdr.getStringAt(0,"bilid")+"生成";
+  bilhdr.setValueAt(0,"NOTE",注释);
+				//</OnConvert>
+				<OnDelete name="删除目标单据时发生" comment="可用对象:eaContext,_EADB"></OnDelete>
+				<DESC name="数据流描述"></DESC>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+			</ROW>
+		</ROWSET>
+	</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">SS</SRCCLS>
+				<ConvertMod name="单据转换模式:0=明细转换;1=(默认)整单转换;2=仅转换单据头">0</ConvertMod>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">qty</ValFld>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。" comment="可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)"></OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生" comment="可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息"></OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生" comment="可用对象:eaContext,_EADB"></OnUnCkeck>
+			</ROW>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据"></SRCCLS>
+				<ConvertMod name="单据转换模式:0=(默认)明细转换;1=整单转换;2=仅转换单据头"></ConvertMod>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">qty</ValFld>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。" comment="可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)"></OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生" comment="可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息"></OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生" comment="可用对象:eaContext,_EADB"></OnUnCkeck>
+			</ROW>
+		</ROWSET>
+	</srcBil>
+</dataFlow>

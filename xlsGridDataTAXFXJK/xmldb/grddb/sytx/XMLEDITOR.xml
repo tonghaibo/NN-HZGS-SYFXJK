@@ -1,0 +1,509 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >XMLEDITOR</MWID><NAME >xmlds结构数据文件编辑器</NAME><NOTE ></NOTE><FILE >XMLEDITOR.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >SAVE</ID><NAME >保存</NAME><TIP ></TIP><BTNORD >3</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE></ROW>
+<ROW num="1" ><ID >ReLoad</ID><NAME >刷新</NAME><TIP ></TIP><BTNORD >2</BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE></ROW>
+<ROW num="2" ><ID >insrow</ID><NAME >添加</NAME><TIP ></TIP><BTNORD >0</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE></ROW>
+<ROW num="3" ><ID >delrow</ID><NAME >删除</NAME><TIP ></TIP><BTNORD >1</BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE></ROW>
+<ROW num="4" ><ID >URLEncode</ID><NAME >URL编码</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+var flag=&amp;quot;accdb&amp;quot;;
+var xmlfile=&amp;quot;xmldb/accdb/accdb.xml&amp;quot;;
+var filter=&amp;quot;syt=JQJM&amp;quot;;
+var rsid=&amp;quot;ACCROOT&amp;quot;;
+var rid=&amp;quot;ACC&amp;quot;;
+var fullrewrite=0;
+function SAVE()
+{
+  var sheet=0;
+  var rows = _this.GetRowCount(sheet);
+  var cols = _this.GetColCount(sheet);
+//  alert ( rows+&amp;quot;,&amp;quot;+cols );
+  var xml = _this.GetXml(sheet,2,1,rows,cols);
+  
+  var param = new Object();
+  param.xmlfile=xmlfile;
+  param.xml = xml;
+  param.rowsetid=rsid;
+  param.rowid=rid;
+  param.fullrewrite=fullrewrite;
+//  alert(xml);
+  
+  var ret = invokeOSFuncExt(&amp;quot;SaveToFile&amp;quot;,param);
+  if(typeof afterSave!= &amp;quot;undefined&amp;quot;)
+    afterSave(0);
+  alert(ret);
+  ReLoad();
+}
+  r0=new RegExp(&amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;,&amp;quot;g&amp;quot;);
+  r1=new RegExp(&amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;,&amp;quot;g&amp;quot;);
+  function  XmlToStd(xml)
+  {
+      xml = xml.replace( r0, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = xml.replace( r1, &amp;quot;&amp;apos;&amp;quot; );
+    return xml;
+  }
+
+
+function ReLoad()
+{
+  var param = new Object();
+  param.xmlfile=xmlfile;
+  param.flag=flag;
+  param.rowsetid=rsid;
+  param.rowid=rid;
+  param.filter=filter;
+  
+  _this.SetText(&amp;quot;xml_1&amp;quot;,&amp;quot;&amp;quot;);
+  var xml = invokeOSFuncExt(&amp;quot;LoadFile&amp;quot;,param,true);
+  if(xml==&amp;quot;-&amp;quot;)
+  {
+    if(typeof newXml != &amp;quot;undefined&amp;quot;)
+      xml = newXml();
+    else
+      xml = &amp;quot;&amp;quot;;
+  }
+  _this.SetText( &amp;quot;xml_1&amp;quot;,XmlToStd(xml) );
+  ReLoadFromXml();
+}
+
+function ReLoadFromXml()
+{
+  var xml = _this.GetText(&amp;quot;xml_1&amp;quot;);
+  if(xml==&amp;quot;&amp;quot;)
+    return;
+  var sheet=0;
+  _this.SetRowCount(sheet,0);
+  _this.SetRowCount(sheet,3);
+  
+  _this.SetRowHeight(sheet,0,20);
+  _this.SetRowHeight(sheet,1,20);
+  _this.SetRowHeight(sheet,2,20);
+
+  _this.SetColCount(sheet,0);
+  _this.SetColCount(sheet,3);
+  
+  _this.SetXmlDS(sheet,1,1,2,2,xml);
+  _this.LoadScene(sheet,2);
+  var c = _this.GetColCount(sheet);
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    _this.SetCellText(sheet,0,i,_this.GetCellText(sheet,1,i));
+  }
+  _this.SetRowVisible(sheet,1,-1); //隐藏额外标题行
+  _this.SetColVisible(sheet,2,-1); //隐藏GUID列
+  var rows = _this.GetRowCount(sheet);
+  for(var i=2;i&amp;lt;rows;i++)
+    if(_this.GetCellText(sheet,i,1)==&amp;quot;0&amp;quot;)
+      _this.SetRowVisible(sheet,i,-1);
+    else
+        for(var j=0;j&amp;lt;c;j++)
+        {
+          _this.SetCellLock(sheet,i,j,0);
+        }
+
+  _this.SetColVisible(sheet,1,-1);
+  if(typeof afterDataLoaded!= &amp;quot;undefined&amp;quot;)
+    afterDataLoaded(0);
+}
+
+function _thisOnpost_loaddata(sheet)
+{
+  _this.SetSheetName(sheet,&amp;quot;表格&amp;quot;);
+  sheet=_this.AddSheet(&amp;quot;XML源码&amp;quot;);
+  _this.SetToCodeEditor(&amp;quot;xml_1&amp;quot;,sheet,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+  _this.ShowTabBar(1);
+  ReLoad();
+  try {	// 调用自定义脚本的载入函数 参考OS的addBottomHtml() xmlfile=xmldb/orgdb/orgdb.xml 取出orgdb.xml并加入到js列表
+  	my_thisOnpost_loaddata(sheet);
+  }
+  catch (e ){
+  
+  }
+  	// 判断是否存在PRJID
+  	var bExist = false;
+	for ( var c=0;c&amp;lt;_this.GetColCount(0);c++){
+		if(_this.GetCellText(0,0,c)==&amp;quot;PRJID&amp;quot;){
+			bExist = true;
+			break;
+		}
+	}
+	if(bExist==false ) {
+		var newcol = _this.InsertCol(0,_this.GetColCount(0)-1);
+		_this.SetColName(0,newcol, &amp;quot;PRJID&amp;quot; );
+		_this.SetCellText(0,0,newcol,&amp;quot;PRJID&amp;quot; );
+	}
+
+}
+
+
+function delrow()
+{
+  var row = _this.GetCurrentRow(0);
+  if(row&amp;gt;1 &amp;&amp; _this.GetCellText(0,row,1)!=&amp;quot;0&amp;quot;)
+  {
+     _this.SetRowVisible(0,row,-1);
+     _this.SetCellText(0,row,1,&amp;quot;-1&amp;quot;); //设置删除标记.
+     //_this.DeleteRow(0,row);
+  }
+}
+
+function insrow()
+{
+  var row = _this.GetCurrentRow(0);
+  //if(row&amp;lt;1 || row&amp;gt;_this.GetRowCount(0))
+  if(fullrewrite==0)
+    row = _this.GetRowCount(0)-1;
+  _this.AppendRow(0,row);
+  row++;
+  _this.SetRowVisible(0,row,1);
+  var col = _this.GetColCount(0);
+  for(var i=3;i&amp;lt;col;i++)
+  {
+    _this.SetCellBkColor(0,row,i,250,220,0);
+    if(row&amp;gt;2)
+      _this.SetCellText(0,row,i,_this.GetCellText(0,row-1,i));
+  }
+  if(typeof afterInsert != &amp;quot;undefined&amp;quot;)
+    afterInsert(0,row);
+  _this.SetCellText(0,row,1,&amp;quot;9&amp;quot;); //设置新增标记.
+}
+
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+  if(_this.GetCellText(0,row,1)!=&amp;quot;9&amp;quot;)//非新增记录
+    _this.SetCellText(0,row,1,&amp;quot;8&amp;quot;); //设置修改标记.
+}
+
+function URLEncode()
+{
+  var ret=prompt(&amp;quot;请输入要编码的文字：&amp;quot;,&amp;quot;&amp;quot;);
+  try
+  {
+    ret = encodeURI(a) 
+  }
+  catch(e)
+  {
+    ret=invokeOSFunc(&amp;quot;urlencode&amp;quot;,&amp;quot;str=&amp;quot;+ret);
+  }
+  prompt(&amp;quot;编码结果：&amp;quot;,ret);
+}
+
+
+function _thisOnSheetShow(sheet,name)
+{
+  	if ( sheet== 1 ){
+            var rows = _this.GetRowCount(0);
+            var cols = _this.GetColCount(0);
+            _this.SetText( &amp;quot;xml_1&amp;quot;, XmlToStd(_this.GetXml(0,1,1,rows,cols) ));
+	    //_this.Redraw();
+	}
+	else
+	  ReLoadFromXml();  
+}
+
+//XML结构浏览
+function XMLViewer()
+{
+	//openWindow( &amp;quot;show.sp?grdid=XMLViewerx.XMLEDITOR.LoadFile.osp?xmlfile=xmldb/accdb/accdb.xml&amp;quot; +xmlfile );//&amp;quot;show.sp?grdid=XMLViewer&amp;fileurl=&amp;quot;+xmlfile );  
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+ 
+	try {// 调用自定义脚本的载入函数 参考OS的addBottomHtml() xmlfile=xmldb/orgdb/orgdb.xml 取出orgdb.xml并加入到js列表
+  		my_thisOnButtonCtrlClick(id,sheet,row,col);
+
+	}
+	catch ( e ) {}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var basePath = pub.EAOption.dynaDataRoot;
+
+function reloadSysDefine()
+{
+  return xmldb.EAXmlDB.initXmlDBs();
+}
+
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+  
+  function StdToXml(xml)
+  {
+    xml = pub.EAFunc.Replace(xml,&amp;quot;&amp;&amp;quot;,&amp;quot;&amp;&amp;quot;+&amp;quot;amp;&amp;quot;);
+    return xml;
+  }
+
+function loadXML2DS()
+{
+  var path = basePath + xmlfile;
+  var xml=pub.EAFunc.readFile(path);
+  var s1=&amp;quot;&amp;lt;&amp;quot;+rowsetid+&amp;quot;&amp;gt;&amp;quot;;
+  var s2=&amp;quot;&amp;lt;/&amp;quot;+rowsetid+&amp;quot;&amp;gt;&amp;quot;;
+  var r1=&amp;quot;&amp;lt;&amp;quot;+rowid+&amp;quot;&amp;gt;&amp;quot;;
+  var r2=&amp;quot;&amp;lt;/&amp;quot;+rowid+&amp;quot;&amp;gt;&amp;quot;;
+  var r3=&amp;quot;&amp;lt;&amp;quot;+rowid+&amp;quot; &amp;quot;;
+  xml = pub.EAFunc.Replace(xml,s1,&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;);
+  xml = pub.EAFunc.Replace(xml,s2,&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;);
+  xml = pub.EAFunc.Replace(xml,r1,&amp;quot;&amp;lt;ROW&amp;gt;&amp;quot;);
+  xml = pub.EAFunc.Replace(xml,r2,&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;);
+  xml = pub.EAFunc.Replace(xml,r3,&amp;quot;&amp;lt;ROW &amp;quot;);
+  
+  var ds = new pub.EAXmlDS(xml);
+  //如果因意外而出现“_”列，删除之。
+  var r=ds.getColumnLoc(&amp;quot;_&amp;quot;);
+  ds.removeColumn(r);
+  r=ds.getColumnLoc(&amp;quot;num&amp;quot;);
+  ds.removeColumn(r);
+  return ds;
+}
+
+function saveDStoFile(ds)
+{
+  var s1=&amp;quot;&amp;lt;&amp;quot;+rowsetid+&amp;quot;&amp;gt;&amp;quot;;
+  var s2=&amp;quot;&amp;lt;/&amp;quot;+rowsetid+&amp;quot;&amp;gt;&amp;quot;;
+  var r1=&amp;quot;&amp;lt;&amp;quot;+rowid+&amp;quot;&amp;gt;&amp;quot;;
+  var r2=&amp;quot;&amp;lt;/&amp;quot;+rowid+&amp;quot;&amp;gt;&amp;quot;;
+  var r3=&amp;quot;&amp;lt;&amp;quot;+rowid+&amp;quot; &amp;quot;;
+  setGUID(ds);
+  var xml = ds.GetXml();
+  //xml = pub.EAFunc.regexReplace(xml,&amp;quot;&amp;gt;&amp;quot;,&amp;quot;&amp;gt;\r&amp;quot;);
+  xml = pub.EAFunc.Replace(xml,&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;,s1);
+  xml = pub.EAFunc.Replace(xml,&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;,s2);
+  xml = pub.EAFunc.Replace(xml,&amp;quot;&amp;lt;ROW&amp;gt;&amp;quot;,r1);
+  xml = pub.EAFunc.Replace(xml,&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;,r2);
+  xml = pub.EAFunc.Replace(xml,&amp;quot;&amp;lt;ROW &amp;quot;,r3);
+  xml = pub.EAFunc.regexReplace(xml,&amp;quot;&amp;lt;&amp;quot;+rowid+&amp;quot; .*&amp;quot;,&amp;quot;&amp;lt;&amp;quot;+rowid+&amp;quot;&amp;gt;&amp;quot;);
+  //xml = pub.EAFunc.regexReplace(xml,&amp;quot;\r&amp;lt;/&amp;quot;,&amp;quot;&amp;lt;/&amp;quot;);
+  var path = basePath + xmlfile;
+  //throw new Exception(xml);
+  pub.EAFunc.WriteToFile(path,xml);
+}
+
+function setGUID(ds)
+{
+  var len = ds.getRowCount()-1;
+//if(col&amp;gt;=0)
+  var loc=ds.getColumnLoc(&amp;quot;GUID&amp;quot;);
+  for(var j=len;j&amp;gt;=0;j--)
+  {
+    var guid = ds.getStringAt(j,loc);
+    if(guid.length()&amp;lt;10) //不是有效的GUID,则赋新值
+    {
+      guid = pub.EAFunc.generateGuid(pub.EAFunc.GUID_JAVA,&amp;quot;&amp;quot;);
+      guid = pub.EAFunc.Replace(guid,&amp;quot;-&amp;quot;,&amp;quot;&amp;quot;);
+      ds.setValueAt(j,0,guid);
+    }
+  }
+}
+
+function addGUID()
+{
+  var ds=loadXML2DS();
+  //var ds = new pub.EAXmlDS(xml);
+  var loc=ds.getColumnLoc(&amp;quot;GUID&amp;quot;);
+  if(loc&amp;lt;0)
+  {
+    ds.addColumn(-1,&amp;quot;GUID&amp;quot;);
+    setGUID(ds);
+    saveDStoFile(ds);    
+  }
+  return ds;
+}
+
+function LoadFile()
+{
+  var ds;
+  try
+  {
+     ds=addGUID();//loadXML2DS();
+  }
+  catch(e)
+  {
+    return &amp;quot;-&amp;quot;;
+  }
+  //在第一行插入字段别名
+  var sql = &amp;quot;select note from V_SYSXMLDB where id=&amp;apos;&amp;quot;+flag+&amp;quot;&amp;apos;&amp;quot;;
+  ds.AddRow(-1);
+  try
+  {
+    var str = pub.EADbTool.GetSQL(sql);
+    var fields = pub.EAFunc.SplitString(str,&amp;quot;,&amp;quot;);
+    var l = fields.length();
+    for(var i=0;i&amp;lt;l;i++) 
+      ds.setValueAt(0,i,&amp;quot;&amp;quot;+fields[i]);
+  }
+  catch(e)
+  {
+    var c = ds.getColumnCount();
+    for(var i=0;i&amp;lt;c;i++) 
+      ds.setValueAt(0,i,ds.getColumnName(i));
+  }
+  //return ds.GetXml();
+  //处理过滤条件,删除不符合条件的记录,设置数据行的可见标记
+  var filters=pub.EAFunc.SplitString(filter,&amp;quot;;&amp;quot;);
+  var l = filters.length();
+  //添加状态列
+  ds.addColumn(-1,&amp;quot;_&amp;quot;);
+  
+  //仅处理 &amp;quot;filed1=val1;field2=val2&amp;quot; 类型的数据过滤,关系为&amp;quot;or&amp;quot;
+  for(var i=0;i&amp;lt;l;i++)
+  {
+    var vals = pub.EAFunc.SplitString(filters[i],&amp;quot;=&amp;quot;);
+    if(vals.length()==2)
+    {
+      var len = ds.getRowCount()-1;
+      var col = ds.getColumnLoc(vals[0]);
+      if(col&amp;gt;=0)
+        for(var j=len;j&amp;gt;=1;j--)
+        {
+          if(ds.getStringAt(j,col)!=vals[1])
+            //ds.setValueAt(j,0,&amp;quot;1&amp;quot;);
+          //else
+            ds.DeleteRow(j);
+            //ds.setValueAt(j,0,&amp;quot;0&amp;quot;);
+        }
+    }
+  }
+  
+  return ds.GetXml();
+}
+
+function SaveToFile()
+{
+  xml = pub.EAFunc.regexReplace(xml,&amp;quot;&amp;lt;ROW .*&amp;quot;,&amp;quot;&amp;lt;ROW&amp;gt;&amp;quot;);
+  //xml = XmlToStd(xml);
+  xml = StdToXml(xml);
+  var ds = new pub.EAXmlDS(xml);
+  if(fullrewrite==1)
+  {
+  var len = ds.getRowCount()-1;
+  for(var j=len;j&amp;gt;=0;j--)
+  {
+    var state = ds.getStringAt(j,0);
+    if(state==&amp;quot;-1&amp;quot;)
+      ds.DeleteRow(j);
+  }  
+  var r=ds.getColumnLoc(&amp;quot;_&amp;quot;);
+  ds.removeColumn(r);
+  //throw new pub.EAException(ds.getXml() );
+  saveDStoFile(ds);
+  return &amp;quot;保存成功!&amp;quot;;    
+  }
+  //return xml;
+  //删除标记为&amp;quot;已删除&amp;quot;的记录
+  var file_ds;
+  try
+  {
+  file_ds=loadXML2DS();
+  }catch(e)
+  {
+    file_ds=new pub.EAXmlDS();
+  }
+  //var file_ds = new pub.EAXmlDS(xml);
+  //var r=file_ds.getColumnLoc(&amp;quot;_&amp;quot;);
+  //file_ds.removeColumn(r);
+  //saveDStoFile(file_ds);
+  var loc0=file_ds.getColumnLoc(&amp;quot;GUID&amp;quot;);
+  var loc1=ds.getColumnLoc(&amp;quot;GUID&amp;quot;);
+  var len = ds.getRowCount()-1;
+  for(var j=len;j&amp;gt;=0;j--)
+  {
+    var state = ds.getStringAt(j,0);
+    var guid=ds.getStringAt(j,loc1);
+    var r = file_ds.Find(guid,loc0);
+    if(state==&amp;quot;-1&amp;quot;)
+    {
+      if(r&amp;gt;=0)
+        onDelete(file_ds,r,guid);
+    }
+    else if(state==&amp;quot;9&amp;quot;)
+    {
+      if(r&amp;lt;0)
+        onInsert(ds,j,file_ds);
+      else throw  new Exception(&amp;quot;记录GUID标志错误:&amp;quot;+loc0+&amp;quot;,&amp;quot;+guid);
+    }
+    else if(state==&amp;quot;8&amp;quot;)
+    {
+      //throw new Exception(&amp;quot;&amp;quot;+r+&amp;quot;,&amp;quot;+xml);
+      if(r&amp;gt;=0)
+        onUpdate(ds,j,file_ds,r,guid);
+    }
+      
+  }
+  saveDStoFile(file_ds);
+  return &amp;quot;保存成功!&amp;quot;;
+}
+//var onDelete=Delete;
+//var onInsert=Insert;
+//var onUpdate=Update;
+function onDelete(destds,destrow,guid)
+{
+  destds.DeleteRow(destrow);
+}
+
+function onInsert(srcds,srcrow,destds)
+{
+  destds.copyOneRow(srcds,srcrow);
+  var r=destds.getColumnLoc(&amp;quot;_&amp;quot;);
+  destds.removeColumn(r);
+}
+
+function onUpdate(srcds,srcrow,destds,destrow,guid)
+{
+  var cols = srcds.getColumnCount();
+  for(var i=1;i&amp;lt;cols;i++) //跳过状态列0
+    destds.setValueAt(destrow,srcds.getColumnName(i),srcds.getStringAt(srcrow,i));
+}
+
+function addBottomHtml(mwobj,request,sb,usrinfo)
+{
+  var script = request.getParameter(&amp;quot;script&amp;quot;);
+  //2012年修改，默认取一个js运行脚本
+  if(pub.EAFunc.isEmptyStr(script))
+  {
+  	// xmlfile=xmldb/orgdb/orgdb.xml 取出orgdb.xml并加入到js列表
+  	var xmlfile =pubpack.EAFunc.NVL( request.getParameter(&amp;quot;xmlfile&amp;quot;),&amp;quot;&amp;quot;);
+	if (xmlfile !=&amp;quot;&amp;quot; ) {
+		var flg = &amp;quot;&amp;quot;;
+		var ss = pubpack.EAFunc.SplitString(xmlfile,&amp;quot;/&amp;quot;);
+		script = &amp;quot;xlsgrid/js/&amp;quot;+ss[ss.length()-1]+&amp;quot;.js&amp;quot;;
+	}
+  }
+  if(!pub.EAFunc.isEmptyStr(script))
+	  sb.append(&amp;quot;&amp;lt;SCRIPT language=jscript src=&amp;apos;&amp;quot;+script+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/SCRIPT&amp;gt;&amp;quot;);  
+}
+
+function urlencode()
+{
+  return java.net.URLEncoder.encode(str,&amp;quot;GBK&amp;quot;);
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

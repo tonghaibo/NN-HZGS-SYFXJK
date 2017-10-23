@@ -1,0 +1,689 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_FG_KSDTL</MWID><NAME >医生微站</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_FG_KSDTL.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+
+function GetBody(){
+//图片地址
+var html=&amp;quot;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	$(document).ready(function(){
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeIn()
+	},function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeOut()
+	});
+	
+	$dragBln = false;
+	
+	$(\&amp;quot;.main_image\&amp;quot;).touchSlider({
+		flexible : true,
+		speed : 200,
+		btn_prev : $(\&amp;quot;#btn_prev\&amp;quot;),
+		btn_next : $(\&amp;quot;#btn_next\&amp;quot;),
+		paging : $(\&amp;quot;.flicking_con a\&amp;quot;),
+		counter : function (e){
+			$(\&amp;quot;.flicking_con a\&amp;quot;).removeClass(\&amp;quot;on\&amp;quot;).eq(e.current-1).addClass(\&amp;quot;on\&amp;quot;);
+		}
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;mousedown\&amp;quot;, function() {
+		$dragBln = false;
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;dragstart\&amp;quot;, function() {
+		$dragBln = true;
+	});
+	
+	$(\&amp;quot;.main_image a\&amp;quot;).click(function(){
+		if($dragBln) {
+			return false;
+		}
+	});
+	
+	timer = setInterval(function(){
+		$(\&amp;quot;#btn_next\&amp;quot;).click();
+	}, 5000);
+	
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		clearInterval(timer);
+	},function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		},5000);
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;touchstart\&amp;quot;,function(){
+		clearInterval(timer);
+	}).bind(\&amp;quot;touchend\&amp;quot;, function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		}, 5000);
+	});
+	
+	});
+	&amp;lt;/script&amp;gt;
+
+&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-ss.css\&amp;quot; /&amp;gt;
+	&amp;lt;div class=\&amp;quot;main_visual\&amp;quot; id=\&amp;quot;test\&amp;quot; &amp;gt;
+		&amp;lt;div class=\&amp;quot;flicking_con\&amp;quot;&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;1&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;2&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;3&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;4&amp;lt;/a&amp;gt;
+		&amp;lt;/div&amp;gt;
+		&amp;lt;div class=\&amp;quot;main_image\&amp;quot;&amp;gt;
+			&amp;lt;ul &amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_1.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_2.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_3.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_4.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;!--css中的图片这里拿出来方便下载--&amp;gt;
+			&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_prev\&amp;quot;  style=\&amp;quot;background: url(xlsgrid/images/flash/images/movpic_left.png) no-repeat left top;\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_next\&amp;quot; style=\&amp;quot;background: url(xlsgrid/images/flash/images/movpic_right.png) no-repeat right top;\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+		&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+		
+			
+					
+		&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+		
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;window.location.href=&amp;apos;L.sp?id=CHARTWE&amp;apos;\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;我要看病&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;预检人员协助您进行&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		
+		
+			&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;  height=100% cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;td&amp;gt;&amp;lt;tr&amp;gt;
+			&amp;lt;table id=\&amp;quot;PAGE_MAIN_HAPP_Tool\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;  height=10% id=\&amp;quot;TABLE_MAIN\&amp;quot; cellspacing=\&amp;quot;7\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;  bgcolor=\&amp;quot;#EEEEEE\&amp;quot;&amp;gt;&amp;quot;;
+			var sql=&amp;quot;&amp;quot;;
+			var ds=null;
+			var db=null;
+			db = new pubpack.EADatabase();
+			sql = &amp;quot;select * from YX_DOCDEPT&amp;quot;;
+			ds = db.QuerySQL(sql);
+			for (var r=0;r&amp;lt;ds.getRowCount();r++) {
+				html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;td width=50%  onmouseover=this.style.cursor=&amp;apos;hand&amp;apos;; width=&amp;apos;0&amp;apos; height=0 align=&amp;apos;&amp;apos; valign=&amp;apos;&amp;apos; style=&amp;apos;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;&amp;apos;&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=f_openLocalURL(&amp;apos;L.sp?id=SJNK&amp;dept=&amp;quot;+ds.getStringAt(r,&amp;quot;id&amp;quot;)+&amp;quot;&amp;apos;);&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=0  cellpadding=0&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;td align=center bgcolor=#FFFFFF width=50 width=120&amp;gt;&amp;lt;img src=&amp;apos;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(r,&amp;quot;img&amp;quot;)+&amp;quot;&amp;apos; width=50px height=50px &amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+				r++;
+				if(r &amp;gt;= ds.getRowCount()) return;
+				html+=&amp;quot;&amp;lt;td width=50%  onmouseover=this.style.cursor=&amp;apos;hand&amp;apos;; width=&amp;apos;0&amp;apos; height=0 align=&amp;apos;&amp;apos; valign=&amp;apos;&amp;apos; style=&amp;apos;padding-top:0px;padding-bottom:0px;margin:0;border:1px  #FFFFFF solid;&amp;apos;&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;a href=# onclick=f_openLocalURL(&amp;apos;L.sp?id=SJNK&amp;dept=&amp;quot;+ds.getStringAt(r,&amp;quot;id&amp;quot;)+&amp;quot;&amp;apos;);&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=0 cellpadding=0&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;td align=center bgcolor=#FFFFFF width=50 width=120&amp;gt;&amp;lt;img src=&amp;apos;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(r,&amp;quot;img&amp;quot;)+&amp;quot;&amp;apos; width=50px height=50px &amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=left valign=middle bgcolor=#FFFFFF&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+				html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+			}
+			
+			html+=&amp;quot;&amp;lt;/table&amp;gt;
+			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+		
+		
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#all_panel3\&amp;quot;  target=\&amp;quot;_Blank\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;找医生&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;关键字、按科室查找专家&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		
+		&amp;lt;div id=\&amp;quot;DIV_2_0\&amp;quot; style=\&amp;quot;margin:0;border:0;overflow-x:auto;\&amp;quot;&amp;gt;
+		&amp;lt;table width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;tbody&amp;gt;&amp;lt;tr align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;quot;;
+		var sql=&amp;quot;&amp;quot;;
+		var ds=null;
+		var db=null;
+		db = new pubpack.EADatabase();
+		try{
+			sql=&amp;quot;select id, rownum,guid,name,jobtitle,img from yx_doc where img is not null and rownum&amp;lt;=15 and name&amp;lt;&amp;gt;&amp;apos;潘宇&amp;apos; and org=&amp;apos;CHIS&amp;apos;&amp;quot;;
+			ds=db.QuerySQL(sql);
+			if(ds.getRowCount()!=0){
+				for (var r = 0;r &amp;lt; ds.getRowCount(); r++) {
+					html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;a href=\&amp;quot;#ABOUTDOCpanel\&amp;quot;  style=\&amp;quot;text-decoration:none;\&amp;quot; onclick=f_openLocalURL(&amp;apos;L.sp?id=ABOUTDOC&amp;uid=&amp;quot;+ds.getStringAt(r,&amp;quot;id&amp;quot;)+&amp;quot;&amp;apos;);&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;div&amp;gt;&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(r,&amp;quot;img&amp;quot;)+&amp;quot;\&amp;quot; width=\&amp;quot;80px\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+					html += &amp;quot;&amp;lt;div&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;div&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;jobtitle&amp;quot;)+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+			}
+		} catch(e){}
+		if(db!=null){db.Close();}
+		
+		html +=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/tbody&amp;gt;&amp;lt;/table&amp;gt;
+			&amp;lt;!-- end layout item 2_0--&amp;gt;
+			&amp;lt;/div&amp;gt;&amp;lt;!-- 单元格 DIVMOBILE--&amp;gt;
+	
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;  target=\&amp;quot;_Blank\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot; onclick=\&amp;quot;f_openLocalURL(&amp;apos;L.sp?id=MAPFIND&amp;apos;);\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;找医院&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;地图快速找到我们&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=MYROOM&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span &amp;gt;进入虚拟场景&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;就诊向导、医院场景&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			
+			&amp;lt;div class=\&amp;quot;copyright\&amp;quot;&amp;gt;Copyright ? 2004-2015 &amp;lt;a&amp;gt;硕格云开发&amp;lt;/a&amp;gt; All rights reserved.&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+//html=getlayout(request,&amp;quot;CHIS_TEST01&amp;quot;);
+return html;
+}
+
+//获取图片参数
+function genstr(str){
+
+	var sql=&amp;quot;&amp;quot;;
+	var ds=&amp;quot;&amp;quot;;
+	var db=null;
+	db = new pubpack.EADatabase();
+	var layid=&amp;quot;&amp;quot;;
+	try{
+		sql=&amp;quot;
+			SELECT B.* FROM LAYOBJ A ,LAYOBJDTL B  
+			WHERE A.GUID=B.FORMGUID 
+			AND A.ID =&amp;apos;CHISMOVEPIC&amp;apos; AND A.CLS=&amp;apos;CHIS&amp;apos;and B.id =&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;
+		&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()==1){
+			layid=ds.getStringAt(0,&amp;quot;VAL&amp;quot;);
+			return layid; 
+		}
+	}
+	catch(e){ throw new Exception(e);}
+	if(db!=null){db.Close();}
+}
+
+//各科医生
+function genSJNK(){
+var dep = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;dept&amp;quot;),&amp;quot;&amp;quot;) ;
+
+var html=&amp;quot;
+
+&amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+
+&amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/sjnk_iscroll.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/iscroll.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+var myScroll;
+function loaded() {
+
+	myScroll = new iScroll(&amp;apos;wrapper&amp;apos;, {
+		snap: true,
+		momentum: false,
+		hScrollbar: false,
+		onScrollEnd: function () {
+			document.querySelector(&amp;apos;#indicator &amp;gt; li.active&amp;apos;).className = &amp;apos;&amp;apos;;
+			document.querySelector(&amp;apos;#indicator &amp;gt; li:nth-child(&amp;apos; + (this.currPageX+1) + &amp;apos;)&amp;apos;).className = &amp;apos;active&amp;apos;;
+		}
+	});
+}
+
+document.addEventListener(&amp;apos;DOMContentLoaded&amp;apos;, loaded, false);
+&amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt;
+&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;
+hr
+{
+	display: block;
+	-webkit-margin-before: 0.5em;
+	-webkit-margin-after: 0.5em;
+	-webkit-margin-start: auto;
+	-webkit-margin-end: auto;
+	border-style: inset;
+	border-width: 1px;
+}
+&amp;lt;/style&amp;gt;
+
+&amp;lt;!--&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/css/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;--&amp;gt;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+$(document).ready(function(){
+	playbox.init(\&amp;quot;playbox\&amp;quot;);
+	/*
+	setTimeout(function() {
+		// IE
+		if(document.all) {
+			document.getElementById(\&amp;quot;playbox\&amp;quot;).click();
+		}
+		// 其它浏览器
+		else {
+			var e = document.createEvent(\&amp;quot;MouseEvents\&amp;quot;);
+			e.initEvent(\&amp;quot;click\&amp;quot;, true, true);
+			document.getElementById(\&amp;quot;playbox\&amp;quot;).dispatchEvent(e);
+		}
+	}, 2000);
+	*/
+});
+
+&amp;lt;/script&amp;gt;&amp;quot;;
+//f_openLocalURL
+//openWindow
+var sql=&amp;quot;&amp;quot;;
+var ds=null;
+var db=null;
+var dept = &amp;quot;&amp;quot;;
+db = new pubpack.EADatabase();
+	try{dept = dep;}catch(e){dept = &amp;quot;&amp;quot;;}
+	if(dept == &amp;quot;&amp;quot;) {
+		sql=&amp;quot;select a.id,a.name,b.name job,a.img,a.BEGOODATNAM,a.viscera,a.hospital from yx_doc a,yx_docjob b where a.jobtitle=b.id and a.org=&amp;apos;CHIS&amp;apos; and iskf is null&amp;quot;;
+	} else {
+		sql=&amp;quot;select a.id,a.name,b.name job,a.img,a.BEGOODATNAM,a.viscera,a.hospital from yx_doc a,yx_docjob b where a.jobtitle=b.id and a.org=&amp;apos;CHIS&amp;apos; and a.DEPARTMENT=&amp;apos;&amp;quot;+dep+&amp;quot;&amp;apos; and iskf is null&amp;quot;; 
+	}
+	ds=db.QuerySQL(sql);
+	html += &amp;quot;&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=184E4ECA152C6272E050007F01007E91\&amp;quot; style=\&amp;quot;width:100%;height:100px;\&amp;quot;/&amp;gt;&amp;quot;;
+	if(ds.getRowCount()!=0){
+		for (var r = 0;r &amp;lt; ds.getRowCount(); r++) {
+			html += &amp;quot;&amp;lt;div bgcolor=#F8F8F8&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;a  onclick=\&amp;quot;javascript:openWindow(&amp;apos;L.sp?id=ABOUTDOC&amp;uid=&amp;quot;+ds.getStringAt(r,&amp;quot;id&amp;quot;)+&amp;quot;&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;;
+			
+			html +=&amp;quot;&amp;lt;table &amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr &amp;gt;&amp;lt;td rowspan=\&amp;quot;4\&amp;quot; &amp;gt;&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(r,&amp;quot;img&amp;quot;)+&amp;quot;\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;width:60px;height:60px;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font color=#3F3F3F&amp;gt;姓名：&amp;lt;/font&amp;gt;&amp;lt;font size=\&amp;quot;2\&amp;quot; color=#B2B2B2&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot; &amp;gt; &amp;lt;font size=\&amp;quot;2\&amp;quot; color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;职称：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;job&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt; &amp;lt;font size=\&amp;quot;2\&amp;quot; color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;擅长领域：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;viscera&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt; &amp;lt;font size=\&amp;quot;2\&amp;quot; color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;擅长病种：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;BEGOODATNAM&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/div&amp;gt;&amp;lt;hr&amp;gt;&amp;quot;;
+		}
+	}
+
+if(db!=null){db.Close();}
+
+html += &amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+.top_bar{position:fixed;z-index:900;bottom:-1px;left:0;right:0;}
+.top_menu{
+	border-top:1px solid #b3b3b3;width:100%;height:40px;margin:0;padding:0;
+	
+	background:rgba(255, 255, 255, 0.7);
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#e7e4e7), to(#b9b9b9));
+	background:-o-gradient(linear, 0 0, 0 100%, from(#e7e4e7), to(#b9b9b9));
+	background:gradient(linear, 0 0, 0 100%, from(#e7e4e7), to(#b9b9b9));
+}
+.top_bar .top_menu&amp;gt;li{
+	position:relative;text-align:center;display:inline-block;width:25%;float:left;
+	
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.1)), color-stop(50%, rgba(0, 0, 0, 0.2)), to(rgba(0, 0, 0, 0.2))), -webkit-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.1)), color-stop(50%, rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0.1)));
+	background:-o-gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.1)), color-stop(50%, rgba(0, 0, 0, 0.2)), to(rgba(0, 0, 0, 0.2))), -o-gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.1)), color-stop(50%, rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0.1)));
+	background:gradient(linear, 0 0, 0 100%, from(rgba(0, 0, 0, 0.1)), color-stop(50%, rgba(0, 0, 0, 0.2)), to(rgba(0, 0, 0, 0.2))), gradient(linear, 0 0, 0 100%, from(rgba(255, 255, 255, 0.1)), color-stop(50%, rgba(255, 255, 255, 0.3)), to(rgba(255, 255, 255, 0.1)));
+}
+.top_bar .top_menu li a label{padding:3px 0 0 3px;font-size:12px;overflow:hidden;}
+.top_menu&amp;gt;li:first-child{background:none;}
+.top_bar .top_menu&amp;gt;li&amp;gt;a{height:40px;line-height:40px;display:block;text-align:center;color:#4f4d4f;text-shadow:0 1px rgba(255, 255, 255, 0.3);text-decoration:none;border-top:1px solid #f9f9f9;}
+.top_bar .top_menu&amp;gt;li&amp;gt;a p{overflow:hidden;margin:0 0 0 0;font-size:12px;display:block!important;line-height:18px;text-align:center;}
+.top_bar .top_menu&amp;gt;li&amp;gt;a img{padding:0;height:20px;width:20px;color:#fff;line-height:40px;vertical-align:middle;}
+.top_bar .top_menu&amp;gt;li&amp;gt;a:hover,.top_bar .top_menu&amp;gt;li&amp;gt;a:active{background-color:#CCCCCC;}
+&amp;lt;/style&amp;gt;
+
+&amp;quot;;
+return html;
+}
+
+//医生微站
+function genABOUTDOC(){
+var uid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;uid&amp;quot;),&amp;quot;&amp;quot;) ;
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var usr=web.EASession.GetLoginInfo(request);
+var orgid=usr.getOrgid();
+var uuid = uid;
+
+var html=&amp;quot;
+
+
+&amp;lt;link rel=\&amp;quot;shortcut icon\&amp;quot; href=\&amp;quot;http://img.guahao.cn/favicon.ico\&amp;quot;&amp;gt;  
+&amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+&amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/sjnk_iscroll.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+
+&amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/sjnk_iscroll.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/iscroll.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+var myScroll;
+function loaded() {
+
+	myScroll = new iScroll(&amp;apos;wrapper&amp;apos;, {
+		snap: true,
+		momentum: false,
+		hScrollbar: false,
+		onScrollEnd: function () {
+			document.querySelector(&amp;apos;#indicator &amp;gt; li.active&amp;apos;).className = &amp;apos;&amp;apos;;
+			document.querySelector(&amp;apos;#indicator &amp;gt; li:nth-child(&amp;apos; + (this.currPageX+1) + &amp;apos;)&amp;apos;).className = &amp;apos;active&amp;apos;;
+		}
+	});
+
+}
+
+document.addEventListener(&amp;apos;DOMContentLoaded&amp;apos;, loaded, false);
+&amp;lt;/script&amp;gt;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+
+var playbox = (function(){
+	//author:eric_wu
+	var _playbox = function(){
+		var that = this;
+		that.box = null;
+		that.player = null;
+		that.src = null;
+		that.on = false;
+		//
+		that.autoPlayFix = {
+			on: true,
+			//evtName: (\&amp;quot;ontouchstart\&amp;quot; in window)?\&amp;quot;touchend\&amp;quot;:\&amp;quot;click\&amp;quot;
+			evtName: (\&amp;quot;ontouchstart\&amp;quot; in window)?\&amp;quot;touchstart\&amp;quot;:\&amp;quot;mouseover\&amp;quot;
+			
+		}
+
+	}
+	_playbox.prototype = {
+		init: function(box_ele){
+			this.box = \&amp;quot;string\&amp;quot; === typeof(box_ele)?document.getElementById(box_ele):box_ele;
+			this.player = this.box.querySelectorAll(\&amp;quot;audio\&amp;quot;)[0];
+			this.src = this.player.src;
+			this.init = function(){return this;}
+			this.autoPlayEvt(true);
+			return this;
+		},
+		play: function(){
+			if(this.autoPlayFix.on){
+				this.autoPlayFix.on = false;
+				this.autoPlayEvt(false);
+			}
+			this.on = !this.on;
+			if(true == this.on){
+				this.player.src = this.src;
+				this.player.play();
+			}else{
+				this.player.pause();
+				this.player.src = null;
+			}
+			if(\&amp;quot;function\&amp;quot; == typeof(this.play_fn)){
+				this.play_fn.call(this);
+			}
+		},
+		handleEvent: function(evt){
+			this.play();
+		},
+		autoPlayEvt: function(important){
+			if(important || this.autoPlayFix.on){
+				document.body.addEventListener(this.autoPlayFix.evtName, this, false);
+			}else{
+				document.body.removeEventListener(this.autoPlayFix.evtName, this, false);
+			}
+		}
+	}
+	//
+	return new _playbox();
+})();
+
+playbox.play_fn = function(){
+	this.box.className = this.on?\&amp;quot;btn_music on\&amp;quot;:\&amp;quot;btn_music\&amp;quot;;
+}
+function inroom(str) {
+}
+&amp;lt;/script&amp;gt;&amp;quot;;
+
+var sql=&amp;quot;&amp;quot;;
+var ds=null;
+var db=null;
+db = new pubpack.EADatabase();
+try{
+	//这里组织先写成：YXIMAGES因为默认的是XLSGRID
+	sql=&amp;quot;select c.guid,a.name,d.name job,a.img,a.BEGOODAT,a.hospital,a.VISCERA,a.EQUTYPE,a.note from yx_doc a,usr c,yx_docjob d where c.id=&amp;apos;&amp;quot;+uid+&amp;quot;&amp;apos;  and a.id=c.id and a.jobtitle=d.id and c.org=&amp;apos;CHIS&amp;apos;&amp;quot;;
+	
+	ds=db.QuerySQL(sql);
+	if(ds.getRowCount()&amp;gt;0){
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;margin-left:12px; margin-top:5px; width:97%\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(0,&amp;quot;img&amp;quot;)+&amp;quot;\&amp;quot;  style=\&amp;quot;border-radius:50%; float:left; height:90px; margin-right:20px;\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;height:50%; text-align:left;\&amp;quot;&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:5px\&amp;quot;&amp;gt;&amp;lt;font  color=#3F3F3F&amp;gt;姓名：&amp;lt;/font&amp;gt;&amp;lt;font  color=#B2B2B2&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:5px\&amp;quot;&amp;gt;&amp;lt;font  color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;职称：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;job&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:5px\&amp;quot;&amp;gt;&amp;lt;font  color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;特长：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(0,&amp;quot;VISCERA&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;					
+				&amp;lt;/div&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;text-align:left; width:100%; margin-right:12px;\&amp;quot;&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:3px\&amp;quot;&amp;gt;&amp;lt;font  color=\&amp;quot;#444444\&amp;quot;&amp;gt;医生介绍：&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;
+					&amp;lt;div style=\&amp;quot;width:100%;\&amp;quot;&amp;gt;&amp;lt;p&amp;gt;&amp;lt;font color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;　　&amp;quot;+ds.getStringAt(0,&amp;quot;note&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/div&amp;gt;
+				&amp;lt;/div&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			
+			html+=&amp;quot;&amp;lt;div&amp;gt;&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+				
+					&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;button id=\&amp;quot;intoROOM\&amp;quot; type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn btn-primary btn-lg btn-block\&amp;quot; onclick=\&amp;quot;inroom(&amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;guid&amp;quot;)+&amp;quot;&amp;apos;)\&amp;quot;&amp;gt;进入诊室&amp;lt;/button&amp;gt;&amp;lt;/li&amp;gt;
+				
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;/div&amp;gt;&amp;quot;;						
+						
+			
+	}
+	
+} catch(e){}
+if(db!=null){db.Close();}
+	
+return html;
+}
+
+//获取布局的html
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(&amp;quot;&amp;quot;);
+						
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+//医生首页
+function genDOCMENU1(){
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var usr=web.EASession.GetLoginInfo(request);
+var orgid=usr.getOrgid();
+var accid=usr.getAccid();
+var userid =usr.getUsrid();
+var html=&amp;quot;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	$(document).ready(function(){
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeIn()
+	},function(){
+		$(\&amp;quot;#btn_prev,#btn_next\&amp;quot;).fadeOut()
+	});
+	
+	$dragBln = false;
+	
+	$(\&amp;quot;.main_image\&amp;quot;).touchSlider({
+		flexible : true,
+		speed : 200,
+		btn_prev : $(\&amp;quot;#btn_prev\&amp;quot;),
+		btn_next : $(\&amp;quot;#btn_next\&amp;quot;),
+		paging : $(\&amp;quot;.flicking_con a\&amp;quot;),
+		counter : function (e){
+			$(\&amp;quot;.flicking_con a\&amp;quot;).removeClass(\&amp;quot;on\&amp;quot;).eq(e.current-1).addClass(\&amp;quot;on\&amp;quot;);
+		}
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;mousedown\&amp;quot;, function() {
+		$dragBln = false;
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;dragstart\&amp;quot;, function() {
+		$dragBln = true;
+	});
+	
+	$(\&amp;quot;.main_image a\&amp;quot;).click(function(){
+		if($dragBln) {
+			return false;
+		}
+	});
+	
+	timer = setInterval(function(){
+		$(\&amp;quot;#btn_next\&amp;quot;).click();
+	}, 5000);
+	
+	$(\&amp;quot;.main_visual\&amp;quot;).hover(function(){
+		clearInterval(timer);
+	},function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		},5000);
+	});
+	
+	$(\&amp;quot;.main_image\&amp;quot;).bind(\&amp;quot;touchstart\&amp;quot;,function(){
+		clearInterval(timer);
+	}).bind(\&amp;quot;touchend\&amp;quot;, function(){
+		timer = setInterval(function(){
+			$(\&amp;quot;#btn_next\&amp;quot;).click();
+		}, 5000);
+	});
+	
+	});
+	&amp;lt;/script&amp;gt;
+
+
+&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-ss.css\&amp;quot; /&amp;gt;
+	&amp;lt;div class=\&amp;quot;main_visual\&amp;quot; id=\&amp;quot;test\&amp;quot; style=\&amp;quot;margin-left:0;margin-right:0\&amp;quot;&amp;gt;
+		&amp;lt;div class=\&amp;quot;flicking_con\&amp;quot;&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;1&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;2&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;3&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;4&amp;lt;/a&amp;gt;
+		&amp;lt;/div&amp;gt;
+		&amp;lt;div class=\&amp;quot;main_image\&amp;quot;&amp;gt;
+			&amp;lt;ul &amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_1.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_2.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_3.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+				&amp;lt;li&amp;gt;&amp;lt;span &amp;gt;&amp;lt;img src=\&amp;quot;xlsgrid/images/flash/images/movpic_4.jpg\&amp;quot; style=\&amp;quot;width:100%;height:110px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;!--css中的图片这里拿出来方便下载--&amp;gt;
+			&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_prev\&amp;quot;  style=\&amp;quot;background: url(xlsgrid/images/flash/images/movpic_left.png) no-repeat left top;\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+			&amp;lt;a href=\&amp;quot;javascript:;\&amp;quot; id=\&amp;quot;btn_next\&amp;quot; style=\&amp;quot;background: url(xlsgrid/images/flash/images/movpic_right.png) no-repeat right top;\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+		&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+
+		&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+		&amp;lt;!--这里不用传用户编号因为聊天组件可以获取全局登录用户信息--&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(G_BROWSETYPE==&amp;apos;IOS&amp;apos;)window.open(&amp;apos;L.sp?id=CHARTWE&amp;userid=&amp;quot;+userid+&amp;quot;&amp;apos;);else f_openLocalURL(&amp;apos;L.sp?id=CHARTWE&amp;userid=&amp;quot;+userid+&amp;quot;&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span &amp;gt;进入诊室&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;进入诊室&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;f_openLocalURL(&amp;apos;L.sp?id=CHIS_PRELIST&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;历史记录查询&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;查询历史就诊记录&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        	&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;f_openLocalURL(&amp;apos;L.sp?id=CHIS_PRELIST&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;预约记录查询&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;查询历史就诊记录&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;/ul&amp;gt;
+
+&amp;quot;;
+return html;
+}
+
+
+//我要咨询（在线不出诊的医生）
+function genzxList(){
+var html=&amp;quot;&amp;quot;;	
+var sql=&amp;quot;&amp;quot;;
+var ds=null;
+var db=null;
+db = new pubpack.EADatabase();
+
+//
+try{
+	//这里组织先写成：YXIMAGES因为默认的是XLSGRID
+	sql=&amp;quot;select c.id,c.guid,a.name,d.name job,a.img,a.BEGOODAT,a.hospital,a.VISCERA,a.EQUTYPE,a.note from yx_doc a,usr c,yx_docjob d where a.id=c.id and a.jobtitle=d.id(+) and c.org=&amp;apos;CHIS&amp;apos;
+	 and  c.id not in (
+		select crtusr
+		  from yx_monthwork
+		 where org = &amp;apos;CHIS&amp;apos;
+		   and ((to_date(dat || &amp;apos; &amp;apos; || substr(morning, 7, 99), &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;) &amp;gt;=
+		       to_date(to_char(sysdate, &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;), &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;) and
+		       to_date(dat || &amp;apos; &amp;apos; || substr(morning, 0, 5), &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;) &amp;lt;=
+		       to_date(to_char(sysdate, &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;), &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;)) or
+		       (to_date(dat || &amp;apos; &amp;apos; || substr(afternoon, 7, 99),
+		                 &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;) &amp;gt;=
+		       to_date(to_char(sysdate, &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;), &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;) and
+		       to_date(dat || &amp;apos; &amp;apos; || substr(afternoon, 0, 5),
+		                 &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;) &amp;lt;=
+		       to_date(to_char(sysdate, &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;), &amp;apos;yyyy-mm-dd hh24:mi&amp;apos;)))
+		   and (usernum &amp;lt;&amp;gt; 0 or usernumaf &amp;lt;&amp;gt; 0)
+		   and ((morning &amp;lt;&amp;gt; &amp;apos;-&amp;apos; and morning is not null) or
+		       (afternoon &amp;lt;&amp;gt; &amp;apos;-&amp;apos; and afternoon is not null)) 
+	) and c.isol=&amp;apos;1&amp;apos; AND a.iskf&amp;lt;&amp;gt;&amp;apos;1&amp;apos;
+	&amp;quot;;
+
+	ds=db.QuerySQL(sql);
+	
+	if(ds.getRowCount()&amp;gt;0){
+		for(var i=0;i&amp;lt;ds.getRowCount();i++){
+			html += &amp;quot;&amp;lt;a href=\&amp;quot;javascript:openWindow(&amp;apos;L.sp?id=CHIS_ZX&amp;ZXUSERID=&amp;quot;+ds.getStringAt(i,&amp;quot;guid&amp;quot;)+&amp;quot;&amp;flg=zx&amp;zxdoc=&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;margin-left:12px; margin-top:5px; width:100%\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(i,&amp;quot;img&amp;quot;)+&amp;quot;\&amp;quot;  style=\&amp;quot;border-radius:50%; float:left; height:90px; margin-right:20px;\&amp;quot;&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;height:100px; text-align:left;\&amp;quot;&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:5px;margin:5px;\&amp;quot;&amp;gt;&amp;lt;font  color=#3F3F3F&amp;gt;姓名：&amp;lt;/font&amp;gt;&amp;lt;font  color=#B2B2B2&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:5px;margin:5px;\&amp;quot;&amp;gt;&amp;lt;font  color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;职称：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;job&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;
+					&amp;lt;p style=\&amp;quot;padding:5px;margin:5px;\&amp;quot;&amp;gt;&amp;lt;font  color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;特长：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;VISCERA&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;				
+				&amp;lt;/div&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;hr/&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}	
+	}
+	
+} catch(e){}
+if(db!=null){db.Close();}
+	
+return html;
+}
+
+//
+// 
+//
+function getAllDoc()
+{
+	var sql=&amp;quot;&amp;quot;;
+	var ds=null;
+	var db=null;
+	var html = &amp;quot;&amp;quot;;
+	db = new pubpack.EADatabase();
+	
+	sql=&amp;quot;select rownum,a.id,a.name,b.name job,a.img,a.BEGOODATNAM,a.viscera,a.hospital from yx_doc a,yx_docjob b where a.jobtitle=b.id and a.org=&amp;apos;CHIS&amp;apos; and iskf is null and rownum&amp;lt;=3&amp;quot;;
+	ds=db.QuerySQL(sql);
+	
+	if(ds.getRowCount()!=0){
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;float:left;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;p style=\&amp;quot;float:right;\&amp;quot; onclick=\&amp;quot;javascript:openWindow(&amp;apos;L.sp?id=SJNK&amp;apos;)\&amp;quot;&amp;gt;更多&amp;gt;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		for (var r = 0;r &amp;lt; ds.getRowCount(); r++) {
+			html += &amp;quot;&amp;lt;div style=\&amp;quot;clear:both; bgcolor:#F8F8F8\&amp;quot;&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;a  onclick=\&amp;quot;javascript:window.open(&amp;apos;L.sp?id=ABOUTDOC&amp;uid=&amp;quot;+ds.getStringAt(r,&amp;quot;id&amp;quot;)+&amp;quot;&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;table &amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr &amp;gt;&amp;lt;td rowspan=\&amp;quot;4\&amp;quot; &amp;gt;&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(r,&amp;quot;img&amp;quot;)+&amp;quot;\&amp;quot; style=\&amp;quot;margin:15px;border-radius:50%;width:60px;height:60px;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font color=#3F3F3F&amp;gt;姓名：&amp;lt;/font&amp;gt;&amp;lt;font size=\&amp;quot;2\&amp;quot; color=#B2B2B2&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot; &amp;gt; &amp;lt;font size=\&amp;quot;2\&amp;quot; color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;职称：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;job&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt; &amp;lt;font size=\&amp;quot;2\&amp;quot; color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;擅长领域：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;viscera&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt; &amp;lt;font size=\&amp;quot;2\&amp;quot; color=\&amp;quot;#3F3F3F\&amp;quot;&amp;gt;擅长病种：&amp;lt;/font&amp;gt;&amp;lt;font  color=\&amp;quot;#B2B2B2\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,&amp;quot;BEGOODATNAM&amp;quot;)+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+			html +=&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;/div&amp;gt;&amp;lt;hr&amp;gt;&amp;quot;;
+		}
+	}
+	
+	if(db!=null){db.Close();}
+	
+	return html;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

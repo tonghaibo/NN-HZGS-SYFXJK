@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>UpdateTempTable</MWID><NAME>临时数据表导入</NAME><NOTE></NOTE><FILE>UpdateTempTable.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>DeleteAllData</ID><NAME>清空数据</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+order = &amp;quot; order by ID&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+       setButton();
+       // 构造3个 SQL
+       selectSQL = &amp;quot;SELECT GUID,ID,S1,S2,S3,S4,S5,S6,S7,S8,S9,S10 &amp;quot;+
+            &amp;quot; ,S11,S12,S13,S14,S15,S16,S17,S18,S19,S20 &amp;quot;+
+            &amp;quot;from TMP&amp;quot;;
+
+       insertSQL = &amp;quot;INSERT INTO TMP( GUID,ID,S1,S2,S3,S4,S5,S6,S7,S8,S9,S10 , &amp;quot;  +
+             &amp;quot;S11,S12,S13,S14,S15,S16,S17,S18,S19,S20 ) &amp;quot;+
+            &amp;quot;VALUES( sys_guid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) &amp;quot;;
+
+       updateSQL = &amp;quot;UPDATE TMP SET ID=?,S1=?,S2=?,S3=?,S4=?,S5=?,S6=?,S7=?,S8=?,S9=?,S10=?  &amp;quot;+
+             &amp;quot;,S11=?,S12=?,S13=?,S14=?,S15=?,S16=?,S17=?,S18=?,S19=?,S20=?  &amp;quot;+
+            &amp;quot;where guid=?&amp;quot;;
+
+       deleteSQL = &amp;quot;delete from TMP where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+}
+
+//================================================================// 
+// 函数：f_dbeditafternewrow
+// 说明：自动生成生成编号
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:06:17
+// 修改日志：
+//================================================================// 
+var nCntNoCommit = 0;      // 没有保存的新增的编号数，用于定位
+function f_dbeditafternewrow(sheet,row)
+{
+}
+
+//================================================================// 
+// 函数：f_dbeditbeforesave
+// 说明：保存时，把nCntNoCommit =0
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:15:22
+// 修改日志：
+//================================================================// 
+function f_dbeditbeforesave(){
+      nCntNoCommit =0;
+}
+
+//清空数据
+function DeleteAllData()
+{
+   if( confirm(&amp;quot;清空临时表中的所有数据，是否继续？&amp;quot;) == 1 ) {
+      var ret = ExcecutSQL(&amp;quot;DELETE FROM TMP&amp;quot;);        
+      alert ( &amp;quot;操作成功，返回&amp;quot; + ret );
+   }
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >phone</MWID><NAME >手机端调用本地接口的方法</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >phone.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//
+//	首先要引入两个js文件
+//	&amp;lt;script type=&amp;quot;text/javascript&amp;quot; charset=&amp;quot;utf-8&amp;quot; src=&amp;quot;cordova.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
+//	&amp;lt;script type=&amp;quot;text/javascript&amp;quot; charset=&amp;quot;utf-8&amp;quot; src=&amp;quot;cordova_plugins.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+//
+
+
+	    // 拍照 capture(50,1,0,-1,-1);
+	    // 摄影 capture(50,1,1,-1,-1);
+	    // 从图库选择 capture(100,0,0,-1,-1)
+	    // qua 清晰度 100;
+	    // src:=0 图片库 =1 摄像头 =2 相册  
+	    // mtype = 0 照相  = 1 摄像 =2 全部
+	    // width height 如果为-1表示取照相机默认像素大小
+	    function capture(qua,src,mtype,width,height) {  
+			navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: qua,  destinationType:1,sourceType:src, targetWidth:width,targetHeight:height,encodingType:0,mediaType:mtype });
+	
+	    }
+	    // Called when a photo is successfully retrieved  
+	    //  
+	    var G_TITLE = &amp;apos;&amp;apos;;
+	    function onPhotoURISuccess(imageURI) {  		
+			//appendMessage(&amp;quot;&amp;lt;div &amp;gt;&amp;lt;img src=&amp;apos;+imageURI+&amp;apos; width=120 height=120&amp;gt;&amp;lt;div id=&amp;apos;process_info&amp;apos;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;,G_USRID,G_USRIMG,&amp;apos;right&amp;apos;);
+			G_TITLE = document.all(&amp;apos;myroomname&amp;apos;).innerHTML;
+			uploadfile(imageURI,&amp;quot;image/jpeg&amp;quot;);
+	    }  
+	    function onFail(message) {   
+	         log(&amp;apos;Failed because: &amp;apos; + message);  
+	    }  
+		
+	    function captureAudio() {  
+			document.all(&amp;apos;addwnd&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+			document.all(&amp;apos;recordwnd&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+	    }  
+            // 以下是录制语音程序
+    	    var mediaRec;        //为了在不同的函数中对一次录音进行多种操作，定义一个公共变量
+            //下面两个变量是为了记录点击按钮之后手指一动造成的变化
+            var date1;
+            var date2;
+            var G_MP3FILE = &amp;apos;&amp;apos;;
+            //开始录音
+            function start(){
+                //定义录音文件保存名称及位置（android默认保存在根目录）
+                G_MP3FILE = fileURL+&amp;apos;/&amp;apos;+G_APP_USRID+&amp;apos;_&amp;apos;+new Date().valueOf()+&amp;apos;.mp3&amp;apos;;//Android/data/
+                var src = G_MP3FILE;
+                //实例化录音类
+                mediaRec = new Media(src,
+                    // 录音执行函数
+                    function() {
+                        console.log(&amp;quot;start():Audio Success&amp;quot;);
+                    },
+                    // 录音失败执行函数
+                    function(err) {
+                        console.log(&amp;quot;start():Audio Error: &amp;quot;+ err.code);
+                    }
+                );
+            }
+             
+            //为按钮绑定  touchstart(点击) 事件
+            $(&amp;quot;#luyin&amp;quot;).on(&amp;quot;touchstart&amp;quot;,function(){
+                //实例化录音类
+                start();
+                //开始录音
+                mediaRec.startRecord();
+                date1=new Date(); 
+                $(&amp;quot;#test&amp;quot;).html(&amp;quot;开始录音&amp;quot;);
+            });
+             
+            //为按钮绑定 touchmove(手势移动) 事件
+            $(&amp;quot;#luyin&amp;quot;).on(&amp;quot;touchmove&amp;quot;,function(e){
+                //这里很关键，如果手势移动会执行另外一个操作，录音就会终止，所以此处需要禁止移动的默认操作。
+                e.preventDefault();
+                 
+                //date3 =new Date();
+                //$(&amp;quot;#test&amp;quot;).html(&amp;quot;滑动了&amp;quot;+(date3.getTime()-date1.getTime())/1000);
+            });
+            //为按钮绑定 touchend(手势离开)事件
+            $(&amp;quot;#luyin&amp;quot;).on(&amp;quot;touchend&amp;quot;,function(){
+                //结束录音
+                mediaRec.stopRecord();
+                //释放系统底层的音频播放资源
+                mediaRec.release();
+                //需要播放的录音的路径
+                var src = G_MP3FILE;
+                //实例化录音类
+                mediaRec = new Media(src,
+                    // 成功操作
+                    function() {
+                        document.all(&amp;apos;addwnd&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+			document.all(&amp;apos;recordwnd&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+                    },
+                    // 失败操作
+                    function(err) {
+			$(&amp;quot;#test&amp;quot;).html(&amp;quot;start():Audio Error: &amp;quot;+ err.code);
+                        console.log(&amp;quot;start():Audio Error: &amp;quot;+ err.code);
+			document.all(&amp;apos;addwnd&amp;apos;).style.display=&amp;apos;block&amp;apos;;
+			document.all(&amp;apos;recordwnd&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+                    }
+                );
+                //在html中显示当前状态          
+                $(&amp;quot;#test&amp;quot;).html(&amp;quot;停止录音&amp;quot;);
+                //开始播放录音
+                mediaRec.play();
+                //在html中显示当前状态
+                $(&amp;quot;#test&amp;quot;).append(&amp;quot;--开始播放录音&amp;quot;);
+                mediaRec.release();
+                uploadfile(G_MP3FILE,&amp;apos;audio/mp3&amp;apos;);
+            });
+            //判断手势操作有没有变化
+            $(&amp;quot;#luyin&amp;quot;).on(&amp;quot;touchcancel&amp;quot;,function(e){
+                date2 =new Date();
+                $(&amp;quot;#test&amp;quot;).html(&amp;quot;状态变化了&amp;quot;+e.type+(date2.getTime()-date1.getTime())/1000);
+            });
+            
+    	function uploadfile(fileName,mimeType)
+    	{
+    		alert(fileName);
+		var ft = new FileTransfer();
+		var options = new FileUploadOptions();
+		options.fileKey = &amp;quot;data&amp;quot;;//图片域名！！！
+		if(fileName.indexOf(&amp;apos;?&amp;apos;)==-1){
+			options.fileName = fileName;
+		}else{
+			options.fileName = fileName.substr(0,fileName.indexOf(&amp;apos;?&amp;apos;));
+		}
+		
+		 options.mimeType = mimeType;//
+		 options.chunkedMode = false;
+		 
+		 var params = {};
+		 params.fileurl = fileName;
+		 params.grdid = &amp;quot;APP_IMGUPLOAD&amp;quot;;
+		 params.sytid = &amp;quot;x&amp;quot;;
+		 options.params = params;
+		 if(mimeType==&amp;apos;audio/mp3&amp;apos;)
+		 	ft.upload(fileName, G_WEBBASE+&amp;quot;EAFormBlobUpload.sp?usrid=&amp;quot;+G_APP_USRID+&amp;quot;&amp;userpwd=&amp;quot;+G_APP_USERPWD, onFileUploadAudioSuccess, onFileUploadFail, options);
+		 else 
+		 	ft.upload(fileName, G_WEBBASE+&amp;quot;EAFormBlobUpload.sp?usrid=&amp;quot;+G_APP_USRID+&amp;quot;&amp;userpwd=&amp;quot;+G_APP_USERPWD, onFileUploadSuccess, onFileUploadFail, options);
+		 ft.onprogress = uploadProcessing;
+
+	}
+	function onFileUploadSuccess(result)
+	{
+		
+		if(G_TITLE==&amp;apos;&amp;apos;)G_TITLE=&amp;apos;&amp;nbsp;&amp;apos;;
+		document.all(&amp;apos;myroomname&amp;apos;).innerHTML=G_TITLE ;
+		var targeturl=&amp;quot;EAFormBlob.sp?guid=&amp;quot;+result.response+&amp;quot;&amp;usrid&amp;quot;+G_APP_USRID+&amp;quot;&amp;userpwd=&amp;quot;+G_APP_USERPWD;
+		//alert(&amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+targeturl+&amp;quot;&amp;apos; target=_blank&amp;gt; &amp;lt;img src=&amp;quot;+targeturl+&amp;quot; width=120 height=120&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;);
+		//appendMessage(&amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+targeturl+&amp;quot;&amp;apos; target=_blank&amp;gt; &amp;lt;img src=&amp;quot;+targeturl+&amp;quot; width=120 height=120&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;,G_USRID,G_USRIMG,&amp;apos;right&amp;apos;);
+
+		var thisguid = G_APP_USRID+&amp;quot;_&amp;quot;+new Date().valueOf();			
+		var msg = &amp;quot;&amp;lt;img id=&amp;apos;&amp;quot;+thisguid+&amp;quot;&amp;apos; src=&amp;quot;+targeturl+&amp;quot; style=&amp;apos;width:120px;heigth:auto;&amp;apos; onclick=\&amp;quot;zoomimg(&amp;apos;&amp;quot;+thisguid+&amp;quot;&amp;apos;);\&amp;quot;&amp;gt;&amp;quot;;
+		appendMessage(msg,G_USRID,G_USRIMG,&amp;apos;right&amp;apos;);
+		sendMsg(msg );
+		//$(&amp;apos;#process_info&amp;apos;).html(&amp;apos;ok&amp;apos;); 
+	
+	}
+	// 声音文件上传成功
+	function onFileUploadAudioSuccess(result)
+	{
+		if(G_TITLE==&amp;apos;&amp;apos;)G_TITLE=&amp;apos;&amp;nbsp;&amp;apos;;
+		document.all(&amp;apos;myroomname&amp;apos;).innerHTML=G_TITLE ;
+		var targeturl=&amp;quot;EAFormBlob.sp?guid=&amp;quot;+result.response+&amp;quot;&amp;usrid&amp;quot;+G_APP_USRID+&amp;quot;&amp;userpwd=&amp;quot;+G_APP_USERPWD;
+		var msg = &amp;quot;&amp;lt;div style=&amp;apos;font-size:40px;color:#009900;width:100%;&amp;apos; align=center class=&amp;apos;glyphicon glyphicon-volume-up&amp;apos; onclick=\&amp;quot;alertaudio (&amp;apos;&amp;quot;+targeturl+&amp;quot;&amp;apos;)\&amp;quot; &amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		appendMessage(msg ,G_USRID,G_USRIMG,&amp;apos;right&amp;apos;);
+
+		sendMsg(msg );
+		//$(&amp;apos;#process_info&amp;apos;).html(&amp;apos;ok&amp;apos;); 
+	
+	}	
+	function onFileUploadFail(error)
+	{
+		alert(&amp;apos;文件上传出错&amp;apos;+error.code);
+		//sendMsg(&amp;apos;onFileUploadFail&amp;apos;+error);
+	}
+	function uploadProcessing(progressEvent){
+		if (progressEvent.lengthComputable) { 
+			//已经上传 
+			var loaded=progressEvent.loaded; 
+			//文件总长度 
+			var total=progressEvent.total; 
+			//计算百分比，用于显示进度条 
+			var 			percent=parseInt((loaded/total)*100); 
+			//换算成MB 
+			loaded=(loaded/1024/1024).toFixed(2); 
+			total=(total/1024/1024).toFixed(2); 
+			document.all(&amp;apos;myroomname&amp;apos;).innerHTML=&amp;apos;upload &amp;apos;+loaded+&amp;apos;/&amp;apos;+total+&amp;apos;M&amp;apos;;
+		}
+	
+	}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

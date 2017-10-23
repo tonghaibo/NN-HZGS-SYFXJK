@@ -1,0 +1,393 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >CheckBack</MWID><NAME >单据勾对</NAME><NOTE ></NOTE><FILE >CheckBack.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS >xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >BILID</ID><NAME >单据号</NAME><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >DATE1</ID><NAME >开始日期</NAME><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >DATE2</ID><NAME >结束日期</NAME><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="3" ><ID >CORPID</ID><NAME >客户</NAME><KEYVAL >V_CORP</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="4" ><ID >BILCNT</ID><NAME >显示单据数</NAME><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >20</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var m_curbil = &amp;quot;&amp;quot;;
+var srctyp=&amp;apos;PY&amp;apos;;
+//var srcfld=&amp;apos;REFNAM2&amp;apos;;
+//var dsttyp=&amp;apos;PI&amp;apos;;
+//var dstfld=&amp;apos;SUMMNY&amp;apos;;
+function _thisOnpost_loaddata(sheet)
+{
+  var newBilmod = typeof newmod != &amp;quot;undefined&amp;quot;;
+  _this.SetCellBkColor(0,-1,-1,255,255,255);      // 背景色为白色
+  _this.SetCellBkColor(1,-1,-1,255,255,255);      // 背景色为白色
+  var btn = document.all(&amp;quot;searchbut&amp;quot;);
+  if(typeof srcname == &amp;quot;undefined&amp;quot;)
+    if(dsttyp==&amp;apos;PI&amp;apos;)
+      srcname = &amp;quot;货款单&amp;quot;;
+    else
+      srcname = &amp;quot;运费单&amp;quot;;
+  btn.value = &amp;quot;查找&amp;quot;+srcname;
+  btn.tag = 0;
+  btn.id = &amp;quot;srcbtn&amp;quot;;
+  if(typeof dstname == &amp;quot;undefined&amp;quot;)
+    if(dsttyp==&amp;apos;PI&amp;apos;)
+      dstname = &amp;quot;采购发票&amp;quot;;
+    else
+      dstname = &amp;quot;运费发票&amp;quot;;
+
+  if(newBilmod)
+  {
+    _this.AddToolbarButton(&amp;quot;udf_newBill&amp;quot;,&amp;quot;新增&amp;quot;+dstname ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,1,0,120);
+    //btn.onclick = newBill;
+  }
+  else
+  {
+        _this.AddToolbarButton(&amp;quot;udf_save&amp;quot;,&amp;quot;保存&amp;quot; ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,1,0,60);
+        _this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;46%&amp;quot;);
+        var val = btn.outerHTML;
+        btn.value = &amp;quot;查找&amp;quot;+dstname;
+        btn.tag = 1;
+        btn.id = &amp;quot;dstbtn&amp;quot;;
+        btn.outerHTML = val + btn.outerHTML;
+  }
+
+  _this.SetCellText(0,0,0,&amp;quot;请勾选 &amp;quot;+srcname);
+  _this.SetCellText(1,0,0,&amp;quot;请勾选 &amp;quot;+dstname);
+  _this.SetColVisible(0,5,-1);//隐藏GUID列
+  _this.SetColVisible(1,5,-1);//隐藏GUID列
+
+  var trobj = totalrow.parentElement.parentElement;
+  trobj.style.display = &amp;quot;none&amp;quot;;
+}
+
+//================================================================// 
+// 函数：newBill
+// 说明：新建目标单据。newBill时，只有一个来源单据界面。
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/08/06 11:32:39
+// 修改日志：
+//================================================================// 
+function newBill()
+{
+  if(m_curbil==&amp;quot;&amp;quot;)
+  {
+    alert(&amp;quot;未选择来源单据。\r\n请选择一个单据后重试。&amp;quot;);
+    return;
+  }
+//取选中的单据号码
+  var refbil = m_curbil.substr(3); //hard code,假设BILTYP总是两位长度
+//问题：如何把它通过数据流传递到新建的目标单据？
+  
+  if ( G_ACCID.substring(0,2)==&amp;quot;01&amp;quot;  ) {     // 总部系统
+        parent.goto_ivocheck(refbil);
+  }
+  else 
+        location = &amp;quot;ShowXlsGrid.sp?grdid=SelBilFlw&amp;datflw=&amp;quot;+datflw+&amp;quot;&amp;refbil=&amp;quot;+refbil;
+}
+
+var target = 0;
+//================================================================// 
+// 函数：savetoxmlds
+// 说明：构造给服务端的数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/22/06 14:59:23
+// 修改日志：
+//================================================================// 
+function savetoxmlds()
+{
+   var sheet = 0;
+   var row1 = _this.GetMainCellRangeRow1(sheet);
+   var row2 = _this.GetMainCellRangeRow2(sheet);
+   var aguid=false;
+   var aqty=0;
+   var srcbil = &amp;quot;&amp;quot;;
+   for(var i=row1;i&amp;lt;=row2;i++)
+   {
+     if(_this.GetRowSelected(sheet,i))
+     {
+       aguid = _this.GetCellText(0,i,5);
+       srcbil = _this.GetCellText(0,i,1);
+       aqty = _this.GetCellText(0,i,4);//勾单前数量 //_this.GetCellText(1,0,4);//直接取目标单据的勾单总额//
+     }
+   }
+   if(!aguid)
+     throw &amp;quot;请在左边窗口选择一个源单据.&amp;quot;;
+   _this.XMLDS_Reset();
+   var sheet = 1;
+   var row1 = _this.GetMainCellRangeRow1(sheet);
+   var row2 = _this.GetMainCellRangeRow2(sheet);
+
+   for(var i=row2;i&amp;gt;=row1;i--)
+   {
+     if(_this.GetRowSelected(sheet,i))
+     {
+       var row=_this.XMLDS_AddRow(-1,&amp;quot;&amp;quot;);
+       _this.XMLDS_SetString(row,&amp;quot;AGUID&amp;quot;,aguid);
+       _this.XMLDS_SetString(row,&amp;quot;ABILTYP&amp;quot;,srcbil);
+       _this.XMLDS_SetString(row,&amp;quot;AQTY&amp;quot;,aqty);
+
+       _this.XMLDS_SetString(row,&amp;quot;BGUID&amp;quot;,_this.GetCellText(1,i,5));
+       _this.XMLDS_SetString(row,&amp;quot;BBILTYP&amp;quot;,_this.GetCellText(1,i,1));
+       _this.XMLDS_SetString(row,&amp;quot;BQTY&amp;quot;,_this.GetCellText(1,i,6));
+       row++;
+     }
+   }
+   if(_this.XMLDS_GetRowCount()==0)
+     throw &amp;quot;请在右边窗口选择一个目标单据.&amp;quot;;
+   
+}
+
+function save()
+{
+//   var val1 = 1.0 * _this.GetCellText(0,0,4);
+//   var val2 = 1.0 * _this.GetCellText(1,0,6);
+//if(val1 &amp;lt; val2)
+//   {
+//     alert(dstname+&amp;quot; 的勾单数必须小于等于\n&amp;quot;+srcname+&amp;quot; 的勾单数,请核对。&amp;quot;);
+//     return;
+//   }
+   var val11=0;
+   var val22=0;
+   var row11 = _this.GetMainCellRangeRow1(0);
+   var row12 = _this.GetMainCellRangeRow2(0);
+   var row21 = _this.GetMainCellRangeRow1(1);
+   var row22 = _this.GetMainCellRangeRow2(1);
+   for(var i = row11;i&amp;lt;= row12;i++)
+   {
+   	var v1 = 1.0*_this.GetCellText(0,i,4);
+	if( _this.GetRowSelected(0,i)!=0){
+		val11+=v1;}
+   }
+   for(var n=row21;n&amp;lt;=row22;n++)
+   {
+   	var v2 = 1.0*_this.GetCellText(1,n,6);
+	if(_this.GetRowSelected(1,n)!=0){
+		val22+=v2;}
+   }
+   
+   if( val11 &amp;lt; val22)
+   {
+     alert(dstname+&amp;quot; 的勾单数必须小于等于\n&amp;quot;+srcname+&amp;quot; 的勾单数,请核对。&amp;quot;);
+     return;
+   }
+   
+   savetoxmlds();
+   var param = new Object();
+   param.xml = _this.XMLDS_GetXml();
+   var ret = invokeOSFuncExt(&amp;quot;SaveCheckBack&amp;quot;,param);
+   alert(ret);
+   document.all(&amp;quot;srcbtn&amp;quot;).click();
+   document.all(&amp;quot;dstbtn&amp;quot;).click();
+}
+
+//================================================================// 
+// 函数：myDoQuery
+// 说明：查找单据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/22/06 14:53:53
+// 修改日志：
+//================================================================// 
+function myDoQuery(param,key,ev)
+{
+  var seltyp = _this.SELECTFLAG_SINGLEROW_CHECKBOX;
+  var subtyp = &amp;quot;&amp;quot;;
+  if(ev.srcElement.tag==0)
+  {
+    target = 0;
+    //m_qtynam = srcfld;
+    if(typeof srcsubtyp != &amp;quot;undefined&amp;quot;)
+      subtyp = srcsubtyp;
+    m_biltyp = srctyp;
+  }
+  else
+  {
+    target = 1;
+    //m_qtynam = dstfld;
+    if(typeof dstsubtyp!= &amp;quot;undefined&amp;quot;)
+      subtyp = dstsubtyp;
+    m_biltyp = dsttyp;
+    seltyp = _this.SELECTFLAG_MULTIROW_CHECKBOX;
+  }
+  emptysheet();
+  var url = &amp;quot;RunScript.sp?accid=&amp;quot;+G_ACCID+&amp;quot;&amp;sytid=&amp;quot;+G_SYTID+&amp;quot;&amp;target=&amp;quot;+target+//&amp;quot;&amp;canzip=1&amp;quot;+
+     &amp;quot;&amp;grdid=&amp;quot;+G_GRDID+&amp;quot;&amp;func=loadBil&amp;&amp;quot;+param+&amp;quot;&amp;biltyp=&amp;quot;+m_biltyp+&amp;quot;&amp;subtyp=&amp;quot;+subtyp;//&amp;quot;&amp;qtynam=&amp;quot;+m_qtynam+
+  
+  var row1 = 2;
+  var rows = 3;
+  var col1 = 1;
+  var cols = 4;
+  //var ret = _this.HttpCall(url);
+  //alert(ret);
+  //return;
+  var rows = _this.LoadXmlDSFile(target , row1, col1, row1+1, col1+cols, url);
+  _this.SetMainCellRange(target , row1, col1, row1+rows-1, col1+cols-1);
+  _this.SetFixedCol(target,1);
+  _this.SetFixedRow(target,2);
+  _this.SetAttribe(&amp;quot;SHEET_&amp;quot;+target,_this.ATTR_SHEET_SELECTFLAG,seltyp);
+  _this.SetCellText(target,0,4,0);
+}
+
+//================================================================// 
+// 函数：emptysheet
+// 说明：清空已有的数据，以便载入新数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/22/06 14:54:11
+// 修改日志：
+//================================================================// 
+function emptysheet()
+{
+  _this.SetRowCount(target,4);
+  for(var i=2;i&amp;lt;5;i++)
+  {
+    _this.SetRowSelected(target,i,-1);
+    for(var j=1;j&amp;lt;7;j++)
+      _this.SetCellText(target,i,j,&amp;quot;&amp;quot;);
+  }
+}
+
+//================================================================// 
+// 函数：thisOnMouseLClick
+// 说明：勾选单据的处理过程
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/22/06 14:54:54
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col)
+{
+  if((isRowInMainRange(sheet,row)||sheet==1) &amp;&amp; col==0)
+  {
+    var chk = _this.GetRowSelected(sheet,row);
+    //var val = 1.0*_this.GetCellText(sheet,0,4);
+    var val = 1.0 * _this.GetCellText(sheet,row,4);
+    if(chk==1)
+    {
+      if(sheet==0)
+      {
+        m_curbil = _this.GetCellText(sheet,row,1);//保存选中的单据信息，供新建单据用newbill
+      }
+      else
+      {
+        if(row==1)
+        {//全选
+          for(var i=row+1;i&amp;lt;_this.GetRowCount(sheet);i++)
+            _this.SetCellText(sheet,i,6,_this.GetCellText(sheet,i,4));
+        }
+        else
+          _this.SetCellText(sheet,row,6,val) ;//可用数作为默认勾单数
+      }
+    }
+    else
+    {
+      //val -= 1.0 * _this.GetCellText(sheet,row,4);
+      val = 0;
+      if(sheet==0)
+        m_curbil = &amp;quot;&amp;quot;;
+      else
+       _this.SetCellText(sheet,row,6,0);
+    }
+    if(sheet==0)
+      _this.SetCellText(sheet,sheet,4,val);
+  }
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+//v_chkbak aqty:勾单时的剩余可转数
+//bqty:勾兑数量
+//原始单据勾兑数在v_popay 中,用aguid关联
+function addBottomHtml(mwobj,request,sb,usrinfo)
+{
+   sb.append(&amp;quot;&amp;lt;script&amp;gt;&amp;quot;);//function initXlsGridToolsBar() { _this.ShowToolBar(1);}&amp;quot;);
+   sb.append(&amp;quot;function DoQuery(where,key){myDoQuery(where,key,event)} &amp;lt;/script&amp;gt;&amp;quot;);
+}
+
+function loadBil()
+{
+  var where = &amp;quot;acc=&amp;apos;&amp;quot;+accid+&amp;quot;&amp;apos; and biltyp=&amp;apos;&amp;quot;+biltyp+&amp;quot;&amp;apos; and &amp;quot; +
+    &amp;quot;bilid like &amp;apos;&amp;quot;+BILID+&amp;quot;%&amp;apos; and (corpid is null or corpid like &amp;apos;&amp;quot;+CORPID+&amp;quot;%&amp;apos;)and dat between to_date(&amp;apos;&amp;quot; +
+    DATE1+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;) and to_date(&amp;apos;&amp;quot;+DATE2+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;;
+  if(subtyp!=&amp;quot;&amp;quot;)
+    where += &amp;quot; and subtyp=&amp;apos;&amp;quot;+subtyp+&amp;quot;&amp;apos; &amp;quot;;
+  var mtyp=&amp;quot;a&amp;quot;;
+  if(target==1) mtyp= &amp;quot;b&amp;quot;;
+  //以目标单据的勾单总数来计算剩余勾单数
+  var btable = &amp;quot;(select &amp;quot;+mtyp+&amp;quot;guid,sum(bqty) &amp;quot;+mtyp+&amp;quot;qty from v_chkbak group by &amp;quot;+mtyp+&amp;quot;guid)&amp;quot;;
+  var qty = &amp;quot;round(qty - nvl(b.&amp;quot;+mtyp+&amp;quot;qty,0),2) &amp;quot;;  
+  var sql = &amp;quot;select biltyp||&amp;apos;.&amp;apos;||bilid bil,dat,&amp;apos;客户:&amp;apos;||corpid||&amp;apos; &amp;apos;||corpnam||&amp;apos;备注:&amp;apos;||NOTE note,&amp;quot;+
+        qty+&amp;quot; qty,a.guid from V_POPAY a,&amp;quot;+btable+&amp;quot; b where a.guid = b.&amp;quot;+mtyp+&amp;quot;guid(+) and &amp;quot; + qty + &amp;quot;&amp;lt;&amp;gt;0 and &amp;quot; +
+        where + &amp;quot; order by dat&amp;quot;;
+  
+  //throw new Exception( sql);
+  sql = pub.EASqlFunc.pageSql(sql,&amp;quot;1&amp;quot;,BILCNT);
+  //return sql;
+  var ds = pub.EADbTool.QuerySQL(sql);
+  ds.removeColumn(0);
+  return ds.GetXml();
+}
+
+function SaveCheckBack()
+{
+  //return xml;
+  var ds = new pub.EAXmlDS(xml);
+  var sql = &amp;quot;insert into CHKBAK(AGUID,ABILTYP,AQTY,BGUID,BBILTYP,BQTY) values (&amp;apos;&amp;quot;;
+  var db = new pub.EADatabase();
+  try
+  {
+    for(var i=0;i&amp;lt;ds.getRowCount();i++)
+    {
+      var val = ds.getStringAt(i,&amp;quot;AGUID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;;
+      var abil = ds.getStringAt(i,&amp;quot;ABILTYP&amp;quot;);
+      val += abil+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;;
+      val += ds.getStringAt(i,&amp;quot;AQTY&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;;
+
+      var p = abil.indexOf(&amp;quot;.&amp;quot;);
+      var abilid = abil.substring(p);
+      var bguid = ds.getStringAt(i,&amp;quot;BGUID&amp;quot;);
+      var updsql = &amp;quot;update bilhdr set refnam1=&amp;apos;&amp;quot;+abilid+&amp;quot;&amp;apos; where guid=&amp;apos;&amp;quot;+bguid+&amp;quot;&amp;apos;&amp;quot;;
+//      throw new Exception(updsql);
+      db.ExcecutSQL(updsql);
+      val += bguid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;;
+      val += ds.getStringAt(i,&amp;quot;BBILTYP&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;;
+      val += ds.getStringAt(i,&amp;quot;BQTY&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;;
+      db.ExcecutSQL(sql + val);
+    }
+    //保存付款单号码到发票中
+    db.Commit();
+    return &amp;quot;保存成功。&amp;quot;;
+  }
+  catch(e)
+  {
+    db.Rollback();
+    throw e;
+  }
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ESTYLE</MWID><NAME >事务类型</NAME><NOTE ></NOTE><FILE >ESTYLE.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var r = 0 ;
+var edit = save;
+var dd = &amp;quot;0&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+         _this.SetCellBkColor(0,-1,-1,255,255,255);
+         _this.SetMainCellRange(sheet,4,1,11,3);
+         _this.SetFixedCol(sheet,1);   
+         _this.SetFixedRow(sheet,2);  
+         window.status=&amp;quot;事务类型&amp;quot;;
+       // _this.LoadScene(sheet,10);//这个会阻碍代码执行
+       _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW ); 
+       try
+       {
+             ret = invokeOSFunc(&amp;quot;filterXmlDS&amp;quot;,&amp;quot;&amp;quot;) ;
+             _this.SetXmlDS(sheet,4,1,11,3,ret); 
+       }
+       catch (e)
+       {
+             alert (e);
+       }
+
+} 
+
+function _thisOnMouseLClick(sheet,row,col) 
+{
+     var estyle = _this.GetCellText(sheet,row,1);  
+     var row1 = _this.GetMainCellRangeRow1(sheet);  
+     var row2 = _this.GetMainCellRangeRow2(sheet); 
+     estyle = estyle.RTrim();
+     if ( row&amp;gt;=row1&amp;&amp;row&amp;lt;=row2 &amp;&amp;estyle != &amp;quot;&amp;quot;)  //点击单选框 
+     {                                       
+                  //QuerySQLDS(&amp;quot;select id from trktyp where trim(name)=&amp;apos;&amp;quot;+estyle+&amp;quot;&amp;apos;&amp;quot;);
+                  //var show_id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+                 // var style = show_id;
+//                 if(edit ==&amp;quot;&amp;quot; &amp;&amp; var edit == null){
+//                    edit = save;
+//                 }
+                  var style = _this.GetCellText(sheet,row,1);//直接得到ID号
+                  var url = &amp;quot;ShowXlsGrid.sp?grdid=HDRTRK&amp;style=&amp;quot;+style+&amp;quot;&amp;edit=&amp;quot;+edit+&amp;quot;&amp;dd=&amp;quot;+dd;   
+                  var child = window.open( url ,&amp;quot;新建事务&amp;quot;,&amp;quot;WIDTH=790,HEIGHT=650,left=0,top=0,toolbar=no,menu=no,resizable=yes,status=yes&amp;quot;);
+                  child.yyWindow = opener;
+                  //opener.refreshSheet();
+                  window.close(); 
+            
+
+     } 
+     else
+      return ;
+}
+function refreshSheet()
+{
+       opener.refreshSheet();
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+function filterXmlDS()
+{
+      var db = null;
+      try 
+      {
+            db = new pubpack.EADatabase();
+            var ds = null;
+            var sql = &amp;quot;select id,name,note from trktyp order by id&amp;quot;;
+            ds = db.QuerySQL(sql);
+            return ds.GetXml();
+      }
+      catch (e)
+      {
+              db.Rollback();
+               throw new pubpack.EAException ( e.toString() );
+      }
+      finally 
+      {
+            if (db!=null) db.Close();
+      }
+
+      
+          
+      
+      
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

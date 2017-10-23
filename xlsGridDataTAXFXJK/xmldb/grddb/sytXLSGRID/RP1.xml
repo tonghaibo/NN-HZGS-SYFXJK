@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >B</MWTYP><MWID >HX</MWID><NAME >补货下架单</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >RP1.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG >6,1,9,13</DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >WMS</syt><USESMLUNT >1</USESMLUNT><ITEMTABLE >WMS_ITEM</ITEMTABLE><LISTSUM >0</LISTSUM></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,2</ID><NAME >单据编号</NAME><VALFLD >BILID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 >0,2,2</C15><C16 >0,2,2</C16><C17 >0,2,2</C17><C18 >0,2,2</C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="1" ><ID >0,3,2</ID><NAME >单据日期</NAME><VALFLD >DAT</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 >0,3,2</C15><C16 >0,3,2</C16><C17 ></C17><C18 >0,3,2</C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="2" ><ID >0,2,4</ID><NAME >货主编号</NAME><VALFLD >CORPID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD >CORPNAM</FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="3" ><ID >0,3,4</ID><NAME >操作日期</NAME><VALFLD >REFNAM4</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="4" ><ID >0,4,7</ID><NAME >仓库编号</NAME><VALFLD >LOCID</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD >LOCNAM</FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 >0,2,13</C20><C21 >0,4,7</C21></ROW>
+<ROW num="5" ><ID >0,4,4</ID><NAME >目标储区</NAME><VALFLD >REFNAM2</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_WMS_ZONE_EXT</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="6" ><ID >0,4,2</ID><NAME >来源储区</NAME><VALFLD >REFID2</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_WMS_ZONE_EXT</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 >0,4,2</C20><C21 ></C21></ROW>
+<ROW num="7" ><ID >0,10,9</ID><NAME >审核人</NAME><VALFLD >CHKUSR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD >CHKUSRNAM</FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="8" ><ID >0,3,7</ID><NAME >操作流水号</NAME><VALFLD >REFNAM5</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="9" ><ID >0,2,7</ID><NAME >备注信息</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >0,2,7</C21></ROW>
+<ROW num="10" ><ID >0,10,2</ID><NAME >录入人</NAME><VALFLD >CRTUSR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD >CRTUSRNAM</FLD><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+</ROWSET>
+</grdcelds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,1</ID><NAME >品种编号</NAME><VALFLD >ITMID</VALFLD><NOTNULL ></NOTNULL><COLTYP >SELECTBOX</COLTYP><LISTID >WMS_ITEM</LISTID><LABEL >name,spec</LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 >0,1</C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="1" ><ID >0,2</ID><NAME >品种名称</NAME><VALFLD >ITMNAM</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="2" ><ID >0,3</ID><NAME >规格</NAME><VALFLD >ITMSPC</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="3" ><ID >0,4</ID><NAME >下架数量</NAME><VALFLD >QTY</VALFLD><NOTNULL ></NOTNULL><COLTYP >UnitEntryBox</COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="4" ><ID >0,5</ID><NAME >下架确认数量</NAME><VALFLD >NOTAXMNY</VALFLD><NOTNULL ></NOTNULL><COLTYP >UnitEntryBox</COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="5" ><ID >0,6</ID><NAME >下架差量</NAME><VALFLD >TAXTYP</VALFLD><NOTNULL ></NOTNULL><COLTYP >UnitEntryBox</COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="6" ><ID >0,10</ID><NAME >取货储位</NAME><VALFLD >REFNAM2</VALFLD><NOTNULL ></NOTNULL><COLTYP >COMBOBOX</COLTYP><LISTID >V_WMS_SLOT_EXT</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="7" ><ID >0,8</ID><NAME >集货储位</NAME><VALFLD >REFID3</VALFLD><NOTNULL ></NOTNULL><COLTYP >COMBOBOX</COLTYP><LISTID >V_WMS_SLOT_EXT</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 >0,11</C16></ROW>
+<ROW num="8" ><ID >0,7</ID><NAME >下架储位</NAME><VALFLD >REFNAM2</VALFLD><NOTNULL ></NOTNULL><COLTYP >COMBOBOX</COLTYP><LISTID >V_WMS_SLOT_EXT</LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+<ROW num="9" ><ID >0,9</ID><NAME >补货栈板条码</NAME><VALFLD >REFID1</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grdcolds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet =0 ;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	alert(G_LOCID);
+//	_this.SetColVisible(sheet,12,-1);
+	
+//	var row1=_this.GetMainCellRangeRow1(sheet);
+//	var row2=_this.GetMainCellRangeRow2(sheet);
+//	var untnum=1;
+//	var qty=0;
+//	var xml =&amp;quot;&amp;quot;;
+//	var slot =&amp;quot;&amp;quot;;
+//	for(var row=row1;row&amp;lt;=row2;row++) {
+//		if(_this.GetCellText(sheet,row,1)==&amp;quot;&amp;quot;||_this.GetCellText(sheet,row,1)==null) break;
+//		qty=1*_this.GetCellText(sheet,row,4);		
+//		untnum=1*_this.GetCellText(sheet,row,9);
+//		_this.SetCellText(sheet,row,7,Math.floor(qty/untnum));
+//		_this.SetCellText(sheet,row,8,qty-untnum*Math.floor(qty/untnum));
+//		xml = _sql.querytods(&amp;quot;EMPTY_SLOT&amp;quot;,&amp;quot;itemid=&amp;quot;+_this.GetCellText(sheet,row,1));
+//		for(var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++){
+//			slot=_this.XMLDS_GetString(0,&amp;quot;slot&amp;quot;);
+//			alert(slot);
+//		}
+//		alert(&amp;quot;结束&amp;quot;);
+//		_this.SetCellText(sheet,row,11,slot);
+//	}
+	 
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >EMPTY_SLOT</ID><NAME ></NAME><DATDSC >select distinct x.slot,x.zone
+  from (SELECT guid slot, zone, item
+          FROM WMS_SLOT
+         WHERE GUID NOT IN (SELECT SLOT FROM WMS_ITMSLT)
+        union all
+        select a.slot, c.zone, a.item
+          from wms_itmslt a, wms_slot c,wms_item d
+         where adqty = 0
+           and a.slot = c.guid
+           and d.guid = a.item) x,
+       wms_item v
+ where x.zone = (select t.repbuf from wms_item t where id =&amp;apos;10&amp;apos;)
+   and  v.id = &amp;apos;[%itemid]&amp;apos;
+ and x.item = v.guid</DATDSC><C4 >EMPTY_SLOT</C4><C5 >EMPTY_SLOT</C5><C6 >EMPTY_SLOT</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >1单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >1货主编号</CORPID><CORPNAM >1货主名称</CORPNAM><LOCID >1仓库编号</LOCID><LOCNAM >1仓库名称</LOCNAM><DAT >1单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >1录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >1审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >1操作员</REFNAM1><REFID2 >1来源储区</REFID2><REFNAM2 >1目标储区</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0仓库ID</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >1操作日期</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >1操作流水号</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0仓库名称</REFNAM6><NOTE >1备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >1品种名称</ITMNAM><ITEMPC >1品种批次号</ITEMPC><ITMSPC >1规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >1下架数量</QTY><TAXTYP >1下架差量</TAXTYP><NOTAXMNY >1下架确认数量</NOTAXMNY><TAXMNY >0金额</TAXMNY><MNY >0上架数量</MNY><REFID1 >1补货栈板条码</REFID1><REFNAM1 >1生产日期</REFNAM1><REFID2 >1商品GUID</REFID2><REFNAM2 >1下架储位</REFNAM2><REFID3 >1集货储位</REFID3><REFNAM3 >0上架储位</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFNAM5 >1货源分配流水号</REFNAM5></ROW>
+</ROWSET>
+</flddtl><flddtlext>
+<ROWSET>
+<ROW num="0" ><PUTAWAYSLOT ></PUTAWAYSLOT></ROW>
+</ROWSET>
+</flddtlext></mdroot>

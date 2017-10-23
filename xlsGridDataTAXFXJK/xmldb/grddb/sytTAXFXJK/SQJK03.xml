@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SQJK03</MWID><NAME >（增值税发票系统升级版纳税人）购票信息</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SQJK03.zxg</FILE><SCENE ></SCENE><FIXED >1,1</FIXED><CATTYP >发票事前监控</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >NSRZT</ID><NAME >纳税人状态</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_TAX_NSR_ZT2</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >NSRZT</C13><C14 >NSRZT</C14><C15 >NSRZT</C15></ROW>
+<ROW num="1" ><ID >HY</ID><NAME >行业</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_GBCOMPCLASS</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >HY</C13><C14 ></C14><C15 >HY</C15></ROW>
+<ROW num="2" ><ID >SMQY</ID><NAME >是否商贸企业</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YESNO</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >SMQY</C15></ROW>
+<ROW num="3" ><ID >ZGSWJG</ID><NAME >税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="4" ><ID >SWGLY</ID><NAME >税管员</NAME><NOTNULL >0</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >SWGLY</C15></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;80&amp;quot;);
+	
+	var hyList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_DM_HY&amp;where=mlbz=&amp;apos;Y&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,hyList);
+	//税务机关
+	var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;where=sjid=&amp;quot;+G_DEPTID+&amp;quot; or id=&amp;quot;+G_DEPTID),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,6,swjgList);
+	_this.SetCellText(1,1,6,G_DEPTID);
+	
+	var yesnoList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YESNO&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,yesnoList);
+	var nsrztList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_NSR_ZT2&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,3,2,nsrztList);
+
+	
+	_this.AutoFixScreenWidth();
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	//setTimeout(&amp;quot;loadData()&amp;quot;,100);
+	
+}
+
+//等待时执行的任务
+function runWaitingTask()
+{
+	var hy = _this.GetCellText(1,1,2);
+	var smqy = _this.GetCellText(1,1,4);
+	var zgswjg = _this.GetCellText(1,1,6);	
+	var nsrzt = _this.GetCellText(1,3,2);	
+	var swgly = _this.GetCellText(1,3,4);
+	var nsrmc = _this.GetCellText(1,3,6);	
+	var xml =  _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;HY=&amp;quot;+hy+&amp;quot;&amp;NSRZT=&amp;quot;+nsrzt+&amp;quot;&amp;SMQY=&amp;quot;+smqy+&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg+&amp;quot;&amp;SWGLY=&amp;quot;+swgly+&amp;quot;&amp;NSRMC=&amp;quot;+nsrmc);
+	return xml;
+}
+
+function loadData()
+{	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,3);
+	_this.SetFixedCol(0,1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);	//设置鼠标选择单行
+	
+	_this.SetCellText(0,3,2,&amp;quot;正在查询...&amp;quot;);
+	//var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;&amp;quot;);
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+	_this.SetCellText(0,3,2,&amp;quot;&amp;quot;);
+	_this.SetMainCellRange(0,3,1,9,31);
+	_this.SetXmlDS(0,3,1,9,31,xml);
+	_this.SetToBoolBox(0,2,0);
+	for (var r=3;r&amp;lt;_this.GetRowCount(0);r++) {
+		if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+		}
+	}
+	
+	_sql.querytods(&amp;quot;LASTUPDATE&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetCellText(0,1,3,_this.XMLDS_GetString(0,&amp;quot;UPTIME&amp;quot;));
+
+	_this.AutoFixScreenWidth();
+	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		loadData();
+	}
+}
+
+
+//数据采集
+function ImpData()
+{
+//	var ret = _this.invokeOSFunc(&amp;quot;getSMBS&amp;quot;,&amp;quot;&amp;quot;);
+//	alert(ret);
+//	
+	showModalDialog(&amp;quot;show.sp?grdid=SMBSData&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=800px;dialogHeight=600px&amp;quot;);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var httphtml = new x_httpcallpaser();
+var Paser = new JavaPackage(&amp;quot;org.htmlparser&amp;quot;);
+var HtmlParser = new x_WG_HtmlParser();
+
+var hostip = &amp;quot;http://87.16.17.217:8080/taxafism/&amp;quot;;
+var code = &amp;quot;utf-8&amp;quot;;
+
+function getSMBS()
+{
+	var httpcall = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	try {
+		httpcall = new webget.HttpCall();
+		ret = httpcall.Get(hostip+&amp;quot;&amp;quot;,code);
+//		throw new Exception(ret);
+		ret = ret.substring(ret.indexOf(&amp;quot;_t&amp;quot;));
+//		ret = ret.substring(ret.indexOf(&amp;quot;value=\&amp;quot;&amp;quot;)+&amp;quot;value=\&amp;quot;&amp;quot;.length());
+//		ret = ret.substring(0,ret.indexOf(&amp;quot;\&amp;quot;&amp;gt;&amp;quot;));
+//		sessionId = ret;
+		var _t = 1501719550153;
+		var username = &amp;quot;14511000102&amp;quot;;
+		var userpwd = &amp;quot;Lin5136017&amp;quot;;
+		ret =  httpcall.Post(hostip+&amp;quot;userinfo.do?method=login&amp;quot;,&amp;quot;_t=&amp;quot;+_t+&amp;quot;&amp;username=&amp;quot;+username+&amp;quot;&amp;userpwd=&amp;quot;+userpwd);	//登陆
+		return ret;
+		
+		return ret;
+	} catch ( e ) {
+		//pub.EAFunc.Log(&amp;quot;易初莲花WG_EkChor error:&amp;quot;+e.toString());
+		throw new Exception( e );
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--升级版纳税人购票信息
+select rownum,dual.* from (
+select b.nsrsbh &amp;quot;纳税人识别号&amp;quot;,
+       b.nsrmc &amp;quot;纳税人名称&amp;quot;,
+       (select nsrztmc from  DM_GY_NSRZT zt where b.nsrzt_dm=zt.nsrzt_dm) &amp;quot;纳税人状态&amp;quot;, 
+       (select hymc from DM_GY_HY hy where b.hy_dm=hy.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;) &amp;quot;行业&amp;quot;,
+       issmqy &amp;quot;是否商贸企业&amp;quot;,
+       fddbrxm &amp;quot;法人姓名&amp;quot;,
+       FDDBRSFZHM &amp;quot;法人身份证号&amp;quot;,
+       FRCJQK &amp;quot;法人采集情况&amp;quot; ,
+       CWFZRXM &amp;quot;财务负责人姓名&amp;quot;,
+       CWFZRSFZHM &amp;quot;财务负责人身份证号&amp;quot;,
+       CWCJQK &amp;quot;财务负责人采集情况&amp;quot;,
+       BSRXM &amp;quot;办税人姓名&amp;quot;,
+       BSRSFZHM &amp;quot;办税人身份证号&amp;quot;,
+       BSRCJQK &amp;quot;办税人采集情况&amp;quot;,
+       GPRXM &amp;quot;购票人姓名&amp;quot;,
+       GPRSFZHM &amp;quot;购票人身份证号&amp;quot;,
+       GPRCJQK &amp;quot;购票人采集情况&amp;quot;,
+       (select fpzlmc from DM_FP_FPZL zl where  c.fpzl_dm=zl.fpzl_dm) &amp;quot;发票种类名称&amp;quot;,
+       to_char(d.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;最近一次发票领购日期&amp;quot;,
+       d.fpsl &amp;quot;最近一次发票领购数量&amp;quot;,
+       e.fpjcfs &amp;quot;发票结存份数&amp;quot;,
+       c.myzggpsl &amp;quot;每月最高购票数量&amp;quot;,
+       c.mczggpsl &amp;quot;每次最高购票数量&amp;quot;,
+       c.dffpzgkpxe &amp;quot;单份发票最高开票限额&amp;quot;,
+       --c.cpzgsl &amp;quot;持票最高数量&amp;quot;,
+       to_char(c.yxqq,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;票种有效期起&amp;quot;,
+       to_char(c.yxqz,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;票种有效期止&amp;quot;,
+       --c.yxbz &amp;quot;票种认定有效标志&amp;quot;,
+       b.zcdz &amp;quot;注册地址&amp;quot;,
+       (select swryxm from DM_GY_SWRY swry where b.SSGLY_DM=swry.swry_dm) &amp;quot;管理员&amp;quot;,
+       (select name from v_swjg sw where sw.id=substr(b.zgswskfj_dm,0,7)) &amp;quot;税务机关&amp;quot;,
+       (select swjgmc from DM_GY_SWJG jg where b.zgswskfj_dm=jg.swjg_dm) &amp;quot;主管税务所（科、分局）&amp;quot;
+       
+from ( 
+--取未完全采集升级版纳税人
+select * 
+from ( select a.* ,b.nsrzt_dm,b.hy_dm,b.djxh,b.zcdz,b.ssgly_dm,b.zgswskfj_dm,
+     (case when b.hy_dm in (select hy_dm from DM_GY_HY start with hy_dm in(&amp;apos;52&amp;apos;,&amp;apos;51&amp;apos;)connect by prior hy_dm=sjhy_dm) then &amp;apos;1&amp;apos; else &amp;apos;0&amp;apos; end ) issmqy 
+from tax_smqy_ybnsr a ,dj_nsrxx b 
+WHERE  (a.nsrsbh=b.nsrsbh or a.nsrsbh=b.shxydm)
+         and b.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)  
+         and b.yxbz=&amp;apos;Y&amp;apos;
+         and b.djxh in (select djxh from dj_djhglgl where lb_dm=&amp;apos;000000000028&amp;apos; )
+         and  not ((frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)  
+         or((b.fddbrsfzjlx_dm !=&amp;apos;201&amp;apos; or length(trim(fddbrsfzhm))&amp;lt;15) and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or( a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos; )
+         or(frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos; )
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)        
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and  a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or  (a.FDDBRXM is null  and  a.CWFZRXM is null and  bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)                                     
+         or (frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos;  and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos;  and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;) )
+        and a.nsrmc like &amp;apos;%[%NSRMC]%&amp;apos;
+        and hy_dm in (select id from v_tax_dm_hy start with id=decode(&amp;apos;[%HY]&amp;apos;,&amp;apos;&amp;apos;,id,&amp;apos;[%HY]&amp;apos;) connect by prior id=sjhy_dm)
+        and nsrzt_dm like &amp;apos;[%NSRZT]%&amp;apos;
+        and substr(zgswj_dm,0,7) in (select id from v_swjg start with id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior id=sjid)
+) t where issmqy like &amp;apos;[%SMQY]%&amp;apos;
+) b,
+( 
+  --发票票种核定:
+  select CPZGSL,  --持票最高数量
+         MCZGGPSL,  --每次最高购票数量
+         MYZGGPSL,  --每月最高购票数量
+         FPZL_DM,--发票种类代码
+         DJXH,  --登记序号
+         SWJG_DM,  --税务机关代码
+         YXBZ,  --有效标志
+         YXQZ,  --有效期止
+         DFFPZGKPXE,  --单份发票最高开票限额
+         DFFPZGKPXE_DM,  --单份发票最高开票限额代码
+         SJGSDQ,  --数据归属地区
+         YXQQ  --有效期起
+  from FP_PZHDXX
+  where yxbz=&amp;apos;Y&amp;apos;
+    and (swjg_dm like &amp;apos;14511%&amp;apos; or sjgsdq like &amp;apos;14511%&amp;apos;)
+) c,
+(
+  --取不同发票种类的最近一次购票时间和数量
+  select * from (
+  SELECT djxh,fpzl_dm,fp_dm,fpsl,fpqshm,fpzzhm,lrrq,ROW_NUMBER()OVER (PARTITION BY djxh,fpzl_dm ORDER BY lrrq DESC ) RN
+  from (
+  select a.djxh,b.fpzl_dm,b.fp_dm,b.fpsl,b.fpqshm,b.fpzzhm,b.lrrq
+  FROM FP_LY a,FP_LY_MX b
+  where trim(a.fplyuuid)=b.fplyuuid
+   and ( b.zgswskfj_dm like &amp;apos;14511%&amp;apos; or b.sjgsdq like &amp;apos;14511%&amp;apos;)  
+  ) )where RN=1 
+) d,
+(
+  --纳税人发票结存
+  select djxh,fpzl_dm,sum(fs)fpjcfs from (
+  select to_char(djxh)djxh,NSRJCUUID,fpzl_dm,fs,FPQSHM,FPZZHM,
+  FPZT_DM,lrrq ,xgrq 
+  from hx_fp.FP_NSRFPJC@js3q 
+  where (ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos; or sjgsdq like &amp;apos;14511%&amp;apos;)
+  --and djxh =&amp;apos;10114501000046779118&amp;apos;
+  order by djxh,lrrq desc 
+  )group by djxh,fpzl_dm
+) e
+where  b.djxh=c.djxh(+)
+and c.djxh=d.djxh(+)
+and trim(c.fpzl_dm)=d.fpzl_dm(+)
+and c.djxh=e.djxh(+)
+and trim(c.fpzl_dm)=e.fpzl_dm(+)
+) dual
+
+
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16></ROW>
+<ROW num="1" ><ID >LASTUPDATE</ID><NAME ></NAME><DATDSC >select max(crtdat) uptime from tax_smqy_ybnsr</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >LASTUPDATE</C9><C10 >LASTUPDATE</C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_HL</MWID><NAME >华联</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_HL.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);  
+//	_this.SaveTextFile( &amp;quot;d:/Chinalh.htm&amp;quot;,msg,&amp;quot; (*.htm)|*.htm|All Files (*.*)|*.*| |&amp;quot; );
+	_this.SaveTextFile( &amp;quot;d:/Chinalh4.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+var httpcall = new webget.HttpCall();
+var util = new JavaPackage(&amp;quot;java.util&amp;quot;);
+//function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+function start()
+{
+	var userid = &amp;quot;13753&amp;quot;;
+	var passwd = &amp;quot;137536969&amp;quot;;
+	var deptid = &amp;quot;4&amp;quot;;
+	var date = &amp;quot;2010-10-05&amp;quot;;
+	var date1 = &amp;quot;2010-09-19&amp;quot;;
+	var kaid = &amp;quot;0000&amp;quot;;
+	var code = &amp;quot;GBK&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	var param = &amp;quot;&amp;quot;;
+	var url = &amp;quot;&amp;quot;;
+	var msg = &amp;quot;&amp;quot;;
+	var pagesize = 0;//每一页显示的订单数目
+	var count = 0;//总共会显示几页
+	var allcount = 0;//当天所有的订单数目
+	var nodelist = null;
+	var tablist = null;
+	var titlenode = null;
+	var ds = null;
+	try
+	{
+		ret = httpcall.Get(&amp;quot;http://www.hlb2b.com/index.jsp&amp;quot;,code);
+		ret = httpcall.Get(&amp;quot;http://www.hlb2b.com/system/login/loginAction.do&amp;quot;,code);	
+		ret = httpcall.Post(&amp;quot;http://www.hlb2b.com/system/login/loginAction.do&amp;quot;,&amp;quot;password=&amp;quot;+passwd+&amp;quot;&amp;proc=login.submit&amp;username=&amp;quot;+userid,code);
+		ret = httpcall.Post(&amp;quot;http://www.hlb2b.com/system/login/roleSelectAction.do&amp;quot;,&amp;quot;proc=select.submit&amp;currentRoleId=0&amp;quot;,code);
+		ret = httpcall.Get(&amp;quot;http://www.hlb2b.com/_template/style2/switch.jsp?menuId=563&amp;quot;,code);
+		//订单
+		ret = httpcall.Post(&amp;quot;http://www.hlb2b.com/ptw/orderLstAction.do&amp;quot;,&amp;quot;proc=search&amp;demandEDate=&amp;quot;+date+&amp;quot;&amp;demandSDate=&amp;quot;+date+&amp;quot;&amp;orderNo=&amp;ordOrgCode=&amp;orgCode=&amp;quot;,code);	
+		nodelist = HtmlParser.parserHtml(ret,code);	 
+		tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;);
+		titlenode = tablist.elementAt(18);
+		var titlerows = titlenode.getRows();
+		var titlecols = titlerows[0].getColumns();
+		var titlenotes = titlecols[0].toPlainTextString();
+		allcount = 1*titlenotes.substring(titlenotes.indexOf(&amp;quot;共&amp;quot;)+1,titlenotes.indexOf(&amp;quot;条，列出第&amp;quot;));//当天所有的订单数目
+		var list1 = new util.ArrayList();
+	        list1 = SetLinksByPost(httpcall ,&amp;quot;http://www.hlb2b.com/ptw/orderLstAction.do&amp;quot;,&amp;quot;proc=search&amp;demandEDate=&amp;quot;+date+&amp;quot;&amp;demandSDate=&amp;quot;+date+&amp;quot;&amp;orderNo=&amp;ordOrgCode=&amp;orgCode=&amp;quot;,code,&amp;quot;pageSize&amp;quot;,list1,&amp;quot;input&amp;quot;,&amp;quot;name&amp;quot;,&amp;quot;value&amp;quot;);
+	        pagesize = 1*list1.get(0);//每一页显示的订单数目
+		count = allcount&amp;lt;pagesize?1:allcount/pagesize+1;
+		for(var allrow = 1;allrow &amp;lt;= count;allrow ++ )
+		{
+			param = &amp;quot;proc=search&amp;demandEDate=&amp;quot;+date+&amp;quot;&amp;demandSDate=&amp;quot;+date+&amp;quot;&amp;orderNo=&amp;ordOrgCode=&amp;orgCode=&amp;image.x=26&amp;image.y=3&amp;pageSize=&amp;quot;+pagesize+&amp;quot;&amp;startIndex=&amp;quot;+((allrow-1)*pagesize+1);
+			var list = new util.ArrayList();
+		        list = SetLinksByPost(httpcall ,&amp;quot;http://www.hlb2b.com/ptw/orderLstAction.do&amp;quot;,param,code,&amp;quot;/ptw/orderLstAction.do?proc=list_detail&amp;quot;,list,&amp;quot;a&amp;quot;,&amp;quot;href&amp;quot;,&amp;quot;href&amp;quot;);
+			for(var _r = 0;_r &amp;lt; list.size();_r ++)
+			{
+				url = &amp;quot;http://www.hlb2b.com&amp;quot;+list.get(_r);
+				ret = httpcall.Get(url,code);
+				nodelist = HtmlParser.parserHtml(ret,code);	 
+				tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;);
+				var nolist = parserTableTitle(tablist,code,new Array(&amp;quot;14&amp;quot;));
+				var bilid = nolist.split(&amp;quot;#&amp;quot;)[1];//订单编号
+				var corpid = nolist.split(&amp;quot;#&amp;quot;)[5].substring(0,4);//终端编号
+				var corpnam = nolist.split(&amp;quot;#&amp;quot;)[5].substring(4,nolist.split(&amp;quot;#&amp;quot;)[5].length());//终端名称
+				var loc = nolist.split(&amp;quot;#&amp;quot;)[7];//仓库
+				var addrdat = nolist.split(&amp;quot;#&amp;quot;)[11].substring(0,10);
+//				return addrdat = HtmlParser.FormatDataString(&amp;quot;01/09/2009&amp;quot;);
+				addrdat = addrdat.split(&amp;quot;-&amp;quot;)[2]+&amp;quot;/&amp;quot;+addrdat.split(&amp;quot;-&amp;quot;)[1]+&amp;quot;/&amp;quot;+addrdat.split(&amp;quot;-&amp;quot;)[0];
+				ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;15&amp;quot;),&amp;quot;O&amp;quot;);
+				for(var r = 0;r &amp;lt; ds.getRowCount();r ++)
+				{
+					if(msg != &amp;quot;&amp;quot;)
+						msg += &amp;quot;╃&amp;quot;;
+					var row = ds.getStringAt(r,&amp;quot;_行号&amp;quot;);
+					var itmid = ds.getStringAt(r,&amp;quot;_商品代码&amp;quot;);
+					var itmnam = ds.getStringAt(r,&amp;quot;_商品名称&amp;quot;);
+					var code = ds.getStringAt(r,&amp;quot;_外箱码&amp;quot;);
+					var spec = ds.getStringAt(r,&amp;quot;_包装规格&amp;quot;);
+					var unit = ds.getStringAt(r,&amp;quot;_单位&amp;quot;);
+					var untnum = 1*spec.substring(spec.indexOf(&amp;quot;*&amp;quot;)+1,spec.length());
+					var qty = 1*ds.getStringAt(r,&amp;quot;_包装数量&amp;quot;);//大单位数量  
+					qty = qty*untnum;//为了和退货单保持一致的数量标志，订单的数量也转换成小单位的数量
+					var price = ds.getStringAt(r,&amp;quot;_单价&amp;quot;);//小单位的单价，且是含税单价
+					var mny = ds.getStringAt(r,&amp;quot;_含税金额&amp;quot;);
+
+					//SRFLG~~~USERID~~~DEPTID~~~KAID~~~BILID~~~ECORPNAM~~~ECORPID~~~ITMCLASS~~~
+					//ORDID~~~DAT~~~ARRDAT~~~TEL~~~FAX~~~SEQID~~~EITMID~~~CODE~~~SPEC~~~EITMNAM~~~
+					//QTYFLG~~~UNTNUM~~~QTY~~~ZPQTY~~~EPRICE~~~CORPADDR~~~NOTE~~~NULL
+					msg += &amp;quot;NR ~~~&amp;quot;+userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~&amp;quot;+corpid+&amp;quot;~~~&amp;quot;+
+						loc+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+date.split(&amp;quot;-&amp;quot;)[2]+&amp;quot;/&amp;quot;+date.split(&amp;quot;-&amp;quot;)[1]+&amp;quot;/&amp;quot;+date.split(&amp;quot;-&amp;quot;)[0]+&amp;quot;~~~&amp;quot;+addrdat+&amp;quot;~~~ ~~~ ~~~&amp;quot;+row+&amp;quot;~~~&amp;quot;+itmid+&amp;quot;~~~&amp;quot;+
+						code+&amp;quot;~~~&amp;quot;+spec+&amp;quot;~~~&amp;quot;+itmnam+&amp;quot;~~~ ~~~&amp;quot;+untnum+&amp;quot;~~~&amp;quot;+qty+&amp;quot;~~~0~~~&amp;quot;+
+						price+&amp;quot;~~~ ~~~ ~~~ &amp;quot;;								
+				}
+			}
+		}
+		//退货单
+		ret = httpcall.Get(&amp;quot;http://www.hlb2b.com/ptw/bckOrderLstAction.do?proc=search&amp;quot;,code);
+		ret = httpcall.Post(&amp;quot;http://www.hlb2b.com/ptw/bckOrderLstAction.do&amp;quot;,&amp;quot;proc=search&amp;filEDate=&amp;quot;+date1+&amp;quot;&amp;filSDate=&amp;quot;+date1+&amp;quot;&amp;orderNo=&amp;ordOrgCode=&amp;orgCode=&amp;quot;,code);	
+		nodelist = HtmlParser.parserHtml(ret,code);	 
+		tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;);
+		titlenode = tablist.elementAt(18);
+		var titlerows = titlenode.getRows();
+		var titlecols = titlerows[0].getColumns();
+		var titlenotes = titlecols[0].toPlainTextString();
+		allcount = 1*titlenotes.substring(titlenotes.indexOf(&amp;quot;共&amp;quot;)+1,titlenotes.indexOf(&amp;quot;条，列出第&amp;quot;));//当天所有的订单数目
+		var list1 = new util.ArrayList();
+	        list1 = SetLinksByPost(httpcall ,&amp;quot;http://www.hlb2b.com/ptw/orderLstAction.do&amp;quot;,&amp;quot;proc=search&amp;demandEDate=&amp;quot;+date+&amp;quot;&amp;demandSDate=&amp;quot;+date+&amp;quot;&amp;orderNo=&amp;ordOrgCode=&amp;orgCode=&amp;quot;,code,&amp;quot;pageSize&amp;quot;,list1,&amp;quot;input&amp;quot;,&amp;quot;name&amp;quot;,&amp;quot;value&amp;quot;);
+	        pagesize = 1*list1.get(0);//每一页显示的订单数目
+	        count = allcount&amp;lt;pagesize?1:allcount/pagesize+1;
+		for(var allrow = 1;allrow &amp;lt;= count;allrow ++ )
+		{
+			param = &amp;quot;proc=search&amp;filEDate=&amp;quot;+date1+&amp;quot;&amp;filSDate=&amp;quot;+date1+&amp;quot;&amp;orderNo=&amp;ordOrgCode=&amp;orgCode=&amp;image.x=26&amp;image.y=3&amp;pageSize=&amp;quot;+pagesize+&amp;quot;&amp;startIndex=&amp;quot;+((allrow-1)*pagesize+1);
+			var list = new util.ArrayList();
+		        list = SetLinksByPost(httpcall ,&amp;quot;http://www.hlb2b.com/ptw/bckOrderLstAction.do&amp;quot;,param,code,&amp;quot;/ptw/bckOrderLstAction.do?proc=list_detail&amp;quot;,list,&amp;quot;a&amp;quot;,&amp;quot;href&amp;quot;,&amp;quot;href&amp;quot;);
+			for(var _r = 0;_r &amp;lt; list.size();_r ++)
+			{
+				url = &amp;quot;http://www.hlb2b.com&amp;quot;+list.get(_r);
+				ret = httpcall.Get(url,code);
+				nodelist = HtmlParser.parserHtml(ret,code);	 
+				tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;);
+				var nolist = parserTableTitle(tablist,code,new Array(&amp;quot;14&amp;quot;));
+				var bilid = nolist.split(&amp;quot;#&amp;quot;)[1];//订单编号
+				var corpid = nolist.split(&amp;quot;#&amp;quot;)[5].substring(0,4);//终端编号
+				var corpnam = nolist.split(&amp;quot;#&amp;quot;)[5].substring(4,nolist.split(&amp;quot;#&amp;quot;)[5].length());//终端名称
+				var loc = nolist.split(&amp;quot;#&amp;quot;)[7];//仓库
+				var addrdat = nolist.split(&amp;quot;#&amp;quot;)[11].substring(0,10);
+				addrdat = addrdat.split(&amp;quot;-&amp;quot;)[2]+&amp;quot;/&amp;quot;+addrdat.split(&amp;quot;-&amp;quot;)[1]+&amp;quot;/&amp;quot;+addrdat.split(&amp;quot;-&amp;quot;)[0];
+				ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;15&amp;quot;),&amp;quot;O&amp;quot;);
+				for(var r = 0;r &amp;lt; ds.getRowCount();r ++)
+				{
+					if(msg != &amp;quot;&amp;quot;)
+						msg += &amp;quot;╃&amp;quot;;
+					var row = ds.getStringAt(r,&amp;quot;_行号&amp;quot;);
+					var itmid = ds.getStringAt(r,&amp;quot;_商品代码&amp;quot;);
+					var itmnam = ds.getStringAt(r,&amp;quot;_商品名称&amp;quot;);
+					var code = ds.getStringAt(r,&amp;quot;_外箱码&amp;quot;);
+					var spec = ds.getStringAt(r,&amp;quot;_包装规格&amp;quot;);
+					var unit = ds.getStringAt(r,&amp;quot;_单位&amp;quot;);
+					var qty = ds.getStringAt(r,&amp;quot;_单品数量&amp;quot;);//小单位数量
+					var price = ds.getStringAt(r,&amp;quot;_单价&amp;quot;);//小单位的单价，且是含税单价
+					var mny = ds.getStringAt(r,&amp;quot;_含税金额&amp;quot;);
+					//SRFLG~~~USERID~~~DEPTID~~~KAID~~~BILID~~~ECORPNAM~~~ECORPID~~~ITMCLASS~~~
+					//ORDID~~~DAT~~~ARRDAT~~~TEL~~~FAX~~~SEQID~~~EITMID~~~CODE~~~SPEC~~~EITMNAM~~~
+					//QTYFLG~~~UNTNUM~~~QTY~~~ZPQTY~~~EPRICE~~~CORPADDR~~~NOTE~~~NULL
+					msg += &amp;quot;R ~~~&amp;quot;+userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~&amp;quot;+corpid+&amp;quot;~~~&amp;quot;+
+						loc+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+date1.split(&amp;quot;-&amp;quot;)[2]+&amp;quot;/&amp;quot;+date1.split(&amp;quot;-&amp;quot;)[1]+&amp;quot;/&amp;quot;+date1.split(&amp;quot;-&amp;quot;)[0]+&amp;quot;~~~&amp;quot;+addrdat+&amp;quot;~~~ ~~~ ~~~&amp;quot;+row+&amp;quot;~~~&amp;quot;+itmid+&amp;quot;~~~&amp;quot;+
+						code+&amp;quot;~~~&amp;quot;+spec+&amp;quot;~~~&amp;quot;+itmnam+&amp;quot;~~~ ~~~&amp;quot;+spec.substring(spec.indexOf(&amp;quot;*&amp;quot;)+1,spec.length())+&amp;quot;~~~&amp;quot;+qty+&amp;quot;~~~0~~~&amp;quot;+
+						price+&amp;quot;~~~ ~~~ ~~~ &amp;quot;;								
+				}
+			}
+		}
+		return msg;
+	}
+	catch(e)
+	{
+		throw new Exception(e);
+	}
+}
+//================================================================// 
+// 函数：parserTableTitle(nodelist,code,tabidxArr)
+// 说明：抬头的部分因为不是规则的不能解析成XML所以用Array来保存。
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：09/07/10 13:41:06
+// 修改日志：
+//================================================================// 
+function parserTableTitle(nodelist,code,tabidxArr)
+{
+	var str = &amp;quot;&amp;quot;;
+	var ltab = nodelist.elementAt(tabidxArr[0]);
+	var rows = ltab.getRows();
+	for (var r = 0;r&amp;lt;rows.length();r++)
+	{
+		var cols = rows[r].getColumns();
+		for (var c = 0;c&amp;lt;cols.length();c++)
+		{
+			if(str != &amp;quot;&amp;quot;)
+				str += &amp;quot;#&amp;quot;;
+			str += HtmlParser.ReplaceStrToNull(cols[c].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot; &amp;quot;));			
+		}
+	}
+	return str;
+}
+
+//================================================================// 
+// 函数：SetLinksByPost(url,encoding,filterStr)
+// 说明：从页面取出所有符合filterStr字符串的链接,字符编码：encoding,links:返回所有链接的ArrayList
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：09/28/10 10:12:11
+// 修改日志：
+//================================================================// 
+function SetLinksByPost(httcall,url,params,encoding,filterStr,links,str1,str2,str3)
+{
+	var res = httpcall.Post(url,params,encoding);
+	//解析页面源码为page对象
+	var page = HtmlParser.parserHtml(res,encoding);	
+	//得到当前页所有的A标签
+//	var atag = filterHtml(page,&amp;quot;a&amp;quot;);
+	var atag = HtmlParser.filterHtml(page,str1);
+	for (var i = 0;i&amp;lt;atag.size();i++)
+	{
+//		var attr = atag.elementAt(i).getAttribute(&amp;quot;href&amp;quot;);
+		var attr = atag.elementAt(i).getAttribute(str2);
+		if (attr != null &amp;&amp; attr.indexOf(filterStr) &amp;gt; -1)
+		{
+			attr = atag.elementAt(i).getAttribute(str3);
+			links.add(attr);
+		}
+	} 
+	return links;	
+}
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

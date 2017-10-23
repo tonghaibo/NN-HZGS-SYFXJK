@@ -1,0 +1,558 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >JSFUNC</MWID><NAME >公用脚本函数库</NAME><NOTE ></NOTE><FILE >JSFUNC.zxg</FILE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><EXTJS >xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：ioCheck
+// 说明：检测str是否为服务端返回的错误信息或页面。以抛出异常或显示错误页面
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：09/15/06 10:45:59
+// 修改日志：
+//================================================================// 
+function ioCheck(str)
+{
+}
+
+//================================================================// 
+// 函数：loadBindXMLDS
+// 说明：从服务端根据where过滤,获取table表或视图的数据,
+//     自动根据table中是否有 ACC,SYT,ORG字段,添加相应的过滤条件
+// 参数：
+// 返回：数据在控件的当前XMLDS中,返回xmlds的记录数
+// 样例：
+// 作者：
+// 创建日期：09/01/06 13:40:36
+// 修改日志：
+//================================================================// 
+function loadBindXMLDS(table,where)
+{
+  var url = homeurl + &amp;quot;XmlDB.sp?bind=&amp;quot;+table+&amp;quot;&amp;where=&amp;quot;+where;
+  //var xmlstr = _this.HttpCall(url);
+  _this.XMLDS_Reset();
+  _this.XMLDS_Load(url);
+  var isError = _this.XMLDS_GetString(0,&amp;quot;_ServerMsg_&amp;quot;)==&amp;quot;true&amp;quot;;
+  if(isError )
+  {
+    var msg = _this.XMLDS_GetString(0,&amp;quot;TOPIC&amp;quot;);
+    alert(msg);
+    throw msg;
+  }
+  return _this.XMLDS_GetRowCount();
+}
+
+//================================================================// 
+// 函数：setColumn2SelectBox
+// 说明：设置明细区的某列邦定到bindKey的选择框
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：09/01/06 14:55:31
+// 修改日志：
+//================================================================// 
+function setColumn2SelectBox(sheet,col,bindKey,where)
+{
+  for( var row=_this.GetMainCellRangeRow1(sheet); row&amp;lt;= _this.GetMainCellRangeRow2(sheet);row++)
+  {
+    _this.SetToSelectBox(&amp;quot;&amp;quot;, sheet, row, col , bindKey, where);
+    _this.SetCellLock(sheet, row, col , -1);
+  }
+}
+
+//================================================================// 
+// 函数：setItemInfo
+// 说明：按where取回table的所有字段，根据fieldstr，依次从col
+//  开始往后填充。如果某个filed为空，则跳过。
+// 参数：
+// 返回：
+// 样例：setRowInfo(sheet,row,col,&amp;quot;V_SHOPITEM&amp;quot;,&amp;quot;id=&amp;apos;1&amp;apos;&amp;quot;,&amp;quot;NAME,SPEC,unit,,price&amp;quot;)
+// 作者：
+// 创建日期：09/04/06 16:50:05
+// 修改日志：
+//================================================================// 
+function setDbToRow(sheet,row,col,table,where,fieldstr)
+{
+  if(typeof fieldstr == &amp;quot;undefined&amp;quot;)
+    fieldstr = &amp;quot;NAME,SPEC,unit,,price&amp;quot;;
+  var fields = fieldstr.split(&amp;quot;,&amp;quot;);
+  var fc = fields.length;
+  if(fc&amp;lt;1)
+  {
+    alert(&amp;quot;接口错误，要填充的字段必须大于1。&amp;quot;);
+    return false;
+  }
+  var rows = loadBindXMLDS(table,where); //根据where，从table中取数
+  if(rows==1)
+  {
+     for(var i=0;i&amp;lt;fc;i++)
+     {
+       col++;
+       var fn = fields[i];
+       if(fn.Trim()!=&amp;quot;&amp;quot;)
+         _this.SetCellText(sheet,row,col,_this.XMLDS_GetString(0,fn));
+     }
+  }
+  else
+  {
+     if(rows&amp;gt;1)
+     {
+       alert(&amp;quot;数据错误，查询得到&amp;quot;+rows+&amp;quot;条记录。&amp;quot;);
+       return false;
+     }
+     alert(&amp;quot;没有找到符合&amp;quot;+where+&amp;quot;的记录。&amp;quot;);
+     for(var i=0;i&amp;lt;fc;i++)
+     {
+       col++;
+       var fn = fields[i];
+       if(fn.Trim()!=&amp;quot;&amp;quot;)
+         _this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+     }
+  }
+}
+//================================================================// 
+// 函数：createList
+// 说明：从服务端根据where过滤,获取table表或视图的数据,创建一个新的值对
+//     自动根据table中是否有 ACC,SYT,ORG字段,添加相应的过滤条件
+// 参数：
+// 返回：返回值对的句柄
+// 样例：
+// 作者：
+// 创建日期：09/01/06 13:50:59
+// 修改日志：
+//================================================================// 
+function createList(table,where,idfiled,valfield)
+{
+  if(typeof where== &amp;quot;undefined&amp;quot;)
+    where= &amp;quot;&amp;quot;;
+  if(typeof idfiled == &amp;quot;undefined&amp;quot;)
+    idfiled = &amp;quot;ID&amp;quot;;
+  if(typeof valfield== &amp;quot;undefined&amp;quot;)
+    valfield= &amp;quot;NAME&amp;quot;;
+  var list = _this.CreateListValueByXMLDS(
+        _this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=&amp;quot;+table+&amp;quot;&amp;where=&amp;quot;+where)
+     ,idfiled,valfield);
+  return list;
+}
+
+//================================================================// 
+// 函数：isRowInMainRange
+// 说明：判断row是否在sheet的明细区中
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：09/04/06 17:08:24
+// 修改日志：
+//================================================================// 
+function isRowInMainRange(sheet,row)
+{
+  return row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet);
+}
+
+
+//================================================================// 
+// 函数：roundto
+// 说明：小数位舍入
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：09/07/06 13:06:17
+// 修改日志：
+//================================================================// 
+function roundto(val,digs)
+{
+return Math.round (val*Math.pow(10,digs))/Math.pow(10,digs);
+}
+
+var cndigits = &amp;quot;零壹贰叁肆伍陆柒捌玖&amp;quot;;
+var cnfraction = &amp;quot;角分厘&amp;quot;;
+//================================================================// 
+// 函数：digit2CN
+// 说明：把整数转换为中文大写
+// 参数：unitname 计量单位，如 吨、圆等。isfraction 是否按金额的小数方式转换
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/26/06 14:35:20
+// 修改日志：
+//================================================================// 
+function digit2CN(val,unitname,isfraction,fillzero)
+{
+  if(typeof unitname== &amp;quot;undefined&amp;quot;)
+    unitname=&amp;quot;圆&amp;quot;;
+  if(typeof isfraction== &amp;quot;undefined&amp;quot; || !isfraction)
+    unitname += &amp;quot;拾佰仟万亿&amp;quot;;
+  if(typeof fillzero== &amp;quot;undefined&amp;quot;)
+    fillzero=true;
+  var len = val.length - 1;
+  var result = &amp;quot;&amp;quot;;
+  var unit;
+  var addzero = false;
+  var addunit = false;
+  for(var i=0;i&amp;lt;=len;i++)
+  {
+    var digit = val.charAt(i);
+    if(isfraction)
+      unit = i;
+    else
+    {
+      unit = (len-i) % 4;
+      addunit = unit == 0;
+      if(unit==0 &amp;&amp; i!= len)
+        unit = 3 + Math.round((len-i)/4);
+    }
+    if(digit!=&amp;apos;0&amp;apos;)
+    {
+      if(addzero)
+      {
+        if(fillzero) result += &amp;quot;零&amp;quot;;
+        addzero = false;
+      }
+      result += cndigits.charAt(digit);
+    }
+    else
+      addzero = true;
+    if(digit!=&amp;apos;0&amp;apos;||addunit)
+      result += unitname.charAt(unit);
+    if(addunit) addzero = false;
+  }
+  return result;
+}
+
+//================================================================// 
+// 函数：NumToWord
+// 说明：把金额转换为中文大写金额，精确到厘
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/26/06 14:54:47
+// 修改日志：
+//================================================================// 
+function NumToWord(value) 
+{ 
+  var strval = new String();
+  strval = &amp;quot;&amp;quot;+Math.abs(value);
+  var pos=strval.indexOf(&amp;quot;.&amp;quot;) ;
+  if(pos==-1) pos = strval.length;
+  var intval = strval.substr(0,pos);
+  var fraction = strval.substr(++pos);
+  var intstr = digit2CN(intval);
+  if(value&amp;lt;0) intstr = &amp;quot;负&amp;quot;+intstr;
+  var fracstr = digit2CN(fraction,cnfraction,true);
+  return intstr+fracstr;
+}
+function setListCombox(view)
+{
+      var listid = _this.CreateListValue();
+      QuerySQLDS(&amp;quot;select id,name from&amp;quot;+&amp;quot; &amp;quot;+view);
+      var row = _this.XMLDS_GetRowCount();
+      var id = &amp;quot;&amp;quot;;
+      var name = &amp;quot;&amp;quot;;
+      if ( row &amp;gt; 0 )
+      {
+            for ( var i=0;i&amp;lt;row;i++)
+            {
+                  id = _this.XMLDS_GetString(i,&amp;quot;id&amp;quot;);
+                  name = _this.XMLDS_GetString(i,&amp;quot;name&amp;quot;);
+                  _this.SetListValue(listid,id,name);
+
+            }
+      }
+      return listid;
+}
+
+
+// 把id,srcid,destid,srcnam,destnam的xmlds转换为一个流程图 
+// SVGDATFLW(xml,startid,title)
+// xml: xmlds描述的数据字符串
+// startid: 开始的srcid(destid)的节点	
+// title: 标题 如果为空，=ROOT
+function SVGDATFLW(xml,startid,startnam)
+{
+	this.m_width  = 80;	// 节点的宽度
+	this.m_height = 40;  	// 节点的高度
+	
+	this.m_x0     = 420;	// 开始节点的中心位置
+	this.m_y0     = 250;		
+	this.m_dwidth = 120;	// 增加一层展开的位置
+	this.m_dheight= 60;		
+	this.m_title = startid+&amp;quot;流程图&amp;quot;;
+	this.m_xml = xml;
+	this.m_startid = startid;
+	this.m_startnam = startnam;
+	this.m_menuid = -1 ;
+	this.MAXLOOP = 3;	// 最大递归层数
+	this.m_itemnum = 0;	// 图元个数
+	this.m_grdtyp =&amp;quot;B&amp;quot;;
+	this.m_leftloopnum  = 0; //预先得到左边有多少个
+	// 层的颜色列表如果超过循环
+	this.m_color = new Array (&amp;quot;#00cc99&amp;quot;,&amp;quot;#C2CC0D&amp;quot;,&amp;quot;#71CC16&amp;quot;,&amp;quot;#FFFFCC&amp;quot;,&amp;quot;#FFCCFF&amp;quot;,&amp;quot;#66FFCC&amp;quot;,&amp;quot;#DD0000&amp;quot;, &amp;quot;#FF9966&amp;quot;,&amp;quot;#C2A00D&amp;quot;,&amp;quot;#71A216&amp;quot;,&amp;quot;#66FFCC&amp;quot;);	
+	this.m_color1 = new Array (&amp;quot;#0D767E&amp;quot;,&amp;quot;#CC68CC&amp;quot;,&amp;quot;#006600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#CC6744&amp;quot;,&amp;quot;#669999&amp;quot;,&amp;quot;#880000&amp;quot;, &amp;quot;#FF6600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#666633&amp;quot;,&amp;quot;#66FF99&amp;quot;);	
+	
+	this.load = SVGDATFLW_load;			// 重新载入
+	this.parselevel= SVGDATFLW_parselevel;			// 递归
+	this.preparselevel = SVGDATFLW_preparselevel;
+}
+// 解析重新生成svgchar
+function SVGDATFLW_load()
+{
+	if ( _this.GetReleaseNo()&amp;lt;&amp;quot;4.42&amp;quot;) {
+		alert ( &amp;quot;要正确显示图表，要求您的控件在4.42以上，请升级 您的硕格控件&amp;quot; );
+		return;
+	}
+	_this.XMLDS_Parse(this.m_xml);
+	// 根据xmlds得到一个svg图的xml字符串
+	var svg= &amp;quot;&amp;quot;;
+	svg = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt;&amp;lt;svg  &amp;gt;  &amp;quot;;//bgcolor=\&amp;quot;#D3E5FA\&amp;quot; 
+	
+	// 预先得到左边有多少个-&amp;gt;this.m_leftloopnum,为了避免左边太多的空地
+	this.preparselevel (this.m_startid,0,&amp;quot;&amp;quot;);
+	
+	this.m_x0=this.m_x0-(this.MAXLOOP-this.m_leftloopnum)*this.m_dwidth;
+	
+	this.m_itemnum++;
+	var gid = this.m_grdtyp+this.m_itemnum+&amp;quot;:&amp;quot;+this.m_startid ; 	
+	svg += &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  selgrdtyp=\&amp;quot;&amp;quot;+this.m_grdtyp+&amp;quot;\&amp;quot;  fill=\&amp;quot;&amp;quot;+this.m_color[0]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(this.m_x0-this.m_width/2) +&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(this.m_y0-this.m_height/2)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+this.m_width+&amp;quot;\&amp;quot;  height=\&amp;quot;&amp;quot;+this.m_height+&amp;quot;\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;&amp;quot;+this.m_menuid+&amp;quot;\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+this.m_startid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+this.m_startid+this.m_startnam+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+			
+	
+	svg += this.parselevel(&amp;quot;left&amp;quot;,this.m_startid,this.m_x0,  this.m_y0,0,&amp;quot;&amp;quot;,gid );	// 左递归，来源 
+	
+	
+	svg += this.parselevel(&amp;quot;right&amp;quot;,this.m_startid,this.m_x0,  this.m_y0,0,&amp;quot;&amp;quot;,gid );	// 右递归，目的 
+	svg+=&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	return svg;
+}
+// 递归，展现二级结构
+// flag 左递归，来源 或 右递归，目的
+// loopnum 递归次数
+// refid : startid所在图的图元ID
+function SVGDATFLW_parselevel(flag,startid,x0,y0,loopnum,havedonebilllist,refid)
+{	
+	if ( loopnum &amp;gt;= this.MAXLOOP ) return &amp;quot;&amp;quot;;
+	var svg = &amp;quot;&amp;quot;;
+	var IDCOL = &amp;quot;DESTID&amp;quot;;
+	var NAMECOL = &amp;quot;DESTNAM&amp;quot;;
+	var OTHER_IDCOL = &amp;quot;SRCID&amp;quot;;
+	var OTHER_NAMECOL = &amp;quot;SRCNAM&amp;quot;;
+	var fzflag = -1;
+	if ( flag== &amp;quot;right&amp;quot; ) {
+		IDCOL = &amp;quot;SRCID&amp;quot;;
+		NAMECOL = &amp;quot;SRCNAM&amp;quot;;
+		OTHER_IDCOL = &amp;quot;DESTID&amp;quot;;
+		OTHER_NAMECOL = &amp;quot;DESTNAM&amp;quot;;	
+		fzflag  = 1;
+						
+	}
+	//从xmlds找出所有的目标是startid的清单
+	var fixlen = 0;
+	// 先绘制本身，并找出共有多少个符合条件
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		var itemid = _this.XMLDS_GetString(i,IDCOL );
+		if (itemid == startid ) {
+			fixlen ++;
+		}
+	}
+	
+	var nownum = 1;
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		var itemid = _this.XMLDS_GetString(i,IDCOL );
+		if (itemid == startid ) {
+			var flwid = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;  );
+
+			var itemnam= _this.XMLDS_GetString(i,NAMECOL   );
+			var other_itemid= _this.XMLDS_GetString (i,OTHER_IDCOL );
+			var other_itemnam= _this.XMLDS_GetString (i,OTHER_NAMECOL );
+			// 画对方节点
+			var x = x0+fzflag* this.m_dwidth;//*(loopnum+1)
+			var dy = 2*this.m_dheight/fixlen;
+			var y = y0-this.m_dheight+(nownum-1)*dy+dy/2;//(loopnum) * +(dy-this.m_height)/2
+			this.m_itemnum++;
+			var gid = this.m_grdtyp+this.m_itemnum+&amp;quot;:&amp;quot;+other_itemid;
+			svg += &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  selgrdtyp=\&amp;quot;&amp;quot;+this.m_grdtyp+&amp;quot;\&amp;quot; fill=\&amp;quot;&amp;quot;+this.m_color[loopnum+1]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(x-this.m_width/2)+&amp;quot;\&amp;quot;  y=\&amp;quot;&amp;quot;+(y-this.m_height/2)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+this.m_width+&amp;quot;\&amp;quot;  height=\&amp;quot;&amp;quot;+this.m_height+&amp;quot;\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;&amp;quot;+this.m_menuid+&amp;quot;\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+other_itemid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+other_itemid+other_itemnam+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;			 							
+			var textwidth = (this.m_dwidth-this.m_width)*3/2;
+			var textheigth = 40;
+
+			if ( flag ==&amp;quot;left&amp;quot; ) {
+				svg += &amp;quot;&amp;lt;connector  from=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot; to=\&amp;quot;&amp;quot;+refid +&amp;quot;\&amp;quot; fromcp=\&amp;quot;32\&amp;quot; tocp=\&amp;quot;12\&amp;quot;  type=\&amp;quot;208\&amp;quot; id=\&amp;quot;connector_&amp;quot;+other_itemid+&amp;quot;_&amp;quot;+itemid +&amp;quot;\&amp;quot;  stroke=\&amp;quot;#000000\&amp;quot;/&amp;gt;&amp;quot;;							
+				// 数据流热点
+				svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+ (x+this.m_width/2)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y-20)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+textwidth +&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+textheigth +&amp;quot;\&amp;quot; align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;+flwid +&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+			}
+			else {
+				svg += &amp;quot;&amp;lt;connector from=\&amp;quot;&amp;quot;+refid +&amp;quot;\&amp;quot;  to=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot; fromcp=\&amp;quot;32\&amp;quot; tocp=\&amp;quot;12\&amp;quot; type=\&amp;quot;208\&amp;quot;  id=\&amp;quot;connector_&amp;quot;+itemid +&amp;quot;_&amp;quot;+other_itemid+&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot;/&amp;gt;&amp;quot;;	 						
+				// 数据流热点
+				svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+(x-this.m_width/2-textwidth+7 )+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y-20)+&amp;quot;\&amp;quot;  width=\&amp;quot;&amp;quot;+textwidth +&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+textheigth +&amp;quot;\&amp;quot;  align=\&amp;quot;right\&amp;quot; valign=\&amp;quot;top\&amp;quot; menuid=\&amp;quot;&amp;quot;+this.m_menuid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+flwid +&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+			}
+			if ( havedonebilllist.indexOf(other_itemid+&amp;quot;,&amp;quot;)&amp;lt;0  ) {
+				var newhavedone = havedonebilllist+ other_itemid+&amp;quot;,&amp;quot;;// 记录当前操作的billid的列表，避免死循环
+				//alert ( newhavedone +&amp;quot;=&amp;quot;+flag+&amp;quot;,&amp;quot;+x+&amp;quot;,&amp;quot;+y+&amp;quot;,&amp;quot;+ other_itemid +&amp;quot;,&amp;quot;+(loopnum +1) );
+
+				svg+=this.parselevel (flag,other_itemid,x,y,loopnum +1,newhavedone,gid );
+			}
+
+			nownum ++;		
+		}
+	}
+	return svg;
+}
+// 预先得到左边有多少个-&amp;gt;this.m_leftloopnum,为了避免左边太多的空地
+function SVGDATFLW_preparselevel(startid,loopnum,havedonebilllist)
+{	
+	if ( loopnum &amp;gt;= this.MAXLOOP ) return &amp;quot;&amp;quot;;
+	if ( loopnum&amp;gt;this.m_leftloopnum  ) this.m_leftloopnum = loopnum;
+	var flag=&amp;quot;left&amp;quot;;
+	var svg = &amp;quot;&amp;quot;;
+	var IDCOL = &amp;quot;DESTID&amp;quot;;
+	var NAMECOL = &amp;quot;DESTNAM&amp;quot;;
+	var OTHER_IDCOL = &amp;quot;SRCID&amp;quot;;
+	var OTHER_NAMECOL = &amp;quot;SRCNAM&amp;quot;;
+	var fzflag = -1;
+	//从xmlds找出所有的目标是startid的清单
+	var fixlen = 0;
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		var itemid = _this.XMLDS_GetString(i,IDCOL );
+		if (itemid == startid ) {
+			fixlen ++;
+		}
+	}
+	
+	var nownum = 1;
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		var itemid = _this.XMLDS_GetString(i,IDCOL );
+		if (itemid == startid ) {
+			var flwid = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;  );
+
+			var itemnam= _this.XMLDS_GetString(i,NAMECOL   );
+			var other_itemid= _this.XMLDS_GetString (i,OTHER_IDCOL );
+			var other_itemnam= _this.XMLDS_GetString (i,OTHER_NAMECOL );
+
+			if ( havedonebilllist.indexOf(other_itemid+&amp;quot;,&amp;quot;)&amp;lt;0  ) {
+				var newhavedone = havedonebilllist+ other_itemid+&amp;quot;,&amp;quot;;// 记录当前操作的billid的列表，避免死循环
+				svg+=this.preparselevel (other_itemid,loopnum +1,newhavedone);
+			}
+
+			nownum ++;		
+		}
+	}
+	return svg;
+}
+
+// 工作流 
+// SVGWORKFLW(sheetprocess,sheetaction)
+// xml: xmlds描述的数据字符串
+// mwid:  中间件编号	
+// title: 标题 如果为空，=ROOT
+function SVGWORKFLW(sheetprocess,sheetaction,mwid)
+{
+	this.m_width  = 80;	// 节点的宽度
+	this.m_height = 40;  	// 节点的高度
+	this.m_sheetprocess= sheetprocess;
+	this.m_sheetaction= sheetaction;
+	this.m_mwid = mwid;
+	this.m_x0     = 400;	// 开始节点的中心位置
+	this.m_y0     = 50;		
+	this.m_dwidth = 120;	// 增加一层展开的位置
+	this.m_dheight= 70;		
+	this.m_title = &amp;quot;流程图&amp;quot;;
+	this.m_menuid = -1 ;
+	this.m_itemnum = 0;	// 图元个数
+	this.m_grdtyp =&amp;quot;B&amp;quot;;
+	// 层的颜色列表如果超过循环
+	this.m_color = new Array (&amp;quot;#00cc99&amp;quot;,&amp;quot;#C2CC0D&amp;quot;,&amp;quot;#71CC16&amp;quot;,&amp;quot;#FFFFCC&amp;quot;,&amp;quot;#FFCCFF&amp;quot;,&amp;quot;#66FFCC&amp;quot;,&amp;quot;#CC6744&amp;quot;, &amp;quot;#FF9966&amp;quot;,&amp;quot;#C2A00D&amp;quot;,&amp;quot;#71A216&amp;quot;,&amp;quot;#66FFCC&amp;quot;);	
+	this.m_color1 = new Array (&amp;quot;#0D767E&amp;quot;,&amp;quot;#CC68CC&amp;quot;,&amp;quot;#006600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#CC6744&amp;quot;,&amp;quot;#669999&amp;quot;,&amp;quot;#880000&amp;quot;, &amp;quot;#FF6600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#666633&amp;quot;,&amp;quot;#66FF99&amp;quot;);	
+	
+	this.load = SVGWORKFLW_load;			// 重新载入
+	//this.parselevel= SVGWORKFLW_parselevel;		// 递归
+}
+
+// 解析重新生成svgchar
+function SVGWORKFLW_load()
+{
+	if ( _this.GetReleaseNo()&amp;lt;&amp;quot;4.42&amp;quot;) {
+		alert ( &amp;quot;要正确显示图表，要求您的控件在4.42以上，请升级 您的硕格控件&amp;quot; );
+		return;
+	}
+	_this.XMLDS_Parse(this.m_xml);
+	// 根据xmlds得到一个svg图的xml字符串
+	var svg= &amp;quot;&amp;quot;;
+	svg = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt;&amp;lt;svg  &amp;gt;  &amp;quot;;//bgcolor=\&amp;quot;#D3E5FA\&amp;quot; 
+	var s1 =this.m_sheetprocess;
+	var s2 = this.m_sheetaction;
+	
+	for ( var row=6;row&amp;lt;_this.GetRowCount(s1)-1;row++) {
+		var processid = _this.GetCellText(s1,row,1);
+		if ( processid != &amp;quot;&amp;quot; ) {
+			var name = _this.GetCellText(s1,row,2);
+			var note = _this.GetCellText(s1,row,3);
+			var gid = &amp;quot;PROCESS&amp;quot;+&amp;quot;:&amp;quot;+processid  ; 	
+			svg += &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  fill=\&amp;quot;&amp;quot;+this.m_color[row%this.m_color.length]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(this.m_x0-this.m_width/2) +&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(this.m_y0-this.m_height/2+((row-6))*this.m_dheight)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+this.m_width+&amp;quot;\&amp;quot;  height=\&amp;quot;&amp;quot;+this.m_height+&amp;quot;\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;&amp;quot;+this.m_menuid+&amp;quot;\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+this.m_mwid+&amp;quot;&amp;processid=&amp;quot;+processid  +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+processid +name+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+			svg += &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;ret\&amp;quot;  fill=\&amp;quot;#FFFFFF\&amp;quot; stroke=\&amp;quot;#FFFFFF\&amp;quot; x=\&amp;quot;&amp;quot;+(this.m_x0-this.m_width/2+this.m_width+8) +&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(this.m_y0-this.m_height/2+((row-6))*this.m_dheight+this.m_height-2)+&amp;quot;\&amp;quot; width=\&amp;quot;2\&amp;quot;  height=\&amp;quot;2\&amp;quot; &amp;gt;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+		}
+	}
+	for ( var row=6;row&amp;lt;_this.GetRowCount(s2)-1;row++) {
+		var actionid = _this.GetCellText(s2,row,1);
+		if ( actionid != &amp;quot;&amp;quot; ) {
+			var name = _this.GetCellText(s2,row,2);
+			var srcid = _this.GetCellText(s2,row,4);
+			var destid = _this.GetCellText(s2,row,5);
+			var where = _this.GetCellText(s2,row,6);
+			var srcrow = 1;// 计算srcid的顺序号
+			for ( var r=6;r&amp;lt;_this.GetRowCount(s1)-1;r++) {
+				if( _this.GetCellText(s1,r,1)== srcid ) {srcrow = r-6+1;break;}
+			}
+			var destrow = 1;// 计算srcid的顺序号
+			for ( var r=6;r&amp;lt;_this.GetRowCount(s1)-1;r++) {
+				if( _this.GetCellText(s1,r,1)== destid ) {destrow = r-6+1;break;}
+			}
+			var fromcp = &amp;quot;32&amp;quot;;
+			var tocp = &amp;quot;12&amp;quot;;
+			var tipx = 0;
+			var tipy = 0;
+			var tipw = 0;
+			var tiph = 0;
+			var ifret= &amp;quot;&amp;quot;;
+			var toid = &amp;quot;PROCESS:&amp;quot;+destid;
+			var arrowtype = &amp;quot;208&amp;quot;;
+			// 从上到下，字体放在中间
+			if ( destrow ==srcrow+1 ) { fromcp = &amp;quot;23&amp;quot;; tocp = &amp;quot;21&amp;quot; ; tipx = this.m_x0;tipy = this.m_y0+(srcrow-1)*this.m_dheight+20; tipw=this.m_width;tiph=this.m_dheight-this.m_height; }
+			// 从下到上
+			if ( srcrow==destrow +1 ) { toid = &amp;quot;PROCESS:&amp;quot;+destid+&amp;quot;ret&amp;quot;;fromcp = &amp;quot;32&amp;quot;; tocp = &amp;quot;32&amp;quot; ; tipx = this.m_x0+this.m_width-10;tipy = this.m_y0+(srcrow-1)*this.m_dheight-20; tipw=this.m_width;tiph=this.m_dheight-this.m_height; }
+			// 从上到下跨越2个
+			//if ( destrow -srcrow&amp;gt;1 ) { fromcp = &amp;quot;32&amp;quot;; tocp = &amp;quot;32&amp;quot; ; tipx = this.m_x0-this.m_width*2;tipy = this.m_y0+(srcrow+(destrow -srcrow-2))*this.m_dheight+10; tipw=this.m_width;tiph=this.m_dheight-this.m_height; }
+			if ( destrow -srcrow&amp;gt;1 ) {fromcp = &amp;quot;12&amp;quot;; tocp = &amp;quot;12&amp;quot; ; tipx = this.m_x0-this.m_width*1.5;tipy =  this.m_y0+(srcrow-1)*this.m_dheight-20; tipw=this.m_width;tiph=this.m_dheight-this.m_height; }
+
+			// 从下到上跨越2个
+//			if ( srcrow -destrow&amp;gt;1 ) { fromcp = &amp;quot;12&amp;quot;; tocp = &amp;quot;12&amp;quot; ;tipx = this.m_x0+this.m_width;tipy = this.m_y0+(destrow -srcrow-1)*this.m_dheight+10; tipw=this.m_width;tiph=this.m_dheight-this.m_height;}
+			if ( srcrow -destrow&amp;gt;1 ) {arrowtype =&amp;quot;108&amp;quot;;toid=&amp;quot;TEXT&amp;quot;+srcid+destid ; fromcp = &amp;quot;32&amp;quot;; tocp = &amp;quot;12&amp;quot; ; tipx = this.m_x0+this.m_width;tipy =  this.m_y0+(srcrow-1)*this.m_dheight+this.m_height-20; tipw=this.m_width;tiph=this.m_dheight-this.m_height; }
+
+
+			svg += &amp;quot;&amp;lt;connector from=\&amp;quot;PROCESS:&amp;quot;+srcid +&amp;quot;\&amp;quot;  to=\&amp;quot;&amp;quot;+toid+&amp;quot;\&amp;quot; fromcp=\&amp;quot;&amp;quot;+fromcp+&amp;quot;\&amp;quot; tocp=\&amp;quot;&amp;quot;+tocp+&amp;quot;\&amp;quot; type=\&amp;quot;&amp;quot;+arrowtype +&amp;quot;\&amp;quot;  id=\&amp;quot;connector_&amp;quot;+srcid +&amp;quot;_&amp;quot;+destid+&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot;/&amp;gt;&amp;quot;;	 						
+			// 数据流热点
+			svg += &amp;quot;&amp;lt;text id=\&amp;quot;TEXT&amp;quot;+srcid+destid +&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(tipx)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(tipy)+&amp;quot;\&amp;quot;  width=\&amp;quot;&amp;quot;+tipw +&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+tiph +&amp;quot;\&amp;quot;  align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;middle\&amp;quot; menuid=\&amp;quot;&amp;quot;+this.m_menuid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name +&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+
+		}
+	}
+	
+	svg+=&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	return svg;
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

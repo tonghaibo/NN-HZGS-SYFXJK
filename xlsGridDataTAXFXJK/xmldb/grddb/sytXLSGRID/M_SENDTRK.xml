@@ -1,0 +1,396 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>Q</MWTYP><MWID>M_SENDTRK</MWID><NAME>移动商务-我发出的事务</NAME><NOTE></NOTE><FILE>M_SENDTRK.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>build</ID><NAME>新建事务</NAME><TIP></TIP><BTNORD>1</BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID>prio</ID><NAME>优先级</NAME><NOTNULL></NOTNULL><KEYVAL>V_PRIO</KEYVAL><INPCTL>list</INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL>0</DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="1" ><ID>s</ID><NAME>事务状态</NAME><NOTNULL>0</NOTNULL><KEYVAL>V_S</KEYVAL><INPCTL>list</INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="2" ><ID>prj</ID><NAME>项目</NAME><NOTNULL></NOTNULL><KEYVAL>V_PRJ</KEYVAL><INPCTL>list</INPCTL><DISPORD></DISPORD><SQLWHE>guid in ( select prjusr.prj from prjusr,usr where usr.guid=prjusr.usr and usr.id=&amp;apos;[%SYS_USRID]&amp;apos; )</SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="3" ><ID>title</ID><NAME>主题关键字</NAME><NOTNULL></NOTNULL><KEYVAL></KEYVAL><INPCTL></INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="4" ><ID>finkey</ID><NAME>事务类别</NAME><NOTNULL></NOTNULL><KEYVAL>V_FINKEY</KEYVAL><INPCTL>list</INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="5" ><ID>trktyp</ID><NAME>事务类型</NAME><NOTNULL></NOTNULL><KEYVAL>V_TRKTYP</KEYVAL><INPCTL>list</INPCTL><DISPORD>6</DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+<ROW num="6" ><ID>dtlusr</ID><NAME>处理人</NAME><NOTNULL></NOTNULL><KEYVAL>V_USR</KEYVAL><INPCTL>list</INPCTL><DISPORD></DISPORD><SQLWHE></SQLWHE><DEFVAL></DEFVAL><TIP></TIP><EDTFLG>1</EDTFLG><VISFLG>1</VISFLG><KEYFLG></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID>0,1,0</ID><NAME></NAME><DBNAME></DBNAME><DSKEY>DSC:DETAIL</DSKEY><NROW>14</NROW><NCOL>3</NCOL><ISMAIN>1</ISMAIN><ISCROSS></ISCROSS><HCOLS></HCOLS><VCOLS></VCOLS><VALUECOL></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0;
+var p = &amp;quot;&amp;quot;;//事务编号
+var t = &amp;quot;&amp;quot;;//标题
+var r = 0;//事务序列号
+var flag = &amp;quot;&amp;quot;;
+var rowno = 0;//单击选择框时选中的行数
+var dd = &amp;quot;0&amp;quot;;
+var a = true;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/07/06 16:57:23
+// 修改日志：
+//================================================================//  
+function _thisOnpost_loaddata(sheet)  
+{ 
+        // _this.SetMainCellRange(sheet,2,1,15,11);  
+         _this.SetCellBkColor(0,-1,-1,255,255,255); 
+         _this.SetFixedCol(sheet,1);  
+         _this.SetFixedRow(sheet,2);  
+         _this.SetColVisible(sheet,11,-1);
+         _this.SetColVisible(sheet,1,-1);
+	 _this.SetColVisible(sheet,2,-1);	
+	 _this.SetColVisible(sheet,4,-1);	
+	// _this.SetColVisible(sheet,5,-1);	
+	 _this.SetColVisible(sheet,6,-1);
+	 _this.SetColVisible(sheet,7,-1);
+	 _this.SetColVisible(sheet,8,-1);
+	_this.SetColVisible(sheet,10,-1);
+
+
+         _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW_CHECKBOX);       
+         var row1 = _this.GetMainCellRangeRow1(sheet);  
+         var row2 = _this.GetMainCellRangeRow2(sheet); 
+         for (var i=row1;i&amp;lt;=row2;i++)
+         {
+                var sname = _this.GetCellText(sheet,i,6);
+                if ( sname == &amp;quot;处理中&amp;quot; )
+                {
+                      _this.SetCellColor(sheet,i,6,255,0,0); //red
+                }
+                else if ( sname == &amp;quot;处理完&amp;quot;)
+                {
+                      _this.SetCellColor(sheet,i,6,0,255,0);//green
+
+                }
+                else if ( sname ==&amp;quot;已处理&amp;quot;)
+                {
+                      _this.SetCellColor(sheet,i,6,0,0,255);
+                }            
+         }
+         if ( a )
+         {
+               document.all(&amp;quot;searchbut&amp;quot;).click();  
+               a = false;
+         }
+
+} 
+//================================================================//   
+// 函数：build 
+// 说明：新建事务按钮 
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/19/06 16:46:02  
+// 修改日志：
+//================================================================//   
+function build() 
+{ 
+      var url = &amp;quot;ShowXlsGrid.sp?grdid=ESTYLE&amp;edit=&amp;quot;+&amp;quot;save&amp;quot;+&amp;quot;&amp;dd=&amp;quot;+dd; 
+      //var url = &amp;quot;ShowXlsGrid.sp?grdid=NEWTYP&amp;edit=&amp;quot;+&amp;quot;save&amp;quot;; 
+      window.open( url ,&amp;quot;事务类型&amp;quot;,&amp;quot;WIDTH=765,HEIGHT=515,left=0,top=0,toolbar=no,menu=no,status=yes&amp;quot;);  
+
+} 
+
+//================================================================// 
+// 函数：deltrk
+// 说明：删除记录
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/22/06 16:23:19
+// 修改日志：
+//================================================================// 
+function deltrk() 
+{ 
+        if ( flag &amp;&amp; (p != &amp;quot;&amp;quot; || p.length != 0)) 
+        {       
+               QuerySQLDS(&amp;quot;select name from v_usr where id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos; and orgid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;);
+               var usrname = _this.XMLDS_GetString(0,&amp;quot;name&amp;quot;);
+               if ( _this.GetCellText(sheet,rowno,8) == usrname)
+               {
+	               if ( confirm(&amp;quot;确认删除事务&amp;lt;-&amp;quot;+p+&amp;quot;-&amp;gt;吗？&amp;quot;) == 1 )  
+	               { 
+	                    QuerySQLDS(&amp;quot;delete from trkhdr where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);  
+	                    QuerySQLDS(&amp;quot;delete from trkdtl where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);                     
+	                    document.all(&amp;quot;searchbut&amp;quot;).click(); 
+	                    window.location.reload();//重新刷新，防止删除掉最后一条时页面依然保留数据
+	                } 
+                }
+                else
+                {
+                	alert (&amp;quot;您不是事务创建者，不能删除该事务！&amp;quot;);
+                	return ;
+                }                   
+        } 
+        else
+        {
+              alert (&amp;quot;未选中事务！&amp;quot;);
+              return ;
+         }          
+}  
+
+//================================================================//  
+// 函数：_thisOnMouseLClick
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/07/06 16:57:17 
+// 修改日志：
+//================================================================//   
+function _thisOnMouseLClick(sheet,row,col)
+{
+
+     var project = _this.GetCellText(sheet,row,1);
+     var title = _this.GetCellText(sheet,row,3);
+     var retitle = _this.GetCellText(sheet,row,4);
+     var row1 = _this.GetMainCellRangeRow1(sheet);
+     var row2 = _this.GetMainCellRangeRow2(sheet);
+     if ( clickMianCell(sheet,row,col) )
+     {
+          if ( project == &amp;quot;&amp;quot; || project.length == 0 )
+          {
+                return ;
+          }
+          else
+          {
+                r = _this.GetCellText(sheet,row,2);  //事务序列号
+                crtusr = _this.GetCellText(sheet,row,8);
+                var endusr = _this.GetCellText(sheet,row,10);
+                var show = _this.GetCellText(sheet,row,11);
+                QuerySQLDS(&amp;quot;select retflg,trsflg,toptyp,sendto from trktyp where id=&amp;apos;&amp;quot;+show+&amp;quot;&amp;apos;&amp;quot;);
+                var retflg = _this.XMLDS_GetString(0,&amp;quot;retflg&amp;quot;);
+                var trsflg = _this.XMLDS_GetString(0,&amp;quot;trsflg&amp;quot;);
+                var toptyp =  _this.XMLDS_GetString(0,&amp;quot;toptyp&amp;quot;);
+                var sendto = _this.XMLDS_GetString(0,&amp;quot;sendto&amp;quot;);
+                trsflg = trsflg.RTrim();
+                retflg = retflg.RTrim();
+                toptyp = toptyp.RTrim();
+                sendto = sendto.RTrim();
+               // var url = &amp;quot;ShowXlsGrid.sp?grdid=TRKCHECK&amp;project=&amp;quot;+project+&amp;quot;&amp;num=&amp;quot;+r+&amp;quot;&amp;user=&amp;quot;+crtusr+&amp;quot;&amp;show=&amp;quot;+show;
+                //var url = &amp;quot;ShowXlsGrid.sp?grdid=M_TRKCHECK&amp;project=&amp;quot;+project+&amp;quot;&amp;num=&amp;quot;+r+&amp;quot;&amp;user=&amp;quot;+crtusr+&amp;quot;&amp;retflg=&amp;quot;+retflg+&amp;quot;&amp;trsflg=&amp;quot;+trsflg+&amp;quot;&amp;toptyp=&amp;quot;+toptyp+&amp;quot;&amp;show=&amp;quot;+show+&amp;quot;&amp;sendto=&amp;quot;+sendto; 
+                var url = &amp;quot;ShowXlsGrid.sp?trkid=&amp;quot;+r;
+                window.open( url ,&amp;quot;&amp;quot;,&amp;quot;WIDTH=1010,HEIGHT=650,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;); 
+
+          }
+     }
+
+
+   
+     var project = _this.GetCellText(sheet,row,1); 
+     var title = _this.GetCellText(sheet,row,3);  
+     var retitle = _this.GetCellText(sheet,row,4);  
+     var row1 = _this.GetMainCellRangeRow1(sheet);  
+     var row2 = _this.GetMainCellRangeRow2(sheet); 
+     if ( row&amp;gt;=row1&amp;&amp;row&amp;lt;=row2&amp;&amp;col==0 )  //点击单选框 
+     {                                       
+           if ( _this.SetRowSelected(sheet,row,1) == 0 )    //=0被选中  
+           { 
+                 p = project;//赋值给全局变量 
+                 t = title; //赋值给全局变量  
+           } 
+           flag = true ; 
+           r = _this.GetCellText(sheet,row,2);  //事务序列号 
+           rowno = row;//rowno保存行号
+     } 
+     
+}
+
+//================================================================// 
+// 函数：close
+// 说明：关闭事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/15/06 15:16:37
+// 修改日志：
+//================================================================// 
+function close()
+{
+      var show_id = _this.GetCellText(sheet,rowno,11);
+      QuerySQLDS(&amp;quot;select endflg from trktyp where id=&amp;apos;&amp;quot;+show_id+&amp;quot;&amp;apos;&amp;quot;);
+      var endflg = _this.XMLDS_GetString(0,&amp;quot;endflg&amp;quot;);
+      endflg = endflg.RTrim();
+      QuerySQLDS(&amp;quot;select name from v_user where id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos;&amp;quot;);
+      var usrname = _this.XMLDS_GetString(0,&amp;quot;name&amp;quot;);
+      if ( endflg == &amp;quot;0&amp;quot; )  //只能由事务创建者关闭事务
+      {
+            if ( p == &amp;quot;&amp;quot; || p.length == 0 )
+            {
+                  alert (&amp;quot;未选中事务！&amp;quot;);
+                  return ;
+            }
+           else
+           {
+                  if ( _this.GetCellText(sheet,rowno,8) == usrname )
+                  {
+                        QuerySQLDS(&amp;quot;update trkhdr set stat=&amp;apos;处理完&amp;apos; where project = &amp;apos;&amp;quot;+p+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);
+                        QuerySQLDS(&amp;quot;update trkdtl set style=&amp;apos;处理完&amp;apos; where project = &amp;apos;&amp;quot;+p+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);
+                        document.all(&amp;quot;searchbut&amp;quot;).click();   
+                        alert (&amp;quot;该事务已关闭！&amp;quot;);
+                        window.location.reload();     
+                  }  
+                  else 
+                  {
+                        alert (&amp;quot;该事务不是由您创建，不能关闭该事务！&amp;quot;);
+                        return ;
+                  }
+           }
+     }
+     else if ( endflg ==&amp;quot;1&amp;quot;)
+     {
+           alert (&amp;quot;不可关闭事务！&amp;quot;);
+           return ;
+     }
+}
+//================================================================// 
+// 函数：edit
+// 说明：修改未被处理的事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/18/06 13:14:38
+// 修改日志：
+//================================================================// 
+function edit()
+{
+      if ( p == &amp;quot;&amp;quot; || p.length == 0 )
+      {
+            alert (&amp;quot;未选中事务！&amp;quot;);
+            return ;
+      }     
+      else 
+      {
+            if ( _this.GetCellText(sheet,rowno,6) == &amp;quot;新建&amp;quot; )  //只有新建的未被处理的事务才可修改
+            {
+                  var estyle = _this.GetCellText(sheet,rowno,4);
+                  QuerySQLDS(&amp;quot;select id from v_trktyp where name=&amp;apos;&amp;quot;+estyle+&amp;quot;&amp;apos;&amp;quot;);
+                  var show_id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;); 
+                  var url = &amp;quot;ShowXlsGrid.sp?grdid=HDRTRK&amp;edit=&amp;quot;+&amp;quot;modify&amp;quot;+&amp;quot;&amp;id=&amp;quot;+r+&amp;quot;&amp;style=&amp;quot;+show_id+&amp;quot;&amp;dd=&amp;quot;+dd; 
+                  window.open( url ,&amp;quot;新建事务&amp;quot;,&amp;quot;WIDTH=900,HEIGHT=650,left=0,top=0,toolbar=no,menu=no,status=yes&amp;quot;);  
+            }
+            else
+                  alert (&amp;quot;本事务已被处理，不能修改！&amp;quot;);
+      }         
+}
+//================================================================//  
+// 函数：clickMianCell 
+// 说明：判断鼠标点击的范围是主数据区 
+// 参数： 
+// 返回： bool 
+// 样例： 
+// 作者： 
+// 创建日期：11/18/06 16:45:03 
+// 修改日志：
+//================================================================//  
+function clickMianCell(sheet,row,col)
+{
+      return row&amp;gt;=_this.GetMainCellRangeRow1(sheet)&amp;&amp;row&amp;lt;=_this.GetMainCellRangeRow2(sheet)&amp;&amp;col&amp;gt;=_this.GetMainCellRangeCol1(sheet)&amp;&amp;col&amp;lt;=_this.GetMainCellRangeCol2(sheet);
+}
+//================================================================// 
+// 函数：refreshSheet
+// 说明：刷新自身
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/31/06 14:19:01
+// 修改日志：
+//================================================================// 
+function refreshSheet()
+{
+      window.location.reload();
+}
+//================================================================// 
+// 函数：expTable
+// 说明：相同事务类型的事务导出到一张表格
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/09/07 09:06:59
+// 修改日志：
+//================================================================// 
+function expTable()
+{
+     var r1 = _this.GetMainCellRangeRow1(sheet);
+     var r2 = _this.GetMainCellRangeRow2(sheet);
+     var trkid = &amp;quot;&amp;quot;;
+     var trktyp = &amp;quot;&amp;quot;;
+     var trkusr = &amp;quot;&amp;quot;;
+     var temp = &amp;quot;&amp;quot;;
+     for (var i=r1;i&amp;lt;=r2;i++)
+     {
+            trkid += _this.GetCellText(sheet,i,2)+&amp;quot;,&amp;quot;;//事务编号
+            trktyp += _this.GetCellText(sheet,i,4)+&amp;quot;,&amp;quot;;//事务类型
+            trkusr += _this.GetCellText(sheet,i,5)+&amp;quot;,&amp;quot;;//处理人
+     
+     }
+//     temp = trkusr.split(&amp;quot;,&amp;quot;);
+//     for ( var i=0;i&amp;lt;temp.length;i++)
+//     {        
+//           if ( temp[i+1] == &amp;quot;&amp;quot; ) break;
+//           if ( temp[i] != temp[i+1])
+//           {
+//                 alert (temp[i]);
+//                 alert (&amp;quot;不能导出！&amp;quot;);
+//                 return ;
+//           }
+//     }
+     var index = trkid.lastIndexOf(&amp;quot;,&amp;quot;);  //得到最后一个“，”的位置值
+     trkid = trkid.substring(0,index);   
+     var url = &amp;quot;ShowXlsGrid.sp?grdid=EXPFORM&amp;quot;+&amp;quot;&amp;trkid=&amp;quot;+trkid;
+     window.open( url ,&amp;quot;事务导出&amp;quot;,&amp;quot;WIDTH=1000,HEIGHT=800,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;); 
+    
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID>DETAIL</ID><NAME></NAME><DATDSC>select a.title,a.dtlusr,to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat
+,&amp;apos;show.sp?grdid=M_TRKCHECK&amp;trkid=&amp;apos;||a.id URL_TITLE
+from trkhdr a,trkdtl b ,v_usr c ,v_prj d ,trktyp e where a.guid=b.trkguid(+) 
+and c.id=&amp;apos;[%SYS_USRID]&amp;apos;
+and a.show=e.id
+and a.project=d.id
+and a.crtusr = c.name
+and a.prio like &amp;apos;%[%prio]%&amp;apos;
+and d.id like &amp;apos;[%prj]%&amp;apos;   
+and a.stat like &amp;apos;%[%s]%&amp;apos;
+and a.title like &amp;apos;%[%title]%&amp;apos;
+and e.finkey like &amp;apos;%[%finkey]%&amp;apos;
+and e.id like &amp;apos;[%trktyp]%&amp;apos; 
+--and a.dtlusr like &amp;apos;[%dtlusr]%&amp;apos;
+and a.dtlusr like decode(&amp;apos;%&amp;apos;,&amp;apos;[%dtlusr]%&amp;apos;,&amp;apos;[%dtlusr]%&amp;apos;,(select name from v_usr where id like &amp;apos;[%dtlusr]%&amp;apos;))
+order by crtdat desc
+
+</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

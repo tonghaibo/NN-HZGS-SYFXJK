@@ -1,0 +1,566 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >MsgView</MWID><NAME >消息管理</NAME><NOTE ></NOTE><FILE >MsgView.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/xlsevent.js,xlsgrid/js/xlscel.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var nRefreshTime = 30000;//30秒钟刷新一次
+var page0 = 1;
+var nrow0= 10;
+var pagecnt0 = 0;
+var page1 = 1;
+var nrow1= 10;
+var pagecnt1 = 0;
+
+// 初始化，查询和新增
+function init()
+{
+  //_this.AddToolbarButton(&amp;quot;udf_reload&amp;quot;,&amp;quot;刷新&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,1,0,50);
+  _this.SetRedraw(0);
+   var itemmenu =&amp;quot;&amp;lt;folder name=\&amp;quot;按条件按查询\&amp;quot;&amp;gt;&amp;lt;item name=\&amp;quot;查询所有发信人[&amp;1]\&amp;quot; id=\&amp;quot;m_find_allsenduser\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;查询系统管理员发出的信息[&amp;2]\&amp;quot; id=\&amp;quot;m_find_xlsgridsenduser\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;查询某个发信人[&amp;3]\&amp;quot; id=\&amp;quot;m_find_onesenduser\&amp;quot;/&amp;gt;&amp;lt;/folder&amp;gt;&amp;lt;item name=\&amp;quot;刷新[&amp;0]\&amp;quot; id=\&amp;quot;udf_reload\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;设置刷新时间[&amp;T]\&amp;quot; id=\&amp;quot;udf_settimeout\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;删除[&amp;F]\&amp;quot; id=\&amp;quot;com_delete\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;上一页[&amp;F]\&amp;quot; id=\&amp;quot;com_prev\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;下一页[&amp;F]\&amp;quot; id=\&amp;quot;com_next\&amp;quot;/&amp;gt;&amp;quot;;
+  _this.AddToolbarButton(&amp;quot;com_toolbar_more&amp;quot;, &amp;quot;更多&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot; , 3,1,0,50);
+//   var itemmenu =&amp;quot;&amp;lt;item name=\&amp;quot;刷新[&amp;0]\&amp;quot; id=\&amp;quot;udf_reload\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;设置刷新时间[&amp;T]\&amp;quot; id=\&amp;quot;udf_settimeout\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;删除[&amp;F]\&amp;quot; id=\&amp;quot;com_delete\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;上一页[&amp;F]\&amp;quot; id=\&amp;quot;com_prev\&amp;quot;/&amp;gt;&amp;lt;item name=\&amp;quot;下一页[&amp;F]\&amp;quot; id=\&amp;quot;com_next\&amp;quot;/&amp;gt;&amp;quot;;
+  _this.AddToolbarButton(&amp;quot;com_toolbar_mymenu&amp;quot;, &amp;quot;操作&amp;quot;,&amp;quot;&amp;quot;, itemmenu , 3,1,0,50);
+  
+  _this.ShowTabBar(1);
+  _this.ShowToolBar(1);
+  /*
+  _this.SetCellBkColor(0,-1,-1,0xEF,0xF7,0xFF);
+  _this.SetCellBkColor(1,-1,-1,0xEF,0xF7,0xFF);
+  _this.SetCellBkColor(2,-1,-1,0xEF,0xF7,0xFF);
+
+  */
+  _this.SetCellBkColor(0,-1,-1,255,255,255);
+  _this.SetCellBkColor(1,-1,-1,255,255,255);
+  _this.SetCellBkColor(2,-1,-1,255,255,255);
+
+  _this.LoadScene(2,10);
+  _this.ShowSheet(1);
+  _this.SetSheetName(1,&amp;quot;我的消息&amp;quot;);
+  _this.HideSheet(0);
+  _this.SetRedraw(1);  
+}
+// callfunc=AddMsg表示只显示增加消息的功能
+function AddMsg()
+{
+  
+  _this.ShowTabBar(1);
+  _this.ShowToolBar(1);
+  _this.SetToBoolBox(2,6,3);
+  _this.SetCellBkColor(0,-1,-1,255,255,255);
+  _this.SetCellBkColor(1,-1,-1,255,255,255);
+  _this.SetCellBkColor(2,-1,-1,255,255,255);
+
+  _this.LoadScene(2,10);
+  _this.HideSheet(1);
+  _this.HideSheet(0);
+  _this.ShowSheet(2);
+  try{_this.SetCellText(2,3,2,title);}catch(e){}
+  
+}
+
+function reload()
+{
+  //查询数据
+  try
+  {
+    //loadmsg(0,1,0);
+    loadmsg(0,1,1);
+  }
+  catch(e)
+  {
+    //alert(&amp;quot;loadmsg error:&amp;quot;+e.message);
+  }
+  setTimeout(&amp;quot;reload();&amp;quot;,nRefreshTime );
+
+}
+
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：初始化界面
+// 参数：
+// 返回：
+// 样例：
+// 作者：gld
+// 创建日期：11/29/05 14:21:46
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+  //var IMG_READED;      // 已读的图片
+  //var IMG_NOTREADED;   // 未读的图片
+  //IMG_READED = _this.LoadImage(&amp;quot;xlsgrid/image/toolbar/search.gif&amp;quot;);    
+  //IMG_NOTREADED = _this.LoadImage(&amp;quot;xlsgrid/image/toolbar/flwimg.gif&amp;quot;);    
+  
+  //_this.SetToRichEdit(&amp;quot;&amp;quot;,1,3,2,&amp;quot;&amp;quot;);
+  _this.SetToSelectBox(&amp;quot;&amp;quot;,2,1,2,&amp;apos;V_ALLUSR&amp;apos;,&amp;apos;&amp;apos; ); 
+  //_this.SetToSelectBox(&amp;quot;&amp;quot;,2,3,2,&amp;apos;ORG&amp;apos;,&amp;apos;&amp;apos; ); 
+  var where = &amp;quot;ID=&amp;apos;XLSGRID&amp;apos;&amp;quot;;
+  var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=ORG&amp;where=&amp;quot;+where),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);//查找所属项目的人员
+	//alert(listid0);
+  _this.SetTocomboBox(&amp;quot;&amp;quot;,2,3,2,listid0 );
+  _this.SetToRichEdit(&amp;quot;&amp;quot;,2,7,1,&amp;apos;&amp;apos;);
+  _this.SetCellText(2,9,2,&amp;quot;&amp;quot;);
+  _this.SetCellText(2,9,4,&amp;quot;&amp;quot;);
+  _this.SetToButton(&amp;quot;udf_okbtn&amp;quot;,2,9,2,&amp;quot;发送&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+  _this.SetToButton(&amp;quot;udf_cancelbtn&amp;quot;,2,9,4,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+
+  _this.LoadScene(0,4);
+  _this.LoadScene(1,4);
+  _this.SetFixedCol(0,1);
+  _this.SetFixedRow(0,0);
+  _this.SetFixedCol(1,1);
+  _this.SetFixedRow(1,0);
+
+  reload();
+  
+  
+  _this.Redraw(); 
+  
+}
+
+//================================================================// 
+// 函数：loadmsg
+// 说明：
+// 参数：allmsg：1，所有消息；0：未阅读的消息
+//      subtyp: 消息类型：0＝公共消息；1=个人消息
+// 返回：
+// 样例：
+// 作者：gld
+// 创建日期：11/29/05 14:57:44
+// 修改日志：
+//================================================================// 
+var uisheet=0;
+var titlecols=3;
+function loadmsg(allmsg,sheet,subtyp)
+{
+
+  _this.SetSheetMargin(sheet,5,5,5,5);
+  _this.SetRowCount(sheet,1);
+  _this.SetColCount(sheet,11);
+
+  _this.SetColWidth(sheet,0,20);  
+  _this.SetCellColor(sheet,0,0,0x7F,0x9D,0xB9);
+  _this.SetColWidth(sheet,1,160);  
+  _this.SetColWidth(sheet,2,40);  
+  //_this.SetToBoolBox(sheet,0,0);
+  _this.SetColVisible(sheet,3,0);
+  _this.SetColVisible(sheet,4,0);
+  _this.SetColVisible(sheet,5,0); 
+  _this.SetColVisible(sheet,6,0); 
+  _this.SetColVisible(sheet,7,0); 
+  _this.SetColVisible(sheet,8,0); 
+  _this.SetColVisible(sheet,9,0); 
+  _this.SetColVisible(sheet,10,0); 
+  for( var col=0;col&amp;lt;3;col++){
+        _this.SetCellBkColor(sheet,0,col,0xEF,0xF7,0xFF);
+        _this.SetCellLeftBorderColor(sheet,0,col,0xFF,0xFF,0xFF);
+        _this.SetCellTopBorderColor(sheet,0,col,0xFF,0xFF,0xFF);
+        _this.SetCellRightBorderColor(sheet,0,col,0xFF,0xFF,0xFF);
+        _this.SetCellBottomBorderColor(sheet,0,col,0xFF,0xFF,0xFF);
+  }
+
+  _this.SetCellHAlign(sheet,0,1,0);  
+
+  uisheet = sheet; 
+  var pagestr = &amp;quot;&amp;quot;;
+  if ( uisheet == 0)
+        pagestr=&amp;quot;&amp;page=&amp;quot;+page0+&amp;quot;&amp;nrow=&amp;quot;+nrow0+&amp;quot;&amp;pagecnt=&amp;quot;+pagecnt0;
+  else if ( uisheet == 1)
+        pagestr=&amp;quot;&amp;page=&amp;quot;+page1+&amp;quot;&amp;nrow=&amp;quot;+nrow1+&amp;quot;&amp;pagecnt=&amp;quot;+pagecnt1;
+  var xml = &amp;quot;&amp;quot;;
+  try {
+  	xml= invokeOSFunc(&amp;quot;getUsrMsg&amp;quot;,&amp;quot;usrid=&amp;quot;+usrid+&amp;quot;&amp;allmsg=&amp;quot;+allmsg+&amp;quot;&amp;subtyp=&amp;quot;+subtyp+pagestr);
+  }
+  catch ( e ) {
+  	alert ( e );
+  }
+
+  if(xml!=&amp;quot;&amp;quot;)
+  {
+    var row=0;
+    _this.XMLDS_Parse(xml);
+    c = _this.XMLDS_GetRowCount();
+    if ( c == 0 ) {
+          _this.XMLDS_AddRow(-1,&amp;quot;&amp;quot;);
+          _this.XMLDS_SetString(0,&amp;quot;dat&amp;quot;,&amp;quot;01/01&amp;quot;);
+          _this.XMLDS_SetString(0,&amp;quot;title&amp;quot;,&amp;quot;系统初始化和试运行通知&amp;quot;);
+          c = 1;
+    }
+    
+    for(i=1;i&amp;lt;c;i++)
+       _this.AppendRow(uisheet,_this.GetRowCount(uisheet)-1);      
+    for(i=0;i&amp;lt;c;i++)
+    {
+
+      var msg=_this.XMLDS_GetString(i,&amp;quot;title&amp;quot;);
+      var crtusrnam=_this.XMLDS_GetString(i,&amp;quot;crtusrnam&amp;quot;);
+      var tim=_this.XMLDS_GetString(i,&amp;quot;tim&amp;quot;);
+      var dat=_this.XMLDS_GetString(i,&amp;quot;dat&amp;quot;);
+      var crtdat=_this.XMLDS_GetString(i,&amp;quot;crtdat&amp;quot;);
+      
+      //var note=_this.XMLDS_GetString(i,&amp;quot;note&amp;quot;);
+      var crtusr=_this.XMLDS_GetString(i,&amp;quot;crtusr&amp;quot;);
+      var guid=_this.XMLDS_GetString(i,&amp;quot;guid&amp;quot;);
+      var url=_this.XMLDS_GetString(i,&amp;quot;url&amp;quot;);
+      _this.SetCellText(uisheet,row,1,&amp;quot;FROM:&amp;quot;+crtusrnam+&amp;quot;\n&amp;quot;+msg)
+      _this.SetCellText(uisheet,row,2,dat+&amp;quot;\n&amp;quot;+tim)
+      //_this.SetCellText(uisheet,row,3,note)      // 说明
+      _this.SetCellText(uisheet,row,4,crtusr)      // 创建人
+      _this.SetCellText(uisheet,row,5,crtdat)      // 创建时间
+      _this.SetCellText(uisheet,row,6,guid)      // GUID
+      _this.SetCellText(uisheet,row,7,msg)      // GUID
+      _this.SetCellText(uisheet,row,8,crtusrnam)      // GUID
+      _this.SetCellText(uisheet,row,9,url)      // GUID
+      _this.SetCellText(uisheet,row,0,row+1)      // GUID
+
+      var tousr=_this.XMLDS_GetString(i,&amp;quot;tousr&amp;quot;);
+      if(tousr!=&amp;quot;&amp;quot;)
+        _this.SetToBoolBox(sheet,row,0);
+      row++;
+//      if ( i &amp;gt; 0 ) 
+  //          _this.AppendRow(uisheet,row);      
+    }
+    
+  }
+}
+
+function okbtn(id)
+{
+  var param = new Object();
+  var ifsms = _this.GetCellText(2,6,3);
+  var msg   = _this.GetCellText(2,5,2);
+  var note = _this.GetCellShowText(2,7,1);
+  var crtusrnam = G_USRNAM;
+  param.msg   = _this.GetCellText(2,5,2);
+  param.tousr = _this.GetCellText(2,1,2);
+  param.ifsms = _this.GetCellText(2,6,3);
+  param.crtusracc = G_ACCID;
+  param.crtusrid  = G_USRID;
+  param.crtusrnam = G_USRNAM;
+  param.org = G_ORGID;
+  param.note = _this.GetCellShowText(2,7,1);
+  
+  var balance = &amp;quot;&amp;quot;;//记录余额
+  var error = &amp;quot;&amp;quot;;//记录发送短信后返回的代码
+  if(ifsms==&amp;quot;1&amp;quot;){
+  	alert(&amp;quot;发送短信&amp;quot;);
+  	var mobiles  = invokeOSFuncExt(&amp;quot;sendSMS&amp;quot;,param);//返回的是查询出所有用户的mobile
+  	alert(mobiles);
+  } 
+}
+
+function cancelbtn(id)
+{
+  _this.SetCurrentSheet(uisheet);
+}
+//================================================================// 
+// 函数：thisOnMouseLClick
+// 说明：察看消息内容
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/16/05 13:24:52
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col)
+{
+      if ( (sheet == 0 ||sheet == 1 )&amp;&amp; col &amp;gt; 0) {
+            var title = _this.GetCellText(sheet,row,7);
+            var usr = _this.GetCellText(sheet,row,8);
+            var dat = _this.GetCellText(sheet,row,5);
+            var guid = _this.GetCellText(sheet,row,6);
+            var url = _this.GetCellText(sheet,row,9);
+            if ( url.length &amp;gt; 0 ){
+                  w = window.open( url,&amp;quot;&amp;quot;,&amp;quot;height=500,width=800,toolbar=yes,location=no,status=yes,resizable=yes,top=50,left=50&amp;quot; );
+            }
+            else {
+                  // 得到消息正文
+                  var note = &amp;quot;无内容&amp;quot;;
+                  try {note=invokeOSFunc(&amp;quot;getOneMsg&amp;quot;,&amp;quot;guid=&amp;quot;+guid);}catch( e ) {}
+                  w = window.open( &amp;quot;&amp;quot; ,&amp;quot;&amp;quot;,&amp;quot;height=500,width=800,toolbar=yes,location=no,status=yes,resizable=yes,top=50,left=50&amp;quot; );
+                  note = note.replace(&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;BR&amp;gt;&amp;quot; );
+                  var str = &amp;quot;&amp;lt;P align=&amp;apos;center&amp;apos;&amp;gt;&amp;lt;font size=&amp;apos;3&amp;apos; color=&amp;apos;#3A77BA&amp;apos;&amp;gt;&amp;quot;+title+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;BR&amp;gt;&amp;lt;font size=&amp;apos;2&amp;apos; color=&amp;apos;#CCCCCC&amp;apos;&amp;gt;发送者：&amp;quot;+usr+&amp;quot;&amp;nbsp;&amp;quot;+dat+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;hr&amp;gt;&amp;lt;font size=&amp;apos;2&amp;apos; color=&amp;apos;#666666&amp;apos;&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+                  try {
+                        w.document.body.innerHTML = str;
+                        w.document.title= &amp;quot;查看消息&amp;quot; ;
+                  }
+                  catch( e ) {
+                        
+                  }
+             }
+      }
+}
+//================================================================// 
+// 函数：thisOnButtonCtrlClick
+// 说明：按钮
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/18/05 22:27:06
+// 修改日志：
+//================================================================// 
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+      if ( id==&amp;quot;com_toolbar_more&amp;quot; ) 
+            window.open( &amp;quot;ROOT_&amp;quot;+accid+&amp;quot;/ShowXlsGrid.sp?sytid=x&amp;grdid=MsgQuery&amp;quot; );
+}
+//================================================================// 
+// 函数：thisOnMenuItemSelect
+// 说明：操作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/18/05 22:30:58
+// 修改日志：
+//================================================================// 
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+      if( menuitemid==&amp;quot;udf_reload&amp;quot; ) {
+            reload();
+      }
+      else if( menuitemid==&amp;quot;udf_settimeout&amp;quot; ) {
+            var ret=prompt(&amp;quot;请输入刷新的时间间隔(秒)&amp;quot;,nRefreshTime/1000);
+            if ( ret&amp;gt;0.1 ) 
+                  nRefreshTime=ret*1000;
+      }
+      else if ( menuitemid== &amp;quot;com_prev&amp;quot; ) {
+            var cursheet = _this.GetCurrentSheet();
+            if (cursheet==0 ) {
+                  if(page0&amp;gt;1 ) {page0--;reload();}
+            }
+            else if ( cursheet == 1 ) 
+                  if(page1&amp;gt;1 ) {page1--;reload();}
+      }
+      else if ( menuitemid==&amp;quot;com_next&amp;quot; ) {
+            var cursheet = _this.GetCurrentSheet();
+            if (cursheet==0 ) {
+                  page0++;reload();
+            }
+            else if ( cursheet == 1 ) {
+                  page1++;reload();
+            }
+      }
+      else if ( menuitemid==&amp;quot;com_delete&amp;quot; ) {
+      
+            if ( confirm( &amp;quot;删除信息，是否继续&amp;quot; ) == 1) {
+               var guidlst=&amp;quot;&amp;quot;;
+               var c = _this.GetRowCount(uisheet);
+               for(var i=0;i&amp;lt;c;i++)
+               {
+                 var chk = _this.GetCellText(uisheet,i,0);
+                 if(chk==1)
+                 {
+                   guidlst+= _this.GetCellText(uisheet,i,6)+&amp;quot;,&amp;quot;;
+                 }
+               }
+               if(guidlst.length &amp;gt;0)
+               {
+               var param = new Object();
+               param.msgs = guidlst;
+               var ret = invokeOSFuncExt(&amp;quot;DelMsg&amp;quot;,param);
+                 if(ret==&amp;apos;1&amp;apos;)
+                 {
+                   alert(&amp;apos;删除成功。&amp;apos;);
+                   reload();
+                 }
+                 else
+                   alert(ret);
+               }
+            }
+      }  
+  
+}
+
+
+//修改单元格内容设置群发的用户id号
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+  if(sheet == 2 &amp;&amp; row == 3 &amp;&amp; col ==2){
+  	//alert(&amp;quot;修改了&amp;quot;+_this.GetCellText(2,3,2));
+  	var org = _this.GetCellText(2,3,2);
+  	var param = new Object();
+  	param.org  = org;
+  	var usrids  = invokeOSFuncExt(&amp;quot;getOrgUsr&amp;quot;,param);
+	_this.SetCellText(2,1,2,usrids);
+
+  }
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//================================================================// 
+// 函数：getUsrMsg
+// 说明：得到某个用户的所有消息列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/12/06 17:43:53
+// 修改日志：
+//================================================================// 
+function getUsrMsg()
+{
+  var sql = &amp;quot;select GUID,to_char(crtdat,&amp;apos;MM/DD&amp;apos;) dat,to_char(crtdat,&amp;apos;hh24:mi&amp;apos;) tim,crtdat,crtusr,crtusracc,trim(crtusrnam) crtusrnam,title,url,tousr from msg where &amp;quot;;
+  //if(subtyp==1)
+  //  sql += &amp;quot;tousr=&amp;apos;&amp;apos; or tousr is null&amp;quot;;
+  //else
+    sql += &amp;quot;tousr=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; or ((tousr=&amp;apos;&amp;apos; or tousr is null) and crtdat&amp;gt;add_months(sysdate,-1)) &amp;quot;;
+  sql += &amp;quot; order by crtdat desc&amp;quot;;
+  var newsql = &amp;quot;SELECT * FROM (&amp;quot;+
+            &amp;quot;SELECT ROWNUM AS NUM ,BASETABLE.*  FROM ( &amp;quot;+
+             sql+&amp;quot;) BASETABLE&amp;quot;+
+             &amp;quot; WHERE ROWNUM &amp;lt;= &amp;quot;+page+&amp;quot;*&amp;quot;+nrow + &amp;quot;)&amp;quot; + 
+             &amp;quot; WHERE NUM &amp;gt; (&amp;quot;+page+&amp;quot;-1)*&amp;quot;+nrow;
+             //throw new pub.EAException( newsql );
+  var xml = pub.EADbTool.QuerySQL(newsql).GetXml();
+  return xml;  
+}
+//================================================================// 
+// 函数：getOneMsg
+// 说明：得到一个消息详细内容
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/12/06 17:44:10
+// 修改日志：
+//================================================================// 
+function getOneMsg()
+{
+  var sql = &amp;quot;select note from msg where GUID=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+  var xml = pub.EADbTool.GetSQL(sql);
+  return xml;  
+}
+
+function sendSMS()
+{
+  var sql = &amp;quot;&amp;quot;;
+//  throw new Exception(&amp;quot;sql =&amp;quot;+sql);
+  var db = null;
+  try
+  {
+  	var touserid = tousr.split(&amp;quot;,&amp;quot;);
+	//循环发给用户信息
+	db = new pub.EADatabase();
+	var wheres = null;
+	
+  	for(var i=0;i&amp;lt;touserid.length();i++){
+  		sql = &amp;quot;insert into msg(crtusracc,crtusr,crtusrnam,tousr,title,note) &amp;quot; +
+        		pub.EAFunc.format(&amp;quot;values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;, 
+              		[crtusracc,crtusrid,crtusrnam,touserid[i],msg,note]);
+		//db.ExcecutSQL(sql);
+		//throw new Exception(sql);
+		//建立查询出用户移动电话的sql语句 
+		if(wheres==null){
+			wheres = &amp;quot; id=&amp;apos;&amp;quot;+touserid[i]+&amp;quot;&amp;apos;&amp;quot;;
+		}else{
+			wheres += &amp;quot; or id=&amp;apos;&amp;quot;+touserid[i]+&amp;quot;&amp;apos;&amp;quot;;
+		}
+  	}
+//  	throw new Exception(&amp;quot;插入&amp;quot;+touserid.length());
+  	var sql = &amp;quot;select wm_concat(mobile) mobile from usr where  &amp;quot;+wheres ; 
+  	//throw new Exception(sql);
+  	var balance = &amp;quot;&amp;quot;;
+//  	throw new Exception(&amp;quot;ifsms=&amp;quot;+ifsms);
+    	if(ifsms==&amp;quot;1&amp;quot;){
+    		var ds = db.QuerySQL(sql);
+    		var phones = &amp;quot;&amp;quot;;
+    		if(ds.getRowCount()&amp;gt;0 )phones=ds.getStringAt(0,&amp;quot;mobile&amp;quot;);//获取电话号码
+    		//http://dev.xlsgrid.net/xlsgrid/ROOT_XLSGRID/Http_SMS.sp?usrid=xlsgrid&amp;userpwd=0&amp;moblies=13023171375&amp;msg=test&amp;note=www.xlsgrid.net/xlsgrid/asdf&amp;crtusrnam=xlsgrid&amp;org=A3mobile
+    		var getUrl = &amp;quot;http://dev.xlsgrid.net/xlsgrid/ROOT_XLSGRID/Http_SMS.sp?usrid=xlsgrid&amp;userpwd=0&amp;moblies=&amp;quot;+phones+&amp;quot;&amp;msg=&amp;quot;+msg+&amp;quot;&amp;note=&amp;quot;+note+&amp;quot;&amp;crtusrnam=&amp;quot;+crtusrnam+&amp;quot;&amp;org=&amp;quot;+org; 
+//  		throw new Exception(getUrl);
+  		var result = &amp;quot;&amp;quot;;
+		try {
+			var myhttp = new pubpack.EAHttp(getUrl ); 
+			result = myhttp.send(); 
+		}
+		catch(e) {
+			pubpack.EAFunc.Log(&amp;quot;SendMessage:&amp;quot;+e.toString());
+			throw new Exception(e);
+		}
+
+
+  		
+    		return result;
+    	}else {
+    		return &amp;quot;&amp;quot;;
+    	}
+    	//throw new Exception(&amp;quot;末尾&amp;quot;+sql);
+	
+  }
+  catch(e)
+  {
+  if( db!= null ) db.Rollback();
+  throw new Exception(e);
+    return e.toString();
+  }finally {
+		if (db!=null) db.Close();
+  }
+}
+
+function DelMsg()
+{
+  var msglst = pub.EAFunc.SplitString(msgs,&amp;quot;,&amp;quot;);
+  var c = msglst.length();
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    var sql = &amp;quot;delete msg where guid=&amp;apos;&amp;quot;+msglst[i]+&amp;quot;&amp;apos; and tousr is not null &amp;quot;;
+    pub.EADbTool.ExcecutSQL(sql);
+  }
+  return 1;
+}
+
+
+//获取该组织的所有用户
+function getOrgUsr(){
+	
+	//throw new Exception(&amp;quot;服务端&amp;quot;+org);
+	var db = null;
+	var ids = &amp;quot;&amp;quot;;
+	try
+	{
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select wm_concat(id) ids from usr where org=&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+
+		if(ds.getRowCount()&amp;gt;0){
+			ids = ds.getStringAt(0,&amp;quot;ids&amp;quot;);
+		}
+	}
+	catch(e)
+	{
+		if( db!= null ) db.Rollback();
+		throw e;
+	}
+	finally
+	{
+		if(db!=null)db.Close(); 
+	} 
+	return ids;
+}
+
+function getMobile(){
+
+	
+	return &amp;quot;&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

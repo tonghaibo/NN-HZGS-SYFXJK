@@ -1,0 +1,613 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >WAITTRK</MWID><NAME >待办事务</NAME><NOTE ></NOTE><FILE >WAITTRK.zxg</FILE><FIXED >0,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><BTNORD >1</BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><ID >build</ID><NAME >新建事务</NAME><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >PRIO</ID><NAME >优先级</NAME><DATDSC ></DATDSC><KEYVAL >V_PRIO</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG >0</KEYFLG><NOTNULL >0</NOTNULL><C14 ></C14><C15 ></C15><C16 >PRIO</C16></ROW>
+<ROW num="1" ><ID >prj</ID><NAME >项目</NAME><DATDSC ></DATDSC><KEYVAL >V_PRJ</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL >0</NOTNULL><C14 >prj</C14><C15 >prj</C15><C16 >prj</C16></ROW>
+<ROW num="2" ><ID >create</ID><NAME >创建人</NAME><DATDSC ></DATDSC><KEYVAL >V_CREATE</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE >org=&amp;apos;[%SYS_ORGID]&amp;apos;</SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 >create</C16></ROW>
+<ROW num="3" ><ID >title</ID><NAME >主题关键字</NAME><DATDSC ></DATDSC><KEYVAL ></KEYVAL><INPCTL ></INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 >title</C16></ROW>
+<ROW num="4" ><ID >trktyp</ID><NAME >事务类型</NAME><DATDSC ></DATDSC><KEYVAL >V_TRKTYP</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD >6</DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 >trktyp</C16></ROW>
+<ROW num="5" ><ID >trkstat</ID><NAME >状态</NAME><DATDSC ></DATDSC><KEYVAL >V_TRKSTAT</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD >9</DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MYWORKTABLE</DSKEY><NROW >15</NROW><NCOL >10</NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><HROW ></HROW><C13 ></C13><C14 ></C14><C15 ></C15><C16 >0,2,0</C16></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+//var p = &amp;quot;&amp;quot;;//项目名称
+var t = &amp;quot;&amp;quot;;//事务标题
+var flag = &amp;quot;&amp;quot;;
+//var r = 0;  //事务序列号
+var crtusr = &amp;quot;&amp;quot;;//事务创建人
+//var rowno = 0;//单选框选中时所在行
+var firtime=1; 
+var dd =&amp;quot;0&amp;quot;;
+var a = true;
+var b = true;
+var msgnum = 0;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:17
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{       
+        _this.SetFixedCol(sheet,1);
+        _this.SetFixedRow(sheet,2);
+        _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+        _this.SetCellBkColor(0,-1,-1,255,255,255); 
+        _this.SetColVisible(0,_this.GetColCount(0)-1,0);
+
+}
+
+//================================================================// 
+// 函数： _thisOnMouseLClick
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:12
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if ( row &amp;gt; 0 ) 
+	   	window.location =&amp;quot;Layout.sp?id=trkquery&amp;trkguid=&amp;quot;+_this.GetCellText(sheet,row,_this.GetColCount(0)-1)+&amp;quot;&amp;showhead=n&amp;quot; ;
+}   
+function oldclick(sheet,row,col)
+{   
+     var project = _this.GetCellText(sheet,row,1);
+//     var title = _this.GetCellText(sheet,row,3);
+//     if ( clickMianCell(sheet,row,col) )
+//     {
+//          if ( project == &amp;quot;&amp;quot; || project.length == 0 )
+//          {
+//                return ;
+//          }
+//          else
+//          {
+//                r = _this.GetCellText(sheet,row,2);  // 事务编号        
+//                crtusr = _this.GetCellText(sheet,row,10);
+//                var show = _this.GetCellText(sheet,row,11);
+//                QuerySQLDS(&amp;quot;select retflg,trsflg,toptyp,sendto from trktyp where id=&amp;apos;&amp;quot;+show+&amp;quot;&amp;apos;&amp;quot;);
+//                var retflg = _this.XMLDS_GetString(0,&amp;quot;retflg&amp;quot;);
+//                var trsflg = _this.XMLDS_GetString(0,&amp;quot;trsflg&amp;quot;);
+//                var toptyp =  _this.XMLDS_GetString(0,&amp;quot;toptyp&amp;quot;);
+//                var sendto =  _this.XMLDS_GetString(0,&amp;quot;sendto&amp;quot;);
+//                trsflg = trsflg.RTrim();
+//                retflg = retflg.RTrim();
+//                toptyp = toptyp.RTrim();
+//                sendto = sendto.RTrim();
+//                var url = &amp;quot;ShowXlsGrid.sp?grdid=TRKCHECK&amp;project=&amp;quot;+project+&amp;quot;&amp;num=&amp;quot;+r+&amp;quot;&amp;user=&amp;quot;+crtusr+&amp;quot;&amp;retflg=&amp;quot;+retflg+&amp;quot;&amp;trsflg=&amp;quot;+trsflg+&amp;quot;&amp;toptyp=&amp;quot;+toptyp+&amp;quot;&amp;show=&amp;quot;+show+&amp;quot;&amp;sendto=&amp;quot;+sendto;
+//                //window.open( url ,&amp;quot;事务查看&amp;quot;,&amp;quot;WIDTH=950,HEIGHT=480,left=0,top=0,toolbar=yes,menu=yes,location=yes,menubar=yes,status=yes&amp;quot;); 
+//                window.open( url ,&amp;quot;事务查看&amp;quot;,&amp;quot;WIDTH=1010,HEIGHT=650,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;); 
+//
+//          }
+//     }
+//     var row1 = _this.GetMainCellRangeRow1(sheet);
+//     var row2 = _this.GetMainCellRangeRow2(sheet);
+//     if ( row&amp;gt;=row1&amp;&amp;row&amp;lt;=row2&amp;&amp;col==0 )  
+//     {  
+//          if ( _this.SetRowSelected(sheet,row,1) == 0 )    //=0 被选中
+//          {
+//                 p = project;//全局变量赋值
+//                 t = title; //
+//          }
+//           flag = true ;
+//           r = _this.GetCellText(sheet,row,2);  //
+//           rowno = row;//rowno保存行号 
+//           
+//     }
+         var r = &amp;quot;&amp;quot;;
+         var show = &amp;quot;&amp;quot;;
+        if ( sheet == 0 )
+        {
+              var row1 = _this.GetMainCellRangeRow1(sheet);
+              var row2 = _this.GetMainCellRangeRow2(sheet);
+              if ( row&amp;gt;=row1&amp;&amp;row&amp;lt;=row2)  
+              {
+                          var show1 = _this.GetCellText(0,row,6);//事务类型
+                          var id1 = _this.GetCellText(0,row,5);//事务编号
+                          var items = id1.split(&amp;quot;.&amp;quot;);
+                          if(items.length==2)
+                          {
+                            var pid=_this.GetCellText(0,row,7);
+                            var url = &amp;quot;show.sp?grdid=&amp;quot;+items[0]+&amp;quot;&amp;bilid=&amp;quot;+items[1]+&amp;quot;&amp;processid=&amp;quot;+pid;
+                            window.open(url);
+                            return;
+                          }
+                          show = show1;
+                          r = id1;                
+               }
+               else
+                   return ;                   
+              
+        }
+//        else if ( sheet == 1 )
+//        {
+//        
+//             if ( clickMianCell(1,row,col) ) 
+//            {
+//                    if( _this.GetCellText(1,row,1) == &amp;quot;&amp;quot; )
+//                    {
+//                          return ;
+//                    }
+//                    else
+//                    {
+//                          var show1 = _this.GetCellText(1,row,5);//事务类型
+//                          var id1 = _this.GetCellText(1,row,4);//事务编号
+//                          show = show1;
+//                          r = id1;                                       
+//                    }              
+//             } 
+//       
+//        }
+                          //QuerySQLDS(&amp;quot;select crtusr from trkhdr where id= &amp;quot;);
+                          QuerySQLDS(&amp;quot;select project,crtusr,stat from trkhdr where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);
+                          var project = _this.XMLDS_GetString(0,&amp;quot;project&amp;quot;);
+                          var crtusr = _this.XMLDS_GetString(0,&amp;quot;crtusr&amp;quot;);
+                          var stat = _this.XMLDS_GetString(0,&amp;quot;stat&amp;quot;);
+                          QuerySQLDS(&amp;quot;select retflg,trsflg,toptyp,sendto from trktyp where id=&amp;apos;&amp;quot;+&amp;quot;&amp;quot;+&amp;quot;&amp;apos;&amp;quot;);
+                          var retflg = _this.XMLDS_GetString(0,&amp;quot;retflg&amp;quot;);
+                          var trsflg = _this.XMLDS_GetString(0,&amp;quot;trsflg&amp;quot;);
+                          var toptyp = _this.XMLDS_GetString(0,&amp;quot;toptyp&amp;quot;);
+                          var sendto = _this.XMLDS_GetString(0,&amp;quot;sendto&amp;quot;);
+                          retflg = retflg.RTrim();
+                          trsflg = trsflg.RTrim();
+                          toptyp = toptyp.RTrim();
+                          sendto = sendto.RTrim();
+                          var url = &amp;quot;ShowXlsGrid.sp?grdid=TRKCHECK&amp;project=&amp;quot;+project+&amp;quot;&amp;num=&amp;quot;+r+&amp;quot;&amp;user=&amp;quot;+crtusr+&amp;quot;&amp;retflg=&amp;quot;+retflg+&amp;quot;&amp;trsflg=&amp;quot;+trsflg+&amp;quot;&amp;toptyp=&amp;quot;+toptyp+&amp;quot;&amp;show=&amp;quot;+show+&amp;quot;&amp;sendto=&amp;quot;+sendto+&amp;quot;&amp;stat=&amp;quot;+stat;
+                         // alert (url);
+                          window.open( url ,&amp;quot;&amp;quot;,&amp;quot;WIDTH=1010,HEIGHT=650,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;); 
+}
+
+
+//================================================================// 
+// 函数：clickMianCell
+// 说明：防止点出数据区以外
+// 参数：
+// 返回：true or false 
+// 样例：
+// 作者：
+// 创建日期：01/08/07 13:49:22
+// 修改日志：
+//================================================================// 
+function clickMianCell(sheet,row,col)
+{
+      return row&amp;gt;=_this.GetMainCellRangeRow1(sheet)&amp;&amp;row&amp;lt;=_this.GetMainCellRangeRow2(sheet)&amp;&amp;col&amp;gt;=_this.GetMainCellRangeCol1(sheet)&amp;&amp;col&amp;lt;=_this.GetMainCellRangeCol2(sheet);
+}
+
+//================================================================// 
+// 函数：process
+// 说明：处理事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:01
+// 修改日志：
+//================================================================// 
+function process()
+{ 
+      if ( p == &amp;quot;&amp;quot; || p.length == 0 )
+      {
+            alert (&amp;quot;未选中事务！&amp;quot;);
+            return ;
+      }
+      else 
+      {
+            var user = _this.GetCellText(sheet,rowno,10);//最后处理人      
+            var crtusr = _this.GetCellText(sheet,rowno,8);//创建人
+            var show = _this.GetCellText(sheet,rowno,11); //事务类型
+            var url = &amp;quot;&amp;quot;;
+            QuerySQLDS(&amp;quot;select retflg,trsflg,toptyp,sendto from trktyp where id=&amp;apos;&amp;quot;+show+&amp;quot;&amp;apos;&amp;quot;);
+            var toptyp = _this.XMLDS_GetString(0,&amp;quot;toptyp&amp;quot;);
+            var retflg = _this.XMLDS_GetString(0,&amp;quot;retflg&amp;quot;);
+            var trsflg = _this.XMLDS_GetString(0,&amp;quot;trsflg&amp;quot;);
+            var sendto = _this.XMLDS_GetString(0,&amp;quot;sendto&amp;quot;);
+            sendto = sendto.RTrim();
+            retflg = retflg.RTrim();
+            trsflg = trsflg.RTrim();
+            toptyp = toptyp.RTrim();
+            var id =&amp;quot;&amp;quot;;
+            QuerySQLDS(&amp;quot;select id ,org from v_usr where id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos;&amp;quot;); 
+            var org = _this.XMLDS_GetString(0,&amp;quot;org&amp;quot;);
+            id = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+            QuerySQLDS(&amp;quot;select id  from v_usr where name=&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos;&amp;quot;);  
+            var crtid = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;); //创建人ID
+            crtid = crtid.RTrim();
+            id = id.RTrim();
+            if ( sendto ==&amp;quot;3&amp;quot;) //组织  ,此时user=XLSGRID
+            {
+//
+                  if ( org == user )
+                  {
+//                         url = &amp;quot;ShowXlsGrid.sp?grdid=DTLTRK&amp;project=&amp;quot;+p+&amp;quot;&amp;num=&amp;quot;+r+&amp;quot;&amp;user=&amp;quot;+user+&amp;quot;&amp;retflg=&amp;quot;+retflg+&amp;quot;&amp;trsflg=&amp;quot;+trsflg+&amp;quot;&amp;crtid=&amp;quot;+crtid;
+//                         window.open( url ,&amp;quot;事务处理&amp;quot;,&amp;quot;WIDTH=600,HEIGHT=600,left=0,top=0,toolbar=no,menu=no,status=yes&amp;quot;);
+                           alert (&amp;quot;该事务不需回复！&amp;quot;);
+                           return ;
+                  }
+                    
+                    
+            } 
+            else 
+            { 
+            
+                  if ( id == G_USRID) 
+                  {
+      
+                        if ( retflg == &amp;quot;2&amp;quot; || retflg == &amp;quot;0&amp;quot; )
+                        {
+                                
+                                url = &amp;quot;ShowXlsGrid.sp?grdid=DTLTRK&amp;project=&amp;quot;+p+&amp;quot;&amp;num=&amp;quot;+r+&amp;quot;&amp;user=&amp;quot;+user+&amp;quot;&amp;retflg=&amp;quot;+retflg+&amp;quot;&amp;trsflg=&amp;quot;+trsflg+&amp;quot;&amp;crtid=&amp;quot;+crtid;                        
+                        }
+                        else
+                        {
+                                 alert (&amp;quot;该事务不需回复！&amp;quot;); 
+                                 return;
+                         }
+                                window.open( url ,&amp;quot;事务处理&amp;quot;,&amp;quot;WIDTH=600,HEIGHT=600,left=0,top=0,toolbar=no,menu=no,status=yes&amp;quot;); 
+                               //window.open( url ,&amp;quot;事务处理&amp;quot;,&amp;quot;WIDTH=500,HEIGHT=600,left=0,top=0,toolbar=yes,menu=yes,location=yes,menubar=yes,status=yes&amp;quot;);
+                 }
+                 else 
+                 {
+                          alert (&amp;quot;该事务不是转发给您，您不能处理！&amp;quot;);
+                          return ;
+                  }
+              }
+       } 
+
+}
+
+//================================================================// 
+// 函数：build
+// 说明：新建事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:26
+// 修改日志：
+//================================================================// 
+function build()
+{
+//      var url = &amp;quot;ShowXlsGrid.sp?grdid=HDRTRK&amp;edit=&amp;quot;+&amp;quot;save&amp;quot;;
+//      window.open( url ,&amp;quot;新建事务&amp;quot;,&amp;quot;WIDTH=450,HEIGHT=600,left=0,top=0,toolbar=no,menu=no&amp;quot;); 
+         var url = &amp;quot;ShowXlsGrid.sp?grdid=ESTYLE&amp;edit=&amp;quot;+&amp;quot;save&amp;quot;+&amp;quot;&amp;dd=&amp;quot;+dd; 
+
+        //var url = &amp;quot;ShowXlsGrid.sp?grdid=NEWTYP&amp;edit=&amp;quot;+&amp;quot;save&amp;quot;; 
+        window.open( url ,&amp;quot;事务类型&amp;quot;,&amp;quot;WIDTH=765,HEIGHT=515,left=0,top=0,toolbar=no,menu=no,status=yes&amp;quot;);  
+
+
+}
+
+//================================================================// 
+// 函数：deltrk
+// 说明：删除事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:33
+// 修改日志：
+//================================================================// 
+function deltrk()
+{
+        if ( flag &amp;&amp; (p != &amp;quot;&amp;quot; || p.length != 0))
+        {
+               if ( confirm(&amp;quot;确认删除&amp;lt;&amp;quot;+p+&amp;quot;&amp;gt;事务吗？&amp;quot;) == 1 )
+               {
+                    QuerySQLDS(&amp;quot;delete from trkhdr where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);
+                    QuerySQLDS(&amp;quot;delete from trkdtl where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);                                     
+                    document.all(&amp;quot;searchbut&amp;quot;).click();
+                    window.location.reload();
+                }
+                    
+        }
+        else
+        {
+              alert (&amp;quot;未选中事务！&amp;quot;);
+              return ;
+        }
+                  
+} 
+//================================================================// 
+// 函数：del
+// 说明：删除事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:47
+// 修改日志：
+//================================================================// 
+function del()
+{
+       if ( p == &amp;quot;&amp;quot; || p.length == 0 )
+         {
+               alert (&amp;quot;未选中事务&amp;quot;);
+               return ; 
+         }
+      
+         else  
+         {
+               if ( confirm(&amp;quot;确认删除&amp;lt;&amp;quot;+p+&amp;quot;&amp;gt;事务吗？&amp;quot;) == 1 )
+               {                    
+                      QuerySQLDS(&amp;quot;delete from trkhdr where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);                 
+                      QuerySQLDS(&amp;quot;delete from trkdtl where id=&amp;apos;&amp;quot;+r+&amp;quot;&amp;apos;&amp;quot;);  
+                      document.all(&amp;quot;searchbut&amp;quot;).click();// 
+                } 
+          }
+  
+}
+
+//================================================================// 
+// 函数：refreshSheet
+// 说明：刷新sheet 
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:57
+// 修改日志：
+//================================================================// 
+function refreshSheet()
+{
+      window.location.reload();
+}
+
+function doSheet1(sheet)
+{
+     var sparam = new Object();
+     sparam.prj = param_prj;
+     sparam.create = param_create;
+     sparam.usrid = G_USRID;
+     var xml = invokeOSFuncExt(&amp;quot;save&amp;quot;,sparam) ;
+     _this.SetMainCellRange(sheet,2,1,16,5);
+     _this.SetXmlDS(sheet,2,1,16,5,xml);
+       
+     
+     
+     
+}
+
+function meg()
+{
+
+var str = &amp;quot;&amp;lt;html&amp;gt; \n\r&amp;quot;+
+	  &amp;quot;&amp;lt;head&amp;gt; \n\r&amp;quot;+
+          &amp;quot;&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html; charset=gb2312&amp;apos;&amp;gt; \n\r&amp;quot;+
+          &amp;quot;&amp;lt;meta name=&amp;apos;Keywords&amp;apos; content=&amp;apos;51windows.Net&amp;apos;&amp;gt; \n\r&amp;quot;+
+          &amp;quot;&amp;lt;META NAME=&amp;apos;Author&amp;apos; CONTENT=&amp;apos;haiwa&amp;apos;&amp;gt; \n\r&amp;quot;;
+     str += &amp;quot;&amp;lt;body scroll=no&amp;gt;&amp;lt;script language=&amp;apos;JavaScript&amp;apos;&amp;gt;\n\r&amp;quot;;   
+     str += &amp;quot;window.onload = getMsg;\n\r&amp;quot;;
+     str += &amp;quot;window.onresize = resizeDiv; \n\r&amp;quot; ;
+     str += &amp;quot;window.onerror = function(){} \n\r&amp;quot;; 
+     str += &amp;quot;var divTop,divLeft,divWidth,divHeight,docHeight,docWidth,objTimer,i = 0; \n\r&amp;quot;;
+     str += &amp;quot;function getMsg() { \n\r&amp;quot;;
+     str += &amp;quot;try{ divTop = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.top,10); \n\r&amp;quot;;
+     str += &amp;quot;divLeft = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.left,10); \n\r&amp;quot;;
+     str += &amp;quot;divHeight = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetHeight,10) ;\n\r&amp;quot;+
+            &amp;quot;divWidth = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetWidth,10); \n\r&amp;quot;+
+            &amp;quot;docWidth = document.body.clientWidth; \n\r&amp;quot;+
+            &amp;quot;docHeight = document.body.clientHeight; \n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.top = parseInt(document.body.scrollTop,10) + docHeight + 10;\n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.left = parseInt(document.body.scrollLeft,10) + docWidth - divWidth ;\n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.visibility=&amp;apos;visible&amp;apos; ;\n\r&amp;quot;+
+            &amp;quot;objTimer = window.setInterval(&amp;apos;moveDiv()&amp;apos;,10) ;}\n\r&amp;quot;;
+     str += &amp;quot;catch(e){} }\n\r&amp;quot;;
+     
+     str += &amp;quot;function resizeDiv() { \n\r&amp;quot;+
+            &amp;quot;i+=1 ;\n\r&amp;quot;+
+            &amp;quot;if(i&amp;gt;500) closeDiv() ;\n\r&amp;quot;+
+            &amp;quot;try{ \n\r&amp;quot;+
+            &amp;quot;divHeight = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetHeight,10); \n\r&amp;quot; +
+            &amp;quot;divWidth = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetWidth,10); \n\r&amp;quot; +
+            &amp;quot;docWidth = document.body.clientWidth; \n\r&amp;quot;  +
+            &amp;quot;docHeight = document.body.clientHeight; \n\r&amp;quot;  +
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.top = docHeight - divHeight + parseInt(document.body.scrollTop,10) ;\n\r&amp;quot; +
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.left = docWidth - divWidth + parseInt(document.body.scrollLeft,10) ;}\n\r&amp;quot;;
+     str += &amp;quot;catch(e){} }\n\r&amp;quot;;    
+     
+     str += &amp;quot;function moveDiv() { \n\r&amp;quot;;
+     str += &amp;quot;try { \n\r&amp;quot;;
+     str += &amp;quot;if(parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.top,10) &amp;lt;= (docHeight - divHeight + parseInt(document.body.scrollTop,10))){ \n\r&amp;quot;;      
+     str += &amp;quot;window.clearInterval(objTimer) ;\n\r&amp;quot;+
+            &amp;quot;objTimer = window.setInterval(&amp;apos;resizeDiv()&amp;apos;,1) ;}\n\r&amp;quot;+
+            &amp;quot;divTop = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.top,10) ;\n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.top = divTop - 1 ;}\n\r&amp;quot;;
+      str += &amp;quot;catch(e){} }\n\r&amp;quot;;   
+      str += &amp;quot;function closeDiv(){ \n\r&amp;quot;+
+             &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.visibility=&amp;apos;hidden&amp;apos;; \n\r&amp;quot;+
+             &amp;quot;if(objTimer) window.clearInterval(objTimer) ;}\n\r&amp;quot;;
+      str +=  &amp;quot;&amp;lt;/script&amp;gt; \n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;DIV id=eMeng style=&amp;apos;BORDER-RIGHT: #455690 1px solid; BORDER-TOP: #a6b4cf 1px solid; Z-INDEX:99999; LEFT: 0px; VISIBILITY: hidden; BORDER-LEFT: #a6b4cf 1px solid; WIDTH: 180px; BORDER-BOTTOM: #455690 1px solid; POSITION: absolute; TOP: 0px; HEIGHT: 116px; BACKGROUND-COLOR: #c9d3f3&amp;apos;&amp;gt;\n\r &amp;quot;;
+      str += &amp;quot;&amp;lt;TABLE style=&amp;apos;BORDER-TOP: #ffffff 1px solid; BORDER-LEFT: #ffffff 1px solid&amp;apos; cellSpacing=0 cellPadding=0 width=&amp;apos;100%&amp;apos; bgColor=#cfdef4 border=0&amp;gt; \n\r&amp;quot;;   
+      str += &amp;quot;&amp;lt;TBODY&amp;gt; &amp;lt;tr&amp;gt; &amp;quot;;
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;FONT-SIZE: 12px;  COLOR: #0f2c8c&amp;apos; width=30 height=24&amp;gt;&amp;lt;/TD&amp;gt; \n\r&amp;quot;;   
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;FONT-WEIGHT: normal; FONT-SIZE: 12px;  COLOR: #1f336b; PADDING-TOP: 4px;PADDING-left: 4px&amp;apos; vAlign=center width=&amp;apos;100%&amp;apos;&amp;gt; 短消息提示：&amp;lt;/TD&amp;gt; \n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;PADDING-TOP: 2px;PADDING-right:2px&amp;apos; vAlign=center align=right width=19&amp;gt;&amp;lt;span title=关闭 style=&amp;apos;CURSOR: hand;color:red;font-size:12px;font-weight:bold;margin-right:4px;&amp;apos; onclick=closeDiv() &amp;gt;×&amp;lt;/span&amp;gt;\n\r&amp;quot;;
+      str +=&amp;quot;&amp;lt;/TR&amp;gt; &amp;lt;TR&amp;gt; \n\r&amp;quot;;    
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;PADDING-RIGHT: 1px;  PADDING-BOTTOM: 1px&amp;apos; colSpan=3 height=90&amp;gt; \n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;DIV style=&amp;apos;BORDER-RIGHT: #b9c9ef 1px solid; PADDING-RIGHT: 13px; BORDER-TOP: #728eb8 1px solid; PADDING-LEFT: 13px; FONT-SIZE: 12px; PADDING-BOTTOM: 13px; BORDER-LEFT: #728eb8 1px solid; WIDTH: 100%; COLOR: #1f336b; PADDING-TOP: 18px; BORDER-BOTTOM: #b9c9ef 1px solid; HEIGHT: 100%&amp;apos;&amp;gt;您有&amp;lt;font color=#FF0000&amp;gt;&amp;quot;+msgnum+&amp;quot;&amp;lt;/font&amp;gt;条未处理事务&amp;lt;BR&amp;gt;&amp;lt;BR&amp;gt; \n\r&amp;quot;;  
+      str+= &amp;quot; &amp;lt;DIV align=center style=&amp;apos;word-break:break-all&amp;apos;&amp;gt;&amp;lt;a href=&amp;apos;http://www.xlsgrid.net&amp;apos;&amp;gt;&amp;lt;font color=#FF0000&amp;gt;欢迎使用硕格软件&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/DIV&amp;gt;&amp;quot;;
+      str += &amp;quot; &amp;lt;/DIV&amp;gt; &amp;quot;;
+      str+=&amp;quot;&amp;lt;/TD&amp;gt; &amp;lt;/TR&amp;gt; &amp;lt;/TBODY&amp;gt; &amp;lt;/TABLE&amp;gt; &amp;lt;/DIV&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt;&amp;quot; ;      
+      return str;     
+     
+}
+
+function load_num()
+{
+     var sql = &amp;quot;select * from (select distinct a.title aa,a.crtusr bb ,to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) cc ,a.prio dd,a.id ee ,a.show ff &amp;quot;+
+		&amp;quot; from  &amp;quot;+
+		&amp;quot;trkhdr a,trkdtl b ,v_usr c,v_prj d ,trktyp e,prjusr pu where a.guid=b.trkguid  &amp;quot;+
+		&amp;quot;and c.id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos;   &amp;quot;+
+		&amp;quot;and c.orgid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;+
+		&amp;quot;and a.show =e.id   &amp;quot;+
+		&amp;quot;and b.crtusr=c.name  &amp;quot;+ 
+		&amp;quot;and a.project=d.id  &amp;quot;+
+		&amp;quot;and ( b.style=&amp;apos;未处理&amp;apos; or b.style = &amp;apos;处理中&amp;apos;)  &amp;quot;+ 
+		&amp;quot;and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;+
+		&amp;quot;order by cc desc )&amp;quot;; 
+		
+        QuerySQLDS(sql);            
+         
+        msgnum = _this.XMLDS_GetRowCount();	 
+        var sss = meg();       
+        window.document.write(sss);
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包  
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );  
+
+function save() 
+{
+      var ret = 0;
+      var db = null;
+      var ds = null;
+      var sql = &amp;quot;&amp;quot;;
+      try
+      { 
+             db = new pubpack.EADatabase();
+             sql = &amp;quot;select distinct a.title,a.crtusr,to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat,a.id,a.show from  &amp;quot;+ 
+			&amp;quot;trkhdr a,trkdtl b,v_usr c,v_prj d ,trktyp e,prjusr pu  &amp;quot;+
+			&amp;quot;where c.id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; &amp;quot;+
+			&amp;quot;and a.show=e.id &amp;quot;+
+			&amp;quot;and a.guid=b.trkguid &amp;quot;+
+			&amp;quot;and pu.usr=c.guid  &amp;quot;+
+			&amp;quot;and pu.prj=d.guid &amp;quot;+
+			&amp;quot;and a.dtlusr=c.name &amp;quot;+
+			&amp;quot;and a.project=d.id &amp;quot;+
+			&amp;quot;and  b.style=&amp;apos;未处理&amp;apos;  &amp;quot;+
+			&amp;quot;and e.id in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;+
+			&amp;quot;and d.id like &amp;apos;&amp;quot;+prj+&amp;quot;%&amp;apos; &amp;quot;+
+			&amp;quot;and a.crtusr like &amp;apos;&amp;quot;+create+&amp;quot;%&amp;apos; &amp;quot;+
+//			&amp;quot;and a.title like &amp;apos;%[%title]%&amp;apos; &amp;quot;+
+//			&amp;quot;and e.id like &amp;apos;[%trktyp]%&amp;apos;  &amp;quot;+
+			&amp;quot;order by crtdat desc &amp;quot;; 
+			//throw new Exception (sql);
+			 ds = db.QuerySQL(sql);
+			 return ds.GetXml();
+				
+       }
+	     catch(e)
+	      {
+	            throw e;
+	      }
+	      finally
+	      {
+	            db.Close(); 
+      }       
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MYWORK</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >select a.title|| &amp;apos;  &amp;apos;||c.name ||&amp;apos; &amp;apos;||to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) name,substr(a.note,1,100) note ,
+a.guid ,a.id,&amp;apos;show.sp?grdid=&amp;apos;||a.id url
+ from  
+trkhdr a,v_usr c ,trktyp e,v_usr cc
+where 
+a.dtlusr=c.id  and a.AIMORG=c.orgid and a.crtusr=cc.id  and a.AIMORG=cc.orgid 
+and c.id=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   
+and c.orgid=&amp;apos;[%SYS_ORGID]&amp;apos;
+and a.show =e.id   
+and a.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; -- 0：新建，1：处理中，2：已处理，3：处理完，4：未处理
+and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) 
+and a.prio like &amp;apos;[%PRIO]%&amp;apos; 
+and a.crtusr like &amp;apos;[%create]%&amp;apos; 
+and a.title like &amp;apos;%[%title]%&amp;apos; 
+and e.finkey like &amp;apos;%[%finkey]%&amp;apos;  
+and e.id like &amp;apos;[%trktyp]%&amp;apos;  
+order by to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) desc </DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 >MYWORK</C19><C20 ></C20><C21 >MYWORK</C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27></ROW>
+<ROW num="1" ><ID >MYCRTTRK</ID><NAME >我创建的事务</NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >select a.title||&amp;apos; &amp;apos;||to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;)||
+&amp;apos;【&amp;apos;||decode(a.stat,&amp;apos;0&amp;apos;,&amp;apos;新建&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;处理中&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;处理完&amp;apos;,&amp;apos;4&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;未知状态&amp;apos;)||&amp;apos;】&amp;apos; name,
+a.guid ,a.id,&amp;apos;show.sp?grdid=&amp;apos;||a.id url
+ from  
+trkhdr a
+where 
+a.crtusr=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   
+
+</DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27></ROW>
+<ROW num="2" ><ID >PRJLIST</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >SELECT A.ID,A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,A.GUID 
+,&amp;apos;Layout.sp?id=trk_BYTYP&amp;trktyp=&amp;trkprj=&amp;apos;|| A.id  url
+FROM PRJ A,TRKHDR B 
+
+WHERE B.PROJECT=A.ID
+GROUP BY A.ID,A.NAME,A.GUID
+ORDER BY A.ID
+
+</DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >PRJLIST</C26><C27 >PRJLIST</C27></ROW>
+<ROW num="3" ><ID >TRKTYPLIST</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >SELECT A.ID,&amp;apos;■ &amp;apos;||A.NAME||&amp;apos;(&amp;apos;||COUNT(*)||&amp;apos;)&amp;apos; NAME,A.GUID FROM trktyp A,TRKHDR B 
+WHERE B.SHOW=A.ID
+GROUP BY A.ID,A.NAME,A.GUID
+ORDER BY A.ID</DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27></ROW>
+<ROW num="4" ><ID >ALLTRK</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >select &amp;apos;●&amp;apos;||title||&amp;apos; &amp;apos;||to_char(crtdat,&amp;apos;MM/DD&amp;apos;) name,id,guid from trkhdr a
+where 
+show  like &amp;apos;[%TRKTYP]%&amp;apos;  
+
+order by crtdat desc</DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 >TRKMNU</C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27></ROW>
+<ROW num="5" ><ID >TRKREP</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >select &amp;apos;0&amp;apos; id,&amp;apos;你有12笔待处理事务&amp;apos; name , &amp;apos;1&amp;apos; guid from dual
+union 
+select &amp;apos;1&amp;apos; id,&amp;apos;你处理的事务平均时间为1.4天&amp;apos; name , &amp;apos;1&amp;apos; guid from dual
+union 
+select &amp;apos;2&amp;apos; id,&amp;apos;昨日新增事务2笔&amp;apos; name , &amp;apos;1&amp;apos; guid from dual
+
+union 
+select &amp;apos;3&amp;apos; id,&amp;apos;昨日你完成事务1笔&amp;apos; name , &amp;apos;1&amp;apos; guid from dual</DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27></ROW>
+<ROW num="6" ><ID >MYWORKTABLE</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >
+select a.id,
+	a.title  标题,
+	c.name 创建人,
+	to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) 创建时间,
+	e.name 事务类型,
+	p.name 项目名称,
+	ss.name 状态,
+	pp.name 优先级,
+	cc.name 最后处理人,
+	a.guid
+from  
+trkhdr a,v_usr c ,trktyp e,v_usr cc,v_prj p, v_PRIO pp , v_trkstat ss
+where 
+a.SELFORG=c.orgid and a.crtusr=c.id  and a.AIMORG=cc.orgid and a.dtlusr=cc.id
+and a.PRIO = pp.id
+and a.stat=ss.id
+and cc.id=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   
+and cc.orgid=&amp;apos;[%SYS_ORGID]&amp;apos;
+and a.project =p.id
+and a.show =e.id   
+and a.stat like &amp;apos;[%trkstat]%&amp;apos;
+and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) 
+and a.prio like &amp;apos;[%PRIO]%&amp;apos; 
+and a.PROJECT like &amp;apos;[%prj]%&amp;apos;
+and a.crtusr like &amp;apos;[%create]%&amp;apos; 
+and a.title like &amp;apos;%[%title]%&amp;apos; 
+and e.id like &amp;apos;[%trktyp]%&amp;apos;  
+order by to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) desc </DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >MYWORKTABLE</C22><C23 >MYWORKTABLE</C23><C24 >MYWORKTABLE</C24><C25 >MYWORKTABLE</C25><C26 ></C26><C27 ></C27></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1闂備礁鎲￠〃鍡椕哄Ο铏规殼濞达綀娅ｇ壕浠嬫煛瀹擃喖鍟埢?</BILID><SUBTYP >0闂佽瀛╃粙鎺楀礉濡ゅ啯鍋栨い鎰剁畱閸???</SUBTYP><CORPID >0闁?????闂備礁鎼ˇ顓㈠磿閸楃偟鏆﹂柣鏂挎啞婵?骞垮劚濞层劌顪冩禒瀣厱??</CORPID><CORPNAM >0闁?????闂備礁鎼ˇ顓㈠磿閸楃偟鏆﹂柣鏂挎啞婵?骞垮劚閹冲繘宕愬畷鍥╃＜??</CORPNAM><LOCID >0濠电偛顕慨鐢稿箰閸濄儴濮抽柣顎板洦鈷戞い鏂挎惈婵倹淇婇顐㈠缂佽鲸鎹囧鍊燁槻濠???</LOCID><LOCNAM >0濠电偛顕慨鐢稿箰閸濄儴濮抽柣顎板洦鈷戞い鏂挎惈婵倹淇婇顐㈠⒋鐎规洏鍎遍濂稿炊??</LOCNAM><DAT >0闂備礁鎲￠〃鍡椕哄Ο铏规殼濞???鐎殿噮鍣ｆ俊鐑芥晜閽樺鍔?</DAT><CRTUSR >1闁荤喐绮庢晶妤?煤閺嶎厼鐭楅柛鈩冾焽椤???</CRTUSR><CRTUSRNAM >0闁荤喐绮庢晶妤?煤閺嶎厼鐭楅柛鈩冾焽椤╂煡鏌涘┑鍡楊伌婵炵》缍侀弻???</CRTUSRNAM><CRTDAT >0闁荤喐绮庢晶妤?煤閺嶎厼鐭楅柛鈩冪☉缁秹鏌曟径娑㈡闁???</CRTDAT><CHKUSR >1闂佽楠搁崢婊堝礈濠靛鍋嬮柧蹇ｅ亞椤???</CHKUSR><CHKUSRNAM >0闂佽楠搁崢婊堝礈濠靛鍋嬮柧蹇ｅ亞椤╂煡鏌涘┑鍡楊伌婵炵》缍侀弻???</CHKUSRNAM><CHKDAT >0闂佽楠搁崢婊堝礈濠靛鍋嬮柟鎯版缁秹鏌曟径娑㈡闁???</CHKDAT><REFID1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???1</REFID1><REFNAM1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???1</REFNAM1><REFID2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???2</REFID2><REFNAM2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???2</REFNAM2><NOTE >0濠电姰鍨煎▔娑樏洪敃鍌氭瀬闁绘劕顕埞宥夋煃閳轰礁鏆曠紒??</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1闂備礁鎼?氼剙霉妞嬪骸鍨濋煫鍥ㄦ⒐閸庣喖鐓崶銊﹀碍濠???</SEQID><ITMID >1闂備礁鎲＄换?闁煎啿鐖奸敐鐐哄箳閺冨倻锛濋梺鍝勮癁閸愩劉鏋?</ITMID><ITMNAM >0闂備礁鎲＄换?闁煎啿鐖奸敐鐐哄箳濡??鐟欙妇?骞垮劚濞???</ITMNAM><ITEMPC >0闂備礁鎲＄换?闁煎啿鐖奸敐鐐哄箳濡??缁犮儵鎮峰▎蹇擃伌闁稿瑪鍥ㄧ厱??</ITEMPC><ITMSPC >0闂佽崵鍠愰悷銉??姘煎弮閹???</ITMSPC><UNIT >0闂佽崵濮崇欢銈囨崲濠靛闂繛宸簻绾??闂佸搫娲﹀銊х矓?</UNIT><SMLUNT >0闂佽绻愮换鎰崲濡ゅ拋鏁囬柟闂寸劍閻撳倿鐓崶銊﹀碍缂??鐎ｎ?????</SMLUNT><UNTNUM >0濠电姰鍨归悥銏ゅ礃閵娧屾Ч濠电偠鎻徊鐣岀矓瀹勬噴褰掑幢濞嗗海鍓ㄩ棅顐㈡处閹稿摜绮堢?ｎ?㈠綊鏁愰崨顖呫垺绻涢崣澶岀煂???</UNTNUM><PRICE >0濠电偛顕繛?闁??闁秵鍋??</PRICE><QTY >0闂備浇妗ㄥ鎺楀础閹惰棄闂??</QTY><TAXTYP >0缂傚倷绀侀鍛瑰畡閭﹀晠闁兼祴鏅濈亸鐢告偣閸ヮ亜鐨???</TAXTYP><NOTAXMNY >0濠电偞鍨堕幐鍝ョ矓閹绢喖绠氶柛顐犲灮閻瑩骞栨潏鍓у矝婵☆値鍏????</NOTAXMNY><TAXMNY >0缂傚倷绀侀鍛存煀閿濆??</TAXMNY><MNY >0濠电偞鍨堕幐鎼侇敄閸涱厾鏆﹂柣鏂垮悑閻撳倿鏌熸潏鎯х槣闁???</MNY><REFID1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???1</REFID1><REFNAM1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???1</REFNAM1><REFID2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???2</REFID2><REFNAM2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

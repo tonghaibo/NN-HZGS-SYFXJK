@@ -1,0 +1,546 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >DesktopLayout</MWID><NAME >桌面布局管理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DesktopLayout.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+var Topstyle = &amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;.Cons{padding:1px 1px; }
+			.Cons table{width:300px; border-bottom:1px #efefef solid; border-left:1px #efefef solid;margin:0 auto;}
+			.Cons th{text-align:center; line-height:18px; padding-top:1px; color:#494949; background:#fff; font-weight:normal;border:1px solid #efefef;border-width:1px 1px 0;}
+			.Cons td{text-align:center; line-height:18px; padding:2px 0 0; border-right:1px #efefef solid; border-top:1px #efefef solid; color:#333;}
+			.Cons td.ConsTi{text-align:left; padding:2px 0 2px;font-size:12px;line-height:18px; }
+			.Cons td.ConsTi2{text-align:right; padding:2px 0 2px;font-size:12px;line-height:18px; }
+			.Cons td.ConsTi3{text-align:center; padding:2px 0 2px;font-size:12px;line-height:18px; }
+		&amp;lt;/style&amp;gt;&amp;quot;;
+//用电排行榜
+function eleTop()
+{
+	var db = null;	
+	var html = &amp;quot;&amp;lt;div class=\&amp;quot;Cons\&amp;quot;&amp;gt;&amp;lt;table cellspacing=\&amp;quot;0\&amp;quot; style=\&amp;quot;width: 100%\&amp;quot;&amp;gt;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select rownum,name,elemny,taxmny from (
+      select name,elemny,taxmny from (
+        select nvl(b.id,a.usrid) id,nvl(b.name,a.usrnam) name,round(nvl(sum(elemny)/10000,0),2) elemny,
+        round(nvl(sum(taxmny),0)/10000,2) taxmny from tax_eledata a,tax_company b,tax_taxdata C
+        where a.usrid=b.ammno(+)
+          AND b.id=c.id(+)   
+          and substr(a.yymm,0,4)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+        group by nvl(b.id,a.usrid),nvl(b.name,a.usrnam)
+            ) order by elemny desc
+      ) where rownum&amp;lt;=7&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		//html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;th width=\&amp;quot;50\&amp;quot;&amp;gt;排名&amp;lt;/th&amp;gt;&amp;lt;th width=\&amp;quot;200\&amp;quot;&amp;gt;企业名称&amp;lt;/th&amp;gt;&amp;lt;th width=\&amp;quot;50\&amp;quot;&amp;gt;用电量&amp;lt;/th&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td width=\&amp;quot;30\&amp;quot;&amp;gt;排名&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos;&amp;gt;企业名称&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos; width=\&amp;quot;60\&amp;quot;&amp;gt;用电量&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//&amp;lt;td width=\&amp;quot;60\&amp;quot;&amp;gt;纳税额&amp;lt;/td&amp;gt;
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var num = ds.getStringAt(i,&amp;quot;ROWNUM&amp;quot;);
+			var title = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+			var elemny = ds.getStringAt(i,&amp;quot;ELEMNY&amp;quot;);
+			var taxmny =ds.getStringAt(i,&amp;quot;TAXMNY&amp;quot;);
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+num+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi&amp;apos;&amp;gt;&amp;quot;+title+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi2&amp;apos;&amp;gt;&amp;quot;+elemny+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;//&amp;lt;td  class=&amp;apos;ConsTi2&amp;apos;&amp;gt;&amp;quot;+taxmny+&amp;quot;&amp;lt;/td&amp;gt;
+		}
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		
+		html = Topstyle + html;
+	}
+	catch(e) {
+		return e.toString();
+	}
+	finally {
+		if(db != null) db.Close();
+	}
+	return html;
+}
+
+//纳税排行榜
+function taxTop()
+{
+	var db = null;	
+	var html = &amp;quot;&amp;lt;div class=\&amp;quot;Cons\&amp;quot;&amp;gt;&amp;lt;table cellspacing=\&amp;quot;0\&amp;quot; style=\&amp;quot;width: 100%\&amp;quot;&amp;gt;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select rownum,name,taxmny from (
+				select name,taxmny from (
+					select a.id,a.name,round(nvl(sum(taxmny),0)/10000,2) taxmny
+					from tax_taxdata a
+					where substr(a.yymm,0,4)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+					group by a.id,a.name
+				      ) order by taxmny desc
+				) where rownum&amp;lt;=7&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		//html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;th width=\&amp;quot;50\&amp;quot;&amp;gt;排名&amp;lt;/th&amp;gt;&amp;lt;th width=\&amp;quot;200\&amp;quot;&amp;gt;企业名称&amp;lt;/th&amp;gt;&amp;lt;th width=\&amp;quot;50\&amp;quot;&amp;gt;税额&amp;lt;/th&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td width=\&amp;quot;30\&amp;quot;&amp;gt;排名&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos;&amp;gt;企业名称&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos;&amp;gt;纳税额&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var num = ds.getStringAt(i,&amp;quot;ROWNUM&amp;quot;);
+			var title = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+			var taxmny = ds.getStringAt(i,&amp;quot;TAXMNY&amp;quot;);
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+num+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi&amp;apos;&amp;gt;&amp;quot;+title+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi2&amp;apos;&amp;gt;&amp;quot;+taxmny+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		
+		html = Topstyle + html;
+	}
+	catch(e) {
+		return e.toString();
+	}
+	finally {
+		if(db != null) db.Close();
+	}
+	return html;
+
+}
+
+//权限检查
+function checkGenTask()
+{
+	//具有税收核算股角色
+	var sql = &amp;quot;select * from usrrol where usr=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)
+		and rol in (select guid from rol where id=&amp;apos;02&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)&amp;quot;;
+	return pub.EADbTool.GetSQLRowCount(sql);
+}
+
+//生成稽查任务
+function insertTasks()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+
+	try{
+		db = new pubpack.EADatabase();
+		var ds = new pubpack.EAXmlDS(xmlstr);
+		var enddate = &amp;quot;&amp;quot;;
+		try { enddate = enddat; } catch(e) {}
+		
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var flg = ds.getStringAt(i,&amp;quot;FLAG&amp;quot;);
+			if (flg == &amp;quot;1&amp;quot;) {
+				var bilid =db.GetBillid(accids,&amp;quot;TK&amp;quot;,&amp;quot;TK&amp;quot;);  //生成单据号
+				var id = ds.getStringAt(i,&amp;quot;ID&amp;quot;);	
+				var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+				var taxman = &amp;quot;&amp;quot;;
+				var note = &amp;quot;&amp;quot;;
+				try { 
+					//报表界面传过来的税管员是姓名，查出对应征管系统的税管员编号
+					taxman = ds.getStringAt(i,&amp;quot;TAXMAN&amp;quot;); 
+					taxman = db.GetSQL(&amp;quot;select id from v_tax_man where name=&amp;apos;&amp;quot;+taxman+&amp;quot;&amp;apos; or id=&amp;apos;&amp;quot;+taxman+&amp;quot;&amp;apos;&amp;quot;);
+				} catch (e) { }
+				
+				var town = &amp;quot;&amp;quot;;
+				
+				try { 
+					town = ds.getStringAt(i,&amp;quot;TOWN&amp;quot;); 
+				} catch (e) { }				
+						
+				sql = &amp;quot;select * from tax_trkhdr where cmid=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; and nvl(yymm1,&amp;apos; &amp;apos;)=nvl(&amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos;,&amp;apos; &amp;apos;) and nvl(yymm2,&amp;apos; &amp;apos;)=nvl(&amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos;,&amp;apos; &amp;apos;)&amp;quot;;
+				var count = db.GetSQLRowCount(sql);	
+				if(count == 0) {
+					
+					if (typ == &amp;quot;1&amp;quot;) { //有电力无缴税
+						note = &amp;quot;所属年月：&amp;quot;+yymm1+&amp;quot;~&amp;quot;+yymm2+&amp;quot;，用电量：&amp;quot;+ds.getStringAt(i,&amp;quot;ELEQTY&amp;quot;);
+					}
+					else if (typ == &amp;quot;2&amp;quot;) { //有缴税无电力
+						note = &amp;quot;所属年月：&amp;quot;+yymm1+&amp;quot;~&amp;quot;+yymm2+&amp;quot;，销售收入：&amp;quot;+ds.getStringAt(i,&amp;quot;somny&amp;quot;)+&amp;quot;，增值税：&amp;quot;+ds.getStringAt(i,&amp;quot;taxmny&amp;quot;);
+					}
+					else if (typ == &amp;quot;3&amp;quot;) { //电力税负异常
+						note = &amp;quot;所属年月：&amp;quot;+yymm1+&amp;quot;~&amp;quot;+yymm2+&amp;quot;，企业用电量(度)：&amp;quot;+ds.getStringAt(i,&amp;quot;eleqty&amp;quot;)
+							+ &amp;quot;，测算销售收入(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;ens&amp;quot;) + &amp;quot;，申报销售收入(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;somny&amp;quot;);
+							//+ &amp;quot;，差异(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;cz&amp;quot;);
+					}		//+&amp;quot;，行业耗能指标：&amp;quot;+ds.getStringAt(i,&amp;quot;envload&amp;quot;)
+					else if (typ == &amp;quot;4&amp;quot;) { //行业税负异常
+						note = &amp;quot;所属年月：&amp;quot;+yymm1+&amp;quot;~&amp;quot;+yymm2+&amp;quot;，销售收入(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;somny&amp;quot;)+&amp;quot;，增值税额(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;taxmny&amp;quot;)
+							+&amp;quot;，税负率%：&amp;quot;+ds.getStringAt(i,&amp;quot;taxbers&amp;quot;) +&amp;quot;，行业税负率%：&amp;quot;+ds.getStringAt(i,&amp;quot;bears&amp;quot;)
+							+&amp;quot;，超出%：&amp;quot; +ds.getStringAt(i,&amp;quot;cy&amp;quot;);
+					}
+					else if (typ == &amp;quot;5&amp;quot;) { //无电表号纳税
+					
+					}
+					else if (typ == &amp;quot;6&amp;quot;) { //无企业电表号
+					
+					}
+					else if (typ == &amp;quot;7&amp;quot;) { //电力税额异常
+						note = &amp;quot;所属年月：&amp;quot;+yymm1+&amp;quot;~&amp;quot;+yymm2+&amp;quot;，企业用电量(度)：&amp;quot;+ds.getStringAt(i,&amp;quot;eleqty&amp;quot;)+&amp;quot;，电力税款系数：&amp;quot;+ds.getStringAt(i,&amp;quot;rate&amp;quot;)
+							+&amp;quot;，测算增值税额(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;ens&amp;quot;) +&amp;quot;，实际申报增值税额(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;taxmny&amp;quot;);
+							//+&amp;quot;，增值税额差异(元)：&amp;quot; +ds.getStringAt(i,&amp;quot;cx&amp;quot;);
+					}else if(typ == &amp;quot;8&amp;quot;){ //电费比对异常
+						note = &amp;quot;所属年月：&amp;quot;+yymm1+&amp;quot;~&amp;quot;+yymm2+&amp;quot;，企业用电量(度)：&amp;quot;+ds.getStringAt(i,&amp;quot;eleqty&amp;quot;)+&amp;quot;，用电金额：&amp;quot;+ds.getStringAt(i,&amp;quot;elemny&amp;quot;)
+							+&amp;quot;，实际申报增值税额(元)：&amp;quot;+ds.getStringAt(i,&amp;quot;somny&amp;quot;);
+							//+&amp;quot;，增值税额差异(元)：&amp;quot; +ds.getStringAt(i,&amp;quot;cz&amp;quot;);
+					}
+					
+					var newtyp = &amp;quot;&amp;quot;;
+					if (typ == &amp;quot;1&amp;quot; || typ == &amp;quot;2&amp;quot; || typ == &amp;quot;5&amp;quot; || typ == &amp;quot;6&amp;quot;) {
+						newtyp = &amp;quot;1&amp;quot;; //疑似漏管
+					}
+					else {
+						newtyp = &amp;quot;2&amp;quot;; //异常申报
+					}
+					
+					var swjg = &amp;quot;&amp;quot;; //税务机关
+					var tmpds = db.QuerySQL(&amp;quot;select swjg_dm,substr(swjg_dm,0,7) swjg from tax_company where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;);
+					if (tmpds.getRowCount() &amp;gt; 0) {
+						swjg = tmpds.getStringAt(0,&amp;quot;SWJG&amp;quot;);
+					}
+					
+					if(taxman == &amp;quot;&amp;quot;){
+						sql=&amp;quot;insert into tax_trkhdr(ACC,ORG,SYT,BILID,CRTUSR,CRTDAT,Cmid,Cmnam,todept,Tousr,SUBTYP,yymm1,yymm2,dat,stat,enddat,town,note,newtyp) 
+						select &amp;apos;&amp;quot;+accids+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+orgs+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+syts+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+bilid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+usrids+&amp;quot;&amp;apos;,sysdate,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; ,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+taxman+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+yymm1
+							+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos;,trunc(sysdate),&amp;apos;1&amp;apos;,to_date(&amp;apos;&amp;quot;+enddate+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;&amp;quot;+town+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+newtyp+&amp;quot;&amp;apos;  from dual&amp;quot;;
+						 
+						ret += db.ExcecutSQL(sql);
+					}
+					else{
+						sql=&amp;quot;insert into tax_trkhdr(CHKUSR,CHKUSRNAM,CHKDAT,ACC,ORG,SYT,BILID,CRTUSR,STAT,CRTDAT,Cmid,Cmnam,todept,Tousr,SUBTYP,yymm1,yymm2,dat,enddat,town,note,newtyp) 
+						select &amp;apos;&amp;quot;+usrids+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+usrnams+&amp;quot;&amp;apos;,sysdate,&amp;apos;&amp;quot;+accids+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+orgs+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+syts+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+bilid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+usrids+&amp;quot;&amp;apos;,&amp;apos;2&amp;apos;,sysdate,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; ,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+taxman+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;
+							+typ+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos;,trunc(sysdate),to_date(&amp;apos;&amp;quot;+enddate+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;&amp;quot;+town+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+newtyp+&amp;quot;&amp;apos;  from dual&amp;quot;;
+						 
+						ret += db.ExcecutSQL(sql);
+					}	
+				}
+			}
+		}
+		db.Commit();
+		
+		return &amp;quot;成功生成&amp;quot;+ret+&amp;quot;条任务&amp;quot;;
+	}
+	catch(e){
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if(db != null)	db.Close();
+	}
+}
+
+function showClass()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var html = &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;
+	try {
+		sql = &amp;quot;select guid,
+				id,
+				name,
+				&amp;apos;&amp;apos; note,
+				&amp;apos;&amp;apos; url
+			from v_tax_hyclass
+			order by id&amp;quot;;
+		db = new pubpack.EADatabase();
+		var ds = db.QuerySQL(sql);	
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+			html += &amp;quot;&amp;lt;li style=&amp;apos;margin-bottom:8px&amp;apos;&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=\&amp;quot;linkClass(&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;)\&amp;quot;&amp;gt;&amp;quot; + name + &amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+		}
+		html += &amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;script type=text/javascript&amp;gt;
+				function linkClass(guid,name) {
+					//alert(&amp;apos;Layout.sp?id=mdItemList&amp;clsid=&amp;apos;+clsid);
+					window.frames[&amp;apos;CELL_0_1&amp;apos;].location.href=\&amp;quot;Layout.sp?id=hydesc&amp;cid=\&amp;quot;+guid+\&amp;quot;&amp;clsname=\&amp;quot;+name;
+				}
+			&amp;lt;/script&amp;gt;&amp;quot;;
+		
+		return html;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//传入行业GUID
+function hyInfos()
+{
+	var html = &amp;quot;行业介绍&amp;gt;&amp;gt;&amp;quot;+clsname+&amp;quot;&amp;lt;hr&amp;gt;&amp;quot;;
+	html = pub.EAFunc.Replace(html,&amp;quot;[%clsname]&amp;quot;,&amp;quot;&amp;quot;);
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select contents from urlbody where fromguid=&amp;apos;&amp;quot;+cid+&amp;quot;&amp;apos;&amp;quot;;
+		var note = db.getBlob2String(sql,&amp;quot;contents&amp;quot;);
+		note = pubpack.EAFunc.Replace(note,&amp;quot;\r\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+		note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+		note = pubpack.EAFunc.Replace(note,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+		note = pubpack.EAFunc.Replace(note,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+		html += note;
+
+		return html;
+
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}	
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function operShow()
+{
+	var html = &amp;quot;&amp;lt;br&amp;gt;&amp;lt;ul&amp;gt;&amp;quot;;
+	var ds = pub.EADbTool.QuerySQL(&amp;quot;select id,name from (select * from v_yyyy order by id desc) where rownum&amp;lt;=12&amp;quot;);
+	for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+		var id = ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		html += &amp;quot;&amp;lt;p align=&amp;apos;left&amp;apos;&amp;gt;&amp;lt;a href=\&amp;quot;Layout.sp?id=hyrep&amp;yyyy=&amp;quot;+id+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;li&amp;gt;&amp;quot;+id+&amp;quot;&amp;lt;/li&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+	}
+	html += &amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+	return html;
+}
+
+function showReportFile()
+{
+	var html = &amp;quot;&amp;quot;;
+	var db = null;
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+	var orgid = usrinfo.getusrOrg();	
+	var yyyy = pub.EAFunc.NVL(request.getParameter(&amp;quot;yyyy&amp;quot;),&amp;quot;&amp;quot;);
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select guid,org,yymm,title,note,filepath,filenote,crtusr,to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crttim from tax_filedata where org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; &amp;quot;;
+		if (yyyy != &amp;quot;&amp;quot; &amp;&amp; yyyy != null) sql += &amp;quot;and substr(yymm,0,4)=&amp;apos;&amp;quot;+yyyy+&amp;quot;&amp;apos;&amp;quot;;
+		sql += &amp;quot; order by yymm desc,crtdat desc&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		
+		html = &amp;quot;&amp;lt;div class=\&amp;quot;Cons\&amp;quot;&amp;gt;&amp;lt;table cellspacing=\&amp;quot;0\&amp;quot; style=\&amp;quot;width: 100%\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos; width=\&amp;quot;40%\&amp;quot;&amp;gt;标题&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos; width=\&amp;quot;30%\&amp;quot;&amp;gt;数据文件&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos; width=\&amp;quot;20%\&amp;quot;&amp;gt;操作&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+			
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+			var guid = ds.getStringAt(i,&amp;quot;guid&amp;quot;);
+			var crtusr = ds.getStringAt(i,&amp;quot;crtusr&amp;quot;);
+			var crttim = ds.getStringAt(i,&amp;quot;crttim&amp;quot;);
+			var note = ds.getStringAt(i,&amp;quot;note&amp;quot;); 
+			var yymm = ds.getStringAt(i,&amp;quot;yymm&amp;quot;); 
+			var title = ds.getStringAt(i,&amp;quot;title&amp;quot;);
+			var filenote = ds.getStringAt(i,&amp;quot;filenote&amp;quot;);
+			filenote = filenote.substring(filenote.lastIndexOf(&amp;quot;\\&amp;quot;)+1);
+			var filepath = ds.getStringAt(i,&amp;quot;filepath&amp;quot;);
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\r&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);//替换换行键
+			note = pubpack.EAFunc.Replace(note,&amp;quot;\u0009&amp;quot;,&amp;quot;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;);//替换tab键
+			
+			/*
+			if (i &amp;gt; 0) html += &amp;quot;&amp;lt;br&amp;gt;&amp;lt;hr&amp;gt;&amp;quot;;
+			html += &amp;quot;&amp;lt;p align=left&amp;gt;&amp;lt;font size=2&amp;gt;【&amp;quot;+yymm+&amp;quot;】&amp;nbsp;&amp;nbsp;&amp;quot;+title+&amp;quot;&amp;lt;/font&amp;gt;&amp;nbsp;&amp;nbsp;&amp;quot;;
+			html += &amp;quot;&amp;lt;font color=#808080&amp;gt;[&amp;quot;+crtusr+&amp;quot; &amp;quot;+crttim+&amp;quot;]&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			
+			//if(note==&amp;quot;&amp;quot;) note += db.getBlob2String(sql,&amp;quot;noteblob&amp;quot;);
+			html += &amp;quot;&amp;lt;p&amp;gt;&amp;lt;font size=2 &amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+			
+			if ( filepath !=&amp;quot;&amp;quot; ) {
+				var idx = filenote.indexOf(&amp;quot;\\&amp;quot;);
+				while(idx&amp;gt;=0 ) {
+					var idx1 = filenote.indexOf(&amp;quot;\\&amp;quot;,idx+1);
+					if ( idx1&amp;gt;= 0 ) idx = idx1;
+					else break;
+				}
+				if ( idx&amp;gt;=0 ) filenote = filenote.substring(idx+1);
+				html += &amp;quot;&amp;lt;div style=\&amp;quot;float:left;\&amp;quot;&amp;gt;&amp;lt;font color=#FF0000 &amp;gt;下载文件：&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+filenote+&amp;quot;&amp;lt;/a&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;downloadFile.sp?format=zip&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;压缩下载&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+			}
+			
+			if ( usrid == crtusr) {
+				html += &amp;quot;&amp;lt;div style=\&amp;quot;float:right;\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;show.sp?grdid=ReportFile&amp;edit=modify&amp;guid=&amp;quot;+guid+&amp;quot;\&amp;quot;&amp;gt;编辑&amp;lt;/a&amp;gt;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(confirm(&amp;apos;删除该记录，是否继续？&amp;apos;)==1)window.location=&amp;apos;TAXMON.DesktopLayout.DeleteReportFile.osp?guid=&amp;quot;+guid+&amp;quot;&amp;apos;;\&amp;quot; &amp;gt;删除&amp;lt;a/&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;/div&amp;gt;&amp;quot;;
+			
+			}
+			*/
+			
+			html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td class=&amp;apos;ConsTi&amp;apos;&amp;gt;&amp;quot;+title+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi&amp;apos;&amp;gt;&amp;lt;a href=\&amp;quot;downloadFile.sp?unzip=1&amp;filename=&amp;quot;+filepath+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+filenote+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td class=&amp;apos;ConsTi3&amp;apos;&amp;gt;&amp;quot;;
+			if ( usrid == crtusr) {
+				html += &amp;quot;&amp;lt;div style=\&amp;quot;float:center;\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;show.sp?grdid=ReportFile&amp;edit=modify&amp;guid=&amp;quot;+guid+&amp;quot;\&amp;quot;&amp;gt;编辑&amp;lt;/a&amp;gt;&amp;nbsp;&amp;nbsp;|&amp;nbsp;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;javascript:if(confirm(&amp;apos;删除该记录，是否继续？&amp;apos;)==1)window.location=&amp;apos;TAXMON.DesktopLayout.DeleteReportFile.osp?guid=&amp;quot;+guid+&amp;quot;&amp;apos;;\&amp;quot; &amp;gt;删除&amp;lt;a/&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;/div&amp;gt;&amp;quot;;
+			}
+			else {
+				html += &amp;quot;&amp;lt;div style=\&amp;quot;float:center;\&amp;quot;&amp;gt;--&amp;lt;/div&amp;gt;&amp;quot;;
+			}
+			html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+		html = Topstyle + html;
+			
+
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	
+	return html;
+}
+
+
+function DeleteReportFile()
+{
+	var usr = web.EASession.GetLoginInfo(request);
+  	var homeurl = usr.getHomeURL();
+	var sql = &amp;quot;delete from tax_filedata where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+	pub.EADbTool.ExcecutSQL(sql);
+	response.sendRedirect(homeurl+&amp;quot;Layout.sp?id=hyrep&amp;quot;);
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >ELEYEAR</ID><NAME >用电排行榜</NAME><DATDSC >select &amp;apos;&amp;lt;div align=center&amp;gt;&amp;apos;||yymm||&amp;apos;&amp;lt;div&amp;gt;&amp;apos; 月份,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||round(elemny/10000,2)||&amp;apos;&amp;lt;div&amp;gt;&amp;apos; 用电量,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||cnt||&amp;apos;&amp;lt;div&amp;gt;&amp;apos; 企业数 from (
+	select a.yymm,nvl(sum(elemny),0) elemny,count(distinct b.id) cnt
+	from tax_eledata a,tax_company b
+	where substr(a.yymm,0,4)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+          and a.usrid=b.ammno
+	group by a.yymm
+ ) order by yymm</DATDSC><C4 >ELETOP</C4><C5 ></C5><C6 >ELEYEAR</C6><C7 >ELEYEAR</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >ELEYEAR</C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="1" ><ID >TAXYEAR</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;lt;div align=center&amp;gt;&amp;apos;||yymm||&amp;apos;&amp;lt;/div&amp;gt;&amp;apos; 月份,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||round(taxmny/10000,2)||&amp;apos;&amp;lt;/div&amp;gt;&amp;apos; 税额,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||cnt||&amp;apos;&amp;lt;/div&amp;gt;&amp;apos; 纳税企业数 from (
+	select a.yymm,nvl(sum(taxmny),0) taxmny,count(distinct a.id) cnt
+	from tax_taxdata a
+	where substr(a.yymm,0,4)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+	group by a.yymm
+ ) order by yymm       </DATDSC><C4 ></C4><C5 >TAXYEAR</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >TAXYEAR</C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="2" ><ID >TKLIST</ID><NAME >稽查任务</NAME><DATDSC >select &amp;apos;&amp;apos; 核查时间段,&amp;apos;&amp;apos; 任务号,&amp;apos;&amp;apos; 状态,&amp;apos;&amp;apos; 企业编号,&amp;apos;&amp;apos; 企业名称,&amp;apos;&amp;apos; 异常类型,&amp;apos;&amp;apos; 创建时间,&amp;apos;&amp;apos; 税管员,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;entry.sp?grdid=MYTKD&amp;quot;&amp;gt;更多...&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+union all
+select * from (
+select yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;2&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未处理&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;处理中&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;9&amp;apos;,&amp;apos;&amp;lt;font color=green&amp;gt;已完成&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;0&amp;apos;,&amp;apos;任务退回&amp;apos;,(select name from SYSPROCESS p where sytid=&amp;apos;TAXMON&amp;apos; and grdid=&amp;apos;TK&amp;apos; and p.id=a.stat)) 状态,
+       cmid 企业编号,
+       cmnam 企业名称,
+       b.name 类型,
+       --to_char(crtdat,&amp;apos;dd/mm hh24:mi:ss&amp;apos;) 创建时间,
+       to_char(crtdat,&amp;apos;yyyy/mm/dd&amp;apos;) 创建时间,
+       tousr 税管员,
+       &amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||a.stat||&amp;apos;&amp;quot;&amp;gt;&amp;apos;
+       ||decode(a.stat,&amp;apos;1&amp;apos;,&amp;apos;分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未完成&amp;lt;/font&amp;gt;&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;查看&amp;apos;,&amp;apos;查看&amp;apos;)
+       ||&amp;apos;&amp;lt;/a&amp;gt;&amp;apos; 操作
+from tax_trkhdr a,V_TAX_TRKTYP b
+where a.tousr=(select name from v_tax_taxman where org=&amp;apos;[%SYS_ORGID]&amp;apos; and uuid=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp=b.id
+  and a.stat like &amp;apos;[%stats]%&amp;apos;
+  and a.stat&amp;lt;&amp;gt;&amp;apos;8&amp;apos;
+order by a.crtdat desc
+)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >TKLIST</C8><C9 >TKLIST</C9><C10 >TKLIST</C10><C11 >TKLIST</C11><C12 >TKLIST</C12><C13 >TKLIST</C13><C14 >TKLIST</C14><C15 >TKLIST</C15><C16 >TKLIST</C16><C17 >TKLIST</C17><C18 >TKLIST</C18><C19 ></C19><C20 ></C20><C21 >TKLIST</C21><C22 ></C22><C23 >TKLIST</C23><C24 >TKLIST</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 >TKLIST</C31><C32 >TKLIST</C32><C33 ></C33><C34 ></C34><C35 >TKLIST</C35><C36 >TKLIST</C36><C37 >TKLIST</C37><C38 >TKLIST</C38><C39 >TKLIST</C39><C40 ></C40><C41 >TKLIST</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 >TKLIST</C45><C46 >TKLIST</C46></ROW>
+<ROW num="3" ><ID >TKOTHER</ID><NAME ></NAME><DATDSC >select nvl(c.name,a.DTLUSR) 接收人,nvl(b.name,a.PROJECT) 类型,a.TITLE 标题,
+	a.CRTUSR 制单人,to_char(a.crtdat,&amp;apos;yyyy-mm-dd&amp;apos;) 制单时间,
+	&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TS&amp;guid=&amp;apos;||a.guid||&amp;apos;&amp;quot; target=&amp;quot;_blank&amp;quot;&amp;gt;处理&amp;lt;/a&amp;gt;&amp;apos; 操作
+from trkhdr a,v_tax_trktyp b,usr c 
+where a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.dtlusr=&amp;apos;[%SYS_USRID]&amp;apos;
+  and a.project=b.id(+)
+  and a.dtlusr=c.id(+)
+  and c.org=&amp;apos;[%SYS_ORGID]&amp;apos;
+order by a.crtdat desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >TKOTHER</C12><C13 >TKOTHER</C13><C14 >TKOTHER</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="4" ><ID >MyTrks</ID><NAME >我的所有事务</NAME><DATDSC >
+select &amp;apos;【&amp;apos;||decode(stat,&amp;apos;1&amp;apos;,&amp;apos;未分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;已分派&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;处理中&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;)||&amp;apos;-&amp;apos;||b.name||&amp;apos;】 &amp;apos;||title||&amp;apos; (&amp;apos;||crtdat||&amp;apos;)&amp;apos; name,url from (
+select guid,title,to_char(crtdat,&amp;apos;yyyy-mm-dd&amp;apos;) crtdat,project subtyp,stat,
+	&amp;apos;show.sp?grdid=TS&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||stat url 
+from trkhdr where acc=&amp;apos;[%SYS_ACCID]&amp;apos; and dtlusr=&amp;apos;[%SYS_USRID]&amp;apos;
+union all
+select guid,bilid||&amp;apos;-&amp;apos;||cmnam||&amp;apos;(&amp;apos;||cmid||&amp;apos;)&amp;apos;,to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat,subtyp,stat,
+	&amp;apos;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||stat url 
+from tax_trkhdr
+where tousr=(select name from v_tax_taxman where uuid=&amp;apos;[%SYS_USRID]&amp;apos; and org=&amp;apos;[%SYS_ORGID]&amp;apos;)
+  and stat like &amp;apos;[%stats]%&amp;apos;
+) a,v_tax_trktyp b
+where subtyp like &amp;apos;[%subtyp]%&amp;apos;
+  and a.subtyp=b.id
+order by crtdat desc,subtyp  
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >MyTrks</C13><C14 ></C14><C15 >MyTrks</C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 >MyTrks</C19><C20 >MyTrks</C20><C21 ></C21><C22 >MyTrks</C22><C23 ></C23><C24 >MyTrks</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 >MyTrks</C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 >MyTrks</C37><C38 ></C38><C39 ></C39><C40 >MyTrks</C40><C41 >MyTrks</C41><C42 ></C42><C43 >MyTrks</C43><C44 ></C44><C45 >MyTrks</C45><C46 >MyTrks</C46></ROW>
+<ROW num="5" ><ID >TrkTypes</ID><NAME ></NAME><DATDSC >select id,&amp;apos;&amp;lt;li&amp;gt;&amp;apos;||name||&amp;apos;&amp;lt;/li&amp;gt;&amp;apos; name,&amp;apos;Layout.sp?id=MyTrk&amp;subtyp=&amp;apos;||id url from V_TAX_TRKTYP</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >TrkTypes</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >TrkTypes</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >TrkTypes</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="6" ><ID >Messages</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;lt;li&amp;gt;&amp;apos;||to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;)||&amp;apos; &amp;apos;||title||&amp;apos;&amp;lt;/li&amp;gt;&amp;apos; name,
+	&amp;apos;show.sp?grdid=TS&amp;guid=&amp;apos;||guid url 
+from trkhdr 
+where acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and PROJECT=&amp;apos;93&amp;apos;
+order by crtdat desc  </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="7" ><ID >stat1</ID><NAME >状态查询</NAME><DATDSC >/*select distinct decode(stat,&amp;apos;2&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;) name,
+&amp;apos;Layout.sp?id=taxman&amp;stats=&amp;apos;||stat url,&amp;apos;&amp;apos; guid from tax_trkhdr
+*/
+
+select &amp;apos;未处理(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxman&amp;stats=2&amp;apos; url from tax_trkhdr 
+where stat=&amp;apos;2&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;处理中(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxman&amp;stats=3&amp;apos; url from tax_trkhdr 
+where stat=&amp;apos;3&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;已完成(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxman&amp;stats=9&amp;apos; url from tax_trkhdr 
+where stat=&amp;apos;9&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;企业电表维护&amp;apos; name,&amp;apos;show.sp?grdid=AMMEDIT&amp;TAXMAN=[%SYS_USRNAM]&amp;loaddata=1&amp;apos; url from dual</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 >stat1</C14><C15 >stat1</C15><C16 >stat1</C16><C17 >stat1</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >stat1</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="8" ><ID >hyclass</ID><NAME ></NAME><DATDSC >select id,&amp;apos;&amp;lt;li&amp;gt;&amp;apos;||name||&amp;apos;&amp;lt;/li&amp;gt;&amp;apos; name,&amp;apos;Layout.sp?id=hydesc&amp;cid=&amp;apos;||id url from V_TAX_HYCLASS order by id
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >hyclass</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="9" ><ID >GSTRK</ID><NAME ></NAME><DATDSC >--select &amp;apos;&amp;apos; 单号,&amp;apos;&amp;apos; 状态,&amp;apos;&amp;apos; 企业名称,&amp;apos;&amp;apos; 供电区域,&amp;apos;&amp;apos; 类型,&amp;apos;&amp;apos; 创建时间,&amp;apos;&amp;apos; 税管员,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;show.sp?grdid=TKDTL&amp;BILID=&amp;DAT1=&amp;DAT2=&amp;TYP=&amp;STAT=[%FILTER]&amp;TAXMAN=&amp;DEPT=1&amp;quot;&amp;gt;更多...&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+--union all
+select * from (
+select --yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+--       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;2&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未处理&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;处理中&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;9&amp;apos;,&amp;apos;&amp;lt;font color=green&amp;gt;已完成&amp;lt;/font&amp;gt;&amp;apos;) 状态,
+	decode(stat,&amp;apos;0&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+		    decode(nvl(tousr,&amp;apos;N&amp;apos;),&amp;apos;N&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;已分派&amp;lt;/font&amp;gt;&amp;apos;)) 状态,
+       --cmid 企业编号,
+       cmnam 企业名称,
+       a.town 供电区域,
+       b.name 类型,
+       to_char(crtdat,&amp;apos;dd/mm hh24:mi:ss&amp;apos;) 创建时间,
+       a.tousr 税管员,
+       decode(nvl(tousr,&amp;apos;N&amp;apos;),&amp;apos;N&amp;apos;,&amp;apos;&amp;lt;a href=&amp;quot;javascript:window.showModalDialog(&amp;apos;&amp;apos;show.sp?grdid=TrkSend&amp;GUID=&amp;apos;||a.guid||&amp;apos;&amp;flag=1&amp;apos;&amp;apos;,window,&amp;apos;&amp;apos;scroll:no;status:no;dialogWidth:450px;dialoHeight:100px&amp;apos;&amp;apos;);&amp;quot;&amp;gt;分派&amp;lt;/a&amp;gt;&amp;apos;
+       	     --,&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TKDTL&amp;BILID=&amp;apos;||bilid||&amp;apos;&amp;DAT1=&amp;apos;||to_char(dat,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;&amp;DAT2=&amp;apos;||to_char(dat,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;&amp;TYP=&amp;STAT=&amp;TAXMAN=&amp;quot;&amp;gt;分派&amp;lt;/a&amp;gt;&amp;apos;
+       	     ,&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;action=query&amp;quot;&amp;gt;查看&amp;lt;/a&amp;gt;&amp;apos;) 操作
+from tax_trkhdr a,V_TAX_TRKTYP b
+where a.todept in (select deptid from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp=b.id
+  [%FILTER]
+order by a.crtdat desc,a.bilid
+)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 >GSTRK</C25><C26 >GSTRK</C26><C27 >GSTRK</C27><C28 ></C28><C29 >GSTRK</C29><C30 >GSTRK</C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 >GSTRK</C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 >GSTRK</C42><C43 ></C43><C44 >GSTRK</C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="10" ><ID >GSDSKSTAT</ID><NAME >核算组桌面状态</NAME><DATDSC >/*select distinct decode(stat,&amp;apos;2&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;) name,
+&amp;apos;Layout.sp?id=taxman&amp;stats=&amp;apos;||stat url,&amp;apos;&amp;apos; guid from tax_trkhdr
+*/
+
+select &amp;apos;全部事务(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxadmdsk&amp;FILTER=&amp;apos; url from tax_trkhdr 
+where todept in (select deptid from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;已分派(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxadmdsk&amp;FILTER=and tousr is not null&amp;apos; url from tax_trkhdr 
+where todept in (select deptid from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and tousr is not null and stat&amp;lt;&amp;gt;&amp;apos;0&amp;apos;
+union all
+select &amp;apos;未分派(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxadmdsk&amp;FILTER=and tousr is null&amp;apos; url from tax_trkhdr 
+where todept in (select deptid from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and tousr is null and stat&amp;lt;&amp;gt;&amp;apos;0&amp;apos;
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >GSDSKSTAT</C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 >GSDSKSTAT</C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 >GSDSKSTAT</C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46></ROW>
+<ROW num="11" ><ID >gettaxman</ID><NAME ></NAME><DATDSC >select name from v_tax_taxman where uuid=&amp;apos;[%SYS_USRID]&amp;apos; and org=&amp;apos;[%SYS_ORGID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 >gettousr</C46></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

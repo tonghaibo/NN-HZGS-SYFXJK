@@ -1,0 +1,717 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >fileEditor</MWID><NAME >文件编辑器</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >fileEditor.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >loadTreeView</ID><NAME >刷新目录</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var treewidth=180;
+var binfiles=&amp;quot;.zxg;.doc;.gif;.jpg;.rar;.zip;.rar;.zip;.pdf;.png;.xls;.ppt;&amp;quot;;
+var imgfiles=&amp;quot;.jpg;.gif;.png;.bmp;.jpeg;.tif;&amp;quot;;
+var sheetTree=0;
+var sheetCode=2;
+var sheetProp=1;	//属性sheet
+//var sheetImage=2;	//图片浏览窗口
+
+var SELFLG  =&amp;quot;0&amp;quot;;// 是否是选择文件模式
+//传入base可以打开/u/xlsGridData相对的目录
+var netmenu = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;上传文件(&amp;U)\&amp;quot; id=\&amp;quot;udf_upload\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;打包上传(&amp;V)\&amp;quot; id=\&amp;quot;udf_subzipup\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;全部打包上传(&amp;W)\&amp;quot; id=\&amp;quot;udf_zipup\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;-\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;下载文件(&amp;D)\&amp;quot; id=\&amp;quot;udf_download\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;打包下载(&amp;Z)\&amp;quot; id=\&amp;quot;udf_subzipdown\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;全部打包下载(&amp;A)\&amp;quot; id=\&amp;quot;udf_zifpdown\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;;
+var filemenu = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;新建文件(&amp;N)\&amp;quot; id=\&amp;quot;udf_newfile\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;-\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;保存(&amp;S)\&amp;quot; id=\&amp;quot;udf_save\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;-\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;删除文件(&amp;D)\&amp;quot; id=\&amp;quot;udf_delfile\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;-\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;删除目录树(&amp;A)\&amp;quot; id=\&amp;quot;udf_deltree\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;-\&amp;quot; id=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	//+&amp;quot;&amp;lt;item name=\&amp;quot;html编辑器(&amp;U)\&amp;quot; id=\&amp;quot;udf_extEdit\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;全部打包备份(&amp;A)\&amp;quot; id=\&amp;quot;udf_backup\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;解压缩(&amp;U)\&amp;quot; id=\&amp;quot;udf_unzip\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;
+	+&amp;quot;&amp;lt;item name=\&amp;quot;复制资源到web目录(&amp;Y)\&amp;quot; id=\&amp;quot;udf_syncRes\&amp;quot;&amp;gt;&amp;lt;/item&amp;gt;&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+	try{ SELFLG = selectflag; }catch ( e ) {}
+	if(SELFLG==&amp;quot;1&amp;quot;){
+		_this.SetToButton(&amp;quot;选择&amp;quot;,sheetProp,3,1,&amp;quot;选择&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,1,-1,-1);
+	
+	}
+	else{
+		_this.SetToButton(&amp;quot;下载&amp;quot;,sheetProp,3,1,&amp;quot;下载&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,1,-1,-1);
+		_this.SetToButton(&amp;quot;编辑&amp;quot;,sheetProp,3,2,&amp;quot;编辑&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,1,-1,-1);
+		
+	}
+  _this.SetSheetName(sheetProp,&amp;quot;文件属性&amp;quot;);
+  _this.SetSheetName(sheetCode,&amp;quot;代码视图&amp;quot;);
+//  _this.SetSheetName(sheetImage,&amp;quot;图片预览&amp;quot;);  
+  _this.SetCellBkColor(sheetProp,-1,-1,255,255,255);
+  _this.SetCellBkColor(sheetCode,-1,-1,255,255,255);
+
+//  _this.SetCellBkColor(sheetImage,-1,-1,255,255,255);
+
+  _this.SetToCodeEditor(&amp;apos;&amp;apos;,sheetCode,-1,-1 ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+  _this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;25%&amp;quot;);
+  _this.AddToolbarButton(&amp;apos;&amp;apos;, &amp;apos;文件管理&amp;apos;,&amp;apos;&amp;apos;, filemenu , 0,0 , 0 , 80);
+  _this.AddToolbarButton(&amp;apos;&amp;apos;, &amp;apos;上传下载&amp;apos;,&amp;apos;&amp;apos;, netmenu , 0,0 , 0 , 80);
+
+  //try { ROOT=base;  }catch ( e ){}
+  _this.ShowTabBar(1);
+  loadTreeView();
+  ShowFileProp(&amp;quot;目录&amp;quot;,ROOT,&amp;quot;&amp;quot;);
+
+}
+
+
+//点击菜单项
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+  _thisOnRunButtonCtrlClick(menuitemid,sheet,row,col);
+}
+
+function loadTreeView()
+{
+
+  var treexml = invokeOSFunc(&amp;quot;getFolderTreeXml&amp;quot;,&amp;quot;root=&amp;quot;+ROOT);
+
+  _this.SetToTreeCtrl(&amp;quot;Tree_1&amp;quot;,sheetTree ,-1,-1,treexml);
+}
+
+//点击树状控件项目
+//var oFCKeditor;
+var activefile = null;
+function _thisOnTreeItemClick(id, hItem, tagid, attribe, value)
+{
+
+  activefile = attribe.trim();
+  //2010/3增加 中间件文件管理上传文件的bug
+  activefile = getXmlAttribute(activefile ,&amp;quot;path&amp;quot;);
+
+
+
+
+  window.status = activefile ;
+  //if(tagid==&amp;quot;&amp;quot;) return;
+  if(tagid==&amp;quot;目录&amp;quot;)
+  {
+    var pid = _this.XMLCTL_GetItem(id,hItem,4);
+    //_this.XMLCTL_SetTagnam(id,hItem,&amp;quot;&amp;quot;);
+    try {var nextlevel_itemid=_this.XMLCTL_GetItem(id,hItem,2);if(nextlevel_itemid!=&amp;quot;&amp;quot;)return;} catch ( e ){  return;}//说明该节点已经有数据
+    var treexml = invokeOSFunc(&amp;quot;getFolderTreeXml&amp;quot;,&amp;quot;root=&amp;quot;+getXmlAttribute(attribe,&amp;quot;path&amp;quot;));//attribe
+
+    _this.XMLCTL_Append(id,treexml ,hItem,2);
+
+    //_this.XMLCTL_SetValue(id,hItem,&amp;quot;&amp;quot;);
+    ShowFileProp(&amp;quot;目录&amp;quot;,getXmlAttribute(attribe,&amp;quot;path&amp;quot;),&amp;quot;&amp;quot;);
+    _this.Redraw();
+
+    return;
+  }
+
+  var fn=attribe.trim();
+  var ext = fn.substr(fn.length-4);
+
+  ShowFileProp(&amp;quot;文件&amp;quot;,fn,ext);
+	if (SELFLG==&amp;quot;1&amp;quot;){
+  		SelectFile();
+  	}
+  	else {
+  		EditFile();
+  	}  
+}
+//function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+//{
+//	 _thisOnTreeItemClick(id, hItem, tagid, attribe, value);
+//	if (SELFLG==&amp;quot;1&amp;quot;){
+//  		SelectFile();
+//  	}
+//  	else {
+//  		EditFile();
+//  	}
+//
+//}
+//显示图片属性
+function ShowFileProp(filetype,filename,ext)
+{
+	_this.SetCurrentSheet(sheetProp);
+	_this.SetCellText(sheetProp,1,0,filetype);
+	_this.SetCellText(sheetProp,1,1,filename);
+	_this.SetCellText(sheetProp,1,2,ext);
+	
+	PreviewFile();
+}
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;选择&amp;quot;)   SelectFile();
+	else if (id==&amp;quot;下载&amp;quot;) DownloadFile();
+	else if (id==&amp;quot;预览&amp;quot;) PreviewFile();
+	else if (id==&amp;quot;编辑&amp;quot;) EditFile();
+
+}
+
+
+//typ=&amp;quot;download&amp;quot; &amp;quot;edit&amp;quot; &amp;quot;preview&amp;quot; &amp;quot;select&amp;quot;
+function SelectFile()
+{
+  if (SELFLG==&amp;quot;1&amp;quot;){
+  	var fn =_this.GetCellText(sheetProp,1,1);
+  	window.returnValue=fn; 
+  	window.close();
+  	return;
+  }
+}
+function EditFile()
+{  
+    var ext =_this.GetCellText(sheetProp,1,2);
+    var fn =_this.GetCellText(sheetProp,1,1);    
+
+    if(binfiles.indexOf(ext+&amp;quot;;&amp;quot;)&amp;lt;0){
+    	if ( fn == &amp;quot;xlsgrid/js/runEvents.js&amp;quot;) {
+		alert ( &amp;quot;该文件由于技术原因，不能打开&amp;quot; );//这个文件包括有格式化返回字符串的特殊格式字符，所以不能打开
+		return ;
+	}
+    	var retfilevalue = invokeOSFunc(&amp;quot;getFile&amp;quot;,&amp;quot;file=&amp;quot;+fn) ;
+    	
+    	_this.SetCellText(sheetCode,-1,-1,retfilevalue );
+	    activefile = fn;
+	    _this.SetCurrentSheet(sheetCode);
+	    _this.Redraw();
+
+    }
+//  if(binfiles.indexOf(ext+&amp;quot;;&amp;quot;)&amp;gt;=0 &amp;&amp; !confirm(&amp;quot;该文件可能不是文本文件，是否用编辑器打开？&amp;quot;))
+//  {
+//    //下载之
+//    //location = tagid;
+//    DownloadFile();
+//  }
+//    else {
+//	    _this.SetCellText(sheetCode,-1,-1,invokeOSFunc(&amp;quot;getFile&amp;quot;,&amp;quot;file=&amp;quot;+fn) );
+//	    activefile = fn;
+//	    _this.SetCurrentSheet(sheetCode);
+//	    _this.Redraw();
+//    }	    
+}
+
+function PreviewFile()
+{
+	var ext =_this.GetCellText(sheetProp,1,2);
+
+	if(_this.GetCellText(sheetProp,1,0)==&amp;quot;目录&amp;quot; ||_this.GetCellText(sheetProp,1,0)==&amp;quot;&amp;quot;){
+		return;
+	}
+	if(imgfiles.indexOf(ext+&amp;quot;;&amp;quot;)&amp;gt;=0 )
+	{
+
+		_this.LoadToImage(&amp;quot;&amp;quot;,sheetProp,5,1,grdid+&amp;quot;.sp?action=down&amp;file=&amp;quot;+_this.GetCellText(sheetProp,1,1));
+	  	_this.SetCellText(sheetProp,4,1,&amp;quot;图片预览&amp;quot;);
+	}
+ 	else{
+	    _this.SetCellText(sheetProp,4,1,&amp;quot;该文件不能预览&amp;quot;);
+	    
+	}
+}
+function DownloadFile()
+{
+	var ext =_this.GetCellText(sheetProp,1,2);
+
+	location = grdid+&amp;quot;.sp?action=down&amp;file=&amp;quot;+_this.GetCellText(sheetProp,1,1);
+
+//  if(binfiles.indexOf(ext+&amp;quot;;&amp;quot;)&amp;gt;=0 &amp;&amp; !confirm(&amp;quot;该文件可能不是文本文件，是否用编辑器打开？&amp;quot;))
+//  {
+//    //下载之
+//    //location = tagid;
+//    download();
+//  }
+}
+
+function instanceEditor()
+{
+//var sBasePath = document.location.pathname.substring(0,document.location.pathname.lastIndexOf(&amp;apos;_samples&amp;apos;)) ;
+//oFCKeditor = new FCKeditor( &amp;apos;FCKeditor1&amp;apos; ) ;
+//oFCKeditor.BasePath	= &amp;apos;&amp;apos; ;
+//oFCKeditor.Value	= &amp;apos;&amp;apos; ;
+//oFCKeditor.Height       = &amp;apos;100%&amp;apos; ;
+//oFCKeditor.Create() ;
+}
+
+function extEdit()
+{
+  var Url=&amp;quot;javascript:void(0)&amp;quot;;
+  var args=new Object();
+  args.html=_this.GetCellText(sheetCode,-1,-1);
+  window.showModalDialog(Url ,args , &amp;quot;resizable:1;fullscreen:1&amp;quot;);//dialogLeft:0px;dialogwidth:210px;dialogheight:480px;
+  _this.SetCellText(sheetCode,-1,-1,args.html);
+  _this.Redraw();
+}
+
+//undefined
+function save()
+{
+  var param = new Object();
+  param.content = _this.GetCellText(sheetCode,-1,-1);
+  if(!activefile)
+  {
+    activefile = prompt(&amp;quot;请输入新文件名，文件名包含路径：\n  例如，下面的名称，将保存到/xlsGridData/x/jsp/demo.jsp：&amp;quot;,&amp;quot;x/jsp/demo.jsp&amp;quot;);
+  }
+  param.file = activefile;
+  alert(invokeOSFuncExt(&amp;quot;savefile&amp;quot;,param));
+}
+
+//undefined
+function newfile()
+{
+  activefile = &amp;quot;&amp;quot;;
+  _this.SetCellText(sheetCode,-1,-1,&amp;quot;&amp;quot;);
+}
+
+//undefined
+function download()
+{
+  if(!activefile)
+  {
+    alert(&amp;quot;请先选择要下载的文件。&amp;quot;);
+    return;
+  }
+  location = grdid+&amp;quot;.sp?action=down&amp;file=&amp;quot;+activefile;
+}
+
+function subzipdown()
+{
+  if(!activefile)
+  {
+    alert(&amp;quot;请先选择要下载的目录。&amp;quot;);
+    return;
+  }
+  
+  location = grdid+&amp;quot;.sp?action=subzipdown&amp;file=&amp;quot;+activefile;
+}
+
+function zipdown()
+{
+  location = grdid+&amp;quot;.sp?action=zipdown&amp;file=&amp;quot;+activefile;
+}
+function _thisOnTreeFolderClick(id,hItem,itemid,attribe,value)
+{
+  activefile = attribe.split(&amp;quot;,&amp;quot;)[0];
+}
+//undefined
+function upload()
+{
+  doupload(&amp;quot;upload&amp;quot;);
+}
+
+function doupload(action)
+{
+  var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+  var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+  form.reset();
+  btn.click();
+  var file = btn.value;
+  if(file)
+  {
+    _this.OpenHttpRequest(homeurl+grdid+&amp;quot;.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,action,0);
+    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+
+    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,activefile+&amp;quot;/&amp;quot;,0);
+    var ret = _this.SendHttpRequest();
+    if(ret==1)
+    {
+      alert(&amp;quot;保存成功。&amp;quot;);
+      //loadTreeView();
+    }
+    else
+      alert(&amp;quot;保存失败:&amp;quot;+ret);
+  }
+  //else alert(&amp;quot;请选择要上传的文件。&amp;quot;);
+}
+
+
+//undefined
+function delfile()
+{
+    _this.OpenHttpRequest(homeurl+grdid+&amp;quot;.sp&amp;quot;,&amp;quot;&amp;quot;);
+    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;delfile&amp;quot;,0);
+    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,activefile,0);
+    var ret = _this.SendHttpRequest();
+    if(ret==1)
+    {
+      alert(&amp;quot;删除成功。&amp;quot;);
+      //loadTreeView();
+    }
+    else
+      alert(&amp;quot;删除失败:&amp;quot;+ret);
+    
+}
+
+function backup()
+{
+  alert(invokeOSFunc(&amp;quot;backup&amp;quot;,&amp;quot;&amp;quot;));
+}
+
+function subzipup()
+{
+  doupload(&amp;quot;subzipup&amp;quot;);
+}
+
+//undefined
+function zipup()
+{
+  doupload(&amp;quot;zipup&amp;quot;);
+}
+function syncRes()
+{
+  alert(invokeOSFunc(&amp;quot;syncRes&amp;quot;,&amp;quot;&amp;quot;));
+}
+
+function deltree()
+{
+  if(confirm(&amp;quot;确实要删除选定目录吗？&amp;quot;+activefile))
+    alert(invokeOSFunc(&amp;quot;deltree&amp;quot;,&amp;quot;file=&amp;quot;+activefile));
+}
+
+function unzip()
+{
+  var param = new Object();
+  var path = prompt(&amp;quot;请输入文件要解压到的路径(相对根节点路径)：\n  例如，下面的名称，将保存到/xlsGridData/x/jsp/demo.jsp：&amp;quot;,&amp;quot;x/jsp/&amp;quot;);
+  param.path = path;
+  param.file = activefile;
+  alert(invokeOSFuncExt(&amp;quot;unzip&amp;quot;,param));
+}
+
+// 得到XML节点的属性值，一般用于树状结构的解析上
+function getXmlAttribute(attribe,attribename)
+{
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; ,  loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1  ) ;
+            return ret;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >/* 使用顶层中间件目录
+var realpath = pub.EAOption.getRealpath();
+    var a = realpath.indexOf(java.io.File.separatorChar);
+    var r = java.io.File.separator; 
+    if(a&amp;gt;=0)
+      r = realpath.substring(0,a+1);
+var cvshome = r+pub.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;);
+*/
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pubpack&amp;quot;);
+
+//使用实例的中间件目录
+var cvshome = pub.EAOption.dynaDataRoot;
+var roolen = cvshome.length();
+var foldid;
+//================================================================// 
+// 函数：getTreeCtlXml
+// 说明：取目录结构
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:27:04
+// 修改日志：
+//================================================================// 
+function normal(val)
+{
+  return pub.EAFunc.Replace(val,&amp;quot; &amp;quot;,&amp;quot;_&amp;quot;);
+}
+
+function getTreeCtlXml(root,xml)
+{
+  var f = root;
+  //throw new Exception(f);
+  var folds = f.listFiles();
+  if(folds==null) return &amp;quot;&amp;quot;;
+  //java.util.Arrays.sort(folds);
+  folds=pub.EAFunc.sort(folds);
+  var c = folds.length();
+  //throw new Exception(c);
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    f=folds[i];
+    if(f.isDirectory())
+    {
+      foldid++;
+	xml += &amp;quot;&amp;lt;目录 path=\&amp;quot;%s\&amp;quot; imageid=\&amp;quot;0\&amp;quot; &amp;gt;%s&amp;lt;/目录&amp;gt;&amp;quot;.format([f.getAbsolutePath().substring(roolen),f.getName()]);
+    }
+  }
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    f=folds[i];
+    if(f.isDirectory())
+    {
+    }
+    else
+      xml += &amp;quot;&amp;lt;&amp;quot;+normal(f.getName()) +&amp;quot; &amp;quot;+f.getAbsolutePath().substring(roolen)+&amp;quot; /&amp;gt;&amp;quot;;
+  }
+  
+  return xml;
+}
+
+//================================================================// 
+// 函数：getFolderTreeXml
+// 说明：取cvs根目录和web根目录下的目录结构
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:26:21
+// 修改日志：
+//================================================================// 
+//var roolen = 0;
+function getFolderTreeXml()
+{
+  foldid=0;
+  var isroot=root==&amp;quot;&amp;quot;;
+  if(isroot)
+    root = cvshome;
+  else root = cvshome + root;
+ // throw new Exception(root);
+  var f = new java.io.File(root);
+  var xml = getTreeCtlXml(f,&amp;quot;&amp;quot;);
+  if(isroot)
+    xml = &amp;quot;&amp;lt;&amp;quot;+f.getName() +&amp;quot; &amp;quot;+root+&amp;quot;&amp;gt;&amp;quot; //&amp;quot;&amp;lt;&amp;quot;+f.getName() +&amp;quot; &amp;quot;+root+&amp;quot;,&amp;quot;+foldid+&amp;quot;&amp;gt;&amp;quot;  
+      + xml
+      + &amp;quot;&amp;lt;/&amp;quot;+f.getName() +&amp;quot;&amp;gt;&amp;quot;;
+  return xml;
+}
+
+function getFile()
+{
+  //throw new Exception(cvshome+file);
+  return pub.EAFunc.readFile(cvshome+file);
+}
+
+function savefile()
+{
+  pub.EAFunc.WriteToFile(cvshome+file,content);
+  return &amp;quot;保存成功：&amp;quot;+cvshome+file;
+}
+
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+{
+//  sb.append(&amp;quot;&amp;lt;SCRIPT src=fckeditor.js type=text/javascript&amp;gt;&amp;lt;/SCRIPT&amp;gt;&amp;quot;);
+}
+
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+	function doupload(path)
+	{
+	    var up = new pub.EAUpload();
+	    up.setOverwrite(true);
+	    up.setFilesizelimit(1024*1024);   // limited upload size &amp;lt;=10M
+	    up.setFolderstore(path);
+
+	    file = pub.EAFunc.encodeString(mrequest.getParameter(&amp;quot;file&amp;quot;),ubp.MultipartFormDataRequest.DEFAULTENCODING,&amp;quot;GBK&amp;quot;);
+
+	    file = pub.EAFunc.Replace(file,&amp;quot;\\&amp;quot;,&amp;quot;/&amp;quot;);
+	    var f=new java.io.File(file);
+	    //throw new Exception(file+&amp;quot;;&amp;quot;+path+&amp;quot;;&amp;quot;+f.getName());
+	    up.store(mrequest,f.getName());
+	    return f.getName();
+	}
+  var action = request.getParameter(&amp;quot;action&amp;quot;);
+ 
+  var filematch= request.getParameter(&amp;quot;filematch&amp;quot;);// 文件匹配 如262*.*
+  if ( filematch== null ) filematch = &amp;quot;&amp;quot;;
+  var mrequest=null;
+  var ubp=null;
+
+  if(action==null||mrequest==null)
+  {
+  	try{
+		ubp = new JavaPackage(&amp;quot;javazoom.upload&amp;quot;);
+		request.setCharacterEncoding(ubp.MultipartFormDataRequest.DEFAULTENCODING);
+		mrequest = new ubp.MultipartFormDataRequest(request);
+		action = mrequest.getParameter(&amp;quot;action&amp;quot;);
+	}catch(e){
+		pub.EAFunc.Log(e.toString());
+	}
+  }
+    
+  var file = request.getParameter(&amp;quot;file&amp;quot;);
+  if(action==&amp;quot;down&amp;quot;){
+      var fullfile = cvshome+file;
+      fullfile =pub.EAFunc.Replace(fullfile ,&amp;quot;\\&amp;quot;,&amp;quot;/&amp;quot;); 
+      pub.EAFunc.file2Response(response,fullfile );
+  }
+  else//目录压缩下载
+  if(action==&amp;quot;subzipdown&amp;quot;)
+  {
+      var f = new java.io.File(cvshome+file);
+      if(f.isFile())
+        file = f.getParent();
+      pub.EAFunc.zip2Response(response,f.getName()+&amp;quot;.zip&amp;quot;,f.getPath(),filematch,&amp;quot;*.os&amp;quot;,true);
+  }
+  else//完整打包下载
+  if(action==&amp;quot;zipdown&amp;quot;)
+  {
+      var f = new java.io.File(cvshome);
+      pub.EAFunc.zip2Response(response,f.getName()+&amp;quot;.zip&amp;quot;,cvshome,&amp;quot;&amp;quot;,&amp;quot;*.os&amp;quot;,true);
+  }
+  else
+  if(action==&amp;quot;upload&amp;quot;)
+  {
+    var path = mrequest.getParameter(&amp;quot;path&amp;quot;);
+    if(path==cvshome+&amp;quot;/&amp;quot;)//传入根目录
+    	path=&amp;quot;&amp;quot;;
+    path = cvshome+pub.EAFunc.encodeString(path,ubp.MultipartFormDataRequest.DEFAULTENCODING,&amp;quot;GBK&amp;quot;);
+
+    var f=new java.io.File(path);
+    if(!f.isDirectory())
+      path = f.getParent()+&amp;quot;/&amp;quot;;
+    doupload(path);
+    return 1;
+  }
+  else//目录压缩上传后，解包
+  if(action==&amp;quot;subzipup&amp;quot;)
+  {
+    var path = mrequest.getParameter(&amp;quot;path&amp;quot;);
+    
+    try{
+	    if(path==cvshome+&amp;quot;/&amp;quot;)//传入根目录
+	    	path=&amp;quot;&amp;quot;;
+	
+	      var path = pub.EAFunc.encodeString(path,ubp.MultipartFormDataRequest.DEFAULTENCODING,&amp;quot;GBK&amp;quot;);
+	      //throw new Exception(path);
+	      var fn = doupload(cvshome);//保存上传的文件到中间件根目录
+	     
+	      var f = new java.io.File(cvshome+path);
+	      if(f.isFile())
+	        path = f.getParent();
+	      else path = f.getPath();
+	    //pub.EAFunc.zip2Response(response,f.getName()+&amp;quot;.zip&amp;quot;,f.getPath(),&amp;quot;&amp;quot;,&amp;quot;*.os&amp;quot;,true);
+	
+	    pub.EAJarResource.ExtractZipFiles(&amp;quot;&amp;quot;,path+&amp;quot;/&amp;quot;,cvshome+fn,true);
+     //throw new Exception ( &amp;quot;目录压缩上传后，解包&amp;quot;+path+&amp;quot;/&amp;quot;+cvshome+fn);
+     }catch(ee){
+     	return path+&amp;quot;/&amp;quot;+ee;
+     }
+    return 1;
+  }
+  else//整个中间件目录压缩上传后，解包
+  if(action==&amp;quot;zipup&amp;quot;)
+  {
+    //上传前先做备份
+    //bakcup();
+    var fn = doupload(cvshome);
+    pub.EAJarResource.ExtractZipFiles(&amp;quot;&amp;quot;,cvshome,cvshome+fn,true);
+    return 1;
+  }
+  else
+  if(action==&amp;quot;delfile&amp;quot;)
+  {
+    var f=new java.io.File(cvshome+file);
+    return f.delete()?1:-1;
+  }
+  else return &amp;quot;unknow action&amp;quot;;
+}
+
+function bakcup()
+{
+    var f = new java.io.File(cvshome);
+    var bakname = cvshome+f.getName()+
+    	pub.EAFunc.DateToStr(new java.util.Date(),&amp;quot; yyyy-MM-dd hh_mm&amp;quot;)+&amp;quot;.zip&amp;quot;;
+    var ez = new pub.EAstdZipFile(f.getPath(),&amp;quot;&amp;quot;,&amp;quot;*.os,*.zip,*.rar&amp;quot;,true);
+    ez.zip2File(cvshome,bakname);
+    return &amp;quot;备份成功。&amp;quot;;
+}
+
+//复制资源到web目录
+function syncRes()
+{
+        pub.EAFunc.copyDirectiory(cvshome+&amp;quot;org&amp;quot;,pub.AppStartListener.approot+&amp;quot;org&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+        pub.EAFunc.copyDirectiory(cvshome+&amp;quot;syt/&amp;quot;,pub.AppStartListener.approot,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+        return &amp;quot;同步到web目录成功。&amp;quot;;
+}
+
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  bodysb.insert(0,&amp;quot;&amp;lt;form id=\&amp;quot;myfilef\&amp;quot;&amp;gt;&amp;lt;input type=\&amp;quot;file\&amp;quot; id=\&amp;quot;myfile\&amp;quot; style=\&amp;quot;display:none\&amp;quot;&amp;gt;&amp;lt;/input&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;);
+  var base =request.getParameter(&amp;quot;base&amp;quot;);
+  if(base==null) base = &amp;quot;&amp;quot;;
+//  //如果base=/打开，表示打开一个绝对目录，否则打开一个相对目录
+  var fullfile = &amp;quot;&amp;quot;;
+  if(base.length()&amp;gt;0&amp;&amp;base.substring(0,1)==&amp;quot;/&amp;quot;){
+  	fullfile = base.substring(1);
+  }
+  else {
+  	fullfile =base;
+  }
+  if(fullfile.indexOf(&amp;quot;/&amp;quot;)&amp;gt;0)
+  	bodysb.insert(0,&amp;quot;&amp;lt;script&amp;gt;alert(&amp;apos;传入的base=参数不能带/或\\,请用|来代替&amp;apos;)&amp;lt;/script&amp;gt;&amp;quot;);
+
+  fullfile =pub.EAFunc.Replace(fullfile ,&amp;quot;\\&amp;quot;,&amp;quot;/&amp;quot;);
+  fullfile =pub.EAFunc.Replace(fullfile ,&amp;quot;|&amp;quot;,&amp;quot;/&amp;quot;);
+  bodysb.insert(0,&amp;quot;&amp;lt;script&amp;gt;var ROOT=\&amp;quot;&amp;quot;+fullfile +&amp;quot;\&amp;quot;;&amp;lt;/script&amp;gt;&amp;quot;);
+  
+
+}
+
+function deltree()
+{
+  var file = request.getParameter(&amp;quot;file&amp;quot;);
+  pub.EAFunc.deltree(cvshome+file);
+  return &amp;quot;删除&amp;quot;+cvshome+file+&amp;quot;成功。&amp;quot;;
+}
+
+function unzip()
+{
+  var file = request.getParameter(&amp;quot;file&amp;quot;);
+  var path = request.getParameter(&amp;quot;path&amp;quot;);
+  //return cvshome+file+&amp;quot;, &amp;quot;+cvshome+path;
+  var src = cvshome+file;
+  var dst = cvshome+path;
+  pub.EAJarResource.ExtractZipFiles(&amp;quot;&amp;quot;,dst,src,true);
+  return &amp;quot;成功解压 &amp;quot;+src+&amp;quot; 到 &amp;quot;+dst;
+}
+
+//复制某个目录下的所有文件到另外一个目录
+//调用 x.fileEditor.CopyDir.osp?srcdir=/u/userdata/abc&amp;destdir=/u/userdata/abcnew
+//参数 srcdir:  &amp;quot;/u/userdata/abc/&amp;quot;
+//     destdir: &amp;quot;/u/userdata/abcnew/&amp;quot;
+function CopyDir()
+{
+	var ret = 0;
+//	pubpack.EAFunc.Log(&amp;quot;开始复制&amp;quot;+srcdir+&amp;quot;到&amp;quot;+destdir);
+	pub.EAFunc.copyDirectiory(srcdir,destdir,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,true);
+//	pubpack.EAFunc.Log(&amp;quot;复制&amp;quot;+srcdir+&amp;quot;到&amp;quot;+destdir+&amp;quot;结束&amp;quot;);
+//	var msg =  &amp;quot;复制&amp;quot;+srcdir+&amp;quot;到&amp;quot;+destdir+&amp;quot;结束&amp;quot;;
+	ret = 1;
+	return ret;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

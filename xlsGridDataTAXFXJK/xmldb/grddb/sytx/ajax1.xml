@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ajax1</MWID><NAME >查询参数间联动</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ajax1.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >orgid</ID><NAME >组织</NAME><NOTNULL ></NOTNULL><KEYVAL >V_ORG</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >orgid</C13><C14 ></C14><C15 >orgid</C15></ROW>
+<ROW num="1" ><ID >usrid</ID><NAME >用户</NAME><NOTNULL ></NOTNULL><KEYVAL >V_MYUSR</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE >1&amp;gt;2</SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >usrid</C14><C15 ></C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >3</NROW><NCOL >3</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+
+//显示查询参数前预处理
+//用于在查询或报表显示查询参数前的预处理。
+//可以往sb（StringBuffer）中append HTML内容或额外附近脚本
+//可以修改paramDs的内容，决定哪些参数可见或修改默认值
+//  ID:编号;  NAME:标题; KEYVAL:关键字; SQLWHE:WHERE条件; DEFVAL:默认值
+//  TIP:提示; EDTFLG:是否可修改;  VISFLG:是否可显示; KEYFLG:关键字段(没有作用)
+//  DISPORD:参数显示次序号(修改无效); INPCTL:控件类型
+function beforeShowParam(request,sb,paramDs,usrinfo)
+//var request=javax.servlet.http.HttpServletRequest(); var sb = new java.lang.StringBuffer();var paramDs = new EAXmlDS();var usrinfo = new web.EAUserinfo();
+{
+//	sb.append(&amp;quot;&amp;lt;script type=&amp;apos;text/javascript&amp;apos; src=&amp;apos;xlsgrid/js/jquery-1.3.1.js&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;);  
+	sb.append(&amp;quot;&amp;lt;script type=&amp;apos;text/javascript&amp;apos; src=&amp;apos;xlsgrid/js/jquery-132min2.js&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); //压缩版
+//	sb.append(&amp;quot;&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/svgchart.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;\n&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;script type=&amp;apos;text/javascript&amp;apos;&amp;gt;&amp;quot;);
+	//为了在页面可以使用客户端控件
+	sb.append(&amp;quot;function CreateControl(ObjectID, WIDTH, HEIGHT){
+		  	document.write( &amp;apos;&amp;lt;object classid=clsid:37CC6FCD-9BF5-4433-B3F3-576E08025EA8 id=&amp;apos; + ObjectID  
+		   	+ &amp;apos; width=&amp;apos; + WIDTH + &amp;apos; height=&amp;apos; + HEIGHT +&amp;apos;&amp;gt;&amp;apos;+&amp;apos;&amp;lt;/OBJECT&amp;gt;&amp;apos;);
+		    }
+		    CreateControl(&amp;apos;svg&amp;apos;,&amp;apos;100%&amp;apos;,&amp;apos;100%&amp;apos;);
+		    var _this = document.getElementById(&amp;apos;svg&amp;apos;);
+	&amp;quot;);
+	
+	sb.append(&amp;quot;
+		$(document).ready(function() {
+			$(\&amp;quot;select[name=orgid]\&amp;quot;).bind(\&amp;quot;change\&amp;quot;,null,function(){
+//                		alert(\&amp;quot;select changed.\&amp;quot;+$(this).val());
+                		var orgid = $(this).val();
+
+				$.ajax({
+					type:&amp;apos;GET&amp;apos;,
+					url:\&amp;quot;XmlDB.sp?bind=V_MYUSR&amp;where=oid=&amp;apos;\&amp;quot;+orgid+\&amp;quot;&amp;apos;&amp;collist=id,name\&amp;quot;,
+					dataType:&amp;apos;text/xml&amp;apos;,
+					error:function(XMLResponse){
+						alert(arguments[1]); //中间件平台返回的XML的encoding=GBK,而ajax要求是utf-8
+						//alert(XMLResponse.responseText)
+					},
+					success:function(xml) {
+						var id,name;
+						//alert(xml);
+						$(\&amp;quot;select[name=usrid]\&amp;quot;).empty();// 清空下拉框
+//						$(xml).find(&amp;apos;ROW&amp;apos;).each(function(){	//在IE下解释XML格式数据有问题，FIREFOX下正常
+//							id = $(this).children(&amp;apos;ID&amp;apos;).text();
+//							name = $(this).children(&amp;apos;NAME&amp;apos;).text();
+//							alert(&amp;apos;usri=&amp;apos;+id+&amp;apos; usrname=&amp;apos;+name);
+//							//$(\&amp;quot;&amp;lt;option value=&amp;apos;\&amp;quot;+id+\&amp;quot;&amp;apos;&amp;gt;\&amp;quot;+name+\&amp;quot;&amp;lt;/option&amp;gt;\&amp;quot;).appendTo(\&amp;quot;select[name=usrid]\&amp;quot;);
+//							$(\&amp;quot;select[name=usrid]\&amp;quot;).append(\&amp;quot;&amp;lt;option value=&amp;apos;\&amp;quot;+id+\&amp;quot;&amp;apos;&amp;gt;\&amp;quot;+name+\&amp;quot;&amp;lt;/option&amp;gt;\&amp;quot;);
+//							
+//						});
+						_this.XMLDS_Reset();
+						_this.XMLDS_Parse(xml);
+						for (var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++) {
+							var id = _this.XMLDS_GetString(i,\&amp;quot;ID\&amp;quot;);
+							var name = _this.XMLDS_GetString(i,\&amp;quot;NAME\&amp;quot;);
+							$(\&amp;quot;select[name=usrid]\&amp;quot;).append(\&amp;quot;&amp;lt;option value=&amp;apos;\&amp;quot;+id+\&amp;quot;&amp;apos;&amp;gt;\&amp;quot;+name+\&amp;quot;&amp;lt;/option&amp;gt;\&amp;quot;);
+						}
+					}
+				});
+
+				
+            		});
+        	});
+	
+	
+	&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;/script&amp;gt;
+	&amp;quot;);
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >select org,id,name from usr 
+where org=&amp;apos;[%orgid]&amp;apos; and id=&amp;apos;[%usrid]&amp;apos;</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

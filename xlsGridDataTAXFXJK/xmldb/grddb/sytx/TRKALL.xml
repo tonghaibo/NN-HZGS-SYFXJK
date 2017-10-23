@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>TRKALL</MWID><NAME>查看具体事务</NAME><NOTE></NOTE><FILE>TRKALL.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/07/06 11:43:58
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+        _this.SetMainCellRange(sheet,2,1,3,9);
+        var param = &amp;quot;project=&amp;quot;+project+&amp;quot;&amp;title=&amp;quot;+title+&amp;quot;&amp;retitle=&amp;quot;+retitle;
+        try
+        {
+              var ret = invokeOSFunc(&amp;quot;filterXmlDS&amp;quot;,param);
+              _this.SetXmlDS(sheet, 2,1,3,9,ret); 
+         }
+         catch(e)
+         {
+                alert (e);
+         }
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+function filterXmlDS()
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql = &amp;quot;select project,id,title,retitle,stat,prio,crtusr,crtdat,note &amp;quot;+
+                &amp;quot; from trkhdr where project=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos; and title=&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos; &amp;quot;+
+                &amp;quot; and retitle=&amp;apos;&amp;quot;+retitle+&amp;quot;&amp;apos;&amp;quot;;
+               // throw new Exception (sql);
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

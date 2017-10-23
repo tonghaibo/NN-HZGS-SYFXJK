@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_ShDHDC</MWID><NAME >顶汇(全佳)</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_ShDHDC.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;getOrderStr&amp;quot;,&amp;quot;dat=2010-07-27&amp;kaid=JQPX01&amp;userid=301378&amp;passwd=301378&amp;deptid=市场部&amp;quot;);
+	_this.SaveTextFile( &amp;quot;d:/ShDHDC.htm&amp;quot;,msg,&amp;quot; (*.htm)|*.htm|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+var hostip = &amp;quot;http://www.sh-dhdc.com.cn/&amp;quot;;
+var __EVENTVALIDATION1 = &amp;quot;/wEWBgLqrtCzDAKSotaICwKz8dy8BQKd+7qdDgKC3IeGDAKT+PmaCOzdFmfvo3cgLrM6d4JkozGIW/l6&amp;quot;;
+var __VIEWSTATE1 = &amp;quot;/wEPDwULLTEwNTkxMTMyMTkPZBYCAgEPZBYEAgsPD2QWAh4Hb25jbGljawUZcmV0dXJuIGJ0bkxvZ2luX29uY2xpY2soKWQCDQ8PZBYCHwAFEmJ0bkNsb3NlX29uY2xpY2soKWRk93LPkYGB6j6mTVO6lStX+SAqSXA=&amp;quot;;
+
+var __EVENTVALIDATION2 = &amp;quot;/wEWBAKLjfCuCgKQscyxAwLj+LrgCQKasMCZAaSxVnzL890b0NQ28ky6jlfbXSMN&amp;quot;;
+var __VIEWSTATE2 = &amp;quot;/wEPDwUKLTU5NjQ1MTc1OQ9kFgICAw9kFgICAw8PFgIeBFRleHQFBjMwMTM3OGRkZCURjQnvoUYFpl4cG2hrhJ1IljhM&amp;quot;;
+
+var __EVENTVALIDATION3 = &amp;quot;/wEWEQKryurqAQKSotaICwLjlOfKAgLu3MKeBQLftYytDgLi0K+bBQKEuZXjAwK0gMnQAQK776+9DQK775e9DQK576+9DQK576u9DQKTl4+6DwKPsMP4DQKln/PuCgKtkuWiCgK+rvNOj08tY30KBPaMNQLIzEmHjVTeP7Y=&amp;quot;;
+var __VIEWSTATE3 = &amp;quot;/wEPDwUJODYzMzgxNzQ0D2QWAgIDD2QWDgIFDw8WAh4EVGV4dAUGMzAxMzc4ZGQCCQ8PZBYCHgZvbmJsdXIFFWZ1bkRpc3BsYXlEYXRlKHRoaXMpO2QCCw8PZBYCHwEFFWZ1bkRpc3BsYXlEYXRlKHRoaXMpO2QCDw8PZBYCHwEFFWZ
+	1bkRpc3BsYXlEYXRlKHRoaXMpO2QCEQ8PZBYCHwEFFWZ1bkRpc3BsYXlEYXRlKHRoaXMpO2QCFQ8QDxYGHg5EYXRhVmFsdWVGaWVsZAUHU1VCTkFNRR4NRGF0YVRleHRGaWVsZAUIU1VCVkFMVUUeC18hRGF0YUJvdW5kZ2QQFQUH5YWoIOmDqAzljo
+	LllYborqLljZUS5Y6C5ZWG57Sn5oCl6K6i5Y2VGuWOguWVhumAgOi0p+WNlSjkuIvmnrblk4EpGuWOguWVhumAgOi0p+WNlSjkuI3oia/lk4EpFQUAAjExAjEzAjMxAjMyFCsDBWdnZ2dnZGQCGQ8QDxYGHwIFBERDSUQfAwUGRENOQU1FHwRnZBAVA
+	gflhagg6YOoEumhtuaxh+W4uOa4qeeJqea1gRUCAAZEMTAxMDEUKwMCZ2dkZGS1zT0AIWZPPoG0xY/2bRWBsELIIQ==&amp;quot;;
+
+var __EVENTVALIDATION4 = &amp;quot;/wEWFALgg++VBgK+rvNOAoyTzeUDAvySpa8CAoW3tIcJAp3hq7INAoL4jZ0DAueO8IcJAsyl0vIOAtOz69wBAoL4kZ0DAoyXx/APAomX+/APAouXx/APAqvWnKcIArLEi7kNAqvW6KQIAqrWnKcIAqXWnKcIAqTWnKcIWn1Ko
+	mCuBJuHuzO6j23uUikJOxc=&amp;quot;;
+var __VIEWSTATE4 = &amp;quot;/wEPDwULLTEwMjk4ODA3ODYPFgIeDFJlcXVlc3RQYXJtczKoDwABAAAA/////wEAAAAAAAAADAIAAABOU3lzdGVtLkRhdGEsIFZlcnNpb249Mi4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE
+	5MzRlMDg5BQEAAAAVU3lzdGVtLkRhdGEuRGF0YVRhYmxlAwAAABlEYXRhVGFibGUuUmVtb3RpbmdWZXJzaW9uCVhtbFNjaGVtYQtYbWxEaWZmR3JhbQMBAQ5TeXN0ZW0uVmVyc2lvbgIAAAAJAwAAAAYEAAAAuAk8P3htbCB2ZXJzaW9uPSIxLjAiIG
+	VuY29kaW5nPSJ1dGYtMTYiPz4NCjx4czpzY2hlbWEgeG1sbnM9IiIgeG1sbnM6eHM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIiB4bWxuczptc2RhdGE9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLW1zZGF0YSI+DQogI
+	Dx4czplbGVtZW50IG5hbWU9IlRhYmxlMSI+DQogICAgPHhzOmNvbXBsZXhUeXBlPg0KICAgICAgPHhzOnNlcXVlbmNlPg0KICAgICAgICA8eHM6ZWxlbWVudCBuYW1lPSJWRU5ET1JJRCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFt
+	ZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iT0RBVEVTIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6ZWxlbWV
+	udCBuYW1lPSJPREFURUUiIHR5cGU9InhzOnN0cmluZyIgbXNkYXRhOnRhcmdldE5hbWVzcGFjZT0iIiBtaW5PY2N1cnM9IjAiIC8+DQogICAgICAgIDx4czplbGVtZW50IG5hbWU9IlJEQVRFUyIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2
+	V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iUkRBVEVFIiB0eXBlPSJ4czpzdHJpbmciIG1zZGF0YTp0YXJnZXROYW1lc3BhY2U9IiIgbWluT2NjdXJzPSIwIiAvPg0KICAgICAgICA8eHM6Z
+	WxlbWVudCBuYW1lPSJPVFlQRSIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFyZ2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgICAgPHhzOmVsZW1lbnQgbmFtZT0iRENJRCIgdHlwZT0ieHM6c3RyaW5nIiBtc2RhdGE6dGFy
+	Z2V0TmFtZXNwYWNlPSIiIG1pbk9jY3Vycz0iMCIgLz4NCiAgICAgIDwveHM6c2VxdWVuY2U+DQogICAgPC94czpjb21wbGV4VHlwZT4NCiAgPC94czplbGVtZW50Pg0KICA8eHM6ZWxlbWVudCBuYW1lPSJ0bXBEYXRhU2V0IiBtc2RhdGE6SXNEYXR
+	hU2V0PSJ0cnVlIiBtc2RhdGE6TWFpbkRhdGFUYWJsZT0iVGFibGUxIiBtc2RhdGE6VXNlQ3VycmVudExvY2FsZT0idHJ1ZSI+DQogICAgPHhzOmNvbXBsZXhUeXBlPg0KICAgICAgPHhzOmNob2ljZSBtaW5PY2N1cnM9IjAiIG1heE9jY3Vycz0idW
+	5ib3VuZGVkIiAvPg0KICAgIDwveHM6Y29tcGxleFR5cGU+DQogIDwveHM6ZWxlbWVudD4NCjwveHM6c2NoZW1hPgYFAAAAwwM8ZGlmZmdyOmRpZmZncmFtIHhtbG5zOm1zZGF0YT0idXJuOnNjaGVtYXMtbWljcm9zb2Z0LWNvbTp4bWwtbXNkYXRhI
+	iB4bWxuczpkaWZmZ3I9InVybjpzY2hlbWFzLW1pY3Jvc29mdC1jb206eG1sLWRpZmZncmFtLXYxIj4NCiAgPHRtcERhdGFTZXQ+DQogICAgPFRhYmxlMSBkaWZmZ3I6aWQ9IlRhYmxlMTEiIG1zZGF0YTpyb3dPcmRlcj0iMCIgZGlmZmdyOmhhc0No
+	YW5nZXM9Imluc2VydGVkIj4NCiAgICAgIDxWRU5ET1JJRD4zMDEzNzg8L1ZFTkRPUklEPg0KICAgICAgPE9EQVRFUz4yMDAxLzA4LzEwPC9PREFURVM+DQogICAgICA8T0RBVEVFPjIwMTAvMDgvMTA8L09EQVRFRT4NCiAgICAgIDxSREFURVMgLz4
+	NCiAgICAgIDxSREFURUUgLz4NCiAgICAgIDxPVFlQRSAvPg0KICAgICAgPERDSUQgLz4NCiAgICA8L1RhYmxlMT4NCiAgPC90bXBEYXRhU2V0Pg0KPC9kaWZmZ3I6ZGlmZmdyYW0+BAMAAAAOU3lzdGVtLlZlcnNpb24EAAAABl9NYWpvcgZfTWlub3
+	IGX0J1aWxkCV9SZXZpc2lvbgAAAAAICAgIAgAAAAAAAAD//////////wsWAgIDD2QWBAIBDw9kFgIeB29uY2xpY2sFGXJldHVybiBidG5CYWNrX29uY2xpY2soKTtkAgkPFwUFBkhlaWdodAcAAAAAAFiRQAUEQkFTRQ8WAh4HVmlzaWJsZWdkBQNjc
+	3NlBQ9SZXBvcnRWaWV3U3RhdGUXBgUKRGVzaWduTW9kZWgFElBhZ2VSZXF1ZXN0Q29udGV4dBcDBQpQYWdlTnVtYmVyAgEFFUlzTGFzdFBhZ2VOdW1iZXJLbm93bmgFDkxhc3RQYWdlTnVtYmVyAgEFB0ZhY3RvcnkFlgFDcnlzdGFsRGVjaXNpb25z
+	LlJlcG9ydFNvdXJjZS5SZXBvcnRTb3VyY2VGYWN0b3J5LENyeXN0YWxEZWNpc2lvbnMuUmVwb3J0U291cmNlLCBWZXJzaW9uPTEwLjIuMzYwMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPTY5MmZiZWE1NTIxZTEzMDQFB1JlZnJ
+	lc2hoBQlSZXBvcnRVUkllBQlScHRTb3VyY2UFN0NyeXN0YWxEZWNpc2lvbnMuUmVwb3J0U291cmNlLk5vbkhUVFBDYWNoZWRSZXBvcnRTb3VyY2UFBVdpZHRoBwAAAAAAmIdAFgQCAg8XBAUCYnMCmeD//w8FBHNpcG5mBQNzaHdoBQNwc3RkFgICCw
+	8QZA8WAWYWARAFCeS4u+aKpeihqAWoA0FBRUFBQUQvLy8vL0FRQUFBQUFBQUFBRUFRQUFBQnhUZVhOMFpXMHVRMjlzYkdWamRHbHZibk11U0dGemFIUmhZbXhsQndBQUFBcE1iMkZrUm1GamRHOXlCMVpsY25OcGIyNElRMjl0Y0dGeVpYSVFTR0Z6Y
+	UVOdlpHVlFjbTkyYVdSbGNnaElZWE5vVTJsNlpRUkxaWGx6QmxaaGJIVmxjd0FBQXdNQUJRVUxDQnhUZVhOMFpXMHVRMjlzYkdWamRHbHZibk11U1VOdmJYQmhjbVZ5SkZONWMzUmxiUzVEYjJ4c1pXTjBhVzl1Y3k1SlNHRnphRU52WkdWUWNtOTJh
+	V1JsY2dqc1VUZy9Bd0FBQUFvS0N3QUFBQWtDQUFBQUNRTUFBQUFRQWdBQUFBTUFBQUFHQkFBQUFBNU1ZWE4wVUdGblpVNTFiV0psY2dZRkFBQUFGVWx6VEdGemRGQmhaMlZPZFcxaVpYSkxibTkzYmdZR0FBQUFDbEJoWjJWT2RXMWlaWElRQXdBQUF
+	BTUFBQUFJQ0FFQUFBQUlBUUFJQ0FFQUFBQUxnFgFmZAIEDxcBBQNiZnBoZBgBBR5fX0NvbnRyb2xzUmVxdWlyZVBvc3RCYWNrS2V5X18WCwUbY3J5UmVwb3J0Vmlld2VyJGN0bDAyJGN0bDAwBRtjcnlSZXBvcnRWaWV3ZXIkY3RsMDIkY3RsMDEFG2
+	NyeVJlcG9ydFZpZXdlciRjdGwwMiRjdGwwMgUbY3J5UmVwb3J0Vmlld2VyJGN0bDAyJGN0bDAzBRtjcnlSZXBvcnRWaWV3ZXIkY3RsMDIkY3RsMDQFG2NyeVJlcG9ydFZpZXdlciRjdGwwMiRjdGwwNQUbY3J5UmVwb3J0Vmlld2VyJGN0bDAyJGN0b
+	DA2BRtjcnlSZXBvcnRWaWV3ZXIkY3RsMDIkY3RsMDcFG2NyeVJlcG9ydFZpZXdlciRjdGwwMiRjdGwxMAUbY3J5UmVwb3J0Vmlld2VyJGN0bDAyJGN0bDEyBRtjcnlSZXBvcnRWaWV3ZXIkY3RsMDIkY3RsMTQ0X2d/xiV7e3Y0LXHsDiVUPpvGLg==&amp;quot;;
+
+var ddlType = &amp;quot;&amp;quot;;	//订单类型：&amp;quot;&amp;quot;、全部，11、厂商订单，13、厂商紧急订单，31、厂商退货单(下架品)，32、厂商退货单(不良品)
+var ddlDCId = &amp;quot;&amp;quot;;	//物流：&amp;quot;&amp;quot;、全 部，D10101、顶汇常温物流
+
+var m_bilds = new pub.EADS();
+var m_bilid = &amp;quot;&amp;quot;;	//订单编号
+var m_bilguid = &amp;quot;&amp;quot;;	//内部编号
+var m_bEntryHdr = false;
+var m_lastcolnam = &amp;quot;&amp;quot;;
+var m_colnamlist = new Array(&amp;quot;采购订单编号&amp;quot;,&amp;quot;供应商编码&amp;quot;,&amp;quot;供应商名称&amp;quot;,&amp;quot;订货日期&amp;quot;,&amp;quot;送货日期&amp;quot;);				//正广和表头可抓取的&amp;lt;TD&amp;gt;info
+var t_bilhdr = new pub.EADS();
+var t_hdrrow = -1;
+var m_colidlist = new Array(&amp;quot;BILID&amp;quot;,&amp;quot;CORPNAM&amp;quot;,&amp;quot;CORPID&amp;quot;,&amp;quot;DEPT&amp;quot;,&amp;quot;订单号&amp;quot;,&amp;quot;DAT&amp;quot;,&amp;quot;期望到货日&amp;quot;,&amp;quot;电话号码&amp;quot;,&amp;quot;传真号码&amp;quot;);	//家乐福格式的HdrDS
+var m_bilhdr = new pub.EADS();
+var m_hdrrow = -1;
+var m_bEntryDtl = false;
+var m_bildtlstartflg = &amp;quot;金额(&amp;quot;;
+var m_bildtlcolseq = 0;
+var m_bildtl = new pub.EADS();		//家乐福格式的DtlDS（可构造不同格式的DS，单独解析，这个调用了家乐福的解析函数，所以格式和家乐福相同）
+var m_dtlrow = -1;
+
+function getOrderStr()
+{
+	var httpcall = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	try {
+		httpcall = new webget.HttpCall();
+		
+		ret =  httpcall.Post(hostip+&amp;quot;Login.aspx&amp;quot;,&amp;quot;btnLogin=登录&amp;txtUserId=&amp;quot;+userid+&amp;quot;&amp;txtPwd=&amp;quot;+passwd
+			+&amp;quot;&amp;__EVENTVALIDATION=&amp;quot;+__EVENTVALIDATION1+&amp;quot;&amp;__VIEWSTATE=&amp;quot;+__VIEWSTATE1,&amp;quot;UTF-8&amp;quot;);		//登陆
+		
+		ret = httpcall.Post(hostip+&amp;quot;Main.aspx&amp;quot;,&amp;quot;&amp;quot;);
+		ret =  httpcall.Post(hostip+&amp;quot;Main.aspx&amp;quot;,&amp;quot;btnToSearch=订单查询&amp;quot;
+			+&amp;quot;&amp;__EVENTVALIDATION=&amp;quot;+__EVENTVALIDATION2+&amp;quot;&amp;__VIEWSTATE=&amp;quot;+__VIEWSTATE2,&amp;quot;UTF-8&amp;quot;);		//订单
+		
+		ret = httpcall.Post(hostip+&amp;quot;POQuery.aspx&amp;quot;,&amp;quot;&amp;quot;);
+		ret = httpcall.Post(hostip+&amp;quot;POQuery.aspx&amp;quot;,&amp;quot;btnSearch=查询&amp;txtVendorId=&amp;quot;+userid+&amp;quot;&amp;txtOrderStartDate=&amp;quot;+dat+&amp;quot;&amp;txtOrderEndDate=&amp;quot;+dat
+			+&amp;quot;&amp;__EVENTVALIDATION=&amp;quot;+__EVENTVALIDATION3+&amp;quot;&amp;__VIEWSTATE=&amp;quot;+__VIEWSTATE3,&amp;quot;UTF-8&amp;quot;);		//清单
+		
+		ret = httpcall.Post(hostip+&amp;quot;POQuery_rpt.aspx&amp;quot;,&amp;quot;&amp;quot;);
+//		ret = httpcall.Post(hostip+&amp;quot;POQuery_rpt.aspx?ODATES=2001%2f08%2f10&amp;ODATEE=2010%2f08%2f10&amp;RDATES=&amp;RDATEE=&amp;OTYPE=&amp;DCID=&amp;quot;,&amp;quot;submit=将报表导出为EXCEL文件&amp;quot;
+//			+&amp;quot;&amp;__EVENTVALIDATION=&amp;quot;+__EVENTVALIDATION4+&amp;quot;&amp;__VIEWSTATE=&amp;quot;+__VIEWSTATE4,&amp;quot;UTF-8&amp;quot;);
+		
+		return ret;
+		
+		
+		var node = httpcall.PostAndParse(hostip+&amp;quot;POQuery.aspx&amp;quot;,billistparam,&amp;quot;GBK&amp;quot;);	
+		GetBillist(node);
+		
+		for (var i = 0; i &amp;lt; m_bilds.getRowCount(); i ++) {
+			m_bilguid = m_bilds.getStringAt(i,&amp;quot;BILGUID&amp;quot;);
+			var billparam = &amp;quot;chkSelection=&amp;quot;+m_bilguid+&amp;quot;&amp;id=&amp;quot;+m_bilguid;
+			
+//			ret = httpcall.Post(hostip+&amp;quot;purchase/BLPOrderModify.jsp&amp;quot;,billparam);
+			node = httpcall.PostAndParse(hostip+&amp;quot;purchase/BLPOrderModify.jsp&amp;quot;,billparam,&amp;quot;GBK&amp;quot;);		//表单
+			m_bEntryHdr = false;
+			m_bEntryDtl = false;
+			m_lastcolnam= &amp;quot;&amp;quot;;
+			m_bildtlcolseq= 0;
+			GetBildetail(node);
+			if (i == 5) break;
+		}
+//		throw new Exception(m_bilhdr.GetXml()+&amp;quot;\n&amp;quot;+m_bildtl.GetXml());
+		var func = new x_WG_Currefour();
+		return func.writeStr(userid,deptid,kaid,m_bilhdr,m_bildtl);		//调用家乐福的解析函数
+	} catch ( e ) {
+		throw new Exception( e );
+	}
+}
+
+function GetBillist(node)
+{
+	if (node.getNodeName().equals(&amp;quot;INPUT&amp;quot;)) {
+		var attrs  = node.getAttributes();
+		var namnode = attrs.getNamedItem(&amp;quot;name&amp;quot;);
+		if ( namnode != null ) {
+			var namvalue = namnode.getNodeValue();
+			if ( namvalue != null &amp;&amp; namvalue.indexOf(&amp;quot;chkSelection&amp;quot;) &amp;gt;= 0 ) {
+				var valnode = attrs.getNamedItem(&amp;quot;value&amp;quot;);
+				if ( valnode != null ) {
+					var valvalue = valnode.getNodeValue();
+					var row = m_bilds.AddRow(m_bilds.getRowCount()-1);
+					m_bilds.setValueAt(row,&amp;quot;BILGUID&amp;quot;,valvalue);
+				}
+			}
+		}
+	}
+	var children = node.getChildNodes();
+	if ( children != null ) {
+		for ( var i = 0; i &amp;lt; children.getLength(); i ++ ) {
+			GetBillist(children.item(i));
+		}
+	}
+}
+
+function GetBildetail(node)
+{
+	if (node.getNodeName().equals(&amp;quot;TD&amp;quot;)) {
+		if (node.getFirstChild() != null) {
+			var eafunc = new pub.EAFunc();
+			var nodevalue = eafunc.NVL(node.getFirstChild().getNodeValue(),&amp;quot;&amp;quot;);
+			
+			if (nodevalue.length() &amp;gt;= m_colnamlist[0].length() &amp;&amp; nodevalue.substring(0,m_colnamlist[0].length()).equals(m_colnamlist[0])) {
+				t_hdrrow = t_bilhdr.AddRow(t_bilhdr.getRowCount()-1);
+				t_bilhdr.setValueAt(t_hdrrow,m_colidlist[0],m_bilguid);
+				m_bEntryHdr = true;	//表头开始
+			}
+			else if (nodevalue.length() &amp;gt;= m_bildtlstartflg.length()
+				&amp;&amp; nodevalue.substring(0,m_bildtlstartflg.length()).equals(m_bildtlstartflg))
+			{
+				m_bEntryDtl = true;	//表体开始
+			}
+			else if ( m_bEntryHdr ) {					//开始抓取HdrDS
+				for ( var i = 0; i &amp;lt; m_colnamlist.length(); i ++ ) {	//&amp;quot;采购订单编号&amp;quot;,&amp;quot;供应商编码&amp;quot;,&amp;quot;供应商名称&amp;quot;,&amp;quot;订货日期&amp;quot;,&amp;quot;送货日期&amp;quot;
+					if (m_lastcolnam.length() &amp;gt;= m_colnamlist[i].length()
+						&amp;&amp; m_lastcolnam.substring(0,m_colnamlist[i].length()).equals(m_colnamlist[i]))
+					{
+						if (i == 0) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[4],nodevalue);
+							m_bilid = nodevalue;
+						}
+						else if (i == 1)
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[2],nodevalue);
+						else if (i == 2)
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[1],nodevalue);
+						else if (i == 3)
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[5],nodevalue);
+						else if (i == 4) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[6],nodevalue);
+							m_bEntryHdr = false;
+						}
+						break;
+					}
+				}
+			}
+			else if ( ! m_bEntryHdr &amp;&amp; t_bilhdr.getRowCount() &amp;gt; 0 ) {	//抓取正广和表头结束(t_bilhdr)，构造家乐福格式HdrDS(m_bilhdr)
+				m_hdrrow = m_bilhdr.AddRow(m_bilhdr.getRowCount()-1);
+				for (var i = 0; i &amp;lt; m_colidlist.length(); i ++) {
+					for (var j = 0; j &amp;lt; t_bilhdr.getColumnCount(); j ++) {
+						if (m_colidlist[i] == t_bilhdr.getColumnName(j)) {
+							m_bilhdr.setValueAt(m_hdrrow,m_colidlist[i],t_bilhdr.getStringAt(t_hdrrow,j));
+							break;
+						}
+						else if (j == t_bilhdr.getRowCount()-1)
+							m_bilhdr.setValueAt(m_hdrrow,m_colidlist[i],&amp;quot;&amp;quot;);
+					}
+				}
+				t_bilhdr.clearDS();
+			}
+			else if ( m_bEntryDtl ) {					//开始抓取DtlDS
+				m_bildtlcolseq ++;
+				if (m_bildtlcolseq == 1) {
+					m_dtlrow = m_bildtl.AddRow(m_bildtl.getRowCount()-1);
+					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;订单号&amp;quot;,m_bilid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;BILID&amp;quot;, m_bilguid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SEQID&amp;quot;, nodevalue);
+				}
+				else if (m_bildtlcolseq == 2) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMID&amp;quot;, nodevalue);
+				}
+				else if (m_bildtlcolseq == 3) {
+					var codenode = node.getNextSibling().getNextSibling();
+					var specnode = codenode.getNextSibling().getNextSibling();
+					
+					var code = codenode.getFirstChild().getNodeValue();
+					var spec = specnode.getFirstChild().getNodeValue();
+					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;条码&amp;quot;, code);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SPEC&amp;quot;, spec);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMNAM&amp;quot;, nodevalue);
+				}
+				else if (m_bildtlcolseq == 6) {
+					var untnum = node.getNextSibling().getNextSibling().getNextSibling().getNextSibling()
+						.getNextSibling().getNextSibling().getNextSibling().getNextSibling().getFirstChild().getNodeValue();
+					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;,untnum);	//包装系数
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTY&amp;quot;,nodevalue);	//包装订量
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;赠品数量&amp;quot;, &amp;quot;&amp;quot;);
+				}
+				else if (m_bildtlcolseq == 11) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;不含税价&amp;quot;,nodevalue);
+				}
+			}
+			m_lastcolnam = nodevalue;
+		}
+	}
+	var children = node.getChildNodes();
+	if ( children != null ) {
+		for ( var i = 0; i &amp;lt; children.getLength(); i ++ ) {
+			GetBildetail(children.item(i));
+		}
+	}
+}
+
+function GetHdrDS()
+{
+	return m_bilhdr;
+}
+
+function GetDtlDS()
+{
+	return m_bildtl;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

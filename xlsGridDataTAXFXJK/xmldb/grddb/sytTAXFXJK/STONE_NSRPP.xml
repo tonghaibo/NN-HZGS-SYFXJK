@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >STONE_NSRPP</MWID><NAME >石材纳税人名称匹配</NAME><NOTE ></NOTE><NOACCNAME >1</NOACCNAME><FILE >STONE_NSRPP.zxg</FILE><SCENE ></SCENE><FIXED >2,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >Save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 >Save</C10><C11 ></C11><C12 >Save</C12></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var ZXGFILE1 = &amp;quot;&amp;quot;;
+var yesnoList;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;50%&amp;quot;);
+	_this.SplitSheet(2,&amp;quot;V&amp;quot;,&amp;quot;8%&amp;quot;);
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	ZXGFILE1 = _this.SaveTempZXGFile(1);
+
+	yesnoList = _this.CreateListValue();
+	_this.SetListValue(yesnoList,&amp;quot;1&amp;quot;,&amp;quot;是&amp;quot;);
+	_this.SetListValue(yesnoList,&amp;quot;0&amp;quot;,&amp;quot;否&amp;quot;);
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,0,2,4,yesnoList);
+	_this.SetCellText(0,2,4,&amp;quot;0&amp;quot;);
+	
+	var key = _this.GetCellText(0,2,2);
+	var ppflag = _this.GetCellText(0,2,4);
+	loadSTData(key,ppflag);
+	searNSRDJXX(&amp;quot;&amp;quot;);
+	
+	
+}
+
+function loadSTData(key,ppflag)
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedRow(0,5);
+	_this.SetFixedCol(0,0);
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,0,2,4,yesnoList);
+	_this.SetCellText(0,2,2,key);
+	_this.SetCellText(0,2,4,ppflag);
+	
+	var wherestr = &amp;quot; and nsrmc like &amp;apos;&amp;quot;+escape(&amp;quot;%&amp;quot;)+key+escape(&amp;quot;%&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+	if (ppflag == 1) wherestr += &amp;quot; and djxh is not null&amp;quot;;
+	else wherestr += &amp;quot; and djxh is null&amp;quot;;
+	
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;WHERESTR=&amp;quot;+wherestr);	
+	_this.SetMainCellRange(0,5,1,7,4);
+	_this.SetXmlDS(0,5,1,7,4,xml);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+		}
+	}
+	_this.AutoFixScreenWidth();
+}
+
+function searNSRDJXX(key)
+{
+	_this.LoadZXGFile(ZXGFILE1,-1,1);
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedRow(1,2);
+	_this.SetFixedCol(1,1);
+	
+	var xml = _sql.query(&amp;quot;SCQY&amp;quot;,&amp;quot;KEY=&amp;quot;+key);	
+	_this.SetMainCellRange(1,2,1,4,4);
+	_this.SetXmlDS(1,2,1,4,4,xml);
+	//_this.AutoFixScreenWidth();
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+//	if (sheet == 0) {
+//		for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+//			if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+//				_this.SetCellText(0,r,0,0);
+//			}
+//		}
+//		_this.SetCellText(0,row,0,newvalue);
+//	}
+
+	if (sheet == 0) {
+		if (row == 2) {
+			var key = _this.GetCellText(0,2,2);
+			var ppflag = _this.GetCellText(0,2,4);
+			loadSTData(key,ppflag);
+		}
+	}
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if (sheet == 0 &amp;&amp; row &amp;gt;= 5) {
+		for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+			if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+				_this.SetCellText(0,r,0,0);
+			}
+		}
+		_this.SetCellText(0,row,0,1);
+	}
+
+}
+
+function getSelectedRow(sheet)
+{
+	for (var r=_this.GetMainCellRangeRow1(sheet);r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+		if (_this.GetCellText(sheet,r,1) != &amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(sheet,r,0) == 1) {
+			return r;
+		}
+	}
+	return -1;
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == 1) {
+		if (row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet)) {
+			var selrow = getSelectedRow(0);
+			if (selrow != -1) {
+				_this.SetCellText(0,selrow,3,_this.GetCellText(1,row,3));
+				_this.SetCellText(0,selrow,4,_this.GetCellText(1,row,4));
+				
+			}
+		}
+	}
+}
+//保存
+function Save()
+{
+	var param = new Object();
+	try {
+		param.xmlstr = _this.GetXml(0,_this.GetMainCellRangeRow1(0),_this.GetMainCellRangeCol1(0),
+			_this.GetMainCellRangeRow2(0),_this.GetMainCellRangeCol2(0));
+		var ret = _this.invokeOSFuncExt(&amp;quot;Save&amp;quot;,param);
+		alert(ret);
+		loadSTData();
+	}
+	catch (e) {
+		alert(&amp;quot;保存失败：&amp;quot;+e.toString());
+	}
+}
+
+//更新石材数据
+function updateStoneData()
+{
+	if (!confirm(&amp;quot;更新已导入的石材数据，是否继续？&amp;quot;)) return;
+	var ret = _this.invokeOSFunc(&amp;quot;updateStoneData&amp;quot;,&amp;quot;&amp;quot;);
+	alert(ret);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		var key = _this.GetCellText(2,1,2);
+		searNSRDJXX(key);
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function Save()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		var ds = new pub.EAXmlDS(xmlstr);
+		var cnt = 0;
+		for (var i=1;i&amp;lt;ds.getRowCount();i++) {
+			var qymc = ds.getStringAt(i,&amp;quot;NSRMC&amp;quot;);
+			var nsrsbh = ds.getStringAt(i,&amp;quot;NSRSBH&amp;quot;);
+			var djxh = ds.getStringAt(i,&amp;quot;DJXH&amp;quot;);
+			if (djxh != &amp;quot;&amp;quot; &amp;&amp; nsrsbh != &amp;quot;&amp;quot;) {
+				sql = &amp;quot;insert into TAX_STONE_DZB (qymc,nsrsbh,djxh)values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;
+					.format([qymc,nsrsbh,djxh]);
+				cnt += db.ExcecutSQL(sql);
+			}
+		}
+		db.Commit();
+		updateStoneData();
+		return &amp;quot;保存成功！记录数&amp;quot;+cnt;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function updateStoneData()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;update tax_stonedata a set (nsrsbh,djxh)=(select nsrsbh,djxh from TAX_STONE_DZB b where a.nsrmc=b.qymc and rownum=1)
+			where exists (select 1 from TAX_STONE_DZB dzb where a.nsrmc=dzb.qymc)&amp;quot;;
+		var cnt = db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return &amp;quot;更新石材数据成功！更新记录数&amp;quot;+cnt;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.* 
+from (
+select distinct nsrmc,nsrsbh,djxh
+from tax_stonedata
+where 1=1 [%WHERESTR] 
+order by nsrmc
+) t</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10></ROW>
+<ROW num="1" ><ID >SCQY</ID><NAME ></NAME><DATDSC >select rownum,t.* 
+from (
+select dj.nsrmc,nvl(dj.shxydm,dj.nsrsbh) nsrsbh,dj.djxh 
+from dj_nsrxx dj,DJ_DJHGLGL gl 
+where lb_dm in (select id from v_tax_scgxhhy)
+  and dj.djxh=gl.djxh
+  and ( dj.nsrmc like &amp;apos;%[%KEY]%&amp;apos; 
+  	or nvl(dj.shxydm,dj.nsrsbh) like &amp;apos;%[%KEY]%&amp;apos; )
+order by dj.nsrmc  
+) t  </DATDSC><C4 >SCQY</C4><C5 >SCQY</C5><C6 >SCQY</C6><C7 ></C7><C8 >SCQY</C8><C9 >SCQY</C9><C10 >SCQY</C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

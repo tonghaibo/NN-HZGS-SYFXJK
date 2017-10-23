@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >DIM_QUERY</MWID><NAME >多维度报表查询参数</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DIM_QUERY.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >A3MobileREP</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >TOPICID</ID><NAME >主题号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >TOPICID</C13><C14 >TOPICID</C14></ROW>
+<ROW num="1" ><ID >SYTID</ID><NAME >系统号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_SYTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >SYTID</C13><C14 ></C14></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:TITLE,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 ></C17><C18 ></C18><C19 >0,1,1</C19></ROW>
+<ROW num="1" ><ID >1,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:DATA</DSKEY><NROW >3</NROW><NCOL >9</NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW >1</HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 ></C17><C18 ></C18><C19 >1,1,1</C19></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var b_first = true;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	if (b_first) {
+//		_this.SplitSheet(sheet,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot;);
+//		b_first = false;
+//	} 
+ 	
+	initSheet();
+	_this.ShowTabBar(1);
+//	var list = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ENDFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+
+}
+
+//初始化页面
+function initSheet()
+{	
+	_this.SetMainCellRange(0,2,1,4,3);
+	_this.SetMainCellRangeAppendAuto(0,1);
+	_this.SetMainCellRange(0,1,1,3,9);
+	_this.SetMainCellRangeAppendAuto(1,1);
+
+	loadSheetData(1);
+//	  	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,5,3,logdat);
+  	_this.SetToButton(&amp;quot;udf_checkout&amp;quot;,0,13,1,&amp;quot;查询&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,0);
+	_this.SetColVisible(0,3,-1);
+	
+}
+
+//加载页面数据
+function loadSheetData(sheet)
+{
+	for (var row=_this.GetMainCellRangeRow1(1);row&amp;lt;=_this.GetMainCellRangeRow2(1);row++) {
+		for (var col=_this.GetMainCellRangeCol1(1);col&amp;lt;=_this.GetMainCellRangeCol2(1);col++){
+			
+			_this.SetCellText(0,row+1,1,_this.GetCellText(1,row,3));
+			getControlCtrl(1,row);
+			_this.SetCellText(0,row+1,3,_this.GetCellText(1,row,2));
+		}
+	}
+	
+	for (var i=0;i&amp;lt;12-_this.GetRowCount(1);i++){
+		_this.SetRowVisible(0,_this.GetRowCount(1)+i,-1);
+		
+	}
+}
+
+
+function setViewColInfo(tablename)
+{
+
+	_sql.querytods(&amp;quot;VIEWINFO&amp;quot;,&amp;quot;tablename=&amp;quot;+tablename);
+	var rowcnt = _this.XMLDS_GetRowCount();
+	var listDim = _this.CreateListValue();
+	if (rowcnt &amp;gt; 0) {
+		for (var i=0;i&amp;lt;rowcnt;i++) {
+			var colid = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+			var colnam = _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+			_this.SetListValue(listDim,colid,colnam);
+		}
+	}
+	return listDim;
+	
+}
+
+
+
+function getControlCtrl(sheet,row)
+{
+	//combobox
+	if(_this.GetCellText(sheet,row,6)==&amp;quot;COMBOBOX&amp;quot;){
+		var contr = _this.GetCellText(sheet,row,7);	
+		if(contr!=&amp;quot;&amp;quot; &amp;&amp;  contr!=null){
+		var listid =setViewColInfo(contr);
+		 	_this.SetToComboBox(&amp;quot;&amp;quot;,0,row+1,2,listid); 
+		}
+	}
+	//datebox
+	if(_this.GetCellText(sheet,row,6)==&amp;quot;DATEBOX&amp;quot;){
+		var contr = _this.GetCellText(sheet,row,7);	
+		 	_this.SetToDateBox(&amp;quot;&amp;quot;,0,row+1,2,&amp;quot;&amp;quot;);
+		
+	}
+	//selectbox
+	if(_this.GetCellText(sheet,row,6)==&amp;quot;SELECTBOX&amp;quot;){
+		var contr = _this.GetCellText(sheet,row,7);	
+		 	if(contr!=&amp;quot;&amp;quot; &amp;&amp;  contr!=null){
+		 		_this.SetToSelectBox(&amp;quot;&amp;quot;,0,row+1,2,contr,&amp;quot;&amp;quot;);
+		 	}	
+	}
+
+}
+
+
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >TITLE</ID><NAME ></NAME><DATDSC >select &amp;apos;※ &amp;apos;||name||&amp;apos;的查询条件&amp;apos; from dim_topic
+where sytid=&amp;apos;[%SYS_SYTID]&amp;apos; and id=&amp;apos;[%TOPICID]&amp;apos;</DATDSC><C4 >TITLE</C4><C5 >TITLE</C5><C6 >TITLE</C6><C7 >TITLE</C7><C8 ></C8><C9 >TITLE</C9><C10 ></C10></ROW>
+<ROW num="1" ><ID >DETAIL</ID><NAME ></NAME><DATDSC >select name,val,id from (
+select id,name || &amp;apos;：&amp;apos; name,
+  decode(control,&amp;apos;COMBOBOX&amp;apos;,&amp;apos;[%COMBOBOX id=&amp;quot;&amp;apos;||id||&amp;apos;&amp;quot; key=&amp;quot;&amp;apos;||keyval||&amp;apos;&amp;quot;]&amp;apos;,
+                 &amp;apos;SELECTBOX&amp;apos;,&amp;apos;[%SELECTBOX&amp;apos;||&amp;apos;id=&amp;quot;&amp;apos;||id||&amp;apos;&amp;quot; key=&amp;quot;&amp;apos;||keyval||&amp;apos;&amp;quot; where=&amp;quot;&amp;apos;||wher||&amp;apos;&amp;quot; order=]&amp;apos;,
+                 &amp;apos;DATEBOX&amp;apos;,&amp;apos;[%DATEBOX id=&amp;quot;&amp;apos;||id||&amp;apos;&amp;quot;]&amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;),
+                 &amp;apos;[%TEXTBOX id=&amp;quot;&amp;apos;||id||&amp;apos;&amp;quot;]&amp;apos;) val,seq
+from dim_dim 
+where refmod=(select refmod from dim_topic where sytid=&amp;apos;[%SYTID]&amp;apos; and id=&amp;apos;[%TOPICID]&amp;apos;)
+  and upper(control)&amp;lt;&amp;gt;&amp;apos;DATEBOX&amp;apos;
+union all  
+select id||&amp;apos;1&amp;apos; id,&amp;apos;开始日期：&amp;apos; name,
+       &amp;apos;[%DATEBOX id=&amp;quot;&amp;apos;||id||&amp;apos;1&amp;quot;]&amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) val,seq
+from dim_dim 
+where refmod=(select refmod from dim_topic where sytid=&amp;apos;[%SYTID]&amp;apos; and id=&amp;apos;[%TOPICID]&amp;apos;)
+  and upper(control)=&amp;apos;DATEBOX&amp;apos;  
+union all 
+select id||&amp;apos;2&amp;apos; id,&amp;apos;截止日期：&amp;apos; name,
+       &amp;apos;[%DATEBOX id=&amp;quot;&amp;apos;||id||&amp;apos;2&amp;quot;]&amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) val,seq
+from dim_dim 
+where refmod=(select refmod from dim_topic where sytid=&amp;apos;[%SYTID]&amp;apos; and id=&amp;apos;[%TOPICID]&amp;apos;)
+  and upper(control)=&amp;apos;DATEBOX&amp;apos;  
+) order by seq  </DATDSC><C4 >DETAIL</C4><C5 >DETAIL</C5><C6 >DETAIL</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="2" ><ID >DATA</ID><NAME ></NAME><DATDSC >select *  
+from dim_dim 
+where refmod=(select refmod from dim_topic where sytid=&amp;apos;[%SYTID]&amp;apos; and id=&amp;apos;[%TOPICID]&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >DATA</C7><C8 >DATA</C8><C9 >DATA</C9><C10 >DATA</C10></ROW>
+<ROW num="3" ><ID >VIEWINFO</ID><NAME ></NAME><DATDSC >select * from [%tablename]</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >VIEWINFO</C9><C10 ></C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

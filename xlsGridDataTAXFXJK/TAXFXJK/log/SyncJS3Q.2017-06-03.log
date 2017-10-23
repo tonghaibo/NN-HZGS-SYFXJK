@@ -1,0 +1,7 @@
+0:10:0 执行第1次.开始
+0:10:0 开始调用TAXFXJK_IMP_TaxData,函数名RunTB,参数xmlstr=
+0:10:0 参数xmlstr=
+2:20:21 操作结束,返回:数据采集失败：执行SQL出错insert into CJ_FXJK.FP_DK_SQ select * from HX_FP.FP_DK_SQ@JS3Q where 1=1  and (  SJGSDQ like ''14511%'' or ZGSWSKFJ_DM like ''14511%'' )  and ( to_char(slrq,''yyyymm'')>=to_char(sysdate-1,''yyyymm'') )java.sql.SQLSyntaxErrorException: ORA-00913: 值过多
+
+8:0:0 任务已取消 
+8:0:0 任务发布,从0:10开始执行

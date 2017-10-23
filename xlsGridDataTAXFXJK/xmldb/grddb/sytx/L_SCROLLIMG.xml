@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >L_SCROLLIMG</MWID><NAME >左右滚动图片</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >L_SCROLLIMG.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function GetBody(){
+//	var html=&amp;quot;&amp;lt;table width=&amp;apos;100%&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;div class=\&amp;quot;imgdiv\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;imageRotation\&amp;quot; id=\&amp;quot;imageRotation\&amp;quot;&amp;gt;
+//		    &amp;lt;div class=\&amp;quot;imageBox\&amp;quot;&amp;gt;&amp;quot;;
+		    
+	var html = &amp;quot;&amp;lt;div style\&amp;quot;width:100%;\&amp;quot; id=\&amp;quot;evewidth\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;imgdiv\&amp;quot; id=\&amp;quot;eve\&amp;quot; &amp;gt;&amp;lt;div class=\&amp;quot;imageRotation\&amp;quot; id=\&amp;quot;imageRotation\&amp;quot;&amp;gt;
+		    &amp;lt;div class=\&amp;quot;imageBox\&amp;quot; &amp;gt;&amp;quot;;
+
+	html=html;  
+	
+	if(LAYCOL ==&amp;quot;&amp;quot;)LAYCOL =&amp;quot;1&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and icon is not null &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	
+	  
+	var xml=db.QuerySQL(sql);
+	var spn=&amp;quot;&amp;quot;;
+	var cnt=xml.getRowCount();
+	if(cnt&amp;gt;5) cnt=5;
+	for(var i=0;i&amp;lt;cnt;i++){
+		html+= &amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot; width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		if(i==0)
+			spn+=&amp;quot;&amp;lt;span class=\&amp;quot;active\&amp;quot; rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot; width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+		else
+			spn+=&amp;quot;&amp;lt;span  rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot;  width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+	}
+	//html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+ &amp;quot;&amp;lt;div class=\&amp;quot;icoBox\&amp;quot;&amp;gt;&amp;quot;+spn+ &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+ &amp;quot;&amp;lt;div class=\&amp;quot;icoBox\&amp;quot;&amp;gt;&amp;quot;+spn+ &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+
+//	html+=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://www.itxueyuan.org/uploads/javascript/jquery.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	var css=&amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		.imgdiv{
+			width:100%;
+			height:350px;
+//			border:1px solid #BBBBBB;
+			position:relative;
+//			clear:both;
+		}
+		.imageRotation{
+			overflow:hidden;  /*--超出容器的所有元素都不可见--*/
+		}
+		.imageBox{
+			position: relative;
+		}
+		.imageBox img {
+			display:block;
+			float:left;
+			border:none;
+		}
+		.icoBox{
+			position:absolute;  /*--固定定位--*/
+			top:5px;
+			text-align:center;
+			line-height:40px;
+			float:left;
+		}
+		.icoBox span{
+			display:block;
+			float:top;
+			margin-top:4px;
+			margin-left:0px;
+			margin-right:0px;
+			overflow:hidden;
+			background:url(\&amp;quot;\&amp;quot;) 0px 0px no-repeat;
+			cursor:pointer;
+		}
+		.icoBox span.active {
+			background-position:0px -12px;
+			cursor:default;
+		}
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	var jvaspt=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;			
+			
+			$(document).ready(function (){
+				$(\&amp;quot;.imageRotation\&amp;quot;).each(function(){
+					var dvwid=$(&amp;apos;.imgdiv&amp;apos;).width();
+					var dvhid=$(&amp;apos;.imgdiv&amp;apos;).height();
+					var img2w=dvwid/6;
+					var img2h=dvhid/10;
+					$(&amp;apos;.imageRotation&amp;apos;).width(dvwid);
+					$(&amp;apos;.imageRotation&amp;apos;).height(dvhid);
+					$(&amp;apos;.icoBox&amp;apos;).css({&amp;apos;right&amp;apos;:0});
+					$(&amp;apos;.imageBox img&amp;apos;).width(dvwid);
+					$(&amp;apos;.imageBox img&amp;apos;).height(dvhid);
+					
+					$(&amp;apos;.icoBox span&amp;apos;).height(dvhid/6);
+					$(&amp;apos;.icoBox span&amp;apos;).width(dvwid/10);
+					$(&amp;apos;.icoBox span img&amp;apos;).height(dvhid/6);
+					$(&amp;apos;.icoBox span img&amp;apos;).width(dvwid/10);
+					var imageRotation = this,
+					imageBox = $(imageRotation).children(\&amp;quot;.imageBox\&amp;quot;)[0],
+					icoBox = $(imageRotation).children(\&amp;quot;.icoBox\&amp;quot;)[0],
+					icoArr = $(icoBox).children(),
+					imageWidth =  $(\&amp;quot;.imageBox img\&amp;quot;).width(),
+					imageNum = $(imageBox).children().size(),
+					imageReelWidth = imageWidth*imageNum,
+					activeID = parseInt($($(icoBox).children(\&amp;quot;.active\&amp;quot;)[0]).attr(\&amp;quot;rel\&amp;quot;)),
+					nextID = 0, 
+					setIntervalID,  
+					intervalTime = 4000,
+					speed =500;
+					$(imageBox).css({&amp;apos;width&amp;apos; : imageReelWidth + \&amp;quot;px\&amp;quot;});
+					
+			
+					var rotate=function(clickID){
+					if(clickID){ nextID = clickID; }
+					else{ nextID=activeID&amp;lt;=3 ? activeID+1 : 1; }
+					
+					$(icoArr[activeID-1]).removeClass(\&amp;quot;active\&amp;quot;);
+					$(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;);
+					 $(imageBox).animate({left:\&amp;quot;-\&amp;quot;+(nextID-1)* $(\&amp;quot;.imageBox img\&amp;quot;).width()+\&amp;quot;px\&amp;quot;} , speed);
+					$(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;3px solid red&amp;apos;});
+					$(icoArr[activeID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;0px solid red&amp;apos;});
+					activeID = nextID;
+					};
+					setIntervalID=setInterval(rotate,intervalTime);
+					
+					$(imageBox).hover(
+					function(){ clearInterval(setIntervalID); },
+					function(){ setIntervalID=setInterval(rotate,intervalTime); }
+					);
+					
+					$(icoArr).click(function(){
+						clearInterval(setIntervalID);
+						var clickID = parseInt($(this).attr(\&amp;quot;rel\&amp;quot;));
+						rotate(clickID);
+						setIntervalID=setInterval(rotate,intervalTime);
+					});
+				});
+			});
+
+			//窗口较小的时候自动改变宽度
+			window.onload = function(){
+				eve();
+			}
+			
+			//窗口宽度大小改变
+			function eve() {
+				var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+				if(document.body.scrollWidth &amp;gt;= 960){
+					document.getElementById(\&amp;quot;eve\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+					document.getElementById(\&amp;quot;imageRotation\&amp;quot;).style.width=widthImg+\&amp;quot;px\&amp;quot; ;
+				}else{
+					widthImg = 960 * 0.8 * 0.57;
+					document.getElementById(\&amp;quot;eve\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+					document.getElementById(\&amp;quot;imageRotation\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot; ;
+				}
+				
+			}
+			
+
+			fEventListen(window, &amp;apos;resize&amp;apos;,eve);
+			function fEventListen(b,c,d,a){
+			a=!!a;if(b.addEventListener)
+			{b.addEventListener(c,d,a);}
+			else{
+				if(b.attachEvent)
+				{b.attachEvent(\&amp;quot;on\&amp;quot;+c,d);}}
+			}
+			&amp;lt;/script&amp;gt;&amp;quot;;
+	html+=jvaspt;
+//	throw new Exception(html);
+	return css+html;
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

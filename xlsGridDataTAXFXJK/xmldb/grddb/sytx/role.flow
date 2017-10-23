@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_121436" x="19" y="43" width="711" height="418" stroke="#000000" fill="#feffe1" stroke-width="" font-family="" font-size="" url="" target="" tip=""  >
+ </rect>
+ <text id="title" x="15" y="16" width="410" height="27" stroke-width="" font-family="" font-size="15" url="" font-color="#0000ff" target="" tip=""  >【系统权限分配】</text>
+ <text id="title_xlsgrid" x="592" y="436" width="154" height="24" stroke-width="" font-family="" font-size="" url="" target="" tip="" font-color="#adadad"   stroke="" fill="">xlsGrid.net 硕格中间件</text>
+ <connector id="connector_542119" from="rect_542116" to="OK" fromcp="23" tocp="23" type="208"  >
+ </connector>
+ <rect id="系统权限定义" x="30" y="190" width="99" height="36" stroke="#000000" fill="#ff0000" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/dbEdit.jsp?flag=SYSMOD&amp;grdid=SYSMODDBEDIT&amp;grdtyp=M&amp;sytid=x&amp;title=%CF%B5%CD%B3%C4%A3%BF%E9%B6%A8%D2%E5"  >系统权限定义</rect>
+ <rect id="角色定义" x="270" y="190" width="100" height="37" stroke="#000000" fill="#79ffbc" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/dbEdit.jsp?flag=ROL&grdid=ROLDBEDIT&grdtyp=M&sytid=x&title=%BD%C7%C9%AB%B6%A8%D2%E5" target="" tip=""   font-color="">角色定义</rect>
+ <rect id="用户权限配置" x="402" y="89" width="115" height="42" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/relationSet.jsp?leftflag1=V_USR&leftflag2=ROL&relationflag=USRROL&columns=USR,ROL&filedsext=,usrrol.acc &valuesext=,'0'&title=%D3%C3%BB%A7%BD%C7%C9%AB%B7%D6%C5%E4" target="" tip=""  >用户角色分配</rect>
+ <rect id="角色权限分配" x="140" y="270" width="110" height="43" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/relationSet.jsp?leftflag1=SYSMOD&amp;leftflag2=ROL&amp;relationflag=ROLMOD&amp;columns=SYSMOD,ROL&amp;title=%BD%C7%C9%AB%C8%A8%CF%DE%B7%D6%C5%E4"   font-color="">权限角色分配</rect>
+ <connector id="connector_134427" from="角色定义" to="角色定义" fromcp="13" tocp="13" type="208"  >
+ </connector>
+ <connector id="为新角色分配权限" cx="284" cy="367" x="284" y="367" width="110" height="-106" >
+ </connector>
+ <text id="text_134436" x="141" y="317" width="129" height="29" stroke-width="" font-family="" font-size="" url="" target="" tip=""  >为新角色
+分配权限</text>
+ <connector id="connector_134433" cx="284" cy="367" x="284" y="367" width="109" height="-104" >
+ </connector>
+ <rect id="角色用户分配" x="406" y="292" width="116" height="40" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/relationSet.jsp?leftflag1=ROL&leftflag2=V_USR&relationflag=USRROL&columns=ROL,USR&filedsext=,usrrol.acc &valuesext=,'0'&title=%BD%C7%C9%AB%D3%C3%BB%A7%B7%D6%C5%E4" target="" tip=""  >角色用户分配</rect>
+ <text id="text_360421" x="407" y="336" width="97" height="27" stroke-width="" font-family="" font-size="" url=""  >为一个角色分配若干个用户</text>
+ <text id="text_360422" cx="638" cy="296" x="498" y="289" width="1" height="2" >
+ </text>
+ <text id="text_360425" x="145" y="63" width="95" height="30" stroke-width="" font-family="" font-size="" url="" target="" tip=""  >为一个角色
+分配若干权限</text>
+ <rect id="rect_360429" x="595" y="314" width="58" height="45" stroke="#000000" fill="#00ffff" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/chgpass.jsp?flag=USR&grdid=PASSWD&grdtyp=M&sytid=x&title=%B8%FC%B8%C4%C3%DC%C2%EB" target="" tip=""  >更改密码</rect>
+ <connector id="connector_108_480709" from="系统权限定义" to="角色权限分配" fromcp="23" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_480710" from="角色权限分配" to="角色定义" fromcp="32" tocp="23" type="108"  >
+ </connector>
+ <rect id="rect_480711" x="547" y="190" width="100" height="37" stroke="#000000" fill="#0080ff" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/dbEdit.jsp?flag=USR&grdid=UPDATEUSR&grdtyp=M&sytid=MNERP&title=%D3%C3%BB%A7%B6%A8%D2%E5%28%B0%B4%B8%DA%CE%BB%29" target="" tip=""  >用户定义</rect>
+ <rect id="rect_480712" x="140" y="100" width="106" height="42" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="xlsgrid/jsp/pages/relationSet.jsp?leftflag1=ROL&amp;leftflag2=SYSMOD&amp;relationflag=ROLMOD&amp;columns=ROL,SYSMOD&amp;title=%BD%C7%C9%AB%C8%A8%CF%DE%B7%D6%C5%E4"   font-color="">角色权限分配</rect>
+ <connector id="connector_108_480713" from="角色定义" to="rect_480712" fromcp="21" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_480714" from="rect_480712" to="系统权限定义" fromcp="12" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_20412" from="角色定义" to="角色定义" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_20413" from="用户权限配置" to="用户权限配置" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_20414" from="角色定义" to="角色定义" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_20415" from="角色定义" to="角色定义" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_20418" from="角色定义" to="角色定义" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_20419" from="用户权限配置" to="用户权限配置" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_20420" from="用户权限配置" to="用户权限配置" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_20421" from="角色定义" to="角色定义" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_20422" from="用户权限配置" to="用户权限配置" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_20424" from="角色定义" to="角色定义" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_20429" from="角色用户分配" to="角色用户分配" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector_108 id="connector_108_20428" cx="440" cy="227" x="440" y="227" width="154" height="67" >
+ </connector_108>
+ <connector id="connector_108_20432" from="角色用户分配" to="角色用户分配" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector_108 id="connector_108_20431" cx="440" cy="227" x="440" y="227" width="157" height="64" >
+ </connector_108>
+ <connector id="connector_108_20433" from="角色定义" to="角色定义" fromcp="23" tocp="23" type="108"  >
+ </connector>
+ <connector_108 id="connector_108_20435" cx="596" cy="292" x="596" y="292" width="0" height="0" >
+ </connector_108>
+ <connector_108 id="connector_108_20434" cx="440" cy="227" x="440" y="227" width="158" height="65" >
+ </connector_108>
+ <connector id="connector_108_20438" from="角色用户分配" to="角色用户分配" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector_108 id="connector_108_20436" cx="440" cy="227" x="440" y="227" width="157" height="65" >
+ </connector_108>
+ <connector id="connector_108_20441" from="角色用户分配" to="角色用户分配" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector_108 id="connector_108_20440" cx="440" cy="227" x="440" y="227" width="156" height="68" >
+ </connector_108>
+ <connector_108 id="connector_108_20443" cx="596" cy="292" x="596" y="292" width="0" height="0" >
+ </connector_108>
+ <connector_108 id="connector_108_20442" cx="440" cy="227" x="440" y="227" width="156" height="63" >
+ </connector_108>
+ <connector id="connector_108_20445" from="角色用户分配" to="角色用户分配" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_20446" from="角色定义" to="角色定义" fromcp="23" tocp="23" type="108"  >
+ </connector>
+ <connector id="connector_108_20447" from="角色定义" to="角色定义" fromcp="23" tocp="23" type="108"  >
+ </connector>
+ <connector id="connector_108_20448" from="角色定义" to="角色用户分配" fromcp="23" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_20450" from="rect_480711" to="rect_480711" fromcp="23" tocp="23" type="108"  >
+ </connector>
+ <connector id="connector_108_20453" from="rect_480711" to="rect_480711" fromcp="23" tocp="23" type="108"  >
+ </connector>
+ <connector id="connector_108_20454" from="角色用户分配" to="rect_480711" fromcp="32" tocp="23" type="108"  >
+ </connector>
+ <connector id="connector_108_20455" from="rect_480711" to="用户权限配置" fromcp="21" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_20456" from="用户权限配置" to="角色定义" fromcp="12" tocp="21" type="108"  >
+ </connector>
+ <text id="text_20458" x="392" y="56" width="126" height="31" stroke-width="" font-family="" font-size="" url="" target="" tip=""   stroke="" font-color="" fill="">查看角色分配
+给哪些用户</text>
+</svg>

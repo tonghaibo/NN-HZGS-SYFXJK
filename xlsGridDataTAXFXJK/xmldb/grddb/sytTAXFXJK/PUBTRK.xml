@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >PUBTRK</MWID><NAME >核实任务公共组件</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >PUBTRK.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+//权限检查
+function checkGenTask()
+{
+	//具有税收核算股角色
+	var sql = &amp;quot;select * from usrrol where usr=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)
+		and rol in (select guid from rol where id=&amp;apos;02&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)&amp;quot;;
+	return pub.EADbTool.GetSQLRowCount(sql);
+}
+
+//权限检查
+function checkGenTask2()
+{
+	//具有税收核算股角色
+	var sql = &amp;quot;select * from usrrol where usr=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)
+		and rol in (select guid from rol where id=&amp;apos;04&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)&amp;quot;;
+	return pub.EADbTool.GetSQLRowCount(sql);
+}
+
+//二期生成核实任务方法
+//param.usrids		//生成任务的用户编号
+//param.usrnams 	//用户名称
+//param.accids 		//帐套号
+//param.orgs	        //组织号
+//param.syts            //系统号
+//param.typ             //任务类型
+//param.yymm1	   	//税款所属期
+//param.yymm2		//税款所属期
+//param.swjg_dm		//税务机构代码
+//param.toswjg		//分派到的股室
+//param.enddat		//任务截止日期
+//param.tousr		//任务分派到的税管员
+//param.note		//任务说明
+//param.xmlstr		//任务明细行
+//param.typ		//任务类型
+//param.subtyp		//风险类型
+function createTask()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	//return xmlstr;
+	
+	try {		
+		db = new pubpack.EADatabase();
+		var ds = new pubpack.EAXmlDS(xmlstr);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var bilid =db.GetBillid(accids,&amp;quot;TK&amp;quot;,&amp;quot;TK&amp;quot;);  //生成单据号
+			var nsrsbh = ds.getStringAt(i,&amp;quot;NSRSBH&amp;quot;);	
+			var nsrmc = ds.getStringAt(i,&amp;quot;NSRMC&amp;quot;);
+			var fxdj = ds.getStringAt(i,&amp;quot;FXDJ&amp;quot;);
+			var cyje = ds.getStringAt(i,&amp;quot;CYJE&amp;quot;);
+			var mynote = ds.getStringAt(i,&amp;quot;NOTE&amp;quot;);
+			mynote += &amp;quot;\n\n&amp;quot;+note;
+			//判断纳税企业是否已生成过核实任务，不重复生成		
+			sql = &amp;quot;select * from tax_trkhdr where cmid=&amp;apos;&amp;quot;+nsrsbh+&amp;quot;&amp;apos; and nvl(yymm1,&amp;apos; &amp;apos;)=nvl(&amp;apos;&amp;quot;+yymm1+&amp;quot;&amp;apos;,&amp;apos; &amp;apos;) and nvl(yymm2,&amp;apos; &amp;apos;)=nvl(&amp;apos;&amp;quot;+yymm2+&amp;quot;&amp;apos;,&amp;apos; &amp;apos;)&amp;quot;;
+			var count = db.GetSQLRowCount(sql);	
+			if (count == 0) {
+				if(tousr == &amp;quot;&amp;quot;){
+					sql = &amp;quot;select taxman from tax_company where id=&amp;apos;&amp;quot;+nsrsbh+&amp;quot;&amp;apos;&amp;quot;;
+					var tmpds = db.QuerySQL(sql);
+					if (tmpds.getRowCount() &amp;gt; 0) {
+						tousr = tmpds.getStringAt(0,&amp;quot;TAXMAN&amp;quot;);
+					}
+				}
+				
+				var newtyp = &amp;quot;&amp;quot;;
+				var stat = &amp;quot;1&amp;quot;;
+				sql = &amp;quot;insert into tax_trkhdr(ACC,ORG,SYT,BILID,CRTUSR,CRTUSRNAM,CMID,CMNAM,todept,Tousr,SUBTYP,yymm1,yymm2,dat,stat,enddat,note,newtyp,typ,fxdj,swjg_dm,cyje)
+					values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,trunc(sysdate),&amp;apos;%s&amp;apos;,to_date(&amp;apos;%s&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,substr(&amp;apos;%s&amp;apos;,0,7),&amp;apos;%s&amp;apos;)&amp;quot;
+					.format([accids,orgs,syts,bilid,usrids,usrnams,nsrsbh,nsrmc,toswjg,tousr,subtyp,yymm1,yymm2,stat,enddat,mynote,newtyp,typ,fxdj,swjg_dm,cyje]); 
+				ret += db.ExcecutSQL(sql);
+				
+			}
+		}
+
+		db.Commit();		
+		return &amp;quot;成功生成&amp;quot;+ret+&amp;quot;条任务!&amp;quot;;
+
+
+	}
+	catch(e){
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if(db != null)	db.Close();
+	}
+}
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >ELEYEAR</ID><NAME >用电排行榜</NAME><DATDSC >select &amp;apos;&amp;lt;div align=center&amp;gt;&amp;apos;||yymm||&amp;apos;&amp;lt;div&amp;gt;&amp;apos; 月份,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||round(elemny/10000,2)||&amp;apos;&amp;lt;div&amp;gt;&amp;apos; 用电量,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||cnt||&amp;apos;&amp;lt;div&amp;gt;&amp;apos; 企业数 from (
+	select a.yymm,nvl(sum(elemny),0) elemny,count(distinct b.id) cnt
+	from tax_eledata a,tax_company b
+	where substr(a.yymm,0,4)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+          and a.usrid=b.ammno
+	group by a.yymm
+ ) order by yymm</DATDSC><C4 >ELETOP</C4><C5 ></C5><C6 >ELEYEAR</C6><C7 >ELEYEAR</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >ELEYEAR</C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64><C65 ></C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="1" ><ID >TAXYEAR</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;lt;div align=center&amp;gt;&amp;apos;||yymm||&amp;apos;&amp;lt;/div&amp;gt;&amp;apos; 月份,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||round(taxmny/10000,2)||&amp;apos;&amp;lt;/div&amp;gt;&amp;apos; 税额,
+	&amp;apos;&amp;lt;div align=right&amp;gt;&amp;apos;||cnt||&amp;apos;&amp;lt;/div&amp;gt;&amp;apos; 纳税企业数 from (
+	select a.yymm,nvl(sum(taxmny),0) taxmny,count(distinct a.id) cnt
+	from tax_taxdata a
+	where substr(a.yymm,0,4)=to_char(sysdate,&amp;apos;yyyy&amp;apos;)
+	group by a.yymm
+ ) order by yymm       </DATDSC><C4 ></C4><C5 >TAXYEAR</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >TAXYEAR</C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64><C65 ></C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="2" ><ID >TKLIST</ID><NAME >稽查任务</NAME><DATDSC >select &amp;apos;&amp;apos; 核查时间段,&amp;apos;&amp;apos; 任务号,&amp;apos;&amp;apos; 状态,&amp;apos;&amp;apos; 企业编号,&amp;apos;&amp;apos; 企业名称,&amp;apos;&amp;apos; 异常类型,&amp;apos;&amp;apos; 创建时间,&amp;apos;&amp;apos; 税管员,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;entry.sp?grdid=MYTKD&amp;quot;&amp;gt;更多...&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+union all
+select * from (
+select yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;2&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未处理&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;处理中&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;23&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;24&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;21&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;25&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;9&amp;apos;,&amp;apos;&amp;lt;font color=green&amp;gt;已完成&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;0&amp;apos;,&amp;apos;任务退回&amp;apos;,(select name from SYSPROCESS p where sytid=&amp;apos;TAXMON&amp;apos; and grdid=&amp;apos;TK&amp;apos; and p.id=a.stat)) 状态,
+       cmid 企业编号,
+       cmnam 企业名称,
+       b.name 类型,
+       --to_char(crtdat,&amp;apos;dd/mm hh24:mi:ss&amp;apos;) 创建时间,
+       to_char(crtdat,&amp;apos;yyyy/mm/dd&amp;apos;) 创建时间,
+       tousr 税管员,
+       &amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||a.stat||&amp;apos;&amp;quot;&amp;gt;&amp;apos;
+       ||decode(a.stat,&amp;apos;1&amp;apos;,&amp;apos;分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未完成&amp;lt;/font&amp;gt;&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;查看&amp;apos;,&amp;apos;查看&amp;apos;)
+       ||&amp;apos;&amp;lt;/a&amp;gt;&amp;apos; 操作
+from tax_trkhdr a,V_TAX_TRKTYP b
+where a.tousr=(select name from v_tax_taxman where org=&amp;apos;[%SYS_ORGID]&amp;apos; and uuid=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp&amp;lt;&amp;gt;&amp;apos;9&amp;apos;
+  and a.subtyp=b.id
+  and a.stat like &amp;apos;[%stats]%&amp;apos;
+  and a.stat&amp;lt;&amp;gt;&amp;apos;8&amp;apos;
+order by a.crtdat desc
+)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >TKLIST</C8><C9 >TKLIST</C9><C10 >TKLIST</C10><C11 >TKLIST</C11><C12 >TKLIST</C12><C13 >TKLIST</C13><C14 >TKLIST</C14><C15 >TKLIST</C15><C16 >TKLIST</C16><C17 >TKLIST</C17><C18 >TKLIST</C18><C19 ></C19><C20 ></C20><C21 >TKLIST</C21><C22 ></C22><C23 >TKLIST</C23><C24 >TKLIST</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 >TKLIST</C31><C32 >TKLIST</C32><C33 ></C33><C34 ></C34><C35 >TKLIST</C35><C36 >TKLIST</C36><C37 >TKLIST</C37><C38 >TKLIST</C38><C39 >TKLIST</C39><C40 ></C40><C41 >TKLIST</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 >TKLIST</C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 >TKLIST</C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 >TKLIST</C61><C62 >TKLIST</C62><C63 ></C63><C64 >TKLIST</C64><C65 >TKLIST</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="3" ><ID >TKOTHER</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;apos; 核查时间段,&amp;apos;&amp;apos; 任务号,&amp;apos;&amp;apos; 状态,&amp;apos;&amp;apos; 企业编号,&amp;apos;&amp;apos; 企业名称,&amp;apos;&amp;apos; 异常类型,&amp;apos;&amp;apos; 创建时间,&amp;apos;&amp;apos; 税管员,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;entry.sp?grdid=MYTKD&amp;quot;&amp;gt;更多...&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+union all
+select * from (
+select yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;2&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未处理&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;处理中&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;23&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;24&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;21&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;25&amp;apos;,&amp;apos;&amp;lt;font color=#EEC900&amp;gt;待审批&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;9&amp;apos;,&amp;apos;&amp;lt;font color=green&amp;gt;已完成&amp;lt;/font&amp;gt;&amp;apos;,
+       		&amp;apos;0&amp;apos;,&amp;apos;任务退回&amp;apos;,(select name from SYSPROCESS p where sytid=&amp;apos;TAXMON&amp;apos; and grdid=&amp;apos;TK&amp;apos; and p.id=a.stat)) 状态,
+       cmid 企业编号,
+       cmnam 企业名称,
+       b.name 类型,
+       --to_char(crtdat,&amp;apos;dd/mm hh24:mi:ss&amp;apos;) 创建时间,
+       to_char(crtdat,&amp;apos;yyyy/mm/dd&amp;apos;) 创建时间,
+       tousr 税管员,
+       &amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||a.stat||&amp;apos;&amp;quot;&amp;gt;&amp;apos;
+       ||decode(a.stat,&amp;apos;1&amp;apos;,&amp;apos;分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未完成&amp;lt;/font&amp;gt;&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;查看&amp;apos;,&amp;apos;查看&amp;apos;)
+       ||&amp;apos;&amp;lt;/a&amp;gt;&amp;apos; 操作
+from tax_trkhdr a,V_TAX_TRKTYP b
+where a.tousr=(select name from v_tax_taxman where org=&amp;apos;[%SYS_ORGID]&amp;apos; and uuid=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp=b.id
+  and a.stat like &amp;apos;[%stats]%&amp;apos;
+  and a.stat&amp;lt;&amp;gt;&amp;apos;8&amp;apos;
+  and a.subtyp=&amp;apos;9&amp;apos;
+order by a.crtdat desc
+)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >TKOTHER</C12><C13 >TKOTHER</C13><C14 >TKOTHER</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 >TKOTHER</C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 >TKOTHER</C64><C65 >TKOTHER</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="4" ><ID >MyTrks</ID><NAME >我的所有事务</NAME><DATDSC >
+select &amp;apos;【&amp;apos;||decode(stat,&amp;apos;1&amp;apos;,&amp;apos;未分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;已分派&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;处理中&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;)||&amp;apos;-&amp;apos;||b.name||&amp;apos;】 &amp;apos;||title||&amp;apos; (&amp;apos;||crtdat||&amp;apos;)&amp;apos; name,url from (
+select guid,title,to_char(crtdat,&amp;apos;yyyy-mm-dd&amp;apos;) crtdat,project subtyp,stat,
+	&amp;apos;show.sp?grdid=TS&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||stat url 
+from trkhdr where acc=&amp;apos;[%SYS_ACCID]&amp;apos; and dtlusr=&amp;apos;[%SYS_USRID]&amp;apos;
+union all
+select guid,bilid||&amp;apos;-&amp;apos;||cmnam||&amp;apos;(&amp;apos;||cmid||&amp;apos;)&amp;apos;,to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat,subtyp,stat,
+	&amp;apos;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;processid=&amp;apos;||stat url 
+from tax_trkhdr
+where tousr=(select name from v_tax_taxman where uuid=&amp;apos;[%SYS_USRID]&amp;apos; and org=&amp;apos;[%SYS_ORGID]&amp;apos;)
+  and stat like &amp;apos;[%stats]%&amp;apos;
+) a,v_tax_trktyp b
+where subtyp like &amp;apos;[%subtyp]%&amp;apos;
+  and a.subtyp=b.id
+order by crtdat desc,subtyp  
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >MyTrks</C13><C14 ></C14><C15 >MyTrks</C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 >MyTrks</C19><C20 >MyTrks</C20><C21 ></C21><C22 >MyTrks</C22><C23 ></C23><C24 >MyTrks</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 >MyTrks</C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 >MyTrks</C37><C38 ></C38><C39 ></C39><C40 >MyTrks</C40><C41 >MyTrks</C41><C42 ></C42><C43 >MyTrks</C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 >MyTrks</C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 >MyTrks</C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 >MyTrks</C61><C62 >MyTrks</C62><C63 ></C63><C64 ></C64><C65 >MyTrks</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="5" ><ID >TrkTypes</ID><NAME ></NAME><DATDSC >select id,&amp;apos;&amp;lt;li&amp;gt;&amp;apos;||name||&amp;apos;&amp;lt;/li&amp;gt;&amp;apos; name,&amp;apos;Layout.sp?id=MyTrk&amp;subtyp=&amp;apos;||id url from V_TAX_TRKTYP</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >TrkTypes</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >TrkTypes</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >TrkTypes</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64><C65 ></C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="6" ><ID >Messages</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;lt;li&amp;gt;&amp;apos;||to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;)||&amp;apos; &amp;apos;||title||&amp;apos;&amp;lt;/li&amp;gt;&amp;apos; name,
+	&amp;apos;show.sp?grdid=TS&amp;guid=&amp;apos;||guid url 
+from trkhdr 
+where acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and PROJECT=&amp;apos;93&amp;apos;
+order by crtdat desc  </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64><C65 ></C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="7" ><ID >stat1</ID><NAME >状态查询</NAME><DATDSC >/*select distinct decode(stat,&amp;apos;2&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;) name,
+&amp;apos;Layout.sp?id=taxman&amp;stats=&amp;apos;||stat url,&amp;apos;&amp;apos; guid from tax_trkhdr
+*/
+
+select &amp;apos;未处理(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxman&amp;stats=2&amp;apos; url from tax_trkhdr 
+where stat=&amp;apos;2&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;处理中(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxman&amp;stats=3&amp;apos; url from tax_trkhdr 
+where stat=&amp;apos;3&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;已完成(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxman&amp;stats=9&amp;apos; url from tax_trkhdr 
+where stat=&amp;apos;9&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;企业电表维护&amp;apos; name,&amp;apos;show.sp?grdid=AMMEDIT&amp;TAXMAN=[%SYS_USRNAM]&amp;loaddata=1&amp;apos; url from dual</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 >stat1</C14><C15 >stat1</C15><C16 >stat1</C16><C17 >stat1</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >stat1</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 >stat1</C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 >stat1</C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64><C65 >stat1</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="8" ><ID >hyclass</ID><NAME ></NAME><DATDSC >select id,&amp;apos;&amp;lt;li&amp;gt;&amp;apos;||name||&amp;apos;&amp;lt;/li&amp;gt;&amp;apos; name,&amp;apos;Layout.sp?id=hydesc&amp;cid=&amp;apos;||id url from V_TAX_HYCLASS order by id
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >hyclass</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64><C65 ></C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="9" ><ID >GSTRK</ID><NAME ></NAME><DATDSC >--select &amp;apos;&amp;apos; 单号,&amp;apos;&amp;apos; 状态,&amp;apos;&amp;apos; 企业名称,&amp;apos;&amp;apos; 供电区域,&amp;apos;&amp;apos; 类型,&amp;apos;&amp;apos; 创建时间,&amp;apos;&amp;apos; 税管员,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;show.sp?grdid=TKDTL&amp;BILID=&amp;DAT1=&amp;DAT2=&amp;TYP=&amp;STAT=[%FILTER]&amp;TAXMAN=&amp;DEPT=1&amp;quot;&amp;gt;更多...&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+--union all
+select * from (
+select --yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+--       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;2&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未处理&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;处理中&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;9&amp;apos;,&amp;apos;&amp;lt;font color=green&amp;gt;已完成&amp;lt;/font&amp;gt;&amp;apos;) 状态,
+	decode(stat,&amp;apos;0&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+		    decode(nvl(tousr,&amp;apos;N&amp;apos;),&amp;apos;N&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;已分派&amp;lt;/font&amp;gt;&amp;apos;)) 状态,
+       --cmid 企业编号,
+       cmnam 企业名称,
+       a.town 供电区域,
+       b.name 类型,
+       to_char(crtdat,&amp;apos;dd/mm hh24:mi:ss&amp;apos;) 创建时间,
+       a.tousr 税管员,
+       decode(nvl(tousr,&amp;apos;N&amp;apos;),&amp;apos;N&amp;apos;,&amp;apos;&amp;lt;a href=&amp;quot;javascript:window.showModalDialog(&amp;apos;&amp;apos;show.sp?grdid=TrkSend&amp;GUID=&amp;apos;||a.guid||&amp;apos;&amp;flag=1&amp;apos;&amp;apos;,window,&amp;apos;&amp;apos;scroll:no;status:no;dialogWidth:450px;dialoHeight:100px&amp;apos;&amp;apos;);&amp;quot;&amp;gt;分派&amp;lt;/a&amp;gt;|&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;action=query&amp;quot;&amp;gt;查看&amp;lt;/a&amp;gt;&amp;apos;
+       	     --,&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TKDTL&amp;BILID=&amp;apos;||bilid||&amp;apos;&amp;DAT1=&amp;apos;||to_char(dat,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;&amp;DAT2=&amp;apos;||to_char(dat,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;&amp;TYP=&amp;STAT=&amp;TAXMAN=&amp;quot;&amp;gt;分派&amp;lt;/a&amp;gt;&amp;apos;
+       	     ,&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;action=query&amp;quot;&amp;gt;查看&amp;lt;/a&amp;gt;&amp;apos;) 操作
+from tax_trkhdr a,V_TAX_TRKTYP b,v_tax_taxman c
+where a.todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp=b.id
+  and a.subtyp&amp;lt;&amp;gt;&amp;apos;9&amp;apos;
+  and a.tousr=c.id(+)
+  [%FILTER]
+order by a.crtdat desc,a.bilid
+)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 >GSTRK</C25><C26 >GSTRK</C26><C27 >GSTRK</C27><C28 ></C28><C29 >GSTRK</C29><C30 >GSTRK</C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 >GSTRK</C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 >GSTRK</C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 >GSTRK</C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 >GSTRK</C55><C56 >GSTRK</C56><C57 >GSTRK</C57><C58 ></C58><C59 >GSTRK</C59><C60 >GSTRK</C60><C61 ></C61><C62 >GSTRK</C62><C63 ></C63><C64 >GSTRK</C64><C65 >GSTRK</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="10" ><ID >GSDSKSTAT</ID><NAME >核算组桌面状态</NAME><DATDSC >/*select distinct decode(stat,&amp;apos;2&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;) name,
+&amp;apos;Layout.sp?id=taxman&amp;stats=&amp;apos;||stat url,&amp;apos;&amp;apos; guid from tax_trkhdr
+*/
+
+select &amp;apos;全部事务(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxadmdsk&amp;FILTER=&amp;apos; url from tax_trkhdr 
+where todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select &amp;apos;已分派(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxadmdsk&amp;FILTER=and tousr is not null&amp;apos; url from tax_trkhdr 
+where todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and tousr is not null and stat&amp;lt;&amp;gt;&amp;apos;0&amp;apos;
+union all
+select &amp;apos;未分派(&amp;apos;||count(*)||&amp;apos;)&amp;apos; name,&amp;apos;Layout.sp?id=taxadmdsk&amp;FILTER=and tousr is null&amp;apos; url from tax_trkhdr 
+where todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and tousr is null and stat&amp;lt;&amp;gt;&amp;apos;0&amp;apos;
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >GSDSKSTAT</C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 >GSDSKSTAT</C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 >GSDSKSTAT</C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 >GSDSKSTAT</C56><C57 >GSDSKSTAT</C57><C58 >GSDSKSTAT</C58><C59 >GSDSKSTAT</C59><C60 >GSDSKSTAT</C60><C61 ></C61><C62 >GSDSKSTAT</C62><C63 ></C63><C64 ></C64><C65 >GSDSKSTAT</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="11" ><ID >TRKCHKLIST</ID><NAME >核实任务领导审批表</NAME><DATDSC >--select &amp;apos;&amp;apos; 单号,&amp;apos;&amp;apos; 核实时间段,&amp;apos;&amp;apos; 核实企业,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;show.sp?grdid=TKSP&amp;stat1=21&amp;stat2=25&amp;gt;更多&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+--union all
+select a.bilid 单号,a.yymm1||&amp;apos;~&amp;apos;||a.yymm2 核实时间段,a.cmnam 核实企业,
+	&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||a.guid||&amp;apos;&amp;processid=&amp;apos;||a.stat||&amp;apos;&amp;quot; target=&amp;quot;_blank&amp;quot;&amp;gt;审批&amp;lt;/a&amp;gt;&amp;apos; 操作
+from tax_trkhdr a
+where a.acc=&amp;apos;[%SYS_ACCID]&amp;apos; and (a.stat=&amp;apos;21&amp;apos; OR A.STAT=&amp;apos;25&amp;apos; )
+and todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+order by a.crtdat desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 >TRKCHKLIST</C45><C46 >TRKCHKLIST</C46><C47 >TRKCHKLIST</C47><C48 >TRKCHKLIST</C48><C49 ></C49><C50 ></C50><C51 >TRKCHKLIST</C51><C52 >TRKCHKLIST</C52><C53 >TRKCHKLIST</C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 >TRKCHKLIST</C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 >TRKCHKLIST</C62><C63 >TRKCHKLIST</C63><C64 ></C64><C65 >TRKCHKLIST</C65><C66 >TRKCHKLIST</C66><C67 >TRKCHKLIST</C67><C68 >TRKCHKLIST</C68></ROW>
+<ROW num="12" ><ID >TRKCHKLIST2</ID><NAME >核实任务管理员审批</NAME><DATDSC >--select &amp;apos;&amp;apos; 单号,&amp;apos;&amp;apos; 核实时间段,&amp;apos;&amp;apos; 核实企业,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;show.sp?grdid=TKSP&amp;stat1=23&amp;stat2=24&amp;quot;&amp;gt;更多&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+--union all
+select a.bilid 单号,a.yymm1||&amp;apos;~&amp;apos;||a.yymm2 核实时间段,a.cmnam 核实企业,
+	&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||a.guid||&amp;apos;&amp;processid=&amp;apos;||a.stat||&amp;apos;&amp;quot; target=&amp;quot;_blank&amp;quot;&amp;gt;审批&amp;lt;/a&amp;gt;&amp;apos; 操作
+from tax_trkhdr a
+where a.acc=&amp;apos;[%SYS_ACCID]&amp;apos; and a.stat=&amp;apos;23&amp;apos; OR A.STAT=&amp;apos;24&amp;apos; 
+and todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+order by a.crtdat desc
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 >GRDDSCDS_12</C52><C53 >TRK</C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 >TRKCHKLIST2</C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 >TRKCHKLIST2</C62><C63 >TRKCHKLIST2</C63><C64 ></C64><C65 >TRKCHKLIST2</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+<ROW num="13" ><ID >GSOTH</ID><NAME >县局其他任务</NAME><DATDSC >--select &amp;apos;&amp;apos; 单号,&amp;apos;&amp;apos; 状态,&amp;apos;&amp;apos; 企业名称,&amp;apos;&amp;apos; 供电区域,&amp;apos;&amp;apos; 类型,&amp;apos;&amp;apos; 创建时间,&amp;apos;&amp;apos; 税管员,&amp;apos;&amp;lt;center&amp;gt;&amp;lt;a href=&amp;quot;show.sp?grdid=TKDTL&amp;BILID=&amp;DAT1=&amp;DAT2=&amp;TYP=&amp;STAT=[%FILTER]&amp;TAXMAN=&amp;DEPT=1&amp;quot;&amp;gt;更多...&amp;lt;/a&amp;gt;&amp;lt;/center&amp;gt;&amp;apos; 操作 from dual
+--union all
+select * from (
+select --yymm1||&amp;apos;~&amp;apos;||yymm2 稽查年月,
+       bilid 单号,
+--       decode(stat,&amp;apos;1&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;2&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未处理&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;3&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;处理中&amp;lt;/font&amp;gt;&amp;apos;,
+--       		&amp;apos;9&amp;apos;,&amp;apos;&amp;lt;font color=green&amp;gt;已完成&amp;lt;/font&amp;gt;&amp;apos;) 状态,
+	decode(stat,&amp;apos;0&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,
+		    decode(nvl(tousr,&amp;apos;N&amp;apos;),&amp;apos;N&amp;apos;,&amp;apos;&amp;lt;font color=red&amp;gt;未分派&amp;lt;/font&amp;gt;&amp;apos;,&amp;apos;&amp;lt;font color=blue&amp;gt;已分派&amp;lt;/font&amp;gt;&amp;apos;)) 状态,
+       --cmid 企业编号,
+       --cmnam 企业名称,
+       --a.town 供电区域,
+       b.name 类型,
+       to_char(crtdat,&amp;apos;dd/mm hh24:mi:ss&amp;apos;) 创建时间,
+       a.tousr 税管员,
+       decode(nvl(tousr,&amp;apos;N&amp;apos;),&amp;apos;N&amp;apos;,&amp;apos;&amp;lt;a href=&amp;quot;javascript:window.showModalDialog(&amp;apos;&amp;apos;show.sp?grdid=TrkSend&amp;GUID=&amp;apos;||a.guid||&amp;apos;&amp;flag=1&amp;apos;&amp;apos;,window,&amp;apos;&amp;apos;scroll:no;status:no;dialogWidth:450px;dialoHeight:100px&amp;apos;&amp;apos;);&amp;quot;&amp;gt;分派&amp;lt;/a&amp;gt;|&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;action=query&amp;quot;&amp;gt;查看&amp;lt;/a&amp;gt;&amp;apos;
+       	     --,&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TKDTL&amp;BILID=&amp;apos;||bilid||&amp;apos;&amp;DAT1=&amp;apos;||to_char(dat,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;&amp;DAT2=&amp;apos;||to_char(dat,&amp;apos;yyyy-mm&amp;apos;)||&amp;apos;&amp;TYP=&amp;STAT=&amp;TAXMAN=&amp;quot;&amp;gt;分派&amp;lt;/a&amp;gt;&amp;apos;
+       	     ,&amp;apos;&amp;lt;a href=&amp;quot;show.sp?grdid=TK&amp;guid=&amp;apos;||guid||&amp;apos;&amp;action=query&amp;quot;&amp;gt;查看&amp;lt;/a&amp;gt;&amp;apos;) 操作
+from tax_trkhdr a,V_TAX_TRKTYP b,v_tax_taxman c
+where a.todept in (select substr(deptid,0,7) from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+  and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos;
+  and a.subtyp=b.id
+  and a.subtyp=&amp;apos;9&amp;apos;
+  and a.tousr=c.id(+)
+  [%FILTER]
+order by a.crtdat desc,a.bilid
+)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 ></C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 >GSOTH</C64><C65 >GSOTH</C65><C66 ></C66><C67 ></C67><C68 ></C68></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

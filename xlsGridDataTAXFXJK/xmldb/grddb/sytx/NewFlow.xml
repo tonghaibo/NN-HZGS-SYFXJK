@@ -1,0 +1,193 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >NewFlow</MWID><NAME >新增一个流程</NAME><NOTE ></NOTE><FILE >NewFlow.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><ORDER ></ORDER><EXTJS >xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >commit</ID><NAME >确定</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var G_GUID = &amp;quot;&amp;quot;;
+var G_SUBTYP = &amp;quot;&amp;quot;;
+//================================================================// 
+// 函数： _thisOnpost_loaddata(sheet)
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/08/07 12:21:16
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+	//  可输入的参数 GUID SUBTYP
+	try { G_GUID = GUID; }catch( e ) {}
+	try { G_SUBTYP = SUBTYP; }catch( e ) {}
+         _this.SetCellBkColor(0,-1,-1,255,255,255);
+         _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,6,2,setListCombox(&amp;quot;v_finkey&amp;quot;));
+         _this.SetCellText(sheet,6,2,&amp;quot;0&amp;quot;);
+         _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,7+1,2,setListCombox(&amp;quot;v_trsflg&amp;quot;));
+         _this.SetCellText(sheet,7+1,2,&amp;quot;0&amp;quot;);
+         _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,9+1,2,setListCombox(&amp;quot;v_sendto&amp;quot;));
+         _this.SetCellText(sheet,9+1,2,&amp;quot;0&amp;quot;);
+         _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,11+1,2,setListCombox(&amp;quot;v_end&amp;quot;));
+         _this.SetCellText(sheet,11+1,2,&amp;quot;0&amp;quot;);
+         _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,13+1,2,setListCombox(&amp;quot;v_retflg&amp;quot;));
+         _this.SetCellText(sheet,13+1,2,&amp;quot;0&amp;quot;);
+         _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,15+1,2,setListCombox(&amp;quot;v_toptyp&amp;quot;));  
+         _this.SetCellText(sheet,15+1,2,&amp;quot;0&amp;quot;);
+         _this.SetCellText(0,2,2,G_SYTID);
+}
+function setListCombox(id)
+{
+
+
+}
+
+//================================================================//  
+// 函数：commit 
+// 说明：点击保存并传参 
+// 参数：
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：01/08/07 12:22:17 
+// 修改日志： 
+//================================================================//  
+function commit()
+{
+        var sign = false;
+        var style = &amp;quot;&amp;quot;;
+        var guid = &amp;quot;&amp;quot;
+        var id = _this.GetCellText(sheet,2,2);
+        var thissytid= _this.GetCellText(sheet,2,4);
+        var name = _this.GetCellText(sheet,3,2);
+	if ( id == &amp;quot;&amp;quot; || name == &amp;quot;&amp;quot; ||thissytid==&amp;quot;&amp;quot; ) {
+		alert ( &amp;quot;存在字段(带*号)为空的情况，不能保存&amp;quot; );
+		return;
+	}
+        var note = _this.GetCellText(sheet,3+1,2);
+        var finkey = _this.GetCellText(sheet,5+1,2);
+        var trsflg =  _this.GetCellText(sheet,7+1,2);
+        var sendto = _this.GetCellText(sheet,9+1,2);
+        var endflg = _this.GetCellText(sheet,11+1,2);
+        var retflg = _this.GetCellText(sheet,13+1,2);
+        var toptyp = _this.GetCellText(sheet,15+1,2);
+        var param = new Object();
+        param.name = name;
+        param.note = note;
+        param.finkey = finkey;
+        param.trsflg = trsflg;
+        param.sendto = sendto;
+        param.endflg = endflg;
+        param.retflg = retflg;
+        param.toptyp = toptyp;
+        param.crtusr = G_USRID;
+        param.subtyp = G_SUBTYP;
+        param.guid = G_GUID;
+        param.thissytid= thissytid;
+        param.trk_id= id;
+        try  
+        {
+             guid = invokeOSFuncExt(&amp;quot;save&amp;quot;,param) ; 
+             sign = true;
+             alert ( &amp;quot;保存成功&amp;quot;);
+             window.close();
+             //alert (guid);
+        }
+        catch(e)
+        {
+             alert (e);
+        }
+        /*
+        if ( sign )
+        {
+              QuerySQLDS(&amp;quot;select id from trktyp where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;); 
+              style = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+              var url =  &amp;quot;ShowXlsGrid.sp?grdid=HDRTRK&amp;style=&amp;quot;+style+&amp;quot;&amp;edit=&amp;quot;+edit;
+              var child = window.open( url ,&amp;quot;新建事务&amp;quot;,&amp;quot;WIDTH=900,HEIGHT=600,left=0,top=0,toolbar=no,menu=no&amp;quot;);
+              child.yyWindow = opener;
+              window.close();
+
+        }
+        */
+
+}
+//================================================================//  
+// 函数：refreshSheet 
+// 说明：刷新 
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：01/08/07 12:24:47 
+// 修改日志： 
+//================================================================//  
+function refreshSheet()
+{
+       opener.refreshSheet();
+}
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if ( sheet==0 &amp;&amp; row==20&amp;&amp; col==3 ) 
+		commit();  
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+function save() 
+{
+      var ret = 0;
+      var db = null;
+      var ds = null;
+      var sql = &amp;quot;&amp;quot;;
+      try
+      {
+            db = new pubpack.EADatabase();
+            var sql1 =  &amp;quot;SELECT trk_seq.nextval FROM DUAL&amp;quot; ; 
+            var trk_id = db.GetSQL(sql1);
+            if ( guid == &amp;quot;&amp;quot; ) {
+            	sql = &amp;quot;insert into trktyp(id,name,note,finkey,trsflg,sendto,endflg,retflg,toptyp,crtusr, subtyp,sytid ) &amp;quot;+
+                  &amp;quot;values(&amp;apos;&amp;quot;+trk_id+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+finkey+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+trsflg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+sendto+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+endflg+&amp;quot;&amp;apos;,&amp;quot;+
+                  &amp;quot;&amp;apos;&amp;quot;+retflg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+toptyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusr +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+subtyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos;)&amp;quot;; 
+            }
+            else {
+            	sql = &amp;quot;update trktyp(id,name,note,finkey,trsflg,sendto,endflg,retflg,toptyp,crtusr,sytid ) &amp;quot;+
+                  &amp;quot;values(&amp;apos;&amp;quot;+trk_id+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+finkey+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+trsflg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+sendto+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+endflg+&amp;quot;&amp;apos;,&amp;quot;+
+                  &amp;quot;&amp;apos;&amp;quot;+retflg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+toptyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusr +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos;)&amp;quot;; 
+
+            }
+            ret = db.ExcecutSQL(sql);
+            var guid = db.GetSQL(&amp;quot;select guid from trktyp where id=&amp;apos;&amp;quot;+trk_id+&amp;quot;&amp;apos;&amp;quot;);            
+            return guid ;      
+      }
+      catch(e)
+      {
+            throw e;
+      }
+      finally
+      {
+            db.Close(); 
+      }       
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

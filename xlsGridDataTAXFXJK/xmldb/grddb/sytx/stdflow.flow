@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ 
+ <rect id="rect_121436" x="17" y="45" width="711" height="418" stroke="#000000" fill="#feffe1" stroke-width="" font-family="" font-size="" url="" target="" tip=""  >
+ </rect>
+ <text id="title" x="14" y="16" width="410" height="27" stroke-width="" font-family="" font-size="15" url="" font-color="#0000ff" target="" tip=""  >【捷强配销中心系统－采购退货流程图】</text>
+ <text id="title_xlsgrid" x="592" y="436" width="154" height="24" stroke-width="" font-family="" font-size="" url="" target="" tip="" font-color="#adadad"   stroke="" fill="">xlsGrid.net 硕格中间件</text>
+ <rect id="退货单录入" x="180" y="211" width="104" height="39" stroke="#000000" fill="#FFFFCC" >退货单录入</rect>
+ <rect id="rect_65911" x="344" y="136" width="104" height="39" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="" target="" tip=""  >预报</rect>
+ <polygon id="物流" points="514,132 491,176 562,176 586,132" changeto="parallelogram" stroke="#000000" fill="#00FF99" >物流</polygon>
+ <connector id="connector_208_65914" from="退货单录入" to="rect_65911" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_65915" from="rect_65911" to="物流" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect id="rect_65916" x="36" y="211" width="104" height="39" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="" target="" tip=""  >采购订单</rect>
+ <connector id="connector_208_65917" from="rect_65916" to="退货单录入" fromcp="32" tocp="12" type="208"  >
+ </connector>
+</svg>

@@ -1,0 +1,216 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_Aquarius</MWID><NAME >梅林正广和</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_Aquarius.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);
+  	_this.SaveTextFile( &amp;quot;d:/Aquarius.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var httpcall = new webget.HttpCall();
+
+var hostip = &amp;quot;http://210.51.48.210:9082/&amp;quot;;
+var selorderstate = 1;	//订单状态：1、发布，2、未查阅，3、已查阅，4、已反馈
+
+var m_bilds = new pub.EADS();
+var m_bilid = &amp;quot;&amp;quot;;	//订单编号
+var m_bilguid = &amp;quot;&amp;quot;;	//内部编号
+var m_bEntryHdr = false;
+var m_lastcolnam = &amp;quot;&amp;quot;;
+var m_colnamlist = new Array(&amp;quot;采购订单编号&amp;quot;,&amp;quot;供应商编码&amp;quot;,&amp;quot;供应商名称&amp;quot;,&amp;quot;订货日期&amp;quot;,&amp;quot;送货日期&amp;quot;);				//表头可抓取的&amp;lt;TD&amp;gt;info
+var t_bilhdr = new pub.EADS();
+var t_hdrrow = -1;
+var m_colidlist = new Array(&amp;quot;BILID&amp;quot;,&amp;quot;CORPNAM&amp;quot;,&amp;quot;CORPID&amp;quot;,&amp;quot;DEPT&amp;quot;,&amp;quot;订单号&amp;quot;,&amp;quot;DAT&amp;quot;,&amp;quot;期望到货日&amp;quot;,&amp;quot;电话号码&amp;quot;,&amp;quot;传真号码&amp;quot;);	//家乐福格式的HdrDS
+var m_bilhdr = new pub.EADS();
+var m_hdrrow = -1;
+var m_bEntryDtl = false;
+var m_bildtlstartflg = &amp;quot;金额(&amp;quot;;
+var m_bildtlcolseq = 0;
+var m_bildtl = new pub.EADS();		//家乐福格式的DtlDS（可构造不同格式的DS，单独解析，这个调用了家乐福的解析函数，所以格式和家乐福相同）
+var m_dtlrow = -1;
+
+function start()
+{
+	return getOrderStr(&amp;quot;JQPX&amp;quot;,&amp;quot;2010-07-19&amp;quot;,&amp;quot;0030&amp;quot;,&amp;quot;gmbl1275&amp;quot;,&amp;quot;123456&amp;quot;,&amp;quot;dept&amp;quot;,&amp;quot;5188&amp;quot;);
+}
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{
+	var ret = &amp;quot;&amp;quot;;
+	try {
+		ret =  httpcall.Post(hostip+&amp;quot;default.jsp&amp;quot;,&amp;quot;flag=login&amp;txtUserID=&amp;quot;+userid+&amp;quot;&amp;txtPassword=&amp;quot;+passwd+&amp;quot;&amp;txtCompanyCode=&amp;quot;+code);	//登陆
+//		ret = httpcall.Get(hostip+&amp;quot;MainPage1.jsp?code=01&amp;quot;,&amp;quot;&amp;quot;);
+		
+		var billistparam = &amp;quot;command=query&amp;type=供应商&amp;btnQuery=查 询&amp;target=_self&amp;txtOrderStartDate=&amp;quot;+dat+&amp;quot;&amp;txtOrderEndDate=&amp;quot;+dat
+			+&amp;quot;&amp;selorderstate=&amp;quot;+selorderstate+&amp;quot;&amp;pageSize=999999999&amp;quot;;
+		
+//		ret = httpcall.Post(hostip+&amp;quot;purchase/BLPOrderQuery.jsp&amp;quot;,billistparam,&amp;quot;GBK&amp;quot;);
+		var node = httpcall.PostAndParse(hostip+&amp;quot;purchase/BLPOrderQuery.jsp&amp;quot;,billistparam,&amp;quot;GBK&amp;quot;);					//清单
+		GetBillist(node);
+		
+		for (var i = 0; i &amp;lt; m_bilds.getRowCount(); i ++) {
+			m_bilguid = m_bilds.getStringAt(i,&amp;quot;BILGUID&amp;quot;);
+			var billparam = &amp;quot;chkSelection=&amp;quot;+m_bilguid+&amp;quot;&amp;id=&amp;quot;+m_bilguid;
+			
+//			ret = httpcall.Post(hostip+&amp;quot;purchase/BLPOrderModify.jsp&amp;quot;,billparam);
+			node = httpcall.PostAndParse(hostip+&amp;quot;purchase/BLPOrderModify.jsp&amp;quot;,billparam,&amp;quot;GBK&amp;quot;);					//表单
+			m_bEntryHdr = false;
+			m_bEntryDtl = false;
+			m_lastcolnam= &amp;quot;&amp;quot;;
+			m_bildtlcolseq= 0;
+			GetBildetail(node);
+		}
+//		throw new Exception(m_bilhdr.GetXml()+&amp;quot;\n&amp;quot;+m_bildtl.GetXml());
+		
+		var func = new x_WG_Currefour();
+		return func.writeStr(userid,deptid,kaid,m_bilhdr,m_bildtl);		//调用家乐福的解析函数
+	} catch ( e ) {
+		throw new Exception( e );
+	}
+}
+
+function GetBillist(node)
+{
+	if (node.getNodeName().equals(&amp;quot;INPUT&amp;quot;)) {
+		var attrs  = node.getAttributes();
+		var namnode = attrs.getNamedItem(&amp;quot;name&amp;quot;);
+		if ( namnode != null ) {
+			var namvalue = namnode.getNodeValue();
+			if ( namvalue != null &amp;&amp; namvalue.indexOf(&amp;quot;chkSelection&amp;quot;) &amp;gt;= 0 ) {
+				var valnode = attrs.getNamedItem(&amp;quot;value&amp;quot;);
+				if ( valnode != null ) {
+					var valvalue = valnode.getNodeValue();
+					var row = m_bilds.AddRow(m_bilds.getRowCount()-1);
+					m_bilds.setValueAt(row,&amp;quot;BILGUID&amp;quot;,valvalue);
+				}
+			}
+		}
+	}
+	var children = node.getChildNodes();
+	if ( children != null ) {
+		for ( var i = 0; i &amp;lt; children.getLength(); i ++ ) {
+			GetBillist(children.item(i));
+		}
+	}
+}
+
+function GetBildetail(node)
+{
+	if (node.getNodeName().equals(&amp;quot;TD&amp;quot;)) {
+		if (m_bEntryDtl) m_bildtlcolseq ++;
+		if (node.getFirstChild() != null) {
+			var eafunc = new pub.EAFunc();
+			var nodevalue = eafunc.NVL(node.getFirstChild().getNodeValue(),&amp;quot;&amp;quot;);
+			
+			if (nodevalue.length() &amp;gt;= m_colnamlist[0].length() &amp;&amp; nodevalue.substring(0,m_colnamlist[0].length()).equals(m_colnamlist[0])) {
+				t_hdrrow = t_bilhdr.AddRow(t_bilhdr.getRowCount()-1);
+				t_bilhdr.setValueAt(t_hdrrow,m_colidlist[0],m_bilguid);
+				m_bEntryHdr = true;	//表头开始
+			}
+			else if (nodevalue.length() &amp;gt;= m_bildtlstartflg.length()
+				&amp;&amp; nodevalue.substring(0,m_bildtlstartflg.length()).equals(m_bildtlstartflg))
+			{
+				m_bEntryDtl = true;	//表体开始
+			}
+			else if ( m_bEntryHdr ) {					//开始抓取HdrDS
+				for ( var i = 0; i &amp;lt; m_colnamlist.length(); i ++ ) {	//&amp;quot;采购订单编号&amp;quot;,&amp;quot;供应商编码&amp;quot;,&amp;quot;供应商名称&amp;quot;,&amp;quot;订货日期&amp;quot;,&amp;quot;送货日期&amp;quot;
+					if (m_lastcolnam.length() &amp;gt;= m_colnamlist[i].length()
+						&amp;&amp; m_lastcolnam.substring(0,m_colnamlist[i].length()).equals(m_colnamlist[i]))
+					{
+						if (i == 0) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[4],nodevalue);
+							m_bilid = nodevalue;
+						}
+						else if (i == 1)
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[2],nodevalue);
+						else if (i == 2)
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[1],nodevalue);
+						else if (i == 3)
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[5],nodevalue);
+						else if (i == 4) {
+							t_bilhdr.setValueAt(t_hdrrow,m_colidlist[6],nodevalue);
+							m_bEntryHdr = false;
+						}
+						break;
+					}
+				}
+			}
+			else if ( ! m_bEntryHdr &amp;&amp; t_bilhdr.getRowCount() &amp;gt; 0 ) {	//抓取表头结束(t_bilhdr)，构造家乐福格式HdrDS(m_bilhdr)
+				m_hdrrow = m_bilhdr.AddRow(m_bilhdr.getRowCount()-1);
+				for (var i = 0; i &amp;lt; m_colidlist.length(); i ++) {
+					for (var j = 0; j &amp;lt; t_bilhdr.getColumnCount(); j ++) {
+						if (m_colidlist[i] == t_bilhdr.getColumnName(j)) {
+							m_bilhdr.setValueAt(m_hdrrow,m_colidlist[i],t_bilhdr.getStringAt(t_hdrrow,j));
+							break;
+						}
+						else if (j == t_bilhdr.getRowCount()-1)
+							m_bilhdr.setValueAt(m_hdrrow,m_colidlist[i],&amp;quot;&amp;quot;);
+					}
+				}
+				t_bilhdr.clearDS();
+			}
+			else if ( m_bEntryDtl ) {					//开始抓取DtlDS
+				if (m_bildtlcolseq == 1) {
+					m_dtlrow = m_bildtl.AddRow(m_bildtl.getRowCount()-1);
+					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;订单号&amp;quot;,m_bilid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;BILID&amp;quot;, m_bilguid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SEQID&amp;quot;, nodevalue);
+				}
+				else if (m_bildtlcolseq == 2) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMID&amp;quot;, nodevalue);
+				}
+				else if (m_bildtlcolseq == 3) {
+					var codenode = node.getNextSibling().getNextSibling();
+					var specnode = codenode.getNextSibling().getNextSibling();
+					
+					var code = codenode.getFirstChild().getNodeValue();
+					var spec = specnode.getFirstChild().getNodeValue();
+					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;条码&amp;quot;, code);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SPEC&amp;quot;, spec);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMNAM&amp;quot;, nodevalue);
+				}
+				else if (m_bildtlcolseq == 6) {
+					var untnum = node.getNextSibling().getNextSibling().getNextSibling().getNextSibling()
+						.getNextSibling().getNextSibling().getNextSibling().getNextSibling().getFirstChild().getNodeValue();
+					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;,untnum);	//包装系数
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTY&amp;quot;,nodevalue);	//包装订量
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;赠品数量&amp;quot;, &amp;quot;&amp;quot;);
+				}
+				else if (m_bildtlcolseq == 11) {
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;不含税价&amp;quot;,nodevalue);
+				}
+			}
+			m_lastcolnam = nodevalue;
+		}
+	}
+	var children = node.getChildNodes();
+	if ( children != null ) {
+		for ( var i = 0; i &amp;lt; children.getLength(); i ++ ) {
+			GetBildetail(children.item(i));
+		}
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

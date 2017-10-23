@@ -1,0 +1,601 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >WEBCVS</MWID><NAME >CVS Web界面</NAME><NOTE ></NOTE><FILE >WEBCVS.zxg</FILE><FIXED >2,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS >xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >login</ID><NAME >登录</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE ></IMGMOUSE><C7 >login</C7></ROW>
+<ROW num="1" ><ID >logout</ID><NAME >注销</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >2</IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="2" ><ID >refresh</ID><NAME >刷新</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE ></IMGMOUSE><C7 >refresh</C7></ROW>
+<ROW num="3" ><ID >doaction</ID><NAME >执行操作</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="4" ><ID >checkout</ID><NAME >取出目录</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="5" ><ID >diff</ID><NAME >差异比较</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="6" ><ID >update</ID><NAME >取出...</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >USERID</ID><NAME >USERID</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >xlsGridData</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >USERID</C13></ROW>
+<ROW num="1" ><ID >CVS</ID><NAME >CVS执行文件</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >/usr/bin/cvs</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="2" ><ID >zip</ID><NAME >压缩级别</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >6</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="3" ><ID >SUBFLD</ID><NAME >含子目录</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >0</DEFVAL><TIP >0或1</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="4" ><ID >HOST</ID><NAME >服务器</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >cvs.xlsgrid.net</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >HOST</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheetTree = 1;
+var sheetFile = 0;
+var row1=2;
+var col1=1;
+var cols=2;
+//var cvsroot = &amp;quot;&amp;quot;;
+var fileArray = new Array();
+var alist;
+var binfiles=&amp;quot;.zxg;.doc;.gif;.jpg;.rar;.zip;&amp;quot;;
+//注：在windows下，以system身份运行的标准cvs无法获得用户目录，故用TortoiseCVS中的cvs替代
+function cvsroot(pwd)
+{
+  var ret = &amp;quot;:pserver&amp;quot;;
+  var name = document.all(&amp;quot;USERID&amp;quot;).value;
+  if(!name)
+  {
+    name = prompt(&amp;quot;输入CVS用户名:&amp;quot;,&amp;quot;&amp;quot;);
+    if(!name)
+      throw &amp;quot;必须输入用户名。&amp;quot;;
+    else
+      document.all(&amp;quot;USERID&amp;quot;).value = name;
+  }
+    ret += &amp;quot;:&amp;quot;+name;
+  if(typeof pwd!=&amp;quot;undefined&amp;quot;)
+    ret += &amp;quot;:&amp;quot;+pwd;
+  return ret+&amp;quot;@&amp;quot;+document.all(&amp;quot;HOST&amp;quot;).value+&amp;quot;:/cvsroot&amp;quot;;
+}
+
+function loadTreeView()
+{
+  var treexml = invokeOSFunc(&amp;quot;getFolderTreeXml&amp;quot;,&amp;quot;root=&amp;quot;);
+  _this.SetToTreeCtrl(&amp;quot;Tree_1&amp;quot;,sheetTree ,-1,-1,treexml);
+}
+
+function _thisOnpost_loaddata(sheet)
+{
+  var trobj = totalrow.parentElement.parentElement;
+  trobj.style.display = &amp;quot;none&amp;quot;;
+  var btn = document.all(&amp;quot;searchbut&amp;quot;);
+  btn.outerHTML = &amp;quot;提示：删除的要到对应目录下\&amp;quot;添加\&amp;quot;以恢复(若文件还存在，需作\&amp;quot;还原\&amp;quot;操作)&amp;quot;;
+  document.all(&amp;quot;HOST&amp;quot;).style.width = &amp;quot;180&amp;quot;;
+  
+  loadTreeView();
+  _this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;25%&amp;quot;);
+  alist = _this.CreateListValue();
+  _this.SetListValue(alist,0,&amp;quot;&amp;quot;);
+  _this.SetListValue(alist,1,&amp;quot;添加&amp;quot;);
+  _this.SetListValue(alist,2,&amp;quot;取出&amp;quot;);
+  _this.SetListValue(alist,3,&amp;quot;提交&amp;quot;);
+  _this.SetListValue(alist,4,&amp;quot;更新&amp;quot;);
+  _this.SetListValue(alist,5,&amp;quot;删除&amp;quot;);
+  _this.SetListValue(alist,6,&amp;quot;还原&amp;quot;);
+  _this.SetListValue(alist,7,&amp;quot;手工处理&amp;quot;);
+  _this.SetTocomboBox(&amp;quot;&amp;quot;,sheetFile,2,3,alist);
+  _this.SetMainCellRange(sheetFile,2,1,_this.GetRowCount(sheetFile)-1,3);	//scott add for sort on column
+  
+	login();  
+}
+
+var curnodepath =&amp;quot;&amp;quot;;
+var curnodeid=0;
+
+function loadCVSState()
+{
+    if(curnodepath==&amp;quot;&amp;quot;)
+      throw &amp;quot;请选择一个目录节点后再刷新目录状态。&amp;quot;;
+    filexml= invokeOSFunc(&amp;quot;getFileState&amp;quot;,&amp;quot;path=&amp;quot;+curnodepath+&amp;quot;&amp;root=&amp;quot;
+          +cvsroot()+&amp;quot;&amp;SUBFLD=&amp;quot;+document.all(&amp;quot;SUBFLD&amp;quot;).value +
+          &amp;quot;&amp;cvsclient=&amp;quot;+document.all(&amp;quot;CVS&amp;quot;).value);
+    fileArray[curnodeid]=filexml;
+}
+
+function showFileState(filexml)
+{
+    //清除原有信息
+    _this.SetRowCount(sheetFile,3);
+    _this.SetRowSelected(sheetFile,2,-1);
+    _this.SetCellLock(sheetFile,2,3,-1);
+    _this.SetCellText(sheetFile,2,1,&amp;quot;&amp;quot;);
+    _this.SetCellText(sheetFile,2,2,&amp;quot;&amp;quot;);
+    _this.SetCellText(sheetFile,2,3,&amp;quot;&amp;quot;);
+    _this.AppendRow(sheetFile,2);
+    _this.AppendRow(sheetFile,2);
+    
+  var rows=_this.SetXmlDS(sheetFile,2,1,4,3,filexml);
+  _this.SetMainCellRange(sheetFile, row1, col1, row1+rows-1, col1+cols-1);
+  _this.SetMainCellRange(sheetFile,2,1,_this.GetRowCount(sheetFile)-1,3);	//scott add for sort on column
+  _this.SetFixedCol(sheetFile,1);
+  _this.SetFixedRow(sheetFile,2);
+  _this.SetAttribe(&amp;quot;SHEET_&amp;quot;+sheetFile,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX);
+  
+}
+
+function refresh()
+{
+  loadCVSState();
+  showFileState(filexml);  
+}
+
+function _thisOnTreeFolderClick(id,hItem,itemid,attribe,value)
+{
+  var itms = attribe.split(&amp;apos;,&amp;apos;);
+  var id=itms[1];
+  var filexml=&amp;quot;&amp;quot;;
+  filexml=fileArray[id];
+  curnodepath = itms[0];
+  curnodeid= id;
+//  if(!filexml)
+//  {
+//    loadCVSState();   
+//    filexml=fileArray[id];
+//  }
+ // if(!!filexml)
+  showFileState(filexml);
+}
+
+function login()
+{
+  //cvsroot= prompt(&amp;quot;请输入用户名(空白表示使用默认用户,:pserver:gld@cvs.xlsgrid.net.cn:/cvsroot)：&amp;quot;,&amp;quot;&amp;quot;);
+  var pwd=prompt(&amp;quot;请输入密码：&amp;quot;,&amp;quot;&amp;quot;);
+  if(!!pwd)
+    invokeOSFunc(&amp;quot;cvslogin&amp;quot;,&amp;quot;pwd=&amp;quot;+pwd+&amp;quot;&amp;root=&amp;quot;+cvsroot(pwd)+
+    &amp;quot;&amp;cvsclient=&amp;quot;+document.all(&amp;quot;CVS&amp;quot;).value);
+  else
+    alert(&amp;quot;请输入密码&amp;quot;);
+}
+
+function logout()
+{
+  var msg = invokeOSFunc(&amp;quot;cvslogout&amp;quot;,&amp;quot;root=&amp;quot;+cvsroot()+
+    &amp;quot;&amp;cvsclient=&amp;quot;+document.all(&amp;quot;CVS&amp;quot;).value);
+}
+
+var actioncount = 7;
+function doaction()
+{
+  var row1=_this.GetMainCellRangeRow1(sheetFile);
+  var row2=_this.GetMainCellRangeRow2(sheetFile);
+  var files=new Array();
+  for(var i=0;i&amp;lt;actioncount;i++)
+  {
+    files[i]=&amp;quot;&amp;quot;;
+  }
+  for(var i=row1;i&amp;lt;=row2;i++)
+  {
+    if(_this.GetRowSelected(sheetFile,i))
+    {
+      var stat=_this.GetCellText(sheetFile,i,3);
+      if(_this.GetCellShowText(sheetFile,i,3)==&amp;quot;&amp;quot;) continue;
+      var fn = _this.GetCellText(sheetFile,i,2);
+      if(stat==1)
+      {
+        var ext = fn.substr(fn.length-3);
+        if(binfiles.indexOf(ext+&amp;quot;;&amp;quot;)&amp;gt;=0)
+          stat=0;
+      }
+      files[stat] += fn+&amp;quot;,&amp;quot;;
+    }
+  }
+  var param = new Object();
+  var comment=prompt(&amp;quot;请输入本次操作的备忘信息：&amp;quot;,&amp;quot;&amp;quot;);
+  param.comment=comment;
+  param.fileroot=curnodepath;
+  param.f0=files[0];
+  param.f1=files[1];
+  param.f2=files[2];
+  param.f3=files[3];
+  param.f4=files[4];
+  param.f5=files[5];
+  param.f6=files[6];
+  param.root=cvsroot();
+  param.cvsclient=document.all(&amp;quot;CVS&amp;quot;).value;
+  var ret=invokeOSFuncExt(&amp;quot;doaction&amp;quot;,param);
+  refresh();
+  showmsg(ret);
+}
+
+var modulename = &amp;quot;xlsGridData&amp;quot;;
+function checkout()
+{
+  if(curnodepath==&amp;quot;&amp;quot;)
+  {
+    throw &amp;quot;请选择一个目录节点，以确定基本路径。&amp;quot;;
+  }
+  var nodename =prompt(&amp;quot;请输入要取出的子目录名称(为空则取本目录下的所有新内容)：&amp;quot;,&amp;quot;&amp;quot;);
+  if(nodename==null) return;
+  curnodepath= curnodepath.replace(/\\/g,&amp;quot;/&amp;quot;);
+  var l = curnodepath.length-1;
+  var fileroot=curnodepath;
+  if(fileroot.charAt(l)==&amp;quot;/&amp;quot;)
+    fileroot = fileroot.substr(0,l);
+  var dbpath = fileroot.substr(fileroot.indexOf(&amp;quot;/&amp;quot;)+1);
+  if(nodename==&amp;quot;&amp;quot;)
+  {
+    nodename = dbpath.substr(dbpath.lastIndexOf(&amp;quot;/&amp;quot;) + 1);
+    fileroot = fileroot.substr(0,fileroot.lastIndexOf(&amp;quot;/&amp;quot;));
+  }
+  else  dbpath += &amp;quot;/&amp;quot; + nodename;
+
+  var p = dbpath.indexOf(modulename);
+  if(p&amp;gt;=0)
+  {
+    dbpath = dbpath.substr(p);
+    var ret = invokeOSFunc(&amp;quot;checkout&amp;quot;,&amp;quot;root=&amp;quot;+cvsroot()+&amp;quot;&amp;fileroot=&amp;quot;+fileroot
+          +&amp;quot;&amp;dbpath=&amp;quot;+dbpath+&amp;quot;&amp;outpath=&amp;quot;+nodename
+          +&amp;quot;&amp;cvsclient=&amp;quot;+document.all(&amp;quot;CVS&amp;quot;).value ); 
+    showmsg(ret);
+    loadTreeView();
+  }
+  else alert(&amp;quot;cvs本地路径未包含&amp;quot;+modulename+&amp;quot;,无法判断cvs仓库路径。&amp;quot;);
+}
+
+function showmsg(msg)
+{
+  var w = window.open(&amp;quot;&amp;quot;,&amp;quot;_BLANK&amp;quot;);
+  w.document.body.innerHTML = &amp;quot;&amp;lt;TEXTAREA rows=37 cols=100 ID=msg&amp;gt;&amp;lt;/TEXTAREA&amp;gt;&amp;quot;;//&amp;quot;&amp;lt;pre&amp;gt;&amp;quot;+msg.replace(&amp;quot;\n&amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;)+&amp;quot;&amp;lt;/pre&amp;gt;&amp;quot;;
+  w.msg.value=msg;
+}
+
+function diff()
+{
+  var fn = _this.GetCellText(0,_this.GetCurrentRow(0),2);
+  var ret = invokeOSFunc(&amp;quot;cvsdiff&amp;quot;,&amp;quot;fileroot=&amp;quot;+curnodepath
+          +&amp;quot;&amp;root=&amp;quot;+cvsroot()+&amp;quot;&amp;fn=&amp;quot;+fn+
+          &amp;quot;&amp;cvsclient=&amp;quot;+document.all(&amp;quot;CVS&amp;quot;).value ); 
+  showmsg(ret);
+}
+
+
+function update()
+{
+  var filename =prompt(&amp;quot;请输入要取出的文件名(多文件名请用逗号分隔)：&amp;quot;,&amp;quot;&amp;quot;);
+  if(filename==null) return;
+  var param = new Object();
+  param.comment=&amp;quot;&amp;quot;;
+  param.fileroot=curnodepath;
+  param.f0=&amp;quot;&amp;quot;;
+  param.f1=&amp;quot;&amp;quot;;
+  param.f2=&amp;quot;&amp;quot;;
+  param.f3=&amp;quot;&amp;quot;;
+  param.f4=&amp;quot;&amp;quot;;
+  param.f5=&amp;quot;&amp;quot;;
+  param.f6=filename;
+  param.root=cvsroot();
+  param.cvsclient=document.all(&amp;quot;CVS&amp;quot;).value;
+  var ret=invokeOSFuncExt(&amp;quot;doaction&amp;quot;,param);
+  showmsg(ret);
+  refresh();
+    
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+//var cvsclient = pub.EAOption.get(&amp;quot;cvsclient&amp;quot;);
+//if(cvsclient==&amp;quot;&amp;quot;) 
+//var cvsclient=&amp;quot;/usr/bin/cvs&amp;quot;;
+var cvshome = pub.EAOption.dynaDataRoot;
+
+function arrayList2Str(al)
+{
+  var i = al.iterator();
+  var hasNext = i.hasNext();
+  var ret=&amp;quot;&amp;quot;;
+  while (hasNext)
+  {
+      ret += i.next()+&amp;quot;\n&amp;quot;;
+      hasNext = i.hasNext();
+  }  
+  return ret;
+}
+
+//================================================================// 
+// 函数：cvsAction
+// 说明：基本cvs命令入口
+// 参数：
+// 返回：cvs -d :pserver:gld@222.72.61.165:/cvsroot
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:28:23
+// 修改日志：
+//================================================================//
+var lastCvsState=0; 
+function cvsAction(cmds,path,msg)
+{
+   var err=new java.util.ArrayList();
+   try
+   {
+      var cmd = [cvsclient,&amp;quot;-z&amp;quot;,&amp;quot;6&amp;quot;];
+      if(root!=&amp;quot;&amp;quot;) 
+        cmd = cmd.concat([&amp;quot;-d&amp;quot;,root]);
+      lastCvsState = pub.EAFunc.run(cmd.concat(cmds),path,msg,err);
+      if(lastCvsState&amp;lt;0)
+      {
+        var emsg=arrayList2Str(err);
+        if(msg!=null)
+          emsg += arrayList2Str(msg);
+        throw new Exception(emsg);
+      }
+      return arrayList2Str(err);//err.toString();
+   }
+   finally
+   {
+      err.clear();
+   }
+}
+
+function cvslogin()
+{
+  var errmsg = cvsAction([&amp;quot;login&amp;quot;,&amp;quot;-p&amp;quot;,pwd],cvshome,null);
+  if(lastCvsState!=0)
+    throw new Exception(errmsg);
+}
+
+function cvslogout()
+{
+cvsAction([&amp;quot;logout&amp;quot;],cvshome,null);
+}
+
+//================================================================// 
+// 函数：trans
+// 说明：翻译cvs返回的状态，并给出建议操作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:27:46
+// 修改日志：
+//================================================================// 
+function trans(state)
+{
+  if(state==&amp;quot;Up-to-date&amp;quot;)
+    return &amp;quot;= 已同步;0&amp;quot;;
+  else if(state==&amp;quot;Needs Checkout&amp;quot;)
+    return &amp;quot;-+ 未取出;4&amp;quot;;
+  else if(state==&amp;quot;Needs Patch&amp;quot;)
+    return &amp;quot;-u 未同步;4&amp;quot;;
+  else if(state==&amp;quot;Needs Merge&amp;quot;)
+    return &amp;quot;#  有冲突;7&amp;quot;;
+  else if(state==&amp;quot;Locally Modified&amp;quot;)
+    return &amp;quot;+ 已修改;3&amp;quot;;
+  else if(state==&amp;quot;Locally Added&amp;quot;)
+    return &amp;quot;++已加入;3&amp;quot;;
+  else if(state==&amp;quot;?&amp;quot;)
+    return &amp;quot;+-未加入;1&amp;quot;;
+  else if(state==&amp;quot;-&amp;quot;)
+    return &amp;quot;--缺少;2&amp;quot;;
+  else// if(state==&amp;quot;!&amp;quot;)
+    return state+&amp;quot;;4&amp;quot;;//! 已删除;3&amp;quot;;
+}
+
+//================================================================// 
+// 函数：getFileState
+// 说明：获取某个目录下的文件状态
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:27:25
+// 修改日志：
+//================================================================// 
+
+function getFileState()
+{
+  var msg=new java.util.ArrayList();
+  var sSUBFLD=&amp;quot;-R&amp;quot;;
+  if(SUBFLD==0)
+  sSUBFLD=&amp;quot;-l&amp;quot;;
+  var errmsg = cvsAction([&amp;quot;-Q&amp;quot;,&amp;quot;status&amp;quot;,sSUBFLD],path,msg);
+  if(lastCvsState!=0)
+    throw new Exception(errmsg);
+  
+  //throw new Exception(msg.toString());
+  var ds = new pub.EAXmlDS();
+  var c = msg.size();
+  var rc = -1;
+  var filestatemsg=&amp;quot;Status:&amp;quot;;
+  var 仓库路径 = pub.EAFunc.Replace(path,&amp;quot;\\&amp;quot;,&amp;quot;/&amp;quot;);//path.replace(&amp;quot;/\\\\/&amp;quot;,&amp;quot;/&amp;quot;);
+  仓库路径 = 仓库路径.substring(仓库路径.indexOf(&amp;quot;/&amp;quot;));
+  //throw new Exception(仓库路径);
+  for(var i=0;i&amp;lt;c;i++)
+  //for(var i=c-1;i&amp;gt;=0;i--)
+  {
+    var tmp = msg.get(i);
+    var file=&amp;quot;&amp;quot;;
+    var stat=&amp;quot;?&amp;quot;;
+    if(tmp!=&amp;quot;&amp;quot;)
+    if(tmp.elementAt(0)==&amp;quot;?&amp;quot;)
+    {
+      file = tmp.substring(2);
+    }
+    else
+    {
+      var p = tmp.indexOf(filestatemsg);
+      if(p&amp;gt;0)
+      {
+        file=tmp.substring(6,p);
+        //throw new Exception(&amp;quot;;&amp;quot;+file.substring(0,7)+&amp;quot;;&amp;quot;);
+        if(file.substring(0,7)==&amp;quot;no file&amp;quot;)//test &amp;quot;no file&amp;quot;
+        {
+          stat=tmp.substring(p+1+filestatemsg.length());
+          if(stat==&amp;quot;Locally Removed&amp;quot;)
+          stat=&amp;quot;!&amp;quot;;
+          else
+          stat=&amp;quot;-&amp;quot;;
+          file=file.substring(8);
+        }
+        else
+        stat=tmp.substring(p+1+filestatemsg.length());
+      }
+      if(file!=&amp;quot;&amp;quot;) 
+      {
+        i+=3;
+        var tmp = msg.get(i);
+        var p = tmp.indexOf(仓库路径);
+        var p1 = tmp.indexOf(&amp;quot;,&amp;quot;);
+        if(p&amp;gt;0)
+        file = tmp.substring(p+仓库路径.length()+1,p1);  
+        //throw new Exception(仓库路径+&amp;quot;,&amp;quot;+p+&amp;quot;,&amp;quot;+tmp+&amp;quot;,&amp;quot;+file);
+      }
+    }
+    if(file!=&amp;quot;&amp;quot;)
+    {
+      ds.AddRow(rc++);
+      var action = pub.EAFunc.SplitString(trans(stat),&amp;quot;;&amp;quot;);
+      ds.setValueAt(rc,&amp;quot;stat&amp;quot;,action[0]);
+      ds.setValueAt(rc,&amp;quot;file&amp;quot;,file.replace(&amp;quot;/\\s*$/&amp;quot;,&amp;quot;&amp;quot;));//trimRight
+      ds.setValueAt(rc,&amp;quot;action&amp;quot;,action[1]);
+    }
+  }
+  return ds.GetXml();
+}
+
+
+var foldid;
+//================================================================// 
+// 函数：getTreeCtlXml
+// 说明：取目录结构
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:27:04
+// 修改日志：
+//================================================================// 
+function getTreeCtlXml(root,xml)
+{
+  var f = root;
+  var folds = f.listFiles();
+  java.util.Arrays.sort(folds);
+  var c = folds.length();
+  //throw new Exception(c);
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    f=folds[i];
+    if(f.isDirectory())
+    {
+      foldid++;
+      xml += &amp;quot;&amp;lt;&amp;quot;+f.getName() +&amp;quot; &amp;quot;+f.getAbsolutePath()+&amp;quot;,&amp;quot;+foldid+&amp;quot;&amp;gt;&amp;quot;  
+            + getTreeCtlXml(f,&amp;quot;&amp;quot;)
+            + &amp;quot;&amp;lt;/&amp;quot;+f.getName() +&amp;quot;&amp;gt;&amp;quot;;
+    }
+  }
+  return xml;
+}
+
+//================================================================// 
+// 函数：getFolderTreeXml
+// 说明：取cvs根目录下的目录结构
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:26:21
+// 修改日志：
+//================================================================// 
+function getFolderTreeXml()
+{
+  foldid=0;
+  if(root==&amp;quot;&amp;quot;)
+    root = cvshome;
+  var f = new java.io.File(root);
+  var xml = &amp;quot;&amp;lt;&amp;quot;+f.getName() +&amp;quot; &amp;quot;+root+&amp;quot;,&amp;quot;+foldid+&amp;quot;&amp;gt;&amp;quot;  
+      + getTreeCtlXml(f,&amp;quot;&amp;quot;)
+      + &amp;quot;&amp;lt;/&amp;quot;+f.getName() +&amp;quot;&amp;gt;&amp;quot;;
+  return xml;
+}
+
+
+//================================================================// 
+// 函数：fileAction
+// 说明：cvs操作入口
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:25:46
+// 修改日志：
+//================================================================// 
+function fileAction(basicCMD,root,files,delfiles)
+{
+  var fArray = pub.EAFunc.SplitString(files,&amp;quot;,&amp;quot;);
+  if(delfiles)
+  {
+    for(var i=0;i&amp;lt;fArray.length();i++)
+    {
+      var file = new java.io.File(root+&amp;quot;/&amp;quot;+fArray[i]);
+      var r=file.delete();
+      //throw new Exception(r);
+    }
+  }
+  basicCMD = basicCMD.concat(fArray);
+  var msg = new java.util.ArrayList();
+  var ret = cvsAction(basicCMD,root,msg);
+  if(msg.size()&amp;gt;0)
+    ret += &amp;quot;\n&amp;quot; + msg.toString();
+  return ret+arrayList2Str(msg);//ret;
+}
+
+//================================================================// 
+// 函数：doaction
+// 说明：执行客户端的操作请求
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/06 14:25:42
+// 修改日志：
+//================================================================// 
+function doaction()
+{
+  var ret = &amp;quot;&amp;quot;;
+  if (comment==&amp;quot;&amp;quot;) comment=&amp;quot;\&amp;quot;\&amp;quot;&amp;quot;;
+  if(f0!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;add&amp;quot;,&amp;quot;-kb&amp;quot;],fileroot,f0,false);
+  if(f1!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;add&amp;quot;],fileroot,f1,false);
+  if(f2!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;update&amp;quot;],fileroot,f2,false);
+  if(f3!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;commit&amp;quot;,&amp;quot;-m&amp;quot;, comment],fileroot,f3,false);
+  if(f4!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;update&amp;quot;],fileroot,f4,false);
+  if(f5!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;remove&amp;quot;,&amp;quot;-f&amp;quot;],fileroot,f5,false);
+  if(f6!=&amp;quot;&amp;quot;)
+    ret+= fileAction([&amp;quot;update&amp;quot;,&amp;quot;-C&amp;quot;],fileroot,f6,true);
+  return ret;
+}
+
+function checkout()
+{
+   //var outpath = dbpath;
+   return fileAction([&amp;quot;checkout&amp;quot;,&amp;quot;-d&amp;quot;,outpath,dbpath],fileroot,&amp;quot;&amp;quot;,false);
+}
+
+function cvsdiff()
+{
+  var msg = new java.util.ArrayList();
+  var ret = cvsAction([&amp;quot;diff&amp;quot;,&amp;quot;-N&amp;quot;,&amp;quot;-c&amp;quot;,fn],fileroot,msg);
+  //throw new Exception(&amp;quot;ddd:&amp;quot;+msg.size());
+//  if(msg.size()&amp;gt;0)   ret += &amp;quot;\n&amp;quot; + msg.toString();
+  return ret+arrayList2Str(msg);
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

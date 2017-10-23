@@ -1,0 +1,1132 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >LayoutMain</MWID><NAME >布局定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >LayoutMain.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><SHOWBTN >1,3,4</SHOWBTN></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >1,0,1</ID><CELLID ></CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >SYSURL</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >SAVE</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 >SAVE</C10><C11 >SAVE</C11><C12 ></C12><C13 >SAVE</C13><C14 >SAVE</C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >TestRun</ID><NAME >试运行</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE><C10 ></C10><C11 ></C11><C12 >TestRun</C12><C13 ></C13><C14 >TestRun</C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >saveas</ID><NAME >另存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 ></C10><C11 >saveas</C11><C12 ></C12><C13 ></C13><C14 >saveas</C14><C15 ></C15></ROW>
+<ROW num="3" ><ID >entrydesign</ID><NAME >进入开发平台</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 >entrydesign</C14><C15 >entrydesign</C15></ROW>
+<ROW num="4" ><ID >opensutyped</ID><NAME >打开子系统定义</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 >opensutyped</C15></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >layoutid</ID><NAME >布局编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="1" ><ID >myorgid</ID><NAME >组织编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >orgid</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >AStartRow = 5;//A.数据显示：的行号
+var BStartRow = 15;//B.数据来源： 的行号
+
+var G_DROPSHEET=-1;
+var G_DROPROW=-1;
+var G_DROPCOL=-1;
+var CURROW=-1;
+var CURCOL=-1;
+//function InitLayout() {
+//	_this.SetRowCount(0,4);
+//	_this.SetColCount(0,2);
+//	_this.SetRowHeight(0,0,23);
+//	_this.SetRowHeight(0,1,87);
+//	_this.SetRowHeight(0,2,91);
+//	_this.SetRowHeight(0,3,114);
+//	_this.SetColWidth(0,0,254);
+//	_this.SetColWidth(0,1,515);
+//	_this.MergeCells(0,0,0,0,1);
+//	_this.MergeCells(0,1,1,3,1);
+// 	for ( var i=0;i&amp;lt;4;i++) { 
+//		for ( var j=0;j&amp;lt;2;j++) { 
+//			_this.SetCellLock(0,i,j,1);
+//			_this.SetCellBorder(0,i,j,1,1,1,1);
+//		}
+//	}
+//	_this.SetCellText(0,0,0,&amp;quot;～～～HTMLSTR～～～～～～NVL～～～～～～～&amp;lt;table width=&amp;apos;100%&amp;apos; height=&amp;apos;25&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=&amp;apos;80%&amp;apos;&amp;gt;新增：&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_01&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;电子电气&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_02&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;环控/内饰&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_03&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;液压机械&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_06&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;ISC&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_05&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;L/HIRF分析&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_07&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;燃油动力&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_08&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;结构&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;show.sp?grdid=HDRTRKBBS&amp;style=ADD_04&amp;edit=save&amp;dd=0&amp;apos;&amp;gt;区域&amp;lt;/a&amp;gt;&amp;nbsp;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td width=&amp;apos;20%&amp;apos; align=right&amp;gt;&amp;lt;font size=&amp;apos;2&amp;apos;&amp;gt;&amp;lt;input name=&amp;apos;search&amp;apos; onkeyup=&amp;apos;if(event.keyCode==&amp;apos;13&amp;apos;){linkSubmit();}&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=&amp;apos;linkSubmit()&amp;apos;&amp;gt;搜索&amp;lt;/a&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;script&amp;gt;function linkSubmit(form){var query=document.getElementsByName(&amp;apos;search&amp;apos;)[0].value;var url=&amp;apos;Layout.sp?id=SearchTrk&amp;trktyp=&amp;crtusr=&amp;trkprj=&amp;query=&amp;apos;+query;window.location = url;}&amp;lt;/script&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;～#EFEFEF～～1～～～～～～&amp;quot;);
+//	_this.SetCellText(0,0,1,&amp;quot;&amp;quot;);
+//	_this.SetCellText(0,1,0,&amp;quot;～登录统计～xlsgrid/images/my/greeting.jpg～OS～～～～～～XP～～～～XLSGRID.TRKLAYOUTCUS.PrjLoginInfo～～～～～～～～～～～～&amp;quot;);
+//	_this.SetCellText(0,1,1,&amp;quot;DS～所有事务～～TABLE～1～25～～～～XP～XLSGRID.TRKLAYOUTCUS.allprjbbs～trktyp=&amp;trktyp～～～～～～～～～～～～～0～2&amp;quot;);
+//	_this.SetCellText(0,2,0,&amp;quot;DS～我创建的事务～～LIST～1～7～～～～XP～XLSGRID.TRKLAYOUT.MYCRTWORK～～～～～～～～～～～～～～～&amp;quot;);
+//	_this.SetCellText(0,2,1,&amp;quot;&amp;quot;);
+//	_this.SetCellText(0,3,0,&amp;quot;DS～工作组～～详细信息～1～10～～～～XP～MSG3.BBS.BBS_RT～trktyp=&amp;trkusr～～～～～～～～～～～～～～&amp;quot;);
+//	_this.SetCellText(0,3,1,&amp;quot;&amp;quot;);
+//}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	
+	_this.ShowTabbar(1);
+	_this.SetSheetName(1,&amp;quot;布局属性&amp;quot;);
+	_this.SetSheetName(2,&amp;quot;页面属性&amp;quot;);
+	_this.SetSheetName(3,&amp;quot;布局模板&amp;quot;);
+	_this.SetColName(2,0,&amp;quot;ID&amp;quot;);
+	_this.SetColName(2,1,&amp;quot;NAME&amp;quot;);
+	
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;75%&amp;quot;); 
+	_this.SetCellBkColor(1,-1,-1,255,255,255);	
+	_this.SetCellBkColor(2,-1,-1,255,255,255);	
+	_this.SetRowVisible(2,2,0);
+
+	InitLayout();
+	//_this.SetToCodeEditor(&amp;quot;&amp;quot;,1,11,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+
+	var list0 = _this.CreateListValue();
+	_this.SetListValue(list0,&amp;quot;XP&amp;quot;,&amp;quot;白底蓝边XP风格&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;NVL&amp;quot;,&amp;quot;自定义&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;NVLNEW&amp;quot;,&amp;quot;简约风格&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;LBSD&amp;quot;,&amp;quot;浅蓝标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;LBHD&amp;quot;,&amp;quot;浅蓝弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;LBJD&amp;quot;,&amp;quot;浅蓝渐变&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;BSD&amp;quot;,&amp;quot;蓝色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;BHD&amp;quot;,&amp;quot;蓝色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;BJD&amp;quot;,&amp;quot;蓝色渐变&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;SBSD&amp;quot;,&amp;quot;深蓝色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;SBHD&amp;quot;,&amp;quot;深蓝色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;WBSD&amp;quot;,&amp;quot;蔚蓝标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;WBHD&amp;quot;,&amp;quot;蔚蓝弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;OSD&amp;quot;,&amp;quot;橙色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;OHD&amp;quot;,&amp;quot;橙色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;OJD&amp;quot;,&amp;quot;橙色渐变&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;GSD&amp;quot;,&amp;quot;绿色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;GHD&amp;quot;,&amp;quot;绿色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;PSD&amp;quot;,&amp;quot;紫色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;PHD&amp;quot;,&amp;quot;紫色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;RSD&amp;quot;,&amp;quot;红色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;RHD&amp;quot;,&amp;quot;红色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;YSD&amp;quot;,&amp;quot;黄色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;YHD&amp;quot;,&amp;quot;黄色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;YJD&amp;quot;,&amp;quot;黄色渐变&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;SSD&amp;quot;,&amp;quot;银色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;SHD&amp;quot;,&amp;quot;银色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;SJD&amp;quot;,&amp;quot;银色渐变&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;HSD&amp;quot;,&amp;quot;黑色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;HHD&amp;quot;,&amp;quot;黑色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;NSD&amp;quot;,&amp;quot;褐色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;NHD&amp;quot;,&amp;quot;褐色弧度&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;BBSD&amp;quot;,&amp;quot;天蓝色标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;BBHD&amp;quot;,&amp;quot;天蓝色弧度&amp;quot;);	
+	_this.SetListValue(list0,&amp;quot;TBSD&amp;quot;,&amp;quot;工具栏深蓝标准&amp;quot;);
+	_this.SetListValue(list0,&amp;quot;TBHD&amp;quot;,&amp;quot;工具栏深蓝弧度&amp;quot;);	
+
+
+
+	
+	
+//	_this.SetListValue(list0,&amp;quot;BWNDSD&amp;quot;,&amp;quot;蓝色标准窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;BWNDHD&amp;quot;,&amp;quot;蓝色弧度渐变窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;LBWNDSD&amp;quot;,&amp;quot;浅蓝色标准窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;LBWNDHD&amp;quot;,&amp;quot;浅蓝色弧度窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;YWNDSD&amp;quot;,&amp;quot;黄色标准窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;YWNDHD&amp;quot;,&amp;quot;黄色弧度窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;GWNDSD&amp;quot;,&amp;quot;绿色标准窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;GWNDHD&amp;quot;,&amp;quot;绿色弧度窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;SWNDSD&amp;quot;,&amp;quot;银色标准窗口&amp;quot;);
+//	_this.SetListValue(list0,&amp;quot;SWNDHD&amp;quot;,&amp;quot;银色弧度窗口&amp;quot;);	
+
+	
+//	_this.SetListValue(list0,&amp;quot;GRID&amp;quot;,&amp;quot;含边框的蓝色风格&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,1,1,list0)  ;	
+	//_this.SetToComboBox(&amp;quot;&amp;quot;, 2,2,1,list0)  ;
+
+
+	var list1 = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SHOWFLAG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot; );
+	_this.SetListValue(list1,&amp;quot;表格&amp;quot;,&amp;quot;表格(标准)&amp;quot;);
+	//_this.SetListValue(list1,&amp;quot;边框无标题表格&amp;quot;,&amp;quot;边框无标题表格&amp;quot;);
+	//_this.SetListValue(list1,&amp;quot;分色带标题表格&amp;quot;,&amp;quot;分色带标题表格&amp;quot;);
+	//_this.SetListValue(list1,&amp;quot;分色无标题表格&amp;quot;,&amp;quot;分色无标题表格&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;空白表格&amp;quot;,&amp;quot;空白表格&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;FRAME&amp;quot;,&amp;quot;内部FRAME&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;FRAMELOGIN&amp;quot;,&amp;quot;单点登录内部FRAME&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;FRAMEGROUP&amp;quot;,&amp;quot;分页FRAME组&amp;quot;);	
+	_this.SetListValue(list1,&amp;quot;FRAMEGROUPLOGIN&amp;quot;,&amp;quot;单点登录分页FRAME组&amp;quot;);	
+	_this.SetListValue(list1,&amp;quot;HTML&amp;quot;,&amp;quot;HTML字符串(信息发布)&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;HTMLSTR&amp;quot;,&amp;quot;HTML字符串&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;OS&amp;quot;,&amp;quot;自行编写OS脚本&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;LOGIN&amp;quot;,&amp;quot;登录&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;WELCOME&amp;quot;,&amp;quot;登录后欢迎页面&amp;quot;);
+	
+	_this.SetListValue(list1,&amp;quot;SETUP&amp;quot;,&amp;quot;第一次进入系统&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;SCROLLIMAGE&amp;quot;,&amp;quot;滚动图片&amp;quot;);
+	_this.SetListValue(list1,&amp;quot;TQ&amp;quot;,&amp;quot;即时通讯&amp;quot;);	
+	_this.SetListValue(list1,&amp;quot;HEADIMG&amp;quot;,&amp;quot;系统默认标题栏&amp;quot;);		
+	_this.SetListValue(list1,&amp;quot;TOOLBAR&amp;quot;,&amp;quot;系统默认工具栏&amp;quot;);		
+	_this.SetListValue(list1,&amp;quot;MENU&amp;quot;,&amp;quot;菜单栏&amp;quot;);	
+	_this.SetListValue(list1,&amp;quot;DOWNLOADSVGFORM&amp;quot;,&amp;quot;下载控件&amp;quot;);		
+	_this.SetListValue(list1,&amp;quot;DOWNLOAD3AMOBILE&amp;quot;,&amp;quot;下载手机版本&amp;quot;);		
+	_this.SetListValue(list1,&amp;quot;MSG&amp;quot;,&amp;quot;公共消息窗口&amp;quot;);		
+
+	_this.SetListValue(list1,&amp;quot;TAB&amp;quot;,&amp;quot;滑动分页标签&amp;quot;);		
+	_this.SetListValue(list1,&amp;quot;FLASH&amp;quot;,&amp;quot;视频演示&amp;quot;);	
+	_this.SetListValue(list1,&amp;quot;CHART&amp;quot;,&amp;quot;分析图&amp;quot;);	
+	_this.SetListValue(list1,&amp;quot;MW&amp;quot;,&amp;quot;某个中间件的界面&amp;quot;);		
+	
+	
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,AStartRow ,1,list1)  ;	
+	
+	
+	
+	var list2 = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SYSURLCLASS&amp;where= orgid like &amp;apos;&amp;quot;+myorgid+&amp;quot;&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetListValue(list2,&amp;quot;DS&amp;quot;,&amp;quot;来源于指定的数据源&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,BStartRow ,1,list2)  ;	
+
+	var list2 = _this.CreateListValue();
+	_this.SetListValue(list2,&amp;quot;LEFT&amp;quot;,&amp;quot;左对齐&amp;quot;);
+	_this.SetListValue(list2,&amp;quot;CENTER&amp;quot;,&amp;quot;居中对齐&amp;quot;);
+	_this.SetListValue(list2,&amp;quot;RIGHT&amp;quot;,&amp;quot;右对齐&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 2,5 ,1,list2)  ;
+
+	var list3 = _this.CreateListValue();
+	_this.SetListValue(list3,&amp;quot;TOP&amp;quot;,&amp;quot;上对齐&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;baseline&amp;quot;,&amp;quot;居中对齐&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;BOTTOM&amp;quot;,&amp;quot;下对齐&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 2,6 ,1,list3)  ;
+	
+	var list4 = _this.CreateListValue();
+	_this.SetListValue(list4,&amp;quot;1&amp;quot;,&amp;quot;1（8磅）&amp;quot;);
+	_this.SetListValue(list4,&amp;quot;2&amp;quot;,&amp;quot;2（10磅）&amp;quot;);
+	_this.SetListValue(list4,&amp;quot;3&amp;quot;,&amp;quot;3（12磅）&amp;quot;);
+	_this.SetListValue(list4,&amp;quot;4&amp;quot;,&amp;quot;4（14磅）&amp;quot;);
+	_this.SetListValue(list4,&amp;quot;5&amp;quot;,&amp;quot;5（18磅）&amp;quot;);
+	_this.SetListValue(list4,&amp;quot;6&amp;quot;,&amp;quot;6（24磅）&amp;quot;);
+	_this.SetListValue(list4,&amp;quot;7&amp;quot;,&amp;quot;7（26磅）&amp;quot;);
+
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,23 ,1,list4)  ;
+	
+	// 载入布局主定义信息
+	
+	var sParam =&amp;quot;thisorgid=&amp;quot;+myorgid+&amp;quot;&amp;layoutid=&amp;quot;+layoutid    ;
+	try {
+		var ret = invokeOSFunc(&amp;quot;getLayoutIndex&amp;quot;,sParam) ;       
+
+		if ( ret.trim()!=&amp;quot;&amp;quot; ) {
+			
+			var ss = ret.split(&amp;quot;~&amp;quot;);
+
+			if ( ss.length&amp;gt;8){
+				_this.SetCellText(2,1,1,ss[0]);
+				_this.SetCellText(2,2,1,ss[1]);
+				_this.SetCellText(2,3,1,ss[2]);
+				if ( ss.length&amp;gt;14)	_this.SetCellText(2,4,1,ss[14]);
+				_this.SetCellText(2,5,1,ss[3]);
+				_this.SetCellText(2,6,1,ss[4]);
+				
+				_this.SetCellText(2,7,1,ss[5]);
+				_this.SetCellText(2,8,1,ss[6]);
+				_this.SetCellText(2,9,1,ss[7]);
+				_this.SetCellText(2,10,1,ss[8]);
+				_this.SetCellText(2,11,1,ss[9]);
+				if ( ss.length&amp;gt;10)_this.SetCellText(2,12,1,ss[10]);
+				if ( ss.length&amp;gt;11)_this.SetCellText(2,13,1,ss[11]);
+				if ( ss.length&amp;gt;12)_this.SetCellText(2,14,1,ss[12]);
+				if ( ss.length&amp;gt;13)_this.SetCellText(2,15,1,ss[13]);
+
+							
+
+
+			}
+		}
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+	_this.SetToBoolBox(2,7,1);
+	_this.SetToBoolBox(2,8,1);
+	_this.SetToBoolBox(1,4,1);
+	_this.SetToBoolBox(1,21,1);
+	_this.SetToBoolBox(2,10,1);
+	//设置允许拖拉开关 //设置拖拉模式,设为单元格选择模式
+      	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+//      	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);  
+      	_this.SetAttribe(&amp;quot;SHEET_3&amp;quot;,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+      	_this.SetAttribe(&amp;quot;SHEET_3&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+      	_this.SetColVisible(3,2,0);
+      	GetLayout();  
+	//_this.SetDesignMode(1);
+	SetShowValue();
+	
+	// 把历史的下拉列表中的中文变量全部改为中文变量
+	for ( var i = 0 ;i &amp;lt; _this.GetRowCount(0);i++ ) {
+		for ( var j = 0 ; j &amp;lt; _this.GetColCount(0);j ++ ) {
+			var str = _this.GetCellText(0,i,j );
+			str = str.replace(&amp;quot;～按钮～&amp;quot;,&amp;quot;～BUTTON～&amp;quot; );
+			str = str.replace(&amp;quot;～列表～&amp;quot;,&amp;quot;～LIST～&amp;quot; );
+			str = str.replace(&amp;quot;～平铺～&amp;quot;,&amp;quot;～LAYOUT～&amp;quot; );
+			str = str.replace(&amp;quot;～清单～&amp;quot;,&amp;quot;～MENULIST～&amp;quot; );
+			str = str.replace(&amp;quot;～树状～&amp;quot;,&amp;quot;～TREE～&amp;quot; );
+			str = str.replace(&amp;quot;～缩略图～&amp;quot;,&amp;quot;～THUMBNAIL～&amp;quot; );
+			str = str.replace(&amp;quot;～图标～&amp;quot;,&amp;quot;～ICON～&amp;quot; );
+			str = str.replace(&amp;quot;～正文～&amp;quot;,&amp;quot;～BODY～&amp;quot; );
+			str = str.replace(&amp;quot;～空白表格～&amp;quot;,&amp;quot;～NVLTABLE～&amp;quot; );
+			str = str.replace(&amp;quot;～表格～&amp;quot;,&amp;quot;～TABLE～&amp;quot; );
+			_this.SetCellText(0,i,j ,str);
+
+		}
+	}
+	_this.SetDesignMode(1);
+}
+
+function GetLayout()
+{
+
+	var xml = invokeOSFunc(&amp;quot;GetLayout&amp;quot;,&amp;quot;thisorgid=&amp;quot;+myorgid+&amp;quot;&amp;sub=flow&amp;quot;);
+
+	_this.SetXmlDS(3,2,0,17,2,xml);
+
+//	_this.XMLDS_Parse(xml);
+//	var list2 = _this.CreateListValue();
+//	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++) {
+//		_this.SetListValue(list2,_this.XMLDS_GetString(i,&amp;quot;FILENAME&amp;quot;),_this.XMLDS_GetString(i,&amp;quot;FILENAME&amp;quot;));
+//	}
+//	_this.SetToComboBox(&amp;quot;&amp;quot;, 3,0,0,list2)  ;
+
+
+
+
+}
+
+function f_showvaltoright(rownew,colnew)
+{
+		var str = _this.GetCellText(0,rownew,colnew);  
+		for ( var r=0;r&amp;lt;=_this.GetRowCount(1)-1;r++) 
+			 _this.SetCellText(1,r,1,&amp;quot;&amp;quot;);
+		var ss = str.split(&amp;quot;～&amp;quot;);
+		if ( ss.length &amp;gt; 0 ) _this.SetCellText(1,15,1,ss[0]);//数据来源
+		if ( ss.length &amp;gt; 1 ) _this.SetCellText(1,0,1,ss[1]);//标题：
+		if ( ss.length &amp;gt; 3 ) _this.SetCellText(1,6,1,ss[2]);//背景图片：
+		if ( ss.length &amp;gt; 2 ) _this.SetCellText(1,5,1,ss[3]);//显示风格：
+		if ( ss.length &amp;gt; 4 ) _this.SetCellText(1,7,1,ss[4]);//分列数：
+		if ( ss.length &amp;gt; 5 ) _this.SetCellText(1,8,1,ss[5]);//最大行数：
+		if ( ss.length &amp;gt; 6 ) _this.SetCellText(1,9,1,ss[6]);//targetLayoutid
+		if ( ss.length &amp;gt; 7 ) _this.SetCellText(1,16,1,ss[7]);//where
+		if ( ss.length &amp;gt; 8 ) _this.SetCellText(1,17,1,ss[8]);//orderby
+		if ( ss.length &amp;gt; 9 ) _this.SetCellText(1,1,1,ss[9]);//布局风格：
+		if ( ss.length &amp;gt; 10 ) _this.SetCellText(1,18,1,ss[10]);//DS
+		if ( ss.length &amp;gt; 11 ) _this.SetCellText(1,19,1,ss[11]);//DS-param
+		if ( ss.length &amp;gt; 12 ) _this.SetCellText(1,20,1,ss[12]);//More Button url
+		if ( ss.length &amp;gt; 13 ) _this.SetCellText(1,10,1,ss[13]);//OS函数：
+		if ( ss.length &amp;gt; 14 ) _this.SetCellText(1,11,1,ss[14]);//OS调用参数：
+		
+		if ( ss.length &amp;gt; 15 ) _this.SetCellText(1,12,1,ss[15]);//FRAME地址：
+		if ( ss.length &amp;gt; 16 ) _this.SetCellText(1,13,1,ss[16]);//HTML所在DS：
+		if ( ss.length &amp;gt; 17 ) _this.SetCellText(1,2,1,ss[17]);//背景颜色
+		if ( ss.length &amp;gt; 18 ) _this.SetCellText(1,3,1,ss[18]);//边框颜色
+		if ( ss.length &amp;gt; 19 ) _this.SetCellText(1,4,1,ss[19]);//是否显示标题
+		if ( ss.length &amp;gt; 20 ) _this.SetCellText(1,21,1,ss[20]);//显示滚动条？
+		if ( ss.length &amp;gt; 21 ) _this.SetCellText(1,22,1,ss[21]);//每页行数：
+		if ( ss.length &amp;gt; 22 ) _this.SetCellText(1,23,1,ss[22]);//字号
+		if ( ss.length &amp;gt; 23 ) _this.SetCellText(1,14,1,ss[23]);//TARGET
+		if ( ss.length &amp;gt; 24 ) _this.SetCellText(1,24,1,ss[24]);//CELLSPACE
+		if ( ss.length &amp;gt; 25 ) _this.SetCellText(1,25,1,ss[25]);//CELLPADDING
+
+}
+
+//单元格焦点变动
+function _thisOnCellFocusChange(sheet,rowold,colold,rownew,colnew)
+{
+	// 分割
+	if ( sheet == 0 ) {
+		_this.SetCellFocus(1,-1,-1);//为了避免comboxbox显示状态	
+		f_showvaltoright(rownew,colnew);
+
+		CURROW = rownew;
+		CURCOL = colnew;
+		_thisOnCellModify(1,AStartRow,1,&amp;quot;&amp;quot;,_this.GetCellText(1,AStartRow,1));
+		_thisOnCellModify(1,BStartRow,1,&amp;quot;&amp;quot;,_this.GetCellText(1,BStartRow,1));
+
+
+	}
+	else if ( sheet==1){
+//		alert( &amp;quot;focus()&amp;quot;);
+		_thisOnCellModify(1,BStartRow,1,&amp;quot;&amp;quot;,_this.GetCellText(1,BStartRow,1));
+
+	}
+	
+}
+
+//测试
+function TestRun()
+{
+	window.open( &amp;quot;../Layout.sp?id=&amp;quot;+layoutid+&amp;quot;&amp;org=&amp;quot;+ myorgid);
+}
+
+//保存
+function SAVE()
+{
+	//POST方式调用网络OS函数
+	if ( layoutid == &amp;quot;&amp;quot; ) {
+		var ret = prompt(&amp;quot;请输入保存的编号&amp;quot; );
+		if( ret==undefined ) return;
+		layoutid = ret;
+	}
+	
+	
+	
+	var param = new Object();
+	param.xmlstr = _this.GetSXGString(0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	param.layoutid    = layoutid;
+	param.thisorgid = myorgid;
+	param.pageprop = _this.GetXML(2,1,0,_this.GetRowCount(2)-2,1);
+
+
+	try {
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert ( msg );
+	}
+	catch (e) {
+		alert ( e );
+	}  
+}
+function saveas()
+{
+		var param = new Object();
+	  	var fileid= prompt( &amp;quot;请输入所在组织编号&amp;quot;,orgid  );
+	  	if ( fileid==undefined) return;
+	  	myorgid = fileid;
+
+	  	var fileid= prompt( &amp;quot;请输入要保存的编号&amp;quot;,&amp;quot;&amp;quot;  );
+	  	if ( fileid==undefined) return;
+	  	layoutid = fileid;
+		
+		SAVE();
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+//	alert( &amp;quot;thisOnCellModify()&amp;quot;);
+	if ( sheet == 1 ) {
+		if ( CURROW != -1 &amp;&amp; CURCOL != -1 ){	
+			var framesrc=_this.GetCellText(1,12,1);
+			framesrc=framesrc.replace(&amp;quot;,&amp;quot;,&amp;quot;，&amp;quot;);
+			window.status =&amp;quot;thisOnCellModify,&amp;quot;+sheet+&amp;quot;,&amp;quot;+row+&amp;quot;,&amp;quot;+col+&amp;quot;,&amp;quot;+newvalue ;
+			var str = _this.GetCellText(1,15,1)+		//数据来源
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,0,1)+		//标题：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,6,1)+		//背景图片：	
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,5,1)+		//显示风格：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,7,1)+		//分列数：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,8,1)+		//最大行数	
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,9,1)+		//targetLayoutid
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,16,1)+		// where
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,17,1)+		// orderby
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,1,1)+		//布局风格：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,18,1)+		//DS
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,19,1)+		//DS-param
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,20,1)+		//More Button url
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,10,1)+		//OS函数：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,11,1)+		//OS调用参数：
+				&amp;quot;～&amp;quot;+framesrc+		//FRAME地址：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,13,1)+		//HTML所在DS：	
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,2,1)+		//背景颜色
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,3,1)+		//边框颜色
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,4,1)+		//是否显示标题
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,21,1)+		//显示滚动条？
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,22,1)+		//每页行数：
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,23,1)+		//字号
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,14,1)+		//TARGET
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,24,1)+		//CELLSPACE
+				&amp;quot;～&amp;quot;+_this.GetCellText(1,25,1);		//CELLPADDING
+
+
+				if( str!=&amp;quot;～～～～～～～～～～～～～～～～～～～～～～～～～&amp;quot;) {
+				//window.status =_this.GetCellText(1,2,1);
+				_this.SetCellText(0,CURROW,CURCOL , str );
+				_this.SetCellShowText(0,CURROW,CURCOL ,_this.GetCellText(1,0,1) );
+			}
+		
+		}
+		
+	}
+	if ( sheet ==1 &amp;&amp; row ==AStartRow  &amp;&amp; col == 1 ) {// 修改了A.数据显示：
+		
+		if ( newvalue == &amp;quot;OS&amp;quot; ) {
+			_this.SetRowVisible(1,AStartRow +1,0);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,1);
+			_this.SetRowVisible(1,AStartRow +6,1);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,0);	
+			_this.SetRowVisible(1,AStartRow +9,0);			
+		}
+		else if (newvalue == &amp;quot;HTML&amp;quot; || newvalue == &amp;quot;FLASH&amp;quot; ) {
+			_this.SetRowVisible(1,AStartRow +1,0);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,0);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,1);	
+			_this.SetRowVisible(1,AStartRow +9,0);	
+			_this.SetCellText(1,AStartRow +8,0,&amp;quot;信息发布ID&amp;quot;);
+			
+		}
+		else if (newvalue == &amp;quot;HTMLSTR&amp;quot; ) {
+			_this.SetRowVisible(1,AStartRow +1,0);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,0);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,1);	
+			_this.SetRowVisible(1,AStartRow +9,0);	
+			_this.SetCellText(1,AStartRow +8,0,&amp;quot;HTML字符串&amp;quot;);
+			
+		}
+
+		else if (newvalue == &amp;quot;FRAME&amp;quot; ||newvalue == &amp;quot;FRAMELOGIN&amp;quot;) {
+			_this.SetRowVisible(1,AStartRow +1,0);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,0);
+			_this.SetRowVisible(1,AStartRow +7,1);
+			_this.SetRowVisible(1,AStartRow +8,0);	
+			_this.SetRowVisible(1,AStartRow +9,0);	
+		}
+		else if (newvalue == &amp;quot;CHART&amp;quot; ) {
+			_this.SetRowVisible(1,AStartRow +1,0);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,1);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,1);	
+			_this.SetRowVisible(1,AStartRow +9,0);	
+			_this.SetCellText(1,AStartRow +8,0,&amp;quot;系统.中间件.按钮编号&amp;quot;);
+
+		}
+		else if (newvalue == &amp;quot;MW&amp;quot; ) {//调用某个中间件按的输出格式，html方式，需要选择中间件、输入参数
+			_this.SetRowVisible(1,AStartRow +1,0);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,1);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,1);	
+			_this.SetRowVisible(1,AStartRow +9,0);	
+			_this.SetCellText(1,AStartRow +8,0,&amp;quot;系统.中间件&amp;quot;);
+
+		}
+	
+
+
+		else if (newvalue == &amp;quot;FRAMEGROUP&amp;quot; ||newvalue == &amp;quot;FRAMEGROUPLOGIN&amp;quot; ||newvalue == &amp;quot;WELCOME&amp;quot;||newvalue == &amp;quot;SETUP&amp;quot;||newvalue == &amp;quot;DOWNLOADSVGFORM&amp;quot;
+			||newvalue == &amp;quot;DOWNLOAD3AMOBILE&amp;quot;||newvalue == &amp;quot;MSG&amp;quot;  ||newvalue == &amp;quot;LOGIN&amp;quot;
+			||newvalue == &amp;quot;HEADIMG&amp;quot;||newvalue == &amp;quot;TOOLBAR&amp;quot;||newvalue == &amp;quot;TQ&amp;quot;) {
+			_this.SetRowVisible(1,AStartRow +1,1);
+			_this.SetRowVisible(1,AStartRow +2,0);
+			_this.SetRowVisible(1,AStartRow +3,0);
+			_this.SetRowVisible(1,AStartRow +4,0);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,0);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,0);	
+			_this.SetRowVisible(1,AStartRow +9,0);	
+		}	
+
+			
+		else {
+			_this.SetRowVisible(1,AStartRow +1,1);
+			_this.SetRowVisible(1,AStartRow +2,1);
+			_this.SetRowVisible(1,AStartRow +3,1);
+			_this.SetRowVisible(1,AStartRow +4,1);
+			_this.SetRowVisible(1,AStartRow +5,0);
+			_this.SetRowVisible(1,AStartRow +6,0);
+			_this.SetRowVisible(1,AStartRow +7,0);
+			_this.SetRowVisible(1,AStartRow +8,0);	
+			_this.SetRowVisible(1,AStartRow +9,1);				
+		}
+	}  
+	if ( sheet ==1 &amp;&amp; row ==BStartRow  &amp;&amp; col == 1 ) {// 修改了A.数据显示：
+		if ( newvalue == &amp;quot;DS&amp;quot; ) {
+			_this.SetRowVisible(1,BStartRow +1,0);
+			_this.SetRowVisible(1,BStartRow +2,0);
+			_this.SetRowVisible(1,BStartRow +3,1);
+			_this.SetRowVisible(1,BStartRow +4,1);
+		}
+		else {
+			_this.SetRowVisible(1,BStartRow +1,1);
+			_this.SetRowVisible(1,BStartRow +2,1);
+			_this.SetRowVisible(1,BStartRow +3,0);
+			_this.SetRowVisible(1,BStartRow +4,0);
+		}
+	}  
+
+}
+
+function _thisOnShellExecuteFileModify(filepath,classname)
+{
+
+	_this.LoadZXGFile(filepath,-1,0);
+	SetShowValue();	
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet ==1 &amp;&amp; row==1 &amp;&amp; col ==0){
+		var ret=window.showModalDialog( &amp;quot;xlsgrid/sellayoutflag.htm&amp;quot;,&amp;quot;&amp;quot;,&amp;apos;dialogTop:0;dialogWidth:&amp;apos;+(window.screen.availWidth   )   +&amp;apos;px;DialogHeight=&amp;apos;+(window.screen.availHeight   )   +&amp;apos;px;help=0;center=1;status:yes;scroll=1;&amp;apos;);
+		if( ret!= undefined ){
+			_this.SetCellText(sheet,row,1,ret);
+			_thisOnCellModify(sheet,row,1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;)
+		}
+	}  
+	if ( sheet ==1 &amp;&amp; row==15 &amp;&amp; col ==0){
+		var refid = asfman.urlEncode(_this.GetCellText(1,15,1));//使用gbk方式进行url编码
+		var url = &amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?grdid=SYSURLEDIT&amp;flag=SYSURL&amp;thisorgid=&amp;quot;+myorgid+&amp;quot;&amp;orgid=&amp;quot;+myorgid+&amp;quot;&amp;refid=&amp;quot;+refid ;
+		url = &amp;quot;show.sp?grdid=SYSURLED&amp;grdtyp=Q&amp;sytid=x&amp;loaddata=1&amp;myorgid=&amp;quot;+myorgid+&amp;quot;&amp;menu=&amp;quot;+refid;
+		window.open(url);
+	}
+	if ( (sheet ==1 &amp;&amp; row==13 &amp;&amp; col ==0)||(sheet ==2 &amp;&amp; row==14 &amp;&amp; col ==0)||(sheet ==2 &amp;&amp; row==15 &amp;&amp; col ==0)){//信息发布ID的编辑
+		var refid = _this.GetCellText(sheet,row,1);
+		var url = &amp;quot;&amp;quot;;
+		var bodyguid = &amp;quot;&amp;quot;
+		if( refid == &amp;quot;&amp;quot; ) {
+			_sql.querytods(&amp;quot;SEQ&amp;quot;, &amp;quot;&amp;quot; );
+
+			refid  = _this.XMLDS_GetStringAt(0,0)
+
+			_sql.run(&amp;quot;NEWSYSURL&amp;quot;,&amp;quot;id=&amp;quot;+refid +&amp;quot;&amp;thisorgid=&amp;quot;+myorgid );
+			_this.SetCellText(sheet,row,1,refid );
+			_thisOnCellModify(sheet,row,1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot; );
+		}else{
+			_sql.querytods(&amp;quot;BODYGUID&amp;quot;, &amp;quot;ID=&amp;quot;+refid+&amp;quot;&amp;quot; );
+
+			bodyguid  = _this.XMLDS_GetStringAt(0,0)
+		}
+
+		var url = &amp;quot;show.sp?grdid=URLBODY&amp;urlguid=&amp;quot;+bodyguid+&amp;quot;&amp;SYSURLID=&amp;quot;+refid ;
+		
+		openWindow(url);
+	}	
+	if ( sheet ==1 &amp;&amp; (row==10||row==18) &amp;&amp; col ==0){//打开中间件
+		var refid = _this.GetCellText(1,row,1);
+		var ss  = refid.split(&amp;quot;.&amp;quot;);
+		if( ss.length &amp;gt;=2 ) {
+			var url = &amp;quot;xlsgrid/jsp/design/designer.jsp?sytid=&amp;quot;+ss[0]+&amp;quot;&amp;grdid=&amp;quot;+ss[1];
+			openWindow(url);
+		}
+	}	
+	if ( sheet ==3&amp;&amp; col==0 &amp;&amp; row&amp;gt;1){//打开模板设计器
+		openWindow( &amp;quot;show.sp?grdid=LayoutMain&amp;layoutid=&amp;quot;+_this.GetCellText(sheet,row,col) );
+	}
+	
+}
+//下面是建立个把一个中文字符串转换为gbk编码的url编码.js自带的编码只能转换为utf-8
+var asfman = {};   
+asfman.urlEncode = function(str)   
+{   
+    window.execScript(&amp;quot;Function vbsFun(str):vbsFun=hex(asc(str)):End Function&amp;quot;,&amp;quot;vbscript&amp;quot;);   
+    var gObject={};   
+    return str.replace(/[\x00-\xff]/g,function(a)   
+    {   
+        return a.replace(/[^0-9a-zA-Z]/g,function(b){   
+        if(!gObject[b])   
+        gObject[b]=&amp;quot;%&amp;quot;+vbsFun(b);   
+        return gObject[b];   
+        })   
+    }).replace(/[^\x00-\xff]/g,function(c){   
+        return c.replace(/./g,function(d)   
+        {   
+            if(!gObject[d])   
+            gObject[d]= vbsFun(d).replace(/(..)(..)/,&amp;quot;%$1%$2&amp;quot;);   
+            return gObject[d];   
+        })   
+    }).replace(/%20/g,&amp;quot;+&amp;quot;)   
+};
+
+//进入设计器
+function entrydesign()
+{
+	openWindow(&amp;quot;xlsgrid/index.jsp?accid=0&amp;quot;); 
+}
+
+//打开子系统定义
+function opensutyped()
+{
+	openWindow(&amp;quot;show.sp?grdid=subsyt&amp;MYSYTID=&amp;quot;+G_SYTID);
+}
+
+//================================================================//  
+// 函数：_thisOnBeginDrag
+// 说明：开始拖动
+//================)_================================================// 
+function _thisOnBeginDrag(id)  
+{ 
+	window.status = &amp;quot;开始拖动&amp;quot;+id ;
+	var idsplit= id.split(&amp;quot;_&amp;quot; );
+	G_DROPSHEET = idsplit[1];
+	G_DROPROW = idsplit[2];
+	G_DROPCOL = idsplit[3];   
+   	if( G_DROPSHEET == 3 ) {
+   		DROPSTR = _this.GetCellText(G_DROPSHEET,G_DROPROW,2 );
+
+   		if ( DROPSTR  == &amp;quot;&amp;quot; ) {
+   			alert ( &amp;quot;这是模板名称，不能拖拉，只能拖拉模板下面的窗口&amp;quot; );
+		   	G_DROPSHEET =&amp;quot;-1&amp;quot;;
+			G_DROPROW = &amp;quot;-1&amp;quot;;
+			G_DROPCOL = &amp;quot;-1&amp;quot;;   
+
+   		}
+   		
+   	}
+   	else if ( G_DROPSHEET == 0 ){
+   		
+		   	
+   	}
+   	else {
+	   	G_DROPSHEET =&amp;quot;-1&amp;quot;;
+		G_DROPROW = &amp;quot;-1&amp;quot;;
+		G_DROPCOL = &amp;quot;-1&amp;quot;;   
+
+   	}
+
+}
+//================================================================// 
+// 函数：_thisOnEndDrop
+// 说明：
+// 参数：拖动到终点,id为目标点编号
+//================================================================// 
+function _thisOnEndDrop(id,text)  
+{ 
+
+	var idsplit= id.split(&amp;quot;_&amp;quot; );
+
+	
+	window.status= &amp;quot;drop to &amp;quot;+id+&amp;quot;,src =&amp;quot;+G_DROPSHEET+&amp;quot;.&amp;quot;+G_DROPROW+&amp;quot;.&amp;quot;+G_DROPCOL;
+
+	
+	var DROPSTR   = _this.GetCellText(G_DROPSHEET,G_DROPROW,2  );
+	
+	if(G_DROPSHEET!=&amp;quot;3&amp;quot;)  DROPSTR   = _this.GetCellText(G_DROPSHEET,G_DROPROW,G_DROPCOL  );
+	
+	if (G_DROPSHEET !=&amp;quot;-1&amp;quot;&amp;&amp;
+		G_DROPROW != &amp;quot;-1&amp;quot;&amp;&amp;
+		G_DROPCOL != &amp;quot;-1&amp;quot; ) { 
+		
+		
+		if ( idsplit[1]==&amp;quot;0&amp;quot; &amp;&amp; G_DROPSHEET == &amp;quot;0&amp;quot; ) {
+			//alert(G_DROPSHEET+G_DROPROW+G_DROPCOL +DROPSTR    );
+			//相互替代
+			var str = _this.GetCellText( idsplit[1], idsplit[2], idsplit[3]);
+			_this.SetCellText( idsplit[1], idsplit[2], idsplit[3],DROPSTR    );
+			_this.SetCellText( G_DROPSHEET, G_DROPROW, G_DROPCOL,str );
+		}
+		else if ( idsplit[1]==&amp;quot;0&amp;quot; ) {
+			
+			var ss = DROPSTR.split(&amp;quot;,&amp;quot;);
+			if ( ss.length&amp;gt;2 ) 
+				_this.SetCellText( idsplit[1], idsplit[2], idsplit[3],ss [2]);
+		}
+	}
+
+	//f_showvaltoright(idsplit[2], idsplit[3]);
+	SetShowValue();
+	
+   	G_DROPSHEET =&amp;quot;-1&amp;quot;;
+	G_DROPROW = &amp;quot;-1&amp;quot;;
+	G_DROPCOL = &amp;quot;-1&amp;quot;;   
+	_this.SetFocusCell(idsplit[1], idsplit[2], idsplit[3]);
+
+
+	SetShowValue ();
+
+}
+
+//设置为显示值	
+function SetShowValue ()
+{
+
+	for ( var r=0;r&amp;lt;_this.GetRowCount(0);r++){
+		for ( var c=0;c&amp;lt;_this.GetColCount(0);c++) {
+			var str = _this.GetCellText(0,r,c);
+			if ( str!=&amp;quot;&amp;quot;){
+				var ss = str.split( &amp;quot;～&amp;quot;);
+				if ( ss.length &amp;gt;=1 ) 
+					_this.SetCellShowText(0,r,c,ss[1]);
+				
+
+			}else _this.SetCellShowText(0,r,c,&amp;quot;&amp;quot;);
+	
+
+		}
+	}
+}
+
+//父窗口刷新控件
+function lchref()
+{
+	var str = _this.GetCellText(1,BStartRow,1);
+	var sysurllist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SYSURLCLASS&amp;where= orgid like &amp;apos;&amp;quot;+myorgid+&amp;quot;&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,BStartRow,1,sysurllist);
+	_this.SetCellText(1,BStartRow,1,str);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var grdpack = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot; );
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;script&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;function InitLayout() {&amp;quot;);	
+	var layoutid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;layoutid&amp;quot;), &amp;quot;&amp;quot; );
+	//if ( layoutid == &amp;quot;&amp;quot; )throw new Exception( &amp;quot;必须传入参数layoutid&amp;quot; );
+	var orgid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;myorgid&amp;quot;), &amp;quot;&amp;quot; );
+	if ( orgid== &amp;quot;&amp;quot; )throw new Exception( &amp;quot;必须传入参数myorgid	&amp;quot; );	
+	if (layoutid != &amp;quot;&amp;quot; ){
+		var layout = new grdpack.EALayout(orgid,layoutid );
+		sb.append( layout.GetInitGridJS() );
+		try {sb.append( layout.GetInitPageJS() );}catch(e){}
+		
+	}
+	sb.append(&amp;quot;}&amp;quot;);	
+	
+	sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);  
+}
+
+// 得到数据流的定义
+function GetLayout()
+{
+       var xml = &amp;quot;&amp;quot;;
+
+	var num = 0;
+	var ds = new pubpack.EAXmlDS();
+	var fileurl=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + thisorgid+&amp;quot;/layout&amp;quot;;     
+	var fileurl1=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + thisorgid+&amp;quot;/layout/index.layout&amp;quot;;   
+	var pagexml = pubpack.EAFunc.readFile(fileurl1);
+        var pageds  = new pubpack.EAXmlDS(pagexml); 
+	var folds = (new java.io.File(fileurl)).listFiles();
+	if ( folds != null ) {
+		folds=pub.EAFunc.sort(folds);
+		var c = folds.length();
+		for(var i=0;i&amp;lt;c;i++) {
+			var f=folds[i];
+			if(!f.isDirectory() ) {
+				var filename = f.getName();
+            			var index = filename.indexOf(&amp;quot;.sxg&amp;quot;);	
+				if ( index &amp;gt;=0  ) {
+					var row= ds.AddRow(ds.getRowCount()-1);
+					num++;
+					//ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+					var layoutid = filename.substring(0,index);
+					ds.setValueAt(row,&amp;quot;ID&amp;quot;,layoutid );
+					var layouttitle = &amp;quot;未命名&amp;quot;;
+					for ( var j=0;j&amp;lt;pageds.getRowCount();j++){
+						if ( pageds.getStringAt(j,&amp;quot;ID&amp;quot;)==layoutid ){
+							layouttitle =pageds.getStringAt(j,&amp;quot;TITLE&amp;quot;);
+							if (layouttitle ==&amp;quot;&amp;quot;)
+								layouttitle =&amp;quot;页面标题为空&amp;quot;;
+							break;
+						}
+					}
+					ds.setValueAt(row,&amp;quot;NAME&amp;quot;,layouttitle );
+					ds.setValueAt(row,&amp;quot;STR&amp;quot;,&amp;quot;&amp;quot; );
+
+					//ds.setValueAt(row,&amp;quot;NOTE&amp;quot;,&amp;quot;数据流&amp;quot;+filename);
+					var fileurl2=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + thisorgid+&amp;quot;/layout/&amp;quot;+filename ;   
+					var svgstr = pubpack.EAFunc.readFile(fileurl2);
+					var index1= svgstr.indexOf(&amp;quot;cellvalue=\&amp;quot;&amp;quot;);
+					if ( index1&amp;gt;0){
+						var index2= svgstr.indexOf(&amp;quot;\&amp;quot;&amp;quot;,index1+&amp;quot;cellvalue=\&amp;quot;&amp;quot;.length()+1);
+						if ( index2&amp;gt;0 ) {
+							var cellstr = svgstr.substring(index1+&amp;quot;cellvalue=\&amp;quot;&amp;quot;.length(),index2 );
+							var ss = cellstr.split(&amp;quot;~n&amp;quot; );
+							for ( var n = 0 ;n&amp;lt;ss.length() ;n++) {
+								if ( ss[n].length() &amp;gt; 0 ) {
+									row= ds.AddRow(ds.getRowCount()-1);
+									num++;
+									ds.setValueAt(row,&amp;quot;ID&amp;quot;,&amp;quot;&amp;quot; );
+									var sss = ss[n].split(&amp;quot;～&amp;quot;);
+									
+									var title = ss[n];
+									if ( sss.length() &amp;gt; 1 ) {
+										title = sss[1]; 
+									}
+									if ( title == &amp;quot;&amp;quot; )
+										title=&amp;quot;窗体标题为空&amp;quot;;
+									ds.setValueAt(row,&amp;quot;NAME&amp;quot;,title );
+									ds.setValueAt(row,&amp;quot;STR&amp;quot;,ss[n]  );
+								}
+								
+							}
+						}
+					}
+				}	
+			}
+		}
+	}
+
+        return ds.GetXml();
+}
+
+
+// 得到数据流的定义
+function GetLayoutItem()
+{
+       var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EAORGXmlDB.getOrgDs();
+	var ds = new pubpack.EAXmlDS();
+	var num = 0;
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+		var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		
+		if ( thissytid == selsytid ) {
+			var fileurl=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + selsytid+&amp;quot;/layout&amp;quot;;     
+			var folds = (new java.io.File(fileurl)).listFiles();
+			if ( folds != null ) {
+				folds=pub.EAFunc.sort(folds);
+				var c = folds.length();
+				for(var i=0;i&amp;lt;c;i++) {
+					var f=folds[i];
+					if(!f.isDirectory() ) {
+						var filename = f.getName();
+		            			var index = filename.indexOf(&amp;quot;.sxg&amp;quot;);	
+						if ( index &amp;gt;=0  ) {
+							var row= ds.AddRow(ds.getRowCount()-1);
+							num++;
+							ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+							ds.setValueAt(row,&amp;quot;FILENAME&amp;quot;,filename);
+							ds.setValueAt(row,&amp;quot;NOTE&amp;quot;,&amp;quot;数据流&amp;quot;+filename);
+							ds.setValueAt(row,&amp;quot;SYTID&amp;quot;,selsytid );
+							ds.setValueAt(row,&amp;quot;ACTION&amp;quot;,&amp;quot;修改布局&amp;quot; );
+							ds.setValueAt(row,&amp;quot;ACTION1&amp;quot;,&amp;quot;删除布局&amp;quot; );
+							
+	
+	
+							
+						}	
+					}
+				}
+			}
+		}
+	}
+        return ds.GetXml();
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	
+	try {
+		  xmlstr = XmlToStd(xmlstr);
+		  var path = pubpack.EAOption.dynaDataRoot+&amp;quot;org/&amp;quot; + thisorgid + &amp;quot;/layout/&amp;quot; + layoutid+&amp;quot;.sxg&amp;quot;;
+		  
+		  pubpack.EAFunc.WriteToFile(path,xmlstr);	
+		  
+		  var path = pubpack.EAOption.dynaDataRoot+&amp;quot;org/&amp;quot; + thisorgid + &amp;quot;/layout/index.layout&amp;quot;;
+		  
+		  var pageds= new pubpack.EAXmlDS( pageprop );
+		  
+		  if ( pageds.getRowCount() &amp;gt; 6 ) {
+		  	  var title = pageds.getStringAt(0,&amp;quot;NAME&amp;quot;) ;
+		  	  var showflag =  pageds.getStringAt(1,&amp;quot;NAME&amp;quot;) ;
+			  var fixwidth =pageds.getStringAt(2,&amp;quot;NAME&amp;quot;) ;
+			  var fixheight =pageds.getStringAt(3,&amp;quot;NAME&amp;quot;) ;// 新增高度
+			  var align= pageds.getStringAt(4,&amp;quot;NAME&amp;quot;) ;
+			  var valign= pageds.getStringAt(5,&amp;quot;NAME&amp;quot;) ;
+			  var showheadimg= pageds.getStringAt(6,&amp;quot;NAME&amp;quot;) ;
+			  var showtoolbar= pageds.getStringAt(7,&amp;quot;NAME&amp;quot;) ;
+			  var bkcolor= pageds.getStringAt(8,&amp;quot;NAME&amp;quot;) ;
+			  var fixrowheight= pageds.getStringDef(9,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) ;//自适应行高？
+			  var reloadtime= pageds.getStringDef(10,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) ;//定时刷新时间  (秒)	
+			  var cellspace= pageds.getStringDef(11,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) ;//cellspace	
+			  var cellpadding= pageds.getStringDef(12,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) ;//cellpadding
+			  
+			  var onhtmlid= pageds.getStringDef(13,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) ;//	
+			  var posthtmlid= pageds.getStringDef(14,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) ;//
+
+			  
+
+	
+
+			  
+			  var ds =new pubpack.EAXmlDS();
+			  try {
+			  	ds.ReadFromFile(path);
+			  }
+			  catch (pubpack.EAException e) {//不存在，新增
+			  	if ( e.getCode() ==pubpack.EAException.errDataNotFount ){
+				  	var row =ds.AddRow(-1);
+				  	ds.setValueAt(row,&amp;quot;ID&amp;quot;,layoutid);
+				}
+				else throw new Exception (e.toString());
+			  }
+			  var bExist =0 ;
+			  for ( var i=0;i&amp;lt;ds.getRowCount();i++) {
+			  	var id = ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+			  	if ( id  == layoutid ){
+			  		ds.setValueAt(i,&amp;quot;TITLE&amp;quot;,title );
+//			  		throw new Exception(title); 
+			  		ds.setValueAt(i,&amp;quot;SHOWFLAG&amp;quot;,showflag );
+			  		ds.setValueAt(i,&amp;quot;WIDTHFIX&amp;quot;,fixwidth );
+			  		ds.setValueAt(i,&amp;quot;HEIGHTFIX&amp;quot;,fixheight );
+			  		ds.setValueAt(i,&amp;quot;ALIGN&amp;quot;,align);
+			  		ds.setValueAt(i,&amp;quot;VALIGN&amp;quot;,valign);
+			  		ds.setValueAt(i,&amp;quot;SHOWHEADIMG&amp;quot;,showheadimg);
+			  		ds.setValueAt(i,&amp;quot;SHOWTOOLBAR&amp;quot;,showtoolbar);
+			  		ds.setValueAt(i,&amp;quot;BKCOLOR&amp;quot;,bkcolor);
+			  		ds.setValueAt(i,&amp;quot;FIXROWHEIGHT&amp;quot;,fixrowheight);//自适应行高？
+			  		ds.setValueAt(i,&amp;quot;RELOADTIME&amp;quot;,reloadtime);//定时刷新时间  (秒)	
+			  		ds.setValueAt(i,&amp;quot;CELLSPACE&amp;quot;,cellspace);
+			  		ds.setValueAt(i,&amp;quot;CELLPADDING&amp;quot;,cellpadding);
+			  		
+			  		ds.setValueAt(i,&amp;quot;ONHTMLID&amp;quot;,onhtmlid);
+			  		ds.setValueAt(i,&amp;quot;POSTHTMLID&amp;quot;,posthtmlid);
+
+			  		
+
+
+
+			  		bExist =1;
+			  		break;
+			  	}
+			  
+			  }
+			  if(bExist ==0) {
+			 	 var row =ds.AddRow(-1);
+				  ds.setValueAt(row,&amp;quot;ID&amp;quot;,layoutid);
+				  ds.setValueAt(row,&amp;quot;TITLE&amp;quot;,title );
+		  		ds.setValueAt(row,&amp;quot;SHOWFLAG&amp;quot;,showflag );
+		  		ds.setValueAt(row,&amp;quot;WIDTHFIX&amp;quot;,fixwidth );
+		  		ds.setValueAt(row,&amp;quot;HEIGHTFIX&amp;quot;,fixheight);
+
+		  		ds.setValueAt(row,&amp;quot;ALIGN&amp;quot;,align);
+		  		ds.setValueAt(row,&amp;quot;VALIGN&amp;quot;,valign);
+		  		ds.setValueAt(row,&amp;quot;SHOWHEADIMG&amp;quot;,showheadimg);
+		  		ds.setValueAt(row,&amp;quot;SHOWTOOLBAR&amp;quot;,showtoolbar);
+		  		ds.setValueAt(row,&amp;quot;BKCOLOR&amp;quot;,bkcolor);
+		  		ds.setValueAt(row,&amp;quot;FIXROWHEIGHT&amp;quot;,fixrowheight);//自适应行高？
+		  		ds.setValueAt(row,&amp;quot;RELOADTIME&amp;quot;,reloadtime);//定时刷新时间  (秒)
+				ds.setValueAt(row,&amp;quot;CELLSPACE&amp;quot;,cellspace);
+			  		ds.setValueAt(row,&amp;quot;CELLPADDING&amp;quot;,cellpadding);
+			  		
+			  		ds.setValueAt(row,&amp;quot;ONHTMLID&amp;quot;,onhtmlid);
+			  		ds.setValueAt(row,&amp;quot;POSTHTMLID&amp;quot;,posthtmlid);
+
+
+			  }
+			  	
+			  pubpack.EAFunc.WriteToFile(path,ds.GetXml() );
+			 
+		  }
+		  
+	
+	}
+	catch ( ee ) {
+
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		
+	}
+	return &amp;quot;已保存&amp;quot;+layoutid;
+}
+
+// 得到布局的主定义信息
+function getLayoutIndex()
+{
+	var ret = &amp;quot; &amp;quot;;
+	try {
+		  
+		  var path = pubpack.EAOption.dynaDataRoot+&amp;quot;org/&amp;quot; + thisorgid + &amp;quot;/layout/index.layout&amp;quot;;
+		  var ds =new pubpack.EAXmlDS();
+
+		  try {
+			  	ds.ReadFromFile(path);
+		  }
+		  catch (pubpack.EAException e) {//不存在，新增
+		  	
+		  	if ( e.getCode() ==pubpack.EAException.errDataNotFount ){
+			  	return &amp;quot;&amp;quot;;
+			}
+			else throw new Exception (e.toString());
+		  }
+		
+		  for ( var i=0;i&amp;lt;ds.getRowCount();i++) {
+			  var id = ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+			  if ( id  == layoutid ){
+
+			  	  var title = ds.getValueAt(i,&amp;quot;TITLE&amp;quot;) ;
+
+			  	  var showflag =  ds.getValueAt(i,&amp;quot;SHOWFLAG&amp;quot;) ;
+				  var fixwidth =ds.getValueAt(i,&amp;quot;WIDTHFIX&amp;quot;) ;
+				  var fixheight =ds.getStringDef(i,&amp;quot;HEIGHTFIX&amp;quot;,&amp;quot;&amp;quot;) ;
+
+				  var align= ds.getValueAt(i,&amp;quot;ALIGN&amp;quot;) ;
+				  var valign=ds.getValueAt(i,&amp;quot;VALIGN&amp;quot;);
+				  var showheadimg= ds.getValueAt(i,&amp;quot;SHOWHEADIMG&amp;quot;);
+				  var showtoolbar= ds.getValueAt(i,&amp;quot;SHOWTOOLBAR&amp;quot;) ;
+				  var bkcolor= ds.getStringDef(i,&amp;quot;BKCOLOR&amp;quot;,&amp;quot;&amp;quot;) ;
+				  var fixrowheight= ds.getStringDef(i,&amp;quot;FIXROWHEIGHT&amp;quot;,&amp;quot;&amp;quot;) ;//自适应行高？
+				  var reloadtime= ds.getStringDef(i,&amp;quot;RELOADTIME&amp;quot;,&amp;quot;&amp;quot;) ;//定时刷新时间  (毫秒)
+				  var cellspace= ds.getStringDef(i,&amp;quot;CELLSPACE&amp;quot;,&amp;quot;&amp;quot;) ;//定时刷新时间  (毫秒)
+				  var cellpadding= ds.getStringDef(i,&amp;quot;CELLPADDING&amp;quot;,&amp;quot;&amp;quot;) ;//定时刷新时间  (毫秒)	
+				  var onhtmlid= ds.getStringDef(i,&amp;quot;ONHTMLID&amp;quot;,&amp;quot;&amp;quot;) ;//页面前HTML_ID
+				  var posthtmlid= ds.getStringDef(i,&amp;quot;POSTHTMLID&amp;quot;,&amp;quot;&amp;quot;) ;//			  
+				  ret = title +&amp;quot;~&amp;quot;+showflag +&amp;quot;~&amp;quot;+fixwidth  +&amp;quot;~&amp;quot;+align+&amp;quot;~&amp;quot;+valign+&amp;quot;~&amp;quot;+showheadimg+&amp;quot;~&amp;quot;+showtoolbar+&amp;quot;~&amp;quot;+bkcolor+&amp;quot;~&amp;quot;+fixrowheight+&amp;quot;~&amp;quot;+reloadtime+&amp;quot;~&amp;quot;+cellspace+&amp;quot;~&amp;quot;+cellpadding+&amp;quot;~&amp;quot;+onhtmlid+&amp;quot;~&amp;quot;+posthtmlid+&amp;quot;~&amp;quot;+fixheight;
+				  return ret;
+			  }
+
+		  }
+		  
+		    
+	
+	}
+	catch ( ee ) {
+
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		
+	}
+
+	return ret;
+}
+
+
+function  XmlToStd(xml)
+{
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SEQ</ID><NAME ></NAME><DATDSC >select seq_sysurl.nextval from dual</DATDSC><C4 ></C4><C5 >SEQ</C5></ROW>
+<ROW num="1" ><ID >NEWSYSURL</ID><NAME ></NAME><DATDSC >insert into sysurl( org,id,name,refid) values(&amp;apos;[%thisorgid]&amp;apos;,&amp;apos;[%id]&amp;apos;,&amp;apos;系统自动添加[%id]&amp;apos;,&amp;apos;_HTMLSTR&amp;apos;)
+</DATDSC><C4 >NEWSYSURL</C4><C5 ></C5></ROW>
+<ROW num="2" ><ID >BODYGUID</ID><NAME ></NAME><DATDSC >select a.guid from sysurl a,urlbody b where a.guid=b.fromguid and a.id=&amp;apos;[%ID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

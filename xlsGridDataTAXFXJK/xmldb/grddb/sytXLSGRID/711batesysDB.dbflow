@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="CORP"  dbname="" tablename="CORP" fill="#FFFFCC" x="88" y="97" width="80"  height="40" url="">CORP </rect>
+ <rect id="POSDETAIL"  dbname="" tablename="POSDETAIL" fill="#FFFFCC" x="87" y="512" width="80"  height="40" url="">POSDETAIL </rect>
+ <rect id="PAYMENT_NOTICE"  dbname="" tablename="PAYMENT_NOTICE" fill="#FFFFCC" x="87" y="225" width="80"  height="40" url="">PAYMENT_NOTICE </rect>
+ <rect id="PARAM"  dbname="" tablename="PARAM" fill="#FFFFCC" x="87" y="336" width="80"  height="40" url="">PARAM 基本参数表</rect>
+ <polygon id="card_493911" points="296,55 278,63 278,95 370,95 370,55" changeto="card" stroke="#000000" fill="#FFFFCC" >V_SESCORP</polygon>
+ <polygon id="card_493912" points="297,135 279,142 279,172 372,172 372,135" changeto="card" stroke="#000000" fill="#FFFFCC" >V_STORE_SES
+</polygon>
+ <connector id="connector_108_493922" from="CORP" to="CORP" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_493923" from="CORP" to="CORP" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_493924" from="card_493911" to="card_493911" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_493925" from="CORP" to="CORP" fromcp="32" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_493926" from="card_493911" to="card_493911" fromcp="12" tocp="12" type="108"  >
+ </connector>
+ <edit id="edit_373111" cx="455" cy="51" x="455" y="51" width="123" height="41" >供应商视图
+corptyp ='0'</edit>
+ <edit id="edit_373112" cx="457" cy="138" x="457" y="138" width="126" height="37" >门店视图
+corptyp='1'</edit>
+ <edit id="edit_373113" cx="98" cy="16" x="72" y="18" width="107" height="39" >门店和供应商信息
+ </edit>
+ <edit id="edit_373114" cx="72" cy="219" x="276" y="227" width="111" height="36" >返利数据导入表</edit>
+ <edit id="edit_373115" cx="77" cy="427" x="78" y="449" width="92" height="35" >久远销售数据表
+ </edit>
+ <polygon id="card_573411" points="293,331 271,339 271,375 384,375 384,331" changeto="card" stroke="#000000" fill="#FFFFCC" >V_ITEMCLASS_SES</polygon>
+ <edit id="edit_173711" cx="476" cy="326" x="476" y="326" width="120" height="41" >供应商销售大类视图</edit>
+</svg>

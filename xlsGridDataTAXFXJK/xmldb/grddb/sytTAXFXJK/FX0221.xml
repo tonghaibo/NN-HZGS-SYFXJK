@@ -1,0 +1,189 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FX0221</MWID><NAME >增值税专用发票有销项没有进项</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FX0221.zxg</FILE><SCENE ></SCENE><FIXED >4,1</FIXED><CATTYP >风险特征库</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >dat1</C13><C14 >dat1</C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >dat2</C13><C14 >dat2</C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD >3</DISPORD><SQLWHE >id=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7) or sjid=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7)</SQLWHE><DEFVAL >[%SYS_DEPTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_2</C13><C14 >zgswjg</C14><C15 >ZGSWJG</C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >13</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,1</C20><C21 >0,4,1</C21></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SetCellText(0,2,3,DAT1+&amp;quot; 至 &amp;quot;+DAT2);
+	_this.SetToBoolBox(0,3,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+	}
+
+	var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+
+	}else{
+		_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+	}
+	
+}
+
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 3 &amp;&amp; col == 0) {
+		for(var r=4;r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+			if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+				_this.SetCellText(sheet,r,0,newvalue);
+			}
+		}
+
+	}  
+}
+
+
+//生成核实任务
+function genTasks()
+{	
+	var param = new Object();	
+	
+	var xmlds = getXmlStr(0,4,0,_this.GetMainCellRangeRow2(0),13);
+	param.xmlstr = xmlds;	
+	param.usrids = G_USRID;
+	param.usrnams = G_USRNAM;
+	param.accids = G_ACCID;
+	param.orgs = G_ORGID;
+	param.syts = G_SYTID;
+	param.typ = &amp;quot;1&amp;quot;;     //决策二包任务
+	param.subtyp = &amp;quot;01&amp;quot;; //发票类 
+	param.yymm1 = DAT1;
+	param.yymm2 = DAT2;
+	param.swjg_dm = G_DEPTID;
+	param.toswjg = &amp;quot;&amp;quot;;
+	param.tousr=&amp;quot;&amp;quot;;
+	
+	var retobj = window.showModalDialog(&amp;quot;show.sp?grdid=RWParam&amp;typ=&amp;quot;+param.typ+&amp;quot;&amp;subtyp=&amp;quot;+param.subtyp,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	try {
+	//if (retobj != &amp;quot;undefined&amp;quot; &amp;&amp; retobj != null) {		
+		param.enddat = retobj.enddat;
+		param.note = retobj.note;
+		param.typ = retobj.typ;
+		param.subtyp = retobj.subtyp;
+		var msg = invokeOSFuncExt(&amp;quot;TAXFXJK.PUBTRK.createTask&amp;quot;,param);
+		alert(msg);
+	//}
+	} catch (e) { }
+	
+}
+
+
+function getXmlStr(sheet,row1,col1,row2,col2)
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var i = 0;
+	for (var r=row1;r&amp;lt;=row2;r++) {
+		if (_this.GetCellText(sheet,r,0) == &amp;quot;1&amp;quot;) {
+			xmlstr += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(++i)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+			var nsrsbh = _this.GetCellText(sheet,r,2);
+			var nsrmc = _this.GetCellText(sheet,r,3);
+			var fxdj = &amp;quot;高&amp;quot;;//_this.GetCellText(sheet,r,5);
+			var cyje = &amp;quot;&amp;quot;;
+			var note = &amp;quot;增值税专用发票有销项没有进项&amp;quot;;
+
+			xmlstr += &amp;quot;&amp;lt;NSRSBH&amp;gt;&amp;quot;+nsrsbh+&amp;quot;&amp;lt;/NSRSBH&amp;gt;\n&amp;quot;; //纳税人识别号
+			xmlstr += &amp;quot;&amp;lt;NSRMC&amp;gt;&amp;quot;+nsrmc+&amp;quot;&amp;lt;/NSRMC&amp;gt;\n&amp;quot;;	   //纳税人名称
+			xmlstr += &amp;quot;&amp;lt;NOTE&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/NOTE&amp;gt;\n&amp;quot;;       //说明
+			xmlstr += &amp;quot;&amp;lt;FXDJ&amp;gt;&amp;quot;+fxdj+&amp;quot;&amp;lt;/FXDJ&amp;gt;\n&amp;quot;;       //风险等级
+			xmlstr += &amp;quot;&amp;lt;CYJE&amp;gt;&amp;quot;+cyje+&amp;quot;&amp;lt;/CYJE&amp;gt;\n&amp;quot;;       //差异金额
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--风险点：增值税专用发票有销项没有进项，且税控设备抵减额大于10000元
+--取数条件：
+--1、销项、进项从 HX_SB.SB_ZZS_YBNSR 取最后一个月本年累计数
+--2、增值税税控系统专用设备费及技术维护费从HX_SB.SB_ZZS_YBNSR_FB4_SEDJQK取
+
+
+--取销项，进项
+
+SELECT  rownum,
+       (select nvl(dj.shxydm, dj.NSRSBH) from dj_nsrxx dj  where t1.DJXH = DJ.DJXH  AND rownum = 1) nsrsbh,
+       (select dj.NSRMC from dj_nsrxx dj  where t1.DJXH = DJ.DJXH  AND rownum = 1) NSRMC,
+       t1.ybxm_xxse,
+       t1.ybxm_jxse,
+       t1.jzjtxm_xxse,
+       t1.jzjtxm_jxse, 
+       t2.BQFSE,     
+       T2.BQYDJSE,
+       t2.BQSJDJSE,
+       (select nsrztmc from DM_GY_NSRZT zt where dj.nsrzt_dm=zt.nsrzt_dm) nsrztmc,
+       (select name from v_swjg where substr(dj.zgswskfj_dm,1,7)=id) zgswjg,
+       t1.djxh
+from 
+(
+select to_char(djxh)djxh,
+       sum(decode(ewblxh,&amp;apos;1&amp;apos;,xxse,0))ybxm_xxse,
+       sum(decode(ewblxh,&amp;apos;1&amp;apos;,jxse,0))ybxm_jxse,
+       sum(decode(ewblxh,&amp;apos;3&amp;apos;,xxse,0))jzjtxm_xxse,
+       sum(decode(ewblxh,&amp;apos;3&amp;apos;,jxse,0))jzjtxm_jxse
+from( select a.sbuuid,a.djxh,a.skssqq,a.skssqz,b.ewblxh,b.lmc,b.xxse,b.jxse,a.GZLX_DM_1
+      from sb_sbb a,SB_ZZS_YBNSR b
+      where a.SBUUID=b.sbuuid
+            and a.ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;
+            and a.zfbz_1 =&amp;apos;N&amp;apos;
+            and skssqq between date &amp;apos;[%DAT1]&amp;apos; and date &amp;apos;[%DAT2]&amp;apos;
+            and a.GZLX_DM_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+            AND b.EWBLXH in(&amp;apos;1&amp;apos;,&amp;apos;3&amp;apos;)
+     )group by djxh
+) T1,      
+--取税控设备抵减
+(select to_char(djxh)djxh,sum(BQFSE)BQFSE,sum(BQYDJSE)BQYDJSE ,sum(BQSJDJSE) BQSJDJSE
+ from (select a.sbuuid ,a.djxh,a.skssqq,a.skssqz,a.zfbz_1,a.GZLX_DM_1,
+     b.HMC,b.EWBHXH,b.BQYDJSE,b.BQSJDJSE,b.QMYE,b.BQFSE
+     from sb_sbb a,SB_ZZS_YBNSR_FB4_SEDJQK b
+     where a.SBUUID=b.sbuuid
+            and a.ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;
+            and zfbz_1 =&amp;apos;N&amp;apos;
+            and skssqq between date &amp;apos;[%DAT1]&amp;apos; and date &amp;apos;[%DAT2]&amp;apos;
+            AND b.EWBHXH =&amp;apos;1&amp;apos;
+            and a.GZLX_DM_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)) group by djxh
+)T2,DJ_NSRXX dj
+ where T1.DJXH=T2.DJXH(+)   
+     and T1.djxh=dj.djxh(+)
+     and (T1.ybxm_xxse !=0 and t1.ybxm_jxse=0)
+     and (substr(dj.zgswskfj_dm,1,7) in(&amp;apos;[%ZGSWJG]&amp;apos;)
+     or substr(dj.zgswskfj_dm,1,7) in (select swjg.id from V_SWJG swjg 
+           start with swjg.id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg.id=swjg.sjid))
+
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

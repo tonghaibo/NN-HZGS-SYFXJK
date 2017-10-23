@@ -1,0 +1,154 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >SYSMW</MWID><NAME >中间件列表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SYSMW.zxg</FILE><SCENE >5</SCENE><FIXED >1,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><syt >x</syt><WIDTHMOD >1</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >New</ID><NAME >新增</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C10 >New</C10><C11 ></C11></ROW>
+<ROW num="1" ><ID >webbase</ID><NAME >WEB根目录</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 >webbase</C11></ROW>
+<ROW num="2" ><ID >TestPrompt</ID><NAME >提示输入</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >MWID</ID><NAME >中间件编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >12</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >MWID</C16></ROW>
+<ROW num="1" ><ID >MWTYP</ID><NAME >中间件类型</NAME><NOTNULL ></NOTNULL><KEYVAL >V_MWTYP</KEYVAL><INPCTL >list</INPCTL><DISPORD >13</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >MWTYP</C13><C14 ></C14><C15 >MWTYP</C15><C16 >MWTYP</C16></ROW>
+<ROW num="2" ><ID >MWNAME</ID><NAME >中间件名称</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >2</INPCTL><DISPORD >22</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >MWNAME</C16></ROW>
+<ROW num="3" ><ID >thissytid</ID><NAME >系统号</NAME><NOTNULL ></NOTNULL><KEYVAL >SYT</KEYVAL><INPCTL >idlist</INPCTL><DISPORD >11</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >thissytid</C15><C16 >thissytid</C16></ROW>
+<ROW num="4" ><ID >MWSUBTYP</ID><NAME >子分类</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >2</INPCTL><DISPORD >21</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >MWSUBTYP</C16></ROW>
+<ROW num="5" ><ID >dat</ID><NAME >创建日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >2</NROW><NCOL >10</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	for (var row = 1; row &amp;lt; _this.GetRowCount(sheet); row ++) {
+		_this.AutoFixOneRowHeight(sheet,row);
+	}
+	_this.AutoFixScreenWidth();
+
+}
+
+//新增
+function New()
+{
+	var mwtyp = document.all(&amp;quot;MWTYP&amp;quot;).value;
+	
+	if ( mwtyp == &amp;quot;&amp;quot; ) {
+		alert ( &amp;quot;请先选择一个中间件类型&amp;quot; );
+	}
+	var sytid = document.all(&amp;quot;thissytid&amp;quot;).value;
+	
+	openWindow(&amp;quot;xlsgrid/jsp/design/designer.jsp?MWTYP=&amp;quot;+mwtyp+&amp;quot;&amp;todo=new&amp;selsytid=&amp;quot;+sytid );
+}
+
+//双击选择主数据区行
+//function _thisOnDblClickMainCellRangeRow(sheet,row)
+//{
+//	var mwtyp = _this.GetCellText(sheet,row,2);
+//	var mwid = _this.GetCellText(sheet,row,4);
+//	var sytid = _this.GetCellText(sheet,row,0);
+//	
+//	openWindow(&amp;quot;xlsgrid/jsp/design/designer.jsp?MWTYP=&amp;quot;+mwtyp+&amp;quot;&amp;grdid=&amp;quot;+mwid+&amp;quot;&amp;sytid=&amp;quot;+sytid );
+//}
+
+//选择主数据区行记录
+//function _thisOnSelectMainCellRangeRow(sheet,row)
+//{
+//	var mwtyp = _this.GetCellText(sheet,row,2);
+//	var mwid = _this.GetCellText(sheet,row,4);
+//	var sytid = _this.GetCellText(sheet,row,0);
+//	window.location = &amp;quot;xlsgrid/jsp/design/designer.jsp?MWTYP=&amp;quot;+mwtyp+&amp;quot;&amp;grdid=&amp;quot;+mwid+&amp;quot;&amp;sytid=&amp;quot;+sytid ;
+//
+//}
+//鼠标双击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	var mwtyp = _this.GetCellText(sheet,row,2);
+	var mwid = _this.GetCellText(sheet,row,4);
+	var sytid = _this.GetCellText(sheet,row,0);
+
+	if(col==8&amp;&amp; _this.GetCellText(sheet,row,col)== &amp;quot;工作流定义&amp;quot; ) {
+	
+		openWindow(&amp;quot;show.sp?grdid=flowOAMain&amp;mwid=&amp;quot;+mwid+&amp;quot;&amp;selsytid=&amp;quot;+sytid );
+
+	}
+	else if(col==9&amp;&amp; _this.GetCellText(sheet,row,col)== &amp;quot;中间件设计&amp;quot; ) {
+	
+		window.location=&amp;quot;xlsgrid/jsp/design/designer.jsp?MWTYP=&amp;quot;+mwtyp+&amp;quot;&amp;grdid=&amp;quot;+mwid+&amp;quot;&amp;sytid=&amp;quot;+sytid ;
+
+
+	}
+	else if (sytid !=&amp;quot;&amp;quot; &amp;&amp; mwid!=&amp;quot;&amp;quot; ){
+	
+	}	
+
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	var mwtyp = _this.GetCellText(sheet,row,2);
+	var mwid = _this.GetCellText(sheet,row,4);
+	var sytid = _this.GetCellText(sheet,row,0);
+
+	if(col==8&amp;&amp; _this.GetCellText(sheet,row,col)== &amp;quot;工作流定义&amp;quot; ) {
+	
+	}
+	else if(col==9&amp;&amp; _this.GetCellText(sheet,row,col)== &amp;quot;中间件设计&amp;quot; ) {
+	
+
+	}
+	else if (sytid !=&amp;quot;&amp;quot; &amp;&amp; mwid!=&amp;quot;&amp;quot; ){
+		openWindow(&amp;quot;xlsgrid/jsp/design/designer.jsp?MWTYP=&amp;quot;+mwtyp+&amp;quot;&amp;grdid=&amp;quot;+mwid+&amp;quot;&amp;sytid=&amp;quot;+sytid );
+	}	
+}
+
+//FTP站点
+function webbase()
+{
+	
+	_this.OpenFTPWindow(&amp;quot;www.xmidware.com&amp;quot;, &amp;quot;oracle&amp;quot;, &amp;quot;Eru43wPo&amp;quot;, 21, &amp;quot;/../../u/oracleas/Apache/Apache/htdocs/&amp;quot;);
+	
+}
+
+//提示输入
+function TestPrompt()
+{
+	var ret =_this.Prompt(&amp;quot;&amp;quot;,&amp;quot;请输入申请内容&amp;quot;,-1,-1,500,300);
+	alert ( ret )
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select b.id sytid,b.name sytnam,
+c.id mwtyp,c.name mwtypname,a.id,a.name,a.note, a.typ 
+,decode(c.id,&amp;apos;F&amp;apos;,&amp;apos;工作流定义&amp;apos;,&amp;apos;B&amp;apos;,&amp;apos;工作流定义&amp;apos;,&amp;apos;&amp;apos;) action
+,&amp;apos;中间件设计&amp;apos; action2
+from sysmw a, syt b,v_mwtyp c
+where a.syt=b.id and a.mwtyp=c.id
+and b.id like &amp;apos;%[%thissytid]%&amp;apos; and c.id like &amp;apos;[%MWTYP]%&amp;apos;
+and upper(a.id) like &amp;apos;%&amp;apos;||upper(&amp;apos;[%MWID]&amp;apos;)||&amp;apos;%&amp;apos; and NVL(a.name,&amp;apos; &amp;apos;) like &amp;apos;%[%MWNAME]%&amp;apos;
+and NVL(a.typ,&amp;apos; &amp;apos;) like &amp;apos;[%MWSUBTYP]%&amp;apos;
+order by a.crtdat desc</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

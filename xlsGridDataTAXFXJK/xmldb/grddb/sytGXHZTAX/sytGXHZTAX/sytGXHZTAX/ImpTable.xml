@@ -1,0 +1,204 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ImpTable</MWID><NAME >数据导入</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ImpTable.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >doImport</ID><NAME >执行导入</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	for (var r=3;r&amp;lt;=35;r++) {
+		_this.SetToBoolBox(sheet,r,1);
+	}
+}
+
+//执行导入
+function doImport()
+{
+	var param = new Object();
+	param.xmlstr = _this.GetXml(0,3,1,13,3);
+	try {
+		var ret = invokeOSFuncExt(&amp;quot;exceImport&amp;quot;,param);
+		alert(ret);
+	}
+	catch(e) {
+		alert(e);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function exceImport()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	try {
+		db = new pub.EADatabase();
+		var ds = new pub.EAXmlDS(xmlstr);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var flg = ds.getStringAt(i,&amp;quot;FLAG&amp;quot;);
+			var tablename = ds.getStringAt(i,&amp;quot;TABLENAME&amp;quot;);
+			if (flg == &amp;quot;1&amp;quot;) {
+				var cnt = synOneTable(db,tablename);
+				ret += &amp;quot;导入表[&amp;quot;+tablename+&amp;quot;]记录数:&amp;quot;+cnt+&amp;quot;\n&amp;quot;;
+			}
+		}
+		db.Commit();
+		return &amp;quot;导入完成\n&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function synOneTable(db,tablename,where) {
+	var swhere = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from user_tables where table_name=upper(&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;)&amp;quot;;
+	if (where != &amp;quot;&amp;quot;) {
+		swhere = &amp;quot; where &amp;quot; + where;
+	}
+	
+	if (db.GetSQLRowCount(sql) &amp;gt; 0) {
+		sql = &amp;quot;delete from &amp;quot;+tablename;
+		db.ExcecutSQL(sql);
+	}
+	else {
+		sql = &amp;quot;create table &amp;quot;+tablename+&amp;quot; as select * from &amp;quot; + tablename + &amp;quot;@taxdb&amp;quot; + swhere;
+		db.ExcecutSQL(sql);
+	}
+	sql = &amp;quot;insert into &amp;quot;+tablename+&amp;quot; select * from &amp;quot;+tablename+ &amp;quot;@taxdb&amp;quot;;
+	var cnt = db.ExcecutSQL(sql);
+	return cnt;
+}
+
+//后台每天同步
+function autoImport()
+{
+	var tableName = new Array(
+		&amp;quot;dj_nsrxx&amp;quot;,		/*纳税人信息表*/
+		&amp;quot;dj_nsrxx_kz&amp;quot;,		/*纳税人信息扩展*/
+		&amp;quot;dj_sz&amp;quot;,		/*税种*/
+		&amp;quot;dj_sz_ls&amp;quot;,		/*税种历史*/
+		&amp;quot;dj_nsrzt_bg&amp;quot;,		/*纳税人状态变更*/
+		&amp;quot;dm_swjg&amp;quot;,		/*税务机关代码表*/
+		&amp;quot;dm_czry&amp;quot;,		/*操作人员代码表*/
+		&amp;quot;dm_hy&amp;quot;,		/*行业代码*/
+		&amp;quot;dm_hymx&amp;quot;,		/*行业明细代码*/
+		&amp;quot;dm_djzclx&amp;quot;,		/*登记注册类型*/
+		&amp;quot;dm_nsrzt&amp;quot;,		/*纳税人状态*/
+		&amp;quot;dm_fp&amp;quot;,	/*发票代码*/
+		&amp;quot;dm_fpzl&amp;quot;,		/*发票种类代码*/
+		&amp;quot;dm_pzzl&amp;quot;,		/*凭证种类代码*/
+		&amp;quot;dm_zsxm&amp;quot;,		/*征收项目代码*/
+		&amp;quot;dm_jdxz&amp;quot;,		/*街道乡镇代码*/
+		&amp;quot;v_dm_ysfpbl&amp;quot;,		/*预算分配比例*/
+		&amp;quot;rd_nsrzg_lsxx&amp;quot;,	/*纳税人资格认定历史信息*/
+		&amp;quot;hd_dsqc&amp;quot;,		/*定税清册*/
+		&amp;quot;hd_dsqc_ls&amp;quot;,	/*定税清册历史信息*/
+		&amp;quot;FP_DK_FP_QT&amp;quot;,	/*普票代开*/
+		&amp;quot;fp_dk_fp&amp;quot;,	/*专票代开*/
+		&amp;quot;fp_xs_ls&amp;quot;,	/*发票销售历史信息*/
+		&amp;quot;fp_yj&amp;quot;,	/*发票验旧*/
+		&amp;quot;fp_pz_ls&amp;quot;,	/*票种登记历史信息*/
+		&amp;quot;fp_nsrjc&amp;quot;,	/*发票结存*/
+//		&amp;quot;sb_zzs_xgmnsr_2005&amp;quot;,	/*2005版小规模纳税人申报表*/
+//		&amp;quot;sb_zzs_2003_ybnsr&amp;quot;,	/*2003班一般纳税人申报表*/
+//		&amp;quot;sb_sbxx&amp;quot;,	/*申报信息*/
+//		&amp;quot;sb_zsxx&amp;quot;,	/*征收信息*/
+		&amp;quot;kj_mdt&amp;quot;,	/*会计免抵调*/
+		&amp;quot;kj_srttk&amp;quot;	/*收入提退库*/
+	);
+	
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {		     
+		sql = &amp;quot;insert into tax_imptable_log(id,name,strtime,endtime,cnt) values(&amp;apos;START&amp;apos;,&amp;apos;开始&amp;apos;,sysdate,sysdate,0)&amp;quot;;
+		pub.EADbTool.ExcecutSQL(sql);
+		
+		for (var i=0;i&amp;lt;tableName.length();i++){
+			db = new pub.EADatabase();
+			var strtime = db.GetSQL(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) from dual&amp;quot;);
+			var where = &amp;quot;&amp;quot;;
+			if(tableName[i] == &amp;quot;sb_zzs_2003_ybnsr&amp;quot;) {
+				where = &amp;quot;nsr_swjg_dm like &amp;apos;14511%&amp;apos;&amp;quot;;
+			}
+
+			var cnt = synOneTable(db,tableName[i],where);
+			
+			//记录日记
+			sql = &amp;quot;insert into tax_imptable_log(id,name,strtime,endtime,cnt) 
+				values(&amp;apos;&amp;quot;+tableName[i]+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+tableName[i]+&amp;quot;&amp;apos;,to_date(&amp;apos;&amp;quot;+strtime+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;),sysdate,&amp;apos;&amp;quot;+cnt+&amp;quot;&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+	
+			db.Commit();
+		}
+		
+		//税务数据处理
+		db = new pub.EADatabase();
+		var ret = 0;
+		var strtime = db.GetSQL(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) from dual&amp;quot;);
+		sql = &amp;quot;delete from tax_taxdata&amp;quot;;
+		db.ExcecutSQL(sql);		
+		sql = &amp;quot;insert into tax_taxdata(yymm,id,name,somny,taxmny,sdtaxmny,org)
+			select to_char(ssrq,&amp;apos;yyyy-mm&amp;apos;) yymm,nsrsbh,nsrmc,sum(xssr) somny,sum(sbzzse) taxmny,&amp;apos;&amp;apos; adtaxmny,&amp;apos;GXHZ&amp;apos; org
+			from v_tax_taxdata_ybnsr
+			group by to_char(ssrq,&amp;apos;yyyy-mm&amp;apos;),nsrsbh,nsrmc&amp;quot;;
+		ret += db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into tax_taxdata(yymm,id,name,somny,taxmny,sdtaxmny,org)
+			select to_char(ssrq,&amp;apos;yyyy-mm&amp;apos;) yymm,nsrsbh,nsrmc,sum(xssr) somny,sum(sbzzse) taxmny,&amp;apos;&amp;apos; adtaxmny,&amp;apos;GXHZ&amp;apos; org
+			from v_tax_taxdata_xgm
+			group by to_char(ssrq,&amp;apos;yyyy-mm&amp;apos;),nsrsbh,nsrmc&amp;quot;;
+		ret += db.ExcecutSQL(sql);		
+		sql = &amp;quot;insert into tax_imptable_log(id,name,strtime,endtime,cnt) 
+				values(&amp;apos;tax_taxdata&amp;apos;,&amp;apos;tax_taxdata&amp;apos;,to_date(&amp;apos;&amp;quot;+strtime+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;),sysdate,&amp;apos;&amp;quot;+ret+&amp;quot;&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		//开票税务数据处理
+		sql = &amp;quot;insert into tax_kpdata(nsrsbh,sehj,jkfsrq,YSFPBL_DM,zzs,xfs,sds,sdsn,sdsw,grsdsse,clgzsse,xzxsf)
+			select * from v_tax_kpdata a where not exists 
+			(select 1 from tax_kpdata b where b.nsrsbh=a.nsrsbh and b.jkfsrq=a.jkfsrq ) and a.JKFSRQ&amp;lt;sysdate&amp;quot;;
+		ret = db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into tax_imptable_log(id,name,strtime,endtime,cnt) 
+				values(&amp;apos;tax_kpdata&amp;apos;,&amp;apos;tax_kpdata&amp;apos;,to_date(&amp;apos;&amp;quot;+strtime+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;),sysdate,&amp;apos;&amp;quot;+ret+&amp;quot;&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+
+		
+		sql = &amp;quot;insert into tax_imptable_log(id,name,strtime,endtime,cnt) values(&amp;apos;END&amp;apos;,&amp;apos;结束&amp;apos;,sysdate,sysdate,0)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		var errsql = &amp;quot;insert into tax_imptable_log(id,name,strtime,endtime,cnt,note) values (&amp;apos;error&amp;apos;,&amp;apos;出错&amp;apos;,null,sysdate,0,&amp;apos;&amp;quot;+e.toString()+&amp;quot;&amp;apos;)&amp;quot;;
+		pub.EADbTool.ExcecutSQL(errsql);
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

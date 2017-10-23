@@ -1,0 +1,398 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FXYD</MWID><NAME >风险应对</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FXYD.zxg</FILE><SCENE ></SCENE><FIXED >1,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >runYD</ID><NAME >应对处理</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >Send</C10><C11 >delrw</C11><C12 >runYD</C12><C13 >runYD</C13><C14 ></C14></ROW>
+<ROW num="1" ><ID >send</ID><NAME >任务推送</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >GRDBTNDS_1</C10><C11 >send</C11><C12 >send</C12><C13 ></C13><C14 ></C14></ROW>
+<ROW num="2" ><ID >jsrw</ID><NAME >结束任务</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14></ROW>
+<ROW num="3" ><ID >imp2B</ID><NAME >导入二包处理结果</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 >imp2B</C14></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DAT</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_0</C13></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DAT</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_1</C13></ROW>
+<ROW num="2" ><ID >RWLX</ID><NAME >任务类型</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_RWLX</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_2</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var rwztList;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;8%&amp;quot;);
+	
+	var rwlxList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_RWLX&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,rwlxList);
+	_this.SetCellText(1,1,2,1);
+	
+	var rwfxlxList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_RWFXLX&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,rwfxlxList);
+	
+	var fxdjList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=tax_cs_fxyjjb&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,6,fxdjList);
+	
+	//var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;where=sjid=&amp;quot;+G_DEPTID+&amp;quot; or id=&amp;quot;+G_DEPTID),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	//_this.SetListValue(swjgList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,8,swjgList);
+	_this.SetCellText(1,1,8,G_DEPTID);
+	
+	rwztList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_RWZT&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	
+	
+	loadData();
+	
+	
+}
+
+function loadData()
+{
+	var rwlx = _this.GetCellText(1,1,2);
+	var rwfxlx = _this.GetCellText(1,1,4);
+	var fxdj = _this.GetCellText(1,1,6);
+	var swjg = _this.GetCellText(1,1,8);
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedRow(0,1);
+	_this.SetFixedCol(0,0);
+	_this.SetColVisible(0,2,-1);
+	_this.SetColVisible(0,12,-1);
+	_this.SetColVisible(0,13,-1);
+	_this.SetColVisible(0,15,-1);
+	_this.SetColVisible(0,17,-1);
+
+	_this.SetMainCellRange(0,1,1,10,_this.GetColCount(0)-1);	
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;RWLX=&amp;quot;+rwlx+&amp;quot;&amp;RWFXLX=&amp;quot;+rwfxlx+&amp;quot;&amp;FXDJ=&amp;quot;+fxdj+&amp;quot;&amp;ZGSWJG=&amp;quot;+swjg);
+	_this.SetXmlDS(0,1,1,10,_this.GetColCount(0)-1,xml);
+	//设置勾选列
+	_this.SetToBoolBox(0,0,0);
+	for (var r=1;r&amp;lt;_this.GetRowCount(0);r++) {
+		if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+			_this.SetToComboBox(&amp;quot;&amp;quot;,0,r,11,rwztList);
+			var zt = _this.GetCellText(0,r,11);
+			if (zt == 2) _this.SetCellColor(0,r,11,255,0,0);
+			if (zt == 3) _this.SetCellColor(0,r,11,0,0,255);
+		}
+	}
+	_this.AutoFixScreenWidth();
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp; row == 0 &amp;&amp; col == 0) {
+		for (var r=1;r&amp;lt;_this.GetRowCount(0);r++) {
+			if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+				_this.SetCellText(0,r,0,newvalue);
+			}
+		}
+
+	}
+}
+
+
+//推送
+function send()
+{
+	var chk = _this.invokeOSFunc(&amp;quot;SendTrk&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk != &amp;quot;1&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+	
+	var str = getSelectGuids();
+	if (str == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+	var param = new Object();
+	param.guidstr = str;
+	param.usrid = G_USRID;
+	param.usrnam = G_USRNAM;
+	
+	var tsobj = window.showModalDialog(&amp;quot;show.sp?grdid=RWTSParam&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	//alert(&amp;quot;swjg=&amp;quot;+tsobj.gs+&amp;quot; &amp;quot;+tsobj.swgly);
+	try {
+		if (tsobj != &amp;quot;undefined&amp;quot; &amp;&amp; tsobj != null) {		
+			param.zgswjg = tsobj.zgswjg;
+			param.gs = tsobj.gs;
+			param.swgly = tsobj.swgly;
+			var msg = invokeOSFuncExt(&amp;quot;Send&amp;quot;,param);
+			alert(msg);
+			loadData();
+		}
+	} catch (e) { 
+		alert(&amp;quot;任务推送出错：&amp;quot;+e.toString());
+	}
+
+}
+
+function getSelectGuids()
+{
+	var str = &amp;quot;&amp;quot;;
+	for (var r=1;r&amp;lt;=_this.GetRowCount(0)-1;r++) {
+		var guid = _this.GetCellText(0,r,2);
+		var flag = _this.GetCellText(0,r,0);
+		if (guid != &amp;quot;&amp;quot; &amp;&amp; flag == 1) {
+			if (str == &amp;quot;&amp;quot;) str += guid;
+			else str += &amp;quot;,&amp;quot; + guid;
+		}
+	}
+	return str;
+}
+
+//删除
+function delrw()
+{
+	var str = getSelectGuids();
+	if (str == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;没有选中要删除的记录！&amp;quot;);
+		return;
+	}
+	
+	if (!confirm(&amp;quot;删除选中记录，是否继续？&amp;quot;)) return;
+	
+	var param = new Object();
+	param.guidstr = str;
+	var ret = _this.invokeOSFuncExt(&amp;quot;DeleteHSRW&amp;quot;,param);
+	if (ret == 1) {
+		alert(&amp;quot;删除核实任务成功&amp;quot;);
+		loadData();
+	}
+	else {
+		alert(&amp;quot;删除失败：&amp;quot;+ret);
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		loadData();
+	}
+}
+
+//决策二包
+function jsjc2b()
+{
+	var str = &amp;quot;&amp;quot;;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var rwid = _this.GetCellText(0,r,3);
+		var flag = _this.GetCellText(0,r,0);
+		if (rwid != &amp;quot;&amp;quot; &amp;&amp; flag == 1) {
+			if (str == &amp;quot;&amp;quot;) str += rwid;
+			else str += &amp;quot;,&amp;quot; + rwid;
+		}
+	}
+	if (str == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+
+	window.open(&amp;quot;show.sp?grdid=EXPRW2JS&amp;rwids=&amp;quot;+str,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+
+}
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (row &amp;gt;= 1 &amp;&amp; row &amp;lt; _this.GetRowCount(0)) {
+		_this.SetCellText(0,row,0,&amp;quot;1&amp;quot;);
+		var guid = _this.GetCellText(0,row,2);
+		if (guid != &amp;quot;&amp;quot;) {
+			//showModalDialog(&amp;quot;show.sp?grdid=HSRW&amp;guid=&amp;quot;+guid,window,&amp;quot;scroll:no;status:no;dialogWidth=800px;dialogHeight=600px&amp;quot;);
+			openYDCL(row);
+			loadData();
+		}
+	}
+}
+
+function openYDCL(row)
+{
+	var guid = _this.GetCellText(0,row,2);	
+	var flag = _this.GetCellText(0,row,0);
+	var typ = _this.GetCellText(0,row,6);
+	var newtyp = _this.GetCellText(0,row,12);
+	//alert(&amp;quot;r=&amp;quot;+r+&amp;quot;,guid=&amp;quot;+guid+&amp;quot;,f=&amp;quot;+flag);
+	if (guid != &amp;quot;&amp;quot; &amp;&amp; flag == 1) {
+		if (typ == &amp;quot;发票类&amp;quot; &amp;&amp; newtyp == &amp;quot;SYSTEM&amp;quot;) {
+			showModalDialog(&amp;quot;show.sp?grdid=FPFXHCB&amp;guid=&amp;quot;+guid,window,&amp;quot;scroll:no;status:no;dialogWidth=800px;dialogHeight=600px&amp;quot;);
+		}
+		else {
+			showModalDialog(&amp;quot;show.sp?grdid=HSRW&amp;guid=&amp;quot;+guid,window,&amp;quot;scroll:no;status:no;dialogWidth=800px;dialogHeight=600px&amp;quot;);
+		}	
+		
+	}
+}
+
+
+//应对处理
+function runYD()
+{
+	var chk = _this.invokeOSFunc(&amp;quot;YDCL&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk != &amp;quot;1&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+	
+	for (var r=1;r&amp;lt;=_this.GetRowCount(0)-1;r++) {
+		var guid = _this.GetCellText(0,r,2);	
+		var flag = _this.GetCellText(0,r,0);
+		if (guid != &amp;quot;&amp;quot; &amp;&amp; flag == 1) {
+			openYDCL(r);			
+			loadData();
+		}
+	}
+}
+
+//结束任务
+function jsrw()
+{
+	var str = getSelectGuids();
+	if (str == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+	
+	if (!confirm(&amp;quot;结束选中的任务，是否继续？&amp;quot;)) return;
+	
+	var param = new Object();
+	param.guidstr = str;
+	var ret = _this.invokeOSFuncExt(&amp;quot;JSHSRW&amp;quot;,param);
+	if (ret == 1) {
+		alert(&amp;quot;结束核实任务成功&amp;quot;);
+		loadData();
+	}
+	else {
+		alert(&amp;quot;结束任务失败：&amp;quot;+ret);
+	}
+
+}
+
+//导入二包
+function imp2B()
+{
+	showModalDialog(&amp;quot;show.sp?grdid=IMP2B&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=800px;dialogHeight=600px&amp;quot;);
+	loadData();
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function YDCL()
+{
+	return &amp;quot;1&amp;quot;;
+}
+
+//删除任务
+function DeleteHSRW()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;0&amp;apos; where guid in (&amp;quot;+pub.EAFunc.SQLIN(guidstr)+&amp;quot;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		return 1;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+//任务推送
+function Send()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;2&amp;apos;,chkusr=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,chkusrnam=&amp;apos;&amp;quot;+usrnam+&amp;quot;&amp;apos;,swjg_dm=&amp;apos;&amp;quot;+zgswjg+&amp;quot;&amp;apos;,todept=&amp;apos;&amp;quot;+gs+&amp;quot;&amp;apos;,tousr=&amp;apos;&amp;quot;+swgly+&amp;quot;&amp;apos; where guid in (&amp;quot;+pub.EAFunc.SQLIN(guidstr)+&amp;quot;)&amp;quot;;
+		var cnt = db.ExcecutSQL(sql);
+		return &amp;quot;任务推送成功,共&amp;quot;+cnt+&amp;quot;条.&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//结束任务
+function JSHSRW()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;update tax_trkhdr set stat=&amp;apos;9&amp;apos; where guid in (&amp;quot;+pub.EAFunc.SQLIN(guidstr)+&amp;quot;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		return 1;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function SendTrk()
+{
+	return &amp;quot;1&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select a.guid,bilid,cmnam title,
+	b.name rwlx,
+	c.name rwfxlx,
+	fxdj,
+	(select name from usr where a.tousr=usr.id and rownum=1) tousr,
+	a.crtdat,crtusrnam,a.stat,a.newtyp,
+	substr(dj.swjg_dm,0,7) swjg_dm,
+  (select name from v_swjg sw where sw.id=substr(dj.swjg_dm,0,7)) swjg,
+  	trim(dj.swjg_dm) swjgskfj_dm,
+  (select swjgjc from DM_GY_SWJG sw where trim(sw.swjg_dm)=dj.swjg_dm) swjgskfj,
+  	dj.taxman sgyid,
+  (select name from usr where usr.id=dj.taxman) taxman  
+from tax_trkhdr a,v_tax_rwlx b,v_tax_rwfxlx c,tax_company dj
+where a.typ=b.id(+) and a.subtyp=c.id(+)
+  and a.cmid=dj.id(+)
+  and a.stat not in (&amp;apos;1&amp;apos;,&amp;apos;9&amp;apos;)
+  and a.typ like &amp;apos;[%RWLX]%&amp;apos;
+  and nvl(a.subtyp,&amp;apos; &amp;apos;) like &amp;apos;[%RWFXLX]%&amp;apos;
+  and nvl(a.fxdj,&amp;apos; &amp;apos;) like &amp;apos;[%FXDJ]%&amp;apos;
+  --and substr(dj.swjg_dm,0,7) like &amp;apos;[%ZGSWJG]%&amp;apos;
+  and substr(dj.swjg_dm,0,7) in (select id from v_swjg where sjid=&amp;apos;[%ZGSWJG]&amp;apos; or id=&amp;apos;[%ZGSWJG]&amp;apos;)
+  and nvl(a.tousr,&amp;apos; &amp;apos;) like (case when &amp;apos;[%ZGSWJG]&amp;apos;!=&amp;apos;1451100&amp;apos; then &amp;apos;[%SYS_USRID]&amp;apos; else &amp;apos;%&amp;apos; end)
+order by a.crtdat desc
+) t</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

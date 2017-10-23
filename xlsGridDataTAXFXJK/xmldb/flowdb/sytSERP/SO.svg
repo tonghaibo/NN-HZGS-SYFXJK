@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <desc>SVGForm By xlsGrid.net</desc>
+ <text x="200" y="10" font-family="宋体" font-size="20" font-color="#000075">销售主流程图</text>
+ <rect id="SERP_SO" MWID="SO" MWTYP="B" sytid="SERP" x="127" y="122" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">销售单</rect>
+ <rect id="SERP_SR" MWID="SO" MWTYP="B" sytid="SERP" x="126" y="49" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">销售退货单</rect>
+ <rect id="SERP_SS" MWID="SO" MWTYP="B" sytid="SERP" x="204" y="205" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">代送单</rect>
+ <rect id="SERP_SX" MWID="SO" MWTYP="B" sytid="SERP" x="127" y="292" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">赊销单</rect>
+ <rect id="SERP_SH" MWID="SO" MWTYP="B" sytid="SERP" x="343" y="205" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">出货单</rect>
+ <rect id="SERP_SD" MWID="SO" MWTYP="B" sytid="SERP" x="343" y="246" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">送货单</rect>
+ <rect id="SERP_SC" MWID="SO" MWTYP="B" sytid="SERP" x="20" y="198" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">销售合同</rect>
+ <rect id="SERP_SI" MWID="SO" MWTYP="B" sytid="SERP" x="300" y="90" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">销售发票</rect>
+ <rect id="SERP_ST" MWID="SO" MWTYP="B" sytid="SERP" x="343" y="165" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">提货单</rect>
+ <rect id="SERP_FS" MWID="FS" MWTYP="B" sytid="SERP" x="400" y="90" width="80" height="35" fill="#F2F5FB" stroke="#8396C3" stroke-width="1" font-family="宋体" font-size="12" font-color="#000075">销售结算单</rect>
+ <connector id="SERP_SOSR2SI_SO" MWID="SOSR2SI" MWTYP="BF" from="SERP_SO" to="SERP_SI" fromcp="21" tocp="12" type="208" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SC2SO_SC" MWID="SC2SO" MWTYP="BF" from="SERP_SC" to="SERP_SO" fromcp="32" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SC2SX_SC" MWID="SC2SX" MWTYP="BF" from="SERP_SC" to="SERP_SX" fromcp="32" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SX2SO_SX" MWID="SX2SO" MWTYP="BF" from="SERP_SX" to="SERP_SO" fromcp="21" tocp="23" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SS2SO_SX" MWID="SS2SO" MWTYP="BF" from="SERP_SS" to="SERP_SO" fromcp="12" tocp="23" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SOSX2SH_SO" MWID="SOSX2SH" MWTYP="BF" from="SERP_SO" to="SERP_SH" fromcp="32" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SOSX2SH_SX" MWID="SOSX2SH" MWTYP="BF" from="SERP_SX" to="SERP_SH" fromcp="32" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SOSX2SH_SS" MWID="SOSX2SH" MWTYP="BF" from="SERP_SS" to="SERP_SH" fromcp="32" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SI2FS_SS" MWID="SI2FS" MWTYP="BF" from="SERP_SI" to="SERP_FS" fromcp="32" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+ <connector id="SERP_SOSR2SI_SX" MWID="SOSR2SI" MWTYP="BF" from="SERP_SR" to="SERP_SI" fromcp="23" tocp="12" type="258" stroke-width="1" stroke="#95BDEE" font-family="Arial" font-size="12">
+ </connector>
+</svg>

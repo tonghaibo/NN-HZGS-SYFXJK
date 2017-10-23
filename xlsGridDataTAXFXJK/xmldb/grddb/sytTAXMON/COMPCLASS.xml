@@ -1,0 +1,114 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >COMPCLASS</MWID><NAME >行业分类维护</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >COMPCLASS.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/dbhelper.js</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+var sheet = 0 ;
+
+function _thisOnpost_loaddata(sheet)
+{
+       setButton();
+       var fields = &amp;quot;GUID,GUID,sys_guid();&amp;quot;+
+            &amp;quot;ID,行业代码,,.+,1;&amp;quot;+
+	    &amp;quot;NAME,行业名称,,,1;&amp;quot;+
+	    &amp;quot;HYCODE,行业命名规则,,,1;&amp;quot;+
+	    &amp;quot;CLS1,大类,,,1;&amp;quot;+
+	    &amp;quot;CLS2,中类,,,1;&amp;quot;+
+	    &amp;quot;TAX,平均负税率,,,;&amp;quot;+
+	    &amp;quot;AVGSALE,平均售价,,,;&amp;quot;+
+	    &amp;quot;ENVLOAD,单位能耗,,,;&amp;quot;+
+	    &amp;quot;-CONTENTS,行业简介,,,;&amp;quot;;	    
+            
+      var where = &amp;quot;&amp;quot;;	
+      var orderby = &amp;quot;CLS1,to_number(ID)&amp;quot;;	// 字段的列表
+      // 参数1：基表的名称
+      // 参数2：字段列表 格式是通过;分隔不同的字段，每个分隔中使用,来分隔不同的字段属性
+      //            字段属性： ID,NAME,默认值,正则表达式,是否列入查询的字段(=1是)
+      // 参数3：主键
+      // 参数4：显示空行标志 =true表示如果结果集为空，隐藏开头的两个空行,强制用户点击“新增”，以保证填入默认值
+      // 参数5：查询的表名称，在某些情况下，查询的表名称和基表名称不一样，默认=&amp;quot;&amp;quot;表示查询表名称采用基表名称
+      // 参数6：where条件，是不带where的子句如&amp;quot;ID like &amp;apos;01%&amp;apos;&amp;quot;
+      // 参数7：orederby，是不带order by的子句如&amp;quot;ID,REFID&amp;quot;, 
+
+      _dbhelper.InitSQL(&amp;quot;tax_compclass&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false,&amp;quot;tax_compclass&amp;quot;,where,orderby);
+      _dbhelper.InitColumnList(fields );
+      _dbhelper.Load(1,1,2,2);
+      
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+}
+
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata()
+{
+	var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_HYTYPCLS1&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_HYTYPCLS2&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	for (row = _this.GetMainCellRangeRow1(sheet); row &amp;lt;= _this.GetMainCellRangeRow2(sheet); row ++) {
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,6,listid1);
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,7,listid2);	
+		_this.SetCellText(sheet,row,11,&amp;quot;双击编辑&amp;quot;);	
+	}
+}
+
+function f_dbeditafternewrow(sheet,row)
+{
+	
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue)
+{
+	
+}
+
+function f_dbeditbeforedelete()
+{
+	alert ( &amp;quot;不能删除记录&amp;quot; );
+}
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (col == 11) {
+		var fromguid = _this.GetCellText(sheet,row,1);
+		window.open(&amp;quot;show.sp?grdid=URLBODY&amp;urlguid=&amp;quot;+fromguid+&amp;quot;&amp;SYSURLID=&amp;quot; );
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

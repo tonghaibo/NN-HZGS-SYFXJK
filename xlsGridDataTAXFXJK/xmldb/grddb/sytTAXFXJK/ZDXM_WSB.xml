@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDXM_WSB</MWID><NAME >已报验无税务申报项目</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXM_WSB.zxg</FILE><SCENE ></SCENE><FIXED >4,3</FIXED><CATTYP >重点项目</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YM1</ID><NAME >*起始年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM1</C13><C14 ></C14></ROW>
+<ROW num="1" ><ID >YM2</ID><NAME >*截止年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM2</C13><C14 ></C14></ROW>
+<ROW num="2" ><ID >XMJE</ID><NAME >项目金额大于</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >万元</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >ZDBZ</C14></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+//	_this.SetToBoolBox(0,0,0);
+//	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+//		_this.SetToBoolBox(0,r,0);
+//	}
+
+
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+	_this.SetMainCellRange(0,4,1,6,13);
+	_this.SetXmlDS(0,4,1,6,13,xml);
+	
+	//_this.AutoFixColWidth(0,300);
+	_this.AutoFixScreenWidth();	
+	
+
+}
+
+function runWaitingTask()
+{
+	try {
+		var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;YM1=&amp;quot;+YM1+&amp;quot;&amp;YM2=&amp;quot;+YM2+&amp;quot;&amp;XMJE=&amp;quot;+XMJE);
+		return xml;
+	}catch(e) { alert(e.toString()); }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum rn,t.*
+from (
+select  b.WCJYHWMC,       --外出经营货物名称
+        a.WCJYHTZJE,         --外出经营合同总金额
+        --b.WCJYHWZZ,        --外出经营货物总值
+        a.WCJYHDSSGLZMBH,    --外出经营活动税收管理证明编号
+        dj.nsrmc,
+        nvl(dj.shxydm,dj.nsrsbh) nsrsbh,
+        (select nsrztmc from dm_gy_nsrzt zt where zt.nsrzt_dm=dj.nsrzt_dm) nsrzt,
+        a.SWDJD,             --税务登记地
+        a.WCJYD,             --外出经营地
+        to_char(a.WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm-dd&amp;apos;) dat1, --外出经营活动税收管理证明有效期限起
+        to_char(a.WCJYHDSSGLZMYXQXZ,&amp;apos;yyyy-mm-dd&amp;apos;) dat2, --外出经营活动税收管理证明有效期限止
+        to_char(a.WCJYHDSSGLZMQFRQ,&amp;apos;yyyy-mm-dd&amp;apos;) qfrq,  --外出经营活动税收管理证明签发日期 
+        (select name from v_swjg sw where sw.id=substr(dj.zgswskfj_dm,0,7)) swjg
+from DJ_WBNSRJYDBYDJ a,(
+     select bydjuuid,djxh,wcjyhwmc,WCJYHWZZ from DJ_WBNSRJYDBYDJ_HWXX
+     union all
+     select bydjuuid,djxh,wcjylwmc,wcjylwdhtje from DJ_WBNSRJYDBYDJ_LWXX
+     ) b,DJ_WCJYHDQKSBBXX c,dj_nsrxx dj
+where trim(a.BYDJUUID)=trim(b.BYDJUUID)
+  and a.djxh=dj.djxh
+  and trim(a.BYDJUUID)=trim(c.BYDJUUID(+))
+  and c.bydjuuid is null
+  and to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;[%YM1]&amp;apos;
+  and to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  and WCJYHWZZ&amp;gt;10000*decode(&amp;apos;[%XMJE]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%XMJE]&amp;apos;)
+order by nvl(dj.shxydm,dj.nsrsbh),substr(dj.zgswskfj_dm,0,7),
+  WCJYHWMC,WCJYHDSSGLZMYXQXQ,WCJYHWZZ desc
+) t    
+
+
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

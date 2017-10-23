@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="roundrect_115512" x="23" y="14" width="913" height="484" round="3" stroke="#000000" fill="#FFFFFF" fillto="#EEEEEE" >
+ </rect>
+ <connector id="connector_208_233921" from="rect_233917" to="rect_233918" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_265016" from="rect_233918" to="rhombus_265015" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_360518" from="rect_233916" to="rhombus_265015" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_108_190022" from="1号货柜" to="rect_190016" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_190023" from="1号货柜" to="rect_190019" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_190031" from="rect_190026" to="rect_190026" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_490416" from="rect_74827" to="rect_190026" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_490432" from="rect_190018" to="rect_490421" fromcp="23" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_108_171716" from="rect_190021" to="rect_490427" fromcp="23" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_108_244618" from="rect_224317" to="rect_244617" fromcp="22" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_244619" from="rect_244616" to="rect_224321" fromcp="11" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_188_244623" from="rect_224316" to="rect_224320" fromcp="22" tocp="22" type="188"  >
+ </connector>
+ <connector id="connector_108_351011" from="rect_190027" to="rect_111825" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <line id="line_450518" x1="36" y1="53" x2="923" y2="53"  fill="#000000" stroke-width="1" stroke="#000000">
+ </line>
+ <text id="text_450519" x="38" y="27" width="264" height="22"   stroke-width="" font-family="" font-size="14" font-color="#000000">【比对系统】</text>
+ <connector id="connector_108_553310" from="polygon_222318" to="polygon_512018" fromcp="12" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_144510" from="rect_301520" to="rect_301520" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_561212" from="polygon_222318" to="polygon_202418" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_208_340722" from="rect_535510" to="roundrect_581914" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_340723" from="roundrect_581914" to="userhand_225922" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <polygon id="page_311422" points="299,112 290,112 289,116 299,112 299,76 204,76 204,116 289,116 299,112 299,112 299,112 299,112" changeto="page" stroke="#000000" fill="#E7E7E7" fillto=""  url="flow.jsp?flowid=EleMain.flow&syt=TAXMON">电力数据</polygon>
+ <polygon  id="polygon_311423" points="479,112 470,112 469,116 479,112 479,76 384,76 384,116 469,116 479,112 479,112 479,112 479,112 479,112" changeto="page" stroke="#000000" fill="#E7E7E7" fillto="" url="flow.jsp?flowid=TaxMain.flow&syt=TAXMON">税务数据</polygon>
+ <polygon id="rhombus_311424" points="302,168 340,190 379,168 340,146 302,168 302,168 302,168 302,168" changeto="rhombus" stroke="#000000" fill="#CCFFCC" fillto="" >智能匹配</polygon>
+ <connector id="connector_208_311426" from="page_311422" to="rhombus_311424" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_311427" from="polygon_311423" to="rhombus_311424" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <rect id="roundrect_311428" x="58" y="233" width="105" height="39" round="15" stroke="#000000" fill="#D0D0FF" fillto="#FFFFFF"  属性="" url="entry.sp?grdid=CR01">有电力数据无缴税申报企业</rect>
+ <rect  id="rect_311429" x="518" y="233" width="105" height="39" round="15" stroke="#000000" fill="#D0D0FF" fillto="#FFFFFF" url="entry.sp?grdid=CR10">电力增值税额指标异常企业</rect>
+ <rect  id="rect_311430" x="403" y="233" width="105" height="39" round="15" stroke="#000000" fill="#D0D0FF" fillto="#FFFFFF" url="entry.sp?grdid=CR04" 属性="">行业税负指标异常企业</rect>
+ <rect  id="rect_311431" x="288" y="233" width="105" height="39" round="15" stroke="#000000" fill="#D0D0FF" fillto="#FFFFFF" url="entry.sp?grdid=CR03" 属性="">电力税负指标异常企业</rect>
+ <connector id="connector_108_311432" from="rhombus_311424" to="roundrect_311428" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_311433" from="rhombus_311424" to="rect_311429" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_311435" from="rect_311430" to="rect_311430" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_311436" from="rhombus_311424" to="rect_311430" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_311437" from="rhombus_311424" to="rect_311431" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <rect id="rect_282422" x="237" y="327" width="207" height="44" round="" stroke="#000000" fill="#FFFFCC" fillto="" >数据分析监控岗</rect>
+ <connector id="connector_108_282423" from="roundrect_311428" to="rect_282422" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_282425" from="rect_311430" to="rect_282422" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_282426" from="rect_311431" to="rect_282422" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_182922" from="rect_311429" to="rect_282422" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <polygon id="userhand_182923" points="271,407 305,457 375,457 410,407 271,407 271,407 271,407" changeto="userhand" stroke="#000000" fill="#DDDDDD" fillto="" >相关税务官核查</polygon>
+ <connector id="connector_208_182924" from="rect_282422" to="userhand_182923" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <rect  id="rect_244416" x="173" y="233" width="105" height="39" round="15" stroke="#000000" fill="#D0D0FF" fillto="#FFFFFF" url="entry.sp?grdid=CR02" 属性="">有缴税申报无对应电表企业</rect>
+ <connector id="connector_108_244418" from="rhombus_311424" to="rect_244416" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_244419" from="rect_244416" to="rect_282422" fromcp="23" tocp="21" type="108"  >
+ </connector>
+</svg>

@@ -1,0 +1,212 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >BIPath</MWID><NAME >BI数据挖掘路径</NAME><NOTE ></NOTE><FILE >BIPath.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >modguid</ID><NAME >模型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：载入数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/10/05 23:45:15
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+	var xml = &amp;quot;&amp;lt;双击选择分析主题 imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;quot;+invokeOSFunc(&amp;quot;GetDIMTOPIC&amp;quot;,&amp;quot;&amp;imageid=1&amp;modguid=&amp;quot;+modguid)		//+&amp;quot;&amp;topicid=&amp;quot;+topicid
+		+&amp;quot;&amp;lt;/双击选择分析主题&amp;gt;&amp;quot;;
+
+	_this.SetToTreeCtrl(&amp;quot;TREE0&amp;quot;,sheet,-1,-1,xml );
+	_this.ShowToolBar(0);
+	//_this.ShowTabBar(1);
+        _this.SetSheetName(0,&amp;quot;所有主题路径&amp;quot;);
+        _this.SetSheetName(1,&amp;quot;自定义查询&amp;quot;);
+	 _this.OpenWithWord(&amp;quot;&amp;quot;)
+	 
+}
+
+function f_scrolltotopic ( topic )
+{
+	
+	return _this.XMLCTL_FindByAttribe(&amp;quot;TREE0&amp;quot;,&amp;quot;topicid&amp;quot;,topic,&amp;quot;&amp;quot;,0);
+
+}
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      var typ = getXmlAttribute(attribe,&amp;quot;typ&amp;quot;);
+      var sytid = getXmlAttribute(attribe,&amp;quot;sytid&amp;quot;);
+      var orgid = getXmlAttribute(attribe,&amp;quot;orgid&amp;quot;);
+      var todo = getXmlAttribute(attribe,&amp;quot;todo&amp;quot;);
+      var topicid = getXmlAttribute(attribe,&amp;quot;topicid&amp;quot;);
+
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+      var nextlevel_itemid = &amp;quot;&amp;quot;;
+      if ( topicid!=&amp;quot;&amp;quot; ) {
+		parent.f_chgvalue(&amp;quot;topic&amp;quot;,topicid );
+	  	parent.f_submit();
+      }
+
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            if(loc&amp;lt;0) return &amp;quot;&amp;quot;;
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; , loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1 ) ;
+            
+            return ret;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+var grd = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var tag = new JavaPackage(&amp;quot;com.xlsgrid.net.tag&amp;quot;);
+var xmldsform = new tag.XmlDSForm();
+var EAfunc = new pubpack.EAFunc();
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+//得到模型下面的所有主题
+function GetDIMTOPIC()
+{
+	var xml = _GetDIMTOPIC(&amp;quot;&amp;quot;,modguid);
+	return xml;
+}
+//树型递归函数
+function _GetDIMTOPIC(topicid,modguid)
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var refidstr = &amp;quot; and refid is null &amp;quot;;
+	if ( topicid!= &amp;quot;&amp;quot; ) 
+		refidstr = &amp;quot; and refid=&amp;apos;&amp;quot;+topicid+&amp;quot;&amp;apos;&amp;quot;;
+	var sql = &amp;quot;select id,name,guid from dim_topic where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos; &amp;quot;+refidstr+&amp;quot; and url is null order by id&amp;quot;;
+
+	var ds = pubpack.EADbTool.QuerySQL(sql);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+		xml+=&amp;quot;&amp;lt;&amp;quot;+name + &amp;quot; imageid=\&amp;quot;5\&amp;quot; topicid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot;  modguid=\&amp;quot;&amp;quot;+modguid+&amp;quot;\&amp;quot; topicguid=\&amp;quot;&amp;quot;+guid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		//递归，找出下级所有的
+		xml+=_GetDIMTOPIC(id ,modguid);
+		xml+=&amp;quot;&amp;lt;/&amp;quot;+name+&amp;quot;&amp;gt;&amp;quot;;
+
+	}
+	
+	return xml;
+}
+
+
+
+//作为.sp服务时的入口	
+//预定义变量：request,response
+function Response()
+{
+	var optionstr = &amp;quot;&amp;quot;;
+	  var optionds = pubpack.EADbTool.QuerySQL(&amp;quot;select * from v_charttype&amp;quot;);
+            
+            for(var r = 0;r &amp;lt;optionds .getRowCount();r ++)
+            {	//有多少个主题
+            	    var id = optionds .getStringAt(r,&amp;quot;ID&amp;quot;);
+            	    var typ = optionds .getStringAt(r,&amp;quot;typ&amp;quot;);
+            	    var name = optionds .getStringAt(r,&amp;quot;name&amp;quot;);
+            	    optionstr+=&amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;-&amp;quot;+typ+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+	   }
+
+	var    ret=&amp;quot;	&amp;lt;html&amp;gt;
+	    			&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main.css&amp;apos;&amp;gt;
+	    			&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;
+	    			&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/images/flash/FusionCharts.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;
+				&amp;lt;head&amp;gt;
+				&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html; charset=gb2312&amp;apos;&amp;gt;
+				
+				&amp;lt;STYLE&amp;gt;
+    						.navPoint {
+						COLOR: #225f98; CURSOR: hand; FONT-FAMILY: &amp;apos;Webdings&amp;apos;; FONT-SIZE: 9pt
+						}
+				&amp;lt;/STYLE&amp;gt;
+				&amp;lt;script&amp;gt;
+					    var bfirst = false;
+					    function f_chgchart()
+					    {
+   					    	var swf = opener.f_getcharttype();
+   					    	if ( bfirst == true ) 
+	   					    	swf=document.all(&amp;apos;chgchart&amp;apos;).value;
+	   					bfirst  = true;
+					    	var ss = swf.split(&amp;apos;-&amp;apos;);
+					    	var w = &amp;apos;&amp;apos;+document.body.clientWidth ;
+					    	var h = &amp;apos;&amp;apos;+(document.body.clientHeight-30) ;
+					    	var chart1 = new FusionCharts(&amp;apos;xlsgrid/images/flash/&amp;apos;+ss[0]+&amp;apos;.swf&amp;apos;, &amp;apos;ChartId1&amp;apos;, w, h); 
+					    	chartdatatype  = ss[1];
+					    	if ( ss[1]==&amp;apos;1&amp;apos;) 
+					            chart1.setDataXML(opener.f_getchartxml1()  );
+					        else     chart1.setDataXML(opener.f_getchartxml2() );
+
+					        chart1.render(&amp;apos;chartdiv1&amp;apos;);
+					    }
+
+
+
+				&amp;lt;/script&amp;gt;
+				&amp;lt;/head&amp;gt; 
+				&amp;lt;body  topmargin=&amp;apos;0&amp;apos; leftmargin=&amp;apos;0&amp;apos; scroll=no onload=&amp;apos;javascript:f_chgchart();&amp;apos;&amp;gt;
+					&amp;lt;table width=100% height=100% border=0 cellspacing=0 cellpadding=0 &amp;gt;
+						&amp;lt;tr&amp;gt;&amp;lt;td height=30 align=center background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif&amp;gt;图型更换：&amp;nbsp;&amp;lt;select id=chgchart size=1 name=chgchart onchange=f_chgchart(); style=border: 1px solid #808080&amp;gt;&amp;quot;
+				                  	+optionstr+&amp;quot;&amp;lt;/select&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=top&amp;gt;&amp;lt;div id=chartdiv1 align=center&amp;gt; &amp;nbsp; &amp;lt;/div&amp;gt;
+				        &amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+				&amp;lt;/body&amp;gt;
+			&amp;lt;/html&amp;gt;
+	&amp;quot;;
+      return ret ;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

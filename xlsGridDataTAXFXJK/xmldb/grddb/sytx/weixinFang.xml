@@ -1,0 +1,299 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >weixinFang</MWID><NAME >方的微信</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >weixinFang.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >微信</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var resp = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin.message.resp&amp;quot;);
+var weixin = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin&amp;quot;);
+
+/**
+ * 微信的接口消息响应处理中间件
+ * @author Harry
+ * @date 2013-10-11
+*/
+
+
+//响应微信服务器的业务逻辑处理方法
+function doPost()
+{
+	//防止中文乱码
+	response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+
+	var respMessage = null;
+	var textMessage = null;
+	var db = null;
+	//pub.EAFunc.Log(&amp;quot;小方知道 req=&amp;quot;+request);
+
+	try {
+		// xml请求解析
+		var requestMap = weixin.MessageUtil.parseXml(request);	
+		
+		// 发送方帐号（open_id）
+		var fromUserName = requestMap.get(&amp;quot;FromUserName&amp;quot;);
+		
+		// 公众帐号
+		var toUserName = requestMap.get(&amp;quot;ToUserName&amp;quot;);
+		// 消息类型
+		var msgType = requestMap.get(&amp;quot;MsgType&amp;quot;);
+		
+		//request.getSession().setAttribute(&amp;quot;WEIXIN_FROMUSERNAME&amp;quot;,fromUserName);
+
+		// 回复文本消息
+		textMessage = new resp.TextMessage();
+		textMessage.setToUserName(fromUserName);
+		textMessage.setFromUserName(toUserName);
+		var dt = new java.util.Date();
+		textMessage.setCreateTime(dt.getTime());
+		textMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+		textMessage.setFuncFlag(0);
+		
+		// 文本消息  
+		if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {  
+	                // 接收用户发送的文本消息内容  
+	                var content = requestMap.get(&amp;quot;Content&amp;quot;);  
+	  
+	                // 创建图文消息  
+	                var newsMessage = new resp.NewsMessage();  
+	                newsMessage.setToUserName(fromUserName);  
+	                newsMessage.setFromUserName(toUserName);  
+	                newsMessage.setCreateTime(dt.getTime());  
+	                newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+	                newsMessage.setFuncFlag(0);  
+	  
+	                var articleList = new java.util.ArrayList();  
+	                
+	                // 查询菜单项
+	                if (&amp;quot;?&amp;quot;.equals(content) || &amp;quot;？&amp;quot;.equals(content)) {
+	                	textMessage.setContent(&amp;quot;导航菜单\n\n1) 进入&amp;lt;a href=\&amp;quot;http://fl.act.qq.com/27330/addev/h5/46597?v=demo\&amp;quot;&amp;gt;我的风铃微站&amp;lt;/a&amp;gt;\n2) 图文消息DEMO，请回复1,2,3,4,5\n3) 发送我的位置\n&amp;quot;);
+				respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+	                	return respMessage;
+
+	                }
+	                
+	                // 单图文消息  
+	                else if (&amp;quot;1&amp;quot;.equals(content)) {  
+	                    var article = new resp.Article();  
+	                    article.setTitle(&amp;quot;示例1-单图文消息&amp;quot;);  
+	                    article.setDescription(&amp;quot;微信公众平台开始支持前端网页，大家可能看到很多网页上都有分享到朋友圈，关注微信等按钮，点击它们都会弹出一个窗口让你分享和关注，这个是怎么实现的呢？今天就给大家讲解下如何在微信公众平台前端网页上添加分享到朋友圈，关注微信号等按钮。\n\n&amp;quot;
+	                    	+ &amp;quot;通过在电脑上打开微信的网页，我们可以发现微信内嵌浏览器定义了一个私有 JavaScript 对象：WeixinJSBridge，通过操作这个对象的相关方法可以实现分享到微信朋友圈，和判断一个微信号的关注状态以及实现关注指定微信号等功能。&amp;quot;);  
+	                    article.setPicUrl(&amp;quot;http://b275.photo.store.qq.com/psb?/V11JGWQf4B4Knx/XVCibE*CtxdQsJDpUa0HPM6nZqEjKFgOsCztHUa6GeE!/b/dIfG76M2IQAA&amp;bo=wAOAAgAAAAABAGY!&amp;rf=photoDetail&amp;quot;);  
+	                    article.setUrl(&amp;quot;http://www.xlsgrid.net/xlsgrid/ROOT_0/wxdemo.sp?usrid=xlsgrid&amp;userpwd=0&amp;quot;);  
+	                    articleList.add(article);  
+	                    // 设置图文消息个数  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    // 设置图文消息包含的图文集合  
+	                    newsMessage.setArticles(articleList);  
+	                    // 将图文消息对象转换成xml字符串  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                    return respMessage;
+                	} 
+                	 // 单图文消息---不含图片  
+	                else if (&amp;quot;2&amp;quot;.equals(content)) {  
+	                    var article = new resp.Article();  
+	                    article.setTitle(&amp;quot;示例2-单图文消息不含图片&amp;quot;);  
+	                    // 图文消息中可以使用QQ表情、符号表情  
+	                    article.setDescription(&amp;quot;柳峰，80后，&amp;quot;  
+	                            + &amp;quot;，微信公众帐号开发经验4个月。为帮助初学者入门，特推出此系列连载教程，也希望借此机会认识更多同行！\n\n目前已推出教程共12篇，包括接口配置、消息封装、框架搭建、QQ表情发送、符号表情发送等。\n\n后期还计划推出一些实用功能的开发讲解，例如：天气预报、周边搜索、聊天功能等。&amp;quot;);  
+	                    // 将图片置为空  
+	                    article.setPicUrl(&amp;quot;&amp;quot;);  
+	                    article.setUrl(&amp;quot;http://blog.csdn.net/lyq8479&amp;quot;);  
+	                    articleList.add(article);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                    return respMessage;
+	                } 
+	                // 多图文消息  
+	                else if (&amp;quot;3&amp;quot;.equals(content)) {  
+	                    var article1 = new resp.Article();  
+	                    article1.setTitle(&amp;quot;示例3-多图文消息\n第1篇 微信帐号开发教程&amp;quot;);  
+	                    article1.setDescription(&amp;quot;&amp;quot;);  
+	                    article1.setPicUrl(&amp;quot;http://b275.photo.store.qq.com/psb?/V11JGWQf4B4Knx/XVCibE*CtxdQsJDpUa0HPM6nZqEjKFgOsCztHUa6GeE!/b/dIfG76M2IQAA&amp;bo=wAOAAgAAAAABAGY!&amp;rf=photoDetail&amp;quot;);  
+	                    article1.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8937622&amp;quot;);  
+	  
+	                    var article2 = new resp.Article();  
+	                    article2.setTitle(&amp;quot;第2篇\n微信公众帐号的类型&amp;quot;);  
+	                    article2.setDescription(&amp;quot;&amp;quot;);  
+	                    article2.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article2.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8941577&amp;quot;);  
+	  
+	                    var article3 = new resp.Article();  
+	                    article3.setTitle(&amp;quot;第3篇\n开发模式启用及接口配置&amp;quot;);  
+	                    article3.setDescription(&amp;quot;&amp;quot;);  
+	                    article3.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article3.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8944988&amp;quot;);  
+	  
+	                    articleList.add(article1);  
+	                    articleList.add(article2);  
+	                    articleList.add(article3);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                    return respMessage;
+	                }  
+	                 // 多图文消息---首条消息不含图片  
+	                else if (&amp;quot;4&amp;quot;.equals(content)) {  
+	                    var article1 = new resp.Article();  
+	                    article1.setTitle(&amp;quot;示例4-首条消息不含图片&amp;quot;);  
+	                    article1.setDescription(&amp;quot;&amp;quot;);  
+	                    // 将图片置为空  
+	                    article1.setPicUrl(&amp;quot;&amp;quot;);  
+	                    article1.setUrl(&amp;quot;http://blog.csdn.net/lyq8479&amp;quot;);  
+	  
+	                    var article2 = new resp.Article();  
+	                    article2.setTitle(&amp;quot;第4篇\n消息及消息处理工具的封装&amp;quot;);  
+	                    article2.setDescription(&amp;quot;&amp;quot;);  
+	                    article2.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article2.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8949088&amp;quot;);  
+	  
+	                    var article3 = new resp.Article();  
+	                    article3.setTitle(&amp;quot;第5篇\n各种消息的接收与响应&amp;quot;);  
+	                    article3.setDescription(&amp;quot;&amp;quot;);  
+	                    article3.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article3.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8952173&amp;quot;);  
+	  
+	                    var article4 = new resp.Article();  
+	                    article4.setTitle(&amp;quot;第6篇\n文本消息的内容长度限制揭秘&amp;quot;);  
+	                    article4.setDescription(&amp;quot;&amp;quot;);  
+	                    article4.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article4.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8967824&amp;quot;);  
+	  
+	                    articleList.add(article1);  
+	                    articleList.add(article2);  
+	                    articleList.add(article3);  
+	                    articleList.add(article4);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                    return respMessage;
+	                }
+	                // 多图文消息---最后一条消息不含图片  
+	                else if (&amp;quot;5&amp;quot;.equals(content)) {  
+	                    var article1 = new resp.Article();  
+	                    article1.setTitle(&amp;quot;示例5-最后一条消息不含图片\n第7篇 文本消息中换行符的使用&amp;quot;);  
+	                    article1.setDescription(&amp;quot;&amp;quot;);  
+	                    article1.setPicUrl(&amp;quot;http://b275.photo.store.qq.com/psb?/V11JGWQf4B4Knx/XVCibE*CtxdQsJDpUa0HPM6nZqEjKFgOsCztHUa6GeE!/b/dIfG76M2IQAA&amp;bo=wAOAAgAAAAABAGY!&amp;rf=photoDetail&amp;quot;);  
+	                    article1.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/9141467&amp;quot;);  
+	  
+	                    var article2 = new resp.Article();  
+	                    article2.setTitle(&amp;quot;第8篇\n文本消息中使用网页超链接&amp;quot;);  
+	                    article2.setDescription(&amp;quot;&amp;quot;);  
+	                    article2.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article2.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/9157455&amp;quot;);  
+	  
+	                    var article3 = new resp.Article();  
+	                    article3.setTitle(&amp;quot;如果觉得文章对你有所帮助，请通过博客留言或关注微信公众帐号xiaoqrobot来支持柳峰！&amp;quot;);  
+	                    article3.setDescription(&amp;quot;&amp;quot;);  
+	                    // 将图片置为空  
+	                    article3.setPicUrl(&amp;quot;&amp;quot;);  
+	                    article3.setUrl(&amp;quot;http://blog.csdn.net/lyq8479&amp;quot;);  
+	  
+	                    articleList.add(article1);  
+	                    articleList.add(article2);  
+	                    articleList.add(article3);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                    return respMessage;
+	                } 
+                	
+                	//textMessage.setContent(&amp;quot;Oh,sorry听不懂，我还小表要欺负我哦。更多地了解我请进&amp;lt;a href=\&amp;quot;http://user.qzone.qq.com/281778354/infocenter\&amp;quot;&amp;gt;小方的空间&amp;lt;/a&amp;gt;,come in baby!&amp;quot;);
+                	textMessage.setContent(&amp;quot;Oh,sorry听不懂，我还小表要欺负我哦，请回复？查询导航菜单项，谢谢！&amp;quot;);
+			respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+                	return respMessage;
+	                
+		}
+		
+		else if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
+			// 事件类型
+			var eventType = requestMap.get(&amp;quot;Event&amp;quot;);
+			// 订阅
+			if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
+				textMessage.setContent(&amp;quot;感谢您关注小方知道，来和我打个招呼认识一下吧！^_^\n\n输入?查询菜单项&amp;quot;);
+				respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+				return respMessage;
+			}
+			// 取消订阅
+			else if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
+				// TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+			}
+		}
+		
+		else if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) { 
+			var lx = requestMap.get(&amp;quot;Location_X&amp;quot;);
+			var ly = requestMap.get(&amp;quot;Location_Y&amp;quot;);
+			var lb = requestMap.get(&amp;quot;Label&amp;quot;);
+
+//			textMessage.setContent(&amp;quot;你发来了地理位置信息！[&amp;quot;+lx+&amp;quot;,&amp;quot;+ly+&amp;quot;]&amp;quot;+lb);
+//			respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+//			return respMessage;
+			
+			// 创建图文消息  
+	                var newsMessage = new resp.NewsMessage();  
+	                newsMessage.setToUserName(fromUserName);  
+	                newsMessage.setFromUserName(toUserName);  
+	                newsMessage.setCreateTime(dt.getTime());  
+	                newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+	                newsMessage.setFuncFlag(0);  
+
+			var articleList = new java.util.ArrayList(); 
+			var article = new resp.Article();  
+                    	article.setTitle(&amp;quot;朋友圈分享统计演示&amp;quot;);  
+                    	article.setDescription(lb+&amp;quot;\n\n分享测试页，分享成功，数据回写到推广统计数据库！&amp;quot;);  
+                    	article.setPicUrl(&amp;quot;https://mmbiz.qlogo.cn/mmbiz/t4l43QDP1ohmsQhVsGQxkhl3pLUSQDd7INw7x3BpWXRGvWj5ncWuZXg6RKUQlabNWq5ibhPY2PFQA0iawpjSyGDQ/0&amp;quot;);  
+                    	article.setUrl(&amp;quot;http://www.xlsgrid.net/xlsgrid/ROOT_0/demo1.sp?usrid=xlsgrid&amp;userpwd=0&amp;lx=&amp;quot;+lx+&amp;quot;&amp;ly=&amp;quot;+ly+&amp;quot;&amp;lb=&amp;quot;+java.net.URLEncoder.encode(lb,&amp;quot;gbk&amp;quot;));  
+                    	//article.setUrl(&amp;quot;http://mp.weixin.qq.com/s?__biz=MzA5MjM2OTIwNw==&amp;mid=200701634&amp;idx=1&amp;sn=97640c1097752e83d60f6f16371384be#rd&amp;quot;);
+                    	articleList.add(article);  
+                    	// 设置图文消息个数  
+                    	newsMessage.setArticleCount(articleList.size());  
+                    	// 设置图文消息包含的图文集合  
+                    	newsMessage.setArticles(articleList);  
+                   	// 将图文消息对象转换成xml字符串  
+                   	respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage); 
+			return respMessage;
+
+		}
+	}
+	catch (Exception e) {
+		if (db != null) db.Rollback();
+		textMessage.setContent(e.toString());
+		respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+		return respMessage;
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+
+	textMessage.setContent(&amp;quot;Oh,sorry听不懂哦，我还小表要欺负我。\n更多地了解我请进我的扣扣空间&amp;lt;a href=\&amp;quot;http://user.qzone.qq.com/281778354/infocenter\&amp;quot;&amp;gt;小方的空间&amp;lt;/a&amp;gt;&amp;quot;);
+	respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+	return respMessage;
+
+	
+}
+
+function emoji(hexEmoji) 
+{
+	return java.lang.String.valueOf(java.lang.Character.toChars(hexEmoji));
+}
+
+function shareDemo()
+{
+	return &amp;quot;分享测试页&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

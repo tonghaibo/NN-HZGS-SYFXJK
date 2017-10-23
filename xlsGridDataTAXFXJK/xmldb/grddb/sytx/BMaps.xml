@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >BMaps</MWID><NAME >GPS地图跟踪</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BMaps.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >gpsxy</ID><NAME >跳转</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >orgid</ID><NAME >组织</NAME><NOTNULL ></NOTNULL><KEYVAL >V_ORG</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="1" ><ID >usrid</ID><NAME >用户</NAME><NOTNULL ></NOTNULL><KEYVAL >V_MYUSR</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE >1&amp;gt;2</SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >usrid</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var map = null;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	map = new BMap.Map(&amp;quot;container&amp;quot;);
+	map.addEventListener(&amp;quot;click&amp;quot;, function(e){   
+		 click(e.point.lng,e.point.lat);
+		});  
+	var point = new BMap.Point(121.30462,31.14947); 
+	map.addControl(new BMap.NavigationControl());  
+	map.centerAndZoom(point, 15);
+	map.enableScrollWheelZoom();
+	var pointss = new Array();
+	//不知道怎么回事..确定gps数值是没有错误的.错误在输入到百度时显示的位置
+	var a = 121.379597+0.01;
+	var b = 31.097337+0.004;
+//	var a = 121.374630+0.01;
+//	var b = 31.182390+0.004;
+//	pointss.push(new BMap.Point(a, b));
+	pointss.push(new BMap.Point(121.29923,31.155651));
+	pointss.push(new BMap.Point(121.30462,31.14947));
+	pointss.push(new BMap.Point(121.309147,31.143907));
+	pointss.push(new BMap.Point(121.309147,31.143907));
+	pointss.push(new BMap.Point(121.310728,31.134078));
+	pointss.push(new BMap.Point(121.310081,31.12703));
+	pointss.push(new BMap.Point(121.308213,31.116148));
+	
+	
+	var polyline = new BMap.Polyline(pointss, {strokeColor:&amp;quot;#EA0000&amp;quot;, strokeWeight:10, strokeOpacity:1});
+	map.addOverlay(polyline);
+}
+function click(lng,lat){
+	alert(&amp;quot;&amp;quot;+lng+&amp;quot;,&amp;quot;+lat);
+}
+
+ function gpsxy  (){
+    var xx = &amp;quot;121.308213&amp;quot;;//123
+    var yy = &amp;quot;31.116148&amp;quot;;//31
+    var gpsPoint = new BMap.Point(xx,yy);
+    BMap.Convertor.translate(gpsPoint,0,translateCallback);
+}
+function  translateCallback  (point){
+    map .clearOverlays();
+    var marker = new BMap.Marker(point);
+    map .addOverlay(marker);
+    map .setCenter(point);
+    document.getElementById(&amp;quot;baiduXY&amp;quot;).innerHTML = point.lng + &amp;quot;,&amp;quot; + point.lat;
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?v=1.2\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);  
+	//sb.append(&amp;quot;&amp;lt;script src=&amp;apos;http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true_or_false&amp;key=ABQIAAAADEgO6kqjKx2W3NKoYkXzGhTepiFuMo4rdqjr65BYebADdmCbPBSZRe2SjhGp7UEHeh4Eg90T-LJuxw&amp;sensor=true&amp;apos; type=&amp;apos;text/javascript&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+}
+
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:1024px;height:768px;border:1px solid gray\&amp;quot; id=\&amp;quot;container\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);  
+}
+
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var db = null;
+      var ret= &amp;quot;OK&amp;quot;;
+      var SerialNumber = request.getParameter(&amp;quot;SerialNumber&amp;quot;);
+      var dblLatitude = request.getParameter(&amp;quot;dblLatitude&amp;quot;);
+      var dblLongitude = request.getParameter(&amp;quot;dblLongitude&amp;quot;);
+
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            try {
+            	db.ExcecutSQL(&amp;quot;create table GPS(guid char(32) default sys_guid() primary key, SerialNumber varchar2(50),dblLatitude number(20,4),dblLongitude number(20,4),crtdat date default sysdate )&amp;quot; );
+            }catch ( e ) {}
+            db.ExcecutSQL(&amp;quot;insert into GPS( SerialNumber ,dblLatitude ,dblLongitude  ) values ( &amp;apos;&amp;quot;+SerialNumber +&amp;quot;&amp;apos;,&amp;quot;+dblLatitude +&amp;quot;,&amp;quot;+dblLongitude +&amp;quot;)&amp;quot; );
+            db.Commit();
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >savePoint</ID><NAME ></NAME><DATDSC >--insert into markers(name,address,lat,lng,type) values (&amp;apos;[%name]&amp;apos;,&amp;apos;[%address]&amp;apos;,[%lat],[%lng],&amp;apos;[%type]&amp;apos;)
+
+update corp set lat=[%GISX],lng=[%GISY]
+where id=&amp;apos;[%CORPID]&amp;apos;</DATDSC><C4 ></C4><C5 >savePoint</C5><C6 >savePoint</C6><C7 >savePoint</C7><C8 >savePoint</C8><C9 >savePoint</C9></ROW>
+<ROW num="1" ><ID >netlist</ID><NAME ></NAME><DATDSC >--select guid,rownum,name,address,lat,lng from markers
+select guid,id,name,ads,lat,lng from corp where ads is not null and rownum&amp;lt;=50</DATDSC><C4 >allnet</C4><C5 >netlist</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >netlist</C9></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

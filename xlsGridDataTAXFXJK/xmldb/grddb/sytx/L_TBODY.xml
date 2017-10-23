@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >L_TBODY</MWID><NAME >TBODY</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >L_TBODY.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function GetBody()
+{
+	var html = &amp;quot;&amp;quot;;
+	
+	var layhdrguid= request.getParameter( &amp;quot;layhdrguid&amp;quot; ) ;
+	var sql = &amp;quot;select A.* from LSYSURL a,formblob b,formblob img where a.icon=img.guid(+) and a.htmlguid=b.guid and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos;&amp;quot;;
+	var ds = db.QuerySQL(sql);
+	var title = &amp;quot;&amp;quot;;
+	var crtdat = &amp;quot;&amp;quot;;
+	var image = &amp;quot;&amp;quot;;
+	if(ds.getRowCount()&amp;gt;0){
+		title = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		crtdat = ds.getStringAt(0,&amp;quot;CRTDAT&amp;quot;);
+		image = ds.getStringAt(0,&amp;quot;ICON&amp;quot;);
+	}
+	var context = db.getBlob2String(&amp;quot;select b.bdata from LSYSURL a,formblob b where a.htmlguid=b.guid and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos; &amp;quot;,&amp;quot;bdata&amp;quot;);
+	html = &amp;quot;  
+		&amp;lt;table   &amp;gt;
+		&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;h1 style=\&amp;quot;   text-align: center; \&amp;quot;&amp;gt;&amp;quot;+title +&amp;quot;&amp;lt;/h1&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;quot;+crtdat+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;hr style=\&amp;quot;border-bottom: 1px solid #DFDFDF; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px\&amp;quot; size=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;quot;;
+	if(image!=&amp;quot;&amp;quot;){
+		html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+image +&amp;quot;\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	
+	html+= &amp;quot;
+		 &amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;table     width=90% style=\&amp;quot;text-align: left;\&amp;quot;  &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+context +&amp;quot; &amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		&amp;lt;/table&amp;gt;
+
+		 &amp;quot;;
+//	html = &amp;quot;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font size=\&amp;quot;4\&amp;quot;&amp;gt;标题&amp;lt;/font&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/p&amp;gt;
+//		&amp;lt;hr style=\&amp;quot;border-bottom: 1px solid #DFDFDF; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px\&amp;quot; size=\&amp;quot;0\&amp;quot;&amp;gt;
+//		&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;
+//		&amp;lt;p&amp;gt;&amp;lt;img src=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+//		&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;80%\&amp;quot; cellspacing=\&amp;quot;10\&amp;quot;&amp;gt;
+//		 &amp;lt;tr&amp;gt;
+//		  &amp;lt;td&amp;gt;&amp;quot;+context +&amp;quot;&amp;lt;/td&amp;gt;
+//		 &amp;lt;/tr&amp;gt;
+//		&amp;lt;/table&amp;gt;
+//		&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+//	html = &amp;quot;  &amp;lt;h1 style=\&amp;quot; height: auto;  text-align: center;margin-top: 10px;\&amp;quot;&amp;gt;&amp;quot;+title +&amp;quot;&amp;lt;/h1&amp;gt;
+//		&amp;lt;div id=\&amp;quot;fbdate\&amp;quot; style=\&amp;quot;text-align: center;\&amp;quot;&amp;gt;2014&amp;lt;/div&amp;gt;
+//		&amp;lt;div id=\&amp;quot;wenzi\&amp;quot; style=\&amp;quot;width: 630px; text-align: justify;margin: 0 auto;line-height: 23px;;BSHARE_POP blkContainerSblkCon clearfix blkContainerSblkCon_14;\&amp;quot;&amp;gt;
+//		&amp;lt;div id=\&amp;quot;maincontent\&amp;quot;&amp;gt;&amp;lt;div id=\&amp;quot;ivs_content\&amp;quot;&amp;gt;&amp;quot;+context +&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;/div&amp;gt; &amp;quot;;
+//	html = &amp;quot;&amp;lt;h1 style=\&amp;quot; text-align: center;margin-top: 10px;\&amp;quot;&amp;gt;&amp;quot;+title +&amp;quot;&amp;lt;/h1&amp;gt;&amp;quot;;
+	return  html;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

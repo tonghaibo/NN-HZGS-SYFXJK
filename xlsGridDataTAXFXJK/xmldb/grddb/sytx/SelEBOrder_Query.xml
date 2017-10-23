@@ -1,0 +1,677 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SelEBOrder_Query</MWID><NAME >仅查看订单</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SelEBOrder_Query.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >ORDDAT</ID><NAME >订单日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >ORDDAT</C13><C14 >ORDDAT</C14><C15 >ORDDAT</C15><C16 >ORDDAT</C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >ORDDAT</C21><C22 ></C22><C23 >ORDDAT</C23></ROW>
+<ROW num="1" ><ID >KA</ID><NAME >渠道</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_KA</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >KA</C16><C17 >KA</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >KA</C21><C22 ></C22><C23 >KA</C23></ROW>
+<ROW num="2" ><ID >actions</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >action</C18><C19 >action</C19><C20 >action</C20><C21 >actions</C21><C22 >actions</C22><C23 ></C23></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var G_ORDTAG = &amp;quot;&amp;quot;;//当前的tagid
+var G_M = &amp;quot;A&amp;quot;;//判断当前的tagid的处理状态(默认是未处理)
+var G_ANTAG = &amp;quot;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	window.location.href=&amp;quot;show.sp?grdid=SelEBOrder&amp;actions=query&amp;ORDDAT=&amp;quot;+ORDDAT+&amp;quot;&amp;KA=&amp;quot;+KA+&amp;quot;&amp;quot;;
+//		alert(&amp;quot;提醒：\n\t生成订单前，先查看基础信息是否全：比如对应客户，对应商品，开单价格......！&amp;quot;);
+//		_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;21%&amp;quot;);
+//		_this.ShowTabBar(1);
+//		var param = new Object();
+//		param.dat = ORDDAT;
+//		param.ka = KA;
+//		//加载前先把订单表中的信息更新	
+//	//	invokeOSFuncExt(&amp;quot;ModifyPrice&amp;quot;,param);
+//		invokeOSFuncExt(&amp;quot;ModifyBaseInfo&amp;quot;,param);
+//		refreshTree(sheet,param);
+//		alert(actions);
+//		if(actions==&amp;quot;query&amp;quot;){
+//			//_this.AddToolbarButton(&amp;quot;analyseInv&amp;quot;,&amp;quot;测试&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,50);
+//			_this.AddToolbarButton(&amp;quot;analyseInv&amp;quot;,&amp;quot;分析库存&amp;quot;,&amp;quot;分析库存&amp;quot;,&amp;quot;&amp;quot;,0,0,1,80);
+//			_this.AddToolbarButton(&amp;quot;refreshBase&amp;quot;,&amp;quot;刷新基础信息&amp;quot;,&amp;quot;刷新基础信息&amp;quot;,&amp;quot;&amp;quot;,0,0,1,100);
+//			_this.AddToolbarButton(&amp;quot;refreshPrice&amp;quot;,&amp;quot;刷新价格&amp;quot;,&amp;quot;刷新价格&amp;quot;,&amp;quot;&amp;quot;,0,0,1,80);
+//			_this.AddToolbarButton(&amp;quot;PrintSrcOrd&amp;quot;,&amp;quot;打印原始订单&amp;quot;,&amp;quot;打印原始订单&amp;quot;,&amp;quot;&amp;quot;,0,0,1,100);
+//			_this.AddToolbarButton(&amp;quot;CloseCurOrder&amp;quot;,&amp;quot;强制结束当前订单&amp;quot;,&amp;quot;强制结束当前订单&amp;quot;,&amp;quot;&amp;quot;,0,0,1,120);
+//			//_this.AddToolbarButton(
+//		}
+//		//
+//	  	//_this.AddToolbarButton(
+//		_this.SetCellBkColor(1,-1,-1,255,255,255);	
+//		_this.ShowToolBar(1);
+}
+
+
+//点击树状控件项目
+function _thisOnTreeItemClick(id, hItem, tagid, attribe, value)
+{
+	G_ORDTAG = tagid;
+	if(tagid == &amp;quot;无对应商品&amp;quot;)
+	{
+		var xml = _sql.query(&amp;quot;GETNOITEM&amp;quot;,&amp;quot;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;ORDID=&amp;quot;+G_ANTAG+&amp;quot;&amp;KA=&amp;quot;+KA);	
+		_this.LoadZXGFile(zxgRoot +&amp;quot;SelNoItemList.zxg&amp;quot;,-1,1);		
+		_this.SetXmlDS(1,1,0,3,4,xml);				
+	}
+	else if(tagid == &amp;quot;无对应客户&amp;quot;)
+	{
+		var xml = _sql.query(&amp;quot;GETNOCORP&amp;quot;,&amp;quot;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;ORDID=&amp;KA=&amp;quot;+KA);	
+		_this.LoadZXGFile(zxgRoot +&amp;quot;SelNoCorpList.zxg&amp;quot;,-1,1);		
+		_this.SetXmlDS(1,1,0,3,3,xml);	
+	}
+	else if(tagid == &amp;quot;价格不一致&amp;quot;)
+	{	
+		var xml = _sql.query(&amp;quot;GENPRICEDIFF&amp;quot;,&amp;quot;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;ORDID=&amp;quot;+G_ANTAG+&amp;quot;&amp;KA=&amp;quot;+KA);	
+		_this.LoadZXGFile(zxgRoot +&amp;quot;SelDiffPriceList.zxg&amp;quot;,-1,1);		
+		_this.SetXmlDS(1,1,0,3,8,xml);		
+	}
+	else if(tagid == &amp;quot;到货日期是当天&amp;quot;)
+	{	
+		var xml = _sql.query(&amp;quot;GETARVDAY&amp;quot;,&amp;quot;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;ORDID=&amp;KA=&amp;quot;+KA);	
+		_this.LoadZXGFile(zxgRoot +&amp;quot;SamArrdat.zxg&amp;quot;,-1,1);		
+		_this.SetXmlDS(1,1,0,3,3,xml);		
+	}	
+	else
+	{		
+		G_M = &amp;quot;A&amp;quot;;
+		if(attribe.indexOf(&amp;quot;stat=&amp;apos;1&amp;apos;&amp;quot;)&amp;gt;-1)
+		{
+			G_M = &amp;quot;B&amp;quot;;	
+		}	
+		var xml = _sql.query(&amp;quot;GETLIST&amp;quot;,&amp;quot;ORDID=&amp;quot;+G_ORDTAG+&amp;quot;&amp;stat=&amp;quot;+G_M+&amp;quot;&amp;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;KA=&amp;quot;+KA);	
+		_this.LoadZXGFile(zxgRoot +&amp;quot;SelEBOrderTmp.zxg&amp;quot;,-1,1);		
+		_this.SetXmlDS(1,1,0,3,10,xml);
+		_this.SetColVisible(1,10,-1);
+//		var listid = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_HANDLESTAT&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+//		_this.SetToComboBox(&amp;quot;stat&amp;quot;,1,0,10,listid);
+		//如果订单中有不符生成条件以显目颜色标识出来
+		for (var r = 1;r&amp;lt;_this.GetRowCount(1);r++)
+		{
+			//if(false)
+			if(_this.GetCellText(1,r,0)==&amp;apos;0&amp;apos;)
+			{
+				for (var c = 0;c&amp;lt;_this.GetColCount(1);c++)
+					_this.SetCellBkColor(1,r,c,0xFF,0xFF,0xCC );
+			}	
+		}				
+		_this.SetColVisible(1,0,-1);	
+
+		if(G_M == &amp;quot;A&amp;quot;)
+			G_ANTAG = tagid;
+		else 
+			G_ANTAG = &amp;quot;&amp;quot;;	
+		CorpAlert(G_ANTAG);						
+	}
+	window.status = &amp;quot;当前节点：&amp;quot;+tagid;	
+	_this.SetSheetName(1,G_ORDTAG);	
+	_this.SetCellBkColor(1,-1,-1,255,255,255);
+	_this.SetFixedRow(1,1);
+	_this.SetFixedCol(1,0);
+	//载入打印模板
+//	setPrintTemplate(KA,G_ANTAG);
+//	_this.SetSheetName(2,G_ANTAG+&amp;quot;订单原样&amp;quot;);	
+}
+
+//下拉列表框选择改变
+function _thisOnListSelChange(id, oldsel, cursel)
+{
+	_sql.querytods(&amp;quot;GETSTAT&amp;quot;,&amp;quot;ID=&amp;quot;+cursel);
+	var name = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+	for (var i=1;i&amp;lt;=_this.GetRowCount(1);i++)	
+	{
+		if(_this.GetCellText(1,i,10)!=name){
+			_this.SetRowVisible(1,i,-1);
+		}
+		else {
+			_this.SetRowVisible(1,i,1);
+		}
+	}
+}
+
+//当前无客户节点
+function CorpAlert(tagid)
+{
+	if(G_M == &amp;apos;A&amp;apos; &amp;&amp; tagid!=&amp;quot;&amp;quot;)
+	{
+		_sql.querytods(&amp;quot;GETNOCORP&amp;quot;,&amp;quot;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;ORDID=&amp;quot;+tagid);
+		if(_this.XMLDS_GetRowCount()&amp;gt;0)
+			alert(&amp;quot;提示：\n\t订单【&amp;quot;+tagid+&amp;quot;】 未找到系统对应客户！&amp;quot;);
+	}
+}
+
+//分析库存
+function analyseInv()
+{
+	//查询登录的用户是否绑定了库存.仓库
+	var param = new Object();
+	param.usrid = usrid;
+	
+	var isloc=invokeOSFuncExt(&amp;quot;IsLoc&amp;quot;,param);
+	var table=&amp;quot;v_ebloc&amp;quot;;
+	alert(usrid);
+	if(isloc==&amp;quot;1&amp;quot;){
+		table=&amp;quot;v_kaloc&amp;quot;;
+	}else{
+		table=&amp;quot;v_ebloc&amp;quot;;
+	}
+	alert (table);
+	if(G_ANTAG !=&amp;quot;&amp;quot; &amp;&amp; G_M == &amp;quot;A&amp;quot;)	
+	{
+		var url = &amp;quot;show.sp?isfilldata=true&amp;table=&amp;quot;+table+&amp;quot;&amp;grdtyp=R&amp;sytid=JQPX&amp;grdid=AnalyseInv&amp;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;tag=&amp;quot;+G_ANTAG; 
+	 	window.open(url);		
+	}
+
+}
+//刷新树目录
+function refreshTree(sheet,param)
+{
+	var treexml = invokeOSFuncExt(&amp;quot;getTreeXml&amp;quot;,param);
+  	_this.SetToTreeCtrl(&amp;quot;tree&amp;quot;,sheet,-1,-1,treexml);	
+}
+//刷新基础数据
+function refreshBase()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	var param = new Object();
+	param.dat = ORDDAT;
+	param.ka = KA;
+	invokeOSFuncExt(&amp;quot;ModifyBaseInfo&amp;quot;,param);
+	refreshTree(0,param);
+	_this.LoadZXGFile(zxgRoot +&amp;quot;SelEBOrderTmp.zxg&amp;quot;,-1,1)	
+	_this.SetXmlDS(1,1,0,3,10,xml);	
+}
+//刷新订单价格
+function refreshPrice()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	var param = new Object();
+	param.dat = ORDDAT;
+	param.ka = KA;
+	invokeOSFuncExt(&amp;quot;ModifyPrice&amp;quot;,param);
+	refreshTree(0,param);
+	_this.LoadZXGFile(zxgRoot +&amp;quot;SelEBOrderTmp.zxg&amp;quot;,-1,1)
+	_this.SetXmlDS(1,1,0,3,10,xml);			
+	
+	
+}
+
+//================================================================// 
+// 函数：setPrintTemplate(ka,tag)
+// 说明：增加打印模板
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/31/10 16:02:32
+// 修改日志：
+//================================================================// 
+function setPrintTemplate(ka,tag)
+{
+	_sql.querytods(&amp;quot;GETPRINTTEMP&amp;quot;,&amp;quot;KA=&amp;quot;+ka);
+	var temp = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+	var imgpath = _this.XMLDS_GetString(0,&amp;quot;NOTE&amp;quot;);	
+	
+	//取得订单的总行数
+	_sql.querytods(&amp;quot;GETLISTCOUNT&amp;quot;,&amp;quot;KA=&amp;quot;+ka+&amp;quot;&amp;ORDID=&amp;quot;+tag);	
+		
+	var rCount = 1 * _this.XMLDS_GetString(0,&amp;quot;CUNT&amp;quot;);
+	var rowcount = Math.floor((rCount+pagesize-1)/pagesize);	
+	//设置打印数据
+	setData(ka,tag,temp,imgpath);
+}
+var pagesize = 15;
+//设置打印数据
+function setData(ka,tag,temp,imgpath,rowcount)
+{
+	//取得订单的总行数
+	_sql.querytods(&amp;quot;GETLISTCOUNT&amp;quot;,&amp;quot;KA=&amp;quot;+KA+&amp;quot;&amp;ORDID=&amp;quot;+G_ANTAG);			
+	var rCount = 1 * _this.XMLDS_GetString(0,&amp;quot;CUNT&amp;quot;);
+	var rowcount = Math.floor((rCount+pagesize-1)/pagesize); 
+		
+	_this.LoadZXGFile(zxgRoot +temp+&amp;quot;.zxg&amp;quot;,-1,2); 	
+	_this.SetToImage(&amp;quot;&amp;quot;,2,2,0,_this.LoadImage(imgpath));	
+
+	setToList(ka,tag,1,pagesize); 			
+	setToHead(ka,tag,1,rowcount);
+						
+}
+//打印原始订单
+function PrintSrcOrd()
+{
+	_sql.querytods(&amp;quot;GETPRINTTEMP&amp;quot;,&amp;quot;KA=&amp;quot;+KA);
+	var temp = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+	var imgpath = _this.XMLDS_GetString(0,&amp;quot;NOTE&amp;quot;);	
+	
+	//取得订单的总行数
+	_sql.querytods(&amp;quot;GETLISTCOUNT&amp;quot;,&amp;quot;KA=&amp;quot;+KA+&amp;quot;&amp;ORDID=&amp;quot;+G_ANTAG);	
+		
+	var rCount = 1 * _this.XMLDS_GetString(0,&amp;quot;CUNT&amp;quot;);
+	var rowcount = Math.floor((rCount+pagesize-1)/pagesize); 
+	
+	for (var r = 1;r&amp;lt;=rowcount;r++)
+	{	
+		_this.LoadZXGFile(zxgRoot +temp+&amp;quot;.zxg&amp;quot;,-1,2); 	
+		_this.SetToImage(&amp;quot;&amp;quot;,2,2,0,_this.LoadImage(imgpath));				
+		setToList(KA,G_ANTAG,r,pagesize); 	
+		setToHead(KA,G_ANTAG,r,rowcount);			
+		_this.Print(2,1);
+	}		 
+}
+
+//设置打印头部信息
+function setToHead(ka,tag,page,count)
+{	
+	_sql.querytods(&amp;quot;GETHEADINFO&amp;quot;,&amp;quot;KA=&amp;quot;+ka+&amp;quot;&amp;ORDID=&amp;quot;+tag);
+	_this.SetCellText(2,0,0,&amp;quot;订单：&amp;quot;+tag);
+	_this.SetCellText(2,0,8,&amp;quot;页码：&amp;quot;+page+&amp;quot;/&amp;quot;+count);	
+	_this.SetCellText(2,6,0,_this.XMLDS_GetString(0,&amp;quot;ecorpnam&amp;quot;));
+	_this.SetCellText(2,6,2,_this.XMLDS_GetString(0,&amp;quot;ecorpid&amp;quot;));
+	_this.SetCellText(2,8,2,_this.XMLDS_GetString(0,&amp;quot;ordid&amp;quot;));
+	_this.SetCellText(2,9,2,_this.XMLDS_GetString(0,&amp;quot;dat&amp;quot;));
+	_this.SetCellText(2,10,2,_this.XMLDS_GetString(0,&amp;quot;arrdat&amp;quot;));
+	_this.SetCellText(2,6,6,_this.XMLDS_GetString(0,&amp;quot;itmclass&amp;quot;));
+	_this.SetCellText(2,8,6,_this.XMLDS_GetString(0,&amp;quot;userid&amp;quot;));
+	_this.SetCellText(2,9,6,G_ACCNAM);
+	_this.SetCellText(2,10,6,&amp;quot;SH JieQian Tobacco Suger&amp;quot;);							
+	_this.SetCellText(2,12,6,_this.XMLDS_GetString(0,&amp;quot;tel&amp;quot;));							
+	_this.SetCellText(2,14,6,_this.XMLDS_GetString(0,&amp;quot;fax&amp;quot;));
+
+}	
+//设置打印明细数据
+function setToList(ka,tag,pageno,pagesize)
+{
+	var param = new Object();
+	param.kaid = ka;
+	param.ordid = tag;
+	param.pageno = pageno;
+	param.pagesize = pagesize;
+	var xml = invokeOSFuncExt(&amp;quot;getListData&amp;quot;,param);
+//	_this.SetMainCellRange(2,21,0,22,8);
+	_this.SetXmlDS(2,23,0,24,8,xml);
+	
+}
+
+//结束当前订单
+function CloseCurOrder()
+{
+	if(G_ANTAG!=&amp;quot;&amp;quot;) 
+	{	
+		var param = new Object();
+		param.tag = G_ANTAG;
+		param.ka = KA;
+		var ret = invokeOSFuncExt(&amp;quot;closeOrder&amp;quot;,param);
+		if(ret&amp;gt;0)
+			alert(&amp;quot;强制结束订单：&amp;quot;+tag+&amp;quot;已成功，共操作：&amp;quot;+ret+&amp;quot;条订单明细！&amp;quot;);
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	alert(id); 
+	if (id==&amp;quot;analyseInv&amp;quot;){//分析库存
+		//查询登录的用户是否绑定了库存.仓库
+		var param = new Object();
+		param.usrid = usrid;
+		
+		var isloc=invokeOSFuncExt(&amp;quot;IsLoc&amp;quot;,param);
+		var table=&amp;quot;v_ebloc&amp;quot;;
+		alert(usrid);
+		if(isloc==&amp;quot;1&amp;quot;){
+			table=&amp;quot;v_kaloc&amp;quot;;
+		}else{
+			table=&amp;quot;v_ebloc&amp;quot;;
+		}
+		alert (table);
+		if(G_ANTAG !=&amp;quot;&amp;quot; &amp;&amp; G_M == &amp;quot;A&amp;quot;)	
+		{
+			var url = &amp;quot;show.sp?isfilldata=true&amp;table=&amp;quot;+table+&amp;quot;&amp;grdtyp=R&amp;sytid=JQPX&amp;grdid=AnalyseInv&amp;DAT=&amp;quot;+ORDDAT+&amp;quot;&amp;tag=&amp;quot;+G_ANTAG; 
+		 	window.open(url);		
+		}
+	}else if(id==&amp;quot;refreshBase&amp;quot;){//刷新基础信息 
+  
+	}else if(id==&amp;quot;refreshPrice&amp;quot;){//刷新价格 
+		var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+		var param = new Object();
+		param.dat = ORDDAT;
+		param.ka = KA;
+		invokeOSFuncExt(&amp;quot;ModifyPrice&amp;quot;,param);
+		refreshTree(0,param);
+		_this.LoadZXGFile(zxgRoot +&amp;quot;SelEBOrderTmp.zxg&amp;quot;,-1,1)
+		_this.SetXmlDS(1,1,0,3,10,xml);			
+		
+	}else if(id==&amp;quot;PrintSrcOrd&amp;quot;){//打印原始订单 
+	  	_sql.querytods(&amp;quot;GETPRINTTEMP&amp;quot;,&amp;quot;KA=&amp;quot;+KA);
+		var temp = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+		var imgpath = _this.XMLDS_GetString(0,&amp;quot;NOTE&amp;quot;);	
+		
+		//取得订单的总行数
+		_sql.querytods(&amp;quot;GETLISTCOUNT&amp;quot;,&amp;quot;KA=&amp;quot;+KA+&amp;quot;&amp;ORDID=&amp;quot;+G_ANTAG);	
+			
+		var rCount = 1 * _this.XMLDS_GetString(0,&amp;quot;CUNT&amp;quot;);
+		var rowcount = Math.floor((rCount+pagesize-1)/pagesize); 
+		
+		for (var r = 1;r&amp;lt;=rowcount;r++)
+		{	
+			_this.LoadZXGFile(zxgRoot +temp+&amp;quot;.zxg&amp;quot;,-1,2); 	
+			_this.SetToImage(&amp;quot;&amp;quot;,2,2,0,_this.LoadImage(imgpath));				
+			setToList(KA,G_ANTAG,r,pagesize); 	
+			setToHead(KA,G_ANTAG,r,rowcount);			
+			_this.Print(2,1);
+		}		
+	}else if(id==&amp;quot;CloseCurOrder&amp;quot;){//强制结束当前订单 
+		if(G_ANTAG!=&amp;quot;&amp;quot;) 
+		{	
+			var param = new Object();
+			param.tag = G_ANTAG;
+			param.ka = KA;
+			var ret = invokeOSFuncExt(&amp;quot;closeOrder&amp;quot;,param);
+			if(ret&amp;gt;0)
+				alert(&amp;quot;强制结束订单：&amp;quot;+tag+&amp;quot;已成功，共操作：&amp;quot;+ret+&amp;quot;条订单明细！&amp;quot;);
+		}
+	}
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+//================================================================// 
+// 函数：getTreeXml
+// 说明：返回树控件的xml
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/02/10 10:43:54
+// 修改日志：
+//================================================================// 
+function getTreeXml()
+{
+	var db = null; 
+	var sql = &amp;quot;&amp;quot;;
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;\n&amp;lt;&amp;quot;+dat+&amp;quot;&amp;gt;\n&amp;quot;;
+	try{
+		var scorpid = &amp;quot;&amp;quot;;
+		var scorpnam = &amp;quot;&amp;quot;;
+		var ordid = &amp;quot;&amp;quot;;
+		db = new pubpack.EADatabase();
+		      	
+		//订单数量与已处理数量相等并且处理状态为1(已处理)
+		sql = &amp;quot;select distinct ordid from ord_tmp where qty&amp;lt;&amp;gt;nvl(traqty,0) and  nvl(stat,&amp;apos;0&amp;apos;) &amp;lt;&amp;gt; &amp;apos;1&amp;apos; and dat =&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;\n&amp;quot;;
+		var cds = db.QuerySQL(sql);
+		var sCount = cds.getRowCount();
+		xml += &amp;quot;&amp;lt;未处理(&amp;quot;+sCount+&amp;quot;)&amp;gt;\n&amp;quot;;		
+		sql = &amp;quot;select distinct ecorpid,ecorpnam from ord_tmp where qty&amp;lt;&amp;gt;nvl(traqty,0) and nvl(stat,&amp;apos;0&amp;apos;) &amp;lt;&amp;gt;1 and dat =&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);		
+		for (var r = 0 ; r &amp;lt; ds.getRowCount(); r++)
+		{
+			scorpid = ds.getStringAt(r,&amp;quot;ECORPID&amp;quot;);
+			scorpnam = ds.getStringAt(r,&amp;quot;ECORPNAM&amp;quot;);			
+			xml += &amp;quot;&amp;lt;&amp;quot;+scorpnam+&amp;quot; id=&amp;apos;&amp;quot;+scorpid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;;
+			
+			var ordsql = &amp;quot;select distinct ordid from ord_tmp where ecorpid =&amp;apos;&amp;quot;+scorpid+&amp;quot;&amp;apos; and qty&amp;lt;&amp;gt;nvl(traqty,0) and nvl(stat,&amp;apos;0&amp;apos;) &amp;lt;&amp;gt;1 and dat =&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;&amp;quot;;
+			var ords = db.QuerySQL(ordsql);
+			for (var i = 0 ; i&amp;lt; ords.getRowCount(); i++)
+			{
+				ordid = ords.getStringDef(i,&amp;quot;ORDID&amp;quot;,&amp;quot;未找到&amp;quot;);
+				xml += &amp;quot;&amp;lt;&amp;quot;+ordid+&amp;quot; id=&amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos; stat=&amp;apos;0&amp;apos;/&amp;gt;&amp;quot;;
+			}				
+
+			xml += &amp;quot;&amp;lt;/&amp;quot;+scorpnam+&amp;quot;&amp;gt;&amp;quot;;
+
+		}
+		//xml += &amp;quot;&amp;lt;当天全部 id=&amp;apos;all&amp;apos;/&amp;gt;&amp;quot;;
+		xml += &amp;quot;&amp;lt;无对应客户 id=&amp;apos;nocorp&amp;apos;/&amp;gt;&amp;quot;;
+		xml += &amp;quot;&amp;lt;无对应商品 id=&amp;apos;noitem&amp;apos;/&amp;gt;&amp;quot;;				
+		xml += &amp;quot;&amp;lt;价格不一致 id=&amp;apos;diffprice&amp;apos;/&amp;gt;&amp;quot;;
+		xml += &amp;quot;&amp;lt;到货日期是当天/&amp;gt;&amp;quot;;
+		xml += &amp;quot;&amp;lt;/未处理&amp;gt;\n&amp;quot;;
+		sql = &amp;quot;select distinct ordid from ord_tmp where (qty=nvl(traqty,0) or stat=1) and dat =&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;\n&amp;quot;;
+		var tds = db.QuerySQL(sql);
+		var tCount = tds.getRowCount();
+		xml += &amp;quot;&amp;lt;已处理(&amp;quot;+tCount+&amp;quot;)&amp;gt;\n&amp;quot;;		
+		sql = &amp;quot;select distinct ecorpid,ecorpnam from ord_tmp where (qty=nvl(traqty,0) or stat=1) and dat =&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);		
+		for (var r = 0 ; r &amp;lt; ds.getRowCount(); r++)
+		{
+			scorpid = ds.getStringAt(r,&amp;quot;ECORPID&amp;quot;);
+			scorpnam = ds.getStringAt(r,&amp;quot;ECORPNAM&amp;quot;);			
+			xml += &amp;quot;&amp;lt;&amp;quot;+scorpnam+&amp;quot; id=&amp;apos;&amp;quot;+scorpid+&amp;quot;&amp;apos;&amp;gt;&amp;quot;;
+			
+			var ordsql = &amp;quot;select distinct ordid from ord_tmp where ecorpid =&amp;apos;&amp;quot;+scorpid+&amp;quot;&amp;apos; and (qty=nvl(traqty,0) or stat=1) and dat =&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;&amp;quot;;
+			var ords = db.QuerySQL(ordsql);
+			for (var i = 0 ; i&amp;lt; ords.getRowCount(); i++)
+			{
+				ordid = ords.getStringDef(i,&amp;quot;ORDID&amp;quot;,&amp;quot;未找到&amp;quot;);
+				xml += &amp;quot;&amp;lt;&amp;quot;+ordid+&amp;quot; id=&amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos; stat=&amp;apos;1&amp;apos;/&amp;gt;&amp;quot;;
+			}				
+
+			xml += &amp;quot;&amp;lt;/&amp;quot;+scorpnam+&amp;quot;&amp;gt;&amp;quot;;
+
+		}
+
+		xml += &amp;quot;&amp;lt;/已处理&amp;gt;\n&amp;quot;;	
+		xml += &amp;quot;&amp;lt;/&amp;quot;+dat+&amp;quot;&amp;gt;&amp;quot;;	
+		db.Commit();
+		return xml;
+	}catch(Exception e){
+		db.Rollback();
+		throw new Exception(e);
+	}
+}
+
+//================================================================// 
+// 函数：ModifyPrice
+// 说明：更新开单价格，当价格维护进去的时候可以不用刷新整个页面
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/02/10 10:26:06
+// 修改日志：
+//================================================================// 
+function ModifyPrice()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		//更新基础信息：
+		//更新基础价格,同样已处理的订单不再做处理
+		sql = &amp;quot;
+		       update ord_tmp a set sprice=eprice
+			where a.dat = &amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos;
+			  and a.qty&amp;lt;&amp;gt;a.traqty
+			  and a.stat &amp;lt;&amp;gt; &amp;apos;2&amp;apos;
+			  and a.kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;
+			  and eprice= (select case when protprice&amp;lt;&amp;gt;0 then protprice else case when kaprice&amp;lt;&amp;gt;0 then kaprice else baseprice end end  
+			                  from v_bilprice b
+			                 where a.dat = b.dat
+			                   and a.scorpid = b.corpid
+			                   and a.sitmid = b.itmid
+			                )
+			  and exists (select 1 from v_bilprice c  
+			                where a.dat = c.dat
+			                  and a.scorpid = c.corpid
+			                  and a.sitmid = c.itmid
+			               )                          
+               &amp;quot;;
+               db.ExcecutSQL(sql);		
+               db.Commit();
+	}catch(e)
+	{
+		db.Rollback();
+		throw new Exception(e);
+	}               
+}
+//================================================================// 
+// 函数：ModifyBaseInfo
+// 说明：更新基础信息，当基础维护进去的时候可以不用刷新整个页面
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/02/10 10:25:24
+// 修改日志：
+//================================================================// 
+function ModifyBaseInfo()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		//更新基础信息：	
+		//更新客户,商品信息已经处理过的订单，或强制结束的订单不处理
+		sql = &amp;quot;update ord_tmp a set scorpid = (select id from corp b where b.ordcorp = a.ecorpid),
+					     scorpnam = (select name from corp b where b.ordcorp = a.ecorpid),
+					     sitmid = (select c.id from corpitem b,item c where b.ebitem = a.eitmid and b.item = c.guid),
+					     sitmnam = (select c.name from corpitem b,item c where b.ebitem = a.eitmid and b.item = c.guid)
+					     
+			where a.dat = &amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos;
+			  and a.qty&amp;lt;&amp;gt;a.traqty 
+			  and a.stat&amp;lt;&amp;gt;&amp;apos;2&amp;apos;	
+			  and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;		     
+		      &amp;quot;;
+//		      throw new Exception(sql);
+		db.ExcecutSQL(sql);
+
+               db.Commit();
+	}catch(e)
+	{
+		db.Rollback();
+		throw new Exception(e);
+	}               
+}
+
+
+//================================================================// 
+// 函数：getListData
+// 说明：返回原始订单明细数据的分页xml
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/02/10 10:24:50
+// 修改日志：
+//================================================================// 
+function getListData()
+{
+	var db = new pubpack.EADatabase();
+	var sql = &amp;quot;
+			select eitmid||&amp;apos;      001/01&amp;apos; itmid,code||&amp;apos;              &amp;apos;||spec cs,eitmnam,untnum,&amp;apos;N  &amp;apos;||qty qty,zpqty,qty*untnum sqty,eprice notaxprice,eprice*qty*untnum notaxmny
+			  from ord_tmp 
+			 where ordid=&amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos;
+			   and kaid = &amp;apos;&amp;quot;+kaid+&amp;quot;&amp;apos;
+		  &amp;quot;;
+	var xmlds = db.GetXMLSQL(sql,pageno,pagesize);
+	xmlds.removeColumn(&amp;quot;RID_&amp;quot;);
+        xmlds.removeColumn(&amp;quot;num&amp;quot;);
+        var xml = xmlds.GetXml();
+  	return xml;
+}
+
+//================================================================// 
+// 函数：closeOrder
+// 说明：强制结束订单,未处理完的订单，打上一个结束的标志
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/02/10 10:24:12
+// 修改日志：
+//================================================================// 
+function closeOrder()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try{
+		db = new pubpack.EADatabase();
+		sql = &amp;quot; update ord_tmp set stat=&amp;apos;1&amp;apos; where ordid=&amp;apos;&amp;quot;+tag+&amp;quot;&amp;apos; and kaid=&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos; and stat=&amp;apos;0&amp;apos;&amp;quot;;
+		ret = db.ExcecutSQL(sql);
+		if(ret &amp;gt; 0){
+			return ret;
+		}	
+	}catch(e)
+	{
+		db.Rollback();
+		throw new Exception(e);
+	}
+}
+//查询该用户是否绑定库存
+function IsLoc(){
+	var IsLoc=&amp;quot;1&amp;quot;;
+	return IsLoc;
+}
+
+
+
+
+
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GETLIST</ID><NAME ></NAME><DATDSC > select case when sitmid is null or scorpid is null then 0 else 1 end color,
+	eitmid,eitmnam,dat orddat,arrdat,
+ 	spec,qty*untnum,traqty,qty*untnum-traqty cqty,eprice,
+ 	case when &amp;apos;[%stat]&amp;apos;=&amp;apos;A&amp;apos; then &amp;apos;待处理&amp;apos; else &amp;apos;已处理&amp;apos; end statstr
+  from ord_tmp
+ where ordid like decode(&amp;apos;[%ORDID]&amp;apos;,&amp;apos;当天全部&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%ORDID]&amp;apos;)
+   and dat =&amp;apos;[%DAT]&amp;apos;
+   and kaid = &amp;apos;[%KA]&amp;apos;
+   and case when qty&amp;gt;nvl(traqty,0) and stat=&amp;apos;0&amp;apos; then &amp;apos;0&amp;apos; else &amp;apos;1&amp;apos; end = decode(&amp;apos;[%stat]&amp;apos;,&amp;apos;A&amp;apos;,&amp;apos;0&amp;apos;,&amp;apos;B&amp;apos;,&amp;apos;1&amp;apos;)</DATDSC><C4 >getList</C4><C5 >getList</C5><C6 >getList</C6><C7 >getList</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 >GETLIST</C14><C15 >GETLIST</C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 >GETLIST</C19><C20 >GETLIST</C20><C21 >GETLIST</C21><C22 >GETLIST</C22><C23 ></C23><C24 >GETLIST</C24><C25 ></C25><C26 >GETLIST</C26><C27 >GETLIST</C27><C28 >GETLIST</C28></ROW>
+<ROW num="1" ><ID >GETSTAT</ID><NAME ></NAME><DATDSC >select name from v_handlestat where id=&amp;apos;[%ID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 >GETSTAT</C14><C15 >GETSTAT</C15><C16 ></C16><C17 ></C17><C18 >GETSTAT</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >GETSTAT</C22><C23 ></C23><C24 >GETSTAT</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="2" ><ID >GETNOITEM</ID><NAME ></NAME><DATDSC >select distinct eitmid,eitmnam,code,spec,untnum
+  from ord_tmp
+ where sitmid is null
+   and dat =&amp;apos;[%DAT]&amp;apos;
+   and kaid = &amp;apos;[%KA]&amp;apos;
+   and ordid like decode(&amp;apos;[%ORDID]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%ORDID]&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >GETNOITEM</C10><C11 >GETNOITEM</C11><C12 >GETNOITEM</C12><C13 >GETNOITEM</C13><C14 ></C14><C15 >GETNOITEM</C15><C16 >GETNOITEM</C16><C17 ></C17><C18 ></C18><C19 >GETNOITEM</C19><C20 ></C20><C21 ></C21><C22 >GETNOITEM</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="3" ><ID >GETNOCORP</ID><NAME ></NAME><DATDSC >select distinct ecorpid,ecorpnam,tel,fax 
+  from ord_tmp
+ where dat =&amp;apos;[%DAT]&amp;apos;
+   and kaid = &amp;apos;[%KA]&amp;apos;
+   and ordid like decode(&amp;apos;[%ORDID]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%ORDID]&amp;apos;)
+   and scorpid is null</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >GETNOCORP</C10><C11 >GETNOCORP</C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 >GETNOCORP</C15><C16 >GETNOCORP</C16><C17 ></C17><C18 ></C18><C19 >GETNOCORP</C19><C20 ></C20><C21 ></C21><C22 >GETNOCORP</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >GETNOCORP</C28></ROW>
+<ROW num="4" ><ID >GENPRICEDIFF</ID><NAME ></NAME><DATDSC >select ordid,eitmid,eitmnam,sitmid,scorpid,eprice,
+  from ord_tmp o,v_bilprice d
+ where o.scorpid = d.corpid(+)
+   and o.sitmid = d.itmid(+)    
+   and o.ordid like decode(&amp;apos;[%ORDID]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%ORDID]&amp;apos;)
+   and dat =&amp;apos;[%DAT]&amp;apos;
+   and kaid = &amp;apos;[%KA]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >GENPRICEDIFF</C8><C9 >GENPRICEDIFF</C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 >GENPRICEDIFF</C15><C16 >GENPRICEDIFF</C16><C17 ></C17><C18 ></C18><C19 >GENPRICEDIFF</C19><C20 ></C20><C21 >GENPRICEDIFF</C21><C22 >GENPRICEDIFF</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="5" ><ID >GETARVDAY</ID><NAME ></NAME><DATDSC >select ordid,eitmid,eitmnam,arrdat
+  from ord_tmp 
+ where arrdat = to_char(sysdate,&amp;apos;dd/mm/yyyy&amp;apos;)
+   and ordid like decode(&amp;apos;[%ORDID]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%ORDID]&amp;apos;)
+   and kaid = &amp;apos;[%KA]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >GETARVDAY</C17><C18 ></C18><C19 >GETARVDAY</C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="6" ><ID >GETPRINTTEMP</ID><NAME ></NAME><DATDSC >select name,note from v_printtemp where id=&amp;apos;[%KA]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 >GETPRINTTEMP</C25><C26 >GETPRINTTEMP</C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="7" ><ID >GETHEADINFO</ID><NAME ></NAME><DATDSC >select ecorpid,ecorpnam,ordid,to_char(to_date(dat,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;dd/mm/yyyy&amp;apos;) dat,
+       to_char(to_date(arrdat,&amp;apos;yyyy-mm-dd&amp;apos;),&amp;apos;dd/mm/yyyy&amp;apos;) arrdat,itmclass,&amp;apos;X852&amp;apos; userid,
+       tel,fax
+  from ord_tmp 
+ where kaid=&amp;apos;[%KA]&amp;apos;
+   and ordid=&amp;apos;[%ORDID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28></ROW>
+<ROW num="8" ><ID >GETLISTCOUNT</ID><NAME ></NAME><DATDSC >select count(*) CUNT
+  from ord_tmp 
+ where kaid=&amp;apos;[%KA]&amp;apos;
+   and ordid=&amp;apos;[%ORDID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 >GETLISTCOUNT</C23><C24 ></C24><C25 ></C25><C26 >GETLISTCOUNT</C26><C27 ></C27><C28 ></C28></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

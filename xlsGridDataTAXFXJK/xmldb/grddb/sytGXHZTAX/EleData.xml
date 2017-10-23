@@ -1,0 +1,490 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >EleData</MWID><NAME >电力数据导入</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >EleData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,5,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,7,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,9,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,11,3);
+
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,13,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,15,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,17,3);
+	_this.ShowTabBar(1);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+   	if(id == &amp;quot;导入&amp;quot;) {
+		if(!confirm(&amp;quot;确定导入文件？&amp;quot;)) return ;
+		
+		var filepath = &amp;quot;&amp;quot;;
+		var typ = &amp;quot;&amp;quot;;
+		
+		for (var i=3;i&amp;lt;18;i=i+2) {
+			if (i == 3) { typ = 1; filepath =_this.GetCellText(sheet,3,3); } 	//平桂电力
+			else if (i == 5) { typ = 5; filepath =_this.GetCellText(sheet,5,3); }	//桂源桂东
+			else if (i == 7) { typ = 6; filepath =_this.GetCellText(sheet,7,3); }	//富川电力
+			else if (i == 9) { typ = 4; filepath =_this.GetCellText(sheet,9,3); }	//钟山电力
+			else if (i == 11) { typ = 7; filepath =_this.GetCellText(sheet,11,3); }	//昭平电力
+			else if (i == 13) { typ = 8; filepath =_this.GetCellText(sheet,13,3); }	//南方电网
+			else if (i == 15) { typ = 9; filepath =_this.GetCellText(sheet,15,3); }	//临江电力
+			else if (i == 17) { typ = 10; filepath =_this.GetCellText(sheet,17,3); }	//水管所
+			
+			if (filepath != &amp;quot;&amp;quot;) {
+				if (typ == 2 || typ == 3) {
+					if (typ == 2) _this.SetCellText(sheet,15,2,&amp;quot;正在导入桂源电力数据...&amp;quot;);
+					else if (typ == 3) _this.SetCellText(sheet,15,2,&amp;quot;正在导入桂东电力数据...&amp;quot;);
+					var filename = upLoadFile2Server(filepath);
+					var param = new Object();
+					param.typ=typ;
+					param.thisorgid = G_ORGID;
+					param.filename = &amp;quot;/u/filestore&amp;quot;+filename;
+					var msg = invokeOSFuncExt(&amp;quot;impGuiYuan&amp;quot;,param);
+					_this.SetCellText(0,15,2,_this.GetCellText(sheet,15,2)+&amp;quot;\n&amp;quot;+msg);
+					alert(msg);
+				}
+				else {		
+					if (typ == 1) _this.SetCellText(sheet,19,2,&amp;quot;正在导入平桂电力数据...&amp;quot;);
+					else if (typ == 4) _this.SetCellText(sheet,19,2,&amp;quot;正在导入钟山电力数据...&amp;quot;);
+					else if (typ == 5) _this.SetCellText(sheet,19,2,&amp;quot;正在导入桂源桂东电力数据...&amp;quot;);
+					else if (typ == 6) _this.SetCellText(sheet,19,2,&amp;quot;正在导入富川电力数据...&amp;quot;);
+					else if (typ == 7) _this.SetCellText(sheet,19,2,&amp;quot;正在导入昭平电力数据...&amp;quot;);
+					else if (typ == 8) _this.SetCellText(sheet,19,2,&amp;quot;正在导入南方电力数据...&amp;quot;);
+					else if (typ == 9) _this.SetCellText(sheet,19,2,&amp;quot;正在导入临江电力数据...&amp;quot;);
+					else if (typ == 10) _this.SetCellText(sheet,19,2,&amp;quot;正在导入水管所电力数据...&amp;quot;);
+					
+					runImpl(filepath,typ);
+				}
+				_this.SetCellText(sheet,i,3,&amp;quot;&amp;quot;);
+			}
+			
+		}
+	}
+}
+
+function runImpl(filepath,typ)
+{
+	try {
+		var tabnam =  runImp(filepath);
+		//alert(tabnam);
+		//return ;
+		if(tabnam != null &amp;&amp; tabnam != &amp;quot;&amp;quot;) {
+			var param = new Object();
+			param.tabnam = tabnam;
+			param.typ = typ;
+			param.thisorgid = G_ORGID;
+			var msg = invokeOSFuncExt(&amp;quot;insert&amp;quot;,param);
+			_this.SetCellText(0,19,2,_this.GetCellText(0,19,2)+&amp;quot;\n&amp;quot;+msg);
+			alert(msg);			
+		}
+	}
+	catch(e) {
+		alert(&amp;quot;导入失败！&amp;quot;+e);
+	}
+}
+
+
+
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+function insert()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var tabname = tabnam;
+	var typ = typ;
+	var ret = &amp;quot;&amp;quot;;
+
+	try{
+		db = new pubpack.EADatabase();
+		
+		sql = &amp;quot;select * from user_tables where table_name=upper(&amp;apos;&amp;quot;+tabname+&amp;quot;&amp;apos;)&amp;quot;;
+		var cnt = db.GetSQLRowCount(sql);
+		if(cnt &amp;lt;= 0) return &amp;quot;无数据可以导入&amp;quot;;
+
+		//平桂电力
+		if(typ == 1) {
+			//sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0=&amp;apos;用户号&amp;apos;&amp;quot;;
+//			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;sz_id_user%&amp;apos;&amp;quot;;
+//			db.ExcecutSQL(sql);
+//			//居民用电不导入
+//			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co10 =&amp;apos;0.4563&amp;apos; or co10 =&amp;apos;0.6003&amp;apos; or co10 =&amp;apos;0.5283&amp;apos;&amp;quot;;
+//			db.ExcecutSQL(sql);
+//			
+//			sql = &amp;quot;update tax_eledata a set (ELEQTY,ELEPRICE,ELEMNY)=(select sum(co9),max(co10),sum(co11) 
+//				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co12
+//				       group by co0,co12)
+//				where a.typ=&amp;apos;1&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co0=a.usrid and b.co12=a.yymm)&amp;quot;;
+//			var upcnt = db.ExcecutSQL(sql);
+//			
+//			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,ELEPRICE,ELEMNY,typ,TOWN)&amp;quot;+
+//				&amp;quot;select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co12,co0,max(co1) co1,sum(co9) co9,max(co10) co10,sum(co11) coll,&amp;apos;1&amp;apos;,&amp;apos;平桂&amp;apos; from &amp;quot;+tabname+&amp;quot; a&amp;quot; +
+//				&amp;quot; where not exists (select 1 from tax_eledata b where b.usrid=a.co0 and b.YYMM=a.co12 and b.typ=&amp;apos;1&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) group by co0,co12&amp;quot;;
+//			var count = db.ExcecutSQL(sql);
+//			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+//			
+//			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+
+			//2016启用新格式
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where is_number(co0) !=1&amp;quot;;
+			db.ExcecutSQL(sql);
+			//居民用电不导入 //倍率=1
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co8=1&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY,ELEPRICE,ELEMNY)=(select sum(co11),max(co15),sum(co16) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co5
+				       group by co1,co5)
+				where a.typ=&amp;apos;1&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co1=a.usrid and b.co5=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,ELEPRICE,ELEMNY,typ,TOWN)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co5,co1,max(co2) co2,sum(co11) co11,max(to_number(co15)) co15,sum(co16) col6,&amp;apos;1&amp;apos;,&amp;apos;平桂&amp;apos; from &amp;quot;+tabname+&amp;quot; a 
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co1 and b.YYMM=a.co5 and b.typ=&amp;apos;1&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) group by co1,co5&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+
+		}
+		//钟山电力
+		else if (typ == &amp;quot;4&amp;quot;) {
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%编号%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co3) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co2 
+				       group by co0,co2),(ELEMNY)=(select sum(co4) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co2 
+				       group by co0,co2)
+				where a.typ=&amp;apos;4&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co0=a.usrid and b.co2=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY) &amp;quot;+
+			      &amp;quot;select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,to_char(to_date(to_number(co2),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;),co0,max(co1) co1,sum(co3) co3,&amp;apos;4&amp;apos;,&amp;apos;钟山&amp;apos;,max(co6) co6,max(co8) co8,max(co7) co7,sum(co4) co4 from &amp;quot;+tabname+&amp;quot; a&amp;quot; +
+			      &amp;quot; where not exists (select 1 from tax_eledata b where b.usrid=a.co0 and b.YYMM=to_char(to_date(to_number(co2),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;) and b.typ=&amp;apos;4&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) group by co0,co2&amp;quot;;
+			
+			var count = db.ExcecutSQL(sql);
+			//return sql;
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+		}
+		//桂源桂东
+		else if (typ == &amp;quot;5&amp;quot;) {
+			//删除标题行
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co1 like &amp;apos;%户号%&amp;apos; or co2 like &amp;apos;%户名%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			//格式化电费年月
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(to_number(co4),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;),co1=to_number(co1)&amp;quot;;//导新数据
+			//sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(190001,&amp;apos;yyyymm&amp;apos;)+to_number(co4),&amp;apos;yyyy-mm&amp;apos;),co1=to_number(co1)&amp;quot;;//导旧数据
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co5) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co4 
+				       group by co1,co4),(ELEMNY)=(select sum(co6) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co4 
+				       group by co1,co4)
+				where a.typ=&amp;apos;5&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co1=a.usrid and b.co4=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co4,co1,max(co2) co2,sum(co5) co5,&amp;apos;5&amp;apos;,&amp;apos;桂源桂东&amp;apos; town,max(co7) co7,max(co3) co3,max(co8) co8,sum(co6) co6 from &amp;quot;+tabname+&amp;quot; a
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co1 and b.YYMM=co4 and b.typ=&amp;apos;5&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) 
+				group by co1,co4&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+
+		}
+		//富川电力
+		else if (typ == &amp;quot;6&amp;quot;) {
+			//删除标题行
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%客户编号%&amp;apos; or co1 like &amp;apos;%客户名称%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			//格式化电费年月
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co3=to_char(to_date(to_number(co3),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co7) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co3 
+				       group by co0,co3),(ELEMNY)=(select sum(co8) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co3 
+				       group by co0,co3)
+				where a.typ=&amp;apos;6&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co1=a.usrid and b.co3=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co3,co0,max(co1) co1,sum(co7) co7,&amp;apos;6&amp;apos;,&amp;apos;富川&amp;apos; town,max(co9) co9,max(co2) c02,max(co4) co4,sum(co8) co8 from &amp;quot;+tabname+&amp;quot; a
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co0 and b.YYMM=co3 and b.typ=&amp;apos;6&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) group by co0,co3&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+		}
+		//昭平电力
+		else if (typ == &amp;quot;7&amp;quot;) {
+			//删除标题行
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%编号%&amp;apos; or co1 like &amp;apos;%名称%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			//格式化电费年月
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co0=to_number(co0),co3=to_char(to_date(to_number(co3),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co5) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co3 
+				       group by co0,co3),(ELEMNY)=(select sum(co6) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co3
+				       group by co0,co3)
+				where a.typ=&amp;apos;7&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co1=a.usrid and b.co3=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co3,co0,max(co1) co1,sum(co5) co5,&amp;apos;7&amp;apos;,&amp;apos;昭平&amp;apos; town,max(co7) co7,max(co2) co2,max(co4) co4,sum(co6) co6 from &amp;quot;+tabname+&amp;quot; a
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co0 and b.YYMM=co3 and b.typ=&amp;apos;7&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) group by co0,co3&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+		}
+		//南方电网
+		else if (typ == &amp;quot;8&amp;quot;) {
+			//删除标题行
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%户号%&amp;apos; or co1 like &amp;apos;%户名%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			//格式化电费年月
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(to_number(co4),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;quot;;//导新数据
+			//sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(190001,&amp;apos;yyyymm&amp;apos;)+to_number(co4),&amp;apos;yyyy-mm&amp;apos;),co1=to_number(co1)&amp;quot;;//导旧数据
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co5) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co4 
+				       group by co1,co4),(ELEMNY)=(select sum(co6) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co4 
+				       group by co1,co4)
+				where a.typ=&amp;apos;8&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co1=a.usrid and b.co4=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co4,co1,max(co2) co2,sum(co5) co5,&amp;apos;8&amp;apos;,&amp;apos;南方电网&amp;apos; town,max(co7) co7,max(co3) co3,max(co8) co8,sum(co6) co6 from &amp;quot;+tabname+&amp;quot; a
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co1 and b.YYMM=co4 and b.typ=&amp;apos;8&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) 
+				group by co1,co4&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+
+		}
+		//临江电力
+		else if (typ == &amp;quot;9&amp;quot;) {
+			//删除标题行
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co1 like &amp;apos;%户号%&amp;apos; or co2 like &amp;apos;%户名%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			//格式化电费年月
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(to_number(co4),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;quot;;//导新数据
+			//sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(190001,&amp;apos;yyyymm&amp;apos;)+to_number(co4),&amp;apos;yyyy-mm&amp;apos;),co1=to_number(co1)&amp;quot;;//导旧数据
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co5) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co4 
+				       group by co1,co4),(ELEMNY)=(select sum(co6) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co1 and a.yymm=b.co4 
+				       group by co1,co4)
+				where a.typ=&amp;apos;9&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co1=a.usrid and b.co4=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co4,co1,max(co2) co2,sum(co5) co5,&amp;apos;9&amp;apos;,&amp;apos;临江电力&amp;apos; town,max(co7) co7,max(co3) co3,max(co8) co8,sum(co6) co6 from &amp;quot;+tabname+&amp;quot; a
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co1 and b.YYMM=co4 and b.typ=&amp;apos;9&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) 
+				group by co1,co4&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+
+		}
+		//水管所
+		else if (typ == &amp;quot;10&amp;quot;) {
+			//删除标题行
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co1 like &amp;apos;%用户名%&amp;apos; or co2 like &amp;apos;%地址%&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			//格式化电费年月
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co3=to_char(to_date(to_number(co3),&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;quot;;//导新数据
+			//sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co4=to_char(to_date(190001,&amp;apos;yyyymm&amp;apos;)+to_number(co4),&amp;apos;yyyy-mm&amp;apos;),co1=to_number(co1)&amp;quot;;//导旧数据
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_eledata a set (ELEQTY)=(select sum(co4) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co3 
+				       group by co0,co3),(ELEMNY)=(select sum(co5) 
+				       from &amp;quot;+tabname+&amp;quot; b where a.usrid=b.co0 and a.yymm=b.co3 
+				       group by co0,co3)
+				where a.typ=&amp;apos;10&amp;apos; and a.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; and exists (select 1 from &amp;quot;+tabname+&amp;quot; b where b.co0=a.usrid and b.co3=a.yymm)&amp;quot;;
+			var upcnt = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN,GDS,ADDR,ELEPRO,ELEMNY)
+				select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,co3,co0,max(co1) co1,sum(co4) co4,&amp;apos;10&amp;apos;,&amp;apos;水管所&amp;apos; town,max(co6) co6,max(co2) co2,&amp;apos;&amp;apos; co8,sum(co5) co5 from &amp;quot;+tabname+&amp;quot; a
+				where not exists (select 1 from tax_eledata b where b.usrid=a.co0 and b.YYMM=co3 and b.typ=&amp;apos;10&amp;apos; and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) 
+				group by co0,co3&amp;quot;;
+			var count = db.ExcecutSQL(sql);
+			db.ExcecutSQL(&amp;quot;drop table &amp;quot;+tabname);
+			
+			return  &amp;quot;导入&amp;quot;+count+&amp;quot;笔记录，更新&amp;quot;+upcnt+&amp;quot;笔记录。&amp;quot;;	
+
+		}
+		
+		
+		return ret;
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if(db != null)	db.Close();
+	}
+}
+
+//桂源电力导入
+function impGuiYuan()
+{
+	var db = null ;
+	var ds = null ;
+	var ps = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	var typ=typ;
+	try {		
+		db = new pubpack.EADatabase();
+		//filename = &amp;quot;/u/filestore/u/filestore/u/filestoreupload/pgtmp/guiyuan.xls&amp;quot;;
+		
+		//加载xmlDS
+		var excelgrid = new xlsdb.excelgrid();	
+		for (var sheet = 0;sheet &amp;lt;= 12;sheet++) {
+			var xmlds = excelgrid.GetXmlDS(filename,sheet);	
+			if (xmlds.getColumnCount() &amp;gt; 3) {
+				var table =  db.GetSQL(&amp;quot;select &amp;apos;PG_&amp;apos;||TAX_NEXTVAL.nextval from dual&amp;quot;);
+				var params = &amp;quot;&amp;quot;;
+				var columns = &amp;quot;&amp;quot;;
+
+				//创建临时表		
+				sql = &amp;quot;create table &amp;quot;+table+&amp;quot; (&amp;quot;;
+				for (var col = 0;col &amp;lt; xmlds.getColumnCount();col ++) {
+					if (col &amp;gt; 0) sql += &amp;quot;,&amp;quot;;
+					sql += &amp;quot;CO&amp;quot;+col+&amp;quot; varchar2(255) \n&amp;quot;;
+					if (columns != &amp;quot;&amp;quot;) columns += &amp;quot;,&amp;quot;;
+					columns += &amp;quot;CO&amp;quot;+col;
+					if (params != &amp;quot;&amp;quot;) params += &amp;quot;,&amp;quot;;
+					params += &amp;quot;?&amp;quot;;
+				}
+				sql += &amp;quot;) &amp;quot;;
+				db.ExcecutSQL(sql);
+				
+				//导入临时表
+				//最后一列日期类型的 导入后变成了数字，如何转成日期？
+				//to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;) co5
+				var updatesql = &amp;quot;insert into &amp;quot;+table+&amp;quot; (&amp;quot;+columns +&amp;quot;) values (&amp;quot;+params+&amp;quot;)&amp;quot;;
+//				pubpack.EAFunc.Log(updatesql);
+				ps = db.GetConn().prepareStatement(updatesql);
+				
+				var rowcount = xmlds.getRowCount();
+				for(var rows=0;rows&amp;lt;rowcount;rows++) {
+					for(var cols=0;cols&amp;lt;xmlds.getColumnCount();cols++) {
+						var colname=xmlds.getColumnName(cols);
+						var colstr=xmlds.getStringAt(rows,colname);
+//						if (rows &amp;gt; 0 &amp;&amp; cols == 5) throw new Exception(colstr);
+						ps.setString(cols+1,colstr);
+					}
+					ps.addBatch();
+				}
+				ps.executeBatch();
+				
+				if(typ==2){
+					//写入正式目标表 
+					sql = &amp;quot;delete from &amp;quot;+table+&amp;quot; where co0=&amp;apos;用户编号&amp;apos;&amp;quot;;
+					db.ExcecutSQL(sql);
+					
+					//电价为0.5283的用电记录，属于居民用电，不予导入
+					sql = &amp;quot;delete from &amp;quot;+table+&amp;quot; where co5=&amp;apos;0.5283&amp;apos;&amp;quot;;
+					db.ExcecutSQL(sql);
+			
+					sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,ELEMNY,typ,TOWN)
+					select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,yymm,usrid,usrnam,eleqty,elemny,typ,town from (
+		  			select to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co2),&amp;apos;yyyy-mm&amp;apos;) yymm,
+					decode(instr(co0,&amp;apos;.&amp;apos;),0,co0,to_number(co0)) usrid,max(co1) usrnam,sum(co3) eleqty,sum(co4) elemny,&amp;apos;2&amp;apos; typ,max(co6) town from &amp;quot;+table+&amp;quot; a 
+					group by co2,co0
+					) a where not exists (select 1 from tax_eledata b where b.usrid=a.usrid and b.YYMM=a.yymm and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;)&amp;quot;;
+					ret += db.ExcecutSQL(sql);
+					//drop临时表
+		  			sql = &amp;quot;drop table &amp;quot; + table;
+		 			db.ExcecutSQL(sql);
+	 			}
+	 			else if(typ==3){
+					sql=&amp;quot;delete from &amp;quot;+table+&amp;quot; where co5 is null&amp;quot;;
+					db.ExcecutSQL(sql);
+					
+					sql=&amp;quot;select * from &amp;quot;+table+&amp;quot; where co2=&amp;apos;用户号&amp;apos;&amp;quot;;
+					ds = db.QuerySQL(sql);
+					for (var i=3;i&amp;lt;15;i++) {
+						var colnam = ds.getColumnName(i);
+						var yymm = ds.getStringAt(0,i);
+						sql = &amp;quot;insert into tax_eledata(ORG,YYMM,USRID,USRNAM,ELEQTY,typ,TOWN)
+							select &amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; org,yymm,co2,co1,co3,typ,&amp;apos;桂东&amp;apos; from(select to_char(to_date(&amp;apos;&amp;quot;+yymm+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;) yymm,decode(instr(co2,&amp;apos;.&amp;apos;),0,co2,to_number(co2)) co2,max(co1) co1,nvl(sum(&amp;quot;+colnam+&amp;quot;),0) co3,&amp;apos;3&amp;apos; typ from &amp;quot;+table+&amp;quot; a
+							where co2 !=&amp;apos;用户号&amp;apos;and &amp;quot;+colnam+&amp;quot; is not null and co2 is not null group by co2 ) a where not exists (select 1 from tax_eledata b where a.co2=b.usrid and b.yymm=a.yymm and b.org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;) &amp;quot;;
+							ret += db.ExcecutSQL(sql);
+							
+					}
+					//drop临时表
+		  			sql = &amp;quot;drop table &amp;quot; + table;
+		 			db.ExcecutSQL(sql);
+	 			}
+			}
+		}
+			
+		db.Commit();
+		return &amp;quot;导入成功，记录数&amp;quot;+ret;
+
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+		throw new Exception(e);
+	}
+	finally {
+		if(db != null) db.Close();
+		//文件导入成功后删除
+		var file = new java.io.File(filename);   
+         	if(file.exists()){   
+         		file.delete();
+         	}
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

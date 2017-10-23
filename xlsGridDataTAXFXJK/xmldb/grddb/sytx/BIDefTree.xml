@@ -1,0 +1,499 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >BIDefTree</MWID><NAME >BI模型定义</NAME><NOTE ></NOTE><FILE >BIDefTree.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：载入数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/10/05 23:45:15
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+       _this.ShowToolBar(0); 
+       _this.SetSheetName(0,&amp;quot;选择菜单&amp;quot;);
+       
+      // var treexml = &amp;quot;&amp;lt;XMIDWARE中间件 imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;查询报表 typ=\&amp;quot;REP\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/查询报表&amp;gt;&amp;lt;表单单据 typ=\&amp;quot;FORM\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/表单单据&amp;gt;&amp;lt;其他窗体 typ=\&amp;quot;WND\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/其他窗体&amp;gt;&amp;quot;+
+      // 		&amp;quot;&amp;lt;页面布局 typ=\&amp;quot;Portal\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/页面布局&amp;gt;&amp;lt;流程图 typ=\&amp;quot;Flow\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/流程图&amp;gt;&amp;lt;数据结构 typ=\&amp;quot;Database\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/数据结构&amp;gt;&amp;quot;+
+      // 		&amp;quot;&amp;lt;ETL组件 typ=\&amp;quot;ETLOBJ\&amp;quot; imageid=\&amp;quot;1\&amp;quot;&amp;gt;&amp;lt;/ETL组件&amp;gt;&amp;lt;ETL拓扑图 typ=\&amp;quot;ETLFLOW\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/ETL拓扑图&amp;gt;&amp;lt;SSO对象 typ=\&amp;quot;SSOOBJ\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/SSO对象&amp;gt;&amp;lt;SSO拓扑图 typ=\&amp;quot;SSOFLOW\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/SSO拓扑图&amp;gt;&amp;lt;Web调用对象 typ=\&amp;quot;WSOBJ\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/Web调用对象&amp;gt;&amp;lt;Web调用拓扑图 typ=\&amp;quot;WSFLOW\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/Web调用拓扑图&amp;gt;&amp;lt;EAI工作流 typ=\&amp;quot;EAI\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/EAI工作流&amp;gt;&amp;lt;业务流程重组 typ=\&amp;quot;BPEL\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;/业务流程重组&amp;gt;&amp;lt;权限设置中心 typ=\&amp;quot;USRORGROL\&amp;quot; imageid=\&amp;quot;3\&amp;quot;&amp;gt;&amp;lt;/权限设置中心&amp;gt;&amp;lt;/XMIDWARE中间件&amp;gt;&amp;quot;;
+       		//&amp;lt;BI分析模型 typ=\&amp;quot;BI\&amp;quot; imageid=\&amp;quot;2\&amp;quot;&amp;gt;
+	var treexml = &amp;quot;&amp;lt;BI分析模型 imageid=\&amp;quot;2\&amp;quot;&amp;gt;&amp;quot;;
+	treexml += invokeOSFunc(&amp;quot;GetDIMMOD&amp;quot;,&amp;quot;selsytid=&amp;quot;+G_SYTID +&amp;quot;&amp;typ=&amp;quot;+typ+&amp;quot;&amp;imageid=1&amp;quot;);
+
+	_this.SetToTreeCtrl(&amp;quot;Tree_1&amp;quot;,0,-1,-1,treexml);
+}
+
+
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      var typ = getXmlAttribute(attribe,&amp;quot;typ&amp;quot;);
+      var sytid = getXmlAttribute(attribe,&amp;quot;sytid&amp;quot;);
+      var orgid = getXmlAttribute(attribe,&amp;quot;orgid&amp;quot;);
+      var todo = getXmlAttribute(attribe,&amp;quot;todo&amp;quot;);
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+      var nextlevel_itemid = &amp;quot;&amp;quot;;
+      
+      if ( typ== &amp;quot;BI&amp;quot;&amp;&amp; sytid !=&amp;quot;&amp;quot;) {
+      		
+      		 if ( todo==&amp;quot;dimmodel&amp;quot;){
+      			var modguid= getXmlAttribute(attribe,&amp;quot;modguid&amp;quot;);
+      			parent.document.all(&amp;quot;right&amp;quot;).src=&amp;quot;show.sp?grdid=BIDef&amp;guid=&amp;quot; +modguid;
+      			try {nextlevel_itemid=_this.XMLCTL_GetItem(id,hItem,2);} catch ( e ){return;}//说明该节点已经有数据
+      			var topicid= getXmlAttribute(attribe,&amp;quot;topicid&amp;quot;);
+      			var md_xml = invokeOSFunc(&amp;quot;GetDIMTOPIC&amp;quot;,&amp;quot;selsytid=&amp;quot;+sytid +&amp;quot;&amp;typ=&amp;quot;+typ+&amp;quot;&amp;imageid=1&amp;modguid=&amp;quot;+modguid+&amp;quot;&amp;topicid=&amp;quot;+topicid);
+     			_this.XMLCTL_Append(id,md_xml,hItem,2);
+      		}
+      		else if ( todo==&amp;quot;dimtopic&amp;quot; ) {
+      			var modguid= getXmlAttribute(attribe,&amp;quot;modguid&amp;quot;);
+      			var topicguid= getXmlAttribute(attribe,&amp;quot;topicguid&amp;quot;);
+      			parent.document.all(&amp;quot;right&amp;quot;).src=&amp;quot;show.sp?grdid=BITopic&amp;guid=&amp;quot; +topicguid;
+			/*try {nextlevel_itemid=_this.XMLCTL_GetItem(id,hItem,2);} catch ( e ){return;}//说明该节点已经有数据
+			var topicid= getXmlAttribute(attribe,&amp;quot;topicid&amp;quot;);
+      			var md_xml = invokeOSFunc(&amp;quot;GetDIMTOPIC&amp;quot;,&amp;quot;selsytid=&amp;quot;+sytid +&amp;quot;&amp;typ=&amp;quot;+typ+&amp;quot;&amp;imageid=1&amp;modguid=&amp;quot;+modguid+&amp;quot;&amp;topicid=&amp;quot;+topicid);
+     			_this.XMLCTL_Append(id,md_xml,hItem,2);
+     			*/
+		}
+		else if ( todo==&amp;quot;newtopic&amp;quot; ) {	// 在本层新增主题
+      			try {nextlevel_itemid=_this.XMLCTL_GetItem(id,hItem,2);} catch ( e ){return;}//说明该节点已经有数据
+      			var modguid= getXmlAttribute(attribe,&amp;quot;modguid&amp;quot;);
+      			var refid= getXmlAttribute(attribe,&amp;quot;topicid&amp;quot;);
+			parent.document.all(&amp;quot;right&amp;quot;).src=&amp;quot;show.sp?grdid=BITopic&amp;refmod=&amp;quot; +modguid+&amp;quot;&amp;refid=&amp;quot;+refid;
+		}
+		else if ( todo==&amp;quot;newdimmod&amp;quot; ) {	// 新增模型
+      			
+			parent.document.all(&amp;quot;right&amp;quot;).src=&amp;quot;show.sp?grdid=BIDef&amp;selsytid=&amp;quot;+sytid ;
+		}
+		
+		return;
+      }
+	
+
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            if(loc&amp;lt;0) return &amp;quot;&amp;quot;;
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; , loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1 ) ;
+            
+            return ret;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+//查询某个org下的节点
+//传入参数 thisorgid， thisid
+function GetSytList()
+{
+        var xml = &amp;quot;&amp;quot;;
+        var deforg = webpack.EAWebDeforg.GetDeforg(request); 
+        
+        //应该得到默认组织下所有关联组织的系统
+        var sql = &amp;quot;select distinct id,name from (select d.id ,d.name &amp;quot;+
+		&amp;quot; from usr a, (select id,name,refid,level lvl from org connect by prior id=refid start with id=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos;) b , acc c ,syt d&amp;quot;+	
+		&amp;quot; where a.org=b.id and a.id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos; and c.org=b.id and c.id&amp;lt;&amp;gt;&amp;apos;0&amp;apos; and c.syt=d.id order by b.lvl,b.id,c.id &amp;quot;+
+		&amp;quot;  union all select id,name from syt connect by prior refid=id start with id=&amp;apos;&amp;quot;+G_SYTID+&amp;quot;&amp;apos; ) order by id&amp;quot;;		
+	//下级组织的所有系统 + //本系统的所有上级系统
+	sql = &amp;quot;select * from (select id,name,min(lvl) lvl from (
+			select d.id ,d.name,0 lvl  from usr a, 		
+			(select id,name,refid,level lvl from org connect by prior id=refid start with id=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos;) b , acc c ,syt d 
+			where a.org=b.id and a.id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos; and c.org=b.id and c.id&amp;lt;&amp;gt;&amp;apos;0&amp;apos; and c.syt=d.id   
+			 union all 
+			 select id,name,LEVEL lvl from syt connect by prior refid=id start with id=&amp;apos;&amp;quot;+G_SYTID+&amp;quot;&amp;apos;		
+			 ) 
+			 group by id,name ) order by lvl,id &amp;quot;;
+
+	var sytds= pubpack.EADbTool.QuerySQL(sql);
+	for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              
+              var name = sytds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+              var id = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+              name = pubpack.EAFunc.Replace(name,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+              
+              //if ( G_SYTID==&amp;quot;x&amp;quot;|| (G_SYTID!=&amp;quot;&amp;quot; &amp;&amp; sytlistid .indexOf(id+&amp;quot;,&amp;quot;)&amp;gt;=0 ) ) {
+		
+	              xml+=&amp;quot;&amp;lt;&amp;quot;+id+&amp;quot; name=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; imageid=\&amp;quot;&amp;quot;+imageid+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+        	      xml+=&amp;quot;&amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt;&amp;quot;;
+        	//}
+        } 
+	
+        /*
+        var sytlistid = GetSytListByDeforg(deforg);
+        if( sytlistid ==&amp;quot;&amp;quot; ) sytlistid = G_SYTID+&amp;quot;,&amp;quot;;
+        var sytds0 = xmldbpack.EASYTXmlDB.getSytDS();
+        
+	var sytds = sytds0 .sort(&amp;quot;ID&amp;quot;);
+	
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              
+              var name = sytds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+              var id = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+              name = pubpack.EAFunc.Replace(name,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+              
+              if ( G_SYTID==&amp;quot;x&amp;quot;|| (G_SYTID!=&amp;quot;&amp;quot; &amp;&amp; sytlistid .indexOf(id+&amp;quot;,&amp;quot;)&amp;gt;=0 ) ) {
+		
+	              xml+=&amp;quot;&amp;lt;&amp;quot;+id+&amp;quot;_&amp;quot;+name+&amp;quot; imageid=\&amp;quot;&amp;quot;+imageid+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+        	      xml+=&amp;quot;&amp;lt;/&amp;quot;+id+&amp;quot;_&amp;quot;+name+&amp;quot;&amp;gt;&amp;quot;;
+        	}
+        }  
+        */
+        return xml;
+}
+
+function GetOrgList()
+{
+        var xml = &amp;quot;&amp;quot;;
+        var sytds0 = xmldbpack.EAORGXmlDB.getOrgDs();
+        var deforg = webpack.EAWebDeforg.GetDeforg(request);
+       
+        
+	var sytds = sytds0 .sort(&amp;quot;ID&amp;quot;);
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              var id = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+
+              var name = sytds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+              name = pubpack.EAFunc.Replace(name,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+              if ( G_ORGID==&amp;quot;0&amp;quot;|| (deforg !=&amp;quot;&amp;quot; &amp;&amp; deforg ==id ) ) {	//改为取默认组织号
+
+	              xml+=&amp;quot;&amp;lt;&amp;quot;+id+&amp;quot; name=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; imageid=\&amp;quot;&amp;quot;+imageid+&amp;quot;\&amp;quot;  orgid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	              
+	              xml+=&amp;quot;&amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt;&amp;quot;;
+	      }
+        }  
+        
+        return xml;
+}
+
+function GetSytListByDeforg(deforg)
+{
+	var accds0 = xmldbpack.EAACCXmlDB.getAccDS();
+        var sytlistid = &amp;quot;&amp;quot;;
+	var accds = accds0 .sort(&amp;quot;ID&amp;quot;);
+        for( var i=0;i&amp;lt; accds.getRowCount(); i ++ ) {
+              var accid = accds.getStringAt(i,&amp;quot;ID&amp;quot;);
+              var orgid = accds.getStringAt(i,&amp;quot;ORG&amp;quot;);
+              var sytid = accds.getStringAt(i,&amp;quot;SYT&amp;quot;);
+
+              if ( orgid==deforg ) {
+              	sytlistid +=sytid +&amp;quot;,&amp;quot;;
+              
+              }
+              
+        }  
+        return sytlistid ;
+}
+
+// 得到数据流的定义
+function GetLayout()
+{
+       var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EAORGXmlDB.getOrgDs();
+	var ds = new pubpack.EAXmlDS();
+	
+
+	var num = 0;
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+		var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		
+		if ( thissytid == selsytid ) {
+			var fileurl=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + selsytid+&amp;quot;/layout&amp;quot;;     
+			var fileurl1=pubpack.EAOption.dynaDataRoot + &amp;quot;org/&amp;quot; + selsytid+&amp;quot;/layout/index.layout&amp;quot;;   
+			var pagexml = &amp;quot;&amp;quot;;
+			try {pagexml =pubpack.EAFunc.readFile(fileurl1);
+			}catch ( e ) {
+				throw new pubpack.EAException(&amp;quot;目录为空，没有记录&amp;quot;);
+			}
+		        var pageds  = new pubpack.EAXmlDS(pagexml); 
+			var folds = (new java.io.File(fileurl)).listFiles();
+			if ( folds != null ) {
+				folds=pub.EAFunc.sort(folds);
+				var c = folds.length();
+				for(var i=0;i&amp;lt;c;i++) {
+					var f=folds[i];
+					if(!f.isDirectory() ) {
+						var filename = f.getName();
+		            			var index = filename.indexOf(&amp;quot;.sxg&amp;quot;);	
+						if ( index &amp;gt;=0  ) {
+							var row= ds.AddRow(ds.getRowCount()-1);
+							num++;
+							ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+							ds.setValueAt(row,&amp;quot;FILENAME&amp;quot;,filename);
+							var layoutid = filename.substring(0,index);
+							for ( var j=0;j&amp;lt;pageds.getRowCount();j++){
+								if ( pageds.getStringAt(j,&amp;quot;ID&amp;quot;)==layoutid ){
+									ds.setValueAt(row,&amp;quot;NOTE&amp;quot;,pageds.getStringAt(j,&amp;quot;TITLE&amp;quot;));
+									break;
+								}
+							}
+							ds.setValueAt(row,&amp;quot;SYTID&amp;quot;,selsytid );
+							ds.setValueAt(row,&amp;quot;ACTION&amp;quot;,&amp;quot;修改布局&amp;quot; );
+							ds.setValueAt(row,&amp;quot;ACTION1&amp;quot;,&amp;quot;删除布局&amp;quot; );
+						}	
+					}
+				}
+			}
+		}
+	}
+	if ( ds.getRowCount() &amp;gt; 0 ) {
+		var ds0 = ds.sort( &amp;quot;FILENAME&amp;quot; );
+		for( var i=0;i&amp;lt; ds0.getRowCount(); i ++ ) {
+	              var id = ds0.getStringAt(i,&amp;quot;FILENAME&amp;quot;);
+	              var name = ds0.getStringAt(i,&amp;quot;NOTE&amp;quot;);
+	              
+	              name = pubpack.EAFunc.Replace(name,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+	              xml+=&amp;quot;&amp;lt;&amp;quot;+id+name +&amp;quot; imageid=\&amp;quot;&amp;quot;+imageid+&amp;quot;\&amp;quot;  orgid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;openlayout\&amp;quot; layoutid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	              
+	              xml+=&amp;quot;&amp;lt;/&amp;quot;+id+name +&amp;quot;&amp;gt;&amp;quot;;
+	        }  
+		
+	 }             
+           
+
+	xml+=&amp;quot;&amp;lt;新增 imageid=\&amp;quot;9\&amp;quot;  orgid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;openlayout\&amp;quot; layoutid=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/新增&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+        return xml;
+}
+// 得到单据列表
+function GetDIMMOD()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	//var ds = xmldbpack.EAGRDXmlDB.getSytWMList(selsytid,selgrdtyp);
+	var sql = &amp;quot;select id,name,guid from dim_model where sytid=&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos; order by id&amp;quot;;
+	var ds = pubpack.EADbTool.QuerySQL(sql);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+		xml+=&amp;quot;&amp;lt;&amp;quot;+name + &amp;quot; imageid=\&amp;quot;5\&amp;quot; modid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;dimmodel\&amp;quot; modguid=\&amp;quot;&amp;quot;+guid+&amp;quot;\&amp;quot; topicid=\&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+
+	}
+	xml+=&amp;quot;&amp;lt;新增分析模型  imageid=\&amp;quot;5\&amp;quot;  sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newdimmod\&amp;quot; modguid=\&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+
+	return xml;
+}
+//得到模型下面的所有主题
+function GetDIMTOPIC()
+{
+	var xml = _GetDIMTOPIC(&amp;quot;&amp;quot;,modguid,selsytid,typ);
+	xml+=&amp;quot;&amp;lt;新增主题  sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newtopic\&amp;quot; modguid=\&amp;quot;&amp;quot;+modguid+&amp;quot;\&amp;quot; topicid=\&amp;quot;&amp;quot;+topicid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+	return xml;
+}
+//树型递归函数
+function _GetDIMTOPIC(topicid,modguid,selsytid,typ)
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var refidstr = &amp;quot; and refid is null &amp;quot;;
+	if ( topicid!= &amp;quot;&amp;quot; ) 
+		refidstr = &amp;quot; and refid=&amp;apos;&amp;quot;+topicid+&amp;quot;&amp;apos;&amp;quot;;
+	var sql = &amp;quot;select id,name,guid from dim_topic where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos; &amp;quot;+refidstr+&amp;quot; order by id&amp;quot;;
+
+	var ds = pubpack.EADbTool.QuerySQL(sql);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+		xml+=&amp;quot;&amp;lt;&amp;quot;+id+&amp;quot;-&amp;quot;+name + &amp;quot; topicid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;dimtopic\&amp;quot; modguid=\&amp;quot;&amp;quot;+modguid+&amp;quot;\&amp;quot; topicguid=\&amp;quot;&amp;quot;+guid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		//递归，找出下级所有的
+		xml+=_GetDIMTOPIC(id ,modguid,selsytid,typ);
+		xml+=&amp;quot;&amp;lt;/&amp;quot;+id+&amp;quot;-&amp;quot;+name+&amp;quot;&amp;gt;&amp;quot;;
+
+	}
+	//xml+=&amp;quot;&amp;lt;在本层新增主题  sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newtopic\&amp;quot; modguid=\&amp;quot;&amp;quot;+modguid+&amp;quot;\&amp;quot; topicid=\&amp;quot;&amp;quot;+topicid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+
+	return xml;
+}
+
+// 得到单据列表
+function GetGrdList()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	//var ds = xmldbpack.EAGRDXmlDB.getSytWMList(selsytid,selgrdtyp);
+	var sql = &amp;quot;select id,name from sysmw where syt=&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos; and mwtyp=&amp;apos;&amp;quot;+mwcls+&amp;quot;&amp;apos;&amp;quot;;
+	if ( subcls==&amp;quot;&amp;quot;) 
+		sql+=&amp;quot; and typ is null &amp;quot;;
+	else sql+=&amp;quot; and typ =&amp;apos;&amp;quot;+subcls+&amp;quot;&amp;apos;&amp;quot;;
+
+	
+	var ds = pubpack.EADbTool.QuerySQL(sql);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+
+		xml+=&amp;quot;&amp;lt;&amp;quot;+id+&amp;quot; name=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; mwid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; mwcls=\&amp;quot;&amp;quot;+mwcls+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;openmw\&amp;quot;/&amp;gt;&amp;quot;;
+
+	}
+	return xml;
+}
+function GetGrdTypList()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var sql =&amp;quot;select distinct mwtyp,typ,decode(mwtyp,&amp;apos;R&amp;apos;,&amp;apos;报表&amp;apos;,&amp;apos;Q&amp;apos;,&amp;apos;查询&amp;apos;,&amp;apos;F&amp;apos;,&amp;apos;表单&amp;apos;,&amp;apos;B&amp;apos;,&amp;apos;单据&amp;apos;,&amp;apos;其他&amp;apos;)||&amp;apos;-&amp;apos;||NVL(typ,&amp;apos;未分类&amp;apos;) id from sysmw where syt=&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos; &amp;quot;;
+	if ( typ==&amp;quot;REP&amp;quot; ) 
+		sql+= &amp;quot; and mwtyp =&amp;apos;R&amp;apos; &amp;quot;;
+	else if ( typ==&amp;quot;FORM&amp;quot; ) 
+		sql+= &amp;quot; and mwtyp=&amp;apos;F&amp;apos; &amp;quot;;
+	else if ( typ==&amp;quot;BILL&amp;quot; ) 
+		sql+= &amp;quot; and mwtyp =&amp;apos;B&amp;apos; &amp;quot;;
+	else if ( typ==&amp;quot;QUERY&amp;quot; ) 
+		sql+= &amp;quot; and mwtyp =&amp;apos;Q&amp;apos;&amp;quot;;
+
+	else sql+= &amp;quot; and mwtyp not in ( &amp;apos;R&amp;apos;,&amp;apos;Q&amp;apos;,&amp;apos;F&amp;apos;,&amp;apos;B&amp;apos;) &amp;quot;;
+	sql+=&amp;quot; order by mwtyp,typ&amp;quot;;
+	var ds = pubpack.EADbTool.QuerySQL(sql);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;id&amp;quot;);
+		var mwtyp= ds.getStringAt(i,&amp;quot;mwtyp&amp;quot;);
+		var subcls= ds.getStringAt(i,&amp;quot;typ&amp;quot;);
+
+		xml+=&amp;quot;&amp;lt;&amp;quot;+id + &amp;quot; mwcls=\&amp;quot;&amp;quot;+mwtyp+&amp;quot;\&amp;quot; subcls=\&amp;quot;&amp;quot;+subcls+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;openmwtyp\&amp;quot;/&amp;gt;&amp;quot;;
+
+	}
+	if ( typ==&amp;quot;REP&amp;quot; ) {
+		xml+= &amp;quot;&amp;lt;新增报表中间件 mwcls=\&amp;quot;R\&amp;quot; subcls=\&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newmwtyp\&amp;quot;/&amp;gt;&amp;quot;;
+		
+	}
+	else if ( typ==&amp;quot;BILL&amp;quot; ) {
+		xml+= &amp;quot;&amp;lt;新增单据中间件 mwcls=\&amp;quot;B\&amp;quot; subcls=\&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newmwtyp\&amp;quot;/&amp;gt;&amp;quot;;
+	}
+	else if ( typ==&amp;quot;FORM&amp;quot; ) {
+		xml+= &amp;quot;&amp;lt;新增表单中间件 mwcls=\&amp;quot;F\&amp;quot; subcls=\&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newmwtyp\&amp;quot;/&amp;gt;&amp;quot;;
+	}
+	else if ( typ==&amp;quot;QUERY&amp;quot; ) {
+		xml+= &amp;quot;&amp;lt;新增查询中间件 mwcls=\&amp;quot;Q\&amp;quot; subcls=\&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newmwtyp\&amp;quot;/&amp;gt;&amp;quot;;
+
+	}
+
+	else 
+		xml+= &amp;quot;&amp;lt;新增基础中间件 mwcls=\&amp;quot;M\&amp;quot; subcls=\&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;newmwtyp\&amp;quot;/&amp;gt;&amp;quot;;
+
+	return xml;
+}
+
+//&amp;quot;typ=&amp;quot; +typ+&amp;quot;&amp;imageid=2&amp;sub=wsflow&amp;quot;
+// sub 后缀
+function GetFlowGraph()
+{
+        var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EASYTXmlDB.getSytDS();
+	var ds = new pubpack.EAXmlDS();
+	var num = 0;
+	if( sub==&amp;quot;&amp;quot; ) sub=&amp;quot;flow&amp;quot;;
+	
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+		var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		if ( thissytid == selsytid ) {
+			var fileurl=basePath + pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid;     
+			//throw new pubpack.EAException(fileurl);         
+			var folds = (new java.io.File(fileurl)).listFiles();
+			if ( folds != null ) {
+				folds=pub.EAFunc.sort(folds);
+				var c = folds.length();
+				for(var i=0;i&amp;lt;c;i++) {
+					var f=folds[i];
+					if(!f.isDirectory() ) {
+						var filename = f.getName();
+		            			var index = filename.indexOf(&amp;quot;.&amp;quot;+sub);	
+						if ( index &amp;gt;=0  ) {
+							var row= ds.AddRow(ds.getRowCount()-1);
+							num++;
+							ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+							ds.setValueAt(row,&amp;quot;FILENAME&amp;quot;,filename);
+							ds.setValueAt(row,&amp;quot;NOTE&amp;quot;,&amp;quot;图&amp;quot;+filename);
+							ds.setValueAt(row,&amp;quot;SYTID&amp;quot;,selsytid );
+						}	
+					}
+				}
+			}
+		}
+	}
+
+	if ( ds.getRowCount() &amp;gt; 0 ) {
+		var ds0 = ds.sort( &amp;quot;FILENAME&amp;quot; );
+		for( var i=0;i&amp;lt; ds0.getRowCount(); i ++ ) {
+	              var id = ds0.getStringAt(i,&amp;quot;FILENAME&amp;quot;);
+	              var name = ds0.getStringAt(i,&amp;quot;NOTE&amp;quot;);
+	              
+	              name = pubpack.EAFunc.Replace(name,&amp;quot; &amp;quot;,&amp;quot;&amp;quot;);
+	              xml+=&amp;quot;&amp;lt;&amp;quot;+id +&amp;quot; imageid=\&amp;quot;&amp;quot;+imageid+&amp;quot;\&amp;quot;  sytid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;open&amp;quot;+typ+&amp;quot;\&amp;quot; wsid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	              
+	              xml+=&amp;quot;&amp;lt;/&amp;quot;+id +&amp;quot;&amp;gt;&amp;quot;;
+	        }  
+		
+	}
+	xml+=&amp;quot;&amp;lt;新增图 imageid=\&amp;quot;9\&amp;quot;   sytid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;open&amp;quot;+typ+&amp;quot;\&amp;quot; wsid=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/新增图&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+
+	if( typ==&amp;quot;WSFLOW&amp;quot; ) {
+		
+		xml+=&amp;quot;&amp;lt;WS对象定义 imageid=\&amp;quot;9\&amp;quot;   sytid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;list&amp;quot;+typ+&amp;quot;\&amp;quot; wsid=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/WS对象定义&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	}
+	else if ( typ == &amp;quot;Flow&amp;quot; ) {
+		
+		xml+=&amp;quot;&amp;lt;单据流对象 imageid=\&amp;quot;9\&amp;quot;   sytid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;list&amp;quot;+typ+&amp;quot;\&amp;quot; wsid=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/单据流对象&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	
+	}
+	else if ( typ == &amp;quot;WorkFlow&amp;quot; ) {
+		
+	}
+	else if ( typ == &amp;quot;Database&amp;quot; ) {
+		
+	}
+	else if ( typ == &amp;quot;SSO&amp;quot; ) {
+		xml+=&amp;quot;&amp;lt;SSO站点定义 imageid=\&amp;quot;9\&amp;quot;   sytid=\&amp;quot;&amp;quot;+thissytid+&amp;quot;\&amp;quot; typ=\&amp;quot;&amp;quot;+typ+&amp;quot;\&amp;quot; todo=\&amp;quot;list&amp;quot;+typ+&amp;quot;\&amp;quot; wsid=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/SSO站点定义&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+
+	}	
+	return xml;
+
+
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

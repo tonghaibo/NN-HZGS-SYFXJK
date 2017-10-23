@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >ZDXMGL</MWID><NAME >发改委项目管理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXMGL.zxg</FILE><SCENE ></SCENE><FIXED >1,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >XMLX</ID><NAME >项目类型</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_ZDXM_XMLX</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >XMMC</C14><C15 >ZDBZ</C15><C16 ></C16><C17 >ZDBZ</C17><C18 ></C18></ROW>
+<ROW num="1" ><ID >QSRQ</ID><NAME >起始日期</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >QSRQ</C13><C14 >QSRQ</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >QSRQ</C18></ROW>
+<ROW num="2" ><ID >JZRQ</ID><NAME >截止日期</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >QZRQ</C13><C14 >JZRQ</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >JZRQ</C18></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >11</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,1,1</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var bFirstLoad = true;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	if (bFirstLoad == true) {
+		bFirstLoad = false;
+		_this.AddToolbarButton(&amp;quot;udf_setZDXM&amp;quot;,&amp;quot;标注为重点项目&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,3,3,80);
+		_this.AddToolbarButton(&amp;quot;udf_delZDXM&amp;quot;,&amp;quot;取消重点项目标注&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,3,3,80);
+		
+		document.getElementById(&amp;quot;QSRQ&amp;quot;).value = G_LOGDAT.substring(0,4)+&amp;quot;-01&amp;quot;;
+		document.getElementById(&amp;quot;JZRQ&amp;quot;).value = G_LOGDAT.substring(0,7);
+	}
+	_this.SetColVisible(0,_this.GetColCount(0)-1,-1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.AutoFixScreenWidth();
+	
+	_this.SetToBoolBox(0,0,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+		var cnt = 1*_this.GetCellText(sheet,r,8);
+		if (cnt &amp;gt; 0) {
+			_this.SetCellColor(0,r,8,0,0,255);
+		}
+		else if (cnt == 0) {
+			_this.SetCellColor(0,r,8,255,0,0);
+		}
+	}
+			
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp;  row == 0 &amp;&amp; col == 0) {
+		for (var r=1;r&amp;lt;_this.GetRowCount(0);r++) {
+			_this.SetCellText(0,r,0,newvalue);
+		}
+	}
+}
+
+function setZDXMFlag(param)
+{
+	try {
+		var ret = _this.invokeOSFuncExt(&amp;quot;setZDXMFlag&amp;quot;,param);
+		alert(ret);
+	}
+	catch (e) {
+		alert(&amp;quot;标注失败：&amp;quot;+e.toString());
+	}
+}
+
+//标注为重点项目
+function setZDXM()
+{
+	var param = new Object();
+	param.guids = getSelectGuid();
+	param.zdbz = &amp;quot;1&amp;quot;;
+	if (param.guids == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+	if (!confirm(&amp;quot;标注选中项目记录为重点项目，是否继续？&amp;quot;)) return;
+	setZDXMFlag(param);
+
+}
+
+//取消重点项目标注
+function delZDXM()
+{
+	var param = new Object();
+	param.guids = getSelectGuid();
+	param.zdbz = &amp;quot;0&amp;quot;;
+	if (param.guids == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+	if (!confirm(&amp;quot;取消重点项目标注，是否继续？&amp;quot;)) return;
+	setZDXMFlag(param);
+}
+
+function getSelectGuid()
+{
+	var ret = &amp;quot;&amp;quot;;
+	for (var r=1;r&amp;lt;_this.GetRowCount(0);r++) {
+		var flg = _this.GetCellText(0,r,0);
+		var guid = _this.GetCellText(0,r,_this.GetColCount(0)-1);
+		if (flg == 1 &amp;&amp; guid != &amp;quot;&amp;quot;) {
+			if (ret == &amp;quot;&amp;quot;) ret += guid;
+			else ret += &amp;quot;,&amp;quot;+guid;
+		}
+	}
+	return ret;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+//替换SQL参数
+function replaceParam(mwobj,request,sql)
+{
+//	var isget = request.getParameter(&amp;quot;ISGET&amp;quot;);
+//	if (isget == &amp;quot;0&amp;quot;) {
+//		sql = pub.EAFunc.Replace(sql,&amp;quot;[%ISGETSTR]&amp;quot;,&amp;quot; and zbdwsbh=0&amp;quot;);
+//	}
+//	else if (isget == &amp;quot;1&amp;quot;) {
+//		sql = pub.EAFunc.Replace(sql,&amp;quot;[%ISGETSTR]&amp;quot;,&amp;quot; and zbdwsbh&amp;gt;0&amp;quot;);
+//	}
+//	else {
+//		sql = pub.EAFunc.Replace(sql,&amp;quot;[%ISGETSTR]&amp;quot;,&amp;quot;&amp;quot;);
+//	}
+//	
+//	return sql;
+}
+
+
+function setZDXMFlag()
+{
+	var db = null ;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+
+	try {		
+		db = new pub.EADatabase();
+		sql = &amp;quot;update TAX_ZDXM_FGWXM set zdbz=&amp;apos;&amp;quot;+zdbz+&amp;quot;&amp;apos; where fgwxmuuid in (&amp;quot;+pub.EAFunc.SQLIN(guids)+&amp;quot;)&amp;quot;;
+		ret = db.ExcecutSQL(sql);
+		db.Commit();
+		return &amp;quot;标注成功，记录数&amp;quot;+ret;
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if(db != null) db.Close();
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.*
+from (
+select nvl(b.name,xmlx) xmlx,xmdm,xmmc,ztzje,jhkgsj,xmssdw,xmzrdw,zyjsnrgm,
+	decode(zdbz,&amp;apos;1&amp;apos;,&amp;apos;是&amp;apos;,&amp;apos;否&amp;apos;) zbxm,fgwxmuuid
+from TAX_ZDXM_FGWXM a,v_tax_zdxm_xmlx b
+where a.xmlx=b.id(+)
+  and to_char(to_date(jhkgsj,&amp;apos;yyyy.mm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=decode(&amp;apos;[%QSRQ]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01-01&amp;apos;,&amp;apos;[%QSRQ]&amp;apos;)
+  and to_char(to_date(jhkgsj,&amp;apos;yyyy.mm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=decode(&amp;apos;[%JZRQ]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;9999-12-31&amp;apos;,&amp;apos;[%JZRQ]&amp;apos;)
+  --and zdbz like &amp;apos;%[%ZDBZ]%&amp;apos;
+  and xmlx like &amp;apos;[%XMLX]%&amp;apos;
+order by a.xmlx,jhkgsj,xmdm,xmmc
+) t
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+<ROW num="1" ><ID >CHECK</ID><NAME ></NAME><DATDSC >insert into tax_zdxmxx_sbh(zdxmguid,nsrsbh,shxydm,djxh,zbdwmc)  
+select distinct guid,nsrsbh,shxydm,djxh,zbdwmc 
+from (
+  select a.guid,a.tjyf,a.xmmc,a.cgdw,a.zbdwmc,a.zbdwsbh,
+	b.nsrsbh,b.shxydm,b.djxh,b.nsrzt_dm
+  from TAX_ZDXM_DR a,hx_dj.dj_nsrxx@js3q b
+  where a.zbdwmc=b.nsrmc  
+    and tjyf&amp;gt;=replace(&amp;apos;[%QSRQ]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and tjyf&amp;lt;=replace(&amp;apos;[%JZRQ]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+) a 
+where (guid,nsrsbh,shxydm,djxh) not in 
+  (select zdxmguid,nsrsbh,shxydm,djxh from tax_zdxmxx_sbh)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

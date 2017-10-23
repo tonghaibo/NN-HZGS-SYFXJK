@@ -1,0 +1,573 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>FlowDesigner</MWID><NAME>流程定义设计器</NAME><NOTE></NOTE><FILE>FlowDesigner.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>//      流程定义：
+//
+//      1、各个系统的对象图的浏览
+//
+//      2、可以从现有的中间件添加到对象图中
+//
+//      3、可以以地图后构架图的方式表现组织机构
+//
+//      4、数据流的支持
+//
+//      5、其他图元和控件可以拖拉到图中
+//
+//      6、在图上点击可以打开中间件的设计界面（界面、代码）
+
+
+
+var nSeq = 0 ;
+var sheetTree = 0 ;
+var sheetFlow = 1;
+var sheetCode = 2;
+var sheetObject = 3;
+var sheetDatalink = 4;
+var sheetTool = 5;
+var FLOWID = &amp;quot;FLOW_1&amp;quot;;
+var TREEID = &amp;quot;TREE_1&amp;quot;;
+var PROPID = &amp;quot;PROP_1&amp;quot;;
+var TOOLID = &amp;quot;TOOL_1&amp;quot;;
+var DATAFLOWID = &amp;quot;DATAFLOW_1&amp;quot;;
+var MWID = &amp;quot;MW_1&amp;quot;;
+
+
+var thisfile = &amp;quot;&amp;quot;;
+
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：载入数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/10/05 23:45:15
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+       _this.ShowTabBar(1);
+       _this.SetSheetName(0,&amp;quot;流程图对象&amp;quot;);
+       sheetFlow  = _this.AddSheet(&amp;quot;流程图&amp;quot;);
+       sheetCode = _this.AddSheet(&amp;quot;代码&amp;quot;);
+       sheetObject = _this.AddSheet(&amp;quot;中间件&amp;quot;);
+       sheetDatalink = _this.AddSheet(&amp;quot;数据流&amp;quot;);
+       sheetTool = _this.AddSheet(&amp;quot;其他&amp;quot;);
+       
+       _this.SetDesignMode(1);
+       var treexml = &amp;quot;&amp;quot;;
+       try {
+            treexml = invokeOSFunc(&amp;quot;GetSytList&amp;quot;,&amp;quot;&amp;quot; ) ;       
+            _this.SetToTreeCtrl(TREEID ,sheetTree ,-1,-1,&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;流程图对象&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/流程图对象&amp;gt;&amp;quot;);
+            _this.SetToTreeCtrl(MWID  ,sheetObject,-1,-1,&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;中间件对象&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/中间件对象&amp;gt;&amp;quot; );       
+            _this.SetToTreeCtrl(DATAFLOWID ,sheetDatalink ,-1,-1,&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;单据流对象&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/单据流对象&amp;gt;&amp;quot;);    
+       }
+       catch ( e ) {
+            alert ( e );
+       }
+       _this.SetToSVGForm(FLOWID,sheetFlow,-1,-1 ,&amp;quot;&amp;quot;);
+//       var dsid = _this.XMLDS_CREATE();
+/*
+       var idlist = new Array(&amp;quot;rect&amp;quot;,&amp;quot;text&amp;quot;,&amp;quot;circle&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+       var namelist = new Array(&amp;quot;矩形&amp;quot;,&amp;quot;文本&amp;quot;,&amp;quot;圆形&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+       for ( row=0;row&amp;lt;idlist.length;row++){
+             var row1 = _this.XMLDS_AddRow(_this.XMLDS_GetRowCount()-1,&amp;quot;&amp;quot;); _this.XMLDS_SetString(row1,&amp;quot;ID&amp;quot;, idlist[row] );       _this.XMLDS_SetString(row1,&amp;quot;NAME&amp;quot;,namelist[row] );
+       }
+       var xml = _this.XMLDS_GetXml();
+*/       
+       _this.LoadToListCtrl(TOOLID ,sheetTool,-1,-1,&amp;quot;xlsgrid/jsp/resource/svgformds.xml&amp;quot;);
+       _this.SetAttribe(TOOLID,_this.ATTR_LISTCTRL_SHOWCOLUMNHEAD,&amp;quot;0&amp;quot;);
+       _this.SetAttribe(TOOLID,_this.ATTR_LISTCTRL_VIEWAS,&amp;quot;list&amp;quot;);
+       _this.SetAttribe(TOOLID,_this.SELECTFLAG_SINGLEROW_CHECKBOX,&amp;quot;1&amp;quot;);
+
+     
+       _this.SetToCodeEditor(PROPID,sheetCode,-1,-1 ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+       _this.SetCellBkColor(sheetObject,-1,-1,255,255,255);//211,219,250
+
+       f_initToolbox(sheetCode);       
+       
+       _this.SetCurrentSheet(sheetFlow);
+       
+       _this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;20%&amp;quot;);
+       _this.SplitSheet(sheetFlow,&amp;quot;H&amp;quot;,&amp;quot;70%&amp;quot;);
+       _this.SplitSheet(sheetCode ,&amp;quot;V&amp;quot;,&amp;quot;40%&amp;quot;);
+       
+       _this.AddToolbarButton(&amp;quot;com_save&amp;quot;,&amp;quot;F8保存&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,80);
+      
+
+}
+//================================================================// 
+// 函数：thisOnF8KeyDown
+// 说明：Excecute SQL ALL
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/18/05 15:07:32
+// 修改日志：
+//================================================================// 
+function _thisOnF8KeyDown(sheet,row,col)
+{
+  _thisOnButtonCtrlClick(&amp;quot;com_save&amp;quot;,sheet,-1,-1);
+}
+
+
+//================================================================// 
+// 函数：thisOnButtonCtrlClick
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/05 12:05:02
+// 修改日志：
+//================================================================// 
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+        if ( id==&amp;quot;com_save&amp;quot; ) {      
+              
+              if ( thisfile ==&amp;quot;&amp;quot; ){
+                    var ret = prompt(&amp;quot;请输入要保存的流程图对象名称（中间不能有空格）&amp;quot;);      
+                    if ( ret.length &amp;gt; 0 ) 
+                          thisfile = ret;
+                    else return;
+              }
+              var svgxml = &amp;quot;&amp;quot;;
+              try{
+                    svgxml = _this.CTRL_GetSelectedText(FLOWID);
+              }catch ( e ) {}
+              if ( svgxml == &amp;quot;&amp;quot; )
+                    svgxml = _this.GetCellText( sheetFlow ,-1,-1);
+              alert ( svgxml );      
+              
+        }
+}
+//================================================================// 
+// 函数：thisOnMouseLClick
+// 说明：如果选择图，显示代码
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/11/06 17:26:44
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col)
+{
+      if ( sheet == sheetFlow ){
+            var str = _this.GetCellText(sheetFlow,-1,-1) ;
+            alert ( str );
+            _this.SetCellText(sheetCode,-1,-1,str );
+      }         
+}
+
+//================================================================// 
+// 函数：f_initToolbox
+// 说明：初始化工具栏，用于显示字体等信息
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/15/06 10:57:33
+// 修改日志：
+//================================================================// 
+function f_initToolbox(sheet){
+       _this.SetCellBkColor(sheet,-1,-1,255,255,255);
+       _this.SetToComboBox(&amp;quot;SEL_FONTNAME&amp;quot;,sheet,1,2,1);
+       var nHAlignList = _this.CreateListValue();
+       var nVAlignList = _this.CreateListValue();
+       var nLineStyle = _this.CreateListValue();
+       var nBorderStyle = _this.CreateListValue();
+       var nFormatStyle = _this.CreateListValue();
+
+       _this.SetListValue(nHAlignList,_this.H_ALIGN_LEFT,&amp;quot;左对齐&amp;quot;);
+       _this.SetListValue(nHAlignList,_this.H_ALIGN_CENTER,&amp;quot;居中对齐&amp;quot;);
+       _this.SetListValue(nHAlignList,_this.H_ALIGN_RIGHT,&amp;quot;右对齐&amp;quot;);
+       _this.SetListValue(nVAlignList,_this.V_ALIGN_TOP,&amp;quot;上对齐&amp;quot;);
+       _this.SetListValue(nVAlignList,_this.V_ALIGN_CENTER,&amp;quot;居中对齐&amp;quot;);
+       _this.SetListValue(nVAlignList,_this.V_ALIGN_BOTTOM,&amp;quot;下对齐&amp;quot;);
+       
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_SOLID,&amp;quot;LINESTYLE_SOLID&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_DASH,&amp;quot;LINESTYLE_DASH&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_DOT,&amp;quot;LINESTYLE_DOT&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_DASHDOT,&amp;quot;LINESTYLE_DASHDOT&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_DASHDOTDOT,&amp;quot;LINESTYLE_DASHDOTDOT&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_NULL,&amp;quot;LINESTYLE_NULL&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_INSIDEFRAME,&amp;quot;LINESTYLE_INSIDEFRAME&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_GEOMETRIC,&amp;quot;LINESTYLE_GEOMETRIC&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_COSMETIC,&amp;quot;LINESTYLE_COSMETIC&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_ALTERNATE,&amp;quot;LINESTYLE_ALTERNATE&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_USERSTYLE,&amp;quot;LINESTYLE_USERSTYLE&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_ENDCAP_ROUND,&amp;quot;LINESTYLE_ENDCAP_ROUND&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_ENDCAP_SQUARE,&amp;quot;LINESTYLE_ENDCAP_SQUARE&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_ENDCAP_FLAT,&amp;quot;LINESTYLE_ENDCAP_FLAT&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_JOIN_BEVEL,&amp;quot;LINESTYLE_JOIN_BEVEL&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_JOIN_MITER,&amp;quot;LINESTYLE_JOIN_MITER&amp;quot;);
+       _this.SetListValue(nLineStyle ,_this.LINESTYLE_JOIN_ROUND,&amp;quot;LINESTYLE_JOIN_ROUND&amp;quot;);
+
+      _this.SetListValue(nBorderStyle,&amp;quot;0000&amp;quot;,&amp;quot;无边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;1111&amp;quot;,&amp;quot;全外边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;2222&amp;quot;,&amp;quot;全内边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;1000&amp;quot;,&amp;quot;仅左边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;0100&amp;quot;,&amp;quot;仅上边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;0010&amp;quot;,&amp;quot;仅右边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;0001&amp;quot;,&amp;quot;仅下边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;1100&amp;quot;,&amp;quot;左上边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;1001&amp;quot;,&amp;quot;左下边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;0110&amp;quot;,&amp;quot;右上边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;0011&amp;quot;,&amp;quot;右下边框&amp;quot;);
+      _this.SetListValue(nBorderStyle,&amp;quot;0101&amp;quot;,&amp;quot;上下边框&amp;quot;);
+
+      _this.SetListValue(nFormatStyle ,&amp;quot;&amp;quot;,&amp;quot;无&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;#,##0.00_ &amp;quot;,&amp;quot;金额型&amp;quot;);
+
+      _this.SetListValue(nFormatStyle ,&amp;quot;0_ &amp;quot;,&amp;quot;整数字型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.00_ &amp;quot;,&amp;quot;2位数字型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.0000_ &amp;quot;,&amp;quot;4位数字型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.000000_ &amp;quot;,&amp;quot;6位数字型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.00000000_ &amp;quot;,&amp;quot;8位数字型&amp;quot;);
+
+      _this.SetListValue(nFormatStyle ,&amp;quot;0%&amp;quot;,&amp;quot;百份整数型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;Percent&amp;quot;,&amp;quot;百份数型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.0000%&amp;quot;,&amp;quot;4位百份数型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.000000%&amp;quot;,&amp;quot;6位百份数型&amp;quot;);
+      _this.SetListValue(nFormatStyle ,&amp;quot;0.00000000%&amp;quot;,&amp;quot;8位百份数型&amp;quot;);
+       _this.SetToComboBox(&amp;quot;SEL_FONTNAME&amp;quot;,sheet,1,2,1);// 第一个listid是字体
+       _this.SetToComboBox(&amp;quot;SEL_HALIGN&amp;quot;,sheet,7,2,nHAlignList);
+       _this.SetToComboBox(&amp;quot;SEL_VALIGN&amp;quot;,sheet,7,7,nVAlignList);
+       //_this.SetToComboBox(&amp;quot;SEL_LINESTYLE&amp;quot;,sheet,5,9,nLineStyle );
+       _this.SetToComboBox(&amp;quot;SEL_BORDERSTYLE&amp;quot;,sheet,5,5,nBorderStyle );
+       _this.SetToComboBox(&amp;quot;SEL_FORMATSTYLE&amp;quot;,sheet,11,2,nFormatStyle );
+       
+      _this.SetToRectbox(sheet,3,2,&amp;quot;10%&amp;quot;,&amp;quot;10%&amp;quot;,&amp;quot;80%&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;#DDECFE&amp;quot;, 1, &amp;quot;#DBEAF5&amp;quot;,1, &amp;quot;#DBEAF5&amp;quot;,1, &amp;quot;#DBEAF5&amp;quot;, 1, &amp;quot;#DBEAF5&amp;quot; );
+      _this.SetToRectbox(sheet,3,5,&amp;quot;10%&amp;quot;,&amp;quot;10%&amp;quot;,&amp;quot;80%&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;#0000FF&amp;quot;, 0, &amp;quot;#DBEAF5&amp;quot;,0, &amp;quot;#DBEAF5&amp;quot;,0, &amp;quot;#DBEAF5&amp;quot;, 0, &amp;quot;#DBEAF5&amp;quot; );
+      _this.SetToRectbox(sheet,5,2,&amp;quot;10%&amp;quot;,&amp;quot;10%&amp;quot;,&amp;quot;80%&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;#FF0000&amp;quot;, 1, &amp;quot;#000000&amp;quot;,1, &amp;quot;#000000&amp;quot;,1, &amp;quot;#000000&amp;quot;, 1, &amp;quot;#000000&amp;quot; ); 
+       //_this.LoadScene(sheet,10);
+       
+}
+//================================================================// 
+// 函数：TreeItemDClick
+// 说明：Click tree item
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/15/06 16:02:13
+// 修改日志：
+//================================================================// 
+function f_TreeItemDClick(id,hItem,tagid,attribe,value)
+{
+
+      var ret = &amp;quot;&amp;quot;;
+      var itemid = tagid;      // 标签
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+      var nextlevel_itemid = _this.XMLCTL_GetItem(id,hItem,2);
+      
+      if ( id==TREEID ) {
+            sytid =getXmlAttribute(attribe,&amp;quot;sytflg&amp;quot;);
+            if ( sytid.length&amp;gt;0 &amp;&amp; level == 2) {      // 展开tree节点
+                  
+                  if ( nextlevel_itemid.length== 0 ) {
+                        var md_xml = &amp;quot;&amp;quot;;
+                        try {
+                             md_xml = invokeOSFunc(&amp;quot;GetSVGList&amp;quot;,&amp;quot;selsytid=&amp;quot; + sytid  ) ;
+                             _this.XMLCTL_Append(id,md_xml,hItem,2);
+                        }
+                        catch ( e ) {}
+                        
+                  }
+            }
+            else if ( attribe.length &amp;gt; 0 &amp;&amp; level&amp;gt;=3 ) {   
+                  // 打开现有图
+                  thisfile =getXmlAttribute(attribe,&amp;quot;url&amp;quot;);
+                  // 得到上层中第二层节点中存在selsytid属性的，level=2
+                  var curitem = _this.XMLCTL_GetItem(id,hItem,_this.ATTR_XMLMODE_PARENT);
+                  while ( _this.XMLCTL_GetLevel(id,curitem) &amp;gt; 2 ) {
+                        curitem= _this.XMLCTL_GetItem(id,curitem,_this.ATTR_XMLMODE_PARENT);
+                  }
+                  var sytid =_this.XMLCTL_GetAttribe(id,curitem,&amp;quot;sytflg&amp;quot;);
+                  if (  thisfile.length&amp;gt; 0) {
+                        try {
+                              ret = invokeOSFunc(&amp;quot;loadSVG&amp;quot;,&amp;quot;path=&amp;quot;+thisfile +&amp;quot;&amp;selsytid=&amp;quot;+sytid ) ;       
+                              //alert ( ret );
+                              _this.SetToSVGForm(&amp;quot;&amp;quot;,sheetFlow,-1,-1,ret);
+                        }
+                        catch ( e ) {
+                              alert ( e );
+                        }
+                   }
+            }
+      }      
+      else if ( id==MWID  ) {        //DATAFLOWID 
+            if ( nextlevel_itemid.length== 0 ) {
+                  // 没有下级节点
+                  if ( level == 2 ) {
+                        sytid =getXmlAttribute(attribe,&amp;quot;sytflg&amp;quot;);
+                        var md_xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;;
+                        md_xml +=&amp;quot;&amp;lt;单据中间件 sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; imageid=\&amp;quot;0\&amp;quot; grdtyp=\&amp;quot;B\&amp;quot;/&amp;gt;&amp;quot;;
+                        md_xml +=&amp;quot;&amp;lt;查询中间件 sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; imageid=\&amp;quot;0\&amp;quot; grdtyp=\&amp;quot;Q\&amp;quot;/&amp;gt;&amp;quot;;
+                        md_xml +=&amp;quot;&amp;lt;报表中间件 sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; imageid=\&amp;quot;0\&amp;quot; grdtyp=\&amp;quot;R\&amp;quot;/&amp;gt;&amp;quot;;
+                        md_xml +=&amp;quot;&amp;lt;表单中间件 sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; imageid=\&amp;quot;0\&amp;quot; grdtyp=\&amp;quot;F\&amp;quot;/&amp;gt;&amp;quot;;
+                        md_xml +=&amp;quot;&amp;lt;自定义中间件 sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; imageid=\&amp;quot;0\&amp;quot; grdtyp=\&amp;quot;M\&amp;quot;/&amp;gt;&amp;quot;;
+
+                  _this.XMLCTL_Append(id,md_xml,hItem,2);
+                  }
+                  else if ( level == 3){
+                        sytid = getXmlAttribute(attribe,&amp;quot;sytid&amp;quot;);
+                        grdtyp = getXmlAttribute(attribe,&amp;quot;grdtyp&amp;quot;);
+                        var md_xml = invokeOSFunc(&amp;quot;GetMDList&amp;quot;,&amp;quot;selsytid=&amp;quot; + sytid +&amp;quot;&amp;grdtyp=&amp;quot;+grdtyp ) ;
+                        _this.XMLCTL_Append(id,md_xml,hItem,2);
+                  }
+                  else if ( level &amp;gt; 3 ) {
+                        var name= getXmlAttribute(attribe,&amp;quot;NAME&amp;quot;);
+                        var id =  getXmlAttribute(attribe,&amp;quot;ID&amp;quot;);
+                        var mwtyp = getXmlAttribute(attribe,&amp;quot;类型&amp;quot;);
+
+                        sytid = getXmlAttribute(attribe,&amp;quot;sytid&amp;quot;);
+                        var xml = &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+sytid+&amp;quot;_&amp;quot;+tagid+&amp;quot;\&amp;quot; MWID=\&amp;quot;&amp;quot;+mwtyp+&amp;quot;\&amp;quot; MWID=\&amp;quot;&amp;quot;+tagid+&amp;quot;\&amp;quot; sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; x=\&amp;quot;10\&amp;quot; y=\&amp;quot;10\&amp;quot; width=\&amp;quot;80\&amp;quot; height=\&amp;quot;35\&amp;quot; border=\&amp;quot;2\&amp;quot; fill=\&amp;quot;#D3E5FA\&amp;quot; stroke=\&amp;quot;#7F9DB9\&amp;quot; fontname=\&amp;quot;宋体\&amp;quot; fontsize=\&amp;quot;9\&amp;quot; fontcolor=\&amp;quot;#7F9DB9\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;
+                        _this.XMLCTL_Append( FLOWID,xml,&amp;quot;&amp;quot;,2 );
+                  }
+            }
+      }
+      else if ( id==DATAFLOWID) {        //DATAFLOWID 
+            if ( nextlevel_itemid.length== 0 ) {
+            try{
+                  if ( level == 2){
+                        sytid = getXmlAttribute(attribe,&amp;quot;sytflg&amp;quot;);
+                        var myxml = invokeOSFunc(&amp;quot;GetFlwList&amp;quot;,&amp;quot;selsytid=&amp;quot; + sytid ) ;
+                        alert ( myxml );
+                        _this.XMLCTL_Append(id,myxml,hItem,2);
+                  }
+                  else if ( level &amp;gt; 2 ) {
+                        var name= getXmlAttribute(attribe,&amp;quot;NAME&amp;quot;);
+                        var id =  getXmlAttribute(attribe,&amp;quot;ID&amp;quot;);
+                        
+                        // 得到上层中第二层节点中存在selsytid属性的，level=2
+                        
+                        var curitem = _this.XMLCTL_GetItem(id,hItem,_this.ATTR_XMLMODE_PARENT);
+                        while ( _this.XMLCTL_GetLevel(id,curitem) &amp;gt; 2 ) {
+                              curitem= _this.XMLCTL_GetItem(id,curitem,_this.ATTR_XMLMODE_PARENT);
+                        }
+                        var sytid =_this.XMLCTL_GetAttribe(id,curitem,&amp;quot;sytflg&amp;quot;);
+
+                        var xml = &amp;quot;&amp;lt;connector mdtyp=\&amp;quot;DF\&amp;quot; sytid=\&amp;quot;&amp;quot;+sytid+&amp;quot;\&amp;quot; id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; from=\&amp;quot;\&amp;quot; to=\&amp;quot;\&amp;quot; fromcp=\&amp;quot;\&amp;quot; tocp=\&amp;quot;\&amp;quot; type=\&amp;quot;\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; stroke-width=\&amp;quot;1\&amp;quot; font-family=\&amp;quot;Arial\&amp;quot; font-size=\&amp;quot;9\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/connector&amp;gt;&amp;quot;;
+                        _this.XMLCTL_Append( FLOWID,xml,&amp;quot;&amp;quot;,2 );
+                  }
+               } catch ( e ) {alert( e );}
+            }            
+      }
+     
+}  
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; , loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1 ) ;
+            return ret;
+
+}
+//================================================================// 
+// 函数：thisOnCellModify
+// 说明：代码修改后，触发事件
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/08/06 17:29:28
+// 修改日志：
+//================================================================// 
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( sheet == sheetCode &amp;&amp; row==-1 &amp;&amp; col==-1) {
+		_this.SetObjectXMLElement(id,newvalue);
+	}
+}
+
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      f_TreeItemDClick(id,hItem,tagid,attribe,value);
+}
+
+function _thisOnListViewDClick(id,row,col)
+{
+      var sample = _this.XMLLIST_GetString(id,row,&amp;quot;ATTR_SAMPLE&amp;quot;);
+      var id = _this.XMLLIST_GetString(id,row,&amp;quot;ID&amp;quot;);
+      var name = _this.XMLLIST_GetString(id,row,&amp;quot;NAME&amp;quot;);
+      
+      xml = &amp;quot;&amp;lt;&amp;quot;+id + &amp;quot; &amp;quot;+sample  + &amp;quot;/&amp;gt;&amp;quot;;
+      _this.XMLCTL_Append( FLOWID,xml ,&amp;quot;&amp;quot;,2 );
+}
+
+function _thisOnOnObjectSelected ( id, sheet, row, col )
+{
+      alert ( id );
+      var xml=_this.GetObjectXMLElement(id);
+      
+      _this.SetCellText(sheetCode ,-1,-1,xml);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+var basePath = pubpack.EAOption.dynaDataRoot;
+//================================================================// 
+// 函数：GetTableTree
+// 说明：得到数据的TABLE和TREE的列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/11/05 14:48:21
+// 修改日志：
+//================================================================// 
+function GetSVGList()
+{
+              var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;quot;;
+//              xml += &amp;quot;&amp;lt;系统流程图&amp;gt;&amp;quot;;
+              var sID = selsytid;
+              // 找出下级帐套所有的流程图
+              var path = pubpack.EAOption.dynaDataRoot+&amp;quot;/xmldb/flowDb/syt&amp;quot;+sID;//pubpack.EAOption.dynaDataRoot + pubpack.EAOption.get(&amp;quot;xmldb.file.flowdb&amp;quot;) +&amp;quot;/syt&amp;quot;+sID;
+              xml+=pubpack.EAFunc.readFile(path+&amp;quot;/index.xml&amp;quot;);
+
+              //path = basePath  + &amp;quot;xmldb/flowDb/syt&amp;quot;+sID;
+              /**
+              var file = new webpack.EAFileTree();
+              try {
+                    xml += file.GetXml(path,&amp;quot;,grp,SVG,svg,&amp;quot;,1);
+              }
+              catch ( pubpack.EAException e ) {
+                  // 没有目录，不需要报错
+                  //return e.toString();
+              }*/
+//              xml += &amp;quot;&amp;lt;/系统流程图&amp;gt;&amp;quot;;
+              return xml;
+}
+//================================================================// 
+// 函数：GetMDList
+// 说明：得到中间件对象
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:26:17
+// 修改日志：
+//================================================================// 
+function GetMDList()
+{
+              var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;quot;;
+              var ds = xmldbpack.EAGRDXmlDB.getGrdIDDS(selsytid,grdtyp);//
+              for ( var row=0;row&amp;lt;ds.getRowCount();row++){
+                    xml+=&amp;quot;&amp;lt;&amp;quot;+ds.getStringAt(row,&amp;quot;MWID&amp;quot;)+&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+
+                          &amp;quot;\&amp;quot; id=\&amp;quot;&amp;quot;+ds.getStringAt(row,&amp;quot;MWID&amp;quot;)+&amp;quot;\&amp;quot; NAME=\&amp;quot;&amp;quot;+ds.getStringAt(row,&amp;quot;NAME&amp;quot;) +&amp;quot;\&amp;quot; 类型=\&amp;quot;&amp;quot;+ds.getStringAt(row,&amp;quot;MWTYP&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              }                      
+              return xml;
+}
+//================================================================// 
+// 函数：GetSytList
+// 说明：得到所有的系统名称
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/14/06 11:58:50
+// 修改日志：
+//================================================================// 
+function GetSytList()
+{
+//&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;;
+//        xml+=&amp;quot;&amp;lt;中间件对象&amp;gt;&amp;quot;;
+        var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EASYTXmlDB.getSytDS();
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+              xml+=&amp;quot;&amp;lt;&amp;quot;+selsytid+&amp;quot; imageid=\&amp;quot;0\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+              xml+=&amp;quot;&amp;lt;/&amp;quot;+selsytid+&amp;quot;&amp;gt;&amp;quot;;
+        }    
+ //       xml+=&amp;quot;&amp;lt;/中间件对象&amp;gt;&amp;quot;;
+        return xml;
+}
+
+//================================================================// 
+// 函数：GetFlwList
+// 说明：得到数据流定义
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:26:08
+// 修改日志：
+//================================================================// 
+function GetFlwList()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var flwdbbase = pub.EAOption.dynaDataRoot + pub.EAOption.get(&amp;quot;xmldb.file.flwLnkdb&amp;quot;) + &amp;quot;/syt&amp;quot;;
+	var flwpath= pub.EAOption.get(&amp;quot;xmldb.file.flwLnkdb&amp;quot;);
+	var sytid = selsytid;
+	var xmlpath = flwpath + &amp;quot;/syt&amp;quot; + sytid + &amp;quot;/&amp;quot;;
+	var fs = (new iopack.File(flwdbbase+sytid)).listFiles();
+	if(fs!=null) {
+		utilpack.Arrays.sort(fs);
+		for (var k = 0; k &amp;lt; fs.length ; k++){
+			var filename = fs[k].getName();
+			var len = filename.length();
+			if(fs[k].isFile()&amp;&amp;filename.substring(len-4).equalsIgnoreCase(&amp;quot;.xml&amp;quot;))
+			{
+				var flwname = filename;	// 文件名称
+				xmlfile = xmlpath + flwname;//文件路径
+				xml+=&amp;quot;&amp;lt;&amp;quot;+flwname +&amp;quot; sytid=\&amp;quot;&amp;quot;+selsytid+ &amp;quot;\&amp;quot; id=\&amp;quot;&amp;quot;+flwname +&amp;quot;\&amp;quot; url=\&amp;quot;&amp;quot;+xmlfile +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+			}
+		}
+	}
+              
+        return xml;
+
+}
+
+
+//================================================================// 
+// 函数：loadSVG
+// 说明：载入一个svg图文件
+// 参数：path路径
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/11/06 17:08:33
+// 修改日志：
+//================================================================// 
+function loadSVG()
+{
+      var basepath = pubpack.EAOption.dynaDataRoot+&amp;quot;/xmldb/flowDb/syt&amp;quot;+selsytid;//
+      var str = pubpack.EAFunc.readFile(basepath +&amp;quot;/&amp;quot;+path);
+      return str;
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

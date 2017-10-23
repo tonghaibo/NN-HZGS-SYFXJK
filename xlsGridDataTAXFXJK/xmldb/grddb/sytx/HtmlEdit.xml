@@ -1,0 +1,181 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >HtmlEdit</MWID><NAME >HTML编辑器</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >HtmlEdit.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/public.js,xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var itmguid = &amp;quot;&amp;quot;;
+var itmnoteguid = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	try{   itmguid = guid;  } catch(e){}
+	if(itmguid!=&amp;quot;&amp;quot; ){
+		
+		var contentnote = _this.HttpCall(&amp;quot;EAFormBlob.sp?action=download&amp;guid=&amp;quot;+itmguid );
+		editor.html(contentnote);
+	}
+	_this.AddToolbarButton(&amp;quot;Sure&amp;quot;,&amp;quot;确定&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,80);
+}
+
+
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;Sure&amp;quot;)
+	{
+		editor.sync();
+		var contents = editor.html();
+		contents = upLoadContentsImg(contents );
+//		var path=document.getElementById(&amp;quot;content1&amp;quot;).value;
+		var returnValue = f_upload(contents);
+		alert ( &amp;quot;保存成功&amp;quot; );
+		window.returnValue = returnValue ;
+//		window.returnValue = contents ;
+		window.close();
+	}
+
+}
+
+function upLoadContentsImg(note)
+{
+	var p = note.indexOf(&amp;quot;&amp;lt;img src=&amp;quot;,0);
+	while (p != -1) {
+		var imgsrc = note.substring(p+10,note.indexOf(&amp;quot;\&amp;quot;&amp;quot;,p+10));
+		if (imgsrc.indexOf(&amp;quot;file://&amp;quot;) &amp;gt; -1) {
+			var newurl = imgsrc.replace(&amp;quot;file://&amp;quot;,&amp;quot;&amp;quot;);
+			var imgguid = saveImage(newurl,&amp;quot;&amp;quot;,G_SYTID,G_GRDID,imgsrc);
+			note = note.replace(imgsrc,&amp;quot;EAFormBlob.sp?guid=&amp;quot;+imgguid);
+		}
+		if (imgsrc.indexOf(&amp;quot;file:\\&amp;quot;) &amp;gt; -1) {
+			var newurl = imgsrc.replace(&amp;quot;file:\\&amp;quot;,&amp;quot;&amp;quot;);
+			var imgguid = saveImage(newurl,&amp;quot;&amp;quot;,G_SYTID,G_GRDID,imgsrc);
+			note = note.replace(imgsrc,&amp;quot;EAFormBlob.sp?guid=&amp;quot;+imgguid);
+		}
+		p = note.indexOf(&amp;quot;&amp;lt;img src=&amp;quot;,p+1);
+	}
+	return note;
+}
+//保存图片到数据库
+//	srcurl	图片位置
+function saveImage(srcurl)
+{
+	// 上传图片到formBlob表
+	_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+	_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+	_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,srcurl,1);
+	_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,&amp;quot;&amp;quot;,0);
+	_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+	_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+	_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,srcurl,0);
+	var ret = _this.SendHttpRequest();
+	_this.CloseHttpRequest();
+	
+	return ret;
+}
+
+//上传一个文件到FORMBLOB
+// 参数G_GUID：本表单的GUID
+//返回FORMBLOB表的GUID
+function f_upload(contents)
+{
+        var ret = &amp;quot;&amp;quot;;
+        var tmpfile = _this.GetWindowTempFile();
+	_this.SaveTextFile(tmpfile,contents,&amp;quot;&amp;quot;);
+        _this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+        _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+        _this.AddHttpRequestParam(&amp;quot;data&amp;quot;,tmpfile,1);
+        _this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,itmguid,0);
+        _this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+        _this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+        _this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,tmpfile,0);
+        
+        ret=_this.SendHttpRequest();    
+        _this.CloseHttpRequest(); 
+        return ret ;
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+
+  //在Head区引用额外脚本
+
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	var ret = &amp;quot;&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;../kindeditor-4.1.7/themes/default/default.css\&amp;quot; /&amp;gt;
+		&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; href=\&amp;quot;../kindeditor-4.1.7/plugins/code/prettify.css\&amp;quot; /&amp;gt;
+		&amp;lt;script charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;../kindeditor-4.1.7/kindeditor.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;../kindeditor-4.1.7/lang/zh_CN.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;../kindeditor-4.1.7/plugins/code/prettify.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script&amp;gt;
+			var editor;
+			KindEditor.ready(function(K) {
+				var editor1 = K.create(&amp;apos;textarea[name=\&amp;quot;content1\&amp;quot;]&amp;apos;, {
+					cssPath : &amp;apos;../kindeditor-4.1.7/plugins/code/prettify.css&amp;apos;,
+					uploadJson : &amp;apos;../kindeditor-4.1.7/jsp/upload_json.jsp&amp;apos;,
+					fileManagerJson : &amp;apos;../kindeditor-4.1.7/jsp/file_manager_json.jsp&amp;apos;,
+					allowFileManager : true,
+					afterCreate : function() {
+						var self = this;
+						K.ctrl(document, 13, function() {
+							self.sync();
+							document.forms[&amp;apos;example&amp;apos;].submit();
+						});
+						K.ctrl(self.edit.doc, 13, function() {
+							self.sync();
+							document.forms[&amp;apos;example&amp;apos;].submit();
+						});
+					}
+				});
+				editor = editor1;
+				prettyPrint();
+			});
+			&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	sb.append(ret) ;
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;10\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;	&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=100% height=5% style=\&amp;quot;border: 1px solid #DEDEDE;\&amp;quot;&amp;gt;&amp;quot;);
+
+
+}
+
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=100% bgcolor=\&amp;quot;#FEFEFE\&amp;quot; style=\&amp;quot;border: 1px solid #DEDEDE\&amp;quot; align=left valign=top&amp;gt;&amp;quot;);
+	// 这里是HTML正文内容
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;50\&amp;quot; cellspacing=\&amp;quot;\&amp;quot; cellpadding=\&amp;quot;5\&amp;quot; &amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=right colspan=3&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;textarea id = \&amp;quot;content1\&amp;quot; name=\&amp;quot;content1\&amp;quot; line-height=\&amp;quot;3px\&amp;quot; style=\&amp;quot;width:100%;height:550;\&amp;quot;&amp;gt;&amp;lt;/textarea&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+	//==================
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+
+
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_593109" x="272" y="98" width="134" height="43" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >核实处理流程</rect>
+ <rect id="roundrect_422921" x="76" y="193" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >企业补报流程
+subtyp=1</rect>
+ <rect  id="rect_422922" x="186" y="193" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">电表维护流程
+subtyp=2</rect>
+ <rect  id="rect_422923" x="296" y="193" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">非国税管户处理流程
+subtyp=3</rect>
+ <rect  id="rect_422924" x="406" y="193" width="96" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">非工业纳税户处理流程
+subtyp=4</rect>
+ <rect  id="rect_422925" x="526" y="193" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">文字说明处理流程
+subtyp=5</rect>
+ <connector id="connector_208_422926" from="rect_593109" to="roundrect_422921" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_422927" from="rect_593109" to="rect_422922" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_422928" from="rect_593109" to="rect_422923" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_422929" from="rect_593109" to="rect_422924" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_422930" from="rect_593109" to="rect_422925" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <text id="text_422931" x="15" y="10" width="250" height="150" font-size="14" >核实任务的3种类型：
+1 - 自查生成任务
+2 - 系统生成任务
+3 - 分派任务
+
+任务表（tax_trkhdr） 用typ字段标识
+子类型用subtyp字段标识，见如下五种类型：</text>
+ <text id="text_422932" x="649" y="12" width="290" height="360" font-size="14"  属性="">工作流状态stat：
+0 退回
+1 未分派 任务生成时的状态
+2 已分派 任务分派到税务员时的状态
+3 已处理 税管员处理任务时的状态（确认处理类型是subtyp）
+8 分派到县局 市级发布的任务到县局
+9 完成 任务处理结束
+
+21 填写查补台账
+22 企业电表操作
+23 提交非国税管户电表号申请
+24 提交非工业纳税电表号申请
+25 情况核实说明
+
+31 领导审批
+32 系统管理员
+33 领导审批
+34 系统管理员</text>
+ <rect  id="rect_422933" x="76" y="283" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">填写查补台账
+21</rect>
+ <rect  id="rect_422934" x="76" y="363" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">领导审批
+31</rect>
+ <rect  id="rect_422935" x="186" y="283" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">企业电表操作
+22</rect>
+ <rect  id="rect_422936" x="296" y="283" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">提交非国税管户电表号申请
+23</rect>
+ <rect  id="rect_422937" x="412" y="283" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">提交非工业纳税电表号申请
+24</rect>
+ <rect  id="rect_422938" x="526" y="283" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">填写情况说明
+25</rect>
+ <rect  id="rect_422939" x="526" y="363" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">领导审批
+34</rect>
+ <text id="text_422940" x="7" y="206" width="70" height="40" font-size="14" >工作流状态：2</text>
+ <rect  id="rect_422941" x="296" y="363" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">系统管理员
+32</rect>
+ <rect  id="rect_422942" x="412" y="363" width="86" height="53" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">系统管理员
+33</rect>
+ <rect id="roundrect_422944" x="182" y="510" width="336" height="27" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >任务结束</rect>
+ <connector id="connector_108_422945" from="rect_422941" to="roundrect_422944" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422946" from="rect_422942" to="roundrect_422944" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422947" from="rect_422939" to="roundrect_422944" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422948" from="rect_422934" to="roundrect_422944" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422949" from="rect_422935" to="roundrect_422944" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422950" from="roundrect_422921" to="rect_422933" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422951" from="rect_422933" to="rect_422934" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422952" from="rect_422922" to="rect_422935" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422953" from="rect_422923" to="rect_422936" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422954" from="rect_422936" to="rect_422941" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422955" from="rect_422924" to="rect_422937" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422956" from="rect_422937" to="rect_422942" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422958" from="rect_422938" to="rect_422938" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422959" from="rect_422925" to="rect_422938" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_422960" from="rect_422938" to="rect_422939" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <polygon id="upnote_422961" points="654,385 654,530 840,530 840,385 716,385 665,365 685,385 654,385" changeto="upnote" stroke="#000000" fill="#FFFFFF" fillto="" opacity="1" stroke-dash="1" stroke-dash="1"  属性="">upnote_422961</polygon>
+ <text  id="text_422962" x="7" y="286" width="70" height="60" font-size="14">工作流状态：21...34</text>
+ <polygon id="flow_createTrk" selsytid="GXHZTAX"  points="409,72 397,72 396,79 409,72 409,5 270,5 270,79 396,79 409,72 409,72" flowid="createTrk" flowname="生成核实任务流程" changeto="page" stroke="#000000" fill="#FFFFCC"  xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:GXHZTAX:createTrk[%quot]/[%right]" >子图:createTrk
+生成核实任务流程</polygon>
+ <connector id="connector_208_371010" from="flow_createTrk" to="rect_593109" fromcp="23" tocp="21" type="208"  >
+ </connector>
+</svg>

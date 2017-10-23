@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head>
+<head>
+<meta http-equiv="x-ua-compatible" content="ie=7"><!-- ie7 mode -->
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+<title>XMIDWARE硕格中间件云桌面</title>
+<script language="javascript" type="text/javascript" src="js/swfobject.js"></script>
+<script language="javascript" type="text/javascript" src="js/jquery-1.3.2.js"></script>
+<script language="javascript" type="text/javascript" src="js/dockfunction.js"></script>
+<style type="text/css">
+html{overflow:hidden;margin:0px;padding:0px}
+html,body{margin:0px;padding:0px;}
+</style>
+</head>
+
+<body>
+<div id="FlashDock" style="width:100%; height:100%"></div>
+<script type="text/javascript">
+var webWindowArray=new Array();
+var top_zIndex=100;
+var params={setup:"system.xml"};//数据配置文件
+
+//?"+Math.random()
+swfobject.embedSWF("FlashDock.swf", "FlashDock", "100%", "100%", "9.0.0","js/expressInstall.swf", params, {menu:"false",allowScriptAccess:"always",allowFullscreen:"true",wmode:"transparent"}, {id:"mydock",name:"mydock"});
+$(window).bind("load",function(){getDockId();onResize()})
+$(function(){
+	$(window).bind("resize",onResize);
+	if(!$.browser.msie){
+		getDockId();
+		onResize();
+	}
+});
+</script>
+</body>
+</html>

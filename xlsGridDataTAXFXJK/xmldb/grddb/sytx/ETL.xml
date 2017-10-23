@@ -1,0 +1,200 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >ETL</MWID><NAME >ETL定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ETL.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG >18,1,38,6</DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >ETLHDR</BILHDRTABLE><BILDTLTABLE >ETLDTL</BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,2</ID><NAME >编号</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 >0,2,2</C16></ROW>
+<ROW num="1" ><ID >0,2,4</ID><NAME >名称</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 >0,2,4</C16></ROW>
+<ROW num="2" ><ID >0,2,6</ID><NAME >分类</NAME><VALFLD >CLS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 >0,2,6</C16></ROW>
+<ROW num="3" ><ID >0,3,2</ID><NAME >说明</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 >0,3,2</C16></ROW>
+<ROW num="4" ><ID >0,5,2</ID><NAME >下载类型</NAME><VALFLD >EXPTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL >0</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_ETL_FTPWEB</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 >0,5,2</C16></ROW>
+<ROW num="5" ><ID >0,5,4</ID><NAME >下载格式</NAME><VALFLD >EXPFMT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_ETL_TXTXML</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 >0,5,4</C16></ROW>
+<ROW num="6" ><ID >0,5,6</ID><NAME >下载文件分割符</NAME><VALFLD >EXPDIV</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="7" ><ID >0,6,2</ID><NAME >下载远程连接的站点</NAME><VALFLD >EXPCON</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="8" ><ID >0,6,4</ID><NAME >下载远程连接的文件</NAME><VALFLD >EXPCONFIL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="9" ><ID >0,7,2</ID><NAME >下载到本地目录</NAME><VALFLD >EXPLOCAL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="10" ><ID >0,7,4</ID><NAME >下载到本地的文件名</NAME><VALFLD >EXPLOCALFILE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="11" ><ID >0,8,2</ID><NAME >下载触发事件</NAME><VALFLD >EXPFUNC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="12" ><ID >0,10,2</ID><NAME >临时库表名称</NAME><VALFLD >TRANTAB</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="13" ><ID >0,11,2</ID><NAME >临时库触发函数</NAME><VALFLD >TRANFUNC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="14" ><ID >0,13,2</ID><NAME >正式库表名称</NAME><VALFLD >LOADTAB</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="15" ><ID >0,14,2</ID><NAME >正式库表的唯一字段列表</NAME><VALFLD >LOADTABKEY</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="16" ><ID >0,15,2</ID><NAME >导入正式库触发函数</NAME><VALFLD >LOADFUNC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="17" ><ID >0,6,6</ID><NAME >下载后是否删除文件</NAME><VALFLD >EXPDEL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >v_etl_delfile</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="18" ><ID >0,10,4</ID><NAME >来源数据库名</NAME><VALFLD >SRCDB</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_DBLIST</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="19" ><ID >0,14,4</ID><NAME >目标数据库名</NAME><VALFLD >DSTDB</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_DBLIST</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="20" ><ID >0,10,6</ID><NAME >来源表的查询WHERE条件</NAME><VALFLD >SRCWHERE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+<ROW num="21" ><ID >0,13,6</ID><NAME >目标表的查询WHERE条件</NAME><VALFLD >DSTWHERE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16></ROW>
+</ROWSET>
+</grdcelds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,1</ID><NAME >COLUMN编号</NAME><VALFLD >COLID</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 >0,1</C11></ROW>
+<ROW num="1" ><ID >0,2</ID><NAME >COLUMN名称</NAME><VALFLD >COLNAM</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 >0,2</C11></ROW>
+<ROW num="2" ><ID >0,3</ID><NAME >类型</NAME><VALFLD >COLTYP</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11></ROW>
+<ROW num="3" ><ID >0,4</ID><NAME >对应临时库的字段</NAME><VALFLD >TMPCOLID</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11></ROW>
+<ROW num="4" ><ID >0,5</ID><NAME >列转换计算公式</NAME><VALFLD >TRAN</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11></ROW>
+<ROW num="5" ><ID >0,6</ID><NAME >对应目标库的字段</NAME><VALFLD >DESTCOLID</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11></ROW>
+</ROWSET>
+</grdcolds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >InitTable</ID><NAME >初始化数据结构</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//undefined
+function InitTable()
+{
+	// create or replace view V_ETL_FTPWEB  as select &amp;apos;ftp&amp;apos; id,&amp;apos;ftp站点&amp;apos; name from dual union select &amp;apos;web&amp;apos; id,&amp;apos;web站点&amp;apos; name from dual
+		// create or replace view V_ETL_TXTXML  as select &amp;apos;txt&amp;apos; id,&amp;apos;TXT文本&amp;apos; name from dual union select &amp;apos;xml&amp;apos; id,&amp;apos;XML文档&amp;apos; name from dual
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+//	_thisOnCellModify(sheet,row,col,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	if((row == 15 || row == 8 || row == 11) &amp;&amp; col == 2){
+		var etlid = _this.GetCellText(0,2,2);
+		if (etlid == &amp;quot;&amp;quot;){
+			alert(&amp;quot;ETL的编号不能为空，请输入！&amp;quot;);
+			return;
+		}
+		var func = _this.GetCellText(0,row,col);
+		if (func == &amp;quot;&amp;quot;){
+			if (row == 8)  func = &amp;quot;afterExport&amp;quot;;
+			if (row == 11) func = &amp;quot;afterTrans&amp;quot;;
+			if (row == 15) func = &amp;quot;afterLoad&amp;quot;;
+		}
+		var Url = &amp;quot;show.sp?grdid=JSDOC&amp;etlid=&amp;quot;+etlid+&amp;quot;&amp;funcName=&amp;quot; + func;
+		var leftpos = window.screenLeft + 100;
+		var args = new Array();
+
+		ret = window.showModalDialog(Url,args,&amp;quot;dialogLeft:&amp;quot;+leftpos+&amp;quot;px;dialogwidth:800px;dialogheight:700px;resizable:yes ;&amp;quot;);
+		_this.SetCellText(0,row,col,func);
+		//_this.SetCellText(0,row,2,ret);
+	}
+	
+  
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var sh = _this.AddSheet(&amp;quot;ETL定义说明&amp;quot;);
+	_this.SetToCodeEditor(&amp;quot;note&amp;quot;,sh,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);	
+	_this.ShowTabBar(1);  
+	
+	setNote();
+	_this.SetCellLock(sh,-1,-1,1);
+}
+
+function setNote()
+{
+	var str = &amp;quot;&amp;quot;
++ &amp;quot;\tETL编号	唯一标识一个ETL中间件，必填。	\r\n&amp;quot;
++ &amp;quot;\t名称			ETL名称。                                                                   \r\n&amp;quot;
++ &amp;quot;\t分类			ETL归属分类，可空。                                                         \r\n&amp;quot;
++ &amp;quot;\t说明			对该ETL的简单说明，可空。                                                   \r\n&amp;quot;
++ &amp;quot;\t                                                                                               \r\n&amp;quot;
++ &amp;quot;\t//第一步：从ftp或web下载                                                                       \r\n&amp;quot;
++ &amp;quot;\t类型			下载的类型，有两种方式：FTP和WEB。                                          \r\n&amp;quot;
++ &amp;quot;\t格式			下载的文件格式，有txt和xml两种，目前版本只支持txt。                             \r\n&amp;quot;
++ &amp;quot;\t分割符			txt文本的数据列的分割符号。                                                 \r\n&amp;quot;
++ &amp;quot;\t远程连接		FTP站点或WEB地址；如果是FTP站点，需在配置文件配置用户名和登录密码。       \r\n&amp;quot;
++ &amp;quot;\t			配置方式是站点名后接_user，_pwd和_path，分别是用户名，密码和目录路径；例如 127.0.0.1_user = xlsgrid。            \r\n&amp;quot;
++ &amp;quot;\t远程文件名		如下载类型是FTP，指定远程下载的文件名，留空时默认为ETL编号；WEB下载不需要指定。 \r\n&amp;quot;
++ &amp;quot;\t下载后删除文件		FTP下载后是否删除下载源文件，只有整个ETL流程正确无误转换成功才会删除。      \r\n&amp;quot;
++ &amp;quot;\t本地目录		远程下载的文件保存到本地的目录，未定义时默认为c:\\etldown。定义时路径请用反斜杠/，如d:/ftpdown                        \r\n&amp;quot;
++ &amp;quot;\t本地文件名		下载到本地后的文件名，留空时默认为ETL编号。                                 \r\n&amp;quot;
++ &amp;quot;\t触发函数		文件下载完成后执行的函数，请参考ETL编程说明 。                              \r\n&amp;quot;
++ &amp;quot;\t                                                                                               \r\n&amp;quot;
++ &amp;quot;\t//第二步：来源库（导入临时库并转换）                                                                     \r\n&amp;quot;
++ &amp;quot;\t表名称			导入到临时库的表名称，为空时系统自动创建并在整个过程结束后Drop掉。          \r\n&amp;quot;
++ &amp;quot;\t数据库			对应数据库指定的数据源名称，为空表示默认数据库。          \r\n&amp;quot;
++ &amp;quot;\tWHERE条件			从来源数据表查询的过滤WHERE子句。          \r\n&amp;quot;
++ &amp;quot;\t触发函数		导入到临时库完成后执行的函数，请参考ETL编程说明。                           \r\n&amp;quot;
++ &amp;quot;\t                                                                                               \r\n&amp;quot;
++ &amp;quot;\t//第三步：载入目标库                                                                           \r\n&amp;quot;
++ &amp;quot;\t目标表			导入到正式库的表名称，需指定。如果表不存在，则根据定义自动创建。            \r\n&amp;quot;
++ &amp;quot;\t数据库			对应数据库指定的数据源名称，为空表示默认数据库。          \r\n&amp;quot;
++ &amp;quot;\t唯一键			唯一索引列，UPDATE的条件。                                                 \r\n&amp;quot;
++ &amp;quot;\t触发函数		导入正式库完成后执行的函数，请参考ETL编程说明。                             \r\n&amp;quot;
++ &amp;quot;\t                                                                                               \r\n&amp;quot;
++ &amp;quot;\t//字段列表说明                                                                                 \r\n&amp;quot;
++ &amp;quot;\t编号			和文件数据列一一对应。                                                      \r\n&amp;quot;
++ &amp;quot;\t说明			对各数据列字段的说明，自动创建目标时作为目标表列字段的说明。                \r\n&amp;quot;
++ &amp;quot;\t类型			导入到临时表和目标表的字段数据类型，为空时默认为varchar2(20)。              \r\n&amp;quot;
++ &amp;quot;\t对应临时库的字段	临时表的字段名。                                                            \r\n&amp;quot;
++ &amp;quot;\t列转换计算公式		从临时表导入到正式表时的转换公式，所操作的是临时表的字段。                  \r\n&amp;quot;
++ &amp;quot;\t对应目标库的字段	目标表的字段列。                                                            \r\n&amp;quot;;
+	                                                                                                                                                                    	
+	
+	_this.SetText(&amp;quot;note&amp;quot;,str);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >createtable</ID><NAME ></NAME><DATDSC >drop table ETLHDR cascade constraints;
+create table ETLHDR ( 
+	GUID CHAR(32) default SYS_GUID()    not null ,
+	ID VARCHAR2(20),
+	NAME VARCHAR2(256),
+	NOTE VARCHAR2(256),
+	CLS VARCHAR2(20),
+	EXPTYP VARCHAR2(20),
+	EXPFMT VARCHAR2(20),
+	EXPDIV VARCHAR2(20),
+	EXPCON VARCHAR2(256),
+	EXPCONFIL VARCHAR2(256),
+	EXPLOCAL VARCHAR2(256),
+	EXPLOCALFILE VARCHAR2(256),
+	EXPFUNC VARCHAR2(256),
+	TRANTAB VARCHAR2(256),
+	TRANFUNC VARCHAR2(256),
+	LOADTAB VARCHAR2(256),
+	LOADTABKEY VARCHAR2(256),
+	LOADFUNC VARCHAR2(256),
+	EXPDEL VARCHAR2(4) default &amp;apos;0&amp;apos;
+,
+	SRCDB VARCHAR2(20),
+	DSTDB VARCHAR2(20),
+	SRCWHERE VARCHAR2(1024) );
+  comment on column ETLHDR.GUID is &amp;apos;内部唯一编号&amp;apos; ;
+ comment on column ETLHDR.ID is &amp;apos;编号&amp;apos; ;
+ comment on column ETLHDR.NAME is &amp;apos;名称&amp;apos; ;
+ comment on column ETLHDR.NOTE is &amp;apos;说明&amp;apos; ;
+ comment on column ETLHDR.CLS is &amp;apos;分类&amp;apos; ;
+ comment on column ETLHDR.EXPTYP is &amp;apos;下载类型ftp或web&amp;apos; ;
+ comment on column ETLHDR.EXPFMT is &amp;apos;下载格式txt或xml&amp;apos; ;
+ comment on column ETLHDR.EXPDIV is &amp;apos;下载文件分割符&amp;apos; ;
+ comment on column ETLHDR.EXPCON is &amp;apos;下载远程连接的站点&amp;apos; ;
+ comment on column ETLHDR.EXPCONFIL is &amp;apos;下载远程连接的文件&amp;apos; ;
+ comment on column ETLHDR.EXPLOCAL is &amp;apos;下载到本地目录&amp;apos; ;
+ comment on column ETLHDR.EXPLOCALFILE is &amp;apos;下载到本地的文件名&amp;apos; ;
+ comment on column ETLHDR.EXPFUNC is &amp;apos;下载触发事件&amp;apos; ;
+ comment on column ETLHDR.TRANTAB is &amp;apos;临时库表名称&amp;apos; ;
+ comment on column ETLHDR.TRANFUNC is &amp;apos;临时库触发函数&amp;apos; ;
+ comment on column ETLHDR.LOADTAB is &amp;apos;正式库表名称&amp;apos; ;
+ comment on column ETLHDR.LOADTABKEY is &amp;apos;正式库表的唯一字段列表&amp;apos; ;
+ comment on column ETLHDR.LOADFUNC is &amp;apos;导入正式库触发函数&amp;apos; ;
+ comment on column ETLHDR.EXPDEL is &amp;apos;下载后是否删除文件&amp;apos; ;
+ comment on column ETLHDR.SRCDB is &amp;apos;来源数据库名&amp;apos; ;
+ comment on column ETLHDR.DSTDB is &amp;apos;目标数据库名&amp;apos; ;
+ comment on column ETLHDR.SRCWHERE is &amp;apos;来源表的查询WHERE条件&amp;apos; ;
+drop table ETLDTL cascade constraints;
+</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

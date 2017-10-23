@@ -1,0 +1,700 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >LSCROLLIMGA</MWID><NAME >左右滚动图片兼容各种浏览器</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >LSCROLLIMGA.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+//左右滚动图片右边带小视图
+function lscrollimg(){
+var html =&amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		/* Reset style */
+		* { margin:0; padding:0; word-break:break-all; }
+		body { background:#FFF; color:#333; font:12px/1.6em Helvetica, Arial, sans-serif; }
+		h1, h2, h3, h4, h5, h6 { font-size:1em; }
+		a { color:#039; text-decoration:none; }
+		 a:hover { text-decoration:underline; }
+		ul, li { list-style:none; }
+		fieldset, img { border:none; }
+		em, strong, cite, th { font-style:normal; font-weight:normal; }
+		/* Focus_change style */
+		
+		 #focus_change_list li { float:left; }
+		
+		 #focus_change_btn ul { padding-left:5px; }
+		 #focus_change_btn li { display:inline; float:left; margin:0 15px; padding-top:12px; }
+		 #focus_change_btn li img {border:2px solid #888;}
+		
+		 #focus_change_btn .current img { border-color:#EEE; }
+		&amp;lt;/style&amp;gt;&amp;quot;;
+		
+	if(LAYCOL ==&amp;quot;&amp;quot;)LAYCOL =&amp;quot;1&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and icon is not null &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	
+	  
+	var xml=db.QuerySQL(sql);
+	var spn=&amp;quot;&amp;quot;;
+	var cnt=xml.getRowCount();
+	if(cnt&amp;gt;5) cnt=5;
+	
+		
+	
+	html += &amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+
+		function $a(id) { return document.getElementById(id); }
+		function moveElement(elementID,final_x,final_y,interval) {
+	
+		 if (!document.getElementById) return false;
+		 if (!document.getElementById(elementID)) return false;
+		 var elem = document.getElementById(elementID);
+		 if (elem.movement) {
+		 clearTimeout(elem.movement);
+		 }
+		 if (!elem.style.left) {
+		 elem.style.left = \&amp;quot;0px\&amp;quot;;
+		 }
+		 if (!elem.style.top) {
+		 elem.style.top = \&amp;quot;0px\&amp;quot;;
+		 }
+		 var xpos = parseInt(elem.style.left);
+		 var ypos = parseInt(elem.style.top);
+		 if (xpos == final_x &amp;&amp; ypos == final_y) {
+		 return true;
+		 }
+		 if (xpos &amp;lt; final_x) {
+		 var dist = Math.ceil((final_x - xpos)/10);
+		 xpos = xpos + dist;
+		 }
+		 if (xpos &amp;gt; final_x) {
+		 var dist = Math.ceil((xpos - final_x)/10);
+		 xpos = xpos - dist;
+		 }
+		 if (ypos &amp;lt; final_y) {
+		 var dist = Math.ceil((final_y - ypos)/10);
+		 ypos = ypos + dist;
+		 }
+		 if (ypos &amp;gt; final_y) {
+		 var dist = Math.ceil((ypos - final_y)/10);
+		 ypos = ypos - dist;
+		 }
+		 elem.style.left = xpos + \&amp;quot;px\&amp;quot;;
+		 elem.style.top = ypos + \&amp;quot;px\&amp;quot;;
+		 var repeat = \&amp;quot;moveElement(&amp;apos;\&amp;quot;+elementID+\&amp;quot;&amp;apos;,\&amp;quot;+final_x+\&amp;quot;,\&amp;quot;+final_y+\&amp;quot;,\&amp;quot;+interval+\&amp;quot;)\&amp;quot;;
+		 elem.movement = setTimeout(repeat,interval);
+		}
+		function classNormal(){
+		
+		 var focusBtnList = $a(&amp;apos;focus_change_btn&amp;apos;).getElementsByTagName(&amp;apos;li&amp;apos;);
+		 for(var i=0; i&amp;lt;focusBtnList.length; i++) {
+		 focusBtnList[i].className=&amp;apos;&amp;apos;;
+		 }
+		}
+		function focusChange() {
+
+			var focusBtnList = $a(&amp;apos;focus_change_btn&amp;apos;).getElementsByTagName(&amp;apos;li&amp;apos;);
+			
+			var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+			if(!document.body.scrollWidth &amp;gt;= 960){
+				 widthImg = 960 * 0.8 * 0.57;
+			}
+		 	focusBtnList[0].onmouseover = function() {
+			moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg * 0,0,5);
+			classNormal()
+			focusBtnList[0].className=&amp;apos;current&amp;apos;
+			 
+			}			 
+			 focusBtnList[1].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg ,0,5);
+			 classNormal()
+			 focusBtnList[1].className=&amp;apos;current&amp;apos;
+			 }
+			 focusBtnList[2].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *2,0,5);
+			 classNormal()
+			 focusBtnList[2].className=&amp;apos;current&amp;apos;
+			 }
+			 focusBtnList[3].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *3,0,5);
+			 classNormal()
+			 focusBtnList[3].className=&amp;apos;current&amp;apos;
+			 }
+			 focusBtnList[4].onmouseover = function() {
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *4,0,5);
+			 classNormal()
+			 focusBtnList[4].className=&amp;apos;current&amp;apos;
+			 }
+			}
+		setInterval(&amp;apos;autoFocusChange()&amp;apos;, 4000);
+		function autoFocusChange() {
+			
+			 var focusBtnList = $a(&amp;apos;focus_change_btn&amp;apos;).getElementsByTagName(&amp;apos;li&amp;apos;);
+			 for(var i=0; i&amp;lt;focusBtnList.length; i++) {
+				 if (focusBtnList[i].className == &amp;apos;current&amp;apos;) {
+				 var currentNum = i;
+				 }
+			 }
+				 var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+				if(!document.body.scrollWidth &amp;gt;= 960){
+					widthImg = 960 * 0.8 * 0.57;
+				}
+			 if (currentNum==0 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg ,0,5);
+			 classNormal()
+			 focusBtnList[1].className=&amp;apos;current&amp;apos;
+			 }
+			 if (currentNum==1 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *2,0,5);
+			 classNormal()
+			 focusBtnList[2].className=&amp;apos;current&amp;apos;
+			 }
+			 if (currentNum==2 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *3,0,5);
+			 classNormal()
+			 focusBtnList[3].className=&amp;apos;current&amp;apos;
+			 } 
+			 if (currentNum==3 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,-widthImg *4,0,5);
+			 classNormal()
+			 focusBtnList[4].className=&amp;apos;current&amp;apos;
+			 }
+			if (currentNum==4 ){
+			 moveElement(&amp;apos;focus_change_list&amp;apos;,0,0,5);
+			 classNormal()
+			 focusBtnList[0].className=&amp;apos;current&amp;apos;
+			 }
+		}
+		
+
+		window.onload=function(){
+		  focusChange();
+		   eve();
+		}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+
+	html += &amp;quot;&amp;lt;div id=\&amp;quot;focus_change\&amp;quot; style=\&amp;quot; position:relative; height:350px;width:100%; overflow:hidden;\&amp;quot;&amp;gt;
+		 &amp;lt;div id=\&amp;quot;focus_change_list\&amp;quot; style=\&amp;quot;top:0; left:0; position:absolute; height:350px;\&amp;quot;&amp;gt;
+		 &amp;lt;ul&amp;gt;&amp;quot;;
+		for(var i=0;i&amp;lt;cnt;i++){
+		if(i==0)
+			html += &amp;quot;&amp;lt;li class=\&amp;quot;current\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot; id=&amp;apos;imgpx0&amp;apos; style=\&amp;quot;height:350px;\&amp;quot;  alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		else
+			html += &amp;quot;&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot; id=&amp;apos;imgpx&amp;quot;+i+&amp;quot;&amp;apos;  style=\&amp;quot; height:350px;\&amp;quot;  alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		}
+	html +=	 &amp;quot;&amp;lt;/ul&amp;gt;
+		 &amp;lt;/div&amp;gt;
+		 &amp;lt;div  style=\&amp;quot;position:absolute; width:65px; height:100%; top:0; right:0; background:#000; filter:alpha(opacity=50); -moz-opacity:0.5; opacity: 0.5; \&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		 &amp;lt;div id=\&amp;quot;focus_change_btn\&amp;quot; style=\&amp;quot;position:absolute; width:60px; height:100%;  bottom:0; right:20px;_right:-11px;\&amp;quot;&amp;gt;
+		 &amp;lt;ul&amp;gt;&amp;quot;;
+		 for(var i=0;i&amp;lt;cnt;i++){
+		 if(i==0)
+			html += &amp;quot;&amp;lt;li class=\&amp;quot;current\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot; style=\&amp;quot;width:50px; height:50px;\&amp;quot;   alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		 else
+			html += &amp;quot;&amp;lt;li&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot; style=\&amp;quot;width:50px; height:50px;\&amp;quot;   alt=\&amp;quot;\&amp;quot; &amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		 }
+	html +=	&amp;quot;&amp;lt;/ul&amp;gt;
+		 &amp;lt;/div&amp;gt;
+		 &amp;lt;/div&amp;gt;&amp;quot;;
+		
+	html += &amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+
+
+		
+		//窗口宽度大小改变
+		function eve() {
+			var widthImg = document.body.scrollWidth * 0.8 * 0.57;
+			if(document.body.scrollWidth &amp;gt;= 960){
+				document.getElementById(\&amp;quot;focus_change\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot;;		
+				document.getElementById(&amp;apos;imgpx0&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;			
+				document.getElementById(&amp;apos;imgpx1&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx2&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx3&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx4&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+
+				document.getElementById(\&amp;quot;focus_change_list\&amp;quot;).style.width=4000+\&amp;quot;px\&amp;quot; ;
+			}else{
+				widthImg = 960 * 0.8 * 0.57;
+				
+				
+				document.getElementById(\&amp;quot;focus_change\&amp;quot;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx0&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx1&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx2&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx3&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(&amp;apos;imgpx4&amp;apos;).style.width=widthImg +\&amp;quot;px\&amp;quot;;
+				document.getElementById(\&amp;quot;focus_change_list\&amp;quot;).style.width=4000+\&amp;quot;px\&amp;quot; ;
+			}
+		}
+		
+
+		fEventListen(window, &amp;apos;resize&amp;apos;,eve);
+		function fEventListen(b,c,d,a){
+		a=!!a;if(b.addEventListener)
+		{b.addEventListener(c,d,a);}
+		else{
+			if(b.attachEvent)
+			{b.attachEvent(\&amp;quot;on\&amp;quot;+c,d);}}
+		}&amp;lt;/script&amp;gt;&amp;quot;;
+	return html;
+
+}
+
+//上下滚动图片
+function sxscrollimg(){
+var onload=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;window.onload=function(){$(\&amp;quot;.imageBox img\&amp;quot;).width($(\&amp;quot;.imageRotation\&amp;quot;).width());$(\&amp;quot;.imageBox img\&amp;quot;).height($(\&amp;quot;.imageRotation\&amp;quot;).height());}&amp;lt;/script&amp;gt;&amp;quot;;
+		
+
+	var html=&amp;quot;&amp;lt;div class=\&amp;quot;imageRotation\&amp;quot; id=\&amp;quot;imageRotation\&amp;quot;&amp;gt;&amp;quot;+
+		    &amp;quot;&amp;lt;div class=\&amp;quot;imageBox\&amp;quot;&amp;gt;&amp;quot;;
+	html=ond+html;    
+	var xml=db.QuerySQL(&amp;quot;select icon,icon2,url from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;);
+	var spn=&amp;quot;&amp;quot;;
+	for(var i=0;i&amp;lt;xml.getRowCount();i++){
+		html+= &amp;quot;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;&amp;gt;&amp;quot;;
+		if(i==0)
+			spn+=&amp;quot;&amp;lt;span class=\&amp;quot;active\&amp;quot; rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;http://dev.sss-shanghai.org/aca/ROOT_HIS/&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+		else
+			spn+=&amp;quot;&amp;lt;span  rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;http://dev.sss-shanghai.org/aca/ROOT_HIS/&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+	}
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+ &amp;quot;&amp;lt;div class=\&amp;quot;icoBox\&amp;quot;&amp;gt;&amp;quot;+spn+ &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	
+	var jvaspt=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;&amp;quot;+
+			&amp;quot;    $(document).ready(function() {&amp;quot;+
+			&amp;quot;       $(\&amp;quot;.imageRotation\&amp;quot;).each(function(){&amp;quot;+
+			&amp;quot;           var imageRotation = this, &amp;quot;+
+			&amp;quot;                    imageBox = $(imageRotation).children(\&amp;quot;.imageBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                   icoBox = $(imageRotation).children(\&amp;quot;.icoBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                    icoArr = $(icoBox).children(), &amp;quot;+
+			&amp;quot;                    imageWidth = $(imageBox).width(),  &amp;quot;+
+			&amp;quot;                    imageNum = $(imageBox).children().size(),  &amp;quot;+
+			&amp;quot;                    imageReelWidth = imageWidth*imageNum,  &amp;quot;+
+			&amp;quot;                    activeID = parseInt($($(icoBox).children(\&amp;quot;.active\&amp;quot;)[0]).attr(\&amp;quot;rel\&amp;quot;)), &amp;quot;+
+			&amp;quot;                    nextID = 0, &amp;quot;+
+			&amp;quot;                    setIntervalID,  &amp;quot;+
+			&amp;quot;                    intervalTime = 4000,  &amp;quot;+
+			&amp;quot;                    speed =500;  &amp;quot;+
+			
+
+			&amp;quot;            $(imageBox).css({&amp;apos;width&amp;apos; : imageReelWidth + \&amp;quot;px\&amp;quot;});&amp;quot;+
+			
+	
+			&amp;quot;            var rotate=function(clickID){&amp;quot;+
+			&amp;quot;                if(clickID){ nextID = clickID; }&amp;quot;+
+			&amp;quot;                else{ nextID=activeID&amp;lt;=3 ? activeID+1 : 1; }&amp;quot;+
+			
+			&amp;quot;                $(icoArr[activeID-1]).removeClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(imageBox).animate({left:\&amp;quot;-\&amp;quot;+(nextID-1)*imageWidth+\&amp;quot;px\&amp;quot;} , speed);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;3px solid #eee&amp;apos;});&amp;quot;+
+			&amp;quot;                $(icoArr[activeID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;0px solid #eee&amp;apos;});&amp;quot;+
+			&amp;quot;                activeID = nextID;&amp;quot;+
+			&amp;quot;            };&amp;quot;+
+			&amp;quot;            setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			
+			&amp;quot;            $(imageBox).hover(&amp;quot;+
+			&amp;quot;                    function(){ clearInterval(setIntervalID); },&amp;quot;+
+			&amp;quot;                    function(){ setIntervalID=setInterval(rotate,intervalTime); }&amp;quot;+
+			&amp;quot;            );&amp;quot;+
+			
+			&amp;quot;            $(icoArr).click(function(){&amp;quot;+
+			&amp;quot;                clearInterval(setIntervalID);&amp;quot;+
+			&amp;quot;                var clickID = parseInt($(this).attr(\&amp;quot;rel\&amp;quot;));&amp;quot;+
+			&amp;quot;                rotate(clickID);&amp;quot;+
+			&amp;quot;                setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			&amp;quot;            });&amp;quot;+
+			 &amp;quot;       });&amp;quot;+
+			&amp;quot;    });&amp;quot;+
+			&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;;
+   return html+jvaspt;
+
+}
+
+//W8风格商品显示
+function w8item(){
+var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from LSYSURL where icon is not null&amp;quot;;
+	var db = null;
+	var width=120;
+	var height=120;
+
+	db = new pubpack.EADatabase();
+	
+	//表格标题
+	var title = &amp;quot;商品&amp;quot;;
+	
+	var itemds = db.QuerySQL(sql);
+	
+	var count = itemds.getRowCount();
+	
+	if(LAYROW==&amp;quot;&amp;quot; ) LAYROW=2;
+	var trows = LAYROW;
+	
+	if(LAYCOL==&amp;quot;&amp;quot;) LAYCOL =db.GetSQL(&amp;quot;select ceil(&amp;quot;+count+&amp;quot; / &amp;quot;+trows+&amp;quot;) cols from dual&amp;quot;);
+	var tcols = LAYCOL;
+	
+	var tablewidth = 60+60*2+width*tcols;
+
+	var tableheight = 60+height*trows;
+	
+//	html=&amp;quot;&amp;lt;div style=&amp;apos;overflow-x: auto; overflow-y: auto;width:500px; height=300px;&amp;apos;&amp;gt;&amp;quot;;
+	
+	html += &amp;quot;&amp;lt;table id=\&amp;quot;XMIDWARE_MENU_TABLE\&amp;quot; class=\&amp;quot;XMIDWARE_MENU_TABLE\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=0 cellspacing=0 width=\&amp;quot;&amp;quot;+tablewidth+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+tableheight+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+	
+	html += &amp;quot;&amp;lt;TR height=\&amp;quot;60\&amp;quot;&amp;gt;\n
+				&amp;lt;td width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;&amp;gt;&amp;lt;img border=0 src=\&amp;quot;http://xmidware.com/null.jpg\&amp;quot; width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td  colspan=\&amp;quot;&amp;quot;+tcols+&amp;quot;\&amp;quot; align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;5\&amp;quot; color=\&amp;quot;#000000\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;XMIDWARE_MENU_SHEETNAME\&amp;quot; &amp;gt;&amp;nbsp;&amp;quot;+title+&amp;quot; &amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;&amp;gt;&amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;http://xmidware.com/null.jpg\&amp;quot; width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;/&amp;gt;&amp;lt;/td&amp;gt;
+			&amp;lt;/TR&amp;gt;\n&amp;quot;;
+	
+	
+	var matds = getMatrix(trows,tcols);
+	
+	for (var r=0;r&amp;lt;trows;r++) {
+		html += &amp;quot;&amp;lt;TR height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot;&amp;gt;\n&amp;lt;td width=\&amp;quot;60\&amp;quot; height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img border=0 src=\&amp;quot;http://xmidware.com/null.jpg\&amp;quot; width=\&amp;quot;60\&amp;quot; height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		for (var c=0;c&amp;lt;tcols;c++) {
+			var idx = 1 * matds.getStringAt(r,c);
+			if (idx &amp;lt; count) {
+				var id= itemds.getStringAt(idx,&amp;quot;id&amp;quot;);
+				var icon= itemds.getStringAt(idx,&amp;quot;ICON&amp;quot;);
+				var title = itemds.getStringAt(idx,&amp;quot;REFID&amp;quot;);
+				
+				var note= itemds.getStringAt(idx,&amp;quot;name&amp;quot;);
+			
+				var price =&amp;quot;&amp;quot;;
+				var hrefurl =itemds.getStringAt(idx,&amp;quot;url&amp;quot;);
+				
+				html += gethdTableCellHtml(width,height,icon,&amp;quot;&amp;quot;,price,hrefurl,&amp;quot;&amp;quot;);//宽
+				html += &amp;quot;\n&amp;quot;;
+				
+			}
+		}
+		html += &amp;quot;&amp;lt;/TR&amp;gt;\n&amp;quot;;
+
+	}
+	html += &amp;quot;&amp;lt;/TABLE&amp;gt;\n\n&amp;quot;;
+		
+	return html;
+
+
+}
+
+//图文标题加省略内容
+function imgtext(){
+
+var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; order by crtdat desc &amp;quot;  ;
+	
+	var ds=db.QuerySQL(sql);
+	var count =0;
+	if(ds.getRowCount()&amp;gt;LAYROW){
+		count = LAYROW;
+	}else{
+		count = ds.getRowCount();
+	}
+	
+	for (var r =0;r &amp;lt; count; r ++) {
+		var txt = &amp;quot;txt&amp;quot;;
+		var img = ds.getStringAt(r,&amp;quot;icon&amp;quot;);
+		var name = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+		var htmlguid=ds.getStringAt(r,&amp;quot;htmlguid&amp;quot;);
+		var contextes=ds.getStringAt(r,&amp;quot;contextes&amp;quot;);
+		var context = db.getBlob2String(&amp;quot;select b.bdata from LSYSURL a,formblob b where a.htmlguid=b.guid and a.htmlguid=&amp;apos;&amp;quot;+htmlguid+&amp;quot;&amp;apos;&amp;quot;,&amp;quot;bdata&amp;quot;);
+
+		var url = ds.getStringAt(r,&amp;quot;url&amp;quot;);
+		if (url != &amp;quot;&amp;quot;) {
+			url += &amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(r,&amp;quot;GUID&amp;quot;);
+		}
+		txt=txt+r;
+		html += &amp;quot;&amp;lt;table valign=\&amp;quot;top\&amp;quot; cellpadding=\&amp;quot;5\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+img+&amp;quot;\&amp;quot; width=\&amp;quot;200\&amp;quot; height=\&amp;quot;200\&amp;quot;/&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;table  width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td&amp;gt;&amp;lt;h3&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/h3&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td height=\&amp;quot;40\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td id=\&amp;quot;&amp;quot;+txt+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;a href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+contextes+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;	
+		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;td colspan=2&amp;gt;&amp;lt;hr style=\&amp;quot;border-top:1px dashed #cccccc; height:1px\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	}
+
+//	html += &amp;quot;
+//			&amp;lt;script&amp;gt;
+//				window.onload = function(){
+//					for (var r=0;r&amp;lt;&amp;quot;+count+&amp;quot;;r++) {
+//						var txt = \&amp;quot;txt\&amp;quot;;
+//						txt=txt+r;
+//						 var text = document.getElementById(txt),
+//						 str = text.innerHTML,
+//						 textLeng = 400;
+//					
+//						 if(str.length &amp;gt; textLeng ){
+//							   text .innerHTML = str.substring(0,textLeng)+\&amp;quot;。。。。\&amp;quot;;
+//						 } 
+//					 }
+//				 }
+//			 &amp;lt;/script&amp;gt;
+//			&amp;quot;;
+//
+	return html;
+
+}
+
+function picsw(){
+//	var iconwidth=&amp;quot;&amp;quot;;
+//	var iconheight=&amp;quot;&amp;quot;;
+//	var space =&amp;quot;&amp;quot;;
+//	var time=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	html=&amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt; 
+		img{border:0;}
+		a{text-decoration:none;}
+		a:hover{text-decoration:underline;}
+		li{list-style:none; list-style-image:none; list-style-type:none;}
+		.rollBox{width:&amp;quot;+iconwidth+&amp;quot;px;overflow:hidden;padding:0;margin:0 auto; }
+		.rollBox .Cont{width:1342px;overflow:hidden;float:left;}
+		.rollBox .ScrCont{width:10000000px;}
+		.rollBox .Cont .pic{width:1342px;float:left;text-align:center; margin-right:0px;}
+		.rollBox .Cont .pic img{display:block; margin-bottom:7px;}
+		.rollBox #List1,.rollBox #List2{float:left;}
+		&amp;lt;/style&amp;gt;&amp;quot;;
+		
+		if(LAYCOL ==&amp;quot;&amp;quot;)LAYCOL =&amp;quot;1&amp;quot;;
+		var sql = &amp;quot;select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and icon is not null &amp;quot;  ;
+		if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+		if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+		else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+		if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+		
+		  
+		var xml=db.QuerySQL(sql);
+		var spn=&amp;quot;&amp;quot;;
+		var cnt=xml.getRowCount();
+		 
+		html+=&amp;quot;&amp;lt;div class=\&amp;quot;rollBox\&amp;quot;&amp;gt;
+		     &amp;lt;div class=\&amp;quot;LeftBotton\&amp;quot; onmousedown=\&amp;quot;ISL_GoUp()\&amp;quot; onmouseup=\&amp;quot;ISL_StopUp()\&amp;quot; onmouseout=\&amp;quot;ISL_StopUp()\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+			  &amp;lt;div class=\&amp;quot;Cont\&amp;quot; id=\&amp;quot;ISL_Cont\&amp;quot;&amp;gt;
+			       &amp;lt;div class=\&amp;quot;ScrCont\&amp;quot;&amp;gt;
+				&amp;lt;div id=\&amp;quot;List1\&amp;quot;&amp;gt;&amp;quot;;
+					      for(var i=0;i&amp;lt;cnt;i++){
+					      	html+=&amp;quot;&amp;lt;div class=\&amp;quot;pic\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;HTMLGUID&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot; style=\&amp;quot;max-width=:100%;height=:auto;\&amp;quot;/&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;//width=&amp;quot;+iconwidth+&amp;quot; height=&amp;quot;+iconheight+&amp;quot;
+					      }																				
+				 html+= &amp;quot; &amp;lt;/div&amp;gt;
+			      &amp;lt;div id=\&amp;quot;List2\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		            &amp;lt;/div&amp;gt;
+		    	 &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;RightBotton\&amp;quot; onmousedown=\&amp;quot;ISL_GoDown()\&amp;quot; onmouseup=\&amp;quot;ISL_StopDown()\&amp;quot; onmouseout=\&amp;quot;ISL_StopDown()\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		    &amp;lt;/div&amp;gt;
+		 &amp;lt;/div&amp;gt;&amp;quot;;
+		 
+		 
+		html+=&amp;quot;&amp;lt;script language=\&amp;quot;javascript\&amp;quot; type=\&amp;quot;text/javascript\&amp;quot;&amp;gt; 
+		var Speed = 0; //速度(毫秒)
+		var Space = 1342; //每次移动(px)
+		var PageWidth = 1; //翻页宽度 
+		var fill = 0; //整体移位 
+		var MoveLock = false; 
+		var MoveTimeObj; 
+		var Comp = 0;
+		var AutoPlayObj = null;
+		GetObj(\&amp;quot;List2\&amp;quot;).innerHTML = GetObj(\&amp;quot;List1\&amp;quot;).innerHTML;
+		GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft = fill;
+		GetObj(\&amp;quot;ISL_Cont\&amp;quot;).onmouseover = function(){clearInterval(AutoPlayObj);}
+		GetObj(\&amp;quot;ISL_Cont\&amp;quot;).onmouseout = function(){AutoPlay();}
+		AutoPlay();
+		function GetObj(objName){if(document.getElementById){return eval(&amp;apos;document.getElementById(\&amp;quot;&amp;apos;+objName+&amp;apos;\&amp;quot;)&amp;apos;)}else{return eval(&amp;apos;document.all.&amp;apos;+objName)}}
+		function AutoPlay(){ //自动滚动
+		 clearInterval(AutoPlayObj);
+		 AutoPlayObj = setInterval(&amp;apos;ISL_GoDown();ISL_StopDown();&amp;apos;,&amp;quot;+time+&amp;quot;); //间隔时间
+		}
+		function ISL_GoUp(){ //上翻开始
+		 if(MoveLock) return;
+		 clearInterval(AutoPlayObj);
+		 MoveLock = true;
+		 MoveTimeObj = setInterval(&amp;apos;ISL_ScrUp();&amp;apos;,Speed); 
+		} 
+		function ISL_StopUp(){ //上翻停止
+		 clearInterval(MoveTimeObj); 
+		 if(GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft % PageWidth - fill != 0){
+		  Comp = fill - (GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft % PageWidth);
+		  CompScr();
+		 }else{
+		  MoveLock = false;
+		 }
+		 AutoPlay();
+		}
+		function ISL_ScrUp(){ //上翻动作
+		 if(GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft &amp;lt;= 0){GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft = GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft + GetObj(&amp;apos;List1&amp;apos;).offsetWidth}
+		 GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft -= Space ;
+		}
+		function ISL_GoDown(){ //下翻
+		 clearInterval(MoveTimeObj);
+		 if(MoveLock) return; 
+		 clearInterval(AutoPlayObj);
+		 MoveLock = true;
+		 ISL_ScrDown();
+		 MoveTimeObj = setInterval(&amp;apos;ISL_ScrDown()&amp;apos;,Speed);
+		}
+		function ISL_StopDown(){ //下翻停止
+		 clearInterval(MoveTimeObj);
+		 if(GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft % PageWidth - fill != 0 ){
+		  Comp = PageWidth - GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft % PageWidth + fill;
+		  CompScr();
+		 }else{
+		  MoveLock = false;
+		 }
+		 AutoPlay();
+		}
+		function ISL_ScrDown(){ //下翻动作
+		 if(GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft &amp;gt;= GetObj(&amp;apos;List1&amp;apos;).scrollWidth){GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft = GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft - GetObj(&amp;apos;List1&amp;apos;).scrollWidth;}
+		 GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft += Space ;
+		}
+		function CompScr(){
+		 var num;
+		 if(Comp == 0){MoveLock = false;return;}
+		 if(Comp &amp;lt; 0){ //上翻
+		  if(Comp &amp;lt; -Space){
+		   Comp += Space;
+		   num = Space;
+		  }else{
+		   num = -Comp;
+		   Comp = 0;
+		  }
+		  GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft -= num;
+		  setTimeout(&amp;apos;CompScr()&amp;apos;,Speed);
+		 }else{ //下翻
+		  if(Comp &amp;gt; Space){
+		   Comp -= Space;
+		   num = Space;
+		  }else{
+		   num = Comp;
+		   Comp = 0;
+		  }
+		  GetObj(&amp;apos;ISL_Cont&amp;apos;).scrollLeft += num;
+		  setTimeout(&amp;apos;CompScr()&amp;apos;,Speed);
+		 }
+		}
+	&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	return html;
+}
+
+//二级菜单栏
+function menu(){
+	var typ =DSMOD ;
+	var ds=db.QuerySQL(&amp;quot;select * from lsysurl where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and refid=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos;&amp;quot;);
+	var div=&amp;quot;&amp;quot;;
+	var iframe=&amp;quot;&amp;quot;;
+	var rowcnt=ds.getRowCount();
+	var pindd=&amp;quot;15px&amp;quot;;
+	
+	if(V_PADDING!=&amp;quot;&amp;quot;) pindd=V_PADDING;
+
+	var st = new Array(); 
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	if(selfontcolor==&amp;quot;&amp;quot;)selfontcolor=&amp;quot;#FFFFFF&amp;quot;;
+	var css=&amp;quot;&amp;lt;style&amp;gt;
+		    .nav_a&amp;quot;+cdcnt+&amp;quot; {
+		        color: &amp;quot;+fontcolor+&amp;quot;;
+		        cursor: pointer;
+		        float: left;
+		        font-size: 15px;
+		        height: &amp;quot;+height+&amp;quot;;
+		        line-height: &amp;quot;+height+&amp;quot;;
+		        padding: 0px &amp;quot;+pindd+&amp;quot;;
+		        position: relative;
+
+		    }
+		
+		    .nav&amp;quot;+cdcnt+&amp;quot; {
+		        height:&amp;quot;+height+&amp;quot;;
+		
+		    }
+		    .nav&amp;quot;+cdcnt+&amp;quot; .on {
+		        background-color:&amp;quot;+onclickcolor+&amp;quot;;
+		        color: &amp;quot;+selfontcolor+&amp;quot;;
+		    }
+		    #dr&amp;quot;+cdcnt+&amp;quot; div:hover{
+		        cursor:pointer;
+		        background:&amp;quot;+hovercolor+&amp;quot;;&amp;quot;;
+		        if(bg_img!=null||bg_img!=&amp;quot;&amp;quot;){
+		        	css+=&amp;quot;background-image:url(&amp;quot;+bg_img+&amp;quot;);&amp;quot;;
+		        }
+	css += &amp;quot;}&amp;lt;/style&amp;gt;&amp;quot;;
+	var menulog= MENUID;
+	for(var i=0; i&amp;lt;rowcnt;i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;)+cdcnt;
+		var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		var target=ds.getStringAt(i,&amp;quot;target&amp;quot;);
+
+		st[i]=id;
+		var onmo=&amp;quot;&amp;quot;;
+		if(menulog+cdcnt==id)
+			div+=&amp;quot;&amp;lt;DIV onclick=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot; on\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+		else
+			div+=&amp;quot;&amp;lt;DIV onclick=\&amp;quot;swithpage&amp;quot;+typ+cdcnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;)\&amp;quot; &amp;quot;+onmo+&amp;quot; id=&amp;quot;+id+&amp;quot; class=\&amp;quot;nav_a&amp;quot;+cdcnt+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/DIV&amp;gt;&amp;quot;;
+	}
+
+	var padding=&amp;quot;&amp;quot;;
+	
+//	if(typ==&amp;quot;NEW_MENU_1&amp;quot;) return menulog+&amp;quot;-----------------------------我是分割线-----------------------&amp;quot;;
+	if(paddingleft!=&amp;quot;&amp;quot;)  padding=&amp;quot;PADDING-LEFT:&amp;quot;+paddingleft+&amp;quot;;&amp;quot;; else if(paddingleft==&amp;quot;&amp;quot;&amp;&amp;paddingright==&amp;quot;&amp;quot;)  padding=&amp;quot;PADDING-LEFT:0px&amp;quot;; else padding=&amp;quot;PADDING-RIGHT:&amp;quot;+paddingleft+&amp;quot;;&amp;quot;;
+	var bgcolorimg=&amp;quot;&amp;quot;;
+	if(bgcolor_img!=null) bgcolorimg=&amp;quot;background-image:url(&amp;quot;+bgcolor_img+&amp;quot;);&amp;quot;;
+	var html=&amp;quot;&amp;lt;div style=\&amp;quot;OVERFLOW: hidden; &amp;quot;+padding+&amp;quot; BACKGROUND-COLOR: &amp;quot;+bgcolor+&amp;quot;; &amp;quot;+bgcolorimg+&amp;quot;);\&amp;quot;&amp;gt;&amp;lt;DIV id=dr&amp;quot;+cdcnt+&amp;quot; class=nav&amp;quot;+cdcnt+&amp;quot; style=\&amp;quot;FLOAT: left\&amp;quot;&amp;gt;&amp;quot;+div+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+			function swithpage&amp;quot;+typ+cdcnt+&amp;quot;(frameid,url,target){
+				if(target==&amp;apos;_blank&amp;apos;)
+					window.open(url);
+				else window.location.href=url;
+			}
+			
+	&amp;lt;/script&amp;gt;&amp;quot;;
+//	window.onload=function(){&amp;quot;;
+//				
+//				if(bgcolor_img!=null)
+//		            		script+=&amp;quot;document.getElementById(&amp;apos;&amp;quot;+menulog+cdcnt+&amp;quot;&amp;apos;).style.backgroundImage=\&amp;quot;url(&amp;quot;+bgcolor_img+&amp;quot;)\&amp;quot;;&amp;quot;;
+//		            	else
+//				 	script+=&amp;quot;document.getElementById(&amp;apos;&amp;quot;+menulog+cdcnt+&amp;quot;&amp;apos;).style.background=\&amp;quot;&amp;quot;+onclickcolor+&amp;quot;\&amp;quot;;&amp;quot;;
+//				 	
+//				script+=&amp;quot;document.getElementById(&amp;apos;&amp;quot;+menulog+cdcnt+&amp;quot;&amp;apos;).style.color=\&amp;quot;#000000\&amp;quot;;
+//			}
+	
+	return css+html+script;
+
+
+}
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,1331 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_EBSEL</MWID><NAME >3ABILL订单入口</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_EBSEL.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >WMS</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var G_SEQU=&amp;quot;&amp;quot;;//流水号
+var pageno=1;
+var pagesize=10;
+var build =1;
+var trial = 1;
+var untrial =1;
+var shseqid=&amp;quot;&amp;quot;;
+var totalpage=1;
+var flag = false;
+var sqlIn=&amp;quot;&amp;quot;;
+var sysdat = &amp;quot;&amp;quot;;
+var note =&amp;quot;&amp;quot;;
+var rowcount = 0;
+var rowcount1= 0;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetMainCellRange(0,6,1,15,17);
+	_this.SetMainCellRange(3,9,1,18,10);
+	_this.SetToBoolBox(0,3,3);  
+	_this.SetToBoolBox(0,3,5);
+	_this.SetToBoolBox(0,3,7);
+	_this.SetCellText(0,17,6,pageno);
+	
+ 	_this.SetCellText(0,3,3,1);
+  	_this.SetCellText(0,3,5,1);
+  	_this.SetCellText(0,3,	7,1);
+
+	totalpage = Math.floor(((getResultCount()+pagesize-1)/pagesize));
+	_this.SetCellText(0,17,13,totalpage);
+	loadData2MainArea(build,trial,untrial,shseqid,pagesize,pageno,0,15);	
+
+	_this.SetToDateBox(&amp;quot;&amp;quot;,2,7,3,&amp;quot;&amp;quot;);  
+	_this.SetToDateBox(&amp;quot;&amp;quot;,2,7,5,&amp;quot;&amp;quot;);
+      	var listid =_this.CreateListValueByXMLDS(_this.HttpCall(&amp;quot;XmlDB.sp?bind=V_WMS_OWNER&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);      	
+	_this.SetToComboBox(&amp;quot;&amp;quot;,2,5,3,listid);      	
+      	
+      	var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(&amp;quot;XmlDB.sp?bind=V_WMS_STTYP&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);      	
+	_this.SetToComboBox(&amp;quot;&amp;quot;,2,13,3,listid2);		
+}
+//刷新主数据的ＸＭＬ
+function refreshSheet(sheet,row)
+{
+	var r1=0;
+	var r2=0;
+	var c1=0;
+	var r2=0;
+//	if(sheet==0){
+		r1 = _this.GetMainCellRangeRow1(sheet); 
+		r2 = _this.GetMainCellRangeRow2(sheet);
+		c1 = _this.GetMainCellRangeCol1(sheet);
+		c2 = _this.GetMainCellRangeCol2(sheet);
+		if ( r2-row&amp;gt; 0 )
+		{
+			for ( var j=r2;j&amp;gt;row;j-- )
+			{
+				_this.DeleteRow(sheet,j);
+			}
+		}
+		for ( var i=r1;i&amp;lt;=row;i++) {　
+			for ( var j=c1;j&amp;lt;=c2;j++ ) {
+				if (j&amp;lt;row){
+					_this.SetCellText(sheet,i,j,&amp;quot;&amp;quot;);
+					_this.SetCellColor(sheet,i,1,0,0,0);
+				}
+				else if (j&amp;gt;=row){
+					_this.SetToStandardCell(sheet,i,j);
+				}
+			}
+		}	
+//	}else if(sheet==3){
+//		r1 = 9;
+//		r2 = 18;
+//		c1=1;
+//		c2=10;
+//		if ( r2-row&amp;gt; 0 )
+//		{
+//			for ( var j=r2;j&amp;gt;row;j-- )
+//			{
+//				_this.DeleteRow(sheet,j);
+//			}
+//		}
+//		for ( var i=r1;i&amp;lt;=row;i++) {　
+//			for ( var j=c1;j&amp;lt;=c2;j++ ) {
+//				if (j&amp;lt;18){
+//					_this.SetCellText(sheet,i,j,&amp;quot;&amp;quot;);
+//					_this.SetCellColor(sheet,i,1,0,0,0);
+//				}
+//				else if (j&amp;gt;=18){
+//					_this.SetToStandardCell(sheet,i,j);
+//				}
+//			}
+//	}	
+//	}	
+}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	var stat=&amp;quot;&amp;quot;;
+	var shseq = &amp;quot;&amp;quot;;
+	var ret=&amp;quot;&amp;quot;;
+	var bilid = _this.GetCellText(sheet,5,5);
+	var corpid = _this.GetCellText(sheet,5,3);
+	var startdat = _this.GetCellText(sheet,7,3);
+	var enddat = _this.GetCellText(sheet,7,5);
+	var sttyp = _this.GetCellText(sheet,13,3);
+	var param = new Object();
+	
+	if (id==&amp;quot;查询&amp;quot;)  {
+	 	build = _this.GetCellText(0,3,3);
+		trial = _this.GetCellText(0,3,5);
+		untrial = _this.GetCellText(0,3,7);
+		shseqid = _this.GetCellText(0,3,13);
+		//kyo modi 080710 10:36
+		pageno = 1;	
+//		pageno = _this.GetCellText(sheet,17,6); 
+		_this.SetCellText(sheet,17,6,pageno);
+		
+		if (pageno==&amp;quot;&amp;quot; || pageno==null){pageno=1;}
+		refreshSheet(0,15);
+		loadData2MainArea(build,trial,untrial,shseqid,pagesize,pageno,0,15);	
+	}
+	else if (id==&amp;quot;新建&amp;quot;){
+		_this.ShowSheet(2);
+	}
+	else if (id==&amp;quot;创建作业流水&amp;quot;){
+		if (corpid!=&amp;quot;&amp;quot;)
+		{	
+			param.bilid = bilid;
+			param.corpid = corpid;
+			param.startdat = startdat;
+			param.enddat = enddat;
+//			alert(sttyp);
+			param.sttyp = sttyp;
+			param.staLine = _this.GetCellText(2,9,3);
+			param.endLine = _this.GetCellText(2,9,5);
+			param.staSeq = _this.GetCellText(2,11,3);
+			param.endSeq = _this.GetCellText(2,11,5);
+			param.org = G_ORGID;		
+			param.user = G_USRID;	
+			ret = invokeOSFuncExt(&amp;quot;insertTable&amp;quot;,param);
+			if(ret!=&amp;quot;&amp;quot;)
+			{
+				alert(&amp;apos;本次货源分配流水号是：&amp;apos;+ret);
+				G_SEQU=ret;
+				_this.SetCellText(1,2,2,G_SEQU);
+			  	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;G_SEQU=&amp;quot;+G_SEQU);
+//			  	var rowcount = _this.GetRowCount();
+//	  			_this.SetMainCellRange(1,5,1,8,7);
+		  		_this.SetXmlDS(1,5,1,8,7,xml);
+				rowcount = _this.GetRowCount(1);
+//			  	alert(rowcount);
+				setCellToUnitEntryBox(1,5,rowcount,1,4);
+				setCellToUnitEntryBox(1,5,rowcount,1,6);  				
+				_this.ShowSheet(1);
+			}
+		}	
+		else
+		{
+			alert(&amp;apos;请指定货主&amp;apos;);
+			_this.SetFocusCell(2,5,3);
+			return;
+		}		
+	}
+	else if (id==&amp;quot;上页&amp;quot;){
+		if (pageno&amp;lt;=1)
+		{
+			alert(&amp;apos;已经到首页。&amp;apos;);
+			return;		
+		}else{
+			pageno--;
+			showpage(pageno);
+		}
+	}
+	else if (id==&amp;quot;下页&amp;quot;){
+		rowcount = getResultCount();
+		if (pageno==&amp;quot;&amp;quot; || pageno==null){pageno=1;}		
+		if (pageno*pagesize&amp;gt;rowcount-1)	{
+			alert(&amp;apos;已经到末页。&amp;apos;);
+			return;
+		}else{
+			pageno++;
+			showpage(pageno);
+		}
+				
+	}
+	else if (id==&amp;quot;首页&amp;quot;){
+		pageno=1;
+		showpage(pageno);			
+	}
+	else if (id==&amp;quot;尾页&amp;quot;){
+		pageno = totalpage;
+		showpage(pageno);		
+	}
+	else if (id==&amp;quot;GO&amp;quot;){
+		pageno = _this.GetCellText(sheet,row,6);
+		if (pageno==null || pageno==&amp;quot;&amp;quot;||pageno&amp;lt;0|| pageno&amp;gt;totalpage){return;}
+		else {
+			showpage(pageno);
+		}		
+	}
+	else if (id==&amp;quot;G_SELECT&amp;quot;){
+		stat = _this.GetCellText(sheet,row,11);
+		shseq = _this.GetCellText(sheet,row,1);
+		if (stat==&amp;apos;未试算&amp;apos;){
+			G_SEQU = shseq;
+			_this.SetCellText(1,2,2,G_SEQU);
+		  	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;G_SEQU=&amp;quot;+G_SEQU);
+		  	_this.SetMainCellRange(1,5,1,8,7);
+	  		_this.SetXmlDS(1,5,1,8,7,xml);
+	  		rowcount = _this.GetRowCount(1);
+			setCellToUnitEntryBox(1,5,rowcount,1,4);
+			setCellToUnitEntryBox(1,5,rowcount,1,6);  
+			_this.ShowSheet(1);
+		}
+		if (stat==&amp;apos;已试算&amp;apos;){
+			G_SEQU = shseq;
+		  	show_trial_result(1);
+		}
+		if (stat==&amp;apos;已生成&amp;apos;){
+			G_SEQU = shseq;
+//			alert(G_SEQU);
+			_this.SetCellText(4,3,2,G_SEQU);
+			var param = new Object();
+			param.G_SEQU= G_SEQU;
+		  	var newInfo = invokeOSFuncExt(&amp;quot;GetBills&amp;quot;,param);
+//		  	alert(newInfo );
+			var bs = newInfo.substring(0,newInfo.indexOf(&amp;quot;-&amp;quot;)-1);
+			var rp = newInfo.substring(newInfo.indexOf(&amp;apos;-&amp;apos;)+1,newInfo.indexOf(&amp;apos;~&amp;apos;)-1);
+//			var bc = newInfo.substring(newInfo.indexOf(&amp;apos;~&amp;apos;)+1,newInfo.indexOf(&amp;apos;*&amp;apos;)-1);
+//			var sx = newInfo.substring(newInfo.indexOf(&amp;apos;*&amp;apos;)+1,newInfo.length-1);
+//			var str = &amp;quot;本次货源分配已成功！&amp;quot;;
+			var str = &amp;quot;相关单据如下：&amp;quot;;
+			if (bs==&amp;quot;&amp;quot;||bs==&amp;quot;-&amp;quot;){bs=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n拣货单：&amp;apos;+ bs;
+			if (rp==&amp;quot;&amp;quot;||rp==&amp;quot;~&amp;quot;||rp==&amp;quot;-&amp;quot;){rp=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n补货单：&amp;apos;+rp;
+//			if (bc==&amp;quot;&amp;quot;||bc==&amp;quot;*&amp;quot;||bc==&amp;quot;~&amp;quot;){bc=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n合流单：&amp;apos;+bc;
+//			if (sx==&amp;quot;&amp;quot;||sx==&amp;quot;*&amp;quot;){sx=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n配送单：&amp;apos;+sx;
+			
+			_this.SetCellText(4,5,1,str);
+			_this.ShowSheet(4);
+
+		}	
+	}
+	else if(id==&amp;quot;G_DEL&amp;quot;)
+	{
+		if(confirm(&amp;apos;确定要删除该流水号？&amp;apos;)==1)
+		{
+			var param = new Object();
+			G_SEQU = _this.GetCellText(sheet,row,1);
+			param.G_SEQU = G_SEQU;
+			param.acc = G_ACCID;
+			try{
+				var msg = invokeOSFuncExt(&amp;quot;deleteTable&amp;quot;,param);
+				if(msg!=0){
+					alert(&amp;apos;已成功删除流水作业：(&amp;apos;+G_SEQU+&amp;apos;)!&amp;apos;);
+					window.location.reload();
+					_this.ShowSheet(0);
+				}
+			}catch(e){
+				alert(e);
+			}
+		}
+		else{
+			return;
+		}	
+	}
+
+	else if (id==&amp;quot;取消创建&amp;quot;&amp;&amp;sheet==2){
+		_this.ShowSheet(0);
+	}
+	else if((id==&amp;quot;返回&amp;quot;&amp;&amp;sheet==1)||id==&amp;quot;完成&amp;quot;){
+		window.location.reload();
+		
+	} 
+	else if (id==&amp;quot;返回&amp;quot;&amp;&amp;sheet==3){
+//	alert(flag);
+		if(flag==true){
+			_this.ShowSheet(1);
+		}else{
+			var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;G_SEQU=&amp;quot;+G_SEQU);
+//		  	var rowcount = _this.XMLDS_GetRowCount();
+//	  		_this.SetMainCellRange(1,5,1,8,7);
+//			refreshSheet(1,rowcount);
+	  		_this.SetXmlDS(1,5,1,8,7,xml);
+	  		rowcount = _this.GetRowCount(1);
+			setCellToUnitEntryBox(1,5,rowcount,1,4);
+			setCellToUnitEntryBox(1,5,rowcount,1,6);  	
+			_this.ShowSheet(1);
+			flag=true;
+		}
+	}
+	else if (id==&amp;quot;开始试算&amp;quot;){
+		if(flag==false){
+			_sql.run(&amp;quot;SHDIV&amp;quot;,&amp;quot;param=&amp;quot;+G_SEQU);
+			_sql.run(&amp;quot;UPDATESTAT&amp;quot;,&amp;quot;param=&amp;quot;+G_ACCID);
+			_sql.run(&amp;quot;MODI_SEQ_STAT&amp;quot;,&amp;quot;stat=1&amp;shseq=&amp;quot;+G_SEQU);
+			show_trial_result(1);
+		}else{
+			alert(&amp;apos;货源分配（&amp;apos;+G_SEQU+&amp;apos;）已试算成功，不能重复试算结果！&amp;apos;);
+			_this.ShowSheet(3);
+		}		
+	}
+	else if (id==&amp;quot;生成单据&amp;quot;){
+//	alert(rowcount1);
+		if(rowcount1==0){
+			alert(&amp;quot;没有可生成的单据！&amp;quot;);
+			return false;
+		}else{
+			GenerateBills();
+		}
+	}
+	else if (id ==&amp;quot;G_TRIAL&amp;quot;){//首页试算按钮
+		G_SEQU = _this.GetCellText(0,row,1);
+		_sql.run(&amp;quot;SHDIV&amp;quot;,&amp;quot;param=&amp;quot;+G_SEQU);
+		_sql.run(&amp;quot;UPDATESTAT&amp;quot;,&amp;quot;param=&amp;quot;+G_ACCID);		
+		show_trial_result(1);
+	}
+	else if (id ==&amp;quot;G_GEN&amp;quot;){
+		G_SEQU = _this.GetCellText(0,row,1);
+//		alert(G_SEQU);
+		GenerateBills();
+	}
+	else if (id ==&amp;quot;上一页&amp;quot;){
+		if (pageno&amp;lt;=1)
+		{
+			alert(&amp;apos;已经到首页。&amp;apos;);
+			return;		
+		}else{
+			pageno--;
+			show_trial_result(pageno);
+		}
+	}
+	else if (id==&amp;quot;下一页&amp;quot;){
+		if (pageno==&amp;quot;&amp;quot; || pageno==null){pageno=1;}		
+		if (pageno*pagesize&amp;gt;rowcount-1)	{
+			alert(&amp;apos;已经到末页。&amp;apos;);
+			return;
+		}else{
+			pageno++;
+			show_trial_result(pageno);	
+		}	
+	}
+}
+
+//================================================================// 
+// 函数：setMainData(sheet,xml)
+// 说明：设置主数据的数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：07/08/08 17:07:14
+// 修改日志：
+//================================================================// 
+function setMainData(sheet,xml){
+	_this.XMLDS_Parse(xml);
+	var rowcount = _this.XMLDS_GetRowCount();
+	var id=&amp;quot;&amp;quot;;var crtusr=&amp;quot;&amp;quot;;var crtdat=&amp;quot;&amp;quot;;var stat=&amp;quot;&amp;quot;;var note=&amp;quot;&amp;quot;;
+	_this.SetMainCellRangeAppendAuto(0,1);	
+	for (var row = 0;row&amp;lt;rowcount;row++){
+		id = _this.XMLDS_GetString(row,&amp;quot;id&amp;quot;);
+		crtusr = _this.XMLDS_GetString(row,&amp;quot;crtusr&amp;quot;);
+		crtdat = _this.XMLDS_GetString(row,&amp;quot;crtdat&amp;quot;);
+		stat = _this.XMLDS_GetString(row,&amp;quot;state&amp;quot;);
+		note = _this.XMLDS_GetString(row,&amp;quot;note&amp;quot;);
+		_this.SetCellText(sheet,row+6,1,id);
+		_this.SetCellText(sheet,row+6,5,crtusr);
+		_this.SetCellText(sheet,row+6,7,crtdat);
+		_this.SetCellText(sheet,row+6,11,stat);
+		_this.SetCellText(sheet,row+6,13,note);
+		
+		if (stat==&amp;apos;已试算&amp;apos;){
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,row+6,15,&amp;quot;查询&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1);
+			_this.SetToButton(&amp;quot;G_GEN&amp;quot;,sheet,row+6,16,&amp;quot;生成&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,1);		 
+			_this.SetToButton(&amp;quot;G_DEL&amp;quot;,sheet,row+6,17,&amp;quot;删除&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,2,1);
+			_this.SetCellColor(sheet,row+6,1,255,0,0);
+		}
+		else if (stat==&amp;apos;未试算&amp;apos;){
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,row+6,15,&amp;quot;查询&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1);
+			_this.SetToButton(&amp;quot;G_TRIAL&amp;quot;,sheet,row+6,16,&amp;quot;试算&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,1);		 
+			_this.SetToButton(&amp;quot;G_DEL&amp;quot;,sheet,row+6,17,&amp;quot;删除&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,2,1);
+			_this.SetCellColor(sheet,row+6,1,255,0,0);		
+		}
+		else if (stat==&amp;apos;已生成&amp;apos;){
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,row+6,15,&amp;quot;查询&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1);			
+			_this.SetCellColor(sheet,row+6,1,0,0,0);
+		}	
+	}			
+}
+//
+function Load(sql,pageno,pagesize,sheet,row)
+{
+      var param = new Object();
+      param.runsql = sql ;
+      param.pageno = pageno;
+      param.pagesize = pagesize;
+      try {
+		var xml = invokeOSFuncExt(&amp;quot;getPaginationXML&amp;quot;,param) ;
+    		refreshSheet(sheet,row);
+		if(sheet==0){
+	    		setMainData(sheet,xml); 
+	    	}else if(sheet==3){
+			_this.SetXmlDS(sheet,9,1,18,10,xml);
+	    }	             
+      }catch ( e ) {
+            alert ( e );
+      }
+}
+
+function loadData2MainArea(build,trial,untrial,shseqid,pagesize,pageno,sheet,row){
+
+	var param = new Object();
+	param.build = build;
+	param.trial = trial;
+	param.untrial = untrial;
+	param.shseqid = shseqid;
+	var sql = invokeOSFuncExt(&amp;quot;getSQL&amp;quot;,param);
+	Load(sql,pageno,pagesize,sheet,row);	
+}
+
+function getResultCount(){
+	var param = new Object();
+	param.build = build;
+	param.trial = trial;
+	param.untrial = untrial;
+	param.shseqid = shseqid;	
+	var sql = invokeOSFuncExt(&amp;quot;getSQL&amp;quot;,param);
+	_this.QuerySQLDS(sql);
+	var count = _this.XMLDS_GetRowCount();
+	return count;
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet==1&amp;&amp;col==5&amp;&amp;row&amp;gt;=4) 
+	{
+		var itmid = _this.GetCellText(sheet,row,1);
+//		alert(itmid);
+		var url = &amp;quot;ShowXlsGrid.sp?isfilldata=true&amp;grdid=SHlist&amp;itmid=&amp;quot;+itmid+&amp;quot;&amp;shseq=&amp;quot;+G_SEQU;
+		window.open(url);
+	}
+	if (sheet==1&amp;&amp;col==7&amp;&amp;row&amp;gt;=4) 
+	{
+		var itmid = _this.GetCellText(sheet,row,1);
+//		alert(itmid);
+		var url = &amp;quot;ShowXlsGrid.sp?isfilldata=true&amp;grdid=SH_SLTlist&amp;itmid=&amp;quot;+itmid+&amp;quot;&amp;shseq=&amp;quot;+G_SEQU;
+		if(_this.GetCellText(sheet,row,6)!=0)
+		window.open(url);
+	}	
+}
+
+function setCellToUnitEntryBox(sheet,row1,row2,col1,col2)
+{
+	var itmid = &amp;quot;&amp;quot;;
+	var untnum=&amp;quot;&amp;quot;;
+	var smlunt=&amp;quot;&amp;quot;;
+	var unit=&amp;quot;&amp;quot;;	
+	for (var i=row1;i&amp;lt;=row2;i++)
+	{
+		itmid = _this.GetCellText(sheet,i,col1);
+		if (itmid!=null &amp;&amp; itmid !=&amp;quot;&amp;quot;)
+		{
+			_sql.querytods(&amp;quot;UNIT&amp;quot;,&amp;quot;param=&amp;quot;+itmid);
+			untnum = _this.XMLDS_GetString(0,&amp;quot;untnum&amp;quot;);
+			smlunt = _this.XMLDS_GetString(0,&amp;quot;smlunt&amp;quot;);
+			unit = _this.XMLDS_GetString(0,&amp;quot;unit&amp;quot;);		
+			_this.SetToUnitEntryBox(sheet,i,col2,untnum,unit,smlunt);
+		}		
+	}
+	
+}
+
+//载入xml在一个sheet显示数据
+function setXmlDS2Sheet(datasoure,sheet,row1,col1,row2,col2,param)
+{
+	var xml=_sql.query(datasoure,&amp;quot;param=&amp;quot;+param);
+	_this.SetXmlDS(sheet,row1,col1,row2,col2,xml);
+}
+
+function buildBil()
+{
+	var param = new Object();
+//	var RPXML = getBilInfo2XML(&amp;quot;补货&amp;quot;);
+//	var BSXML = getBilInfo2XML(&amp;quot;拣货&amp;quot;);
+	param.G_SEQU = G_SEQU;
+	param.org = G_ORGID;
+	param.acc = G_ACCID;
+	param.syt = G_SYTID;
+	param.crtusr = G_USRID;
+	param.crtusrnam = G_USRNAM;
+	param.locid = G_LOCID;	
+//	param.ownerID  =  _this.GetCellText(2,5,3);
+//	param.staDate = _this.GetCellText(2,7,3);
+//	param.endDate = _this.GetCellText(2,7,5);
+//	param.staLine = _this.GetCellText(2,9,3);
+//	param.endLine = _this.GetCellText(2,9,5);
+//	param.staSeq = _this.GetCellText(2,11,3);
+//	param.endSeq = _this.GetCellText(2,11,5);
+//	param.shTyp = _this.GetCellText(2,13,3);
+//	param.notifyBil = _this.GetCellText(2,13,5);
+//	param.rpxml = RPXML;
+//	param.bsxml = BSXML;
+ 	var newInfo = invokeOSFuncExt(&amp;quot;buildBilid&amp;quot;,param);
+	return newInfo;
+}
+
+//试算
+function show_trial_result(pageno){
+	try{
+			_sql.querytods(&amp;quot;LOG&amp;quot;,&amp;quot;param=&amp;quot;+G_SEQU);
+			var text=&amp;quot;&amp;quot;;
+			var globaltxt = &amp;quot;&amp;quot;;
+			for (var i=0;i&amp;lt; _this.XMLDS_GetRowCount();i++)
+			{
+				text = _this.XMLDS_GetString(i,&amp;quot;TXT&amp;quot;);
+				if (text!=null &amp;&amp; text!=&amp;quot;&amp;quot;)
+				{
+					globaltxt = globaltxt+&amp;quot;\n&amp;quot;+text;
+				}
+			}
+//			SaveTrialNote();
+			_this.SetCellText(3,4,1,globaltxt);
+//			refreshSheet(3,18);
+			sqlIn = &amp;quot;select SEQID,BILID,ITMID,ITMNAM,SPEC,SRCSLTID,ACTION,AIMSLTID,QTY,NOTE from wms_shdiv_trial WHERE SHSEQ = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;order by seqid &amp;quot;;
+//			alert(pagesize);
+			var sqlcount = &amp;quot;select count(*) rowcoun from (&amp;quot;+sqlIn+&amp;quot;)&amp;quot;;
+	 		_this.QuerySQLDS(sqlcount);
+	 		rowcount1 = _this.XMLDS_GetString(0,&amp;quot;rowcoun&amp;quot;);
+			Load(sqlIn,pageno,pagesize,3,18);
+			
+			var rowcount2 = _this.GetRowCount(3);
+	 		setCellToUnitEntryBox(3,9,rowcount2,3,9);
+//			flag=true;
+			_this.ShowSheet(3);
+	}catch(e)
+	{
+		alert(e);
+	}
+}
+
+//生成单据
+function GenerateBills(){
+		_this.SetCellText(4,3,2,G_SEQU);
+		var newInfo = buildBil();
+//		alert(newInfo);
+		var bs = newInfo.substring(0,newInfo.indexOf(&amp;quot;-&amp;quot;)-1);
+		var rp = newInfo.substring(newInfo.indexOf(&amp;apos;-&amp;apos;)+1,newInfo.indexOf(&amp;apos;~&amp;apos;)-1);
+//		var bc = newInfo.substring(newInfo.indexOf(&amp;apos;~&amp;apos;)+1,newInfo.indexOf(&amp;apos;*&amp;apos;)-1);
+//		var sx = newInfo.substring(newInfo.indexOf(&amp;apos;*&amp;apos;)+1,newInfo.length-1);
+		var str = &amp;quot;本次货源分配已成功！&amp;quot;;
+		if (bs==&amp;quot;&amp;quot;||bs==&amp;quot;-&amp;quot;){bs=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n已生成拣货单：&amp;apos;+ bs;
+		if (rp==&amp;quot;&amp;quot;||rp==&amp;quot;~&amp;quot;||rp==&amp;quot;-&amp;quot;){rp=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n已生成补货单：&amp;apos;+rp;
+//		if (bc==&amp;quot;&amp;quot;||bc==&amp;quot;*&amp;quot;||bc==&amp;quot;~&amp;quot;){bc=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n已生成合流单：&amp;apos;+bc;
+//		if (sx==&amp;quot;&amp;quot;||sx==&amp;quot;*&amp;quot;){sx=&amp;apos;(null)&amp;apos;;} str = str+&amp;apos;\n已生成配送单：&amp;apos;+sx;
+//		alert(str);
+		_this.SetCellText(4,5,1,str);
+		_this.ShowSheet(4);	
+}
+
+function showpage(pageno){
+	 	build = _this.GetCellText(0,3,3);
+		trial = _this.GetCellText(0,3,5);
+		untrial = _this.GetCellText(0,3,7);
+		shseqid = _this.GetCellText(0,3,13);		
+		loadData2MainArea(build,trial,untrial,shseqid,pagesize,pageno,0,15);	
+		_this.SetCellText(0,17,6,pageno);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if(sheet==2&amp;&amp;row==5&amp;&amp;col==5){
+		var STBilid = _this.GetCellText(2,5,5);
+		if (STBilid!=null &amp;&amp; STBilid!=&amp;quot;&amp;quot;)
+		{
+	//	alert(STBilid);
+			_sql.querytods(&amp;quot;LINE&amp;quot;,&amp;quot;param=&amp;quot;+STBilid+&amp;quot;&amp;param1=&amp;quot;+G_ACCID);
+			var line = _this.XMLDS_GetString(0,&amp;quot;refnam2&amp;quot;);
+			var lineseq = _this.XMLDS_GetString(0,&amp;quot;refnam1&amp;quot;);
+			var corpid = _this.XMLDS_GetString(0,&amp;quot;corpid&amp;quot;);
+			var dat = _this.XMLDS_GetString(0,&amp;quot;dat&amp;quot;);
+			var sttyp = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+			sysdat = _this.XMLDS_GetString(0,sysdat);
+			_this.SetCellText(2,9,3,line);
+			_this.SetCellText(2,9,5,line);
+			_this.SetCellText(2,11,3,lineseq);
+			_this.SetCellText(2,11,5,lineseq);
+			_this.SetCellText(2,5,3,corpid);
+			_this.SetCellText(2,13,3,sttyp);
+			_this.SetCellText(2,7,3,dat);
+			_this.SetCellText(2,7,5,dat);
+		}
+		else{
+			_this.SetCellText(2,9,3,&amp;apos;&amp;apos;);
+			_this.SetCellText(2,9,5,&amp;apos;&amp;apos;);
+			_this.SetCellText(2,11,3,&amp;apos;&amp;apos;);
+			_this.SetCellText(2,11,5,&amp;apos;&amp;apos;);
+	//		_this.SetCellText(2,5,3,&amp;apos;&amp;apos;);
+			_this.SetCellText(2,7,3,sysdat);
+			_this.SetCellText(2,7,5,sysdat);	
+	//		_this.SetCellText(2,13,3,&amp;apos;&amp;apos;);
+		}
+	}
+	
+}
+
+
+	
+//下拉列表框选择改变
+function _thisOnListSelChange(id, oldsel, cursel)
+{
+//	alert(_this.GetCellText(2,5,3));
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+function getSQL()
+{
+	var sql = &amp;quot; select id,crtusr,to_char(crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat,\n&amp;quot;+
+	          &amp;quot; decode(stat,0,&amp;apos;已生成&amp;apos;,1,&amp;apos;已试算&amp;apos;,2,&amp;apos;未试算&amp;apos;) state,NOTE FROM wms_shdiv_seq \n&amp;quot;+       
+	          &amp;quot; where stat in (999999999&amp;quot;;         
+        if (build==1){
+		sql = sql + &amp;quot;,0&amp;quot;; 
+        }
+        if (trial==1){
+      		sql = sql + &amp;quot;,1&amp;quot;;
+        }
+        if (untrial==1){
+      		sql = sql + &amp;quot;,2&amp;quot;;
+        }
+        sql = sql+&amp;quot;)&amp;quot;;
+        if (shseqid!=null &amp;&amp; shseqid!=&amp;quot;&amp;quot;){
+       		sql = sql + &amp;quot;and id like &amp;apos;%&amp;quot;+shseqid+&amp;quot;%&amp;apos;\n&amp;quot;;
+        }
+        sql = sql+&amp;quot; order by stat desc,crtdat desc,id desc&amp;quot;;
+//      throw new Exception(sql);
+      return sql;
+}
+
+function getPaginationXML(){
+   var db=new pubpack.EADatabase();
+   var xmlID = db.GetXMLSQL(runsql,pageno,pagesize).GetXml();
+   var xmlds = new pubpack.EAXmlDS(xmlID);
+   xmlds.removeColumn(&amp;quot;num&amp;quot;);
+   xmlds.removeColumn(&amp;quot;RID_&amp;quot;);
+   var xml = xmlds.GetXml();
+   return xml;	
+}
+function insertTable()
+{
+	var db = null;
+	var sql=&amp;quot;&amp;quot;;
+	var sequ = &amp;quot;&amp;quot;;
+	try{	
+		db = new pubpack.EADatabase();
+		sequ = db.GetSQL(&amp;quot;select to_char(SEQ_SHDIV.nextval)||&amp;apos;-&amp;apos;||to_char(sysdate,&amp;apos;YYYYMMDDHH24MISS&amp;apos;) seq from dual&amp;quot;);
+//		throw new Exception(sttyp);
+		sql =   &amp;quot; insert into WMS_SHDIV_SHINFO (bilid,item,itmid,itmnam,dat,spec,qty,corpid,owner,shnam,styp,shseq,bilseqid)\n&amp;quot;+ 
+			&amp;quot; select bl.bilid,item.guid item,bl.itmid,bl.itmnam,bl.dat,bl.itmspc,bl.qty,owner.id corpid,&amp;quot;+
+			&amp;quot; owner.guid owner,styp.name shnam,styp.guid styp,&amp;apos;&amp;quot;+sequ+&amp;quot;&amp;apos;,bl.seqid \n&amp;quot;+
+			&amp;quot; from bildtl bl,bilhdr bh,v_wms_sttyp styp,v_wms_owner owner,wms_item item \n&amp;quot;+
+			&amp;quot; where bl.acc = bh.acc \n&amp;quot;+
+			&amp;quot; and bl.bilid = bh.bilid \n&amp;quot;+
+			&amp;quot; and bl.biltyp = bh.biltyp \n&amp;quot;+
+			&amp;quot; and bh.refid1 = styp.id \n&amp;quot;+
+			&amp;quot; and owner.id = bh.corpid \n&amp;quot;+
+			&amp;quot; and item.id = bl.itmid \n&amp;quot;+
+			&amp;quot; and bh.biltyp=&amp;apos;ST&amp;apos; \n&amp;quot;+
+			&amp;quot; and bh.stat=&amp;apos;2&amp;apos; \n&amp;quot;+
+			//kyo add 2008/07/28 14:00
+//			&amp;quot; and nvl(bh.refnam3,&amp;apos;2999-01-01&amp;apos;)&amp;gt;=to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;+
+			//end
+			&amp;quot; and bh.corpid like &amp;apos;&amp;quot;+corpid+&amp;quot;%&amp;apos;\n&amp;quot;+
+			&amp;quot; and (bh.refid6 &amp;lt;&amp;gt;&amp;apos;2&amp;apos; or refid6 is null)\n&amp;quot;;
+			if(!startdat.equals(&amp;quot;&amp;quot;)) sql+=&amp;quot; and bh.dat&amp;gt;=to_date(&amp;apos;&amp;quot;+startdat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;) \n&amp;quot;;
+			if(!enddat.equals(&amp;quot;&amp;quot;)) sql+=&amp;quot; and bh.dat&amp;lt;=to_date(&amp;apos;&amp;quot;+enddat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)\n&amp;quot;;
+			
+			sql+=&amp;quot; and bh.bilid like &amp;apos;&amp;quot;+bilid+&amp;quot;%&amp;apos;\n&amp;quot;+
+			&amp;quot; and styp.id like &amp;apos;&amp;quot;+sttyp+&amp;quot;%&amp;apos;\n&amp;quot;+
+			&amp;quot; and nvl(bh.refnam2,0)&amp;gt;=decode(&amp;apos;&amp;quot;+staLine+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,0,to_number(&amp;apos;&amp;quot;+staLine+&amp;quot;&amp;apos;)) \n&amp;quot;+
+			&amp;quot; and nvl(bh.refnam2,0)&amp;lt;=decode(&amp;apos;&amp;quot;+endLine+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,999999999999,to_number(&amp;apos;&amp;quot;+endLine+&amp;quot;&amp;apos;)) \n&amp;quot;+
+			&amp;quot; and nvl(bh.refnam1,0)&amp;gt;=decode(&amp;apos;&amp;quot;+staSeq+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,0,to_number(&amp;apos;&amp;quot;+staSeq+&amp;quot;&amp;apos;)) \n&amp;quot;+
+			&amp;quot; and nvl(bh.refnam1,0)&amp;lt;=decode(&amp;apos;&amp;quot;+endSeq+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,999999999999,to_number(&amp;apos;&amp;quot;+endSeq+&amp;quot;&amp;apos;)) \n&amp;quot;;
+//			throw new Exception(sql);
+		db.ExcecutSQL(sql);	
+		sql = &amp;quot; insert into WMS_SHDIV_SLTINFO (SEQ,FNAME,FGUID,SLOT,SLTID,ITEM,ITMID,ITMNAM,SPEC,QTY,shseq) \n&amp;quot;+
+			&amp;quot; select wt.seq,func.name fname,func.guid fguid,wt.slot,ws.id sltid,wt.item,wi.id itmid,wi.name itmnam,wi.spec,wt.qty+wt.adqty-wt.udqty qty,&amp;apos;&amp;quot;+sequ+&amp;quot;&amp;apos; \n&amp;quot;+
+			&amp;quot; from wms_itmslt wt,wms_slot ws,wms_item wi,v_wms_slotfunc func \n&amp;quot;+
+			&amp;quot; where wt.slot = ws.guid \n&amp;quot;+
+			&amp;quot; and wi.guid = wt.item \n&amp;quot;+
+			&amp;quot; and wi.guid in (select item from wms_shdiv_shinfo where shseq=&amp;apos;&amp;quot;+sequ+&amp;quot;&amp;apos;)\n&amp;quot;+
+			&amp;quot; and ws.slotfunc = func.guid \n&amp;quot;;
+//		throw new Exception(sql);
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;insert into wms_shdiv_seq(org,id,crtdat,stat,note,crtusr) values(&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+sequ+&amp;quot;&amp;apos;,sysdate,2,&amp;apos;&amp;apos;,&amp;apos;&amp;quot;+user+&amp;quot;&amp;apos;) &amp;quot;;
+		db.ExcecutSQL(sql);
+	db.Commit();
+	return sequ;
+	}catch(Exception e)
+	{
+		throw new pubpack.EAException(e.toString());
+	}finally{
+		if (db!=null) db.Close();
+	}		
+}
+
+function deleteTable()
+{
+	var db=null;
+	var sql=&amp;quot;&amp;quot;;
+	var ret = 0;
+	try{
+		db = new pubpack.EADatabase();
+		sql = &amp;quot;update bilhdr set refid6=&amp;apos;0&amp;apos; where bilid in (select bilid from wms_shdiv_shinfo where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;) and biltyp=&amp;apos;ST&amp;apos; and acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);		
+		sql = &amp;quot;delete from bildtl where refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and biltyp in (&amp;apos;BS&amp;apos;,&amp;apos;RP&amp;apos;,&amp;apos;BC&amp;apos;,&amp;apos;SX&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from bilhdr where refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and biltyp in (&amp;apos;BS&amp;apos;,&amp;apos;RP&amp;apos;,&amp;apos;BC&amp;apos;,&amp;apos;SX&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);		
+		sql = &amp;quot;delete from WMS_SHDIV_SHINFO where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from WMS_SHDIV_SLTINFO where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from WMS_SHDIV_TRIAL where shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from WMS_SHDIV_LOG where shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from WMS_SHDIV_SEQ where id= &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		unUpdateSltQty(G_SEQU,db);
+		ret++;
+		db.Commit();
+		return ret;
+	}catch(Exception e){
+		db.Rollback();
+		throw new pubpack.EAException(e.toString());
+	}finally{
+		if (db!=null) db.Close();
+	}
+	
+}
+
+//================================================================// 
+// 函数：buildBilid
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 10:46:06
+// 修改日志：
+//================================================================// 
+function buildBilid()
+{
+//	var xmlds = new pubpack.EAXmlDS(rpxml);
+	var db = null;
+	var stat = null;
+	var rs = null;
+	var sql = &amp;quot;&amp;quot;;
+	var srczone = &amp;quot;&amp;quot;;
+	var aimzone = &amp;quot;&amp;quot;;
+	var newbil = &amp;quot;&amp;quot;;
+//	var locid =&amp;quot;&amp;quot;;
+//	var line = &amp;quot;&amp;quot;;
+	var BSzoneguid =&amp;quot;&amp;quot;;
+	var corpguid =&amp;quot;&amp;quot;;
+//	var corpid = &amp;quot;&amp;quot;;
+	var bil=&amp;quot;&amp;quot;;
+	var zds =null;
+//	var corpidds= null;
+	var srclocidds =null;
+	var srclocid =&amp;quot;&amp;quot;;
+	var aimlocidds = null;
+	var aimlocid =&amp;quot;&amp;quot;;
+	try{
+	db = new pubpack.EADatabase();
+	stat = db.GetConn().createStatement();
+	// 1. 创建补货单, 根据保管区跟集货区来分单
+	sql = &amp;quot;select distinct b.zone srczone,c.zone aimzone from WMS_SHDIV_TRIAL a,wms_slot b,wms_slot c \n&amp;quot;
+		+&amp;quot; where ACTION=&amp;apos;补货&amp;apos; and a.srcsltid = b.id and a.aimsltid =c.id and a.shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+	zds = db.QuerySQL(sql );
+//	throw new Exception (sql);
+	for (var i = 0 ;i&amp;lt;zds.getRowCount();i++){
+		srczone = zds.getStringAt(i,&amp;quot;srczone&amp;quot;);//源储区
+		srclocidds = db.QuerySQL(&amp;quot;select distinct b.id srclocid from wms_zone a,wms_loc b where a.loc =b.guid and a.guid = &amp;apos;&amp;quot;+srczone+&amp;quot;&amp;apos;&amp;quot;);
+		if(srclocidds.getRowCount()==0){
+			throw new Exception(&amp;quot;生成补货单时未发现源储区&amp;quot;+srczone+&amp;quot;所在的仓库！\n 操作取消！&amp;quot;);
+		}
+		srclocid = srclocidds.getStringAt(0,&amp;quot;srclocid&amp;quot;);//源储区所在仓库
+				
+		aimzone = zds.getStringAt(i,&amp;quot;aimzone&amp;quot;);//目标储区
+		aimlocidds = db.QuerySQL(&amp;quot;select distinct b.id aimlocid from wms_zone a,wms_loc b where a.loc =b.guid and a.guid = &amp;apos;&amp;quot;+aimzone+&amp;quot;&amp;apos;&amp;quot;);
+		if(srclocidds.getRowCount()==0){
+			throw new Exception(&amp;quot;生成补货单时未发现目标储区&amp;quot;+aimczone+&amp;quot;所在的仓库！\n 操作取消！&amp;quot;);
+		}
+		aimlocid = aimlocidds .getStringAt(0,&amp;quot;aimlocid&amp;quot;);//目标储区所在仓库
+		
+		if(!srclocid.equals(aimlocid)){
+			throw new Exception(&amp;quot;生成补货单时源储区所在仓库&amp;quot;+srclocid+&amp;quot;和目标储区所在仓库&amp;quot;+aimlocid+&amp;quot;不一致！\n 操作取消！&amp;quot;);
+		}
+		newbil = getMaxBilid(db,&amp;quot;RP&amp;quot;,acc,&amp;quot;bilid&amp;quot;,&amp;quot;RP&amp;quot;);//补货单号
+
+		sql = InsHdrSQL(selectRP2HdrSQL(newbil,srczone,aimzone));
+//		throw new Exception (sql);
+		db.ExcecutSQL(sql);	
+//		if(i==1){
+		sql = InsDtlSQL(selectRP2DtlSQL(newbil,srczone,aimzone));
+//		throw new Exception (sql);
+		db.ExcecutSQL(sql);
+//		}
+	}		
+	// 2. 创建捡货单, 根据拣货分区和终端分单
+	sql = &amp;quot;select distinct refid2 corpguid,c.zone BSzoneguid from bilhdr a,WMS_SHDIV_TRIAL b,wms_slot c where acc =&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and biltyp=&amp;apos;ST&amp;apos; \n&amp;quot;+
+		&amp;quot;and a.bilid= b.bilid and b.ACTION=&amp;apos;捡货&amp;apos; and b.shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; and trim(b.srcslt) = c.guid&amp;quot;;
+//	throw new Exception(sql);
+	zds = db.QuerySQL(sql);
+	for (var i=0;i&amp;lt; zds.getRowCount();i++)
+	{
+		corpguid = zds.getStringAt(i,&amp;quot;corpguid&amp;quot;);
+//		srclocidds = db.QuerySQL(&amp;quot;select distinct locid srclocid from bilhdr where bilid = &amp;apos;&amp;quot;+bilid+&amp;quot;&amp;apos;&amp;quot;);
+		BSzoneguid = zds.getStringAt(0,&amp;quot;BSzoneguid&amp;quot;);
+//		if(srclocid.equals(&amp;quot;&amp;quot;)){
+//			throw new Exception (&amp;quot;生成捡货单时未发现出货通知单[&amp;quot;+bilid+&amp;quot;]指定的仓库为空！ \n 操作取消！&amp;quot;);
+//		}
+//		if(i==1){
+		newbil = getMaxBilid(db,&amp;quot;BS&amp;quot;,acc,&amp;quot;bilid&amp;quot;,&amp;quot;BS&amp;quot;);
+		sql = InsHdrSQL(selectBS2HdrSQL(newbil,corpguid,BSzoneguid));
+//		throw new Exception (sql);
+		db.ExcecutSQL(sql);
+		sql = InsDtlSQL(selectBS2DtlSQL(newbil,corpguid,BSzoneguid));
+//		throw new Exception (sql);
+		db.ExcecutSQL(sql);
+//		}
+	}	
+	// 2. 创建合流单,根据路线来分单
+//	bds = db.QuerySQL(&amp;quot;select distinct refid2 line from bilhdr where refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; biltyp =&amp;apos;BS&amp;apos; and a.&amp;quot;);
+//	for (var i=0;i&amp;lt; bds.getRowCount();i++)
+//	{
+//		line = bds.getStringAt(i,&amp;quot;line&amp;quot;);
+//		newbil = getMaxBilid(db,&amp;quot;BC&amp;quot;,acc,&amp;quot;bilid&amp;quot;,&amp;quot;BC&amp;quot;);
+//		sql = InsHdrSQL(selectBC2HdrSQL(newbil,line,G_SEQU));	
+//		db.ExcecutSQL(sql);
+//		sql = InsDtlSQL(selectBC2DtlSQL(newbil,bilid));
+//		db.ExcecutSQL(sql);
+//		}
+	//3.创建配送单,根据配送路线来分单
+//	var sql = &amp;quot;select distinct b.refid2 corpid,b.locid locid FROM WMS_SHDIV_TRIAL a,bilhdr b \n&amp;quot;+
+//		&amp;quot;  where a.bilid = b.bilid and b.biltyp=&amp;apos;ST&amp;apos; and b.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and a.shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;;
+//	corpidds= db.QuerySQL(sql);
+//	throw new Exception(lineseqds.getRowCount());
+//	for(var i=0;i&amp;lt; corpidds.getRowCount();i++)
+//	{
+//		corpid = corpidds.getStringAt(i,&amp;quot;corpid&amp;quot;);
+//		locid = corpidds.getStringAt(i,&amp;quot;locid&amp;quot;);	
+
+//		newbil = getMaxBilid(db,&amp;quot;SX&amp;quot;,acc,&amp;quot;bilid&amp;quot;,&amp;quot;SX&amp;quot;);
+//		sql = InsDtlSQL(selectSX2DtlSQL(newbil,corpid));
+//		throw new Exception(sql);
+//		db.ExcecutSQL(sql);
+	
+//		sql = InsHdrSQL(selectSX2HdrSQL(newbil,corpid,locid ));
+//		throw new Exception(sql);
+//		db.ExcecutSQL(sql);
+
+//	}
+//      修改涉及到的出货通知单的状态（１或null为未做分配，２为已做分配）	
+	updateSTStat(db,G_SEQU);
+	
+//	修改wms_itmslt表中的待下架或待上架数量	
+	updateSltQty(G_SEQU,db);
+	
+//	得到返回的本次货源分配所生成的单据集	
+	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;BS&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+	while(rs.next()){bil += rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	bil = bil+&amp;quot;-&amp;quot;;
+	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;RP&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+	while(rs.next()){bil += rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	bil = bil+&amp;quot;~&amp;quot;;
+//	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;BC&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	while(rs.next()){bil+= rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+//	bil = bil+&amp;quot;*&amp;quot;;
+//	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;SX&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	while(rs.next()){bil+= rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	
+	stat.executeUpdate(&amp;quot;update wms_shdiv_seq t set t.stat = &amp;apos;0&amp;apos; where t.id = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	var pw = new streampack.PrintWriter(new streampack.BufferedWriter(new streampack.FileWriter(&amp;quot;d://a.txt&amp;quot;)));
+	db.Commit();
+	}catch(ee){
+		db.Rollback();
+		throw new pubpack.EAException(ee.toString());
+	}
+	finally{
+		if (db!=null) db.Close();
+	}	
+	return bil;
+}
+//================================================================// 
+// 函数：InsDtlSQL
+// 说明：INSERT INTO BILDTL
+// 参数：sql字符串
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/17/08 16:52:24
+// 修改日志：
+//================================================================// 
+function InsDtlSQL(listSQL)
+{
+	var sql = &amp;quot; INSERT INTO BILDTL ( ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,LOCID,DAT,STAT,SEQID,ITMID,\n&amp;quot;+
+	     	  &amp;quot; ITMNAM,ITMSPC,UNIT,UNTNUM,TONNUM,PRICE,QTY,TAXTYP,NOTAXMNY,TAXMNY,MNY,REFID1,REFNAM1,\n&amp;quot;+
+	     	  &amp;quot; REFID2,REFNAM2,SMLUNT,ITEMPC,REFID3,REFNAM3,REFID4,REFNAM4,REFID5,REFNAM5 ) \n&amp;quot;+
+		  &amp;quot; SELECT * FROM ( \n&amp;quot;+listSQL+&amp;quot; \n)&amp;quot;; 
+//	throw new Exception(sql);	
+	return sql;	     	  
+}
+//================================================================// 
+// 函数：InsHdrSQL
+// 说明：INSERT INTO BILHDR
+// 参数：sql字符串
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/17/08 16:52:30
+// 修改日志：
+//================================================================// 
+function InsHdrSQL(listSQL)
+{
+	var sql = &amp;quot; INSERT INTO BILHDR ( ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,DAT,STAT,CRTUSR, \n&amp;quot;+
+		  &amp;quot; CRTUSRNAM,NOTE,SUMQTY,SUMMNY,REFID1,REFNAM1,REFID2,REFNAM2,DATFLW,REFID3,REFNAM3,REFID4,REFNAM4, \n&amp;quot;+
+		  &amp;quot; REFID5,REFNAM5,REFID6,REFNAM6) \n&amp;quot;+
+		  &amp;quot; SELECT * FROM ( \n&amp;quot;+listSQL+&amp;quot;\n) &amp;quot;;
+//	throw new Exception(sql);
+	return sql;
+}
+
+//================================================================// 
+// 函数：selectRP2DtlSQL(newbil,zone)
+// 说明：插入DTL表的select语句(补货单)
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 14:03:05
+// 修改日志：
+//================================================================// 
+function selectRP2DtlSQL(newbil,srczone,aimzone)
+{	
+	var listSQL = &amp;quot; select ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,LOCID,DAT,STAT,min(SEQID) SEQID,ITMID, \n&amp;quot;+
+ 		      &amp;quot; ITMNAM,ITMSPC,UNIT,UNTNUM,TONNUM,PRICE,sum(QTY) QTY,sum(TAXTYP) TAXTYP,NOTAXMNY,TAXMNY,MNY,REFID1,refnam1, \n&amp;quot;+
+                      &amp;quot; REFID2,REFNAM2,SMLUNT,ITEMPC,refid3,REFNAM3,sum(refid4) REFID4,sum(refnam4) REFNAM4,REFID5,REFNAM5 \n&amp;quot;+
+		      &amp;quot; from ( \n&amp;quot;+
+	 	      &amp;quot; select &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG ,&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;RP&amp;apos; BILTYP,&amp;apos;ST&amp;apos; SUBTYP,b.corpid CORPID,b.locid LOCID,sysdate DAT, \n&amp;quot;+
+		      &amp;quot; 1 STAT,a.seqid,a.itmid ITMID,a.itmnam ITMNAM,a.spec ITMSPC,c.unit UNIT,c.untnum UNTNUM,c.tonnum TONNUM,0 PRICE,a.qty QTY,\n&amp;quot;+
+		      &amp;quot; a.qty TAXTYP,0 NOTAXMNY,0 TAXMNY,0 MNY,&amp;apos;&amp;apos; REFID1,&amp;apos;0&amp;apos; REFNAM1, \n&amp;quot;+
+		      &amp;quot; &amp;apos;&amp;apos; REFID2,a.srcslt REFNAM2,c.smlunt SMLUNT, (select itempc from wms_itmslt where slot = a.srcslt and item = a.item)  ITEMPC,\n&amp;quot;+
+		      &amp;quot; (select distinct q.guid from wms_item p,wms_slot q where trim(p.repbuf) = q.id and p.guid = a.item ) REFID3,\n&amp;quot;+
+		      &amp;quot; a.aimslt REFNAM3, a.qty REFID4,a.qty REFNAM4,&amp;apos;&amp;apos; REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5 from \n&amp;quot;+
+	 	      &amp;quot; (select a.*,b.zone from  wms_shdiv_trial a,wms_slot b where a.shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; and a.action=&amp;apos;补货&amp;apos; and a.srcsltid = b.id) a, \n&amp;quot;+
+	 	      &amp;quot; (select a.*,b.zone from  wms_shdiv_trial a,wms_slot b where a.shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; and a.action=&amp;apos;补货&amp;apos; and a.aimsltid = b.id) d, \n&amp;quot;+
+	 	      &amp;quot; bilhdr b,wms_item c where b.	biltyp=&amp;apos;ST&amp;apos;and a.item = c.guid and b.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and a.zone = &amp;apos;&amp;quot;+srczone+&amp;quot;&amp;apos; and a.bilid = b.bilid \n&amp;quot;+
+	 	      &amp;quot; and b.bilid = d.bilid and d.zone=&amp;apos;&amp;quot;+aimzone+&amp;quot;&amp;apos; and d.item = c.guid and a.seqid = d.seqid \n&amp;quot;+
+	 	      &amp;quot; ) group by ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,LOCID,DAT,STAT,ITMID,\n&amp;quot;+
+		      &amp;quot; ITMNAM,ITMSPC,UNIT,UNTNUM,TONNUM,PRICE,NOTAXMNY,TAXMNY,MNY,REFID1,REFNAM1,\n&amp;quot;+
+		      &amp;quot; REFID2,REFNAM2,SMLUNT,ITEMPC,REFID3,REFNAM3,REFID5,REFNAM5  \n&amp;quot;;
+//		throw new Exception (listSQL);
+	return listSQL;	 	       
+}
+//================================================================// 
+// 函数：selectRP2HdrSQL(newbil,zone,locid)
+// 说明：插入HDR表的select 语句(补货单)
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 14:02:15
+// 修改日志：
+//================================================================// 
+function selectRP2HdrSQL(newbil,srczone,aimzone)
+{
+	var listSQL = &amp;quot; select distinct &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT ,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG,&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;RP&amp;apos; BILTYP,&amp;apos;ST&amp;apos; SUBTYP,&amp;apos;&amp;apos; CORPID, \n&amp;quot;+
+		      &amp;quot; &amp;apos;&amp;apos; CORPNAM,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos; LOCID,(select name from wms_loc where id like &amp;apos;&amp;quot;+locid+&amp;quot;%&amp;apos;) LOCNAM, \n&amp;quot;+
+		      &amp;quot; sysdate DAT,1 STAT,&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos; CRTUSR,&amp;apos;&amp;quot;+crtusrnam+&amp;quot;&amp;apos; CRTUSRNAM,&amp;apos;&amp;apos; NOTE,0 SUMQTY,0 SUMMNY,&amp;apos;&amp;apos;REFID1,&amp;apos;&amp;quot;+crtusrnam+&amp;quot;&amp;apos; REFNAM1,&amp;apos;&amp;apos; REFID2, \n&amp;quot;+
+		      &amp;quot; &amp;apos;&amp;quot;+srczone+&amp;quot;&amp;apos; REFNAM2,&amp;apos;&amp;apos; DATFLW,&amp;apos;&amp;quot;+aimzone+&amp;quot;&amp;apos; REFID3,&amp;apos;&amp;apos; REFNAM3,&amp;apos;&amp;apos; REFID4, to_char(sysdate, &amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) REFNAM4,&amp;apos;&amp;apos; REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;　REFNAM5,&amp;apos;&amp;apos; REFID6,&amp;apos;&amp;apos; REFNAM6 \n&amp;quot;+
+		      &amp;quot; from dual/*bilhdr a where biltyp=&amp;apos;ST&amp;apos; and acc=*/&amp;quot;;
+//	throw new Exception (listSQL);
+	return listSQL;		      
+} 
+//================================================================// 
+// 函数：selectBS2DtlSQL()
+// 说明：插入DTL表的select语句(捡货单)
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 14:39:11
+// 修改日志：
+//================================================================//
+function selectBS2DtlSQL(newbil,corpguid,BSzoneguid)
+{
+	var listSQL = &amp;quot; select ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,LOCID,DAT,STAT,min(SEQID) SEQID,ITMID, \n&amp;quot;+
+ 		      &amp;quot; ITMNAM,ITMSPC,UNIT,UNTNUM,TONNUM,PRICE,sum(QTY) QTY,sum(TAXTYP) TAXTYP,NOTAXMNY,TAXMNY,MNY,REFID1,REFNAM1, \n&amp;quot;+
+                      &amp;quot; REFID2,REFNAM2,SMLUNT,ITEMPC,refid3,REFNAM3,REFID4,REFNAM4,REFID5,REFNAM5 \n&amp;quot;+
+		      &amp;quot; from ( \n&amp;quot;+
+		      &amp;quot; select &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG,&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;BS&amp;apos; BILTYP, \n&amp;quot;+
+		      &amp;quot; &amp;apos;&amp;apos; SUBTYP, b.corpid CORPID,B.LOCID LOCID,sysdate DAT,1 STAT,A.seqid SEQID,a.itmid ITMID,a.itmnam ITMNAM ,\n&amp;quot;+
+		      &amp;quot; a.spec ITMSPC ,c.unit UNIT,c.untnum UNTNUM,c.tonnum TONNUM,0 PRICE,a.qty QTY,a.qty TAXTYP,0 NOTAXMNY,0 TAXMNY,0 MNY, \n&amp;quot;+
+		      &amp;quot; /*(SELECT to_char(prodat,&amp;apos;yyyy-mm-dd&amp;apos;) from v_wms_bsprodat m,v_wms_srcslt n where m.shseq =n.shseq and m.item =n.item \n &amp;quot;+
+		      &amp;quot; and m.slot = n.srcslt and m.shseq=a.shseq and m.bilid =a.bilid and a.item =m.item and rownum=1)*/&amp;apos;&amp;apos; REFID1,\n&amp;quot;+
+		      &amp;quot; &amp;apos;&amp;apos; REFNAM1,&amp;apos;&amp;apos; REFID2, a.srcslt REFNAM2,c.smlunt SMLUNT,/*d.refnam1*/&amp;apos;&amp;apos; ITEMPC, \n&amp;quot;+  
+		      &amp;quot; oprseq REFID3,&amp;apos;&amp;apos; REFNAM3, &amp;apos;&amp;apos; REFID4,&amp;apos;&amp;apos; REFNAM4,&amp;apos;&amp;apos; REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5 \n&amp;quot;+
+		      &amp;quot; from (select a.*,b.zone,b.oprseq from wms_shdiv_trial a,wms_slot b where a.srcsltid = b.id and a.action=&amp;apos;捡货&amp;apos; and a.shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;) a,\n&amp;quot;+
+		      &amp;quot; bilhdr b,wms_item c,bildtl d where b.biltyp=&amp;apos;ST&amp;apos; and b.acc = d.acc and b.biltyp =d.biltyp and b.bilid =d.bilid 	and a.itmid =d.itmid and a.item = c.guid \n&amp;quot;+
+		      &amp;quot; and a.item = c.guid and b.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and a.bilid = b.bilid  and a.zone = &amp;apos;&amp;quot;+BSzoneguid+&amp;quot;&amp;apos; and b.refid2=&amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos; \n&amp;quot;+
+		      &amp;quot; ) group by ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,LOCID,DAT,STAT,ITMID,\n&amp;quot;+
+		      &amp;quot; ITMNAM,ITMSPC,UNIT,UNTNUM,TONNUM,PRICE,NOTAXMNY,TAXMNY,MNY,REFID1,REFNAM1,\n&amp;quot;+
+		      &amp;quot; REFID2,REFNAM2,SMLUNT,ITEMPC,REFID3,REFNAM3,REFID4,REFNAM4,REFID5,REFNAM5  \n&amp;quot;;
+	throw new Exception(listSQL);	
+	return listSQL;
+}
+
+//================================================================// 
+// 函数：selectBS2HdrSQL(newbil,zone,locid)
+// 说明：插入HDR表的select语句(捡货单)
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 16:24:46
+// 修改日志：
+//================================================================// 
+function selectBS2HdrSQL(newbil,corpguid,BSzoneguid)
+{
+	var listSQL = &amp;quot; select distinct &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG, &amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;BS&amp;apos; BILTYP, \n&amp;quot;+
+		      &amp;quot; &amp;apos;ST&amp;apos; SUBTYP,(select id from wms_owner where guid = (select owner from wms_corp where guid = &amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos;)) CORPID, \n&amp;quot;+
+		      &amp;quot;(select name from wms_owner where guid = (select owner from wms_corp where guid = &amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos;)) CORPNAM,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos; LOCID, \n&amp;quot;+
+		      &amp;quot; (select name from wms_loc where id like &amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;) LOCNAM, \n&amp;quot;+
+		      &amp;quot; sysdate DAT,1 STAT, &amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos; CRTUSR,&amp;apos;&amp;quot;+crtusrnam+&amp;quot;&amp;apos; CRTUSRNAM,&amp;apos;&amp;apos; NOTE,0 SUMQTY,0 SUMMNY,&amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos; REFID1,\n&amp;quot;+
+		      &amp;quot; (select id from wms_zone where guid = &amp;apos;&amp;quot;+BSzoneguid+&amp;quot;&amp;apos;) REFNAM1,&amp;quot;+
+		      &amp;quot; (select disline from wms_corp where guid = &amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos;) REFID2, \n&amp;quot;+
+		      &amp;quot; (select disseq from wms_corp where guid = &amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos;) REFNAM2,&amp;apos;&amp;apos; DATFLW, \n&amp;quot;+
+		      &amp;quot; (select ctzone from wms_corp where guid = &amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos;) REFID3, \n&amp;quot;+
+		      	&amp;quot; &amp;apos;&amp;apos; REFNAM3,&amp;apos;&amp;apos;  REFID4,&amp;apos;&amp;apos; REFNAM4,&amp;apos;&amp;apos; REFID5,\n&amp;quot;+
+		      &amp;quot; &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5,&amp;apos;&amp;apos;  REFID6,&amp;apos;&amp;apos; REFNAM6 \n&amp;quot;+
+		      &amp;quot; FROM dual/*bilhdr a where acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and bi	ltyp = &amp;apos;ST&amp;apos; and refid2 =&amp;apos;&amp;quot;+corpguid+&amp;quot;&amp;apos;*/&amp;quot;;
+//		      throw new Exception(listSQL);
+	return listSQL;	
+}
+
+//================================================================// 
+// 函数：selectBC2DtlSQL()
+// 说明：插入DTL表的select语句(合流单)根据WMS_SHDIV_SLTINFO的【单据编号】（通知单）来创建合流单，来源货位都是商品所在的出货分区。
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 16:46:59
+// 修改日志：
+//================================================================// 
+//function selectBC2DtlSQL(newbil,bilid)
+//{
+//	var listSQL = &amp;quot; select &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG,&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;BC&amp;apos; BILTYP, \n&amp;quot;+
+//		      &amp;quot; &amp;apos;ST&amp;apos; SUBTYP,b.corpid CORPID,b.locid LOCID,sysdate DAT,1 STAT,a.seqid SEQID,a.itmid ITMID,a.itmnam ITMNAM ,\n&amp;quot;+
+//		      &amp;quot; a.spec ITMSPC ,c.unit UNIT,c.untnum UNTNUM,c.tonnum TONNUM,0 PRICE,a.qty QTY,0 TAXTYP,0 NOTAXMNY,0 TAXMNY,0 MNY,\n&amp;quot;+
+//		      &amp;quot; (select guid from wms_loc where id=b.locid) REFID1,\n&amp;quot;+
+//		      &amp;quot; (select SHPCAT from wms_item where id = a.itmid and owner = (select guid from wms_owner where id=b.corpid)) REFNAM1, \n&amp;quot;+
+//		      &amp;quot; &amp;apos;&amp;apos; REFID2,&amp;apos;&amp;apos; REFNAM2,c.smlunt SMLUNT,&amp;apos;&amp;apos; ITEMPC,&amp;apos;&amp;apos; REFID3,&amp;apos;&amp;apos; REFNAM3,&amp;apos;&amp;apos; REFID4,&amp;apos;&amp;apos; REFNAM4,&amp;apos;&amp;apos; REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5 \n&amp;quot;+
+//		      &amp;quot; FROM WMS_SHDIV_TRIAL A,BILHDR B,wms_item c where a.item = c.guid and \n&amp;quot;+
+//		      &amp;quot; a.bilid = b.bilid and b.biltyp=&amp;apos;ST&amp;apos; and a.bilid = &amp;apos;&amp;quot;+bilid+&amp;quot;&amp;apos; and b.acc = &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and a.shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; AND a.action=&amp;apos;捡货&amp;apos;\n&amp;quot;; 
+//	return listSQL;
+//}
+//================================================================// 
+// 函数：selectBC2HdrSQL()
+// 说明：插入HDR表的select语句(合流单)根据WMS_SHDIV_SLTINFO的【单据编号】（通知单）来创建合流单，来源货位都是商品所在的出货分区。
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/23/08 16:48:07
+// 修改日志：
+//================================================================// 
+//function selectBC2HdrSQL(newbil,bilid)
+//{
+//	var listSQL = &amp;quot; select distinct &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG, &amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;BC&amp;apos; BILTYP, \n&amp;quot;+
+//		      &amp;quot; &amp;apos;ST&amp;apos; SUBTYP,&amp;apos;&amp;quot;+ownerID+&amp;quot;&amp;apos; CORPID,(select name from wms_owner where id = &amp;apos;&amp;quot;+ownerID+&amp;quot;&amp;apos; ) CORPNAM, \n&amp;quot;+
+//		      &amp;quot; (select id from wms_vendor where name =b.refid2 ) LOCID,b.refid2 LOCNAN,sysdate DAT,1 STAT,&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos; CRTUSR,\n&amp;quot;+
+//		      &amp;quot; &amp;apos;&amp;quot;+crtusrnam+&amp;quot;&amp;apos; CRTUSRNAM,&amp;apos;&amp;apos; NOTE,0 SUMQTY,0 SUMMNY,&amp;apos;&amp;quot;+bilid+&amp;quot;&amp;apos; REFID1,to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) REFNAM1,\n&amp;quot;+
+//		      &amp;quot; b.refid2 REFID2,&amp;apos;&amp;quot;+crtusrnam+&amp;quot;&amp;apos; REFNAM2,&amp;apos;&amp;apos; DATFLW,b.refnam2 REFID3,b.refnam1 REFNAM3,b.refid3 REFID4,&amp;apos;&amp;apos; REFNAM4,b.refid5 REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5,b.refid1 REFID6,&amp;apos;&amp;apos; REFNAM6 \n&amp;quot;+
+//		      &amp;quot; from wms_shdiv_trial a,bilhdr b where a.bilid = b.bilid and b.biltyp=&amp;apos;ST&amp;apos; and a.bilid=&amp;apos;&amp;quot;+bilid+&amp;quot;&amp;apos; and b.acc = &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and a.shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;\n&amp;quot;;
+//	return listSQL;		      
+//}
+//
+//================================================================// 
+// 函数：selectSX2HdrSQL(newbil,line)
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/24/08 18:21:31
+// 修改日志：
+//================================================================// 
+//function selectSX2HdrSQL(newbil,corpid,locid )
+//{
+//	var listSQL = &amp;quot; select distinct &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG,&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;SX&amp;apos; BILTYP,\n&amp;quot;+
+//		      &amp;quot; &amp;apos;ST&amp;apos; SUBTYP,a.corpid CORPID,a.corpnam CORPNAM, \n&amp;quot;+
+//		      &amp;quot; &amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos; LOCID,&amp;apos;&amp;apos; LOCNAM,sysdate DAT,1 STAT,&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos; CRTUSR,&amp;apos;&amp;quot;+crtusrnam+&amp;quot;&amp;apos; CRTUSRNAM,&amp;apos;&amp;apos; NOTE,\n&amp;quot;+
+//		      &amp;quot; (select sum(qty) from bildtl where acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and biltyp =&amp;apos;SX&amp;apos; and bilid=&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos;) SUMQTY, \n&amp;quot;+
+//		      &amp;quot; (select sum(mny) from bildtl where acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and biltyp =&amp;apos;SX&amp;apos; and bilid=&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos;) SUMMNY, \n&amp;quot;+
+//		      &amp;quot;  a.refnam2 REFID1,a.refid2  REFNAM1,refid4 REFID2,&amp;apos;&amp;apos; REFNAM2,&amp;apos;&amp;apos; DATFLW,&amp;apos;&amp;apos; REFID3,a.refnam5 REFNAM3,\n&amp;quot;+
+//		      &amp;quot; (select sum(qty) from bildtl where acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and biltyp =&amp;apos;SX&amp;apos; and bilid=&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos;) REFID4,\n&amp;quot;+
+//		      &amp;quot; a.refnam1 REFNAM4,&amp;apos;&amp;apos; REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5, &amp;apos;&amp;apos; REFID6,&amp;apos;&amp;apos; REFNAM6 \n&amp;quot;+
+//		      &amp;quot; from bilhdr a where biltyp=&amp;apos;ST&amp;apos; \n&amp;quot;+
+//		      &amp;quot; and bilid in (SELECT DISTINCT BILID FROM WMS_SHDIV_TRIAL WHERE SHSEQ=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;) \n&amp;quot;+
+//		      &amp;quot; and a.refid2 = &amp;apos;&amp;quot;+corpid+&amp;quot;&amp;apos; \n&amp;quot;+
+//		      &amp;quot; and a.acc =&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;&amp;quot;;
+//		      throw new Exception (listSQL );
+//	return listSQL;		      
+//}
+
+//function selectSX2DtlSQL(newbil,corpname )
+//{
+//	var listSQL = &amp;quot; select &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG,&amp;apos;&amp;quot;+newbil+&amp;quot;&amp;apos; BILID,&amp;apos;SX&amp;apos; BILTYP, \n&amp;quot;+
+//		      &amp;quot; &amp;apos;ST&amp;apos; SUBTYP,bl.corpid CORPID,bl.locid LOCID,sysdate DAT,1 STAT,ROWNUM SEQID,bl.itmid ITMID,bl.itmnam ITMNAM ,\n&amp;quot;+
+//		      &amp;quot; bl.itmspc ITMSPC ,wi.unit UNIT,wi.untnum UNTNUM,wi.tonnum TONNUM,0 PRICE,bl.qty QTY,0 TAXTYP,0 NOTAXMNY,0 TAXMNY,bl.mny MNY,\n&amp;quot;+
+//		      &amp;quot; bl.bilid REFID1,&amp;apos;&amp;apos; REFNAM1,&amp;apos;&amp;apos; REFID2,&amp;apos;&amp;apos; REFNAM2,wi.smlunt SMLUNT,&amp;apos;&amp;apos; ITEMPC,&amp;apos;&amp;apos; REFID3,\n&amp;quot;+
+//		      &amp;quot; &amp;apos;&amp;apos; REFNAM3,&amp;apos;&amp;apos; REFID4,&amp;apos;&amp;apos; REFNAM4,&amp;apos;&amp;apos; REFID5,&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos; REFNAM5 \n&amp;quot;+
+//		      &amp;quot; from bilhdr bh,bildtl bl,(select distinct bilid,item,shseq from wms_shdiv_trial)  sh,wms_item wi\n&amp;quot;+
+//		      &amp;quot; where bh.acc = bl.acc and bl.biltyp = bh.biltyp and bl.bilid = bh.bilid and bl.itmid = wi.id  and sh.item = wi.guid \n&amp;quot;+
+//		      &amp;quot; and bh.refid2=&amp;apos;&amp;quot;+corpname +&amp;quot;&amp;apos; and bh.biltyp=&amp;apos;ST&amp;apos; \n&amp;quot;+
+//		      &amp;quot; and sh.bilid=bh.bilid and sh.shseq= &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;and bh.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;\n&amp;quot;;    
+// 	throw new Exception (listSQL );
+//	return listSQL;	
+//}
+
+//
+function GetBills(){
+	var bil =&amp;quot;&amp;quot;;
+	var db = null;
+	var stat = null;
+	var rs = null;
+	try{
+	db = new pubpack.EADatabase();
+	stat = db.GetConn().createStatement();
+
+	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;BS&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+	while(rs.next()){bil += rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	bil = bil+&amp;quot;-&amp;quot;;
+	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;RP&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+	while(rs.next()){bil += rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	bil = bil+&amp;quot;~&amp;quot;;
+	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;BC&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+	while(rs.next()){bil+= rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	bil = bil+&amp;quot;*&amp;quot;;
+	rs = stat.executeQuery(&amp;quot;select bilid from bilhdr where biltyp=&amp;apos;SX&amp;apos; and refnam5=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+	while(rs.next()){bil+= rs.getString(&amp;quot;bilid&amp;quot;)+&amp;quot;,&amp;quot;;}
+	
+	return bil;
+//	throw new Exception(bil);
+
+	}catch(ee){
+		throw new Exception(ee.toString());
+	}
+	finally{
+		if (db!=null) db.Close();
+	}	
+}
+
+//修改库位库存的待上架或待下架数量
+function updateSltQty(G_SEQU,db)
+{
+//	var stat = db.GetConn().createStatement();
+//	var rs = stat.executeQuery(&amp;quot;select distinct srcslt from wms_shdiv_trial where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	var rltslt = &amp;quot;&amp;quot;;
+//	var sql = &amp;quot;&amp;quot;;
+//	if (rs.next()){
+//		rltslt = rs.getString(&amp;quot;srcslt&amp;quot;);
+//		if(rltslt==nlll){rltslt=&amp;quot;&amp;quot;}
+//		sql = &amp;quot;update wms_itmslt set udqty = udqty+(select sum(qty) from wms_shdiv_trial where srcslt=rltslt and shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;)&amp;quot;;
+//		db.ExcecutSQL(sql);
+//	}
+//	rs = stat.executeQuery(&amp;quot;select distinct aimslt from wms_shdiv_trial where shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	if(rs.next()){
+//		rltslt = rs.getString(&amp;quot;aimslt&amp;quot;);
+//		sql = &amp;quot;update wms_itmslt set adqty = adqty +(select sum(qty) from wms_shdiv_trial where aimslt =nvl( &amp;apos;&amp;quot;+rltslt+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;) and shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;)&amp;quot;;
+//		db.ExcecutSQL(sql);
+//	}	    	
+}
+
+//还原库存中待上架各下架数量
+function unUpdateSltQty(G_SEQU,db){
+//	var stat = db.GetConn().createStatement();
+//	var rs = stat.executeQuery(&amp;quot;select distinct srcslt from wms_shdiv_trial where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	var rltslt = &amp;quot;&amp;quot;;
+//	var sql = &amp;quot;&amp;quot;;
+//	if (rs.next()){
+//		rltslt = rs.getString(&amp;quot;srcslt&amp;quot;);
+//		sql = &amp;quot;update wms_itmslt set udqty = udqty-(select sum(qty) from wms_shdiv_trial where srcslt=nvl(&amp;apos;&amp;quot;+rltslt+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;) and shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;)&amp;quot;;
+//		db.ExcecutSQL(sql);
+//	}
+//	rs = stat.executeQuery(&amp;quot;select distinct aimslt from wms_shdiv_trial where shseq = &amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	if(rs.next()){
+//		rltslt = rs.getString(&amp;quot;aimslt&amp;quot;);
+//		sql = &amp;quot;update wms_itmslt set adqty = adqty -(select sum(qty) from wms_shdiv_trial where aimslt =nvl( &amp;apos;&amp;quot;+rltslt+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;) and shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;)&amp;quot;;
+//		db.ExcecutSQL(sql);
+//	}	
+}
+
+
+//================================================================// 
+// 函数：getMaxBilid(db,biltyp,G_ACCID,field,prefix)
+// 说明：生成单据号
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：06/24/08 09:27:31
+// 修改日志：
+//================================================================// 
+function getMaxBilid(db,biltyp,G_ACCID,field,prefix)
+{
+        var No=&amp;quot;0000000&amp;quot;;
+        var bilid=null;
+	var num=null;
+       	var tmpnum; 
+        bilid=prefix; 
+        var sql=&amp;quot;select 1*substr(max(trim(&amp;quot;+field+&amp;quot;)),3) from bilhdr a where acc=&amp;apos;&amp;quot;+G_ACCID+&amp;quot;&amp;apos; and biltyp=&amp;apos;&amp;quot;+biltyp+&amp;quot;&amp;apos; \n&amp;quot;;  
+        if (biltyp==&amp;quot;SX&amp;quot;){
+        	sql =&amp;quot;select  1*substr(max(trim(&amp;quot;+field+&amp;quot;)),3) from bildtl a where acc=&amp;apos;&amp;quot;+G_ACCID+&amp;quot;&amp;apos; and biltyp=&amp;apos;&amp;quot;+biltyp+&amp;quot;&amp;apos; \n&amp;quot; ;
+        }
+        tmpnum=db.GetSQL(sql);
+        if(tmpnum==&amp;quot;&amp;quot;||tmpnum==null) {
+        	bilid=bilid+&amp;quot;00000001&amp;quot;;                  
+        	
+        } else {                  
+        	num=1*tmpnum; 
+        	num=num+1;         
+        	num=&amp;quot;&amp;quot;+num;
+                bilid=bilid+No.substring(0,8-num.length())+num;
+        }	
+        return bilid;
+}
+
+//修改已做货源分配的出货通知单的状态
+function updateSTStat(db,G_SEQU)
+{
+	var sql = &amp;quot;update bilhdr set refid6=&amp;apos;2&amp;apos; where biltyp=&amp;apos;ST&amp;apos; and bilid in (select distinct bilid from wms_shdiv_trial where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;)&amp;quot;;
+	db.ExcecutSQL(sql);
+}
+
+//function SaveTrialNote(){
+//	try{
+//	db = new pubpack.EADatabase();
+//	stat = db.GetConn().createStatement();
+//	db.ExcecutSQL(&amp;quot;update wms_shdiv_seq set note = &amp;apos;&amp;quot;+note+&amp;quot;&amp;apos; where shseq=&amp;apos;&amp;quot;+G_SEQU+&amp;quot;&amp;apos;&amp;quot;);
+//	db.Commit();
+//	}catch(Exception e){
+//		db.Rollback();
+//		throw new pubpack.EAException(e.toString());
+//	}finally{
+//		if (db!=null) db.Close();
+//	}
+//
+//}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SHSEQ</ID><NAME ></NAME><DATDSC >select id,crtusr,to_char(crtdat,&amp;apos;yyyy-mm-dd&amp;apos;) crtdat,
+decode(stat,0,&amp;apos;已生成&amp;apos;,1,&amp;apos;已试算&amp;apos;,2,&amp;apos;未试算&amp;apos;) state,NOTE FROM wms_shdiv_seq
+order by stat,crtdat desc</DATDSC><C4 >SHSEQ</C4><C5 >SHSEQ</C5><C6 >SHSEQ</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >SHSEQ</C10></ROW>
+<ROW num="1" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select d.id 商品编号,c.name 商品名称,d.spec 批次,d.unassigned 未分配数量,&amp;apos;双击查看&amp;apos; aa,to_char(c.qty) 库存,decode(c.qty,0,&amp;apos;&amp;apos;,&amp;apos;双击查看&amp;apos;) bb
+  from (select b.id, b.name, b.spec, nvl(sum(a.qty),0) qty
+          from wms_itmslt a, wms_item b
+         where a.item(+) = b.guid
+         group by b.id, b.name, b.spec) c,
+       (SELECT A.ITMID id, A.ITMNAM, A.SPEC, SUM(A.QTY) unassigned
+          FROM WMS_SHDIV_SHINFO a
+        where a.shseq = &amp;apos;[%G_SEQU]&amp;apos;
+         GROUP BY A.ITMID, A.ITMNAM, A.SPEC order by id) d
+ where c.id = d.id 
+ order by c.id</DATDSC><C4 ></C4><C5 ></C5><C6 >MAIN</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >MAIN</C10></ROW>
+<ROW num="2" ><ID >SHDIV</ID><NAME ></NAME><DATDSC >declare 
+ret varchar2(255);
+begin 
+      ret :=WMS_SHDIV.doit(&amp;apos;[%param]&amp;apos;) ;
+end;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >SHDIV</C7><C8 >SHDIV</C8><C9 ></C9><C10 >SHDIV</C10></ROW>
+<ROW num="3" ><ID >TRIAL</ID><NAME ></NAME><DATDSC >select SEQID,BILID,ITMID,ITMNAM,SPEC,SRCSLTID,ACTION,
+AIMSLTID,QTY,NOTE
+from wms_shdiv_trial WHERE SHSEQ = &amp;apos;[%param]&amp;apos;
+order by seqid</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >TRIAL</C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="4" ><ID >LOG</ID><NAME ></NAME><DATDSC >select txt from wms_shdiv_log where shseq=&amp;apos;[%param]&amp;apos; 
+and txt is not null 
+order by crtdat</DATDSC><C4 ></C4><C5 ></C5><C6 >LOG</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="5" ><ID >MODI_SEQ_STAT</ID><NAME ></NAME><DATDSC >update wms_shdiv_seq set stat = [%stat] where id=&amp;apos;[%shseq]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="6" ><ID >UPDATESTAT</ID><NAME ></NAME><DATDSC >UPDATE BILHDR SET REFID6=&amp;apos;1&amp;apos; WHERE BILTYP=&amp;apos;ST&amp;apos; and acc=&amp;apos;[%param]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >UPDATESTAT</C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="7" ><ID >UNIT</ID><NAME ></NAME><DATDSC >select untnum,smlunt,unit from wms_item where guid in (
+	select item from wms_shdiv_shinfo where itmid=&amp;apos;[%param]&amp;apos;
+)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="8" ><ID >LINE</ID><NAME ></NAME><DATDSC >
+select to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) sysdat,bh.dat,bh.corpid,
+bh.refnam2,bh.refnam1,b.id from bilhdr bh,v_wms_sttyp b 
+where bh.refid1 = b.id
+and bh.biltyp=&amp;apos;ST&amp;apos;
+and bh.bilid=&amp;apos;[%param]&amp;apos;
+AND bh.ACC=&amp;apos;[%param1]&amp;apos;
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >LINE</C9><C10 ></C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,407 @@
+<ROWSET>
+    <ROW num="1">
+        <NAME>矩阵</NAME>
+        <ID>rect</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y 
+					width:宽度
+					height:高度
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+					cx:圆角x-axis radius of the ellipse used to round off the corners of the rectangle 
+					cy:圆角y-axis radius of the ellipse used to round off the corners of the rectangle
+				  值: 显示在四边形中的文字</NOTE>
+	 <TAG>rect</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12" cx="0" cy="0"</ATTR>
+        <VALUE>矩阵</VALUE>
+    </ROW>
+    <ROW num="2">
+        <NAME>文本</NAME>
+        <ID>text</ID>
+        <NOTE>		或text/tspan标签
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+				  值:文字</NOTE>
+	 <TAG>text</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE>文本</VALUE>
+    </ROW>
+    <ROW num="3">
+        <NAME>圆</NAME>
+        <ID>circle</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					cx:圆心x	
+					cy:圆心y	
+					r:半径
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+					值:文字</NOTE>
+	 <TAG>circle</TAG>
+        <ATTR>id="" cx="50" cy="50" r="30" width="100" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="4">
+        <NAME>椭圆形</NAME>
+        <ID>ellipse</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					cx:圆心x
+					cy:圆心y
+					rx:x半径
+					ry:y半径
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+					值:文字</NOTE>
+	 <TAG>ellipse</TAG>
+        <ATTR>id="" cx="50" cy="50" rx="40" ry="30" width="100" height="40" fill="#FFFFFF" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="5">
+        <NAME>闭合多边形</NAME>
+        <ID>polygon</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					points:点列表,内容参考svg格式的说明
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+				  值:文字</NOTE>
+	 <TAG>polygon</TAG>
+        <ATTR>id="" points="" fill="#FFFFFF" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="6">
+        <NAME>多边折线</NAME>
+        <ID>polyline</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					points点列表,内容参考svg格式的说明
+					stroke:线条颜色
+					stroke-width:线条宽度
+					值: 
+	Sample: id="" points="" stroke="#000000" stroke-width="1"
+	</NOTE>
+	 <TAG>polyline</TAG>
+        <ATTR></ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="7">
+        <NAME>路径</NAME>
+        <ID>path</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					d:PATH点列表,内容参考svg格式的说明
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+				  值: 文字</NOTE>
+	 <TAG>path</TAG>
+        <ATTR>id="" d="" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="8">
+        <NAME>图形</NAME>
+        <ID>img</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					src文件的路径
+					x:x
+					y:y
+					width:宽度
+					height:高度
+				  值:	</NOTE>
+	 <TAG>img</TAG>
+        <ATTR>id="" src="" x="0" y="0" width＝“100" height="40"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="9">
+        <NAME>连接线</NAME>
+        <ID>connector</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					from:来源对象的ID
+					to:目标对象的id
+					fromcp:		来源图元的连接点位置：可以是	
+								"11" 左上 "21" 中上 "31" 右上
+								"12" 左中 "22" 中中 "32" 右中
+								"13" 左下 "23" 中下	"33" 右下					
+					tocp:		目标图元的连接点位置： 同tocp
+					type:		连接类型
+							100 直接连接符 108 直接箭头连接符 188 直接双箭头连接符
+							200 肘型连接符 208 肘型箭头连接符 288 肘型双箭头连接符
+					fill:填充颜色
+					stroke:线条颜色
+					font-family:字体
+					font-size:字体大小
+					值:文字</NOTE>
+	 <TAG>connector</TAG>
+        <ATTR>id="" from="" to="" fromcp="32" tocp="12" type="208" fill="#FFFFFF" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="10">
+        <NAME>文本输入框</NAME>
+        <ID>edit</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+				  值:	文本的初始内容</NOTE>
+	 <TAG>edit</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="11">
+        <NAME>下拉式列表</NAME>
+        <ID>ListBox</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					listid值对的编号
+					值:初始值</NOTE>
+	 <TAG>ListBox</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" listid=""</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="12">
+        <NAME>下拉式列表</NAME>
+        <ID>ComboBox</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					listid:值对的编号
+					值:	初始值</NOTE>
+	 <TAG>ComboBox</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" listid=""</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="13">
+        <NAME>无线选择按钮</NAME>
+        <ID>RadioBox</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					listid:值对的编号
+				  值:初始值</NOTE>
+	 <TAG>RadioBox</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" listid=""</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="14">
+        <NAME>勾选框</NAME>
+        <ID>CheckBox</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					值:0或1</NOTE>
+	 <TAG>CheckBox</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="15">
+        <NAME>日期输入框</NAME>
+        <ID>DateBox</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					值:初始值</NOTE>
+	 <TAG>DateBox</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="16">
+        <NAME>静态标签</NAME>
+        <ID>label</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					值:初始值</NOTE>
+	 <TAG>label</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40"</ATTR>
+        <VALUE>文本</VALUE>
+    </ROW>
+    <ROW num="17">
+        <NAME>按钮</NAME>
+        <ID>button</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					tip:提示
+					menu:菜单对应的xml
+					imgid1:鼠标移开的图片
+					imgid2:鼠标移入的图片
+					type:按钮类型,参考函数SetToButton的说明
+				  值:初始值</NOTE>
+	 <TAG>button</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" tip="" menu="" imgid1="" imgid2="" type=""</ATTR>
+        <VALUE>按钮</VALUE>
+    </ROW>
+    <ROW num="18">
+        <NAME>树控件</NAME>
+        <ID>TreeCtrl</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					url:描述数据的XML的路径
+				  值:</NOTE>
+	 <TAG>TreeCtrl</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" url=""</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="19">
+        <NAME>列表控件</NAME>
+        <ID>ListCtrl</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					url:描述数据的XML的路径
+				  值:</NOTE>
+	 <TAG>ListCtrl</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" url=""</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="20">
+        <NAME>文本编辑器</NAME>
+        <ID>RichEdit</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					url:描述数据的XML的路径
+					codeeditor:是否作为代码编辑器 =1 =0
+					border:是否需要边框 =1 =0 
+				  值:</NOTE>
+	 <TAG>RichEdit</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" url="" codeeditor="1" border="1"</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="21">
+        <NAME>图表</NAME>
+        <ID>Chart</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x:x
+					y:y
+					width:宽度
+					height:高度
+					url:描述数据的XML的路径
+					type:图表类型, 参考SetToChart函数的说明
+					seriesat:水平还是垂直坐标
+					title:标题
+					xtitle:x轴标题
+					ytitle:y轴标题
+					ztitle:z轴标题
+				  值:</NOTE>
+	 <TAG>Chart</TAG>
+        <ATTR>id="" x="0" y="0" width="100" height="40" url="" type="" seriesat="" title="" xtitle="" ytitle="" ztitle=""</ATTR>
+        <VALUE>
+        </VALUE>
+    </ROW>
+    <ROW num="22">
+        <NAME>线</NAME>
+        <ID>line</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					x1:起点x
+					y1:起点y 
+					x2:截止点x
+					y2:截止点y 
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+				  值: 显示的文字</NOTE>
+	 <TAG>line</TAG>
+        <ATTR>id="" x1="0" y1="0" x2="100" y2="40" stroke="#000000" stroke-width="1" font-family="Arial" font-size="12"</ATTR>
+        <VALUE></VALUE>
+    </ROW>
+    <ROW num="1">
+        <NAME>原点</NAME>
+        <ID>point</ID>
+        <NOTE>
+					id:唯一性编号,如果为"",由系统自动分配一个
+					cx:圆心x	
+					cy:圆心y	
+					r:半径
+					fill:填充颜色
+					stroke:线条颜色
+					stroke-width:线条宽度
+					font-family:字体
+					font-size:字体大小
+				  值: 显示在四边形中的文字</NOTE>
+	 <TAG>circle</TAG>
+        <ATTR>r="3" fill="#FFFFEE" stroke="#000000" stroke-width="1" resizable="0"</ATTR>
+        <VALUE></VALUE>
+    </ROW>
+
+</ROWSET>

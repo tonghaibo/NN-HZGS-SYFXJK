@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >treelayoutnote</MWID><NAME >分页布局用到的备注窗口</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >treelayoutnote.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD >1</HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >DFYY</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.SetCellBkColor(sheet,-1,-1,255,255,255);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW ); 
+
+	// 设置边框为0
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,&amp;quot;BORDER&amp;quot;, &amp;quot;0&amp;quot;);// 第1个sheet
+
+	// Hide 滚动条
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,&amp;quot;SCROLL&amp;quot;, &amp;quot;0&amp;quot;);// 第1个sheet
+
+	_this.SetColVisible(sheet,1,-1);
+	_this.SetColVisible(sheet,2,-1);
+	_this.SetColVisible(sheet,3,-1);
+	
+	_this.SetRowCount(sheet,1);
+}
+
+
+function newmsg(msg)
+{
+	var arrmsg = msg.split(&amp;quot;\n&amp;quot;);
+	var currow = 0;
+	_this.SetRowCount(0,1);
+	_this.SetCellText(0,0,0,msg);
+	for (var i=0;i&amp;lt;arrmsg.length;i++) {
+		currow = _this.AppendRow(0,i);
+		_this.SetCellText(0,currow,0,arrmsg[i].split(&amp;quot;@&amp;quot;)[0]);
+		_this.SetCellText(0,currow,1,arrmsg[i].split(&amp;quot;@&amp;quot;)[1]);
+		_this.SetCellColor(0,currow,0,255,0,0);
+	}
+	_this.SetRowVisible(0,0,-1);
+
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+
+	var str = _this.GetCellText(sheet,row,0) + _this.GetCellText(sheet,row,1);  
+	try {
+		setFormulaInfo(str);	
+	}
+	catch(e) {
+		alert(&amp;quot;设置背景色出错：&amp;quot;+e.toString());
+	}
+}
+
+//设置突出信息
+//[T01]1000：流动资产合计大于应收利息 - 公式【F(&amp;apos;01&amp;apos;,&amp;apos;DFFIN01&amp;apos;,&amp;apos;2009-10&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;T010112&amp;apos;,&amp;apos;01&amp;apos;)=F(&amp;apos;01&amp;apos;,&amp;apos;DFFIN01&amp;apos;,&amp;apos;2009-10&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;T010106&amp;apos;,&amp;apos;01&amp;apos;)】
+function setFormulaInfo(phmsg)
+{
+	var arrPH = new Array();
+	var phno = phmsg.substring(phmsg.indexOf(&amp;quot;]&amp;quot;)+1,phmsg.indexOf(&amp;quot;：&amp;quot;));
+	var formula = phmsg.substring(phmsg.indexOf(&amp;quot;【&amp;quot;)+1,phmsg.indexOf(&amp;quot;】&amp;quot;));
+	var sytid = G_SYTID;
+	var repid = phmsg.substring(phmsg.indexOf(&amp;quot;[&amp;quot;)+1,phmsg.indexOf(&amp;quot;]&amp;quot;));
+	
+	var pos1 = formula.indexOf(&amp;quot;F(&amp;quot;);
+	var pos2 = -1;
+
+	while (pos1 &amp;gt; -1) {
+		pos2 = formula.indexOf(&amp;quot;)&amp;quot;,pos1+1);		
+		var str = formula.substring(pos1+2,pos2);
+		var arrstr = str.split(&amp;quot;,&amp;quot;);
+		var indexobj = new Object();
+		indexobj.sytid = sytid;
+		indexobj.repid = repid;
+		indexobj.accid = arrstr[1].substring(1,arrstr[1].length-1);
+		indexobj.yymm = arrstr[2].substring(1,arrstr[2].length-1);
+		indexobj.moneyunit = arrstr[3].substring(1,arrstr[3].length-1);
+		indexobj.indexid = arrstr[4].substring(1,arrstr[4].length-1);
+		indexobj.indexitemid = arrstr[5].substring(1,arrstr[5].length-1);
+		arrPH.push(indexobj);
+		
+		pos1 = formula.indexOf(&amp;quot;F(&amp;quot;,pos2+1);
+
+	}
+	
+//	alert(&amp;quot;str=&amp;quot;+str+&amp;quot;phno=&amp;quot;+phno+&amp;quot; repid=&amp;quot;+repid+&amp;quot; formula=&amp;quot;+formula);
+
+	for (var i=0;i&amp;lt;arrPH.length;i++) {
+		var sytid = arrPH[i].sytid;
+		var repid = arrPH[i].repid;
+		var accid = arrPH[i].accid;
+		var yymm = arrPH[i].yymm;
+		var indexid = arrPH[i].indexid;
+		var indexitemid = arrPH[i].indexitemid;
+		var params = &amp;quot;sytid=&amp;quot;+sytid+&amp;quot;&amp;repid=&amp;quot;+repid+&amp;quot;&amp;indexid=&amp;quot;+indexid+&amp;quot;&amp;indexitemid=&amp;quot;+indexitemid;
+		var ret = invokeOSFunc(&amp;quot;getCellIDbyIndex&amp;quot;,params);
+		var row = ret.split(&amp;quot;,&amp;quot;)[0];
+		var col = ret.split(&amp;quot;,&amp;quot;)[1];
+		var sheetid = parent.wnd.query(accid,repid,yymm);
+		if (sheetid == -1) {
+			var guid = invokeOSFunc(&amp;quot;DFFIN.reptree.getRepGuid&amp;quot;,&amp;quot;yymm=&amp;quot;+yymm+&amp;quot;&amp;repid=&amp;quot;+repid+&amp;quot;&amp;accid=&amp;quot;+accid);
+			if (guid == undefined) guid = accid+&amp;quot;_&amp;quot;+repid+&amp;quot;_&amp;quot;+yymm;
+			_this.QuerySQLDS(&amp;quot;select name from v_finrep where id=&amp;apos;&amp;quot;+repid+&amp;quot;&amp;apos;&amp;quot;);
+			var repname = _this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;);
+			var url = &amp;quot;show.sp?grdid=&amp;quot;+repid+&amp;quot;&amp;guid=&amp;quot;+guid+&amp;quot;&amp;repid=&amp;quot;+repid+&amp;quot;&amp;yymm=&amp;quot;+yymm+&amp;quot;&amp;repnam=&amp;quot;+repname+&amp;quot;&amp;accid=&amp;quot;+accid+&amp;quot;&amp;thisorgid=&amp;thisaccid=&amp;quot;+accid;
+			sheetid = parent.wnd.add( guid,accid,repid,yymm,repname,url );
+		}
+		if (sheetid &amp;gt; -1) {
+			parent.wnd.show(sheetid);
+			//定位到报表窗口的某个位置
+			parent.wnd.getframe(sheetid).f_SetCellBkColor(0,row,col,255,0,0);
+		}
+	}
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

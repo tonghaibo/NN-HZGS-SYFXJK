@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >JIAXCSWH_LR</MWID><NAME >驾校参数维护录入界面</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >JIAXCSWH_LR.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >参数维护</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//添加
+
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	if (act==&amp;quot;update&amp;quot;) { 
+	
+	_sql.querytods(&amp;quot;Update_Xg&amp;quot;,&amp;quot;GUID=&amp;quot;+guid);
+	
+	var sfcsdm = _this.XMLDS_GetString(0,&amp;quot;sfcsdm&amp;quot;);
+	_this.SetCellText(0,3,2,sfcsdm);
+	
+	var diqlx = _this.XMLDS_GetString(0,&amp;quot;diqlx&amp;quot;);
+	_this.SetCellText(0,4,2,diqlx);
+	
+	var jiazlx = _this.XMLDS_GetString(0,&amp;quot;jiazlx&amp;quot;);
+	_this.SetCellText(0,5,2,jiazlx);
+
+	var lingqlx = _this.XMLDS_GetString(0,&amp;quot;lingqlx&amp;quot;);
+	_this.SetCellText(0,6,2,lingqlx);
+	
+	var baomf = _this.XMLDS_GetString(0,&amp;quot;baomf&amp;quot;);
+	_this.SetCellText(0,7,2,baomf);
+
+	var yxqq = _this.XMLDS_GetString(0,&amp;quot;yxqq&amp;quot;);
+	_this.SetCellText(0,8,2,yxqq);	
+		
+	var yxqz = _this.XMLDS_GetString(0,&amp;quot;yxqz&amp;quot;);
+	_this.SetCellText(0,9,2,yxqz);
+	}
+}
+
+
+//点击确定按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	//var kfqy = _this.GetCellText(0,3,2);
+	//var nsrsbh = _this.GetCellText(0,4,2);
+	//var nrsmc = _this.GetCellText(0,5,2);
+	//var xsjj = _this.GetCellText(0,6,2);
+	//var qhl = _this.GetCellText(0,7,2);
+	//var yxqq = _this.GetCellText(0,8,2);
+	//var yxqz = _this.GetCellText(0,9,2);
+	var param = new Object();
+	param.sfcsdm = _this.GetCellText(0,3,2);
+	param.diqlx = _this.GetCellText(0,4,2);
+	param.jiazlx = _this.GetCellText(0,5,2);
+	param.lingqlx = _this.GetCellText(0,6,2);
+	param.baomf = _this.GetCellText(0,7,2);
+	param.yxqq = _this.GetCellText(0,8,2);
+	param.yxqz = _this.GetCellText(0,9,2);
+	if (id == &amp;quot;确定&amp;quot;) {
+		if (act==&amp;quot;update&amp;quot; &amp;&amp; param.sfcsdm!=&amp;quot;&amp;quot; ) {
+			param.guid=guid;
+			var msg = invokeOSFuncExt(&amp;quot;UpdateXg&amp;quot;,param);
+			_this.SetCellText(0,12,1,_this.GetCellText(0,12,1)+&amp;quot;\n&amp;quot;+msg);
+			alert(msg);			
+		}else if (act==&amp;quot;add&amp;quot; &amp;&amp; param.sfcsdm!=&amp;quot;&amp;quot;) {
+		        var msg = invokeOSFuncExt(&amp;quot;AddXz&amp;quot;,param);
+			_this.SetCellText(0,12,1,_this.GetCellText(0,12,1)+&amp;quot;\n&amp;quot;+msg);
+			alert(msg);			
+		}
+		else {
+			alert(&amp;quot;请输入完整信息&amp;quot;);
+		}
+	}
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//修改
+function UpdateXg()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	try{
+		db = new pub.EADatabase();
+		sql = &amp;quot;update TAX_JIAXSFCSB set sfcsdm=&amp;apos;&amp;quot;+sfcsdm+&amp;quot;&amp;apos;,diqlx=&amp;apos;&amp;quot;+diqlx+&amp;quot;&amp;apos;,jiazlx=&amp;apos;&amp;quot;+jiazlx+&amp;quot;&amp;apos;,lingqlx=&amp;apos;&amp;quot;+lingqlx+&amp;quot;&amp;apos;,baomf=&amp;apos;&amp;quot;+baomf+&amp;quot;&amp;apos;,
+		yxqq=to_date(&amp;apos;&amp;quot;+yxqq+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),yxqz=to_date(&amp;apos;&amp;quot;+yxqz+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;) where jiaxsfcsuuid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos; &amp;quot;;
+		var updcount=db.ExcecutSQL(sql);
+		var ret = &amp;quot;更新&amp;quot;+updcount +&amp;quot;条记录&amp;quot;;
+		return ret;	
+        }
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if(db != null)	db.Close();
+	}
+
+}
+
+//新增
+function AddXz()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	try{
+		db = new pub.EADatabase();
+		sql = &amp;quot;insert into TAX_JIAXSFCSB(sfcsdm,diqlx,jiazlx,lingqlx,baomf,yxqq,yxqz)
+		 values (&amp;apos;&amp;quot;+sfcsdm+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+diqlx+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+jiazlx+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+lingqlx+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+baomf+&amp;quot;&amp;apos;,to_date(&amp;apos;&amp;quot;+yxqq+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),to_date(&amp;apos;&amp;quot;+yxqz+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)) &amp;quot;;
+		var addcount=db.ExcecutSQL(sql);
+		var ret = &amp;quot;新增&amp;quot;+addcount +&amp;quot;条记录&amp;quot;;
+		return ret;	
+        }
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if(db != null)	db.Close();
+	}
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >getTyp</ID><NAME ></NAME><DATDSC >select id from v_tax_elecompany where name=&amp;apos;[%TYP]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >getTyp</C8><C9 ></C9><C10 >getTyp</C10><C11 ></C11></ROW>
+<ROW num="1" ><ID >Update_Xg</ID><NAME >修改</NAME><DATDSC >
+select sfcsdm,diqlx,jiazlx,lingqlx,baomf,to_char(yxqq,&amp;apos;yyyy-mm-dd&amp;apos;)yxqq,to_char(yxqz,&amp;apos;yyyy-mm-dd&amp;apos;)yxqz
+from TAX_JIAXSFCSB
+where jiaxsfcsuuid=&amp;apos;[%GUID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >Update_Xg</C8><C9 >Update_Xg</C9><C10 >Update_Xg</C10><C11 >Update_Xg</C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

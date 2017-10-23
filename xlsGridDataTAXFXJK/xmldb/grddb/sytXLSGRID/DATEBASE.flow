@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_132514" x="94" y="69" width="642" height="410" stroke="#000000" fill="#feffe1" >
+ </rect>
+ <text id="text_132515" x="85" y="46" width="312" height="23"   font-family="Arial" font-size="15" font-color="#0000ff">【后台管理－流程图】
+</text>
+ <text id="text_3614" x="562" y="441" width="163" height="33"   font-color="#adadad">xlsGrid.net 硕格中间件
+</text>
+ <rect id="rect_84114" x="205" y="195" width="85" height="42" stroke="#000000" fill="#acacff"  url="xlsgrid/jsp/pages/dbEdit.jsp?title=test%20run&grdid=UPDATEUSR1&sytid=XLSGRID&flag=USR">用户管理</rect>
+ <rect  id="rect_53512" x="365" y="325" width="85" height="42" stroke="#000000" fill="#acacff" url="xlsgrid/jsp/pages/relationSet.jsp?leftflag1=PRJ&leftflag2=V_USR&relationflag=PRJUSR&columns=PRJ,USR&title=Project User">项目人员</rect>
+ <rect  id="rect_53513" x="365" y="194" width="85" height="42" stroke="#000000" fill="#acacff" url="xlsgrid/jsp/pages/dbEdit.jsp?grdid=PRJ&topic=Project">项目定义</rect>
+ <connector id="connector_208_283726" from="rect_84114" to="rect_53512" fromcp="23" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_283727" from="rect_53513" to="rect_53512" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <rect  id="rect_124309" x="540" y="194" width="85" height="42" stroke="#000000" fill="#acacff" url="entry.sp?grdid=HR_BASEINF">人事基础资料</rect>
+</svg>

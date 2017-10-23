@@ -1,0 +1,924 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >mwtoserver</MWID><NAME >同步中间件到其他服务器</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >mwtoserver.zxg</FILE><FIXED >1,5</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><SHOWBTN >1,3,4</SHOWBTN></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >Reload</ID><NAME >重载中间件</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >Reload</C12><C13 >Reload</C13></ROW>
+<ROW num="1" ><ID >ReloadSubsyt</ID><NAME >重载系统定义</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 >ReloadSubsyt</C10><C11 ></C11><C12 >ReloadSubsyt</C12><C13 >ReloadSubsyt</C13></ROW>
+<ROW num="2" ><ID >SetPasswd</ID><NAME >设置连接密码</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >SetPasswd</C12><C13 >SetPasswd</C13></ROW>
+<ROW num="3" ><ID >NEWWeb</ID><NAME >添加WEB入口</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >NEWWeb</C11><C12 >NEWWeb</C12><C13 >NEWWeb</C13></ROW>
+<ROW num="4" ><ID >NEWSERVER</ID><NAME >添加服务器</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >GRDBTNDS_4</C11><C12 >NEWSERVER</C12><C13 >NEWSERVER</C13></ROW>
+</ROWSET>
+</grdbtnds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:DS1</DSKEY><NROW >2</NROW><NCOL >18</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17><C18 >0,1,1</C18></ROW>
+<ROW num="1" ><ID >1,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:DS2</DSKEY><NROW >2</NROW><NCOL >10</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 >2,1,1</C17><C18 >1,1,1</C18></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var passwd = &amp;quot;&amp;quot;;
+//数据加载完毕9
+function _thisOnpost_loaddata(sheet)
+{	
+	
+	try { location=url; } catch ( e ) { } //url是下载中间件的连接(用于下载中间件)解决被ie拦截下载的麻烦  
+	
+	_this.SetCellBkColor(0,-1,-1,255,255,255);
+	_this.SetColVisible(1,3,0);
+//	_this.LoadScene(0,4);
+	_this.LoadScene(1,4);
+	_this.SetFixedRow(1,1);
+	_this.SetFixedCol(1,4);
+	// 分割sheet为上面2个，下面1个
+	// 类似于html的表格分割，合并行列用rowspan colspan来区分 
+//	var splitxml=&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+//	&amp;quot;&amp;lt;ROWSET&amp;gt; &amp;quot;+
+//	&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+//	&amp;quot;	&amp;lt;C1  height=\&amp;quot;50%\&amp;quot; width=\&amp;quot;50%\&amp;quot; &amp;gt;0&amp;lt;/C1&amp;gt; &amp;quot;+
+//	&amp;quot;	&amp;lt;C2  height=\&amp;quot;50%\&amp;quot; width=\&amp;quot;50%\&amp;quot; &amp;gt;1&amp;lt;/C2&amp;gt; &amp;quot;+
+//	&amp;quot;&amp;lt;/ROW&amp;gt; &amp;quot;+
+//	&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+//	&amp;quot;	&amp;lt;C1  width=\&amp;quot;100%\&amp;quot; rowspan=\&amp;quot;2\&amp;quot; height=\&amp;quot;50%\&amp;quot;&amp;gt;2&amp;lt;/C1&amp;gt; &amp;quot;+
+//	&amp;quot;	&amp;lt;C2  width=\&amp;quot;50%\&amp;quot; height=\&amp;quot;50%\&amp;quot;&amp;gt;&amp;lt;/C2&amp;gt; &amp;quot;+
+//	&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+//	&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+//	_this.SetLayoutDS(splitxml);  
+
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot; );
+
+	//_this.SplitSheet(&amp;quot;0,1&amp;quot;,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot;);
+	//_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot;);
+	//_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG, _this.ATTR_CELL_MULTLINE );
+	_this.SetColVisible(0,0,0);
+	_this.SetColVisible(0,_this.GetColCount(0)-1,0);
+	_this.SetColVisible(0,_this.GetColCount(0)-2,0);
+	_this.SetColVisible(1,0,0);
+	_this.SetColVisible(1,_this.GetColCount(1)-1,0);
+	_this.SetColVisible(1,_this.GetColCount(1)-2,0);
+	
+	_this.AutoFixScreenWidth();
+	for (var r = 1; r &amp;lt; _this.GetRowCount(0); r ++) {
+		_this.AutoFixOneRowHeight(0,r);
+	}
+	for (var r = 1; r &amp;lt; _this.GetRowCount(1); r ++) {
+		_this.AutoFixOneRowHeight(1,r);
+	}
+	_this.ShowTabbar(1);
+}
+
+// 下载
+function DownloadMW(row)
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+	var name  = _this.GetCellText(0,row,1);
+	var url = _this.GetCellText(0,row,2);
+	var syt = _this.GetCellText(0,row,3);
+	var mdlist = _this.GetCellText(0,row,4);
+	file=&amp;quot;xmldb/grddb/syt&amp;quot;+syt;//下载的中间件系统
+	var filematch = &amp;quot;&amp;quot;;
+	if ( mdlist!=&amp;quot;&amp;quot; ) 
+		filematch =mdlist+&amp;quot;.*&amp;quot;;
+//	location =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+	
+	var url1 =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+//	alert(url1);
+	var url2 =encodeURIComponent(url1);//对url编码进行编码%123,因为含有&amp;quot;/&amp;quot;等特殊字符
+	
+	//window.open(&amp;quot;show.sp?grdid=mwtoserver&amp;url=&amp;quot;+url2);
+	//2010 modify
+	
+	window.location= url1 ;
+}
+// 下载系统定义
+function DownloadSYS(row)
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	var name  = _this.GetCellText(0,row,1);
+	var url = _this.GetCellText(0,row,2);
+	var syt = _this.GetCellText(0,row,3);
+	var mdlist = _this.GetCellText(0,row,4);
+	var file=syt;
+	var filematch = &amp;quot;&amp;quot;;
+	location =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+
+}
+
+// 下载系统定义
+function DownloadXMLDB(row)
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	var name  = _this.GetCellText(0,row,1);
+	var url = _this.GetCellText(0,row,2);
+	var syt = _this.GetCellText(0,row,3);
+	var mdlist = _this.GetCellText(0,row,4);
+	var file=&amp;quot;xmldb&amp;quot;;
+	var filematch = &amp;quot;&amp;quot;;
+	location =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+
+}
+// upload某个文件覆盖中间件目录
+function UploadMW(row)
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	window.status = &amp;quot;正在Upload&amp;quot;+name;
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	form.reset();
+	btn.click();
+	var file = btn.value;
+
+	if(file)
+	{
+		var i = row;
+		var name  = _this.GetCellText(0,i,1);
+		var url = _this.GetCellText(0,i,2);
+		var syt = _this.GetCellText(0,i,3);
+		var mdlist = _this.GetCellText(0,i,4);
+		var ret = &amp;quot;&amp;quot;;
+		_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+		//先自动登录
+		_this.OpenHttpRequest(url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd,&amp;quot;GET&amp;quot;);
+		_this.SendHttpRequest();
+
+		    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+		    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+		    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+		    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+		    var activefile=syt;
+		    var path = &amp;quot;xmldb/grddb/syt&amp;quot;+syt;
+		    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,path ,0);// 解压到哪个目录
+		    
+		    var ret = _this.SendHttpRequest();
+		    alert(&amp;quot;返回值：&amp;quot;+ ret );
+
+	}
+	_this.SetToolbarString(&amp;quot;上传结束&amp;quot; );
+	//alert ( &amp;quot;上传结束&amp;quot; );
+
+}
+
+// upload 系统定义
+function UploadSYS(row)
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	window.status = &amp;quot;正在Upload&amp;quot;+name;
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	form.reset();
+	btn.click();
+	var file = btn.value;
+	
+	if(file)
+	{
+		var i = row;
+		var name  = _this.GetCellText(0,i,1);
+		var url = _this.GetCellText(0,i,2);
+		var syt = _this.GetCellText(0,i,3);
+		var mdlist = _this.GetCellText(0,i,4);
+		var ret = &amp;quot;&amp;quot;;
+		
+		//先自动登录
+		_this.OpenHttpRequest(url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd,&amp;quot;GET&amp;quot;);
+		_this.SendHttpRequest();
+		
+
+		_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+		    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+		    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+		    
+		    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+		    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+		    var activefile=syt;
+		    
+		    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,activefile,0);// 解压到哪个目录
+		    
+		    var ret = _this.SendHttpRequest();
+		    alert(&amp;quot;返回值：&amp;quot;+ ret );
+	}
+	_this.SetToolbarString(&amp;quot;上传结束&amp;quot; );
+	
+
+}
+// upload 系统定义
+function UploadXMLDB(row)
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	window.status = &amp;quot;正在Upload&amp;quot;+name;
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	form.reset();
+	btn.click();
+	var file = btn.value;
+	
+	if(file)
+	{
+		var i = row;
+		var name  = _this.GetCellText(0,i,1);
+		var url = _this.GetCellText(0,i,2);
+		var syt = _this.GetCellText(0,i,3);
+		var mdlist = _this.GetCellText(0,i,4);
+		var ret = &amp;quot;&amp;quot;;
+		
+		//先自动登录
+		_this.OpenHttpRequest(url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd,&amp;quot;GET&amp;quot;);
+		_this.SendHttpRequest();
+		
+
+		_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+		    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+		    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+		    
+		    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+		    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+		    var activefile=&amp;quot;xmldb&amp;quot;;
+		    
+		    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,activefile,0);// 解压到哪个目录
+		    
+		    var ret = _this.SendHttpRequest();
+		    alert(&amp;quot;返回值：&amp;quot;+ ret );
+	}
+	_this.SetToolbarString(&amp;quot;上传结束&amp;quot; );
+	
+
+}
+
+
+
+//重载
+function Reload()
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	
+	for ( var i=1;i&amp;lt;_this.GetRowCount(1);i++ ) {
+		if ( _this.GetRowSelected(1,i) == &amp;quot;1&amp;quot; ) {
+			var name  = _this.GetCellText(1,i,1);
+			var url = _this.GetCellText(1,i,2);
+			var syt = _this.GetCellText(1,i,3);
+			var ret = &amp;quot;&amp;quot;;
+			_this.SetToolbarString(&amp;quot;正在重载&amp;quot;+name);
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=2&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			msg +=name  +&amp;quot;完成！\n&amp;quot;;
+		}
+	
+	}
+	_this.SetToolbarString(&amp;quot;重载结束&amp;quot; );
+	alert ( msg );
+}
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet == 1 &amp;&amp;   col== 4 ){
+		if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(1,row,1);
+		var url = _this.GetCellText(1,row,2);
+		openWindow( url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+	}
+	else if (  col==1 ){
+		//if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(sheet,row,1);
+		var url = _this.GetCellText(sheet,row,2);
+		window.open( url+&amp;quot;index.jsp&amp;quot;);	
+			
+	}
+	else if (  col==2 ){
+		if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(sheet,row,1);
+		var url = _this.GetCellText(sheet,row,2);
+		window.open( url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+			
+	}
+
+	else if ( sheet == 1 &amp;&amp;   col== 5 ){
+		if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(1,row,1);
+		var url = _this.GetCellText(1,row,2);
+		openWindow( url+&amp;quot;ROOT_0/EntryACC.sp?accid=0&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+			
+	}
+	else if ( sheet == 1 &amp;&amp;   col== 6 ){
+		if(EntryPasswd()==false)return;
+
+		var name  = _this.GetCellText(1,row,1);
+		var url = _this.GetCellText(1,row,2);
+		openWindow( url+&amp;quot;ROOT_0/show.sp?grdid=SQLINPUT&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+			
+	}	
+	else if ( sheet == 1 &amp;&amp;   col==7 ){
+		if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(1,row,1);
+		var url = _this.GetCellText(1,row,2);
+		openWindow( url+&amp;quot;ROOT_0/show.sp?grdid=fileEditor&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+	}	
+	else if ( sheet == 1 &amp;&amp;   col==8 ){
+		if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(1,row,1);
+		var url = _this.GetCellText(1,row,2);
+		openWindow( url+&amp;quot;ROOT_0/show.sp?grdid=webdirmgr&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+	}
+	else if ( sheet == 1 &amp;&amp;   col==9 ){
+		var name  = _this.GetCellText(sheet,row,1);
+		if ( confirm( &amp;quot;删除配置&amp;quot;+name+&amp;quot;,是否继续?&amp;quot; )== 1 ) {
+			guid = _this.GetCellText(sheet,row,_this.GetColCount(sheet)-2);
+ 
+			_sql.run(&amp;quot;DelServer&amp;quot;,&amp;quot;guid=&amp;quot;+guid);
+			alert( &amp;quot;插入成功，点击刷新页面&amp;quot; );
+  			window.location.reload();
+
+		}
+
+			
+	}
+	else if (  col&amp;lt;= 2  ){// sheet == 0 &amp;&amp;  
+		if(EntryPasswd()==false)return;
+		var name  = _this.GetCellText(0,row,1);
+		var url = _this.GetCellText(0,row,2);
+		window.open ( url+&amp;quot;index.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+
+		//openWindow( url+&amp;quot;index.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd);	
+			
+	}
+	
+	else if ( sheet == 0 &amp;&amp;   col== 5 ){// 下载中间件
+		DownloadMW(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 6 ){// 
+		UploadMW(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 7 ){// 
+		DownloadSYS(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 8){// 
+		UploadSYS(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 9 ){// 
+		DownloadXMLDB(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 10){// 
+		UploadXMLDB(row);
+	}	
+	else if ( sheet == 0 &amp;&amp;   col== 11 ){// 下载Layout	上传Layout	下载SYSURL	上传SYSURL	下载图片资源	上传图片资源
+		DownloadLayout(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 12 ){// 
+		UploadLayout(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 13 ){// 
+		DownloadSYSURL(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 14){// 
+		UploadSYSURL(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 15 ){// 
+		DownloadWebresource(row);
+	}
+	if ( sheet == 0 &amp;&amp;   col== 16){// 
+		UploadWebresource(row);
+	}	
+	
+	if ( sheet == 0 &amp;&amp;   col== 17){// 
+
+		var name  = _this.GetCellText(sheet,row,1);
+		if ( confirm( &amp;quot;删除配置&amp;quot;+name+&amp;quot;,是否继续?&amp;quot; )== 1 ) {
+			guid = _this.GetCellText(sheet,row,_this.GetColCount(sheet)-2);
+			_sql.run(&amp;quot;DelWeb&amp;quot;,&amp;quot;guid=&amp;quot;+guid);
+			alert( &amp;quot;插入成功，点击刷新页面&amp;quot; );
+  			window.location.reload();
+
+		}
+	}
+
+	
+	
+}
+function EntryPasswd() {
+	
+	passwd = prompt ( &amp;quot;请输入超级用户的密码&amp;quot;,passwd ) ;
+	if ( passwd == undefined ) {passwd =&amp;quot;&amp;quot;;return false;}
+	return true;
+}
+//undefined
+function ReloadSubsyt()
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	
+	for ( var i=1;i&amp;lt;_this.GetRowCount(1);i++ ) {
+		if ( _this.GetRowSelected(1,i) == &amp;quot;1&amp;quot; ) {
+			var name  = _this.GetCellText(1,i,1);
+			var url = _this.GetCellText(1,i,2);
+			var syt = _this.GetCellText(1,i,3);
+			var ret = &amp;quot;&amp;quot;;
+			_this.SetToolbarString(&amp;quot;正在重载&amp;quot;+name);
+			//ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=2&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+		
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=5&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=7&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=6&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=8&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=3&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=1&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			ret=_this.HttpCall(url+&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=4&amp;quot;+&amp;quot;&amp;sytid=&amp;quot;+syt+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd );
+			msg +=name  +&amp;quot;完成！\n&amp;quot;;
+		}
+	
+	}
+	_this.SetToolbarString(&amp;quot;重载结束&amp;quot; );
+	alert ( msg );
+}
+
+//设置连接密码
+function SetPasswd()
+{
+	passwd = prompt ( &amp;quot;设置远程服务器的超级用户密码&amp;quot;,&amp;quot;&amp;quot; ) ;
+	if ( passwd == undefined ) {passwd =&amp;quot;&amp;quot;;return;}
+  
+}
+
+
+//=======================以下内容不再使用 ==================
+//开始同步
+function Start()
+{
+	if ( passwd == &amp;quot;&amp;quot; ) {
+		passwd = prompt ( &amp;quot;请输入超级用户的密码&amp;quot;,&amp;quot;&amp;quot; ) ;
+		if ( passwd == undefined ) {passwd =&amp;quot;&amp;quot;;return;}
+	}
+	var syt  = prompt ( &amp;quot;请输入同步的系统&amp;quot;,G_SYTID ) ;
+	if ( syt  == undefined ) {syt  =&amp;quot;&amp;quot;;return;}
+
+	var file = &amp;quot;&amp;quot;;
+	var file1 = &amp;quot;&amp;quot;;//子系统
+	// 找出源服务
+	for ( var i=1;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		
+		if ( _this.GetRowSelected(0,i) == &amp;quot;1&amp;quot;) {
+			var name  = _this.GetCellText(0,i,1);
+			var url = _this.GetCellText(0,i,2);
+			var mdlist = _this.GetCellText(0,i,5);
+			alert ( &amp;quot;开始下载&amp;quot;+name+&amp;quot;的中间件库&amp;quot; );
+			file = start_download(url,&amp;quot;xmldb/grddb/syt&amp;quot;+syt, &amp;quot;grddb.zip&amp;quot; );
+			alert ( &amp;quot;下载结束，文件是&amp;quot;+file+&amp;quot;,开始下载&amp;quot;+name+&amp;quot;的子系统定义&amp;quot; );
+			file1 = start_download(url, syt, &amp;quot;sytdb.zip&amp;quot; );
+			alert ( &amp;quot;下载结束，文件是&amp;quot;+file1+&amp;quot;,开始上传文件&amp;quot; );
+
+			break;
+		}
+	}
+	if ( i == _this.GetRowCount(0) ) {
+		alert ( &amp;quot;您没有选择来源服务器&amp;quot; );
+		return ;
+	}
+
+	for ( var r = 1;r&amp;lt; _this.GetRowCount(1);r++ ) {
+		if ( _this.GetRowSelected(1,r) == &amp;quot;1&amp;quot; ) {
+			var url = _this.GetCellText(1,r,2);
+			var name  = _this.GetCellText(1,r,1);
+
+			alert ( &amp;quot;开始上传&amp;quot;+name+&amp;quot;的中间件库&amp;quot; );
+
+			start_upload(url,file, &amp;quot;xmldb/grddb/syt&amp;quot;+syt );
+			alert ( &amp;quot;开始上传&amp;quot;+name+&amp;quot;的子系统定义&amp;quot; );
+			start_upload(url,file1, syt );
+		}
+	}
+	alert ( &amp;quot;操作结束！&amp;quot; );
+}
+//下载
+function UFDownLoad()
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if ( passwd == &amp;quot;&amp;quot; ) {
+		passwd = prompt ( &amp;quot;请输入超级用户的密码&amp;quot;,&amp;quot;&amp;quot; ) ;
+		if ( passwd == undefined ) {passwd =&amp;quot;&amp;quot;;return;}
+	}
+	for ( var i=1;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( _this.GetRowSelected(0,i) == &amp;quot;1&amp;quot; ) {
+			var name  = _this.GetCellText(0,i,1);
+			var url = _this.GetCellText(0,i,2);
+			var syt = _this.GetCellText(0,i,3);
+			var mdlist = _this.GetCellText(0,i,4);
+			file=&amp;quot;xmldb/grddb/syt&amp;quot;+syt;
+			location =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd;
+		}
+	}
+	_this.SetToolbarString(msg );	
+}
+//同步
+function UFUpload()
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if ( passwd == &amp;quot;&amp;quot; ) {
+		passwd = prompt ( &amp;quot;请输入超级用户的密码&amp;quot;,&amp;quot;&amp;quot; ) ;
+		if ( passwd == undefined ) {passwd =&amp;quot;&amp;quot;;return;}
+	}
+	_this.SetToolbarString(&amp;quot;正在下载&amp;quot;+name);
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	form.reset();
+	btn.click();
+	var file = btn.value;
+	
+	if(file)
+	{
+		for ( var i=1;i&amp;lt;_this.GetRowCount(0);i++ ) {
+			if ( _this.GetRowSelected(0,i) == &amp;quot;1&amp;quot; ) {
+				var name  = _this.GetCellText(0,i,1);
+				var url = _this.GetCellText(0,i,2);
+				var syt = _this.GetCellText(0,i,3);
+				var mdlist = _this.GetCellText(0,i,4);
+				var ret = &amp;quot;&amp;quot;;
+				_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+				    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+				    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+				    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+				    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+				    var activefile=&amp;quot;xmldb/grddb/syt&amp;quot;+syt;
+				    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,activefile,0);// 解压到哪个目录
+				    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+				    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+				    
+				    var ret = _this.SendHttpRequest();
+			}	
+		}
+	}
+	_this.SetToolbarString(&amp;quot;同步结束&amp;quot; );
+	alert ( &amp;quot;同步结束&amp;quot; );
+
+}
+
+
+function start_download( url, srcfile, deskfile ) {
+	_this.SetToolbarString(&amp;quot;下载&amp;quot;+srcfile+&amp;quot;到&amp;quot;+ deskfile );	
+	window.status = &amp;quot;下载&amp;quot;+srcfile+&amp;quot;到&amp;quot;+ deskfile;
+
+	var loca =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+srcfile+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd;
+	alert ( loca );
+	return _this.DownLoadFileToTrustedDir(loca , deskfile );
+}
+
+//同步
+function start_upload(url,srcfile, deskfile )
+{
+	    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+	    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+	    alert ( srcfile );
+	    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,srcfile,0);
+	    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,srcfile,1);
+	    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,deskfile ,0);// 解压到哪个目录
+	    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+	    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+	    return _this.SendHttpRequest();
+
+}
+
+
+//添加服务器
+function NEWSERVER()
+{
+	var id = prompt ( &amp;quot;请输入服务器地址&amp;quot;,&amp;quot;&amp;quot; ) ;
+	if ( id == undefined ) {return;}
+	var name = prompt ( &amp;quot;请输入服务器名称&amp;quot;,&amp;quot;&amp;quot; ) ;
+	if ( name == undefined ) {return;}
+	_sql.run(&amp;quot;NEWServer&amp;quot;,&amp;quot;id=&amp;quot;+id+&amp;quot;&amp;name=&amp;quot;+name ); 
+
+  	alert( &amp;quot;插入成功，点击刷新页面&amp;quot; );
+  	window.location.reload();
+  	//location.reload();
+}
+
+//添加WEB入口
+function NEWWeb()
+{
+	var id = prompt ( &amp;quot;请输入WEB入口地址&amp;quot;,&amp;quot;&amp;quot; ) ;
+	if ( id == undefined ) {return;}
+	var name = prompt ( &amp;quot;请输入WEB入口名称&amp;quot;,&amp;quot;&amp;quot; ) ;
+	if ( name == undefined ) {return;}
+	_sql.run(&amp;quot;NEWWeb&amp;quot;,&amp;quot;id=&amp;quot;	+id+&amp;quot;&amp;name=&amp;quot;+name ); 
+
+  	alert( &amp;quot;插入成功，点击刷新页面&amp;quot; );
+  	  window.location.reload();  
+}
+
+
+// 下载Layout
+function DownloadLayout(row)
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+	var name  = _this.GetCellText(0,row,1);
+	var url = _this.GetCellText(0,row,2);
+	var syt = _this.GetCellText(0,row,3);
+	var mdlist = _this.GetCellText(0,row,4);
+	file=&amp;quot;org/&amp;quot;+syt;//下载的中间件系统
+	var filematch = &amp;quot;&amp;quot;;
+	if ( mdlist!=&amp;quot;&amp;quot; ) 
+		filematch =mdlist+&amp;quot;.*&amp;quot;;
+//	location =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+	
+	var url1 =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+//	alert(url1);
+	var url2 =encodeURIComponent(url1);//对url编码进行编码%123,因为含有&amp;quot;/&amp;quot;等特殊字符
+	
+	//window.open(&amp;quot;show.sp?grdid=mwtoserver&amp;url=&amp;quot;+url2);
+	//2010 modify
+	
+	window.location= url1 ;
+}
+// upload Layout
+function UploadLayout(row)
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	window.status = &amp;quot;正在Upload&amp;quot;+name;
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	form.reset();
+	btn.click();
+	var file = btn.value;
+
+	if(file)
+	{
+		var i = row;
+		var name  = _this.GetCellText(0,i,1);
+		var url = _this.GetCellText(0,i,2);
+		var syt = _this.GetCellText(0,i,3);
+		var mdlist = _this.GetCellText(0,i,4);
+		var ret = &amp;quot;&amp;quot;;
+		_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+		//先自动登录
+		_this.OpenHttpRequest(url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd,&amp;quot;GET&amp;quot;);
+		_this.SendHttpRequest();
+
+		    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+		    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+		    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+		    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+		    var activefile=syt;
+		    var path = &amp;quot;org/&amp;quot;+syt;
+		    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,path ,0);// 解压到哪个目录
+		    
+		    var ret = _this.SendHttpRequest();
+		    alert(&amp;quot;返回值：&amp;quot;+ ret );
+
+	}
+	_this.SetToolbarString(&amp;quot;上传结束&amp;quot; );
+	//alert ( &amp;quot;上传结束&amp;quot; );
+
+}
+
+
+// 下载Webresource
+function DownloadWebresource(row)
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+	var name  = _this.GetCellText(0,row,1);
+	var url = _this.GetCellText(0,row,2);
+	var syt = _this.GetCellText(0,row,3);
+	var mdlist = _this.GetCellText(0,row,4);
+	file=&amp;quot;webresource/images/&amp;quot;+syt;//下载的中间件系统
+	var filematch = &amp;quot;&amp;quot;;
+	if ( mdlist!=&amp;quot;&amp;quot; ) 
+		filematch =mdlist+&amp;quot;.*&amp;quot;;
+//	location =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+	
+	var url1 =url + &amp;quot;ROOT_0/fileEditor.sp?action=subzipdown&amp;file=&amp;quot;+file+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd+&amp;quot;&amp;filematch=&amp;quot;+filematch;
+//	alert(url1);
+	var url2 =encodeURIComponent(url1);//对url编码进行编码%123,因为含有&amp;quot;/&amp;quot;等特殊字符
+	
+	//window.open(&amp;quot;show.sp?grdid=mwtoserver&amp;url=&amp;quot;+url2);
+	//2010 modify
+	
+	window.location= url1 ;
+}
+// upload Webresource
+function UploadWebresource(row)
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	window.status = &amp;quot;正在Upload&amp;quot;+name;
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	form.reset();
+	btn.click();
+	var file = btn.value;
+
+	if(file)
+	{
+		var i = row;
+		var name  = _this.GetCellText(0,i,1);
+		var url = _this.GetCellText(0,i,2);
+		var syt = _this.GetCellText(0,i,3);
+		var mdlist = _this.GetCellText(0,i,4);
+		var ret = &amp;quot;&amp;quot;;
+		_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+		//先自动登录
+		_this.OpenHttpRequest(url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd,&amp;quot;GET&amp;quot;);
+		_this.SendHttpRequest();
+
+		    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/fileEditor.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+		    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+		    _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;subzipup&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;file&amp;quot;,file,0);
+		    _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);
+		    var activefile=syt;
+		    var path = &amp;quot;webresource/images/&amp;quot;+syt;
+		    _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,path ,0);// 解压到哪个目录
+		    
+		    var ret = _this.SendHttpRequest();
+		    alert(&amp;quot;返回值：&amp;quot;+ ret );
+
+	}
+	_this.SetToolbarString(&amp;quot;上传结束&amp;quot; );
+	//alert ( &amp;quot;上传结束&amp;quot; );
+
+}
+
+
+// 下载SYSURL
+function DownloadSYSURL(row)
+{
+	var msg = &amp;quot;下载任务已发送\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+	var name  = _this.GetCellText(0,row,1);
+	var url = _this.GetCellText(0,row,2);
+	var syt = _this.GetCellText(0,row,3);
+	var url1 =url + &amp;quot;ROOT_0/x.mwtoserver.SYSURL.dsp?myorgid=&amp;quot;+syt +&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd;
+	var xml= _this.HttpCall(url1);
+	_this.SaveTextFile(&amp;quot;&amp;quot;,xml,&amp;quot;&amp;quot;);
+	
+}
+function UploadSYSURL(row)
+{
+	var msg = &amp;quot;操作结束\n&amp;quot;;
+	if(EntryPasswd()==false)return;
+
+	window.status = &amp;quot;正在Upload&amp;quot;+name;
+	// 取第一个
+	var syt = _this.GetCellText(0,1,4);
+	var mdlist = _this.GetCellText(0,1,5);
+	
+	var xml=_this.LoadTextFile(&amp;quot;&amp;quot;);
+
+	if ( xml==&amp;quot;&amp;quot;) return; 
+		var i = row;
+		var name  = _this.GetCellText(0,i,1);
+		var url = _this.GetCellText(0,i,2);
+		var syt = _this.GetCellText(0,i,3);
+		var mdlist = _this.GetCellText(0,i,4);
+		var ret = &amp;quot;&amp;quot;;
+		_this.SetToolbarString(&amp;quot;正在同步&amp;quot;+name);
+		//先自动登录
+		_this.OpenHttpRequest(url+&amp;quot;mydesktop.jsp?usrid=xlsgrid&amp;userpwd=&amp;quot;+passwd,&amp;quot;GET&amp;quot;);
+		_this.SendHttpRequest();
+
+		    _this.OpenHttpRequest(url +&amp;quot;ROOT_0/x.mwtoserver.uploadsysurl.osp&amp;quot;,&amp;quot;POST&amp;quot;);
+		    _this.AddHttpRequestParam(&amp;quot;usrid&amp;quot;,&amp;quot;xlsgrid&amp;quot;,0);
+		    _this.AddHttpRequestParam(&amp;quot;userpwd&amp;quot;,passwd,0);
+		    _this.AddHttpRequestParam(&amp;quot;myorgid&amp;quot;,syt ,0);
+		    _this.AddHttpRequestParam(&amp;quot;xml&amp;quot;,xml,0);
+		    var ret = _this.SendHttpRequest();
+		    alert(&amp;quot;返回值：&amp;quot;+ ret );
+
+
+	_this.SetToolbarString(&amp;quot;上传结束&amp;quot; );
+	//alert ( &amp;quot;上传结束&amp;quot; );
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  bodysb.insert(0,&amp;quot;&amp;lt;form id=\&amp;quot;myfilef\&amp;quot;&amp;gt;&amp;lt;input type=\&amp;quot;file\&amp;quot; id=\&amp;quot;myfile\&amp;quot; style=\&amp;quot;display:none\&amp;quot;&amp;gt;&amp;lt;/input&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;);
+}
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+function uploadsysurl()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var cnt = 0 ;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = new pubpack.EAXmlDS(xml);	// 客户端可以传入一个xml
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+		
+			sql = &amp;quot;insert into sysurl(org,name,note,url,icon,seqid,refid,id,layoutitem,supperid,target,icon2) &amp;quot;+
+				&amp;quot;values(&amp;apos;&amp;quot;+myorgid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;name&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;note&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot; +
+				ds.getStringAt(row,&amp;quot;url&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;icon&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;seqid&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;refid&amp;quot;)+&amp;quot;&amp;apos;,&amp;quot;+
+				&amp;quot;seq_sysurl.nextval,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;layoutitem&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;supperid&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;target&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;icon2&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;;
+			try{
+				cnt +=db.ExcecutSQL(sql);
+			}
+			catch (  e){
+				msg+=e.toString();
+			
+			}
+		}
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	msg =&amp;quot;操作了&amp;quot;+cnt+&amp;quot;笔记录&amp;quot;+msg;
+	return msg;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DS1</ID><NAME ></NAME><DATDSC >select name 同步到服务器,id 地址,&amp;apos;[%SYS_SYTID]&amp;apos; 所在系统,
+&amp;apos;&amp;apos; a1,&amp;apos;双击执行&amp;apos; a2,&amp;apos;双击执行&amp;apos; a3,&amp;apos;双击执行&amp;apos; a4,&amp;apos;双击执行&amp;apos; a5
+,&amp;apos;双击执行&amp;apos; a6, &amp;apos;双击执行&amp;apos; a7
+,&amp;apos;双击执行&amp;apos; a8, &amp;apos;双击执行&amp;apos; a9
+,&amp;apos;双击执行&amp;apos; a10, &amp;apos;双击执行&amp;apos; a11
+,&amp;apos;双击执行&amp;apos; a12, &amp;apos;双击执行&amp;apos; a13
+,&amp;apos;删除配置&amp;apos; 删除配置,guid 
+ from param where typ=&amp;apos;ENTERSERVER&amp;apos; order by name</DATDSC><C4 >DS1</C4><C5 >DS1</C5><C6 >DS1</C6><C7 >DS1</C7><C8 >DS1</C8><C9 >DS1</C9></ROW>
+<ROW num="1" ><ID >DS2</ID><NAME ></NAME><DATDSC >select name WEB入口,id 地址,&amp;apos;[%SYS_SYTID]&amp;apos; 中间件所在系统,
+&amp;apos;双击打开&amp;apos; 打开重载页面,&amp;apos;双击打开&amp;apos; 打开设计器
+,&amp;apos;双击打开&amp;apos; SQL编辑器 
+,&amp;apos;双击打开&amp;apos; 中间件目录 
+,&amp;apos;双击打开&amp;apos; WEB目录 
+,&amp;apos;删除配置&amp;apos; 删除配置,guid
+ from param where typ=&amp;apos;APPSERVER&amp;apos; order by name
+</DATDSC><C4 >DS2</C4><C5 ></C5><C6 ></C6><C7 >DS2</C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="2" ><ID >DS11</ID><NAME ></NAME><DATDSC >select name 同步到服务器,id 地址,&amp;apos;[%SYS_SYTID]&amp;apos; 所在系统 from param where typ=&amp;apos;ENTERSERVER&amp;apos; order by name</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="3" ><ID >NEWWeb</ID><NAME ></NAME><DATDSC >insert into param(typ,id,name) values(&amp;apos;APPSERVER&amp;apos;,&amp;apos;[%ID]&amp;apos;,&amp;apos;[%NAME]&amp;apos;)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >NEWWeb</C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="4" ><ID >NEWServer</ID><NAME ></NAME><DATDSC >insert into param(typ,id,name) values(&amp;apos;ENTERSERVER&amp;apos;,&amp;apos;[%ID]&amp;apos;,&amp;apos;[%NAME]&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >NEWServer</C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="5" ><ID >DelServer</ID><NAME ></NAME><DATDSC >delete from param where  guid=&amp;apos;[%GUID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >DelServer</C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="6" ><ID >DelWeb</ID><NAME ></NAME><DATDSC >delete from param where  guid=&amp;apos;[%GUID]&amp;apos;
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9></ROW>
+<ROW num="7" ><ID >SYSURL</ID><NAME ></NAME><DATDSC >
+select guid,org,name,note,url,icon,seqid,crtdat,refid,id,layoutitem,supperid,target,icon2
+from  sysurl where org=&amp;apos;[%myorgid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

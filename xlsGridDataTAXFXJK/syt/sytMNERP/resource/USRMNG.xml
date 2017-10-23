@@ -1,0 +1,38 @@
+<?xml version = '1.0' encoding="GBK"?>
+<ROWSET>
+<ROW>
+<URL>../xlsgrid/jsp/pages/chgpass.jsp?flag=USR&amp;amp;grdid=PASSWD&amp;amp;grdtyp=M&amp;amp;sytid=x</URL>
+<NAME>更改密码</NAME>
+<ICON>images/icon/icon6.JPG</ICON>
+</ROW>
+<ROW>
+<URL>../xlsgrid/jsp/pages/dbEdit.jsp?flag=SYSMOD&amp;grdid=SYSMODDBEDIT&amp;grdtyp=M&amp;sytid=x</URL>
+<NAME>系统模块定义</NAME>
+<ICON>images/icon/icon1.JPG</ICON>
+</ROW>
+<ROW>
+<URL>../xlsgrid/jsp/pages/dbEdit.jsp?flag=ROL&amp;grdid=ROLDBEDIT&amp;grdtyp=M&amp;sytid=x</URL>
+<NAME>角色定义</NAME>
+<ICON>images/icon/icon3.JPG</ICON>
+</ROW>
+<ROW>
+<URL>../xlsgrid/jsp/pages/relationSet.jsp?leftflag1=V_USR&amp;leftflag2=ROL&amp;relationflag=USRROL&amp;columns=USR,ROL&amp;filedsext=,usrrol.acc &amp;valuesext=,\\\'[%SYS_ACCID]\\\'</URL>
+<NAME>用户角色分配</NAME>
+<ICON>images/icon/icon4.JPG</ICON>
+</ROW>
+<ROW>
+<URL>../xlsgrid/jsp/pages/relationSet.jsp?leftflag1=ROL&amp;leftflag2=V_USR&amp;relationflag=USRROL&amp;columns=ROL,USR&amp;filedsext=,usrrol.acc &amp;valuesext=,\\\'[%SYS_ACCID]\\\'</URL>
+<NAME>角色用户分配</NAME>
+<ICON>images/icon/icon4.JPG</ICON>
+</ROW>
+<ROW>
+<URL>../xlsgrid/jsp/pages/relationSet.jsp?leftflag1=ROL&amp;leftflag2=SYSMOD&amp;relationflag=ROLMOD&amp;columns=ROL,SYSMOD</URL>
+<NAME>角色权限分配</NAME>
+<ICON>images/icon/icon5.JPG</ICON>
+</ROW>
+<ROW>
+<URL>../xlsgrid/jsp/pages/relationSet.jsp?leftflag1=SYSMOD&amp;leftflag2=ROL&amp;relationflag=ROLMOD&amp;columns=SYSMOD,ROL</URL>
+<NAME>角色权限分配</NAME>
+<ICON>images/icon/icon5.JPG</ICON>
+</ROW>
+</ROWSET>

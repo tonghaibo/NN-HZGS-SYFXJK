@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_CenturyMart_test</MWID><NAME >世纪联华抓单测试</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_CenturyMart_test.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	var sql = &amp;quot;select  id, name from v_kaloc &amp;quot;;
+ // 	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,1,2,createListValues(sql));
+  	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);
+  	
+  	try
+  	{
+  		alert(msg);
+  	}
+  	catch(e)
+  	{
+  		alert(e);
+  	}
+  	_this.SaveTextFile( &amp;quot;d:/CenturyMart.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+var httpcall = new webget.HttpCall();
+var mutil = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var text = new JavaPackage(&amp;quot;java.text&amp;quot;);
+var m_bildtl = new pubpack.EADS();	
+var m_dtlrow = -1;
+
+function start()
+{
+	return getOrderStr(&amp;quot;JQPX&amp;quot;,&amp;quot;2012-11-15&amp;quot;,&amp;quot;0010&amp;quot;,&amp;quot;LH17102001&amp;quot;,&amp;quot;6969&amp;quot;,&amp;quot;1&amp;quot;,&amp;quot;utf-8&amp;quot;,&amp;quot;138516&amp;quot;,&amp;quot;2012-11-15&amp;quot;);
+}
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,unicodes,rock_password,date)
+{
+	/**
+	 *  登陆的时候，会使用host_url_new
+	 */
+	var host_url_new = &amp;quot;http://b2b.chinalh.com/&amp;quot;;
+	/**
+	 *  获取左边的那颗树形结构（订货单/送货单/收货报告/进货红冲单/退货通知单/价格补偿协议单）的前缀是host_tree_url
+	 *  http://edi.chinalh.com/lhscm/framework/mainform/navui/leftmenu.do?id=2b877ed7c1eb4d1c95fa86c827c0f99f
+	 */
+	var host_tree_url = &amp;quot;http://edi.chinalh.com&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+  	var message = &amp;quot;&amp;quot;;
+  	var param = &amp;quot;&amp;quot;;
+  	if(unicodes == &amp;quot;&amp;quot;)
+  		unicodes = &amp;quot;UTF-8&amp;quot;;
+	var code = unicodes;
+	
+	try{
+		ret = httpcall.Get(host_url_new+&amp;quot;login/&amp;quot;,code);
+		
+		param = &amp;quot;username=&amp;quot;+userid+&amp;quot;&amp;password=&amp;quot;+passwd+&amp;quot;&amp;checkText=&amp;checkCode=&amp;token=&amp;sms=&amp;quot;+rock_password;
+		ret = httpcall.Post(host_url_new+&amp;quot;login.do&amp;quot;,param,code);
+
+		httpcall.FollowRedirects=&amp;quot;close&amp;quot;;
+		var n=0;
+		while ( ret.length()==0 &amp;&amp; httpcall.m_statusCode!=200 )
+		{
+			ret = httpcall.Get(httpcall.m_newURL, code);
+			n++;
+			if( n&amp;gt;10) break;
+		}
+		var loc = ret.indexOf( &amp;quot;href=&amp;apos;&amp;quot; );
+		var loc1 = ret.indexOf( &amp;quot;&amp;apos;;&amp;lt;/&amp;quot;,loc+1 );
+		if( loc&amp;lt;0 ||loc1&amp;lt;0)		throw new Exception (&amp;quot;格式不对&amp;quot;+ret );
+		ret = httpcall.Get( ret.substring(loc+6,loc1), code);
+		
+		n=0;
+		while ( ret.length()==0 &amp;&amp; httpcall.m_statusCode!=200 )
+		{
+			ret = httpcall.Get(httpcall.m_newURL, code);
+			n++;
+			if( n&amp;gt;10) break;
+		}
+		var str = &amp;quot;document.getElementById(\&amp;quot;iframe\&amp;quot;).src=\&amp;quot;&amp;quot;;
+		loc = ret.indexOf( str );
+		if( loc&amp;lt;0 )		throw new Exception (&amp;quot;格式不对&amp;quot;+ret );
+		ret = ret.substring(loc+str.length());
+		loc1 = ret.indexOf( &amp;quot;?&amp;quot; );
+		if( loc1&amp;lt;0)		throw new Exception (&amp;quot;格式不对&amp;quot;+ret );
+		
+		ret = httpcall.Get( ret.substring(0,loc1+1)+&amp;quot;height=480&amp;width=1119&amp;quot;, code);
+		/**
+		 *  获取左边的那颗树形结构（订货单/送货单/收货报告/进货红冲单/退货通知单/价格补偿协议单）
+		 *  http://edi.chinalh.com/lhscm/framework/mainform/navui/leftmenu.do?id=2b877ed7c1eb4d1c95fa86c827c0f99f
+		 */
+		ret = httpcall.Get(host_tree_url+ret.substring(ret.indexOf(&amp;quot;_t1=\&amp;quot;&amp;quot;)+(&amp;quot;_t1=\&amp;quot;&amp;quot;).length(),ret.indexOf(&amp;quot;\&amp;quot; _t2=\&amp;quot;\&amp;quot;&amp;quot;)),code);
+		var ret_bak = ret;
+		/**
+		 *  获取订货单的连接
+		 *  http://edi.chinalh.com/lhscm/wfquery/Render.do?moduleCode=c1f83f8695cd4d3a845ea1aab2587a95&amp;template=one&amp;url=/cm/business/form/po/po.do
+		 */
+		ret = httpcall.Get(host_tree_url+ret.substring(ret.indexOf(&amp;quot;href=\&amp;quot;javascript:loadPage(false,null,&amp;apos;&amp;quot;)+(&amp;quot;href=\&amp;quot;javascript:loadPage(false,null,&amp;apos;&amp;quot;).length(),ret.indexOf(&amp;quot;&amp;apos;,&amp;apos;订货单&amp;apos;,&amp;apos;FORM&amp;apos;&amp;quot;)),code);
+		param = &amp;quot;accid=&amp;bgid=0002&amp;datebegin=&amp;quot;+date+&amp;quot;&amp;dateend=&amp;quot;+date+&amp;quot;&amp;datetype=1&amp;deptid=&amp;findnew=&amp;limit=100&amp;orderby=bg_org_id&amp;orgid=&amp;pono=&amp;status=-1&amp;quot;;
+		ret = httpcall.Post(host_tree_url+&amp;quot;/lhscm/cm/business/form/po/po.do?search=true&amp;quot;,param,code);
+		
+		//解析成ds格式
+		SoOrdDs(&amp;quot;NR&amp;quot;,ret,host_tree_url,userid,date,code,kaid,deptid);
+
+		/**
+		 *  获取退货货单的连接
+		 *  http://edi.chinalh.com/lhscm/wfquery/Render.do?moduleCode=49f4d68f301f475892ac14ffd02f5bb0&amp;template=one&amp;jspPath=/cm/business/form/returns/returns.do
+		 */
+		 ret_bak = ret_bak.substring(ret_bak.indexOf(&amp;quot;&amp;lt;span class=\&amp;quot;li_span\&amp;quot;&amp;gt;进货红冲单&amp;lt;/span&amp;gt;&amp;quot;));
+		 ret = httpcall.Get(host_tree_url+ret_bak.substring(ret_bak.indexOf(&amp;quot;href=\&amp;quot;javascript:loadPage(false,null,&amp;apos;&amp;quot;)+(&amp;quot;href=\&amp;quot;javascript:loadPage(false,null,&amp;apos;&amp;quot;).length(),ret_bak.indexOf(&amp;quot;&amp;apos;,&amp;apos;退货通知单&amp;apos;,&amp;apos;FORM&amp;apos;&amp;quot;)),code);
+		
+		param = &amp;quot;accid=&amp;bgid=0002&amp;datebegin=&amp;quot;+date+&amp;quot;&amp;dateend=&amp;quot;+date+&amp;quot;&amp;datetype=2&amp;deptid=&amp;findnew=&amp;limit=20&amp;orderby=bg_org_id&amp;orgid=&amp;replyer=&amp;returnno&amp;returnorg=&amp;status=-1&amp;quot;;
+		ret = httpcall.Post(host_tree_url+&amp;quot;/lhscm/cm/business/form/returns/returns.do?search=true&amp;quot;,param,code);
+		//解析成ds格式
+		SrOrdDs(&amp;quot;R&amp;quot;,ret,host_tree_url,userid,date,code,kaid,deptid);
+		
+		/**  将js解析成如下的字符串格式
+		 *   SRFLG~~~USERID~~~DEPTID~~~KAID~~~BILID~~~ECORPNAM~~~ECORPID~~~ITMCLASS~~~ORDID~~~DAT~~~ARRDAT~~~TEL~~~FAX~~~SEQID~~~EITMID~~~CODE~~~SPEC~~~EITMNAM~~~QTYFLG~~~UNTNUM~~~QTY~~~ZPQTY~~~EPRICE~~~CORPADDR~~~NOTE~~~NULL
+		 */
+		 
+		return HtmlParser.parserDsToString(m_bildtl,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+
+	}
+	catch(e)
+	{ 
+		throw new Exception(e);  
+	}
+}
+
+var SoPageSize = 100;//目前一页显示的数据是100条(销售订单)
+var SoRowTotal = 0;//获取订单的所有数据记录条数(销售订单)
+var SoPagePerSize = 0;//获取总共显示多少页（销售订单）
+
+//获取销售订单具体的明细数据
+function SoOrdDs(typ,ret,host_url,userid,date,code,kaid,deptid)
+{
+	/**  以下是获取订单信息的列表格式
+	 *      {&amp;quot;count&amp;quot;:&amp;quot;2&amp;quot;,&amp;quot;rows&amp;quot;:[
+	 *	{&amp;quot;created_date&amp;quot;:&amp;quot;2012-11-14 15:34:35&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;未收货&amp;quot;,&amp;quot;rcvno&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;needfax&amp;quot;:&amp;quot;否&amp;quot;,&amp;quot;pono&amp;quot;:&amp;quot;5015201211140014&amp;quot;,&amp;quot;sum&amp;quot;:&amp;quot;1&amp;quot;,&amp;quot;reply_delivery_date&amp;quot;:&amp;quot;2012-11-17&amp;quot;,&amp;quot;faxtime&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;rcvid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;bg_item_count&amp;quot;:&amp;quot;1&amp;quot;,
+	 *	  &amp;quot;bg_net_amt&amp;quot;:&amp;quot;462.8202&amp;quot;,&amp;quot;id&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;requestdate&amp;quot;:&amp;quot;2012-11-17&amp;quot;,&amp;quot;amt&amp;quot;:&amp;quot;541.4996&amp;quot;,&amp;quot;bgid&amp;quot;:&amp;quot;0002(世纪联华)&amp;quot;,&amp;quot;billdate&amp;quot;:&amp;quot;2012-11-14&amp;quot;,&amp;quot;deptid&amp;quot;:&amp;quot;10(饮料)&amp;quot;,&amp;quot;orgid&amp;quot;:&amp;quot;5015(上海成山路店)&amp;quot;,&amp;quot;lastreferdate&amp;quot;:&amp;quot;2012-11-15 10:28:56&amp;quot;,&amp;quot;sstatus&amp;quot;:&amp;quot;1&amp;quot;,&amp;quot;replydate&amp;quot;:&amp;quot;&amp;quot;},
+	 *	{&amp;quot;created_date&amp;quot;:&amp;quot;2012-11-14 15:04:42&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;未收货&amp;quot;,&amp;quot;rcvno&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;needfax&amp;quot;:&amp;quot;否&amp;quot;,&amp;quot;pono&amp;quot;:&amp;quot;5901201211140023&amp;quot;,&amp;quot;sum&amp;quot;:&amp;quot;1&amp;quot;,&amp;quot;reply_delivery_date&amp;quot;:&amp;quot;2012-11-17&amp;quot;,&amp;quot;faxtime&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;rcvid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;bg_item_count&amp;quot;:&amp;quot;1&amp;quot;,
+	 *	 &amp;quot;bg_net_amt&amp;quot;:&amp;quot;462.8202&amp;quot;,&amp;quot;id&amp;quot;:&amp;quot;CE6F43157B3602B4E043C009010F02B4&amp;quot;,&amp;quot;requestdate&amp;quot;:&amp;quot;2012-11-17&amp;quot;,&amp;quot;amt&amp;quot;:&amp;quot;541.4996&amp;quot;,&amp;quot;bgid&amp;quot;:&amp;quot;0002(世纪联华)&amp;quot;,&amp;quot;billdate&amp;quot;:&amp;quot;2012-11-14&amp;quot;,&amp;quot;deptid&amp;quot;:&amp;quot;10(饮料)&amp;quot;,&amp;quot;orgid&amp;quot;:&amp;quot;5901(上海顾村店)&amp;quot;,&amp;quot;lastreferdate&amp;quot;:&amp;quot;2012-11-15 10:28:35&amp;quot;,&amp;quot;sstatus&amp;quot;:&amp;quot;1&amp;quot;,&amp;quot;replydate&amp;quot;:&amp;quot;&amp;quot;}]}
+	 */
+	//将以上的格式，用{进行分组，一个&amp;quot;{&amp;quot;代表本次订单的总记录数，其余的均代表每个订单的列表
+	var subret = EAfunc.Replace(EAfunc.Replace(ret.substring(1,ret.length()-2),&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;&amp;quot;),&amp;quot;{&amp;quot;,&amp;quot;#&amp;quot;);
+	var splitflg = &amp;quot;#&amp;quot;;
+	var strsplits = subret.split(splitflg );
+	//获取订单的所有数据记录条数
+	SoRowTotal = matchMap(strsplits[0].split(&amp;quot;,&amp;quot;)[0]).get(&amp;quot;count&amp;quot;);//count:2   
+	if(SoRowTotal%SoPageSize == 0)
+		SoPagePerSize = SoRowTotal/SoPageSize;
+	else
+		SoPagePerSize = SoRowTotal/SoPageSize+1;
+	
+	for(var row = 1;row &amp;lt;= SoPagePerSize ;row ++)
+	{
+		ret = EAfunc.Replace(EAfunc.Replace(ret.substring(1,ret.length()-2),&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;&amp;quot;),&amp;quot;{&amp;quot;,&amp;quot;#&amp;quot;);
+		var strsplit = ret.split(&amp;quot;#&amp;quot;);
+		for(var r = 1;r &amp;lt; strsplit.length();r ++)
+		{
+			var map = matchMap(strsplit[r].substring(0,strsplit[r].length()-2));
+			/**
+			 *	获取具体的商品信息
+			 *      url = http://edi.chinalh.com/lhscm/cm/business/form/po/poreportview.do?headerid=CE10D50F5AAC026EE043C009010F026E 
+			 */
+			/**  具体订单的商品信息  ds格式
+			 *	&amp;lt;?xml version = &amp;quot;1.0&amp;quot; encoding=&amp;quot;GBK&amp;quot;?&amp;gt; 
+			 * 	 &amp;lt;ROWSET&amp;gt; 	
+			 *	  &amp;lt;ROW num=&amp;quot;0&amp;quot; &amp;gt; 		
+			 *	  	&amp;lt;_序号&amp;gt;1&amp;lt;/_序号&amp;gt;  		&amp;lt;_条码&amp;gt;6901798138798&amp;lt;/_条码&amp;gt; 	&amp;lt;_商品编号&amp;gt;362495&amp;lt;/_商品编号&amp;gt; 	    	&amp;lt;_子码&amp;gt;001&amp;lt;/_子码&amp;gt; 			&amp;lt;_商品名称&amp;gt;52度泸州老窖红瓷头曲白酒&amp;lt;/_商品名称&amp;gt; 		
+			 *		&amp;lt;_型号&amp;gt;&amp;lt;/_型号&amp;gt;   		&amp;lt;_规格&amp;gt;500ml&amp;lt;/_规格&amp;gt; 		&amp;lt;_包装&amp;gt;6&amp;lt;/_包装&amp;gt; 			&amp;lt;_箱数&amp;gt;1&amp;lt;/_箱数&amp;gt; 			&amp;lt;_单位&amp;gt;箱&amp;lt;/_单位&amp;gt; 		
+			 *	  	&amp;lt;_零数&amp;gt;0&amp;lt;/_零数&amp;gt;  		&amp;lt;_数量&amp;gt;6&amp;lt;/_数量&amp;gt; 		&amp;lt;_单位__单位&amp;gt;盒&amp;lt;/_单位__单位&amp;gt; 		&amp;lt;_赠品&amp;gt;0&amp;lt;/_赠品&amp;gt; 			&amp;lt;_税率&amp;gt;17%&amp;lt;/_税率&amp;gt; 		
+			 *	  	&amp;lt;_未税单价&amp;gt;77.1367&amp;lt;/_未税单价&amp;gt; 	&amp;lt;_含税单价&amp;gt;90.2499&amp;lt;/_含税单价&amp;gt; 	&amp;lt;_未税金额&amp;gt;462.8202&amp;lt;/_未税金额&amp;gt; 	&amp;lt;_含税金额&amp;gt;541.4996&amp;lt;/_含税金额&amp;gt; 	&amp;lt;_备注&amp;gt;总部促销&amp;lt;/_备注&amp;gt; 		
+			 *	  	&amp;lt;_厂商商品编号&amp;gt;&amp;lt;/_厂商商品编号&amp;gt; 
+			 *	  &amp;lt;/ROW&amp;gt; &amp;lt;/ROWSET&amp;gt;
+			 */
+			var detailurl = host_url+&amp;quot;/lhscm/cm/business/form/po/poreportview.do?headerid=&amp;quot;+map.get(&amp;quot;id&amp;quot;);
+			var detailret = httpcall.Get(detailurl,code);
+			var nodelist = HtmlParser.parserHtml(detailret,code); 
+			var tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;); 	
+			var ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;7&amp;quot;),&amp;quot;O&amp;quot;);
+			if(ds.getRowCount() &amp;gt; 0)
+			{
+				for(var r = 0;r &amp;lt; ds.getRowCount() ;r ++)
+				{
+					m_dtlrow = m_bildtl.AddNullRow(m_bildtl.getRowCount()-1);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SRFLG&amp;quot;,typ);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;USERID&amp;quot;,userid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;DEPTID&amp;quot;,deptid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;KAID&amp;quot;,kaid);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;BILID&amp;quot;,map.get(&amp;quot;pono&amp;quot;));//订单号
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ECORPNAM&amp;quot;,map.get(&amp;quot;orgid&amp;quot;).substring(map.get(&amp;quot;orgid&amp;quot;).indexOf(&amp;quot;(&amp;quot;)+1,map.get(&amp;quot;orgid&amp;quot;).indexOf(&amp;quot;)&amp;quot;)));//对方客户名称
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ECORPID&amp;quot;,map.get(&amp;quot;orgid&amp;quot;).substring(0,map.get(&amp;quot;orgid&amp;quot;).indexOf(&amp;quot;(&amp;quot;)));//对方客户编号
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMCLASS&amp;quot;,map.get(&amp;quot;deptid&amp;quot;));//10(饮料)
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ORDID&amp;quot;,map.get(&amp;quot;pono&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;DAT&amp;quot;,FormatDataString(map.get(&amp;quot;billdate&amp;quot;)));//订单日期
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ARRDAT&amp;quot;,FormatDataString(map.get(&amp;quot;requestdate&amp;quot;)));//到货日期
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;TEL&amp;quot;,&amp;quot;&amp;quot;);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;FAX&amp;quot;,&amp;quot;&amp;quot;);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SEQID&amp;quot;,ds.getStringAt(r,&amp;quot;_序号&amp;quot;));//序列号
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;EITMID&amp;quot;,ds.getStringAt(r,&amp;quot;_商品编号&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;CODE&amp;quot;,ds.getStringAt(r,&amp;quot;_条码&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;SPEC&amp;quot;,ds.getStringAt(r,&amp;quot;_规格&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;EITMNAM&amp;quot;,ds.getStringAt(r,&amp;quot;_商品名称&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;,ds.getStringAt(r,&amp;quot;_包装&amp;quot;));					
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTYFLG&amp;quot;,&amp;quot;&amp;quot;);
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTY&amp;quot;,ds.getStringAt(r,&amp;quot;_数量&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ZPQTY&amp;quot;,ds.getStringAt(r,&amp;quot;_赠品&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;EPRICE&amp;quot;,ds.getStringAt(r,&amp;quot;_未税单价&amp;quot;));
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPADDR&amp;quot;,&amp;quot;&amp;quot;);//送货地址
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;NOTE&amp;quot;,ds.getStringAt(r,&amp;quot;_备注&amp;quot;));	
+					m_bildtl.setValueAt(m_dtlrow,&amp;quot;ORDCONTENT&amp;quot;,&amp;quot;&amp;quot;);				
+				}
+			}
+		}
+		var param = &amp;quot;accid=&amp;bgid=0002&amp;datebegin=&amp;quot;+date+&amp;quot;&amp;dateend=&amp;quot;+date+&amp;quot;&amp;datetype=1&amp;deptid=&amp;findnew=&amp;limit=100&amp;orderby=bg_org_id&amp;orgid=&amp;pono=&amp;status=-1&amp;start=&amp;quot;+row*SoPageSize;
+		ret = httpcall.Post(host_url+&amp;quot;/lhscm/cm/business/form/po/po.do?search=true&amp;quot;,param,code);
+	}
+}
+
+var SrPageSize = 20;//目前一页显示的数据是20条(退货订单)
+var SrRowTotal = 0;//获取订单的所有数据记录条数(退货订单)
+var SrPagePerSize = 0;//获取总共显示多少页（退货订单）
+
+//获取销售订单具体的明细数据
+function SrOrdDs(typ,ret,host_url,userid,date,code,kaid,deptid)
+{
+	/**  以下是获取订单信息的列表格式
+	 *      {&amp;quot;count&amp;quot;:&amp;quot;3&amp;quot;,&amp;quot;rows&amp;quot;:[
+	 *	{&amp;quot;marketcode&amp;quot;:&amp;quot;6783&amp;quot;,&amp;quot;replyby&amp;quot;:&amp;quot;LH17102001&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;不同意&amp;quot;,&amp;quot;rcvno&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;needfax&amp;quot;:&amp;quot;否&amp;quot;,&amp;quot;faxtime&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;rcvid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;id&amp;quot;:&amp;quot;CD2E271E7653024EE043C009010F024E&amp;quot;,&amp;quot;orgitemid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;bgid&amp;quot;:&amp;quot;0002(世纪联华)&amp;quot;,&amp;quot;deptid&amp;quot;:&amp;quot;10(饮料)&amp;quot;,&amp;quot;orgid&amp;quot;:&amp;quot;6783(上海奉城店)&amp;quot;,&amp;quot;returnno&amp;quot;:&amp;quot;6783201210290278&amp;quot;,&amp;quot;recall&amp;quot;:&amp;quot;不同意&amp;quot;,&amp;quot;lastreferdate&amp;quot;:&amp;quot;2012-10-30 09:57:10&amp;quot;,&amp;quot;returndate&amp;quot;:&amp;quot;2012-10-29&amp;quot;,&amp;quot;sstatus&amp;quot;:&amp;quot;B&amp;quot;,&amp;quot;enddate&amp;quot;:&amp;quot;2012-11-01 20:00&amp;quot;,&amp;quot;replydate&amp;quot;:&amp;quot;2012-10-30&amp;quot;},
+	 *	{&amp;quot;marketcode&amp;quot;:&amp;quot;6783&amp;quot;,&amp;quot;replyby&amp;quot;:&amp;quot;LH17102001&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;不同意&amp;quot;,&amp;quot;rcvno&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;needfax&amp;quot;:&amp;quot;否&amp;quot;,&amp;quot;faxtime&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;rcvid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;id&amp;quot;:&amp;quot;CD2E271E1C2C024EE043C009010F024E&amp;quot;,&amp;quot;orgitemid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;bgid&amp;quot;:&amp;quot;0002(世纪联华)&amp;quot;,&amp;quot;deptid&amp;quot;:&amp;quot;10(饮料)&amp;quot;,&amp;quot;orgid&amp;quot;:&amp;quot;6783(上海奉城店)&amp;quot;,&amp;quot;returnno&amp;quot;:&amp;quot;6783201210290260&amp;quot;,&amp;quot;recall&amp;quot;:&amp;quot;不同意&amp;quot;,&amp;quot;lastreferdate&amp;quot;:&amp;quot;2012-10-30 09:58:02&amp;quot;,&amp;quot;returndate&amp;quot;:&amp;quot;2012-10-29&amp;quot;,&amp;quot;sstatus&amp;quot;:&amp;quot;B&amp;quot;,&amp;quot;enddate&amp;quot;:&amp;quot;2012-11-01 20:00&amp;quot;,&amp;quot;replydate&amp;quot;:&amp;quot;2012-10-30&amp;quot;},
+	 *	{&amp;quot;marketcode&amp;quot;:&amp;quot;6783&amp;quot;,&amp;quot;replyby&amp;quot;:&amp;quot;LH17102001&amp;quot;,&amp;quot;status&amp;quot;:&amp;quot;不同意&amp;quot;,&amp;quot;rcvno&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;needfax&amp;quot;:&amp;quot;否&amp;quot;,&amp;quot;faxtime&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;rcvid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;id&amp;quot;:&amp;quot;CD2E271E1C36024EE043C009010F024E&amp;quot;,&amp;quot;orgitemid&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;bgid&amp;quot;:&amp;quot;0002(世纪联华)&amp;quot;,&amp;quot;deptid&amp;quot;:&amp;quot;10(饮料)&amp;quot;,&amp;quot;orgid&amp;quot;:&amp;quot;6783(上海奉城店)&amp;quot;,&amp;quot;returnno&amp;quot;:&amp;quot;6783201210290265&amp;quot;,&amp;quot;recall&amp;quot;:&amp;quot;不同意&amp;quot;,&amp;quot;lastreferdate&amp;quot;:&amp;quot;2012-10-30 09:58:25&amp;quot;,&amp;quot;returndate&amp;quot;:&amp;quot;2012-10-29&amp;quot;,&amp;quot;sstatus&amp;quot;:&amp;quot;B&amp;quot;,&amp;quot;enddate&amp;quot;:&amp;quot;2012-11-01 20:00&amp;quot;,&amp;quot;replydate&amp;quot;:&amp;quot;2012-10-30&amp;quot;}]} 
+	 */
+	//将以上的格式，用{进行分组，一个&amp;quot;{&amp;quot;代表本次订单的总记录数，其余的均代表每个订单的列表
+	var subret = EAfunc.Replace(EAfunc.Replace(ret.substring(1,ret.length()-2),&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;&amp;quot;),&amp;quot;{&amp;quot;,&amp;quot;#&amp;quot;);
+	var splitflg = &amp;quot;#&amp;quot;;
+	var strsplit = subret.split(splitflg );
+	//获取订单的所有数据记录条数
+	SrRowTotal = matchMap(strsplit[0].split(&amp;quot;,&amp;quot;)[0]).get(&amp;quot;count&amp;quot;);//count:2   
+	if(SrRowTotal%SrPageSize == 0)
+		SrPagePerSize = SrRowTotal/SrPageSize;
+	else
+		SrPagePerSize = SrRowTotal/SrPageSize+1;
+		
+	for(var row = 1;row &amp;lt;= SrPagePerSize ;row ++)
+	{
+		ret = EAfunc.Replace(EAfunc.Replace(ret.substring(1,ret.length()-2),&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;&amp;quot;),&amp;quot;{&amp;quot;,&amp;quot;#&amp;quot;);
+		strsplit = ret.split(&amp;quot;#&amp;quot;);
+		for(var r = 1;r &amp;lt; strsplit.length();r ++)
+		{
+			var map = matchMap(strsplit[r].substring(0,strsplit[r].length()-2));
+			/**
+			 *	获取具体的商品信息
+			 *      url = 	http://edi.chinalh.com/lhscm/cm/business/form/returns/returnsedit.do?detail=true&amp;headerid=CD402CB717D50224E043C009010F0224
+			 */
+			 
+			var detailurl = host_url+&amp;quot;/lhscm/cm/business/form/returns/returnsedit.do?detail=true&amp;headerid=&amp;quot;+map.get(&amp;quot;id&amp;quot;);
+			var detailret = httpcall.Get(detailurl,code);
+			var detailsubret = EAfunc.Replace(EAfunc.Replace(detailret.substring(1,detailret.length()-2),&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;&amp;quot;),&amp;quot;{&amp;quot;,&amp;quot;#&amp;quot;);
+			var detailstrsplits = detailsubret.split(&amp;quot;#&amp;quot;);
+			for(var r = 1;r &amp;lt; detailstrsplits.length();r ++)
+			{
+				var detailmap = matchMap(detailstrsplits[r].substring(0,detailstrsplits[r].length()-2));
+				m_dtlrow = m_bildtl.AddNullRow(m_bildtl.getRowCount()-1);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;SRFLG&amp;quot;,typ);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;USERID&amp;quot;,userid);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;DEPTID&amp;quot;,deptid);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;KAID&amp;quot;,kaid);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;BILID&amp;quot;,map.get(&amp;quot;returnno&amp;quot;));//订单号
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ECORPNAM&amp;quot;,map.get(&amp;quot;orgid&amp;quot;).substring(map.get(&amp;quot;orgid&amp;quot;).indexOf(&amp;quot;(&amp;quot;)+1,map.get(&amp;quot;orgid&amp;quot;).indexOf(&amp;quot;)&amp;quot;)));//对方客户名称
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ECORPID&amp;quot;,map.get(&amp;quot;orgid&amp;quot;).substring(0,map.get(&amp;quot;orgid&amp;quot;).indexOf(&amp;quot;(&amp;quot;)));//对方客户编号
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ITMCLASS&amp;quot;,map.get(&amp;quot;deptid&amp;quot;));//10(饮料)
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ORDID&amp;quot;,map.get(&amp;quot;returnno&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;DAT&amp;quot;,FormatDataString(map.get(&amp;quot;returndate&amp;quot;)));//订单日期
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ARRDAT&amp;quot;,FormatDataString(map.get(&amp;quot;enddate&amp;quot;)));//退货回复截止日期表示到货日期
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;TEL&amp;quot;,&amp;quot;&amp;quot;);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;FAX&amp;quot;,&amp;quot;&amp;quot;);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;SEQID&amp;quot;,detailmap.get(&amp;quot;seq&amp;quot;));//序列号
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;EITMID&amp;quot;,detailmap.get(&amp;quot;itemid&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;CODE&amp;quot;,detailmap.get(&amp;quot;barcode&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;SPEC&amp;quot;,detailmap.get(&amp;quot;capacity&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;EITMNAM&amp;quot;,detailmap.get(&amp;quot;itemname&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;UNTNUM&amp;quot;,detailmap.get(&amp;quot;packsize&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTYFLG&amp;quot;,&amp;quot;&amp;quot;);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;QTY&amp;quot;,Math.abs(detailmap.get(&amp;quot;qty&amp;quot;)));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ZPQTY&amp;quot;,0);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;EPRICE&amp;quot;,detailmap.get(&amp;quot;netprice&amp;quot;));
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;CORPADDR&amp;quot;,&amp;quot;&amp;quot;);//送货地址
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;NOTE&amp;quot;,&amp;quot;&amp;quot;);
+				m_bildtl.setValueAt(m_dtlrow,&amp;quot;ORDCONTENT&amp;quot;,&amp;quot;&amp;quot;);	
+			}
+		}
+		var param = &amp;quot;accid=&amp;bgid=0002&amp;datebegin=&amp;quot;+date+&amp;quot;&amp;dateend=&amp;quot;+date+&amp;quot;&amp;datetype=2&amp;deptid=&amp;findnew=&amp;limit=20&amp;orderby=bg_org_id&amp;orgid=&amp;replyer=&amp;returnno&amp;returnorg=&amp;status=-1&amp;start=&amp;quot;+row*SrPageSize;
+		ret = httpcall.Post(host_url+&amp;quot;/lhscm/cm/business/form/returns/returns.do?search=true&amp;quot;,param,code);
+	}
+}
+
+/* 将如下的数据通过key-value，放入到map中   如：status:未收货   map.put(&amp;quot;status&amp;quot;,&amp;quot;未收货&amp;quot;)
+ * created_date:2012-11-14 15:34:35, status:未收货,  rcvno:,  needfax:否, pono:5015201211140014,  sum:1,  reply_delivery_date:2012-11-17, faxtime:, 
+ * rcvid:,  bg_item_count:1, bg_net_amt:462.8202,  id:CE10D50F5AAC026EE043C009010F026E,  requestdate:2012-11-17, amt:541.4996,  bgid:0002(世纪联华), 
+ * billdate:2012-11-14,  deptid:10(饮料),  orgid:5015(上海成山路店),  lastreferdate:2012-11-15 10:28:56,  sstatus:1,  replydate:
+ */
+function matchMap(str)
+{
+	var map = null;
+	try
+	{
+		map = new mutil.HashMap();
+		var splitflg = &amp;quot;,&amp;quot;;
+		var strsplit = str.split(splitflg);
+		for(var r = 0;r &amp;lt; strsplit.length();r ++)
+		{
+			var str_array = strsplit[r].split(&amp;quot;:&amp;quot;);
+			if(str_array.length() == 1)
+				map.put(str_array[0],&amp;quot;&amp;quot;);
+			else
+				map.put(str_array[0],str_array[1].split(&amp;quot; &amp;quot;)[0]);
+		}
+		return map;
+	}
+	catch(e)
+	{
+		throw new Exception(e);
+	}
+}
+
+
+function FormatDataString(date)
+{
+	//先将date（字符串型）解析成日期型的
+	var Datetypsdf = new text.SimpleDateFormat(&amp;quot;yyyy-MM-dd&amp;quot;);
+	var Datetyp = Datetypsdf.parse(date);//解析成了日期型的
+        var sdf = new text.SimpleDateFormat(&amp;quot;dd/MM/yyyy&amp;quot;);
+        var dat = sdf.format(Datetyp);//解析成了日期型的
+        return dat;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

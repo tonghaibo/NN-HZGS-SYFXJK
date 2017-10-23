@@ -1,0 +1,319 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >ETLRun</MWID><NAME >ETL运行</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ETLRun.zxg</FILE><SCENE ></SCENE><FIXED >1,2</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >1</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >InitDB</ID><NAME >初始化表结构</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >NewETL</ID><NAME >新增ETL</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >TYP</ID><NAME >分类</NAME><NOTNULL ></NOTNULL><KEYVAL >V_ETL_TYP</KEYVAL><INPCTL >list</INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >TYP</C13><C14 ></C14><C15 >TYP</C15><C16 ></C16><C17 ></C17><C18 >TYP</C18><C19 >TYP</C19><C20 >TYP</C20></ROW>
+<ROW num="1" ><ID >crtusr</ID><NAME >创建人</NAME><NOTNULL ></NOTNULL><KEYVAL >V_USR</KEYVAL><INPCTL >list</INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >crtusr</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >crtusr</C18><C19 ></C19><C20 ></C20></ROW>
+<ROW num="2" ><ID >TITLE</ID><NAME >标题</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >13</INPCTL><DISPORD >8</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20></ROW>
+<ROW num="3" ><ID >JOBID</ID><NAME >作业编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >13</INPCTL><DISPORD >8</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >JOBID</C14><C15 ></C15><C16 >JOBID</C16><C17 >JOBID</C17><C18 ></C18><C19 ></C19><C20 ></C20></ROW>
+<ROW num="4" ><ID >NOTE</ID><NAME >备注</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >6</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >13</NROW><NCOL >14</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//数据加载完毕
+var loadend = 0;
+function _thisOnpost_loaddata(sheet)
+{
+
+  _this.SetColVisible(sheet,13,-1);
+  _this.SetColVisible(sheet,3,-1);
+  _this.SetColVisible(sheet,4,-1);
+  
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	
+	var str = _this.GetCellText(sheet,row,col) ;
+	var typ = _this.GetCellText(sheet,row,13);
+	var jobid = _this.GetCellText(sheet,row,0);
+	var jobnam=_this.GetCellText(sheet,row,1);
+
+	if ( str == &amp;quot;生成&amp;quot; || str == &amp;quot;重新生成&amp;quot; ){
+		_sql.querytods(&amp;quot;GetSEQ&amp;quot;,&amp;quot;&amp;quot;);
+		var seqid= _this.XMLDS_GetString(0,&amp;quot;val&amp;quot;);
+		var thisjobid = &amp;quot;ETL&amp;quot;+jobid +seqid;	
+		_sql.querytods(&amp;quot;QueryRunOSTimer&amp;quot;,&amp;quot;jobid=ETL&amp;quot;+thisjobid );
+		if( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+			//有一个作业正在运行，打开进度框
+			window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+		}
+		else {
+
+			
+			// 通过Get的方式调用服务端的一个函数
+			/*
+			var sParam =&amp;quot;etlid=&amp;quot;+_this.GetCellText(0,row,0)+&amp;quot;&amp;jobid=&amp;quot;+thisjobid+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;jobnam=&amp;quot;+_this.GetCellText(0,row,1)+&amp;quot;&amp;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisaccid=&amp;quot;+G_ACCID+&amp;quot;&amp;thissytid=&amp;quot;+G_SYTID;
+			try {
+				ret = invokeOSFunc(&amp;quot;genbatch&amp;quot;,sParam) ;    
+				if ( ret!=&amp;quot;&amp;quot; ) {
+					window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+ thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+				}   
+			}
+			catch ( e ) {
+					alert ( e );
+			}*/
+
+
+			_sql.run(&amp;quot;NewRunOSTimer&amp;quot;,&amp;quot;jobid=&amp;quot;+thisjobid +&amp;quot;&amp;jobnam=&amp;quot;+jobnam);
+			// 通过Get的方式调用服务端的一个函数
+			var url = &amp;quot;RunETL.sp?etlid=&amp;quot;+jobid +&amp;quot;&amp;DAT=&amp;GUID=&amp;jobseqid=&amp;quot;+thisjobid +&amp;quot;&amp;InsertUpdateMode=&amp;quot;;
+			//openWindow(url);
+			document.all(&amp;quot;framecall&amp;quot;).src=url;
+			window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+thisjobid  ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+			
+		}
+	} 
+	else if ( str == &amp;quot;查询&amp;quot; || str == &amp;quot;查询运行状态&amp;quot; ){
+		_sql.querytods(&amp;quot;GetSEQ&amp;quot;,&amp;quot;&amp;quot;);
+		var seqid= _this.XMLDS_GetString(0,&amp;quot;val&amp;quot;);
+		var thisjobid = &amp;quot;ETL&amp;quot;+jobid +seqid;	
+
+		_sql.querytods(&amp;quot;QueryRunOSTimer&amp;quot;,&amp;quot;jobid=ETL&amp;quot;+thisjobid );
+		if( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+			//有一个作业正在运行，打开进度框
+			window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+		}
+		else {
+			alert (&amp;quot;没有正在执行的进程...&amp;quot;);
+			
+		}
+
+
+	}
+	else if ( str == &amp;quot;定义&amp;quot; ){
+		openWindow(&amp;quot;show.sp?grdid=ETL&amp;guid=&amp;quot;+_this.GetCellText(0,row,13) );
+	}
+	
+	
+}
+function InitDB()
+{
+	if ( confirm( &amp;quot;如果系统是第一次使用本模块，您可以初始化表结构，创建相关的表，建议只有系统管理员来操作，是否继续&amp;quot; )==1 ) {
+		_sql.run(&amp;quot;init&amp;quot; ,&amp;quot;&amp;quot; );
+		//V_ETL_TYP
+	}
+
+}
+function NewETL()
+{
+	var etltyp = document.all(&amp;quot;TYP&amp;quot;).value;
+	
+	openWindow(&amp;quot;show.sp?grdid=ETL&amp;etltyp=&amp;quot;+etltyp );
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var timepack = new JavaPackage( &amp;quot;com.xlsgrid.net.time&amp;quot; );
+var rs = new JavaPackage ( &amp;quot;com.xlsgrid.net.servlet&amp;quot; );
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	bodysb.append(&amp;quot;&amp;lt;iframe style=\&amp;quot;position:absolute; top:0px; left:0px; display:none;\&amp;quot; id=framecall scrolling=\&amp;quot;no\&amp;quot; frameborder=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;);  //
+}
+
+// 客户端param传入的参数可以直接使用
+// 传入 jobid :thisorgid
+function genbatch()
+{
+	var db = null;
+	var jobseqid  = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		jobseqid = jobid;
+		
+		var tim = new timepack.EARunOSTimer(); 
+
+		tim.init(   jobseqid , jobnam,   &amp;quot;x&amp;quot;,  &amp;quot;ETLRun&amp;quot;,  &amp;quot;run&amp;quot;, &amp;quot;etlid=&amp;quot;+etlid+&amp;quot;&amp;jobid=&amp;quot;+jobid+&amp;quot;&amp;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;jobseqid=&amp;quot;+jobseqid +&amp;quot;&amp;thisaccid=&amp;quot;+thisaccid+&amp;quot;&amp;thissytid=&amp;quot;+thissytid);
+	}
+	catch ( ee ) {
+		
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return jobseqid  ;// 返回后台分配的作业编号
+
+}
+
+//&amp;quot;etlid= jobid=&amp;quot;+thisjobid+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;jobnam=分析作业&amp;quot;+_this.GetCellText(0,row,2)+&amp;quot;&amp;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisaccid=&amp;quot;+G_ACCID+&amp;quot;&amp;thissytid=&amp;quot;+G_SYTID;
+function run () 
+{
+	
+	var db = null;var dbfrom = null; var dbto=null;
+
+	var msg= &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	var itemds= null;
+	var jobds = null;
+	var jobguid = &amp;quot;&amp;quot;;
+	var num = 0;
+	var usrid = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var etl = new pubpack.EAEtl(etlid,db);// 从数据库中取得ETL定义，包括hdr和dtl信息,db只能是默认的数据库
+		//etl.setInsertUpdateMode(InsertUpdateMode);
+		if ( etl.getSrcDb().length() != 0 ) dbfrom = new pubpack.EADatabase(etl.getSrcDb());    
+	        else dbfrom = new pubpack.EADatabase();
+	        if ( etl.getDstDb().length() != 0 ) dbto = new pubpack.EADatabase(etl.getDstDb());   
+	        else dbto = new  pubpack.EADatabase();
+	        
+		if ( etl.getExpTyp().length() != 0 ){
+		        //etl.createTable(dbfrom); 
+		        notify(jobid,10,&amp;quot;载入数据&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+		        Export(etl,dbfrom);   //从远程机器下载文件到本地目录 ,request,response
+		        notify(jobid,40,&amp;quot;数据转换处理&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+		        //Trans(etl,dbfrom,request,response); //从文件加载到临时库
+		        notify(jobid,70,&amp;quot;启动后台ＥＴＬ进程&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+		        
+		}
+		notify (jobid , 100, &amp;quot;操作完毕&amp;quot; ,&amp;quot;end&amp;quot;) ;
+		db.Commit();
+		msg=&amp;quot;操作成功&amp;quot;;	
+		
+	}
+	catch ( ee ) {
+		pubpack.EAFunc.Log( ee.toString() );
+		//通知外面执行到哪里了
+		notify(jobid,100,ee.toString(),&amp;quot;error&amp;quot;);
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+
+	}
+	return msg;
+}
+/**
+   * 从远程下载文件到本地
+   * @param etl
+   * @param request
+   * @param response
+   * @throws java.lang.Exception
+   */
+function Export(etl, db) //,request, response
+{
+    var etlid = etl.getEtlId();
+    var expTyp = etl.getExpTyp();
+    var expFmt = etl.getExpFmt();
+    var expDiv = etl.getExpDiv();
+    var expCon = etl.getExpCon();
+    var expConfile = etl.getExpConFile();
+    var expLocal = etl.getExpLocal();
+    var expLocalfile = etl.getExpLocalFile();
+    var expDel = etl.getExpDel();
+    var expFunc = etl.getExpFunc();
+    
+    if (expTyp.trim().equals(&amp;quot;ftp&amp;quot;))
+    {
+ /*     
+      var ftp = new pubpack.EAFtpClient();
+    
+      //远程FTP的用户名，密码和远程目录
+    var user = getFtpInfo(etl,&amp;quot;user&amp;quot;);
+      var pwd = getFtpInfo(etl,&amp;quot;pwd&amp;quot;);
+      var expConPath = getFtpInfo(etl,&amp;quot;path&amp;quot;); 
+      
+      ftp.connectServer(expCon,user,pwd);      
+
+      ftp.download(expConPath,expConfile,expLocal+&amp;quot;/&amp;quot;+expLocalfile);
+
+      ftp.closeServer();
+*/      
+    }
+    else if (expTyp.trim().equals(&amp;quot;web&amp;quot;))
+    {
+      var http = new pubpack.EAHttp(expCon);
+      //var str = http.getvar();
+      if ( expLocalfile==&amp;quot;&amp;quot;) expLocalfile = etlid ;
+      http.downLoadFile(expLocal);//
+    } 
+    
+    //log(&amp;quot;ETL(&amp;quot;+etl.getEtlId()+&amp;quot;)info:从远程机器&amp;quot; + expCon + &amp;quot; FTP下载文件到本地目录&amp;quot; + expLocal);
+    //notify(35,&amp;quot;执行倒入数据后触发程序&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部  
+    //下载后触发服务器端OS函数
+    //execOSFunc(etl,expFunc,db,request,response);
+    
+}
+ 
+// 通知外部当前的运行情况
+function notify(jobseqid,percent,note,stat)
+{
+	var db = null;
+	if ( percent &amp;lt; 0 ) return &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		note = pubpack.EAFunc.Replace( note, &amp;quot;&amp;apos;&amp;quot;,&amp;quot;‘&amp;quot; );
+		if(note==&amp;quot;&amp;quot;){
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		else {
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,percentnote=&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+			db.ExcecutSQL(&amp;quot;insert into RunOSTimerDTL(id,name ) values(&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;)&amp;quot; );
+		}
+		db.Commit();
+	}
+	catch ( e ) {
+		//pubpack.EAFunc.Log( e.toString() );
+		db.Rollback();
+		return &amp;quot;ERROR&amp;quot; ;
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot;OK&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select ID as 编号,NAME as 名称,NOTE as 说明,&amp;apos;&amp;apos; H1,&amp;apos;&amp;apos; H2,CLS as 分类,EXPTYP,EXPFMT,TRANTAB,LOADTAB
+,&amp;apos;生成&amp;apos; action1,&amp;apos;查询&amp;apos; action2,
+&amp;apos;定义&amp;apos; action3 ,guid from ETLHDR a
+where id like &amp;apos;[%JOBID]%&amp;apos;
+and nvl(name,&amp;apos; &amp;apos;) like &amp;apos;[%TITLE]%&amp;apos;
+and nvl(note,&amp;apos; &amp;apos;) like &amp;apos;[%NOTE]%&amp;apos;
+and nvl(a.cls,&amp;apos; &amp;apos;) like &amp;apos;[%TYP]%&amp;apos;
+
+order by id</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 ></C13><C14 >MAIN</C14><C15 >MAIN</C15></ROW>
+<ROW num="1" ><ID >QueryRunOSTimer</ID><NAME ></NAME><DATDSC >select id from RunOSTimer
+where stat=&amp;apos;run&amp;apos; and id like &amp;apos;[%jobid]%&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >QueryRunOSTimer</C12><C13 >QueryRunOSTimer</C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >QueryRunOSTimerExist</ID><NAME ></NAME><DATDSC >select count(*) from RunOSTimer
+where (stat=&amp;apos;end&amp;apos; or stat=&amp;apos;error&amp;apos;) and id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >QueryRunOSTimerExist</C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="3" ><ID >DeleteQueryRunOSTimer</ID><NAME ></NAME><DATDSC >delete from RunOSTimer where  id=&amp;apos;[%jobid]&amp;apos;;
+delete from RunOSTimerDTL where  id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >DeleteQueryRunOSTimer</C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="4" ><ID >NewRunOSTimer</ID><NAME ></NAME><DATDSC >insert into RunOSTimer(id,name) values(&amp;apos;[%jobid]&amp;apos;,&amp;apos;[%jobnam]&amp;apos;)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="5" ><ID >init</ID><NAME ></NAME><DATDSC >create view V_ETL_TYP as select distinct cls id ,cls name from ETLHDR;
+create table RunOSTimer(guid char(32) default sys_guid() primary key , id varchar2(20), name varchar2(256),percent int, percentnote varchar2(256),stat varchar2(10) default &amp;apos;end&amp;apos; ,crtdat date default sysdate);
+alert table RunOSTimer add crtdat date default sysdate;
+create table RunOSTimerDTL(guid char(32) default sys_guid() primary key , id varchar2(20), name varchar2(256),crtdat date default sysdate);
+create sequence seq_etl </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >init</C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="6" ><ID >GetSEQ</ID><NAME ></NAME><DATDSC >select seq_etl.nextval val from dual</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

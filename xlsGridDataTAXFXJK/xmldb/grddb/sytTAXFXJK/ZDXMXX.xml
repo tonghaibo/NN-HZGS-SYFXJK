@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDXMXX</MWID><NAME >已报验项目情况分析</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXMXX.zxg</FILE><SCENE ></SCENE><FIXED >4,3</FIXED><CATTYP >重点项目</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YM1</ID><NAME >*统计起始年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM1</C13><C14 >YM1</C14></ROW>
+<ROW num="1" ><ID >YM2</ID><NAME >*统计截止年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM2</C13><C14 >YM2</C14></ROW>
+<ROW num="2" ><ID >XMJE</ID><NAME >项目金额大于</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >万元</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetCellText(0,2,3,YM1+&amp;quot;至&amp;quot;+YM2);
+	_this.SetCellText(0,2,9,XMJE+&amp;quot;万元&amp;quot;);
+	
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+	_this.SetMainCellRange(0,4,1,6,11);
+	_this.SetXmlDS(0,4,1,6,11,xml);
+	
+	_this.SetToBoolBox(0,3,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+	}
+	
+	//_this.AutoFixColWidth(0,300);
+	_this.AutoFixScreenWidth();	
+	
+
+}
+
+function runWaitingTask()
+{
+	try {
+		var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;YM1=&amp;quot;+YM1+&amp;quot;&amp;YM2=&amp;quot;+YM2+&amp;quot;&amp;XMJE=&amp;quot;+XMJE);
+		return xml;
+	}catch(e) { alert(e.toString()); }
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum rn,t.*
+from (
+select t2.WCJYHWMC,WCJYHWZZ,WCJYHDSSGLZMBH,
+       to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm-dd&amp;apos;) dat1,
+       to_char(WCJYHDSSGLZMYXQXZ,&amp;apos;yyyy-mm-dd&amp;apos;) dat2,
+       nvl(dj.shxydm,dj.nsrsbh) nsrsbh,
+       dj.nsrmc,
+       sum(SJHTJE) SJHTJE,
+       sum(hwxse+kjfpjezk+kjfpjedk) sbje,
+       sum(SJJE) wsje
+from (
+  select WCJYHDQKSBUUID,WCJYHWMC,DJXH,LRRQ,
+         sum(HWXSE) HWXSE,sum(XSHWJNSK) XSHWJNSK,sum(SJHTJE) SJHTJE,
+         sum(YBYJSKJE) YBYJSKJE,sum(KJFPJEZK) KJFPJEZK,sum(KJFPJEDK) KJFPJEDK
+  from (       
+  --外出经营活动情况申报表信息（货物信息）
+  select WCJYHDQKSBUUID, --外出经营活动情况申报UUID
+      WCJYHWMC,          --外出经营货物名称
+      HWXSE,             --货物销售额
+      XSHWJNSK,          --销售货物缴纳税款
+      SJHTJE,            --实际合同金额
+      YBYJSKJE,          --应补预缴税款金额
+      KJFPJEZK,          --开具发票金额（自开）
+      KJFPJEDK,          --开具发票金额（代开）
+      DJXH,              --登记序号
+      LRRQ               --录入日期
+  from DJ_WCJYHDQKSBBXX_HWXX
+  union all
+  --外出经营活动情况申报表信息（劳务信息）
+  select WCJYHDQKSBUUID, --外出经营活动情况申报UUID
+      WCJYLWMC,          --外出经营劳务名称
+      YSLWYYE,           --应税劳务营业额
+      YSLWJNSK,          --应税劳务缴纳税额
+      0 SJHTJE,
+      0 YBYJSKJE,
+      0 KJFPJEZK,
+      0 KJFPJEDK,
+      DJXH,              --登记序号
+      LRRQ               --录入日期
+  from DJ_WCJYHDQKSBBXX_LWXX
+  ) group by WCJYHDQKSBUUID,WCJYHWMC,DJXH,LRRQ
+) t1,(
+  select  a.DJXH,              --登记序号
+          a.WCJYHDSSGLZMBH,    --外出经营活动税收管理证明编号
+          a.SWDJD,             --税务登记地
+          a.WCJYD,             --外出经营地
+          a.WCJYHTZJE,         --外出经营合同总金额
+          a.WCJYHDSSGLZMYXQXQ, --外出经营活动税收管理证明有效期限起
+          a.WCJYHDSSGLZMYXQXZ, --外出经营活动税收管理证明有效期限止
+          a.WCJYHDSSGLZMQFRQ,  --外出经营活动税收管理证明签发日期 
+          b.WCJYHWMC,       --外出经营货物名称
+          b.WCJYHWYXQXQ,    --纳税人外出经营活动有效期起
+          b.WCJYHWYXQXZ,    --外出经营货物有效期限止
+          b.WCJYHWZZ,        --外出经营货物总值
+          c.WCJYHDQKSBUUID
+  from DJ_WBNSRJYDBYDJ a,DJ_WBNSRJYDBYDJ_HWXX b,DJ_WCJYHDQKSBBXX c
+  where trim(a.BYDJUUID)=trim(b.BYDJUUID)
+    and trim(a.BYDJUUID)=trim(c.BYDJUUID)
+) t2,(
+  select WCJYHDQKSBUUID,   --外出经营活动情况申报UUID
+         sum(SJJE) SJJE    --实缴金额
+  from DJ_WCJYHDQKSBBXX_WSXX
+  where yxbz=&amp;apos;Y&amp;apos;
+  group by WCJYHDQKSBUUID
+) t3,dj_nsrxx dj
+where trim(t2.WCJYHDQKSBUUID)=trim(t1.WCJYHDQKSBUUID)
+  and trim(t2.WCJYHDQKSBUUID)=trim(t3.WCJYHDQKSBUUID(+))
+  and t2.djxh=dj.djxh
+  and to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;[%YM1]&amp;apos;
+  and to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  and WCJYHWZZ&amp;gt;10000*decode(&amp;apos;[%XMJE]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%XMJE]&amp;apos;)
+group by t2.WCJYHWMC,WCJYHWZZ,WCJYHDSSGLZMBH,
+       to_char(WCJYHDSSGLZMYXQXQ,&amp;apos;yyyy-mm-dd&amp;apos;),
+       to_char(WCJYHDSSGLZMYXQXZ,&amp;apos;yyyy-mm-dd&amp;apos;),
+       nvl(dj.shxydm,dj.nsrsbh),
+       dj.nsrmc  
+order by t2.WCJYHWMC,WCJYHWZZ desc
+) t
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDXM_XMQKFX1</MWID><NAME >以发改委项目为源头项目跟踪情况表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXM_XMQKFX1.zxg</FILE><SCENE ></SCENE><FIXED >3,1</FIXED><CATTYP >重点项目</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YM1</ID><NAME >起始年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >项目计划开工时间</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM1</C13><C14 >YM1</C14></ROW>
+<ROW num="1" ><ID >YM2</ID><NAME >截止年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >项目计划开工时间</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM2</C13><C14 ></C14></ROW>
+<ROW num="2" ><ID >ZDBZ</ID><NAME >是否重点项目</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YESNO</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >ZDBZ</C14></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetCellText(0,1,3,YM1+&amp;quot;至&amp;quot;+YM2);
+	
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+	_this.SetMainCellRange(0,3,1,5,15);
+	_this.SetXmlDS(0,3,1,5,15,xml);
+	
+//	_this.SetToBoolBox(0,3,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		//_this.SetToBoolBox(0,r,0);
+		var rn = _this.GetCellText(0,r,6);
+		if (rn != &amp;quot;1&amp;quot;) {
+			_this.SetCellText(0,r,2,&amp;quot;&amp;quot;);
+			_this.SetCellText(0,r,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(0,r,4,&amp;quot;&amp;quot;);
+			_this.SetCellText(0,r,5,&amp;quot;&amp;quot;);
+			//_this.MergeCells(0,r,2,r,5);
+		}
+	}
+	
+	//_this.AutoFixColWidth(0,300);
+	_this.AutoFixScreenWidth();	
+	
+
+}
+
+function runWaitingTask()
+{
+	try {
+		var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;YM1=&amp;quot;+YM1+&amp;quot;&amp;YM2=&amp;quot;+YM2+&amp;quot;&amp;ZDBZ=&amp;quot;+ZDBZ);
+		return xml;
+	}catch(e) { alert(e.toString()); }
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select a.jhkgsj,a.xmdm,a.xmmc,a.ztzje,
+     row_number() over (partition by a.xmdm,a.xmmc order by a.xmdm,a.xmmc) rn,
+       b.xmmc jyptxmmc,b.tjyf,b.jyje,
+       case when b.fgwxmdm is null then &amp;apos;否&amp;apos; else &amp;apos;是&amp;apos; end &amp;quot;已招投标否？&amp;quot;,
+       case when dzb.bydjuuid is null then &amp;apos;否&amp;apos; else &amp;apos;是&amp;apos; end &amp;quot;税务登记否？&amp;quot;,
+       case when sb.bydjuuid is null then &amp;apos;否&amp;apos; else &amp;apos;是&amp;apos; end &amp;quot;税务申报否？&amp;quot;,
+       sb.sbje &amp;quot;申报金额&amp;quot;,
+       sb.jnsk &amp;quot;缴纳税款&amp;quot;,
+       sb.yyjskje &amp;quot;已预缴税款金额&amp;quot;
+from tax_zdxm_fgwxm a,tax_zdxm_jyptxm b,tax_zdxm_jyptwbbyxm_dzb dzb,
+     (
+        select sb.bydjuuid,sb.wcjyhdssglzmbh,sb.sjjyqjq,sb.sjjyqjz,sb.bysj,sb.wcjyhdqksbuuid,
+               sbxx.sbje,sbxx.jnsk,sbxx.yyjskje
+        from dj_wcjyhdqksbbxx sb,(
+               select wcjyhdqksbuuid,sum(sbje) sbje,sum(jnsk) jnsk,sum(yyjskje) yyjskje from (
+		       select wcjyhdqksbuuid,wcjyhwmc,hwxse sbje,xshwjnsk jnsk,yyjskje from dj_wcjyhdqksbbxx_hwxx
+		       union all
+		       select wcjyhdqksbuuid,wcjylwmc,yslwyye sbje,yslwjnsk jnsk,0 yyjskje from dj_wcjyhdqksbbxx_lwxx sblw
+		    ) group by wcjyhdqksbuuid
+             ) sbxx
+        where sb.wcjyhdqksbuuid=sbxx.wcjyhdqksbuuid 
+          and sb.zfbz_1=&amp;apos;N&amp;apos;          
+     ) sb
+where a.xmdm=b.fgwxmdm(+)
+  and b.jyptxmuuid=dzb.jyptxmuuid(+)
+  and dzb.bydjuuid=sb.bydjuuid(+)  
+  and to_char(to_date(a.jhkgsj,&amp;apos;yyyy.mm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;[%YM1]&amp;apos;
+  and to_char(to_date(a.jhkgsj,&amp;apos;yyyy.mm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  and a.zdbz like &amp;apos;[%ZDBZ]%&amp;apos;
+order by a.xmdm
+) t  </DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

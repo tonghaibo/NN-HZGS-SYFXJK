@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FX9902</MWID><NAME >小规模纳税人防伪税控抵减额情况</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FX9902.zxg</FILE><SCENE ></SCENE><FIXED >4,1</FIXED><CATTYP >风险特征库</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="3" ><ID >DJSE</ID><NAME >抵减税额大于</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >DJSE</C14><C15 >DJSE</C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >4</NROW><NCOL >11</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,3,1</C20><C21 ></C21><C22 >0,4,1</C22><C23 >0,4,1</C23></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SetCellText(0,2,3,DAT1+&amp;quot; 至 &amp;quot;+DAT2);
+	_this.SetToBoolBox(0,3,0);
+	//_this.SetMainCellRange(0,_this.GetMainCellRangeRow1,_this.GetMainCellRangeCol1,_this.GetMainCellRangeRow2,_this.GetMainCellRangeCol2);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);	
+	//	for (var cl==10;cl&amp;lt;=12;cl++){
+	//		if  (_this.GetCellText(sheet,r,cl) &amp;gt;0) {
+ 	//		_this.SetCellColor(sheet,r,cl,0,0,255);   }
+	       }
+	 
+	//}
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >---------------------------------------------------------------------------------------
+--小规模纳税人:小规模纳税人防伪税控抵减额
+--------------------------------------------------------------------------------------- 
+select rownum ,nvl(dj.shxydm,v.nsrsbh) &amp;quot;纳税人识别号&amp;quot;,
+       v.nsrmc  &amp;quot;纳税人名称&amp;quot;,
+       v.jsyj  &amp;quot;申报销售额&amp;quot;,
+       v.ynse  &amp;quot;应纳税额&amp;quot;,
+       v.bqfse  &amp;quot;本期发生额&amp;quot;,
+       v.bqydjse  &amp;quot;本期应抵减税额&amp;quot;,
+       v.bqsjdjse  &amp;quot;本期实际抵减税额&amp;quot;,    
+       (select swryxm from DM_GY_SWRY swry where swry.swry_dm=dj.ssgly_dm) &amp;quot;税收管理员&amp;quot; ,
+       (select name from v_swjg where id=substr(dj.zgswskfj_dm,1,7)) &amp;quot;主管税务机关&amp;quot;,
+       (select swjgmc from V_DM_GY_SWJG swjg where trim(dj.zgswskfj_dm)=trim(swjg.swjg_dm) ) &amp;quot;主管税务所（科、分局）&amp;quot; 
+ from ( 
+select nsrsbh,nsrmc,
+       sum(jsyj) jsyj,          --计税依据
+       sum(ynse) ynse,          --应纳税额       
+       sum(bqfse) bqfse,        --本期发生额
+       sum(bqydjse) bqydjse,    --本期应抵减税额
+       sum(bqsjdjse) bqsjdjse,  --本期实际抵减税额
+       (case when sum(jsyj)=0 then 0 else round(sum(ynse)/sum(jsyj),4) end) sf
+from (                
+  select a.sbuuid,a.nsrsbh,a.nsrmc,to_char(skssqq,&amp;apos;yyyymm&amp;apos;) yymm,a.zgswskfj_dm,
+         bqfse,bqydjse,bqsjdjse,b.xgrq 
+  from  sb_sbb a,SB_ZZS_XGM_FB_SEDJQK b
+  where b.ewbhxh=1 --增值税税控系统专用设备费及技术维护费
+    and a.sbuuid=b.sbuuid
+    and a.gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and a.skssqq&amp;gt;=date &amp;apos;[%DAT1]&amp;apos;
+    and a.skssqz&amp;lt;=date &amp;apos;[%DAT2]&amp;apos;
+    and a.zfbz_1=&amp;apos;N&amp;apos;
+) t1,
+( 
+  select sbuuid,sum(jsyj) jsyj,sum(ynse) ynse
+  from sb_sbxx a
+  where a.gzlx_dm_1 in (&amp;apos;1&amp;apos;,&amp;apos;5&amp;apos;)
+    and a.skssqq&amp;gt;=date &amp;apos;[%DAT1]&amp;apos;
+    and a.skssqz&amp;lt;=date &amp;apos;[%DAT2]&amp;apos;
+    and a.zfbz_1=&amp;apos;N&amp;apos;
+  group by sbuuid
+) t2
+where t1.sbuuid=t2.sbuuid 
+ and -- a.zgswskfj_dm like (&amp;apos;1451100%&amp;apos;)
+(substr(t1.zgswskfj_dm,1,7) in(&amp;apos;[%ZGSWJG]&amp;apos;) or substr(t1.zgswskfj_dm,1,7)
+  in (select swjg.id from V_SWJG swjg start with swjg.id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg.id=swjg.sjid))
+group by nsrsbh,nsrmc
+)v,dj_nsrxx dj
+where v.nsrsbh=dj.nsrsbh(+)
+and bqfse&amp;gt;&amp;apos;[%DJSE]&amp;apos;
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

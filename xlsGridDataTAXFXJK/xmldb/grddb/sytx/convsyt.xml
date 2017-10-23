@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >convsyt</MWID><NAME ></NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >convsyt.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP >1</BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >conv</ID><NAME >conv</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >getsubsyt</ID><NAME >getsubsyt</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//undefined
+function conv()
+{
+alert(  invokeOSFunc(&amp;quot;conv&amp;quot;,&amp;quot;&amp;quot;) );
+}
+
+//undefined
+function getsubsyt()
+{
+var syt=prompt(&amp;quot;input syt id&amp;quot;,&amp;quot;DC&amp;quot;);
+if(syt!=null)
+alert(  invokeOSFunc(&amp;quot;getsubsyt&amp;quot;,&amp;quot;syt=&amp;quot;+syt) );  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function conv()
+{
+  //var xmldb=new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+  var froot = pub.EAOption.dynaDataRoot;
+  var ds0 = xmldb.EAXmlDB.getXmlDbDs(&amp;quot;subsytdb&amp;quot;);
+  //throw new Exception(ds0.GetXml());
+  var nRow = ds0.getRowCount();
+  var oldsyt = ds0.getStringAt(0,&amp;quot;SYTID&amp;quot;);
+  var xmlds = new pub.EAXmlDS();
+  xmlds.AddNullRow(-1);
+  for ( var i =0 ; i&amp;lt; nRow; i ++ )
+  {
+	var id = ds0.getStringAt(i,&amp;quot;ID&amp;quot;) ;
+	var sytid = ds0.getStringAt(i,&amp;quot;SYTID&amp;quot;) ;
+	if(sytid!=oldsyt)
+	{
+	  //throw new Exception(xmlds.GetXml());
+	  var r = xmlds.getRowCount()-1;
+	  xmlds.DeleteRow(r);
+	  pub.EAFunc.WriteToFile(froot+oldsyt+&amp;quot;/subsytdb.xml&amp;quot;,xmlds.GetXml());
+	  oldsyt=sytid;
+	  xmlds = new pub.EAXmlDS();
+	  xmlds.AddNullRow(-1);
+	}
+	var r = xmlds.getRowCount()-1;  
+	r = xmlds.AddNullRow(r)-1;
+	var order=0;
+	xmlds.setValueAt(r,&amp;quot;subid&amp;quot;,id);
+	xmlds.setValueAt(r,&amp;quot;typ&amp;quot;,0);
+	xmlds.setValueAt(r,&amp;quot;order&amp;quot;,order++);
+	xmlds.setValueAt(r,&amp;quot;name&amp;quot;,ds0.getStringAt(i,&amp;quot;name&amp;quot;));
+	xmlds.setValueAt(r,&amp;quot;TITLE&amp;quot;,ds0.getStringAt(i,&amp;quot;TITLE&amp;quot;));
+	xmlds.setValueAt(r,&amp;quot;ICON&amp;quot;,ds0.getStringAt(i,&amp;quot;DESKICON&amp;quot;));
+	xmlds.setValueAt(r,&amp;quot;URL&amp;quot;,ds0.getStringAt(i,&amp;quot;BANNER&amp;quot;));
+      	for(var j=1;j&amp;lt;10;j++)
+  	{
+		var name = ds0.getStringDef(i,&amp;quot;name&amp;quot;+j,&amp;quot;&amp;quot;);
+		if(name==&amp;quot;&amp;quot;) break;
+		r = xmlds.getRowCount()-1;
+		xmlds.AddNullRow(r)-1;
+		//r--;
+		xmlds.setValueAt(r,&amp;quot;subid&amp;quot;,id);
+		xmlds.setValueAt(r,&amp;quot;typ&amp;quot;,0);
+		xmlds.setValueAt(r,&amp;quot;order&amp;quot;,order++);
+		xmlds.setValueAt(r,&amp;quot;name&amp;quot;,name);
+		xmlds.setValueAt(r,&amp;quot;ICON&amp;quot;,ds0.getStringDef(i,&amp;quot;ICON&amp;quot;+j,&amp;quot;&amp;quot;));
+		//xmlds.setValueAt(r,&amp;quot;TITLE&amp;quot;,ds0.getStringAt(i,&amp;quot;TITLE&amp;quot;));
+		xmlds.setValueAt(r,&amp;quot;URL&amp;quot;,ds0.getStringDef(i,&amp;quot;URL&amp;quot;+j,&amp;quot;&amp;quot;));
+ 	}
+  	
+  }
+	//if(sytid!=oldsyt)
+	{
+	  var r = xmlds.getRowCount()-1;
+	  xmlds.DeleteRow(r);
+	  pub.EAFunc.WriteToFile(froot+oldsyt+&amp;quot;/subsytdb.xml&amp;quot;,xmlds.GetXml());
+	}
+  return &amp;quot;done&amp;quot;;
+}
+
+function getsubsyt()
+{
+  return  xmldb.EAXmlDB.getSubSytDB(syt).GetXml();
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

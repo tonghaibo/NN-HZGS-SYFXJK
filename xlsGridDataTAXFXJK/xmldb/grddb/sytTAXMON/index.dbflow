@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="F1:TAXMON:TK:核实任务"  round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F"  fill="#EEEEEE"   fillto="#FFFFFF" x="157" y="60" width="120"  height="60" selectflag="mouseclick"  menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]"  属性="">表单:TK
+核实任务</rect>
+ <connector id="connector_208_125919" from="F1:TAXMON:TK:核实任务" to="roundrect_125917" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_125920" from="F1:TAXMON:TK:核实任务" to="rect_125918" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <text id="text_125921" x="20" y="8" width="140" height="220" font-size="14" >新增字段newtyp
+1:疑似漏管
+2:申报异常
+
+新增字段newsubtyp
+1:有执照未办证
+2:无执照未办证
+3:电表信息不全
+4:非国税管户
+5:自查补报
+6:电表维护
+9:其他</text>
+ <polygon id="flow_trknewtyp1" selsytid="TAXMON"  points="172,300 160,300 159,307 172,300 172,233 33,233 33,307 159,307 172,300 172,300 172,300 172,300" flowid="trknewtyp1" flowname="trknewtyp1.dbflow的名称" changeto="page" stroke="#000000" fill="#FFFFCC"  xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:TAXMON:trknewtyp1[%quot]/[%right]"  属性="">子图:trknewtyp1
+疑似漏管处理流程</polygon>
+ <polygon id="flow_trknewtyp2" selsytid="TAXMON"  points="399,300 387,300 386,307 399,300 399,233 260,233 260,307 386,307 399,300 399,300 399,300 399,300" flowid="trknewtyp2" flowname="trknewtyp2.dbflow的名称" changeto="page" stroke="#000000" fill="#FFFFCC"  xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:TAXMON:trknewtyp2[%quot]/[%right]" >子图:trknewtyp2
+申报异常处理流程</polygon>
+ <connector id="connector_208_61116" from="F1:TAXMON:TK:核实任务" to="flow_trknewtyp1" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_61117" from="F1:TAXMON:TK:核实任务" to="flow_trknewtyp2" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <text id="text_1" x="15" y="363" width="675" height="193" fill="#000000" stroke="" stroke-width="0"  font-family="" font-size="16" textLength="50" lengthAdjust="0" rotate="0">说明：
+1.	有电力数据无缴税申报企业明细报表(CR01), 有缴税申报无电力数据企业明细报表(CR02), 无电表编号纳税企业(CR05) 查询, 有电表号无对应企业报表(CR06)生成的任务，基本上是属于疑似漏管核实处理流程。
+2.	有电表号无对应企业报表(CR06)，有电表号无对应企业报表(CR06)，电力税额指标异常企业明细报表(CR10)，基本上是属于申报异常核实处理流程。
+3.	有执照未办证和无执照未办证的处理流程中，异常企业正常办理完成税务登记证后，需要在税管员系统中根据纳税人编号查询出基础信息，然后电表维护操作。
+</text>
+ <text  id="text_303111" x="480" y="8" width="250" height="340" font-size="14">工作流转状态：
+1 未分派
+2 已分派
+3 已处理
+9 完成
+8 分派到股室
+0 退回
+
+11 发限改通知补办税证
+12 纳税人电表维护
+13 电力税负异常检查
+14 文字描述说明
+15 电表号标识为“非国税管户”
+21 填写“企业自查补报申请确认表”
+22 填写“查补税款单”
+23 补缴是否足额
+24 企业电表号增删改操作
+25 电力税负异常检查
+</text>
+ <polygon id="upnote_221314" points="696,414 696,541 797,541 797,414 727,414 696,401 711,414 696,414" changeto="upnote" stroke="#000000" fill="#FFFFFF" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >需要修改一下核实任务生成的程序，以区分是疑似漏管任务还是申报异常任务。</polygon>
+</svg>

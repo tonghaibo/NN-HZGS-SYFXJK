@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >JK011</MWID><NAME >监控每天开票总金额大于80万</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >JK011.zxg</FILE><SCENE ></SCENE><FIXED >2,1</FIXED><CATTYP >发票事中监控</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >XE</ID><NAME >限额</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >80</DEFVAL><TIP >万元</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	//桌面的监控显示
+	_this.ShowToolBar(0); 
+	_this.SetColVisible(0,0,-1);
+	_this.SetRowVisible(0,0,-1);
+
+	//_this.SetToolbarString(&amp;quot;提示：双击数据行打开一户式&amp;quot;);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);	
+	setTimeout(&amp;quot;loadData()&amp;quot;,100);
+}
+
+function loadData()
+{
+	_this.SetCellText(0,2,2,&amp;quot;正在查询...&amp;quot;);
+	
+	//检查是否已生成过，没有生成数据的先生成
+//	try { 
+//		var param = new Object();	
+//		param.usrids = G_USRID;
+//		param.usrnams = G_USRNAM;
+//		param.accids = G_ACCID;
+//		param.orgs = G_ORGID;
+//		param.syts = G_SYTID;
+//		param.typ = &amp;quot;1&amp;quot;;     //二包任务
+//		param.subtyp = &amp;quot;01&amp;quot;; //发票类 
+//		param.yymm1 = G_LOGDAT.substring(0,7);
+//		param.yymm2 = G_LOGDAT.substring(0,7);
+//		param.swjg_dm = G_DEPTID;
+//		param.toswjg = &amp;quot;&amp;quot;;
+//		param.tousr=&amp;quot;&amp;quot;;		
+//		param.enddat = &amp;quot;&amp;quot;;
+//		param.note = &amp;quot;&amp;quot;;
+//
+//		var ret = _this.invokeOSFuncExt(&amp;quot;checkAndGenTableData&amp;quot;,param); 
+//		//alert(ret);
+//
+//	} 
+//	catch(e) { 
+//		alert(e.toString());
+//	}
+	
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;XE=80&amp;quot;);
+	_this.SetCellText(0,2,2,&amp;quot;&amp;quot;);
+	_this.SetMainCellRange(0,2,1,9,14);
+	_this.SetXmlDS(0,2,1,9,14,xml);
+	_this.SetColVisible(0,2,-1);
+	for (var r=1;r&amp;lt;_this.GetRowCount(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+	}
+	
+	_this.AutoFixScreenWidth();
+	
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (row &amp;gt;= 2) {
+		var djxh = _this.GetCellText(sheet,row,2);
+		var ym1 = G_LOGDAT.substring(0,5)+&amp;quot;01&amp;quot;;
+		var ym2 = G_LOGDAT.substring(0,7);
+		if (djxh != &amp;quot;&amp;quot;) {
+			//window.open(&amp;quot;Layout.sp?id=zdsyyhs&amp;DJXH=&amp;quot;+djxh+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+			window.showModalDialog(&amp;quot;Layout.sp?id=fplszjkmx&amp;DJXH=&amp;quot;+djxh+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2,window,&amp;quot;scroll:no;status:no;dialogWidth:1024px;dialogHeight:800px&amp;quot;);
+
+		}
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//检查并生成监控数据
+function checkAndGenTableData()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select count(*) from tax_fxjk_mtkpjedy80w where kprq=to_char(sysdate-1,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;;
+		var cnt = 1*db.GetSQL(sql);
+		if (cnt == 0) {
+			sql = &amp;quot;insert into tax_fxjk_mtkpjedy80w(xh,djxh,nsrsbh,nsrmc,kprq,ppje,zpje,kpje,nsrzt_dm,nsrzt,
+				hy_dm,hy,djzclx_dm,djzclx,SSGLY_DM,ssgly,zgswjg_dm,zgswjg,zgswskfj_dm,zgswskfj)
+				select rownum xh,dj.djxh,xfsbh,xfmc,kprq,ppje,zpje,kpje,
+				  dj.nsrzt_dm,
+				  (select nsrztmc from  DM_GY_NSRZT zt where dj.nsrzt_dm=zt.nsrzt_dm) nsrzt,
+				  dj.hy_dm,
+				  (select hymc from DM_GY_HY hy where dj.hy_dm=hy.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;) hy,
+				  dj.djzclx_dm,
+				  (select djzclxmc from DM_DJ_DJZCLX zclx where zclx.djzclx_dm=dj.djzclx_dm) djzclx, 
+				  dj.SSGLY_DM,
+				  (select swryxm from DM_GY_SWRY swry where swry.swry_dm=dj.SSGLY_DM) ssgly,
+				  substr(dj.zgswskfj_dm,1,7) zgswjg_dm,
+				  (select name from v_swjg sw where sw.id=substr(dj.zgswskfj_dm,1,7)) zgswjg,
+				  dj.zgswskfj_dm,
+				  (select swjgmc from DM_GY_SWJG jg where dj.zgswskfj_dm=jg.swjg_dm) zgswskfj 
+				from (
+				  select xfsbh,xfmc,kprq,sum(decode(kplx,&amp;apos;普票&amp;apos;,kpje,0)) ppje,sum(decode(kplx,&amp;apos;专票&amp;apos;,kpje,0)) zpje,sum(kpje) kpje
+				  from (
+				  select &amp;apos;专票&amp;apos; kplx, xfsbh,xfmc,to_char(kprq,&amp;apos;YYYY-MM-DD&amp;apos;) kprq ,sum(je) kpje
+				  from dzdz.dzdz_fpxx_zzsfp@dzdz a 
+				  where xf_dsswjg_dm  like &amp;apos;14511%&amp;apos;
+				  and to_char(kprq,&amp;apos;yyyy-mm-dd&amp;apos;)=to_char(sysdate-1,&amp;apos;yyyy-mm-dd&amp;apos;)
+				  and  a.ZFBZ!=&amp;apos;Y&amp;apos;
+				  group by xfsbh,xfmc,kprq
+				
+				  union all
+				
+				  select &amp;apos;普票&amp;apos; kplx,xfsbh,xfmc,to_char(kprq,&amp;apos;YYYY-MM-DD&amp;apos;) kprq ,sum(je) kpje
+				  from dzdz.dzdz_fpxx_ptfp@dzdz a 
+				  where xf_dsswjg_dm  like &amp;apos;14511%&amp;apos;
+				  and to_char(kprq,&amp;apos;yyyy-mm-dd&amp;apos;)=to_char(sysdate-1,&amp;apos;yyyy-mm-dd&amp;apos;)
+				  and  a.ZFBZ!=&amp;apos;Y&amp;apos;
+				  group by xfsbh,xfmc,kprq
+				  ) 
+				  where xfmc not like &amp;apos;%国家税务局%&amp;apos; 
+				    and xfmc not like &amp;apos;%地方税务局%&amp;apos; 
+				    and xfmc not like &amp;apos;%地税局%&amp;apos; 
+				    and xfmc not like &amp;apos;%代开%&amp;apos;
+				  group by xfsbh,xfmc,kprq
+				  having sum(kpje)&amp;gt;=80*10000
+				)kp,tax_company cp,dj_nsrxx dj
+				where kp.xfsbh=cp.id(+) and cp.djxh=dj.djxh
+				  and kp.xfsbh not in (select nsrsbh from TAX_FPFX_HCB where flag=&amp;apos;0&amp;apos;)
+				  and dj.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			//修改为可以在后台任务计划里每天定时自动执行
+			var typ = &amp;quot;1&amp;quot;;
+			var subtyp = &amp;quot;01&amp;quot;;
+			var accids = &amp;quot;GXHZ&amp;quot;;
+			var orgs = &amp;quot;GXHZ&amp;quot;;
+			var syts = &amp;quot;TAXFXJK&amp;quot;;
+			var toswjg = &amp;quot;&amp;quot;;
+			var tousr = &amp;quot;&amp;quot;;
+			var yymm1 = db.GetSQL(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm&amp;apos;) from dual&amp;quot;);
+			var yymm2 = yymm1;
+			
+			//同时生成核实任务推送
+			sql = &amp;quot;select * from tax_fxjk_mtkpjedy80w where kprq=to_char(sysdate-1,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;;
+			var ds = db.QuerySQL(sql);
+			for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+				var xh = ds.getStringAt(i,&amp;quot;XH&amp;quot;);
+				var nsrsbh = ds.getStringAt(i,&amp;quot;NSRSBH&amp;quot;);
+				var nsrmc = ds.getStringAt(i,&amp;quot;NSRMC&amp;quot;);
+				var zgswjg = ds.getStringAt(i,&amp;quot;ZGSWJG_DM&amp;quot;);	
+				toswjg = zgswjg;
+				
+				//根据推送人员的配置表进行消息推送
+				sql = &amp;quot;select usrid from tax_fxjk_msgtouser where typ=&amp;apos;01&amp;apos; and swjg=&amp;apos;&amp;quot;+zgswjg+&amp;quot;&amp;apos;&amp;quot;;
+				var usrds = db.QuerySQL(sql);
+				if (usrds.getRowCount() &amp;gt; 0) {
+					tousr = usrds.getStringAt(0,&amp;quot;USRID&amp;quot;);
+				}
+				
+				var bilid =db.GetBillid(accids,&amp;quot;TK&amp;quot;,&amp;quot;TK&amp;quot;);  //生成单据号
+				var mynote = &amp;quot;天开票总金额大于80万&amp;quot;;
+				var newtyp = &amp;quot;SYSTEM&amp;quot;;
+				var stat = &amp;quot;2&amp;quot;; //直接推送给设置的人员 
+				var fxdj = &amp;quot;高&amp;quot;;
+				var guid = db.GetSQL(&amp;quot;select sys_guid() from dual&amp;quot;);
+				
+				sql = &amp;quot;insert into tax_trkhdr(GUID,ACC,ORG,SYT,BILID,CRTUSR,CRTUSRNAM,CMID,CMNAM,todept,Tousr,SUBTYP,yymm1,yymm2,dat,stat,enddat,note,newtyp,typ,swjg_dm,fxdj)
+					select &amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,nsrsbh,nsrmc,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,trunc(sysdate),&amp;apos;%s&amp;apos;,null,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,zgswjg_dm,&amp;apos;%s&amp;apos;
+					from tax_fxjk_mtkpjedy80w
+					where kprq=to_char(sysdate-1,&amp;apos;yyyy-mm-dd&amp;apos;)
+					  and xh=&amp;apos;%s&amp;apos;
+					  and nsrsbh not in (select cmid from tax_trkhdr where to_char(dat,&amp;apos;yyyy&amp;apos;)=to_char(sysdate,&amp;apos;yyyy&amp;apos;) and stat!=&amp;apos;9&amp;apos;)&amp;quot;
+					.format([guid,accids,orgs,syts,bilid,&amp;quot;SYSTEM&amp;quot;,&amp;quot;系统生成&amp;quot;,toswjg,tousr,subtyp,yymm1,yymm2,stat,mynote,newtyp,typ,fxdj,xh]); 
+				var rst = db.ExcecutSQL(sql);
+				if (rst &amp;gt; 0) {
+					//同时生成发票风险提示核查表
+					sql = &amp;quot;insert into TAX_FPFX_HCB(NSRSBH,NSRMC,TRKGUID) values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([nsrsbh,nsrmc,guid]);	
+					db.ExcecutSQL(sql);
+				}
+			}
+			
+			db.Commit();
+			
+			return &amp;quot;执行完成&amp;quot;;
+		}
+		return &amp;quot;ok&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//弹出消息提醒框
+function showMessage(request)
+{
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+	var swjg = usrinfo.getDeptId();
+	var sql = &amp;quot;select count(decode(stat,&amp;apos;1&amp;apos;,1,null)) stat1, 
+		       count(decode(stat,&amp;apos;2&amp;apos;,1,&amp;apos;3&amp;apos;,1,&amp;apos;31&amp;apos;,1,&amp;apos;32&amp;apos;,1,null)) stat2
+		from tax_trkhdr 
+		where swjg_dm in (select id from v_swjg where id=&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos; or sjid=&amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;)
+		  --and tousr=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;
+		  and tousr like (case when &amp;apos;&amp;quot;+swjg+&amp;quot;&amp;apos;!=&amp;apos;1451100&amp;apos; then &amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; else &amp;apos;%&amp;apos; end)&amp;quot;;
+	var ds = pub.EADbTool.QuerySQL(sql);
+	if (ds.getRowCount() &amp;gt; 0) {
+		var stat1 = ds.getStringAt(0,&amp;quot;stat1&amp;quot;);
+		var stat2 = ds.getStringAt(0,&amp;quot;stat2&amp;quot;);
+		if (stat1 == 0 &amp;&amp; stat2 == 0) return &amp;quot;&amp;quot;;
+		var msg = &amp;quot;&amp;quot;;
+		var title = &amp;quot;未推送任务数：&amp;quot;+stat1+&amp;quot;&amp;lt;br&amp;gt;应对任务数：&amp;quot;+stat2+&amp;quot;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;请到风险管理模块进行处理&amp;quot;;	
+		var html = &amp;quot;&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/message.js&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;;	
+		html += &amp;quot;&amp;lt;SCRIPT language=JavaScript&amp;gt;&amp;quot;;		
+		html += &amp;quot;var MSG1 = new CLASS_MSN_MESSAGE(&amp;apos;msg&amp;apos;,260,160,&amp;apos;消息提醒&amp;apos;,&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;);
+		    	     MSG1.rect(null,null,null,screen.height-50);
+			     MSG1.speed    = 100; 
+			     MSG1.step    = 15; 
+			     MSG1.oncommand = function(){ 
+				this.hide(); 
+				//window.open(&amp;apos;show.sp?grdid=TKDTL&amp;STAT=1,8&amp;apos;);
+			     } 
+			     MSG1.show(); &amp;quot;;					     
+		html += &amp;quot;&amp;lt;/SCRIPT&amp;gt;&amp;quot;;
+		
+			
+		return html;
+	}
+	return &amp;quot;&amp;quot;;
+}
+
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	var mssage = showMessage(request);
+	sb.append(mssage);
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select xh,djxh,nsrsbh,nsrmc,kprq,ppje,zpje,kpje,
+  nsrzt,
+  hy,
+  djzclx, 
+  ssgly,
+  zgswjg,
+  zgswskfj 
+from tax_fxjk_mtkpjedy80w
+where kprq=to_char(sysdate-1,&amp;apos;yyyy-mm-dd&amp;apos;)
+order by kprq desc,xh
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

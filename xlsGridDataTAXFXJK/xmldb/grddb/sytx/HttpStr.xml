@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >HttpStr</MWID><NAME >获取网页数据返回字符串</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >HttpStr.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var ret = invokeOSFunc(&amp;quot;Response&amp;quot;);  
+//	alert(ret);
+	_this.SaveTextFile( &amp;quot;d:\\carrefour.txt&amp;quot;,ret,&amp;quot;用友导出文件 (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var getWeb = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var iopack = new JavaPackage(&amp;quot;java.io&amp;quot;);
+//作为.sp服务时的入口
+//预定义变量：request,response
+var ACC = &amp;quot;&amp;quot;;
+function Response()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ds = null;
+	var str = &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		//var acc = request.getParameter(&amp;quot;ACC&amp;quot;); 
+		//var dat = request.getParameter(&amp;quot;DAT&amp;quot;);		
+		//var dat = &amp;quot;2010-07-23&amp;quot;;
+		var acc = &amp;quot;JQPX&amp;quot;;
+		var carrefour = new getWeb.CarrefourWeb();
+		if(acc != null &amp;&amp; acc != &amp;quot;&amp;quot;)
+		{
+			//从配置表中取出对应客户的用户名密码
+			//throw new Exception(acc);
+			sql = &amp;quot; select USERID,PASSWD,DEPTID,KAID,VALIDAT from EBCONFIG where ACC=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;&amp;quot;;			
+			ds = db.QuerySQL(sql);
+			if(ds.getRowCount()&amp;gt;0){
+				for (var r = 0;r&amp;lt;ds.getRowCount();r++)
+				{
+					var userid = ds.getStringAt(r,&amp;quot;USERID&amp;quot;);
+					var passwd  = ds.getStringAt(r,&amp;quot;PASSWD&amp;quot;);
+					var deptid = ds.getStringDef(r,&amp;quot;DEPTID&amp;quot;,&amp;quot;None&amp;quot;);	
+					var kaid = ds.getStringDef(r,&amp;quot;KAID&amp;quot;,&amp;quot;None&amp;quot;);	
+					var valid = ds.getStringAt(r,&amp;quot;VALIDAT&amp;quot;);								
+					carrefour.Start(dat,dat,userid,passwd);
+					str += writeStr(userid,deptid,kaid,carrefour.GetHdrDS(),carrefour.GetDtlDS());
+				}
+			}	
+		}
+		return str;
+	}catch(Exception e)
+	{
+		throw new Exception(e);
+	}finally
+	{
+		if(db != null)
+			db.Close();
+	}
+}
+
+//================================================================// 
+// 函数：writeStr
+// 说明：把抓取的数据生成文件文件
+// 	 XMLDS样式：
+//	 HDRDS：
+/*
+		&amp;lt;BILID&amp;gt;1d2b01b-128716d151e-f528764d624db129b32c21fbca0cb8d6&amp;lt;/BILID&amp;gt;
+		&amp;lt;CORPNAM&amp;gt;家乐福苏州体育中心店     &amp;lt;/CORPNAM&amp;gt;
+		&amp;lt;CORPID&amp;gt;SuZhou STADIUM Store     &amp;lt;/CORPID&amp;gt;
+		&amp;lt;DEPT&amp;gt;14 干性副食                 &amp;lt;/DEPT&amp;gt;
+		&amp;lt;订单号&amp;gt;14X852644&amp;lt;/订单号&amp;gt;
+		&amp;lt;DAT&amp;gt;07/05/2010&amp;lt;/DAT&amp;gt;
+		&amp;lt;期望到货日&amp;gt;09/05/2010&amp;lt;/期望到货日&amp;gt;
+		&amp;lt;电话号码&amp;gt;021-58301900        &amp;lt;/电话号码&amp;gt;
+		&amp;lt;传真号码&amp;gt;021-33050438        &amp;lt;/传真号码&amp;gt;
+*/ 
+//        DTLDS：
+/*
+		&amp;lt;订单号&amp;gt;14X852789&amp;lt;/订单号&amp;gt;
+		&amp;lt;BILID&amp;gt;1d2b01b-1287212f287-f528764d624db129b32c21fbca0cb8d6&amp;lt;/BILID&amp;gt;
+		&amp;lt;SEQID&amp;gt;1&amp;lt;/SEQID&amp;gt;
+		&amp;lt;ITMID&amp;gt;206008&amp;lt;/ITMID&amp;gt;
+		&amp;lt;条码&amp;gt;6903474221565&amp;lt;/条码&amp;gt;
+		&amp;lt;SPEC&amp;gt;160 g          &amp;lt;/SPEC&amp;gt;
+		&amp;lt;ITMNAM&amp;gt;正一品鸭脖子                                           &amp;lt;/ITMNAM&amp;gt;
+		&amp;lt;UNTNUM&amp;gt;24&amp;lt;/UNTNUM&amp;gt;
+		&amp;lt;QTY&amp;gt;3&amp;lt;/QTY&amp;gt;
+		&amp;lt;赠品数量&amp;gt;0&amp;lt;/赠品数量&amp;gt;
+		&amp;lt;不含税价&amp;gt;18.3760&amp;lt;/不含税价&amp;gt;
+*/			
+// 参数：hdrds,dtlds
+// 返回：filename (文件名)
+// 样例：
+// 作者：Hx_light
+// 创建日期：05/10/10 10:31:36
+// 修改日志：
+//================================================================// 
+function writeStr(userid,deptid,kaid,hdrds,dtlds)
+{
+	var ordid = &amp;quot;&amp;quot;;
+	var context = &amp;quot;&amp;quot;;
+	var sb = new StringBuffer();
+	for (var i = 0 ;i&amp;lt;hdrds.getRowCount();i++)
+	{		
+		var hval = userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;;
+		
+		for (var c = 0;c&amp;lt; hdrds.getColumnCount();c++)
+		{
+			hval += hdrds.getStringAt(i,c)+&amp;quot;~~~&amp;quot;;
+		}
+		ordid = hdrds.getStringAt(i,&amp;quot;订单号&amp;quot;);
+		for(var j = 0;j&amp;lt;dtlds.getRowCount();j++)
+		{
+			var tmpord = dtlds.getStringAt(j,&amp;quot;订单号&amp;quot;);
+			var dval = &amp;quot;&amp;quot;;
+			if(tmpord.equals(ordid))
+			{
+				for (var m = 2;m&amp;lt;dtlds.getColumnCount();m++){
+					dval += dtlds.getStringAt(j,m)+&amp;quot;~~~&amp;quot;;
+				}
+				context = hval+dval;
+				sb.append(context);
+				sb.append(&amp;quot;\n&amp;quot;);
+			}			
+		}		
+	}	
+	return sb.toString();				
+}
+
+//手机端调用的方法
+function JM_httpstr(){
+	try {HDRORDTL  = hdrordtl ;} catch ( e ) {HDRORDTL=&amp;quot;1&amp;quot;;}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

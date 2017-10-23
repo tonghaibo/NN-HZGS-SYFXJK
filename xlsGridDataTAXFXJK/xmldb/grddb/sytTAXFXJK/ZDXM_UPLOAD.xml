@@ -1,0 +1,115 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDXM_UPLOAD</MWID><NAME >项目图片上传</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXM_UPLOAD.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >重点项目</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var xmuuid = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	try { xmuuid = fgwxmuuid; } catch (e) { }
+	_this.ShowToolBar(0);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,0,3,2);
+	_this.AutoFixScreenWidth();
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	var file = _this.GetCellText(0,3,2);
+	var imgid = _this.LoadImage(file);
+	_this.SetToImage(&amp;quot;&amp;quot;,0,8,1,imgid);
+}
+
+
+// ***************************************************************************
+//上传一个文件到FORMBLOB
+// 参数G_GUID：本表单的GUID
+//返回FORMBLOB表的GUID
+// ***************************************************************************
+function f_upload(fileurl,G_GUID,sytid,grdid,note)
+{
+        var ret = &amp;quot;&amp;quot;;
+        _this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+        _this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+        _this.AddHttpRequestParam(&amp;quot;data&amp;quot;,fileurl,1);
+        _this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,G_GUID,0);
+        _this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,sytid,0);
+        _this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,grdid,0);
+        _this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,fileurl,0);
+        
+        ret=_this.SendHttpRequest();    
+        _this.CloseHttpRequest(); 
+        return ret ;
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;上传&amp;quot;) {
+		if (!confirm(&amp;quot;上传项目图片，是否继续？&amp;quot;)) return;
+		var fileurl = _this.GetCellText(0,3,2);
+		var ret = f_upload(fileurl,xmuuid,G_SYTID,G_GRDID,&amp;quot;项目图片&amp;quot;);
+		if (ret.length == 32) {
+			_sql.run(&amp;quot;UPLOG&amp;quot;,&amp;quot;XMUUID=&amp;quot;+xmuuid+&amp;quot;&amp;IMGGUID=&amp;quot;+ret);
+			alert(&amp;quot;项目图片上传成功&amp;quot;);
+			window.close();
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//查看项目图片响应方法
+function showIMG()
+{
+	var xmuuid = request.getParameter(&amp;quot;xmuuid&amp;quot;);
+	var html = &amp;quot;&amp;lt;table align=center&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;;
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select * from tax_zdxm_xmtp where fgwxmuuid=&amp;apos;&amp;quot;+xmuuid+&amp;quot;&amp;apos; order by crtdat asc&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var imgguid = ds.getStringAt(i,&amp;quot;FORMGUID&amp;quot;);
+			var crtdat = ds.getStringAt(i,&amp;quot;CRTDAT&amp;quot;);
+			var note = ds.getStringAt(i,&amp;quot;NOTE&amp;quot;);
+			var divstr = &amp;quot;&amp;lt;div style=&amp;apos;float:center;width:auto;height:auto&amp;apos;&amp;gt;
+					&amp;lt;img src=&amp;apos;EAFormBlob.sp?guid=&amp;quot;+imgguid+&amp;quot;&amp;apos;&amp;gt;
+				&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;span&amp;gt;上传时间：&amp;quot;+crtdat+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;br&amp;gt;&amp;lt;span&amp;gt;图片说明：&amp;quot;+note+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;hr&amp;gt;\n&amp;quot;;
+			html += divstr;
+		}
+		
+		html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+		
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	
+	return html;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >UPLOG</ID><NAME >上传日志</NAME><DATDSC >insert into tax_zdxm_xmtp(fgwxmuuid,formguid)values(&amp;apos;[%XMUUID]&amp;apos;,&amp;apos;[%IMGGUID]&amp;apos;)</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

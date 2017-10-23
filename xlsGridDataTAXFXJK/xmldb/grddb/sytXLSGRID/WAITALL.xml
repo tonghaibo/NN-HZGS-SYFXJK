@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WAITALL</MWID><NAME >待办事项</NAME><NOTE ></NOTE><NOACCNAME >1</NOACCNAME><FILE >WAITALL.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var msgnum = 0;
+function _thisOnpost_loaddata(sheet)
+{
+  //_this.SetCellText(sheet,1,1,&amp;quot;&amp;quot;);
+  _this.SetCellBkColor(sheet,-1,-1,255,255,255);
+  QuerySQLDS(&amp;quot;select count(*) a from trkhdr&amp;quot;);
+  var aa = _this.XMLDS_GetRowCount()
+  alert (aa);
+  load_num();
+  
+}
+function meg()
+{
+alert (&amp;quot;fff&amp;quot;);
+var str = &amp;quot;&amp;lt;html&amp;gt; \n\r&amp;quot;+
+	  &amp;quot;&amp;lt;head&amp;gt; \n\r&amp;quot;+
+          &amp;quot;&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html; charset=gb2312&amp;apos;&amp;gt; \n\r&amp;quot;+
+          &amp;quot;&amp;lt;meta name=&amp;apos;Keywords&amp;apos; content=&amp;apos;51windows.Net&amp;apos;&amp;gt; \n\r&amp;quot;+
+          &amp;quot;&amp;lt;META NAME=&amp;apos;Author&amp;apos; CONTENT=&amp;apos;haiwa&amp;apos;&amp;gt; \n\r&amp;quot;;
+     str += &amp;quot;&amp;lt;body scroll=no&amp;gt;&amp;lt;script language=&amp;apos;JavaScript&amp;apos;&amp;gt;\n\r&amp;quot;;   
+     str += &amp;quot;window.onload = getMsg;\n\r&amp;quot;;
+     str += &amp;quot;window.onresize = resizeDiv; \n\r&amp;quot; ;
+     str += &amp;quot;window.onerror = function(){} \n\r&amp;quot;; 
+     str += &amp;quot;var divTop,divLeft,divWidth,divHeight,docHeight,docWidth,objTimer,i = 0; \n\r&amp;quot;;
+     str += &amp;quot;function getMsg() { \n\r&amp;quot;;
+     str += &amp;quot;try{ divTop = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.top,10); \n\r&amp;quot;;
+     str += &amp;quot;divLeft = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.left,10); \n\r&amp;quot;;
+     str += &amp;quot;divHeight = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetHeight,10) ;\n\r&amp;quot;+
+            &amp;quot;divWidth = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetWidth,10); \n\r&amp;quot;+
+            &amp;quot;docWidth = document.body.clientWidth; \n\r&amp;quot;+
+            &amp;quot;docHeight = document.body.clientHeight; \n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.top = parseInt(document.body.scrollTop,10) + docHeight + 10;\n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.left = parseInt(document.body.scrollLeft,10) + docWidth - divWidth ;\n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.visibility=&amp;apos;visible&amp;apos; ;\n\r&amp;quot;+
+            &amp;quot;objTimer = window.setInterval(&amp;apos;moveDiv()&amp;apos;,10) ;}\n\r&amp;quot;;
+     str += &amp;quot;catch(e){} }\n\r&amp;quot;;
+     
+     str += &amp;quot;function resizeDiv() { \n\r&amp;quot;+
+            &amp;quot;i+=1 ;\n\r&amp;quot;+
+            &amp;quot;if(i&amp;gt;500) closeDiv() ;\n\r&amp;quot;+
+            &amp;quot;try{ \n\r&amp;quot;+
+            &amp;quot;divHeight = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetHeight,10); \n\r&amp;quot; +
+            &amp;quot;divWidth = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).offsetWidth,10); \n\r&amp;quot; +
+            &amp;quot;docWidth = document.body.clientWidth; \n\r&amp;quot;  +
+            &amp;quot;docHeight = document.body.clientHeight; \n\r&amp;quot;  +
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.top = docHeight - divHeight + parseInt(document.body.scrollTop,10) ;\n\r&amp;quot; +
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.left = docWidth - divWidth + parseInt(document.body.scrollLeft,10) ;}\n\r&amp;quot;;
+     str += &amp;quot;catch(e){} }\n\r&amp;quot;;    
+     
+     str += &amp;quot;function moveDiv() { \n\r&amp;quot;;
+     str += &amp;quot;try { \n\r&amp;quot;;
+     str += &amp;quot;if(parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.top,10) &amp;lt;= (docHeight - divHeight + parseInt(document.body.scrollTop,10))){ \n\r&amp;quot;;      
+     str += &amp;quot;window.clearInterval(objTimer) ;\n\r&amp;quot;+
+            &amp;quot;objTimer = window.setInterval(&amp;apos;resizeDiv()&amp;apos;,1) ;}\n\r&amp;quot;+
+            &amp;quot;divTop = parseInt(document.getElementById(&amp;apos;eMeng&amp;apos;).style.top,10) ;\n\r&amp;quot;+
+            &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.top = divTop - 1 ;}\n\r&amp;quot;;
+      str += &amp;quot;catch(e){} }\n\r&amp;quot;;   
+      str += &amp;quot;function closeDiv(){ \n\r&amp;quot;+
+             &amp;quot;document.getElementById(&amp;apos;eMeng&amp;apos;).style.visibility=&amp;apos;hidden&amp;apos;; \n\r&amp;quot;+
+             &amp;quot;if(objTimer) window.clearInterval(objTimer) ;}\n\r&amp;quot;;
+      str +=  &amp;quot;&amp;lt;/script&amp;gt; \n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;DIV id=eMeng style=&amp;apos;BORDER-RIGHT: #455690 1px solid; BORDER-TOP: #a6b4cf 1px solid; Z-INDEX:99999; LEFT: 0px; VISIBILITY: hidden; BORDER-LEFT: #a6b4cf 1px solid; WIDTH: 180px; BORDER-BOTTOM: #455690 1px solid; POSITION: absolute; TOP: 0px; HEIGHT: 116px; BACKGROUND-COLOR: #c9d3f3&amp;apos;&amp;gt;\n\r &amp;quot;;
+      str += &amp;quot;&amp;lt;TABLE style=&amp;apos;BORDER-TOP: #ffffff 1px solid; BORDER-LEFT: #ffffff 1px solid&amp;apos; cellSpacing=0 cellPadding=0 width=&amp;apos;100%&amp;apos; bgColor=#cfdef4 border=0&amp;gt; \n\r&amp;quot;;   
+      str += &amp;quot;&amp;lt;TBODY&amp;gt; &amp;lt;tr&amp;gt; &amp;quot;;
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;FONT-SIZE: 12px;  COLOR: #0f2c8c&amp;apos; width=30 height=24&amp;gt;&amp;lt;/TD&amp;gt; \n\r&amp;quot;;   
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;FONT-WEIGHT: normal; FONT-SIZE: 12px;  COLOR: #1f336b; PADDING-TOP: 4px;PADDING-left: 4px&amp;apos; vAlign=center width=&amp;apos;100%&amp;apos;&amp;gt; 短消息提示：&amp;lt;/TD&amp;gt; \n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;PADDING-TOP: 2px;PADDING-right:2px&amp;apos; vAlign=center align=right width=19&amp;gt;&amp;lt;span title=关闭 style=&amp;apos;CURSOR: hand;color:red;font-size:12px;font-weight:bold;margin-right:4px;&amp;apos; onclick=closeDiv() &amp;gt;×&amp;lt;/span&amp;gt;\n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;/TR&amp;gt; &amp;lt;TR&amp;gt; \n\r&amp;quot;;    
+      str += &amp;quot;&amp;lt;TD style=&amp;apos;PADDING-RIGHT: 1px;  PADDING-BOTTOM: 1px&amp;apos; colSpan=3 height=90&amp;gt; \n\r&amp;quot;;
+      str += &amp;quot;&amp;lt;DIV style=&amp;apos;BORDER-RIGHT: #b9c9ef 1px solid; PADDING-RIGHT: 13px; BORDER-TOP: #728eb8 1px solid; PADDING-LEFT: 13px; FONT-SIZE: 12px; PADDING-BOTTOM: 13px; BORDER-LEFT: #728eb8 1px solid; WIDTH: 100%; COLOR: #1f336b; PADDING-TOP: 18px; BORDER-BOTTOM: #b9c9ef 1px solid; HEIGHT: 100%&amp;apos;&amp;gt;您有&amp;lt;font color=#FF0000&amp;gt;&amp;quot;+msgnum+&amp;quot;&amp;lt;/font&amp;gt;条未处理事务&amp;lt;BR&amp;gt;&amp;lt;BR&amp;gt; \n\r&amp;quot;;  
+      str += &amp;quot;&amp;lt;DIV align=center style=&amp;apos;word-break:break-all&amp;apos;&amp;gt;&amp;lt;a href=&amp;apos;http://www.xlsgrid.net&amp;apos;&amp;gt;&amp;lt;font color=#FF0000&amp;gt;欢迎使用硕格软件&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/DIV&amp;gt;&amp;quot;;
+      str += &amp;quot;&amp;lt;/DIV&amp;gt; &amp;quot;;
+      str +=&amp;quot;&amp;lt;/TD&amp;gt; &amp;lt;/TR&amp;gt; &amp;lt;/TBODY&amp;gt; &amp;lt;/TABLE&amp;gt; &amp;lt;/DIV&amp;gt; &amp;lt;/body&amp;gt; &amp;lt;/html&amp;gt;&amp;quot; ;      
+      return str;     
+     
+}
+
+function load_num()
+{
+     var sql = &amp;quot;select * from (select distinct a.title aa,a.crtusr bb ,to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) cc ,a.prio dd,a.id ee ,a.show ff &amp;quot;+
+		&amp;quot; from  &amp;quot;+
+		&amp;quot;trkhdr a,trkdtl b ,v_usr c,v_prj d ,trktyp e,prjusr pu where a.guid=b.trkguid  &amp;quot;+
+		&amp;quot;and c.id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos;   &amp;quot;+
+		&amp;quot;and c.orgid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; &amp;quot;+
+		&amp;quot;and a.show =e.id   &amp;quot;+
+		&amp;quot;and b.crtusr=c.name  &amp;quot;+ 
+		&amp;quot;and a.project=d.id  &amp;quot;+
+		&amp;quot;and ( b.style=&amp;apos;未处理&amp;apos; or b.style = &amp;apos;处理中&amp;apos;)  &amp;quot;+  
+		&amp;quot;and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) &amp;quot;+
+		&amp;quot;order by cc desc )&amp;quot;; 
+	// QuerySQLDS(&amp;quot;select count(*) a from trkhdr&amp;quot;);
+        //QuerySQLDS(sql);  
+        //var a = _this.XMLDS_GetString(0,&amp;quot;a&amp;quot;);          
+       // alert (sql);	
+        msgnum = _this.XMLDS_GetRowCount();	 
+        var sss = meg();       
+        window.document.write(sss);
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

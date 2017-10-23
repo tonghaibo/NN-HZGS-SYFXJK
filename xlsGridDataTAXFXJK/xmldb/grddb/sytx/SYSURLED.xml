@@ -1,0 +1,574 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >SYSURLED</MWID><NAME >系统链接表维护</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SYSURLED.zxg</FILE><SCENE ></SCENE><FIXED >1,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >UploadImage</ID><NAME >上传图片</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >1</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >UploadImage</C10><C11 ></C11><C12 ></C12><C13 >UploadImage</C13></ROW>
+<ROW num="1" ><ID >UploadImage2</ID><NAME >上传图片2</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >2</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >UploadImage2</C10><C11 ></C11><C12 ></C12><C13 >UploadImage2</C13></ROW>
+<ROW num="2" ><ID >SelImage</ID><NAME >选择图片文件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >3</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >SelImage</C10><C11 ></C11><C12 ></C12><C13 >SelImage</C13></ROW>
+<ROW num="3" ><ID >inst</ID><NAME >插入</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >7</BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C10 ></C10><C11 >insert</C11><C12 >insert</C12><C13 >inst</C13></ROW>
+<ROW num="4" ><ID >delt</ID><NAME >删除</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >8</BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><C10 ></C10><C11 >delt</C11><C12 >delt</C12><C13 >delt</C13></ROW>
+<ROW num="5" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >9</BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 ></C10><C11 >save</C11><C12 >save</C12><C13 >save</C13></ROW>
+<ROW num="6" ><ID >opensutyped</ID><NAME >打开子系统定义</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >99</BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 >opensutyped</C13></ROW>
+<ROW num="7" ><ID >wp8</ID><NAME >编辑WP8菜单</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >myorgid</ID><NAME >组织</NAME><NOTNULL ></NOTNULL><KEYVAL >V_ORG</KEYVAL><INPCTL >idlist</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >0</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >myorgid</C14><C15 >myorgid</C15><C16 >myorgid</C16><C17 >myorgid</C17><C18 >myorgid</C18><C19 >myorgid</C19><C20 >myorgid</C20><C21 >myorgid</C21><C22 >myorgid</C22><C23 ></C23><C24 >myorgid</C24><C25 >myorgid</C25></ROW>
+<ROW num="1" ><ID >menu</ID><NAME >分类</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SYSURLCLASS</KEYVAL><INPCTL >idlist</INPCTL><DISPORD >2</DISPORD><SQLWHE >orgid=&amp;apos;[%SYS_DEFORG]&amp;apos;</SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >menu</C13><C14 ></C14><C15 ></C15><C16 >menu</C16><C17 ></C17><C18 ></C18><C19 >menu</C19><C20 >menu</C20><C21 >menu</C21><C22 >menu</C22><C23 >menu</C23><C24 >menu</C24><C25 ></C25></ROW>
+<ROW num="2" ><ID >info</ID><NAME >关键字</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 >info</C20><C21 >info</C21><C22 ></C22><C23 ></C23><C24 >info</C24><C25 ></C25></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:Detail</DSKEY><NROW >3</NROW><NCOL >16</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var G_IMAGEMENUXML = &amp;quot;&amp;lt;item id=\&amp;quot;m_img_select\&amp;quot; name=\&amp;quot;选择图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_modify\&amp;quot; name=\&amp;quot;编辑图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_preview\&amp;quot; name=\&amp;quot;预览图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_upload\&amp;quot; name=\&amp;quot;选择本地图片上传\&amp;quot;/&amp;gt;&amp;quot;;
+var G_EDITMENUXML = &amp;quot;&amp;lt;item id=\&amp;quot;m_edit_html\&amp;quot; name=\&amp;quot;HTML编辑\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_edit_text\&amp;quot; name=\&amp;quot;文本编辑\&amp;quot;/&amp;gt;&amp;quot;;
+
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetColVisible(sheet,1,-1);
+	_this.SetColVisible(sheet,2,-1);
+	
+	var list = _this.CreateListValue();
+	_this.SetListValue(list,&amp;quot;win8&amp;quot;,&amp;quot;Win 8风格&amp;quot;);
+	_this.SetListValue(list,&amp;quot;menu&amp;quot;,&amp;quot;Menu风格&amp;quot;);
+	
+	for (var row = 1; row &amp;lt; _this.GetRowCount(sheet); row ++) {
+		_this.SetToBoolBox(sheet,row,0);
+		if (row &amp;gt; 0) {
+			_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,13,list);
+			if (_this.GetCellText(sheet,row,13) == &amp;quot;&amp;quot;) _this.SetCellText(sheet,row,13,&amp;quot;menu&amp;quot;);
+			_this.AutoFixOneRowHeight(sheet,row);
+		}
+		_this.SetToButton(&amp;quot;&amp;quot;,sheet,row,11,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+		_this.SetToButton(&amp;quot;&amp;quot;,sheet,row,13,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+		//_this.SetToButton(&amp;quot;&amp;quot;,sheet,row,7,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_EDITMENUXML ,0,16,16);
+
+
+	}
+	
+	_this.SetColName(sheet,0,&amp;quot;FLG&amp;quot;);
+	_this.SetColName(sheet,1,&amp;quot;GUID&amp;quot;);
+	_this.SetColName(sheet,2,&amp;quot;ORG&amp;quot;);
+	_this.SetColName(sheet,3,&amp;quot;REFID&amp;quot;);
+	_this.SetColName(sheet,4,&amp;quot;ID&amp;quot;);
+	_this.SetColName(sheet,5,&amp;quot;NAME&amp;quot;);
+	_this.SetColName(sheet,6,&amp;quot;NOTE&amp;quot;);
+	_this.SetColName(sheet,8,&amp;quot;URL&amp;quot;);
+	_this.SetColName(sheet,9,&amp;quot;TARGET&amp;quot;);
+	_this.SetColName(sheet,10,&amp;quot;ICON&amp;quot;);
+	_this.SetColName(sheet,12,&amp;quot;ICON2&amp;quot;);
+	_this.SetColName(sheet,14,&amp;quot;SRCFILNAM&amp;quot;);
+	_this.SetColName(sheet,15,&amp;quot;SUPPERID&amp;quot;);
+	_this.SetColName(sheet,16,&amp;quot;SEQID&amp;quot;);
+
+	_this.AutoFixScreenWidth();
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if (row == 0 &amp;&amp; col == 0) {
+		var str = _this.GetCellText(sheet,row,col);
+		_this.SetRedraw(0);
+		//把属性传递下去
+		for (var r = 1; r &amp;lt; _this.GetRowCount(sheet); r ++) {
+			_this.SetCellText(sheet,r,0,str);
+		}
+		_this.SetRedraw(1);
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	
+	if (row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet) &amp;&amp; col == 7) {
+		var urlguid = _this.GetCellText(sheet,row,1);
+		var sysurlid = _this.GetCellText(sheet,row,5);
+		openWindow( &amp;quot;show.sp?grdid=URLBODY&amp;urlguid=&amp;quot;+urlguid+&amp;quot;&amp;SYSURLID=&amp;quot;+sysurlid );
+	} else if (row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet) &amp;&amp; (col == 10 || col == 11)) {
+		var url = _this.GetCellText(sheet,row,col);
+		if (url != &amp;quot;&amp;quot;) openWindow(url);
+	}
+//	else if (row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet) &amp;&amp; (col == 15)) {
+//		wp8();
+//	}
+
+}
+
+//上传图片
+function UploadImage()
+{
+	var row=_this.GetCurrentRow(0);
+	if ( row &amp;lt;1 ) {alert(&amp;quot;请选中行，再上传文件&amp;quot;);return;}
+	var id=_this.GetCellText(0,row,4);
+	var workdir = _this.GetWorkDir();
+	var SYSURLID = &amp;quot;public&amp;quot;;
+	var deforg=thisorgid;
+	var webdir = &amp;quot;webresource/images/&amp;quot;+ deforg+ &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+//	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+//	var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+//	form.reset();
+//	btn.click();
+//	var filename = btn.value;
+	var filename = _this.SelectFile(&amp;quot;*.*&amp;quot;);
+	if ( filename == &amp;quot;&amp;quot; ) return;
+
+	var fs = filename.split(&amp;quot;\\&amp;quot;);
+		// 上传文件到xlsGridData
+		var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+		//2010-10新增，加上内容的编号，以避免文件名冲突
+		var newfilename= fs[fs.length-1];
+		var refid = _this.GetCellText(0,row,3);
+		if ( refid != &amp;quot;&amp;quot; ) webdir = webdir + refid + &amp;quot;/&amp;quot;;
+		
+		
+		_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+		_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+		_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir ,0);	//远程保存的目录
+		_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,newfilename,0);//注意这里只能是文件名，用于远程保存的文件名
+		_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+		var ret=_this.SendHttpRequest(); 
+		_this.CloseHttpRequest();
+	
+		
+		if ( ret.indexOf(&amp;quot;成功&amp;quot;)&amp;gt;0 ){
+			// 从xlsGridData同步到web
+			try {
+				invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+deforg  +&amp;quot;&amp;sysurlid=&amp;quot;+SYSURLID) ;       
+			}
+			catch ( e ) {
+				alert ( e );
+			}
+			_this.SetCellText(0,row,10,&amp;quot;images/&amp;quot;+ deforg+ &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot;+refid+&amp;quot;/&amp;quot;+newfilename);
+
+			_this.SetCellText(0,row,12,fs[fs.length-1]);
+
+			_save(false);
+
+			alert( &amp;quot;文件&amp;quot;+filename +&amp;quot;已上传为&amp;quot;+newfilename+&amp;quot;&amp;quot;);
+
+		}
+		else alert ( ret );
+
+}
+
+//上传图片
+function UploadImage2()
+{
+	var row=_this.GetCurrentRow(0);
+	if ( row &amp;lt;1 ) {alert(&amp;quot;请选中行，再上传文件&amp;quot;);return;}
+	var id=_this.GetCellText(0,row,4);
+	var workdir = _this.GetWorkDir();
+	var SYSURLID = &amp;quot;public2&amp;quot;;
+	var deforg=thisorgid;
+	var webdir = &amp;quot;webresource/images/&amp;quot;+ deforg+ &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot; ;
+//	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+//	  var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+//	  form.reset();
+//	  btn.click();
+//	var filename = btn.value;
+	var filename = _this.SelectFile(&amp;quot;*.*&amp;quot;);
+	if ( filename == &amp;quot;&amp;quot; ) return;
+	var fs = filename.split(&amp;quot;\\&amp;quot;);
+		// 上传文件到xlsGridData
+		var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+		//2010-10新增，加上内容的编号，以避免文件名冲突
+		var newfilename= fs[fs.length-1];
+		var srcfilnam = fs[fs.length-1];
+		
+		var newfilenames=newfilename.split(&amp;quot;.&amp;quot;);
+		newfilename=newfilenames[0]+&amp;quot;-&amp;quot;+id;
+		if(newfilenames.length&amp;gt;1)
+			newfilename+=&amp;quot;.&amp;quot;+newfilenames[1];
+		_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+		_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+		_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir ,0);	//远程保存的目录
+
+		_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,newfilename,0);//注意这里只能是文件名，用于远程保存的文件名
+		_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+		var ret=_this.SendHttpRequest(); 
+
+		_this.CloseHttpRequest();
+//		var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+//		var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+//		var str = ret.substring(loc1+7,loc2);
+//		files+=&amp;quot;&amp;quot;+(i+1)+&amp;quot;.&amp;quot;+filename+&amp;quot;:&amp;quot;+str +&amp;quot;\n&amp;quot;;
+//		alert( files);
+		// 从xlsGridData同步到web
+		
+		if ( ret.indexOf(&amp;quot;成功&amp;quot;)&amp;gt;0 ){
+			// 从xlsGridData同步到web
+			try {
+				invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+deforg  +&amp;quot;&amp;sysurlid=&amp;quot;+SYSURLID) ;       
+			}
+			catch ( e ) {
+				alert ( e );
+			}
+			_this.SetCellText(0,row,11,&amp;quot;images/&amp;quot;+ deforg+ &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot;+newfilename);
+			
+
+//			if(_this.GetCellText(0,row,2)==&amp;quot;&amp;quot;)//图片上传的一个bug，修改状态上传后没有写到数据库
+//			_this.SetCellText(0,row,2,&amp;quot;U&amp;quot;);
+			_save(false);
+
+			alert( &amp;quot;文件&amp;quot;+filename +&amp;quot;已上传为&amp;quot;+newfilename+&amp;quot;&amp;quot;);
+			//alert( &amp;quot;文件&amp;quot;+filename +&amp;quot;已上传为&amp;quot;+newfilename+&amp;quot;，请点击右上角的【保存】按钮保存本页信息&amp;quot;);
+
+		}
+		else alert ( ret );
+//		alert( ret);
+		
+}
+
+//选择图片文件
+function SelImage()
+{
+	var row=_this.GetCurrentRow(0);
+	if ( row &amp;lt;1 ) {alert(&amp;quot;请选中行，再选中文件&amp;quot;);return;}
+	var ret =window.showModalDialog(&amp;quot;show.sp?grdid=fileEditor&amp;selectflag=1&amp;base=webresource|images|&amp;quot;+thisorgid,&amp;quot;&amp;quot;,&amp;quot;center:yes;resizable:yes;dialogWidth: 800px; dialogHeight: 560px;&amp;quot;);  
+	if ( ret!=undefined ){
+		var str=&amp;quot;webresource&amp;quot;;
+		_this.SetCellText(0,row,10,ret.substring(12) );
+	}
+}
+
+//插入
+function inst()
+{
+	var row1 = _this.GetCurrentRow(0);
+	if (row1 == -1) row1 = 1;
+	var row2 = _this.AppendRow(sheet,row1);
+	var org = _this.GetCellText(sheet,row1,2);
+	if (org == &amp;quot;&amp;quot;) org = document.getElementById(&amp;quot;myorgid&amp;quot;).value;
+	var typ = _this.GetCellText(sheet,row1,3);
+	if (org == &amp;quot;&amp;quot;) org = document.getElementById(&amp;quot;menu&amp;quot;).value;
+	
+	_sql.querytods(&amp;quot;SEQ&amp;quot;, &amp;quot;&amp;quot;);
+	_this.SetCellText(sheet,row2,4,_this.XMLDS_GetStringAt(0,0));
+	_this.SetCellText(sheet,row2,2,org);
+	_this.SetCellText(sheet,row2,3,typ);
+	_this.SetCellText(sheet,row2,7,&amp;quot;编辑&amp;quot;);
+}
+
+//删除
+function delt()
+{
+	//POST方式调用网络OS函数
+	var param = new Object();
+	param.xmlstr = _this.GetXml(sheet,1,0,_this.GetRowCount(sheet)-1,_this.GetColCount(sheet)-1).replace(/&amp;/g,&amp;quot;#$&amp;quot;);
+	
+	try {
+		if (!window.confirm(&amp;quot;是否确定删除操作? 此操作不可恢复!!!&amp;quot;)) return;
+		var msg = invokeOSFuncExt(&amp;quot;delt&amp;quot;,param);
+		alert ( msg );
+		try { window.opener.lchref(); } catch ( ee ) { }
+		for ( var i=1;i&amp;lt;_this.GetRowCount(0);i++){
+			if(_this.GetCellText(0,i,0)==&amp;quot;1&amp;quot;)_this.DeleteRow(0,i);
+			
+		}
+		//window.location.href = window.location.href;
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+}
+
+//保存
+function save()
+{
+	_save(true);
+}
+
+//保存
+function _save(prompt)
+{
+	var param = new Object();
+	param.xmlstr = _this.GetXml(sheet,1,1,_this.GetRowCount(sheet)-1,_this.GetColCount(sheet)-1).replace(/&amp;/g,&amp;quot;#$&amp;quot;);
+	
+	try {
+		var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		if ( prompt ) {
+			alert ( msg );
+			try { window.opener.lchref(); } catch ( ee ) { }
+		}
+		alert ( msg );
+		//window.location.href = window.location.href;
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+}
+
+//打开子系统定义
+function opensutyped()
+{
+	openWindow(&amp;quot;show.sp?grdid=subsyt&amp;MYSYTID=&amp;quot;+G_SYTID);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( _this.GetCellText(sheet,row,4) == &amp;quot;&amp;quot;) {
+		_sql.querytods(&amp;quot;SEQ&amp;quot;, &amp;quot;&amp;quot;);
+		_this.SetCellText(sheet,row,4,_this.XMLDS_GetStringAt(0,0));
+		
+	}
+	if ( _this.GetCellText(sheet,row,2) == &amp;quot;&amp;quot;) {
+		_this.SetCellText(sheet,row,2,G_ORGID);
+	}
+}
+
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	var id=menuitemid;
+	//&amp;quot;&amp;lt;item id=\&amp;quot;m_img_select\&amp;quot; name=\&amp;quot;选择图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_modify\&amp;quot; name=\&amp;quot;编辑图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_preview\&amp;quot; name=\&amp;quot;预览图片\&amp;quot;/&amp;gt;&amp;quot;;
+
+	if(id==&amp;quot;m_img_modify&amp;quot;){
+		var imgurl = _this.GetCellText(sheet,row,col-1);
+		var imgguid = &amp;quot;&amp;quot;;
+		var prestr = &amp;quot;EAFormBlob.sp?guid=&amp;quot;;
+		if(imgurl.substring(0,prestr.length)==prestr){
+			imgguid = imgurl.substring(prestr.length );
+		}
+		try{
+			var bw = &amp;quot;120&amp;quot;;// _this.GetCellText(sheet,3,8);
+			var bh = &amp;quot;120&amp;quot;;//_this.GetCellText(sheet,3,9);
+//			if(bh==&amp;quot;&amp;quot;||row!==7)bh= &amp;quot;120&amp;quot;;
+//			if(bw==&amp;quot;&amp;quot;||row!==7)bw= &amp;quot;120&amp;quot;;
+//
+			var url = &amp;quot;show.sp?grdid=ImageEdit&amp;formguid=&amp;quot;+imgguid +&amp;quot;&amp;bigimgw=&amp;quot;+bw+&amp;quot;&amp;bigimgh=&amp;quot;+bh+&amp;quot;&amp;imgw=&amp;imgh=&amp;smlimgw=&amp;smlimgh=&amp;quot;;
+			
+			var ret = window.showModalDialog(url,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+			if(ret!=undefined){
+				
+				var ss = ret.split(&amp;quot;,&amp;quot;);
+				_this.SetCellText(sheet,row,col-1,prestr+ss[0]);
+//				if(ss.length&amp;gt;=5&amp;&amp;row==7){
+//					_this.SetCellText(sheet,3,8,ss[3]);
+//					_this.SetCellText(sheet,3,9,ss[4]);
+//				}
+			}
+		}catch(e){}
+	}
+	else if(id==&amp;quot;m_img_select&amp;quot;){
+		var retval=window.showModalDialog(&amp;quot;iconbatch.sp?rettyp=WEBPATH&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=500pt; dialogWidth=800pt;status=no&amp;quot;); 
+		if (retval!=&amp;quot;&amp;quot; &amp;&amp; retval!=undefined ){
+			_this.SetCellText(sheet,row,col-1, retval );
+		}
+	}
+	else if(id==&amp;quot;m_img_preview&amp;quot;){
+		previewimg(_this.GetCellText(sheet,row,col-1));
+	}
+	else if(id==&amp;quot;m_img_upload&amp;quot;){//选择本地图片上传
+		var filename = _this.SelectFile(&amp;quot;&amp;quot;);
+		if (filename !=&amp;quot;&amp;quot; ) {
+			_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+			_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,filename ,1);
+			_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,&amp;quot;&amp;quot;,0);
+			_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+			_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+			_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,filename ,0);
+			var ret = _this.SendHttpRequest();
+			_this.CloseHttpRequest();
+			if(ret!=&amp;quot;&amp;quot; ) {
+				_this.SetCellText(sheet,row,col-1, &amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret);
+			}
+		}
+	}
+	//var G_EDITMENUXML = &amp;quot;&amp;lt;item id=\&amp;quot;m_edit_html\&amp;quot; name=\&amp;quot;HTML编辑\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_edit_text\&amp;quot; name=\&amp;quot;文本编辑\&amp;quot;/&amp;gt;&amp;quot;;
+//	else if(id==&amp;quot;m_edit_text&amp;quot;){//
+//		var urlguid = _this.GetCellText(sheet,row,1);
+//		var sysurlid = _this.GetCellText(sheet,row,5);
+//		openWindow( &amp;quot;show.sp?grdid=URLBODY&amp;urlguid=&amp;quot;+urlguid+&amp;quot;&amp;SYSURLID=&amp;quot;+sysurlid );
+//	}
+//
+//	else if(id==&amp;quot;m_edit_html&amp;quot;){//
+//		var guid=_this.GetCellText(sheet,row,5);
+//		var ret = window.showModalDialog(&amp;quot;show.sp?grdid=HtmlEdit&amp;guid=&amp;quot;+guid,null,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+//		if(ret!=undefined)
+//		{
+//			_this.SetCellText(sheet,row,5,ret);
+//			_this.SetCellShowText(sheet,row,5,_this.HttpCall(&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret));
+//		}
+//	}
+
+}
+//编辑WP8菜单
+function wp8()
+{
+	var currow = _this.GetCurrentRow(0);
+	if(currow&amp;gt;0){
+		var id = _this.GetCellText(0,currow,4);
+		if( _this.GetCellText(0,currow,15)!=&amp;quot;&amp;quot;)
+			id = _this.GetCellText(0,currow,15);
+		else _this.SetCellText(0,currow,15,id)
+		openWindow(&amp;quot;show.sp?grdid=swfwelcome&amp;candel=0&amp;myorgid=&amp;quot;+G_DEFORG+&amp;quot;&amp;layoutid=&amp;quot;+id+&amp;quot;&amp;nls=&amp;quot;);
+	}
+	else {
+		alert(&amp;quot;请先定位到指定行&amp;quot;);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  
+  sb.append(&amp;quot;&amp;lt;script&amp;gt;\n&amp;quot;);
+  var thisorgid=pubpack.EAFunc.NVL(request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request));
+  sb.append(&amp;quot;\nvar thisorgid=\&amp;quot;&amp;quot;+thisorgid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+  
+}
+  
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  bodysb.insert(0,&amp;quot;&amp;lt;form id=\&amp;quot;myfilef\&amp;quot;&amp;gt;&amp;lt;input type=\&amp;quot;file\&amp;quot; id=\&amp;quot;myfile\&amp;quot; style=\&amp;quot;display:none\&amp;quot;&amp;gt;&amp;lt;/input&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;);//
+}  
+
+// 复制xlsGridData到web
+// 参数 deforg  sysurlid 
+function copytoweb()
+{
+	var srcpath = basePath +&amp;quot;webresource/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+sysurlid+&amp;quot;/&amp;quot;; 
+	var destpath = pubpack.EAOption.approot+&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+sysurlid+&amp;quot;/&amp;quot;;
+	pubpack.EAFunc.copyDirectiory(srcpath,destpath,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+	return &amp;quot;服务端：文件已从&amp;quot;+ srcpath +&amp;quot;同步到&amp;quot;+destpath ;
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var sql= &amp;quot;&amp;quot;;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		var EAfunc = new pubpack.EAFunc();
+		
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+	
+			var guid = ds.getStringAt(row,&amp;quot;GUID&amp;quot;);
+			var org = ds.getStringAt(row,&amp;quot;ORG&amp;quot;);
+			var refid = ds.getStringAt(row,&amp;quot;REFID&amp;quot;);
+			var id = ds.getStringAt(row,&amp;quot;ID&amp;quot;);
+			var name = ds.getStringAt(row,&amp;quot;NAME&amp;quot;);
+			var note = ds.getStringAt(row,&amp;quot;NOTE&amp;quot;);
+			var url = ds.getStringAt(row,&amp;quot;URL&amp;quot;);
+			var target = ds.getStringAt(row,&amp;quot;TARGET&amp;quot;);
+			var icon = ds.getStringAt(row,&amp;quot;ICON&amp;quot;);
+			var icon2 = ds.getStringAt(row,&amp;quot;ICON2&amp;quot;);
+			var srcfilnam = ds.getStringAt(row,&amp;quot;SRCFILNAM&amp;quot;);
+			var supperid = ds.getStringAt(row,&amp;quot;SUPPERID&amp;quot;);
+			var seqid = ds.getStringAt(row,&amp;quot;SEQID&amp;quot;);
+			
+			url = EAfunc.Replace(url,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+			
+			if (guid != &amp;quot;&amp;quot;){
+				sql = &amp;quot;update sysurl set refid=&amp;apos;%s&amp;apos;,name=&amp;apos;%s&amp;apos;,note=&amp;apos;%s&amp;apos;,url=&amp;apos;%s&amp;apos;,target=&amp;apos;%s&amp;apos;,icon=&amp;apos;%s&amp;apos;,icon2=&amp;apos;%s&amp;apos;,srcfilnam=&amp;apos;%s&amp;apos;,supperid=&amp;apos;%s&amp;apos;,seqid=&amp;apos;%s&amp;apos; where guid=&amp;apos;%s&amp;apos;&amp;quot;
+					.format([refid,name,note,url,target,icon,icon2,srcfilnam,supperid,seqid,guid]);
+				db.ExcecutSQL(sql);
+			} else {
+				if (org != &amp;quot;&amp;quot; &amp;&amp; refid != &amp;quot;&amp;quot;) {
+					sql = &amp;quot;insert into sysurl (guid,org,refid,id,name,note,url,target,icon,icon2,srcfilnam,supperid,seqid) values (sys_guid(),&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;
+						.format([org,refid,id,name,note,url,target,icon,icon2,srcfilnam,supperid,seqid]);
+					db.ExcecutSQL(sql);
+				}
+			}
+		}
+		
+		db.Commit();
+		msg = &amp;quot;保存成功!&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+// 客户端param传入的参数可以直接使用
+function delt()
+{
+	var db = null;
+	var sql= &amp;quot;&amp;quot;;
+	var cnt = 0;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+			var flg = ds.getStringAt(row,&amp;quot;FLG&amp;quot;);
+			var guid = ds.getStringAt(row,&amp;quot;GUID&amp;quot;);
+			
+			if (flg == &amp;quot;1&amp;quot;) {
+				sql = &amp;quot;delete sysurl where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+				cnt += db.ExcecutSQL(sql);
+			}
+		}
+		
+		db.Commit();
+		msg = &amp;quot;删除成功! 共 &amp;quot;+cnt+&amp;quot; 行&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Detail</ID><NAME ></NAME><DATDSC >select guid,org,refid,id,name,note,&amp;apos;编辑&amp;apos; editflg,url,target,icon,&amp;apos;&amp;apos; b1,icon2,&amp;apos;&amp;apos; b2,srcfilnam,supperid,seqid
+  from SYSURL
+ where /*decode(&amp;apos;[%myorgid]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~!&amp;apos;,org)=decode(&amp;apos;[%myorgid]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~!&amp;apos;,&amp;apos;[%myorgid]&amp;apos;)*/
+   org=&amp;apos;[%SYS_ORGID]&amp;apos;
+   and decode(&amp;apos;[%menu]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~!&amp;apos;,refid)=decode(&amp;apos;[%menu]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~!&amp;apos;,&amp;apos;[%menu]&amp;apos;)
+   and (nvl(name,&amp;apos; &amp;apos;) like &amp;apos;%[%info]%&amp;apos; or nvl(note,&amp;apos; &amp;apos;) like &amp;apos;%[%info]%&amp;apos; or nvl(url,&amp;apos; &amp;apos;) like &amp;apos;%[%info]%&amp;apos; or nvl(refid,&amp;apos; &amp;apos;) like &amp;apos;%[%info]%&amp;apos;)
+and org=&amp;apos;[%SYS_DEFORG]&amp;apos;
+ order by org,refid,seqid</DATDSC><C4 >Detail</C4><C5 >Detail</C5><C6 >Detail</C6><C7 >Detail</C7><C8 >Detail</C8><C9 >Detail</C9><C10 >Detail</C10><C11 >Detail</C11><C12 >Detail</C12><C13 >Detail</C13><C14 >Detail</C14><C15 >Detail</C15></ROW>
+<ROW num="1" ><ID >SEQ</ID><NAME ></NAME><DATDSC >select seq_sysurl.nextval from dual</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

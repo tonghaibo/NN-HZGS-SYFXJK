@@ -1,0 +1,336 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SQJK05_1</MWID><NAME >升级版纳税人采集情况明细</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SQJK05_1.zxg</FILE><SCENE ></SCENE><FIXED >1,1</FIXED><CATTYP >发票事前监控</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+	
+	if (typ==3){
+		_this.SetCellText(sheet,0,1,&amp;quot; 完全采集企业名单&amp;quot;);
+	}
+	else if (typ==5){
+		_this.SetCellText(sheet,0,1,&amp;quot;部分采集企业名单&amp;quot;);
+	}
+	else if (typ==7){
+		_this.SetCellText(sheet,0,1,&amp;quot; 已采集企业名单&amp;quot;);
+	}
+	else {
+		_this.SetCellText(sheet,0,1,&amp;quot;未采集企业名单&amp;quot;);
+	}
+	
+        loadData();
+        for (var r=1;r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,0) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+		}
+	}
+}
+//加载查询数据
+function loadData()
+{	
+
+	_this.SetFixedRow(0,2);
+	_this.SetFixedCol(0,1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);	
+	
+	_this.SetCellText(0,3,2,&amp;quot;正在查询...&amp;quot;); 
+	
+	if (zgswjg==&amp;quot;平桂区国税局&amp;quot; )  {
+		var zgswjg_dm=&amp;apos;1451101&amp;apos;;   
+	    	//var xml=_sql.query(&amp;quot;MAIN_WQCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm); 
+	     	if    (typ==3)   { 
+	     		var xml=_sql.query(&amp;quot;MAIN_WQCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);  
+	     	}
+	    	else if (typ==5){
+	     		//alert(&amp;quot;typ&amp;quot;+typ);
+	     		 var xml=_sql.query(&amp;quot;MAIN_BFCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+	     	else if (typ==7){ 
+	     		var xml=_sql.query(&amp;quot;MAIN_YCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+	    	else if  (typ==9)  { 
+	     		var xml=_sql.query(&amp;quot;MAIN_WCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+	}
+
+	else if (zgswjg==&amp;quot;八步区国税局&amp;quot;) { 
+		  var zgswjg_dm=&amp;apos;1451102&amp;apos;;     
+      	    	 if (typ==3)      { 
+      	   	  	var xml=_sql.query(&amp;quot;MAIN_WQCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);  
+      	   	  }
+	    	 else if (typ==5)	{
+	    	 	var xml=_sql.query(&amp;quot;MAIN_BFCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm); 
+	    	 }
+	    	 else if (typ==7) {
+	     		var xml=_sql.query(&amp;quot;MAIN_YCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+	    	 else if  (typ==9)  { 
+	     		var xml=_sql.query(&amp;quot;MAIN_WCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+
+        }
+        else if (zgswjg==&amp;quot;昭平县国税局&amp;quot; ){   
+        	 var zgswjg_dm=&amp;apos;1451121&amp;apos;;     
+             	if (typ==3) { 
+             		var xml=_sql.query(&amp;quot;MAIN_WQCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+             	  }
+	    	 else if (typ==5)	{
+	    	 	var xml=_sql.query(&amp;quot;MAIN_BFCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	 }
+	     	else if (typ==7) {
+	     		var xml=_sql.query(&amp;quot;MAIN_YCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+	    	 else  if (typ==9)  { 
+	    	 	var xml=_sql.query(&amp;quot;MAIN_WCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+        }
+        else if (zgswjg==&amp;quot;钟山县国税局&amp;quot; ){ 
+           var zgswjg_dm=&amp;apos;1451122&amp;apos;;     
+             if (typ==3)      { 
+             	var xml=_sql.query(&amp;quot;MAIN_WQCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm); 
+             	 }
+	     else if (typ==5)	{
+	     	var xml=_sql.query(&amp;quot;MAIN_BFCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	 }
+	     else if (typ==7) {
+	    	 var xml=_sql.query(&amp;quot;MAIN_YCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     }
+	     else if (typ==9)   { 
+	     	var xml=_sql.query(&amp;quot;MAIN_WCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     	}
+        }
+        else if (zgswjg==&amp;quot;富川县国税局&amp;quot; ){  
+        	  var zgswjg_dm=&amp;apos;1451123&amp;apos;;     
+             if      (typ==3) { 
+             var xml=_sql.query(&amp;quot;MAIN_WQCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm); 
+              }
+	     else if (typ==5)	{
+	     var xml=_sql.query(&amp;quot;MAIN_BFCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	      }
+	     else if (typ==7) {
+	     var xml=_sql.query(&amp;quot;MAIN_YCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	     }
+	     else if  (typ==9)  {
+	      var xml=_sql.query(&amp;quot;MAIN_WCJ&amp;quot;,&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg_dm);
+	      }
+        }
+        
+
+	_this.SetXmlDS(0,2,1,9,28,xml);
+	//_this.XMLDS_Parse(xml); 
+	
+	_this.AutoFixScreenWidth();
+	
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN_WQCJ</ID><NAME ></NAME><DATDSC >--完全采集企业
+select rownum,a.nsrsbh &amp;quot;纳税人识别号&amp;quot;,
+a.nsrmc ,
+(select nsrztmc from  DM_GY_NSRZT zt where b.nsrzt_dm=zt.nsrzt_dm) &amp;quot;纳税人状态&amp;quot;, 
+(select hymc from DM_GY_HY hy where hy.hy_dm=b.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)&amp;quot;行业&amp;quot;,
+(case when b.hy_dm in (select hy_dm from DM_GY_HY start with hy_dm in(&amp;apos;52&amp;apos;,&amp;apos;51&amp;apos;)connect by prior hy_dm=sjhy_dm)
+        then &amp;apos;1&amp;apos; else &amp;apos;0&amp;apos; end ) &amp;quot;是否商贸企业&amp;quot;,
+a.fddbrxm&amp;quot;法人姓名&amp;quot;,
+a.fddbrsfzhm&amp;quot;法人身份证号&amp;quot;,
+a.frcjqk&amp;quot;法人采集情况&amp;quot;,
+a.cwfzrxm&amp;quot;财务负责人姓名&amp;quot;,
+a.cwfzrsfzhm&amp;quot;财务负责人身份证号&amp;quot;,
+a.cwcjqk&amp;quot;财务负责人采集情况&amp;quot;,
+a.bsrxm&amp;quot;办税人姓名&amp;quot;,
+a.bsrsfzhm&amp;quot;办税人身份证号&amp;quot;,
+a.bsrcjqk&amp;quot;办税人采集情况&amp;quot;,
+a.gprxm&amp;quot;购票人姓名&amp;quot;,
+a.gprsfzhm&amp;quot;购票人身份证号&amp;quot;,
+a.gprcjqk&amp;quot;购票人采集情况&amp;quot;,
+b.zcdz &amp;quot;注册地址&amp;quot;,
+(select swryxm from DM_GY_SWRY swry where swry.swry_dm=b.SSGLY_DM)&amp;quot;管理员&amp;quot;,
+(select name from v_swjg sw where sw.id=substr(b.zgswskfj_dm,1,7))&amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where b.zgswskfj_dm=jg.swjg_dm)&amp;quot;主管税务所（科、分局）&amp;quot;,
+c.fddbrgddh &amp;quot; 法人固定电话&amp;quot;,
+c.fddbryddh &amp;quot;法人移动电话&amp;quot;,
+c.cwfzrgddh &amp;quot;财务负责人固定电话&amp;quot;,
+c.cwfzryddh &amp;quot;财务负责人移动电话&amp;quot;,
+c.bsrgddh&amp;quot;办税人固定电话&amp;quot;,
+c.bsryddh &amp;quot;办税人移动电话&amp;quot;
+from tax_smqy_ybnsr a,dj_nsrxx b,dj_nsrxx_kz c
+where (a.nsrsbh=b.nsrsbh or a.nsrsbh=b.shxydm)
+  and b.djxh=c.djxh(+)
+  and b.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)  
+  and ( (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)  
+         or((b.fddbrsfzjlx_dm !=&amp;apos;201&amp;apos; or length(trim(fddbrsfzhm))&amp;lt;15) and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or( a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos; )
+         or(frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos; )
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)        
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and  a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or  (a.FDDBRXM is null  and  a.CWFZRXM is null and  bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)                                     
+         or (frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos;  and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos;  and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;) )
+    and  b.djxh in ( select djxh from dj_djhglgl where lb_dm=&amp;apos;000000000028&amp;apos; )
+    and substr(b.zgswj_dm,1,7) like &amp;apos;[%ZGSWJG]&amp;apos; 
+    
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16><C17 >MAIN_WQCJ</C17><C18 >MAIN_WQCJ</C18><C19 ></C19><C20 ></C20><C21 >MAIN_WQCJ</C21><C22 >MAIN_WQCJ</C22></ROW>
+<ROW num="1" ><ID >MAIN_YCJ</ID><NAME ></NAME><DATDSC >
+--已采集企业
+select rownum,a.nsrsbh &amp;quot;纳税人识别号&amp;quot;,
+a.nsrmc ,
+(select nsrztmc from  DM_GY_NSRZT zt where b.nsrzt_dm=zt.nsrzt_dm) &amp;quot;纳税人状态&amp;quot;, 
+(select hymc from DM_GY_HY hy where hy.hy_dm=b.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)&amp;quot;行业&amp;quot;,
+(case when b.hy_dm in (select hy_dm from DM_GY_HY start with hy_dm in(&amp;apos;52&amp;apos;,&amp;apos;51&amp;apos;)connect by prior hy_dm=sjhy_dm)
+        then &amp;apos;1&amp;apos; else &amp;apos;0&amp;apos; end ) &amp;quot;是否商贸企业&amp;quot;,
+a.fddbrxm&amp;quot;法人姓名&amp;quot;,
+a.fddbrsfzhm&amp;quot;法人身份证号&amp;quot;,
+a.frcjqk&amp;quot;法人采集情况&amp;quot;,
+a.cwfzrxm&amp;quot;财务负责人姓名&amp;quot;,
+a.cwfzrsfzhm&amp;quot;财务负责人身份证号&amp;quot;,
+a.cwcjqk&amp;quot;财务负责人采集情况&amp;quot;,
+a.bsrxm&amp;quot;办税人姓名&amp;quot;,
+a.bsrsfzhm&amp;quot;办税人身份证号&amp;quot;,
+a.bsrcjqk&amp;quot;办税人采集情况&amp;quot;,
+a.gprxm&amp;quot;购票人姓名&amp;quot;,
+a.gprsfzhm&amp;quot;购票人身份证号&amp;quot;,
+a.gprcjqk&amp;quot;购票人采集情况&amp;quot;,
+b.zcdz &amp;quot;注册地址&amp;quot;,
+(select swryxm from DM_GY_SWRY swry where swry.swry_dm=b.SSGLY_DM)&amp;quot;管理员&amp;quot;,
+(select name from v_swjg sw where sw.id=substr(b.zgswskfj_dm,1,7))&amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where b.zgswskfj_dm=jg.swjg_dm)&amp;quot;主管税务所（科、分局）&amp;quot;,
+c.fddbrgddh &amp;quot; 法人固定电话&amp;quot;,
+c.fddbryddh &amp;quot;法人移动电话&amp;quot;,
+c.cwfzrgddh &amp;quot;财务负责人固定电话&amp;quot;,
+c.cwfzryddh &amp;quot;财务负责人移动电话&amp;quot;,
+c.bsrgddh&amp;quot;办税人固定电话&amp;quot;,
+c.bsryddh &amp;quot;办税人移动电话&amp;quot;
+from tax_smqy_ybnsr a,dj_nsrxx b,dj_nsrxx_kz c
+where (a.nsrsbh=b.nsrsbh or a.nsrsbh=b.shxydm)
+  and b.djxh=c.djxh(+)
+  and b.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)  
+  and (frcjqk=&amp;apos;1&amp;apos; or cwcjqk=&amp;apos;1&amp;apos; or bsrcjqk=&amp;apos;1&amp;apos; or gprcjqk=&amp;apos;1&amp;apos;)
+    and  b.djxh in ( select djxh from dj_djhglgl where lb_dm=&amp;apos;000000000028&amp;apos; )
+    and substr(b.zgswj_dm,1,7) like &amp;apos;[%ZGSWJG]&amp;apos; 
+    
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >MAIN_YCJ</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >MAIN_YCJ</C22></ROW>
+<ROW num="2" ><ID >MAIN_BFCJ</ID><NAME ></NAME><DATDSC >--部分采集
+select rownum,a.nsrsbh &amp;quot;纳税人识别号&amp;quot;,
+a.nsrmc ,
+(select nsrztmc from  DM_GY_NSRZT zt where b.nsrzt_dm=zt.nsrzt_dm) &amp;quot;纳税人状态&amp;quot;, 
+(select hymc from DM_GY_HY hy where hy.hy_dm=b.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)&amp;quot;行业&amp;quot;,
+(case when b.hy_dm in (select hy_dm from DM_GY_HY start with hy_dm in(&amp;apos;52&amp;apos;,&amp;apos;51&amp;apos;)connect by prior hy_dm=sjhy_dm)
+        then &amp;apos;1&amp;apos; else &amp;apos;0&amp;apos; end ) &amp;quot;是否商贸企业&amp;quot;,
+a.fddbrxm&amp;quot;法人姓名&amp;quot;,
+a.fddbrsfzhm&amp;quot;法人身份证号&amp;quot;,
+a.frcjqk&amp;quot;法人采集情况&amp;quot;,
+a.cwfzrxm&amp;quot;财务负责人姓名&amp;quot;,
+a.cwfzrsfzhm&amp;quot;财务负责人身份证号&amp;quot;,
+a.cwcjqk&amp;quot;财务负责人采集情况&amp;quot;,
+a.bsrxm&amp;quot;办税人姓名&amp;quot;,
+a.bsrsfzhm&amp;quot;办税人身份证号&amp;quot;,
+a.bsrcjqk&amp;quot;办税人采集情况&amp;quot;,
+a.gprxm&amp;quot;购票人姓名&amp;quot;,
+a.gprsfzhm&amp;quot;购票人身份证号&amp;quot;,
+a.gprcjqk&amp;quot;购票人采集情况&amp;quot;,
+b.zcdz &amp;quot;注册地址&amp;quot;,
+(select swryxm from DM_GY_SWRY swry where swry.swry_dm=b.SSGLY_DM)&amp;quot;管理员&amp;quot;,
+(select name from v_swjg sw where sw.id=substr(b.zgswskfj_dm,1,7))&amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where b.zgswskfj_dm=jg.swjg_dm)&amp;quot;主管税务所（科、分局）&amp;quot;,
+c.fddbrgddh &amp;quot; 法人固定电话&amp;quot;,
+c.fddbryddh &amp;quot;法人移动电话&amp;quot;,
+c.cwfzrgddh &amp;quot;财务负责人固定电话&amp;quot;,
+c.cwfzryddh &amp;quot;财务负责人移动电话&amp;quot;,
+c.bsrgddh&amp;quot;办税人固定电话&amp;quot;,
+c.bsryddh &amp;quot;办税人移动电话&amp;quot;
+from tax_smqy_ybnsr a,dj_nsrxx b,dj_nsrxx_kz c
+where (a.nsrsbh=b.nsrsbh or a.nsrsbh=b.shxydm)
+  and b.djxh=c.djxh(+)
+  and b.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)  
+  and (frcjqk=&amp;apos;1&amp;apos; or cwcjqk=&amp;apos;1&amp;apos; or bsrcjqk=&amp;apos;1&amp;apos; or gprcjqk=&amp;apos;1&amp;apos;)
+  and not ( (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)  
+         or((b.fddbrsfzjlx_dm !=&amp;apos;201&amp;apos; or length(trim(fddbrsfzhm))&amp;lt;15) and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or( a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos; )
+         or(frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos; )
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)        
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and  a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or  (a.FDDBRXM is null  and  a.CWFZRXM is null and  bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)                                     
+         or (frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos;  and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos;  and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;) )
+  and  b.djxh in ( select djxh from dj_djhglgl where lb_dm=&amp;apos;000000000028&amp;apos; )
+  and substr(b.zgswj_dm,1,7) like &amp;apos;[%ZGSWJG]&amp;apos; 
+   
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >MAIN_BFCY</C18><C19 >MAIN_BFCY</C19><C20 >MAIN_BFCJ</C20><C21 ></C21><C22 >MAIN_BFCJ</C22></ROW>
+<ROW num="3" ><ID >MAIN_WCJ</ID><NAME ></NAME><DATDSC >--未采集企业
+select rownum,a.nsrsbh &amp;quot;纳税人识别号&amp;quot;,
+a.nsrmc ,
+(select nsrztmc from  DM_GY_NSRZT zt where b.nsrzt_dm=zt.nsrzt_dm) &amp;quot;纳税人状态&amp;quot;, 
+(select hymc from DM_GY_HY hy where hy.hy_dm=b.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)&amp;quot;行业&amp;quot;,
+(case when b.hy_dm in (select hy_dm from DM_GY_HY start with hy_dm in(&amp;apos;52&amp;apos;,&amp;apos;51&amp;apos;)connect by prior hy_dm=sjhy_dm)
+        then &amp;apos;1&amp;apos; else &amp;apos;0&amp;apos; end ) &amp;quot;是否商贸企业&amp;quot;,
+a.fddbrxm&amp;quot;法人姓名&amp;quot;,
+a.fddbrsfzhm&amp;quot;法人身份证号&amp;quot;,
+a.frcjqk&amp;quot;法人采集情况&amp;quot;,
+a.cwfzrxm&amp;quot;财务负责人姓名&amp;quot;,
+a.cwfzrsfzhm&amp;quot;财务负责人身份证号&amp;quot;,
+a.cwcjqk&amp;quot;财务负责人采集情况&amp;quot;,
+a.bsrxm&amp;quot;办税人姓名&amp;quot;,
+a.bsrsfzhm&amp;quot;办税人身份证号&amp;quot;,
+a.bsrcjqk&amp;quot;办税人采集情况&amp;quot;,
+a.gprxm&amp;quot;购票人姓名&amp;quot;,
+a.gprsfzhm&amp;quot;购票人身份证号&amp;quot;,
+a.gprcjqk&amp;quot;购票人采集情况&amp;quot;,
+b.zcdz &amp;quot;注册地址&amp;quot;,
+(select swryxm from DM_GY_SWRY swry where swry.swry_dm=b.SSGLY_DM)&amp;quot;管理员&amp;quot;,
+(select name from v_swjg sw where sw.id=substr(b.zgswskfj_dm,1,7))&amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where b.zgswskfj_dm=jg.swjg_dm)&amp;quot;主管税务所（科、分局）&amp;quot;,
+c.fddbrgddh &amp;quot; 法人固定电话&amp;quot;,
+c.fddbryddh &amp;quot;法人移动电话&amp;quot;,
+c.cwfzrgddh &amp;quot;财务负责人固定电话&amp;quot;,
+c.cwfzryddh &amp;quot;财务负责人移动电话&amp;quot;,
+c.bsrgddh&amp;quot;办税人固定电话&amp;quot;,
+c.bsryddh &amp;quot;办税人移动电话&amp;quot;
+from tax_smqy_ybnsr a,dj_nsrxx b,dj_nsrxx_kz c
+where (a.nsrsbh=b.nsrsbh or a.nsrsbh=b.shxydm)
+  and b.djxh=c.djxh(+)
+  and b.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)  
+  and (frcjqk=&amp;apos;0&amp;apos; and  cwcjqk=&amp;apos;0&amp;apos; and bsrcjqk=&amp;apos;0&amp;apos;  and  gprcjqk=&amp;apos;0&amp;apos;)
+  and  b.djxh in ( select djxh from dj_djhglgl where lb_dm=&amp;apos;000000000028&amp;apos; )
+  and substr(b.zgswj_dm,1,7) like &amp;apos;[%ZGSWJG]&amp;apos; 
+   
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >MAIN_WCJ</C22></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

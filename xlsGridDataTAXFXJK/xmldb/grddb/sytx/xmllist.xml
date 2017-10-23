@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>xmllist</MWID><NAME>XML资源文件</NAME><NOTE></NOTE><FILE>xmllist.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>
+var xml =   &amp;quot;&amp;lt;XML资源定义&amp;gt;&amp;quot; + 
+            &amp;quot;&amp;lt;流程图目录 url=\&amp;quot;ShowXlsGrid.sp?grdid=DefXml&amp;sytid=x&amp;grdtyp=M&amp;xmlfile=x/graphlist.xml\&amp;quot;/&amp;gt;&amp;quot; +
+            &amp;quot;&amp;lt;/XML&amp;gt;&amp;quot;;
+
+
+
+function _thisOnpost_loaddata(sheet)
+{
+      _this.SetToTreeCtrl(&amp;quot;&amp;quot;,0,-1,-1,xml);  
+}
+
+
+//================================================================// 
+// 函数：TreeItemDClick
+// 说明：Click tree item
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/15/06 16:02:13
+// 修改日志：
+//================================================================// 
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      alert ( &amp;quot;abc&amp;quot; );
+      url =getXmlAttribute(attribe,&amp;quot;url&amp;quot;);
+      alert ( url );
+      if ( url.length &amp;gt; 0 ) 
+            window.open( url );
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; , loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1 ) ;
+            return ret;
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

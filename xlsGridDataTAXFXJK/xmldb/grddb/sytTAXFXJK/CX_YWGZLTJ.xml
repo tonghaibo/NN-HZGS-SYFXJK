@@ -1,0 +1,444 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CX_YWGZLTJ</MWID><NAME >税务业务工作量统计表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CX_YWGZLTJ.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;8%&amp;quot;);
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	//初始化查询条件界面
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,4,G_LOGDAT.substring(0,8)+&amp;quot;01&amp;quot;);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,6,G_LOGDAT);
+
+	var swjgList =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_DM_GY_SWJG&amp;where=swjg_dm=&amp;apos;&amp;quot;+G_DEPTID+&amp;quot;&amp;apos; or sjswjg_dm=&amp;apos;&amp;quot;+G_DEPTID+&amp;quot;&amp;apos;&amp;quot;),&amp;quot;SWJG_DM&amp;quot;,&amp;quot;SWJGJC&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,swjgList);
+	_this.SetCellText(1,1,2,G_DEPTID);
+	
+}
+//加载查询数据
+function loadData()
+{
+	_this.SetToolbarString(&amp;quot;正在查询，请稍候...&amp;quot;);
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,2);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,0);
+	
+	var zgswjg = _this.GetCellText(1,1,2);
+	var dat1 = _this.GetCellText(1,1,4);
+	var dat2 = _this.GetCellText(1,1,6);
+	var param = &amp;quot;ZGSWJG=&amp;quot;+zgswjg+&amp;quot;&amp;DAT1=&amp;quot;+dat1+&amp;quot;&amp;DAT2=&amp;quot;+dat2;
+	
+	
+	_this.SetRedraw(0);
+	
+	try {
+		var xml = _this.invokeOSFunc(&amp;quot;GetDataXML&amp;quot;,param);
+		//alert(&amp;quot;xml=&amp;quot;+xml);
+		//_this.SetCellText(0,0,1,xml);
+		_this.XMLDS_Reset();
+		_this.XMLDS_Parse(xml);
+		var colcnt = _this.XMLDS_GetColumnCount();
+		for (var c=0;c&amp;lt;colcnt-5;c++) {
+			_this.AppendCol(0,4);
+		}
+
+		_this.SetMainCellRange(0,2,1,5,_this.GetColCount(0)-1);
+		_this.SetXmlDS(0,2,1,5,_this.GetColCount(0)-1,xml);
+	
+		
+		//设置列序号
+		var rw = 0;
+		for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+			if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+				rw ++;
+				_this.SetCellText(0,r,0,rw);
+			}
+			
+			for (var col=4;col&amp;lt;=_this.GetColCount(0);col++) {
+				var cnt = _this.GetCellText(0,r,col);
+				if (cnt == 0) _this.SetCellText(0,r,col,&amp;quot; &amp;quot;);
+			}
+		}
+				
+	        //设置查询数据的列名称
+		for (var i=0;i&amp;lt;colcnt;i++) {
+			var colname = _this.XMLDS_GetColumnName(i);
+			if (i &amp;gt; 2) {
+				_this.SetCellText(0,1,i+1,colname);
+			}			
+		}
+		//设置合并列及列名称
+		var colname = _this.GetCellText(0,1,4);
+		var old_headstr = colname.split(&amp;quot;_&amp;quot;)[0];
+		var mergCol1 = 4;
+		var mergCol2 = 4;
+		for (var col=4;col&amp;lt;=_this.GetColCount(0);col++) {
+			var colname = _this.GetCellText(0,1,col);
+			var headstr = colname.split(&amp;quot;_&amp;quot;)[0];
+			_this.SetCellText(0,1,col,colname.split(&amp;quot;_&amp;quot;)[1]);
+			
+			var tjColName = &amp;quot;&amp;quot;;
+			if (old_headstr == &amp;quot;DJ&amp;quot;) tjColName = &amp;quot;登记&amp;quot;;
+			else if (old_headstr == &amp;quot;SB&amp;quot;) tjColName = &amp;quot;申报&amp;quot;;
+			else if (old_headstr == &amp;quot;DKFP&amp;quot;) tjColName = &amp;quot;代开发票&amp;quot;;
+			else if (old_headstr == &amp;quot;FPFS&amp;quot;) tjColName = &amp;quot;发票发售&amp;quot;;
+			
+			//合并单元格
+			if (headstr != old_headstr) {
+				mergCol2  = col - 1;
+				_this.MergeCells(0,0,mergCol1,0,mergCol2);
+				_this.SetCellText(0,0,mergCol1,tjColName);
+				mergCol1 = col;
+				old_headstr = headstr;
+			}
+		}
+		
+	}
+	catch (e) {
+		alert(&amp;quot;加载数据失败:&amp;quot;+e.toString());
+	}
+	_this.AutoFixColWidth(0,300);
+	_this.AutoFixScreenWidth();
+	
+	_this.SetToolbarString(&amp;quot;&amp;quot;);
+	_this.SetRedraw(1);
+	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		_this.SetToolbarString(&amp;quot;正在查询，请稍候...&amp;quot;);
+		setTimeout(&amp;quot;loadData()&amp;quot;,100);
+		//loadData();
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function GetDataXML()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		
+		//登记状态代码
+		var sql = &amp;quot;select * from DM_GY_NSRZT where nsrzt_dm in (
+			select nsrzt_dm from dj_nsrxx 
+		        where zgswj_dm like &amp;apos;14511%&amp;apos;
+			  and ((to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+		          or (to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;))
+		          and( zgswskfj_dm=&amp;apos;[%ZGSWJG]&amp;apos; 
+				  /*包括下级税务机关*/
+				  or (zgswskfj_dm in (select swjg_dm from DM_GY_SWJG start with swjg_dm=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg_dm=sjswjg_dm)
+			  ))
+			) order by nsrzt_dm&amp;quot;;
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%DAT1]&amp;quot;,DAT1);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%DAT2]&amp;quot;,DAT2);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%ZGSWJG]&amp;quot;,ZGSWJG);
+		var nsrztds = db.QuerySQL(sql);
+		var nsrztsql = &amp;quot;&amp;quot;;
+		for (var i=0;i&amp;lt;nsrztds.getRowCount();i++) {
+			var nsrzt_dm = nsrztds.getStringAt(i,&amp;quot;NSRZT_DM&amp;quot;);
+			var nsrztmc = nsrztds.getStringAt(i,&amp;quot;NSRZTMC&amp;quot;);
+			nsrztsql += &amp;quot;sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;&amp;quot;+nsrzt_dm+&amp;quot;&amp;apos;,tj_cnt,0),0)) as \&amp;quot;DJ_&amp;quot;+nsrztmc+&amp;quot;\&amp;quot;,\n&amp;quot;;
+		}
+		
+		//征收项目代码
+		sql = &amp;quot;select * from DM_GY_ZSXM where zsxm_dm in (
+			select distinct zsxm_dm from (
+			select a.djxh,a.pzxh,a.zgswskfj_dm,a.zsxm_dm,a.gzlx_dm_1,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+			       decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm) czy_dm 
+			from SB_SBXX a 
+			where a.zgswskfj_dm like &amp;apos;14511%&amp;apos;
+			  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+			       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+			    )
+			  and( zgswskfj_dm=&amp;apos;[%ZGSWJG]&amp;apos; 
+				  /*包括下级税务机关*/
+				  or (zgswskfj_dm in (select swjg_dm from DM_GY_SWJG start with swjg_dm=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg_dm=sjswjg_dm)
+			  ))
+			)) order by zsxm_dm&amp;quot;;
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%DAT1]&amp;quot;,DAT1);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%DAT2]&amp;quot;,DAT2);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%ZGSWJG]&amp;quot;,ZGSWJG);
+		var zsxmds = db.QuerySQL(sql);
+		var zsxmsql = &amp;quot;&amp;quot;;
+		for (var i=0;i&amp;lt;zsxmds.getRowCount();i++) {
+			var zsxm_dm = zsxmds.getStringAt(i,&amp;quot;ZSXM_DM&amp;quot;);
+			var zsxmjc = zsxmds.getStringAt(i,&amp;quot;ZSXMJC&amp;quot;);
+			zsxmsql += &amp;quot;sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;&amp;quot;+zsxm_dm+&amp;quot;&amp;apos;,tj_cnt,0),0)) as \&amp;quot;SB_&amp;quot;+zsxmjc+&amp;quot;\&amp;quot;,\n&amp;quot;;
+		}
+		
+		//代开发票类别代码
+		sql = &amp;quot;select * from DM_FP_DKFPLB where dkfplb_dm in (
+			select dkfplb_dm from FP_DK_SQ 
+		        where slswjg_dm like &amp;apos;14511%&amp;apos;
+			  and ((to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+		          or (to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;))
+		          and( slswjg_dm=&amp;apos;[%ZGSWJG]&amp;apos; 
+				  /*包括下级税务机关*/
+				  or (slswjg_dm in (select swjg_dm from DM_GY_SWJG start with swjg_dm=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg_dm=sjswjg_dm)
+			  ))
+			) order by dkfplb_dm&amp;quot;;
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%DAT1]&amp;quot;,DAT1);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%DAT2]&amp;quot;,DAT2);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%ZGSWJG]&amp;quot;,ZGSWJG);
+		var dkfplbds = db.QuerySQL(sql);
+		var dkfplbsql = &amp;quot;&amp;quot;;
+		for (var i=0;i&amp;lt;dkfplbds.getRowCount();i++) {
+			var dkfplb_dm = dkfplbds.getStringAt(i,&amp;quot;DKFPLB_DM&amp;quot;);
+			var dkfplbmc = dkfplbds.getStringAt(i,&amp;quot;DKFPLBMC&amp;quot;);
+			dkfplbsql += &amp;quot;sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;&amp;quot;+dkfplb_dm+&amp;quot;&amp;apos;,tj_cnt,0),0)) as \&amp;quot;DKFP_&amp;quot;+dkfplbmc+&amp;quot;\&amp;quot;,\n&amp;quot;;
+		}
+		
+		var datasql = &amp;quot;select trim(swjg_dm)||&amp;apos;-&amp;apos;||swjg_mc swjg,
+				       czy_dm,swryxm,
+				       [%NSRZTSQL]
+				       [%ZSXMSQL]
+				       [%DKFPLBSQL]
+				       sum(decode(typ,&amp;apos;TJ3&amp;apos;,decode(tjlb,&amp;apos;FPFX&amp;apos;,tj_cnt,0),0)) as \&amp;quot;FPFS_发票发售\&amp;quot;
+				from (
+				select t.swjg_dm,
+				       aa.swjgmc swjg_mc,
+				       t.czy_dm,
+				       (select swryxm from DM_GY_SWRY s where trim(s.swry_dm)=trim(t.czy_dm)) swryxm,
+				       t.tjlb,
+				       t.tj_cnt,
+				       t.typ
+				from 
+				(
+				/*1.登记信息工作量统计*/
+				select zgswj_dm swjg_dm,czy_dm,nsrzt_dm tjlb,count(*) tj_cnt,&amp;apos;TJ1&amp;apos; typ
+				from (       
+				  select djxh,zgswj_dm,
+				         decode(bg_xgr_dm,null,decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm),bg_xgr_dm) czy_dm,
+				         nsrzt_dm,nsrztmc
+				  from (       
+				  select a.djxh,a.nsrsbh,a.shxydm,a.nsrmc,a.djrq,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,a.sjgsdq,a.zgswj_dm,
+				         a.nsrzt_dm,b.nsrztmc,c.bgxm_dm,c.lrr_dm bg_llr_dm,c.lrrq bg_lrrq,c.xgr_dm bg_xgr_dm,c.xgrq bg_xgrq
+				  from dj_nsrxx a,dm_gy_nsrzt b,
+				       (select * from DJ_BGDJMX
+				        where (to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				          or (to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				       ) c
+				  where a.nsrzt_dm=b.nsrzt_dm and a.djxh=c.djxh(+)
+				    and a.zgswj_dm like &amp;apos;14511%&amp;apos;
+				    and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				    ) 
+				  )  
+				) group by zgswj_dm,czy_dm,nsrzt_dm
+				
+				union all
+				
+				/*2.申报工作量统计*/
+				select slswjg_dm,czy_dm,zsxm_dm,count(distinct djxh) sb_cnt,&amp;apos;TJ2&amp;apos; typ
+				from (
+				select a.djxh,a.pzxh,b.slswjg_dm,a.zsxm_dm,a.gzlx_dm_1,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+				       decode(sign(a.xgrq-a.lrrq),1,nvl(a.xgr_dm,&amp;apos;未知&amp;apos;),a.lrr_dm) czy_dm 
+				from SB_SBXX a ,SB_SBB b
+				where a.sbuuid=b.sbuuid and b.slswjg_dm like &amp;apos;14511%&amp;apos;
+				  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				    )
+				) group by slswjg_dm,czy_dm,zsxm_dm
+				
+				union all
+				
+				/*3.发票发售工作量统计*/
+				select slswjg_dm,czy_dm,&amp;apos;FPFX&amp;apos; fpfx_dm,count(*) fpfs_cnt,&amp;apos;TJ3&amp;apos; typ
+				from (       
+				select a.djxh,a.slswjg_dm,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+				       decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm) czy_dm  
+				from fp_ly a
+				where slswjg_dm like &amp;apos;14511%&amp;apos;
+				  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				    )
+				) group by slswjg_dm,czy_dm
+				
+				union all
+				
+				/*4.发票代开工作量统计*/
+				select slswjg_dm,czy_dm,dkfplb_dm,count(distinct djxh) fpdk_cnt,&amp;apos;TJ4&amp;apos; typ
+				from (       
+				select a.djxh,a.dkfplb_dm,slswjg_dm,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+				       decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm) czy_dm 
+				from FP_DK_SQ a
+				where slswjg_dm like &amp;apos;14511%&amp;apos;
+				  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;)
+				    )
+				) group by slswjg_dm,czy_dm,dkfplb_dm
+				
+				) t,DM_GY_SWJG aa where t.swjg_dm=aa.swjg_dm
+				) 
+				where swjg_dm=&amp;apos;[%ZGSWJG]&amp;apos; 
+				  /*包括下级税务机关*/
+				  or (swjg_dm in (select swjg_dm from DM_GY_SWJG 
+				     start with swjg_dm=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg_dm=sjswjg_dm)
+				  )
+				group by swjg_dm,swjg_mc,czy_dm,swryxm
+				order by swjg_dm,swjg_mc,czy_dm&amp;quot;;
+
+		datasql = pub.EAFunc.Replace(datasql,&amp;quot;[%NSRZTSQL]&amp;quot;,nsrztsql);
+		datasql = pub.EAFunc.Replace(datasql,&amp;quot;[%ZSXMSQL]&amp;quot;,zsxmsql);	
+		datasql = pub.EAFunc.Replace(datasql,&amp;quot;[%DKFPLBSQL]&amp;quot;,dkfplbsql);
+		datasql = pub.EAFunc.Replace(datasql,&amp;quot;[%DAT1]&amp;quot;,DAT1);
+		datasql = pub.EAFunc.Replace(datasql,&amp;quot;[%DAT2]&amp;quot;,DAT2);
+		datasql = pub.EAFunc.Replace(datasql,&amp;quot;[%ZGSWJG]&amp;quot;,ZGSWJG);
+		
+		//throw new Exception (datasql);
+		var ds = db.QuerySQL(datasql);
+		return ds.GetXml();
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select swjg_dm,swjg_mc,czy_dm,swryxm,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;01&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_受理&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;02&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_筹建期&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;03&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_正常&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;04&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_停业&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;05&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_非正常&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;06&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_清算&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;07&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_注销&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;08&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_非正常户注销&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;09&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_报验&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;10&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_核销报验&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;11&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_中断缴费&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;12&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_恢复缴费&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ1&amp;apos;,decode(tjlb,&amp;apos;99&amp;apos;,tj_cnt,0),0)) as &amp;quot;DJ_其他&amp;quot;,
+       
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;10101&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_增值税&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;10102&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_消费税&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;10104&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_企业所得税&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;10106&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_个人所得税&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;10116&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_车辆购置税&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;30217&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_文化事业建设费&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ2&amp;apos;,decode(tjlb,&amp;apos;30221&amp;apos;,tj_cnt,0),0)) as &amp;quot;SB_水利建设专项收入&amp;quot;,
+       
+       sum(decode(typ,&amp;apos;TJ3&amp;apos;,decode(tjlb,&amp;apos;FPFX&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPFS_发票发售&amp;quot;,
+       
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;01&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_增值税专用&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;02&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_通用机打&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;03&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_货物运输业&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;04&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_机动车销售&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;05&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_销售不动产&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;06&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_代开建筑业&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;07&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_货物运输业增值税&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;08&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_集中发票代开&amp;quot;,
+       sum(decode(typ,&amp;apos;TJ4&amp;apos;,decode(tjlb,&amp;apos;09&amp;apos;,tj_cnt,0),0)) as &amp;quot;FPDK_增值税普通发票&amp;quot;
+       
+from (
+select swjg_dm,
+       (select max(swjgmc) from HX_DM_ZDY.DM_GY_SWJG where swjg_dm=swjg_dm) swjg_mc,
+       czy_dm,
+       (select max(swryxm) from HX_DM_ZDY.DM_GY_SWRY where swry_dm=t.czy_dm) swryxm,
+       tjlb,
+       tj_cnt,
+       typ
+from 
+(
+--1.登记信息工作量统计
+select zgswj_dm swjg_dm,czy_dm,nsrzt_dm tjlb,count(*) tj_cnt,&amp;apos;TJ1&amp;apos; typ
+from (       
+  select djxh,zgswj_dm,
+         decode(bg_xgr_dm,null,decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm)) czy_dm,
+         nsrzt_dm,nsrztmc
+  from (       
+  select sign(a.xgrq-a.lrrq),a.djxh,a.nsrsbh,a.shxydm,a.nsrmc,a.djrq,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,a.sjgsdq,a.zgswj_dm,
+         a.nsrzt_dm,b.nsrztmc,c.bgxm_dm,c.lrr_dm bg_llr_dm,c.lrrq bg_lrrq,c.xgr_dm bg_xgr_dm,c.xgrq bg_xgrq
+  from hx_dj.dj_nsrxx a,hx_dm_qg.dm_gy_nsrzt b,
+       (select * from hx_dj.DJ_BGDJMX
+        where (to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+          or (to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+       ) c
+  where a.nsrzt_dm=b.nsrzt_dm and a.djxh=c.djxh(+)
+    and a.zgswj_dm like &amp;apos;14511%&amp;apos;
+    and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+    ) --and a.djxh in (10114511010114114573,10114511010114107492,10114511010114107489,10114511010114114478)
+  )  
+) group by zgswj_dm,czy_dm,nsrzt_dm
+
+union all
+
+--2.申报工作量统计      
+select zgswskfj_dm,czy_dm,zsxm_dm,count(*) sb_cnt,&amp;apos;TJ2&amp;apos; typ
+from (
+select a.djxh,a.pzxh,a.zgswskfj_dm,a.zsxm_dm,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+       decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm) czy_dm 
+from hx_sb.SB_SBXX a 
+where a.zgswskfj_dm like &amp;apos;14511%&amp;apos;
+  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+    )
+) group by zgswskfj_dm,czy_dm,zsxm_dm
+
+union all
+
+--3.发票发售工作量统计
+select slswjg_dm,czy_dm,&amp;apos;FPFX&amp;apos; fpfx_dm,count(*) fpfs_cnt,&amp;apos;TJ3&amp;apos; typ
+from (       
+select a.djxh,a.slswjg_dm,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+       decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm) czy_dm  
+from hx_fp.fp_ly a
+where slswjg_dm like &amp;apos;14511%&amp;apos;
+  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+    )
+) group by slswjg_dm,czy_dm
+
+union all
+
+--4.发票代开工作量统计
+select slswjg_dm,czy_dm,dkfplb_dm,count(distinct djxh) fpdk_cnt,&amp;apos;TJ4&amp;apos; typ
+from (       
+select a.djxh,a.dkfplb_dm,slswjg_dm,a.lrr_dm,a.lrrq,a.xgr_dm,a.xgrq,
+       decode(sign(xgrq-lrrq),1,nvl(xgr_dm,&amp;apos;未知&amp;apos;),lrr_dm) czy_dm 
+from hx_fp.FP_DK_SQ a
+where slswjg_dm like &amp;apos;14511%&amp;apos;
+  and ( (to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.lrrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+       or (to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;2017-04-01&amp;apos; and to_char(a.xgrq,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;2017-04-18&amp;apos;)
+    )
+) group by slswjg_dm,czy_dm,dkfplb_dm
+
+) t
+--where czy_dm=&amp;apos;14511010007&amp;apos;
+) group by swjg_dm,swjg_mc,czy_dm,swryxm
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

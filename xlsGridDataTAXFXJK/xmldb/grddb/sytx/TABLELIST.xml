@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >TABLELIST</MWID><NAME >数据库表格查询</NAME><NOTE ></NOTE><FILE >TABLELIST.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >TABLE_NAME</ID><NAME >TABLENAME</NAME><KEYVAL ></KEYVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DSKEY >DSC:DETAIL</DSKEY><NROW >20</NROW><NCOL >5</NCOL><ISPAGE >1</ISPAGE><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sqlsheet=1;
+var tablesheet = 0 ;
+var nLoadButton = 0;
+//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：打开sheet
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/05 11:49:33
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+
+//        _this.ShowTabBar(1);
+        if ( nLoadButton  == 0 ) {
+              _this.AddToolbarButton(&amp;quot;COM_SQL&amp;quot;,&amp;quot;打开SQL查询&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,1,120);
+              _this.AddToolbarButton(&amp;quot;COM_QUERYDATA&amp;quot;,&amp;quot;查询数据&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,1,120);
+              nLoadButton = 1;
+        }
+}
+
+
+
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+        var sheet = _this.GetCurrentSheet();
+        var row = _this.GetCurrentRow(sheet);
+        if ( row &amp;lt;  1 ) {
+              alert ( &amp;quot;请选中其中一行&amp;quot; );
+              return;
+        }
+        var tablename = _this.GetCellText(sheet,row,1 );
+        sql = &amp;quot;SELECT * FROM &amp;quot; + tablename;
+        if ( id == &amp;quot;COM_SQL&amp;quot; ) {
+              window.open(&amp;quot;xlsweb?action=ShowXlsGrid&amp;grdid=SQLINPUT&amp;isfilldata=true&amp;sql=&amp;quot;+ sql);
+        }
+        else if ( id == &amp;quot;COM_QUERYDATA&amp;quot; ) {
+              window.open(&amp;quot;xlsweb?action=ShowXlsGrid&amp;grdid=SQLOUTPUT&amp;grdtyp=M&amp;isfilldata=true&amp;sql=&amp;quot;+ sql);
+        }
+                
+
+}
+
+function _thisOnMouseDClick(sheet,row,col)
+{
+      if ( row &amp;lt;  1 ) return ;
+      var tablename = _this.GetCellText(sheet,row,1 );
+      sql = &amp;quot;SELECT * FROM &amp;quot; + tablename;
+      window.open(&amp;quot;xlsweb?action=ShowXlsGrid&amp;grdid=SQLOUTPUT&amp;grdtyp=M&amp;isfilldata=true&amp;sql=&amp;quot;+ sql);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DETAIL</ID><NAME ></NAME><DATDSC >select rownum,a.table_name,a.typ,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) ,substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)),INSTR(COMMENTS,&amp;apos;~&amp;apos;) from 
+(
+ select TABLE_NAME,&amp;apos;TABLE&amp;apos; TYP from user_tables 
+ UNION
+ select VIEW_NAME TABLE_NAME,&amp;apos;VIEW&amp;apos; TYP from USER_VIEWS
+)
+a,user_tab_comments b
+where a.TABLE_NAME=b.table_name(+) and a.TABLE_NAME like &amp;apos;[%TABLE_NAME]%&amp;apos;
+order by a.TABLE_NAME</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

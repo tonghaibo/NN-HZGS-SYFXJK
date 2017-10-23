@@ -1,0 +1,492 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >BIDef</MWID><NAME >BI模型定义</NAME><NOTE ></NOTE><NOACCNAME >1</NOACCNAME><FILE >BIDef.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >DIM_MODEL</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >GUID 内部唯一编号,ID 编号,NAME 名称,SOURCEDS 数据源,NOTE 说明,CRTUSER 创建人,TO_CHAR(CRTDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) 创建时间</COLLIST><WHERE >1=1</WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><SHOWBTN >1,2</SHOWBTN></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,2</ID><CELLID ></CELLID><NAME >模型ID</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="1" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >模型名称</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="2" ><ID >0,4,2</ID><CELLID ></CELLID><NAME >说明</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="3" ><ID >0,5,2</ID><CELLID ></CELLID><NAME >数据源</NAME><VALFLD >SOURCEDS</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="4" ><ID >0,5,3</ID><CELLID ></CELLID><NAME >系统号</NAME><VALFLD >SYTID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="5" ><ID >0,5,4</ID><CELLID ></CELLID><NAME >配置每行显示多少主题</NAME><VALFLD >ROWCOUNT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 >0,5,6</C20><C21 ></C21></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >run</ID><NAME >试运行</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >7</IMG><IMGMOUSE >7</IMGMOUSE><C10 >RUN</C10><C11 >RUN</C11><C12 >run</C12></ROW>
+<ROW num="1" ><ID >addJs</ID><NAME >附加脚本</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE><C10 ></C10><C11 ></C11><C12 >js</C12></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var b_first = true;
+var g_sourceds = &amp;quot;&amp;quot;;
+var g_sourcexml = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	if ( stat == &amp;quot;0&amp;quot; ) {
+		try { _this.SetCellText(0,5,3,selsytid); } catch ( e ) { _this.SetCellText(0,5,3,G_SYTID); }
+	}
+	
+	if (b_first) {
+		_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;320&amp;quot;);
+		_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot;);
+		b_first = false;
+	}
+	
+	_this.SetFixedRow(0,8);
+	_this.SetFixedRow(1,2);
+	_this.SetFixedRow(2,2);
+	_this.SetCellColor(1,0,1,123,123,123);
+	_this.SetCellColor(2,0,1,123,123,123);
+	
+	f_loadcollist();
+	initSheet();
+	
+	_this.SetRedraw(1);
+	_this.AutoFixScreenWidth();
+}
+
+function f_loadcollist()
+{
+	var tabnam = _this.GetCellText(sheet,5,2);
+	
+	if ( tabnam != &amp;quot;&amp;quot; ) {
+		_this.SetRowCount(sheet,11);
+		var xml = _sql.query(&amp;quot;QueryDSCol&amp;quot;,&amp;quot;table_name=&amp;quot;+tabnam);
+		_this.SetMainCellRange(sheet,8,1,10,5);
+		_this.SetXmlDS(sheet,8,1,10,5,xml);
+		modColor(sheet,_this.GetMainCellRangeRow1(0),_this.GetMainCellRangeCol1(0),_this.GetRowCount(0)-1,_this.GetMainCellRangeCol2(0));
+	}
+}
+
+//初始化页面
+function initSheet()
+{
+	loadSheetData(1);
+	loadSheetData(2);
+	
+	g_sourceds = _this.GetCellText(sheet,5,2);
+	setViewColInfo(g_sourceds);
+}
+
+//加载页面数据
+function loadSheetData(sheet)
+{
+	var modguid = &amp;quot;&amp;quot;;
+	try { modguid = guid; } catch ( e ){ return; }
+	var dsnam = &amp;quot;DATA_&amp;quot;+sheet;
+	var xml = _sql.query(dsnam,&amp;quot;MODGUID=&amp;quot;+modguid);
+	if (sheet == 1) {
+		_this.SetMainCellRange(sheet,2,1,4,11);
+		_this.SetXmlDS(sheet,2,1,4,11,xml);
+		for ( var i=2;i&amp;lt;_this.GetRowCount(sheet);i++) {
+			_this.SetToSelectBox(&amp;quot;&amp;quot;,sheet,i,6,&amp;quot;V_SYSDEFVAL&amp;quot;,&amp;quot;&amp;quot;);
+			_this.SetToBoolBox(sheet,i,9);
+			_this.SetToBoolBox(sheet,i,10);
+		}
+	}
+	if (sheet == 2) {
+		_this.SetMainCellRange(sheet,2,1,4,5);
+		_this.SetXmlDS(sheet,2,1,4,5,xml);
+	}
+	setSheetColName(sheet);
+}
+
+//设置列名称
+function setSheetColName(sheet)
+{
+	for (var i=_this.GetMainCellRangeCol1(sheet);i&amp;lt;=_this.GetMainCellRangeCol2(sheet);i++) {
+		_this.SetColName(sheet,i,&amp;quot;COL&amp;quot;+(i-_this.GetMainCellRangeCol1(sheet)));
+	}
+}
+
+function getDimXml(sheet)
+{
+	var row1 = _this.GetMainCellRangeRow1(sheet);
+	var col1 = _this.GetMainCellRangeCol1(sheet);
+	var row2 = _this.GetMainCellRangeRow2(sheet);
+	var col2 = _this.GetMainCellRangeCol2(sheet);
+	
+	var str = &amp;quot;&amp;quot;;
+	if (row1 &amp;gt; 0 &amp;&amp; col1 &amp;gt; 0 &amp;&amp; row2 &amp;gt; 0 &amp;&amp; col2 &amp;gt; 0) str = _this.GetXml(sheet,row1,col1,row2,col2);
+	
+	return  str;
+}
+
+//function getTarXml()
+//{
+//	var row1 = _this.GetMainCellRangeRow1(2);
+//	var col1 = _this.GetMainCellRangeCol1(2);
+//	var row2 = _this.GetMainCellRangeRow2(2);
+//	var col2 = _this.GetMainCellRangeCol2(2);
+//	return  _this.GetXml(2,row1,col1,row2,col2);
+//}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0 &amp;&amp; row == 5 &amp;&amp; col == 2) {
+		g_sourceds = newvalue;
+		setViewColInfo(g_sourceds);
+		f_loadcollist();
+
+	}
+	else if ((sheet == 1 || sheet == 2) &amp;&amp; col == 1) {	//维度数据类型
+//		var sql = &amp;quot;select a.COLUMN_NAME COLUMN_NAME,nvl(b.COMMENTS,a.COLUMN_NAME) COMMENTS,a.DATA_TYPE &amp;quot;
+//			+ &amp;quot;from user_tab_columns a,user_col_comments b &amp;quot;
+//			+ &amp;quot;where a.Table_Name=b.Table_Name(+) and a.column_name=b.column_name(+) &amp;quot;
+//			+ &amp;quot;and b.table_name=UPPER(&amp;apos;&amp;quot;+g_sourceds+&amp;quot;&amp;apos;) and a.column_name=upper(&amp;apos;&amp;quot;+newvalue+&amp;quot;&amp;apos;)&amp;quot;;
+		_sql.querytods(&amp;quot;QueryDSCol1&amp;quot;,&amp;quot;g_sourceds=&amp;quot;+g_sourceds+&amp;quot;&amp;newvalue=&amp;quot;+newvalue );
+		if (sheet == 1) {
+			_this.SetCellText(1,row,2,_this.XMLDS_GetString(0,&amp;quot;COMMENTS&amp;quot;));
+			_this.SetCellText(1,row,3,_this.XMLDS_GetString(0,&amp;quot;DATA_TYPE&amp;quot;));
+		}
+		else if (sheet == 2) {
+			_this.SetCellText(2,row,2,_this.XMLDS_GetString(0,&amp;quot;COMMENTS&amp;quot;));
+		}
+	}
+}
+
+function setViewColInfo(table_name)
+{
+	_sql.querytods(&amp;quot;VIEWINFO&amp;quot;,&amp;quot;table_name=&amp;quot;+table_name);
+	var rowcnt = _this.XMLDS_GetRowCount();
+	var listDim = _this.CreateListValue();
+	if (rowcnt &amp;gt; 0) {
+		for (var i=0;i&amp;lt;rowcnt;i++) {
+			var colnam = _this.XMLDS_GetString(i,&amp;quot;COLUMN_NAME&amp;quot;);
+			var coltyp = _this.XMLDS_GetString(i,&amp;quot;DATA_TYPE&amp;quot;);
+			_this.SetListValue(listDim ,colnam,colnam);
+		}
+	}
+	setCellMainRangeCtrl(1,1,listDim);
+	setCellMainRangeCtrl(2,1,listDim);
+	
+	var listCtrl = _this.CreateListValue();
+	_this.SetListValue(listCtrl,&amp;quot;LIST&amp;quot;,&amp;quot;下拉列表&amp;quot;);
+	_this.SetListValue(listCtrl,&amp;quot;SELECT&amp;quot;,&amp;quot;选择列表&amp;quot;);
+	_this.SetListValue(listCtrl,&amp;quot;MSELECT&amp;quot;,&amp;quot;多选列表&amp;quot;);
+	_this.SetListValue(listCtrl,&amp;quot;DATEBOX&amp;quot;,&amp;quot;日期控件&amp;quot;);
+	_this.SetListValue(listCtrl,&amp;quot;TEXTBOX&amp;quot;,&amp;quot;文本输入&amp;quot;);
+	setCellMainRangeCtrl(1,4,listCtrl);
+	var listHstr = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_HALIGN&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	setCellMainRangeCtrl(1,11,listHstr);
+	
+	_this.SetColName(1,1,&amp;quot;ID&amp;quot;);
+	_this.SetColName(1,2,&amp;quot;NAME&amp;quot;);
+	_this.SetColName(1,3,&amp;quot;TYP&amp;quot;);
+	_this.SetColName(1,4,&amp;quot;COLTYP&amp;quot;);
+	_this.SetColName(1,5,&amp;quot;KEY&amp;quot;);
+	_this.SetColName(1,6,&amp;quot;DEF&amp;quot;);
+	_this.SetColName(1,7,&amp;quot;WHERE&amp;quot;);
+	_this.SetColName(1,8,&amp;quot;SORT&amp;quot;);
+	_this.SetColName(1,9,&amp;quot;ISFW&amp;quot;);
+	_this.SetColName(1,10,&amp;quot;ISXS&amp;quot;);
+	_this.SetColName(1,11,&amp;quot;HSTR&amp;quot;);
+	
+	var listMat = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_FORMATSTR&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	setCellMainRangeCtrl(2,4,listMat);
+	var listHal = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_HALIGN&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	setCellMainRangeCtrl(2,5,listHal);
+	
+	_this.SetColName(2,1,&amp;quot;ID&amp;quot;);
+	_this.SetColName(2,2,&amp;quot;NAME&amp;quot;);
+	_this.SetColName(2,3,&amp;quot;SUPERNAME&amp;quot;);
+	_this.SetColName(2,4,&amp;quot;FORMATSTR&amp;quot;);
+	_this.SetColName(2,5,&amp;quot;HALIGNSTR&amp;quot;);
+}
+
+function setCellMainRangeCtrl(sheet,col,listval)
+{
+	for (var row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++) {
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,col,listval);
+	}
+}
+
+//保存单据数据后
+function _thisOnaftersave(success)
+{
+	_this.XMLDS_Reset();
+	_this.XMLDS_Parse(success);
+	var modguid = _this.XMLDS_GetString(0,&amp;quot;RETVAL&amp;quot;);
+	var param = new Object();
+	param.modguid = modguid;
+	param.dimxml = getDimXml(1);
+	param.tarxml = getDimXml(2);
+	
+	try {
+		invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		try { parent.frames(&amp;quot;left&amp;quot;).f_refresh(); } catch ( ee ) { }
+		return success;
+	} catch ( e ) {
+		alert( e );
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;F_run_deletebutton1&amp;quot;) {
+		if (window.confirm(&amp;quot;删除本单据，是否继续？&amp;quot;)) {
+			var param = new Object();
+			param.modguid = guid;
+			
+			try {
+				var ret = invokeOSFuncExt(&amp;quot;delete&amp;quot;,param);
+				if (ret == &amp;quot;成功&amp;quot;) alert(&amp;quot;删除成功！&amp;quot;);
+				else alert(&amp;quot;删除失败！&amp;quot;);
+			} catch ( e ) {
+				alert( e );
+			}
+		}
+		
+		try { parent.location.href = &amp;quot;framelayout.sp?leftgrdid=BITreeDef&amp;rightflowid=&amp;rightflowsyt=&amp;quot;; } catch ( e ) { }
+		return 1;
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == 0 &amp;&amp; row &amp;gt;= 8 &amp;&amp; ( col == 4 || col == 5 )) {
+		var colid = _this.GetCellText(sheet,row,1);
+		var colnam = _this.GetCellText(sheet,row,2);
+		var coltyp = _this.GetCellText(sheet,row,3);
+		
+		if ( col == 4 ) addtosheet(1,colid,colnam,coltyp);
+		else addtosheet(2,colid,colnam,coltyp);
+	}
+}
+
+function addtosheet(sh,colid,colnam,coltyp)
+{
+	for ( var i=_this.GetMainCellRangeRow1(sh);i&amp;lt;=_this.GetMainCellRangeRow2(sh);i++ ) {
+		var _colid = _this.GetCellText(sh,i,1);
+		if (_colid == &amp;quot;&amp;quot; ) {
+			_this.SetCellText(sh,i,1,colid);
+			_this.SetCellText(sh,i,2,colnam);
+			if ( sh == 1 ) _this.SetCellText(sh,i,3,coltyp);
+			return;
+		}
+		if ( colid == _colid ) {
+			alert ( &amp;quot;已存在该字段&amp;quot; );
+			return;
+		}
+	}
+	i = _this.AppendRow(sh,_this.GetMainCellRangeRow2(sh));
+	_this.SetCellText(sh,i,1,colid);
+	_this.SetCellText(sh,i,2,colnam);
+	if ( sh == 1 ) _this.SetCellText(sh,i,3,coltyp);
+}
+
+//试运行
+function run()
+{
+	try {
+		openWindow(&amp;quot;BIMain.sp?FORMGUID=&amp;quot;+guid);
+	} catch ( e ) {
+		alert ( &amp;quot;新增状态，请先保存再试运行&amp;quot; );
+	}
+}
+
+//附加脚本
+function addJs()
+{
+	try {
+		window.showModalDialog(&amp;quot;show.sp?grdid=BIJs&amp;FORMGUID=&amp;quot;+guid,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=500px;dialogWidth=900px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	} catch ( e ) {
+		alert ( &amp;quot;新增状态，请先保存再添加脚本&amp;quot; );
+	}
+}
+
+//设置隔行换色
+function modColor(sheet,row0,col0,row1,col1)
+{
+	for(var i=row0;i&amp;lt;=row1;i++){
+		for(var j=col0;j&amp;lt;=col1;j++) {
+			_this.SetCellBkColor(sheet,i,j,255,255,255);
+		}
+		if(i%2==1) {
+			for(var j=col0;j&amp;lt;=col1;j++) {
+				_this.SetCellBkColor(sheet,i,j,250,250,250);
+			}
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table DIM_MODEL add ROWCOUNT NUMBER(20) default 5&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;comment on column DIM_MODEL.ROWCOUNT is &amp;apos;每行显示主题数&amp;apos;&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table DIM_MODEL add JSGUID CHAR(32)&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;comment on column DIM_MODEL.JSGUID is &amp;apos;附加脚本唯一键&amp;apos;&amp;quot;); } catch ( e ) { }
+	
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table dim_dim add ISFW char(1) default &amp;apos;0&amp;apos;&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table dim_dim add ISXS char(1) default &amp;apos;1&amp;apos;&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table dim_dim add HSTR char(1) default &amp;apos;0&amp;apos;&amp;quot;); } catch ( e ) { }
+	
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table dim_target add SUPERNAME varchar2(256)&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table dim_target add FORMATSTR char(1)&amp;quot;); } catch ( e ) { }
+	try { pub.EADbTool.ExcecutSQL(&amp;quot;alter table dim_target add HALIGNSTR char(1) default &amp;apos;0&amp;apos;&amp;quot;); } catch ( e ) { }
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var msg = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	var sql_1 = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();
+		
+		//更新维度表
+		if (dimxml != &amp;quot;&amp;quot;) {
+			var ds = new pub.EAXmlDS(dimxml);
+			sql = &amp;quot;delete from dim_dim where refmod=&amp;apos;%s&amp;apos;&amp;quot;.format([modguid]);
+			db.ExcecutSQL(sql);
+			
+			for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+				var id = ds.getStringAt(row,&amp;quot;ID&amp;quot;);
+				var name = ds.getStringAt(row,&amp;quot;NAME&amp;quot;);
+				var datatyp = ds.getStringAt(row,&amp;quot;TYP&amp;quot;);
+				var control = ds.getStringAt(row,&amp;quot;COLTYP&amp;quot;);
+				var keyval = ds.getStringAt(row,&amp;quot;KEY&amp;quot;);
+				var defval = pub.EAFunc.Replace(ds.getStringAt(row,&amp;quot;DEF&amp;quot;),&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;apos;&amp;quot;);
+				var wher = pub.EAFunc.Replace(ds.getStringAt(row,&amp;quot;WHERE&amp;quot;),&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;apos;&amp;quot;);
+				var seq = ds.getStringAt(row,&amp;quot;SORT&amp;quot;);
+				var isfw = ds.getStringAt(row,&amp;quot;ISFW&amp;quot;);
+				var isxs = ds.getStringAt(row,&amp;quot;ISXS&amp;quot;);
+				var hstr = ds.getStringAt(row,&amp;quot;HSTR&amp;quot;);
+				
+				sql_1 = &amp;quot;select count(1) from dim_dim where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; and refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;;
+				sql = &amp;quot;insert into dim_dim(id,name,datatyp,refmod,control,keyval,defval,wher,seq,isfw,isxs,hstr) values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([id,name,datatyp,modguid,control,keyval,defval,wher,seq,isfw,isxs,hstr]);
+				if (id != null &amp;&amp; id != &amp;quot;&amp;quot;) {
+					var count = 1.0 * db.GetSQL(sql_1);
+					if (count == 0) db.ExcecutSQL(sql);
+				}
+			}
+		}
+		
+		//更新目标表
+		if (tarxml != &amp;quot;&amp;quot;) {
+			var ds = new pub.EAXmlDS(tarxml);
+			sql = &amp;quot;delete from dim_target where refmod=&amp;apos;%s&amp;apos;&amp;quot;.format([modguid]);
+			db.ExcecutSQL(sql);
+			
+			for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+				var id = ds.getStringAt(row,&amp;quot;ID&amp;quot;);
+				var name = ds.getStringAt(row,&amp;quot;NAME&amp;quot;);
+				var supername = ds.getStringAt(row,&amp;quot;SUPERNAME&amp;quot;);
+				var formatstr = ds.getStringAt(row,&amp;quot;FORMATSTR&amp;quot;);
+				var halignstr = ds.getStringAt(row,&amp;quot;HALIGNSTR&amp;quot;);
+				
+				sql_1 = &amp;quot;select count(1) from dim_target where id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; and refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;;
+				sql = &amp;quot;insert into dim_target(id,name,refmod,supername,formatstr,halignstr) values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([id,name,modguid,supername,formatstr,halignstr]);
+				if (id != null &amp;&amp; id != &amp;quot;&amp;quot;) {
+					var count = 1.0 * db.GetSQL(sql_1);
+					if (count == 0) db.ExcecutSQL(sql);	
+				}
+			}
+		}
+		
+		db.Commit();
+		return &amp;quot;成功&amp;quot;;
+	} catch ( ee ) {
+		db.Rollback();
+		throw new pub.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+}
+
+//删除表的时候，一并把维度和目标删除掉
+function delete()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;delete from dim_model where guid=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from dim_dim where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;delete from dim_target where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return &amp;quot;成功&amp;quot;;
+	} catch ( ee ) {
+		db.Rollback();
+//		throw new Exception( ee.toString() );
+	}
+	finally {
+		if(db != null) db.Close();
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DATA_1</ID><NAME >维度</NAME><DATDSC >select id,name,datatyp,control,keyval,defval,wher,seq,isfw,isxs,hstr
+  from dim_dim where refmod=&amp;apos;[%MODGUID]&amp;apos; order by seq</DATDSC><C4 >DATA_1</C4><C5 >DATA_1</C5><C6 >DATA_1</C6><C7 ></C7><C8 >DATA_1</C8><C9 ></C9><C10 >DATA_1</C10><C11 ></C11><C12 >DATA_1</C12></ROW>
+<ROW num="1" ><ID >DATA_2</ID><NAME >目标</NAME><DATDSC >select id,name,supername,formatstr,halignstr
+  from dim_target where refmod=&amp;apos;[%MODGUID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >DATA_2</C9><C10 >DATA_2</C10><C11 >DATA_2</C11><C12 ></C12></ROW>
+<ROW num="2" ><ID >VIEWINFO</ID><NAME ></NAME><DATDSC >select a.COLUMN_NAME COLUMN_NAME,nvl(b.COMMENTS,a.COLUMN_NAME) COMMENTS,a.DATA_TYPE
+  from user_tab_columns a,user_col_comments b
+ where a.Table_Name=b.Table_Name(+) and a.column_name=b.column_name(+) 
+   and b.table_name=UPPER(&amp;apos;[%table_name]&amp;apos;)
+ order by a.COLUMN_ID</DATDSC><C4 >VIEWINFO</C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >VIEWINFO</C11><C12 ></C12></ROW>
+<ROW num="3" ><ID >UpdateDatabase</ID><NAME ></NAME><DATDSC >CREATE OR REPLACE VIEW V_CHARTTYPE AS 
+select &amp;apos;MSColumn3D&amp;apos; id,&amp;apos;三维直方图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;MSColumn2D&amp;apos; id,&amp;apos;二维直方图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;MSLine&amp;apos; id,&amp;apos;线条图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;Pie3D&amp;apos; id,&amp;apos;三维饼图&amp;apos; name,&amp;apos;2&amp;apos; typ from dual union all
+select &amp;apos;Pie2D&amp;apos; id,&amp;apos;二维饼图&amp;apos; name,&amp;apos;2&amp;apos; typ from dual union all
+select &amp;apos;MSArea&amp;apos; id,&amp;apos;区域图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;MSBar2D&amp;apos; id,&amp;apos;多系列条形图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;StackedColumn3D&amp;apos; id,&amp;apos;三维堆积直方图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;StackedColumn2D&amp;apos; id,&amp;apos;二维堆积直方图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;StackedBar2D&amp;apos; id,&amp;apos;二维堆积条形图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;StackedArea2D&amp;apos; id,&amp;apos;二维堆积区域图&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;Doughnut2D&amp;apos; id,&amp;apos;甜甜圈平面图&amp;apos; name,&amp;apos;2&amp;apos; typ from dual union all
+select &amp;apos;MSColumn3DLineDY&amp;apos; id,&amp;apos;复合图（二维直方+线图）&amp;apos; name,&amp;apos;1&amp;apos; typ from dual union all
+select &amp;apos;Funnel&amp;apos; id,&amp;apos;漏斗图&amp;apos; name,&amp;apos;2&amp;apos; typ from dual 
+
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12></ROW>
+<ROW num="4" ><ID >QueryDSCol</ID><NAME >查询数据源的字段</NAME><DATDSC >select a.COLUMN_NAME COLUMN_NAME,nvl(b.COMMENTS,a.COLUMN_NAME) COMMENTS,a.DATA_TYPE ,
+&amp;apos;维度&amp;apos; ac1,&amp;apos;目标&amp;apos; ac2
+from user_tab_columns a,user_col_comments b
+where a.Table_Name=b.Table_Name(+) and a.column_name=b.column_name(+) 
+and b.table_name=UPPER(&amp;apos;[%table_name]&amp;apos;) ORDER BY a.COLUMN_ID</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >QueryDSCol</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12></ROW>
+<ROW num="5" ><ID >QueryDSCol1</ID><NAME ></NAME><DATDSC >select a.COLUMN_NAME COLUMN_NAME,nvl(b.COMMENTS,a.COLUMN_NAME) COMMENTS,a.DATA_TYPE 
+from user_tab_columns a,user_col_comments b 
+where a.Table_Name=b.Table_Name(+) and a.column_name=b.column_name(+) 
+and b.table_name=UPPER(&amp;apos;[%g_sourceds]&amp;apos;) and a.column_name=upper(&amp;apos;[%newvalue]&amp;apos;)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

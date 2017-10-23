@@ -1,0 +1,205 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >localfile</MWID><NAME >本地文件系统管理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >localfile.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var G_ZXGFILE = &amp;quot;&amp;quot;;
+var G_CURFILE = &amp;quot;&amp;quot;;
+//载入ZXG之后
+function _thisOnpost_LoadZXGFile(sheet)
+{
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,80);
+	_this.SplitSheet(1,&amp;quot;H&amp;quot;,300);
+	
+	_this.SetSheetName(1,&amp;quot;文件&amp;quot;);
+	_this.SetSheetName(2,&amp;quot;XML表格&amp;quot;);
+	_this.SetSheetName(3,&amp;quot;文本&amp;quot;);
+	_this.SetSheetName(4,&amp;quot;树结构&amp;quot;);
+
+	_this.ShowTabBar(1);
+	
+	_this.SetColVisible(1,2,0);
+	_this.SetColVisible(1,3,0);
+	_this.SetColVisible(1,4,0);
+	_this.SetColVisible(1,5,0);
+	_this.SetColVisible(1,6,0);
+	_this.SetColVisible(1,7,0);
+	_this.SetColVisible(1,8,0);
+
+	
+	_this.AddToolbarButton(&amp;quot;保存&amp;quot;, &amp;quot;保存文件&amp;quot;, &amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 1, 1, 1, 100);
+	_this.SetToCodeEditor(&amp;quot;code1&amp;quot;,3,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;LOCAL:server&amp;quot;);
+	_this.SetToTreeCtrl(&amp;quot;tree1&amp;quot;, 4, -1, -1, &amp;quot;&amp;quot;);
+	G_ZXGFILE = _this.SaveTempZXGFile(2);
+	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;查询文件&amp;quot; ) {
+		_this.SetRowCount(1,3);_this.SetCellText(1,1,0,&amp;quot;&amp;quot;);_this.SetCellText(1,2,0,&amp;quot;&amp;quot;);_this.SetCellText(1,1,1,&amp;quot;&amp;quot;);_this.SetCellText(1,2,1,&amp;quot;&amp;quot;);
+
+		var srcdir = _this.GetCellText(0,3,2);
+		var srcfile = _this.GetCellText(0,3,7);
+		var xml = _this.FindFile(srcdir+&amp;quot;\\&amp;quot;+srcfile );
+		
+		_this.SetMainCellRange(1,1,0,2,8);
+		_this.SetXmlDS(1,1,0,2,8,xml);
+//		for(var i=_this.GetMainCellRangeCol1(1);i&amp;lt;=_this.GetMainCellRangeCol2(1);i++){
+//			_this.SetCellText(1,0,i,_this.GetColName(1,i) );
+//		}
+	}
+	else if (id==&amp;quot;网络文件&amp;quot;){
+		var str = _this.HttpCall(_this.GetCellText(0,5,2));
+		
+		G_CURFILE   = &amp;quot;&amp;quot;;		
+		_this.LoadZXGFile(G_ZXGFILE,-1, 2);
+		_this.SetToCodeEditor(&amp;quot;code1&amp;quot;,3,-1,-1,str,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+		
+		_this.SetToTreeCtrl(&amp;quot;tree1&amp;quot;, 4, -1, -1, str);
+		_this.SetCurrentSheet(3);
+
+
+	}
+	else 	if(id==&amp;quot;保存&amp;quot;) {
+		if(G_CURFILE==&amp;quot;&amp;quot;) _this.SetToolbarString(&amp;quot;请选择文件再进行保存&amp;quot;);
+		else {
+			var str = _this.GetCellText(3,-1,-1);
+			_this.SaveTextFile(G_CURFILE, str , &amp;quot;&amp;quot; );
+			alert ( &amp;quot;文件已经保存到&amp;quot;+G_CURFILE);
+		}
+
+	}
+	else 	if(id==&amp;quot;选择&amp;quot;) {
+		var ret = _this.SelectDir();
+		if(ret!=&amp;quot;&amp;quot;)
+			_this.SetCellText(0,row,2,ret);
+	}
+}
+
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if(sheet == 1 &amp;&amp; row &amp;gt;=1 ) {
+		var filepath = _this.GetCellText(sheet,row,1);
+		var filename = _this.GetCellText(sheet,row,0);
+		
+		if ( filename.indexOf(&amp;quot;.os&amp;quot;)&amp;gt;0||filename.indexOf(&amp;quot;.js&amp;quot;)&amp;gt;0||filename.indexOf(&amp;quot;.txt&amp;quot;)&amp;gt;0||filename.indexOf(&amp;quot;.config&amp;quot;)&amp;gt;0||filename.indexOf(&amp;quot;.bat&amp;quot;)&amp;gt;0){
+			G_CURFILE   = filepath;
+			var str = _this.LoadTextFile(filepath);
+			_this.SetCellText(3,-1,-1,str);
+			_this.SetCurrentSheet(3);
+			if(filename.indexOf(&amp;quot;.os&amp;quot;)&amp;gt;0)
+				_this.SetToCodeEditor(&amp;quot;code1&amp;quot;,3,-1,-1,str,&amp;quot;&amp;quot;,&amp;quot;LOCAL:server&amp;quot;);
+			else if(filename.indexOf(&amp;quot;.js&amp;quot;)&amp;gt;0)
+				_this.SetToCodeEditor(&amp;quot;code1&amp;quot;,3,-1,-1,str,&amp;quot;&amp;quot;,&amp;quot;LOCAL:client&amp;quot;);
+			else 
+				_this.SetToCodeEditor(&amp;quot;code1&amp;quot;,3,-1,-1,str,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+
+				
+		}
+		else if ( filename.indexOf(&amp;quot;.xml&amp;quot;)&amp;gt;0 ){
+			G_CURFILE   = filepath;		
+			var str = _this.LoadTextFile(filepath);
+			
+			
+			_this.LoadZXGFile(G_ZXGFILE,-1, 2);
+			_this.SetXmlDS(2,1,0,2,2,str);
+			
+			_this.SetToCodeEditor(&amp;quot;code1&amp;quot;,3,-1,-1,str,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+			for(var i=0;i&amp;lt;=_this.GetColCount(2);i++){
+				_this.SetCellText(2,0,i,_this.GetColName(1,i) );
+			}
+			_this.SetToTreeCtrl(&amp;quot;tree1&amp;quot;, 4, -1, -1, str);
+			_this.SetCurrentSheet(2);
+						
+		}
+		else if ( filename.indexOf(&amp;quot;.zxg&amp;quot;)&amp;gt;0 ){
+			_this.LoadZXGFile(filepath,-1, 2);
+			_this.SetCurrentSheet(2);
+
+		}
+
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var code = request.getParameter(&amp;quot;path&amp;quot;);
+      var db = null;
+      var ret= &amp;quot;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            var fileds = getfilelist (pubpack.EAOption.dynaDataRoot + &amp;quot;xmidware/flash/icon/&amp;quot;);
+            ret +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+            
+            for ( var i=0;i&amp;lt;fileds.getRowCount();i++ ) {
+            	if(i%8==0&amp;&amp;i!=0) 
+            		ret+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+
+            	if(i%8==0)
+            		ret+=&amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+            	ret +=&amp;quot;&amp;lt;td&amp;gt;&amp;lt;table&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center onmouseover=\&amp;quot;this.style.backgroundColor=&amp;apos;#DBEBFA&amp;apos;;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot; onmouseout=\&amp;quot;this.style.backgroundColor=&amp;apos;#EFF7FF&amp;apos;;\&amp;quot;  onclick=\&amp;quot;javascript:window.returnValue=&amp;apos;&amp;quot;+fileds.getStringAt(i,&amp;quot;RETURL&amp;quot;)+&amp;quot;&amp;apos;;window.close();\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+fileds.getStringAt(i,&amp;quot;URL&amp;quot;)+&amp;quot;\&amp;quot; border=0/&amp;gt;&amp;lt;BR&amp;gt;&amp;quot;+fileds.getStringAt(i,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		            
+            	
+            }
+            ret+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+            
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+function getfilelist (fileurl){
+	var folds = (new java.io.File(fileurl)).listFiles();
+	var ds = new pubpack.EAXmlDS();
+	if ( folds != null ) {
+		folds=pub.EAFunc.sort(folds);
+		var c = folds.length();
+		for(var i=0;i&amp;lt;c;i++) {
+			var f=folds[i];
+			if(!f.isDirectory() ) {
+				var filename = f.getName();
+            			var index = filename.indexOf(&amp;quot;.png&amp;quot;);	
+				if ( index &amp;gt;=0  ) {
+					var row= ds.AddRow(ds.getRowCount()-1);
+				
+					//ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+					var layoutid = filename.substring(0,index);
+					ds.setValueAt(row,&amp;quot;ID&amp;quot;,layoutid );
+					ds.setValueAt(row,&amp;quot;RETURL&amp;quot;,&amp;quot;resource://&amp;quot;+layoutid  );
+					ds.setValueAt(row,&amp;quot;URL&amp;quot;,&amp;quot;xlsgrid/images/flash/icon/&amp;quot;+filename  );
+
+					
+				}	
+			}
+		}
+	}
+	return ds;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >USRDBEDIT</MWID><NAME >用户数据维护</NAME><NOTE ></NOTE><FILE >USRDBEDIT.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+order = &amp;quot; order by deptid,seq&amp;quot;;
+
+       setButton();
+       // 构造3个 SQL
+       // 查询用户数据表记录
+       selectSQL = &amp;quot;SELECT GUID,ORG as 组织编号,ID as 用户编号,NAME as 用户名称, &amp;quot;+
+                   &amp;quot;deptid as 所属部门,OWNLOC 所属仓库,STRDAT as 起效日期, DEFLOC 默认仓库,&amp;quot;+
+                   &amp;quot;MAINURL as 登录后的首页,POST as 岗位描述 &amp;quot;+
+                   //&amp;quot;,CRTUSR as 创建人,CRTDAT as 创建时间
+                   &amp;quot;from USR where org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;&amp;quot;;
+       //新增用户数据表记录
+       insertSQL = &amp;quot;INSERT INTO USR ( GUID,ORG,ID,NAME,deptid,OWNLOC,STRDAT,DEFLOC,MAINURL,POST&amp;quot;+
+                   //,CRTUSR,CRTDAT 
+                   &amp;quot; ) values( sys_guid(),?,?,?,?,?,to_date(?,&amp;apos;YYYY-MM-DD&amp;apos;),?,?,? )&amp;quot;;
+       // 修改用户数据表记录
+       updateSQL = &amp;quot;UPDATE USR SET ORG=?,ID=?,NAME=?,deptid=?, OWNLOC=?,&amp;quot;+
+                   &amp;quot;STRDAT=to_date(?,&amp;apos;YYYY-MM-DD&amp;apos;),DEFLOC=?,MAINURL=?,POST=? &amp;quot;+
+                   //,CRTUSR=?,CRTDAT=?
+                   &amp;quot;where guid=?&amp;quot;;
+       //删除用户数据表记录
+       deleteSQL = &amp;quot;delete USR where guid=? &amp;quot;;
+            
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+      _this.SetColVisible(sheet,3,-1);
+        // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       //alert(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_LOC&amp;quot;));
+       var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_DEPT&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_LOC&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+       {
+             var str = _this.GetCellText(sheet,row,6);
+            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,6,listid0);
+            _this.SetCellText(sheet,row,6,str);
+            //所属仓库
+            //_this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid1);
+            
+             str = _this.GetCellText(sheet,row,8);            
+            _this.SetToDateBox(&amp;quot;&amp;quot;,sheet,row,8,&amp;quot;&amp;quot;);
+            _this.SetCellText(sheet,row,8,str);            
+            //默认仓库
+            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,9,listid1);
+       }
+                 
+
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+      if( sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==4 ){
+            _this.SetCellText(sheet,row,3,orgid);
+//            _this.SetCellText(sheet,row,4,orgid+newvalue);
+	    _this.SetCellText(sheet,row,4,newvalue);
+      }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

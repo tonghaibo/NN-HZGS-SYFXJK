@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >FileSystem</MWID><NAME >文件系统</NAME><NOTE ></NOTE><FILE >FileSystem.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheetTree;
+var sheetAddr;
+var sheetList;
+function _thisOnpost_loaddata(sheet)
+{
+      //QuerySQLDS( &amp;quot;SELECT FILENOTE NAME,FILEPATH ID FROM TRKDTL WHERE ROWNUM&amp;lt;10&amp;quot; );
+      //QuerySQLDS( &amp;quot;SELECT * FROM USR WHERE ROWNUM&amp;lt;10&amp;quot; );
+
+      sheetAddr = _this.AddSheet(&amp;quot;地址栏&amp;quot;);
+      sheetList = _this.AddSheet(&amp;quot;文件列表&amp;quot;);
+      var xml =&amp;quot;&amp;quot;;
+      xml = invokeOSFunc(&amp;quot;LoadFile&amp;quot;,&amp;quot;path=&amp;quot;   ) ;
+      _this.XMLDS_Parse(xml);
+      
+      _this.SetToTreeCtrl(&amp;quot;&amp;quot;,sheetTree,-1,-1,xml);
+      _this.SetToSelectBox(&amp;quot;&amp;quot;,sheetAddr,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+      _this.SetToListCtrl(&amp;quot;&amp;quot;,sheetList,-1,-1,xml);
+      
+      _this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;25%&amp;quot;);
+      _this.SplitSheet(sheetAddr ,&amp;quot;V&amp;quot;,&amp;quot;30&amp;quot;);
+      
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+//================================================================// 
+// 函数：LoadFile
+// 说明：载入一个文件路径的所有文件
+// 参数：path
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/03/06 22:47:11
+// 修改日志：
+//================================================================// 
+function LoadFile()
+{
+              var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;quot;;
+              if ( path.length() == 0) 
+                    path = basePath ;
+              path+=&amp;quot;/xmldb&amp;quot;;
+              xml += &amp;quot;&amp;lt;&amp;quot;+path+&amp;quot;&amp;gt;&amp;quot; ;
+              var file = new webpack.EAFileTree();
+              //try {
+                    xml += file.GetXml(path,&amp;quot;&amp;quot;,0);
+              //}
+              //catch ( pubpack.EAException e ) {
+                  // 没有目录，不需要报错
+                  //return e.toString();
+              //}
+              xml += &amp;quot;&amp;lt;/&amp;quot;+path+&amp;quot;&amp;gt;&amp;quot;;
+              throw new Exception(xml);
+              return xml;
+}              </GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

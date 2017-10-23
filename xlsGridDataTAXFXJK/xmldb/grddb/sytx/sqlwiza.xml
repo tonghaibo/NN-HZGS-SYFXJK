@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>sqlwiza</MWID><NAME>sql查询向导</NAME><NOTE></NOTE><NOACCNAME></NOACCNAME><FILE>sqlwiza.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><MANUNIT></MANUNIT><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>exit</ID><NAME>关闭并返回sql</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+<ROW num="1" ><ID>cancel</ID><NAME>直接关闭</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var tblSheet = 0;
+var wizaSheet = 1;
+var sqlSheet = 2;
+
+
+var dsid = &amp;quot;&amp;quot;;
+var tbl=&amp;quot;usr&amp;quot;;
+
+var startRow = 1;
+var nextRow = startRow;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+  _this.LoadScene(tblSheet,4);
+  _this.SetCellBkColor(tblSheet,-1,-1,255,255,255);
+  _this.SetColWidth(tblSheet,1,60);
+  _this.SetColWidth(tblSheet,2,100);
+  
+  _this.SetCellBkColor(wizaSheet,-1,-1,255,255,255);
+  
+  var ordlst = _this.CreateListValue();
+  _this.SetListValue(ordlst,0,&amp;apos;&amp;apos;);
+  _this.SetListValue(ordlst,1,&amp;apos;升序&amp;apos;);
+  _this.SetListValue(ordlst,2,&amp;apos;降序&amp;apos;);
+
+  _this.SetAttribe(&amp;quot;SHEET_&amp;quot;+wizaSheet,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+  _this.SetAttribe(&amp;quot;SHEET__&amp;quot;+wizaSheet,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW); 
+       
+       _this.ShowTabBar(1);
+       _this.SetToCodeEditor(&amp;quot;&amp;quot;,sqlSheet,-1,-1 ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+       
+       _this.SplitSheet(tblSheet,&amp;quot;H&amp;quot;,&amp;quot;20%&amp;quot;);  
+       
+       _this.SplitSheet(wizaSheet,&amp;quot;v&amp;quot;,&amp;quot;50%&amp;quot;); 
+       
+       _this.SetToBoolBox(wizaSheet,1,showCol);
+       _this.SetToBoolBox(wizaSheet,2,showCol);
+       
+       _this.SetToComboBox(&amp;apos;&amp;apos;,wizaSheet,1,sortCol,ordlst);
+       _this.SetToComboBox(&amp;apos;&amp;apos;,wizaSheet,2,sortCol,ordlst);
+
+       _this.SetColVisible(wizaSheet,groupCol,-1);
+       showColumns();
+}
+
+function showColumns()
+{
+  var param = new Object();
+  param.dsid = dsid ;
+  param.tablename = tbl;
+  var xml = invokeOSFuncExt(&amp;quot;GetColumnList&amp;quot;,param);
+  _this.SetXmlDS(tblSheet,2,1,3,3,xml);
+}
+
+var nameCol = 1;
+var name1Col= 2;
+var groupCol= 3;
+var sortCol = 4;
+var showCol = 5;
+var condCol = 6;
+var orCondCol=7;
+
+var innerChange=false;
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+  if(sheet==tblSheet)
+  {
+    innerChange=true;
+    insertCol(row);
+    innerChange=false;
+    buildSQL();
+  }
+  
+}
+
+function insertCol(row)
+{
+  var rows = _this.GetRowCount(wizaSheet)-1;
+  for(var i=rows;i&amp;lt;=nextRow;i++)
+   _this.AppendRow(wizaSheet,rows);
+   
+  var n = _this.GetCellText(tblSheet,row,1);
+  var n1= _this.GetCellText(tblSheet,row,2);
+  _this.SetCellText(wizaSheet, nextRow, nameCol , n); 
+  _this.SetCellText(wizaSheet, nextRow, name1Col , n1);
+  _this.SetCellText(wizaSheet, nextRow, showCol, 1);
+  nextRow++; 
+}
+
+function buildSQL()
+{
+  var sql = &amp;quot;select &amp;quot;;
+  var c=0;
+  var oc=0;
+  var cAry = new Array();
+  var order=&amp;quot;&amp;quot;;
+  var colcount = _this.GetColCount(wizaSheet);
+  var rows = _this.GetRowCount(wizaSheet)-1;
+  for(var i=startRow;i&amp;lt;nextRow;i++)
+  {
+    var n =_this.GetCellText(wizaSheet, i, nameCol); 
+    if(n==&amp;quot;&amp;quot;) continue;
+    var show = _this.GetCellText(wizaSheet, i, showCol);
+    if(show==1)
+    {
+      var n1=_this.GetCellText(wizaSheet, i, name1Col);
+      if(c&amp;gt;0) sql +=&amp;quot;,&amp;quot;;
+      sql += n;
+      if(n1!=&amp;quot;&amp;quot;) sql += &amp;apos; as &amp;quot;&amp;apos;+n1+&amp;apos;&amp;quot;&amp;apos;;
+      c++;
+    }
+    var ord = _this.GetCellText(wizaSheet, i, sortCol); 
+    if(ord&amp;gt;0)
+    {
+      if(oc&amp;gt;0) order +=&amp;quot;,&amp;quot;;
+      order += n;
+      if(ord==2) order += &amp;quot; desc&amp;quot;;
+      oc++;
+    }
+    for(var j=condCol;j&amp;lt;colcount;j++)
+    {
+      var condTxt = _this.GetCellText(wizaSheet, i, j).trim();
+      if(condTxt==&amp;apos;&amp;apos;) continue;
+      var idx = j-condCol;
+      if(typeof cAry[idx] == &amp;apos;undefined&amp;apos;) cAry[idx] = &amp;apos;&amp;apos;;
+      if(cAry[idx]!=&amp;apos;&amp;apos;) cAry[idx] += &amp;apos; and &amp;apos;;
+      var ch = condTxt.charCodeAt(0);
+      var valid=(ch&amp;gt;=0x3c)&amp;&amp;(ch&amp;lt;=0x3e);
+      var field=n;
+      if(!valid)
+      {
+        valid = condTxt.indexOf(&amp;apos;&amp;lt;&amp;apos;,1)&amp;gt;1 || condTxt.indexOf(&amp;apos;=&amp;apos;,1)&amp;gt;1 || condTxt.indexOf(&amp;apos;&amp;gt;&amp;apos;,1)&amp;gt;1;
+        if(valid) field=&amp;quot;&amp;quot;
+        else field+=&amp;apos; &amp;apos;;
+      }
+      cAry[idx] += field + condTxt;
+    }
+  }
+  sql += &amp;quot;\r\nfrom &amp;quot;+tbl;
+  var where = cAry.join(&amp;apos;) or (&amp;apos;);
+  if(where!=&amp;quot;&amp;quot;)
+  sql += &amp;quot;\r\nwhere (&amp;quot;+where+&amp;quot;)&amp;quot;;
+  if(order!=&amp;quot;&amp;quot;)
+  sql += &amp;quot;\r\norder by &amp;quot;+order;
+  _this.SetCellText(sqlSheet,-1,-1,sql+&amp;quot;\r\n&amp;quot;);
+}
+
+var srcCell;
+function _thisOnBeginDrag(id)  
+{ 
+      srcCell = id;
+}
+
+function _thisOnEndDrop(id,text)  
+{
+alert(id+&amp;quot;,&amp;quot;+srcCell);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+    /*
+    if(sheet==wizaSheet &amp;&amp; row&amp;gt;startRow &amp;&amp; col==condCol)
+    {
+      var ch = newvalue.charCodeAt(0);
+      var valid=(ch&amp;gt;=0x3c)&amp;&amp;(ch&amp;lt;=0x3e);//&amp;lt;=&amp;gt;
+      if(!valid)
+      {
+        newvalue=newvalue.trim();
+        var p=newvalue.indexOf(&amp;apos; &amp;apos;);
+        if(p&amp;gt;0)
+        {
+          var id=newvalue.substr(0,p).toLowerCase();
+          valid = (id==&amp;apos;in&amp;apos;)||(id==&amp;apos;like&amp;apos;)
+        }
+      }
+    }
+    */
+    if(!innerChange)
+      buildSQL();
+  
+}
+
+//undefined
+function cancel()
+{
+  window.returnValue = null;
+  close();
+}
+
+//undefined
+function exit()
+{
+  window.returnValue = _this.GetCellText(sqlSheet,-1,-1);
+  close();
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function getdatabase(dsid)
+{
+    if(dsid==&amp;quot;&amp;quot;) dsid=null;
+    var db = new pub.EADatabase(dsid);
+
+  return db;
+}
+
+function GetColumnList()
+{
+   var db = getdatabase(dsid);
+        var sql = &amp;quot;select a.column_name name,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note from &amp;quot;+
+            &amp;quot;( select TABLE_NAME,COLUMN_NAME,COLUMN_ID from user_tab_columns) a,user_col_comments b &amp;quot;+
+            &amp;quot;where a.TABLE_NAME=b.table_name(+) and a.COLUMN_NAME=b.COLUMN_NAME(+) and a.TABLE_NAME=UPPER(&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;) order by a.COLUMN_ID&amp;quot;;
+        if(db.getDBTYP()==&amp;quot;mssql&amp;quot;)
+          sql = &amp;quot;select top 300 COLUMN_NAME name,&amp;apos;&amp;apos; note from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos; order by ORDINAL_POSITION&amp;quot;;
+        //throw new Exception(sql);
+        var ds = db.QuerySQL(sql);        
+
+        return ds.GetXml();
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><STAT>0单据状态</STAT><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

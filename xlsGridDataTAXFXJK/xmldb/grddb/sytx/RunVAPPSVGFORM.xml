@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >RunVAPPSVGFORM</MWID><NAME >运行虚拟化应用（SVGFORM版本）</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >RunVAPPSVGFORM.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >学生</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheetflow = 0 ;
+//分析流程图
+function loadFlowSvg(typ)
+{
+	var svg = invokeOSFunc(&amp;quot;loadFlowSvg&amp;quot;,&amp;quot;filename=&amp;quot;+typ+&amp;quot;.flow&amp;syt=x&amp;quot;);
+	_this.SetToSVGForm(&amp;quot;flow1&amp;quot;,sheetflow,-1,-1,svg);
+}
+
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	loadFlowSvg(&amp;quot;VAPP&amp;quot;);
+	_this.SVGFORM_SetTitleText(&amp;quot;flow1&amp;quot;,&amp;quot;当前执行的虚拟化应用(&amp;quot;+G_VAPPID+&amp;quot;)&amp;quot;+G_VAPPNAME,100);
+	setTimeout(&amp;quot;start1()&amp;quot;,1000); //1.载入初始环境
+}
+function start1()
+{
+	//1.载入初始环境
+	_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;正在载入初始环境&amp;quot;,-1);
+	
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step1&amp;quot;,&amp;quot;width&amp;quot;,&amp;quot;58&amp;quot;);
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step1&amp;quot;,&amp;quot;height&amp;quot;,&amp;quot;58&amp;quot;);
+	//this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step1&amp;quot;,&amp;quot;执行中&amp;quot;);
+	LoadVAPP();
+	_this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step1&amp;quot;,&amp;quot;载入初始环境OK&amp;quot;);
+	setTimeout(&amp;quot;start2()&amp;quot;,2000);  //1.载入初始环境
+
+}
+function start2()
+{
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step2&amp;quot;,&amp;quot;width&amp;quot;,&amp;quot;58&amp;quot;);
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step2&amp;quot;,&amp;quot;height&amp;quot;,&amp;quot;58&amp;quot;);
+	//this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step2&amp;quot;,&amp;quot;执行中&amp;quot;);
+	_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;正在检查环境&amp;quot;,-1);
+	
+	_sql.querytods(&amp;quot;QueryVAPPDTL&amp;quot;, &amp;quot;id=OnLoad&amp;vappid=&amp;quot;+G_VAPPID+&amp;quot;&amp;thissytid=&amp;quot;+thissytid);	//OnOpenAPP, OnCloseAPP
+	var retstr = &amp;quot;&amp;quot;;
+	var errmsg = &amp;quot;&amp;quot;;
+	if( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+		var wsid = _this.XMLDS_GetString(0,&amp;quot;WSID&amp;quot;);
+		if (wsid !=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;调用WebService(id=&amp;quot;+wsid +&amp;quot;)&amp;quot; ,-1);
+			var uguid = &amp;quot;&amp;quot;;
+			var url1 = &amp;quot;WEBS.sp?uguid=&amp;quot;+uguid+&amp;quot;&amp;wsid=&amp;quot;+wsid;
+			retstr += _this.HttpCall(url1);
+		}
+		var etlid = _this.XMLDS_GetString(0,&amp;quot;ETLID&amp;quot;);
+		if (etlid !=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;执行ETL(id=&amp;quot;+etlid +&amp;quot;)&amp;quot; ,-1);
+			var url1 = &amp;quot;RunETL.sp?etlid=&amp;quot;+etlid ;
+			retstr += _this.HttpCall(url1);
+		}
+		var url = _this.XMLDS_GetString(0,&amp;quot;CALLURL&amp;quot;);
+		if (url!=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;远程调用&amp;quot;+url,-1);
+			retstr += _this.HttpCall(url);
+		}
+		var osfunc = _this.XMLDS_GetString(0,&amp;quot;OSFUNC&amp;quot;);
+		if (osfunc !=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;执行&amp;quot;+osfunc ,-1);
+			var url1 = thissytid+&amp;quot;.VAPPOS.&amp;quot;+vappid+&amp;quot;_&amp;quot;+osfunc+&amp;quot;.osp?vappid=&amp;quot;+vappid+&amp;quot;&amp;thissytid=&amp;quot;+thissytid;
+			
+			var ss =  _this.HttpCall(url1);
+			if ( ss.substring(0,5)==&amp;quot;ERROR&amp;quot;) {
+				alert ( ss );
+				errmsg = ss;
+			}		
+			retstr +=ss ;
+			//retstr += _this.HttpCall(url);
+		}
+		
+		
+	}
+	_this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step2&amp;quot;,retstr +&amp;quot;检查环境OK&amp;quot;);
+	
+	if ( errmsg != &amp;quot;&amp;quot; ) return ;
+	
+	setTimeout(&amp;quot;start3()&amp;quot;,1000);  //1.载入初始环境
+
+	
+}
+function start3()
+{
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step3&amp;quot;,&amp;quot;width&amp;quot;,&amp;quot;58&amp;quot;);
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step3&amp;quot;,&amp;quot;height&amp;quot;,&amp;quot;58&amp;quot;);
+	_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;正在推数据...&amp;quot;,-1);
+	//this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step3&amp;quot;,&amp;quot;执行中&amp;quot;);
+
+	_sql.querytods(&amp;quot;QueryVAPPDTL&amp;quot;, &amp;quot;id=OnOpenAPP&amp;vappid=&amp;quot;+G_VAPPID+&amp;quot;&amp;thissytid=&amp;quot;+thissytid);	//OnOpenAPP, OnCloseAPP
+var retstr = &amp;quot;&amp;quot;;
+	var errmsg = &amp;quot;&amp;quot;;
+	if( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+		var wsid = _this.XMLDS_GetString(0,&amp;quot;WSID&amp;quot;);
+		if (wsid !=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;调用WebService(id=&amp;quot;+wsid +&amp;quot;)&amp;quot; ,-1);
+			var uguid = &amp;quot;&amp;quot;;
+			var url1 = &amp;quot;WEBS.sp?uguid=&amp;quot;+uguid+&amp;quot;&amp;wsid=&amp;quot;+wsid;
+			retstr += _this.HttpCall(url1);
+		}
+		var etlid = _this.XMLDS_GetString(0,&amp;quot;ETLID&amp;quot;);
+		if (etlid !=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;执行ETL(id=&amp;quot;+etlid +&amp;quot;)&amp;quot; ,-1);
+			var url1 = &amp;quot;RunETL.sp?etlid=&amp;quot;+etlid ;
+			retstr += _this.HttpCall(url1);
+		}
+		var url = _this.XMLDS_GetString(0,&amp;quot;CALLURL&amp;quot;);
+		if (url!=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;远程调用&amp;quot;+url,-1);
+			retstr += _this.HttpCall(url);
+		}
+		var osfunc = _this.XMLDS_GetString(0,&amp;quot;OSFUNC&amp;quot;);
+		if (osfunc !=&amp;quot;&amp;quot; ) {
+			_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;执行&amp;quot;+osfunc ,-1);
+			var url1 = thissytid+&amp;quot;.VAPPOS.&amp;quot;+vappid+&amp;quot;_&amp;quot;+osfunc+&amp;quot;.osp?vappid=&amp;quot;+vappid+&amp;quot;&amp;thissytid=&amp;quot;+thissytid;
+			
+			var ss =  _this.HttpCall(url1);
+			if ( ss.substring(0,5)==&amp;quot;ERROR&amp;quot;) {
+				alert ( ss );
+				errmsg = ss;
+			}		
+			retstr +=ss ;
+			//retstr += _this.HttpCall(url);
+		}
+		
+		
+	}
+	_this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step3&amp;quot;,retstr +&amp;quot;推数据OK&amp;quot;);
+	
+	if ( errmsg != &amp;quot;&amp;quot; ) return ;	
+	
+	setTimeout(&amp;quot;start4()&amp;quot;,1000);  //1.载入初始环境
+
+	
+}
+function start4()
+{
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step4&amp;quot;,&amp;quot;width&amp;quot;,&amp;quot;58&amp;quot;);
+	_this.XMLCTL_SetAttribe(&amp;quot;flow1&amp;quot;,&amp;quot;img_step4&amp;quot;,&amp;quot;height&amp;quot;,&amp;quot;58&amp;quot;);
+	_this.SVGFORM_SetStatusText(&amp;quot;flow1&amp;quot;,&amp;quot;正在打开应用...&amp;quot;,-1);
+	//this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step4&amp;quot;,&amp;quot;执行中&amp;quot;);
+
+	//_this.XMLCTL_SetValue(&amp;quot;flow1&amp;quot;,&amp;quot;text_step4&amp;quot;,&amp;quot;OK&amp;quot;);
+
+	setTimeout(&amp;quot;start5()&amp;quot;,1000); 
+	
+}
+
+var G_Percent = 100;
+var G_nTime = 0;
+//动画显示后台的登录界面
+function start5()
+{
+	//document.all(&amp;quot;tab_vapp&amp;quot;).style.display=&amp;quot;block&amp;quot;;
+	//document.all(&amp;quot;svg&amp;quot;).style.display=&amp;quot;none&amp;quot;;
+	document.all(&amp;quot;maingrid&amp;quot;).style.display=&amp;quot;none&amp;quot;;
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+function loadFlowSvg() 
+{
+	var usrinfo = web.EASession.GetLoginInfo(request);
+	var filename = pub.EAOption.dynaDataRoot+ pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + syt + &amp;quot;/&amp;quot; + filename;
+	var svg = pub.EAFunc.readFile(filename);
+	
+// 	for ( var i=0;i&amp;lt;24;i++ ) 
+// 		pub.EADbTool.ExcecutSQL(&amp;quot;insert into param( typ,id,name ) values(&amp;apos;HH&amp;apos;,&amp;apos;&amp;quot;+i+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+i+&amp;quot;点&amp;apos; ) &amp;quot;);
+// 	for ( var i=0;i&amp;lt;60;i++ ) 
+// 		pub.EADbTool.ExcecutSQL(&amp;quot;insert into param( typ,id,name ) values(&amp;apos;MM&amp;apos;,&amp;apos;&amp;quot;+i+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+i+&amp;quot;分&amp;apos; ) &amp;quot;);
+	
+	return svg;
+}
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var vappid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;vappid&amp;quot;),&amp;quot;&amp;quot;);
+	var thissytid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thissytid&amp;quot;),&amp;quot;&amp;quot;);
+	if ( vappid == &amp;quot;&amp;quot;||thissytid ==&amp;quot;&amp;quot; ) {
+		sb.append(&amp;quot;&amp;lt;script&amp;gt;alert(&amp;apos;传入的vappid,thissytid参数不能为空&amp;apos;)&amp;lt;/script&amp;gt;&amp;quot;);
+
+	}
+	else {
+		try {
+			db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+			var sql = &amp;quot;select * from vapp where id=&amp;apos;&amp;quot;+vappid+&amp;quot;&amp;apos; and sytid=&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos;&amp;quot;;
+			var ds = db.QuerySQL(sql);
+			if ( ds.getRowCount() == 0 ) {
+				sb.append(&amp;quot;&amp;lt;script&amp;gt;alert(&amp;apos;该虚拟化应用ID(&amp;quot;+vappid+&amp;quot;)不存在&amp;apos;)&amp;lt;/script&amp;gt;&amp;quot;);
+			}	
+			else {
+				var fulls = &amp;quot;FALSE&amp;quot;; if ( ds.getStringDef(0,&amp;quot;APPFULLSCR&amp;quot;,&amp;quot;&amp;quot;)==&amp;quot;1&amp;quot; ) fulls =&amp;quot;TRUE&amp;quot;;
+				var appurl = ds.getStringDef(0,&amp;quot;APPURL&amp;quot;,&amp;quot;&amp;quot;);
+				appurl=pubpack.EAFunc.Replace(appurl, &amp;quot;/&amp;quot;, &amp;quot;\\\\&amp;quot;); //style=\&amp;quot;display:none\&amp;quot;
+				sb.append(&amp;quot;&amp;lt;div name=\&amp;quot;tab_vapp\&amp;quot; id=\&amp;quot;tab_vapp\&amp;quot; align=left &amp;gt;
+					&amp;lt;OBJECT name=\&amp;quot;VAPP\&amp;quot;
+					CLASSID=\&amp;quot;CLSID:7584c670-2274-4efb-b00b-d6aaba6d3850\&amp;quot;
+					CODEBASE=\&amp;quot;msrdp.cab\&amp;quot; 
+					WIDTH=\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;APPWIDTH&amp;quot;,&amp;quot;800&amp;quot;)+&amp;quot;\&amp;quot;   
+					HEIGHT=\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;APPHEIGHT&amp;quot;,&amp;quot;600&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;
+					&amp;lt;/OBJECT&amp;gt;
+					&amp;lt;/div&amp;gt;
+					&amp;lt;script language=\&amp;quot;javascript\&amp;quot;&amp;gt;
+					function LoadVAPP(){
+						VAPP.DesktopWidth=\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;APPWIDTH&amp;quot;,&amp;quot;800&amp;quot;)+&amp;quot;\&amp;quot;; //远程桌面的宽和高
+						VAPP.DesktopHeight=\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;APPHEIGHT&amp;quot;,&amp;quot;600&amp;quot;)+&amp;quot;\&amp;quot;;
+						VAPP.FullScreen=\&amp;quot;&amp;quot;+fulls +&amp;quot;\&amp;quot;;
+						VAPP.server=\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;SERVERNAME&amp;quot;,&amp;quot;localhost&amp;quot;)+&amp;quot;\&amp;quot;;
+						VAPP.UserName =\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;USRID&amp;quot;,&amp;quot;administrator&amp;quot;)+&amp;quot;\&amp;quot;;
+						VAPP.AdvancedSettings2.ClearTextPassword=\&amp;quot;&amp;quot;+ds.getStringDef(0,&amp;quot;USERPWD&amp;quot;,&amp;quot;administrator&amp;quot;)+&amp;quot;\&amp;quot;;
+						VAPP.AdvancedSettings2.RedirectDrives=\&amp;quot;FALSE\&amp;quot;;
+						VAPP.AdvancedSettings2.RedirectPrinters=\&amp;quot;FALSE\&amp;quot;;
+						VAPP.AdvancedSettings2.RedirectPorts=\&amp;quot;FALSE\&amp;quot;;
+						VAPP.AdvancedSettings2.RedirectSmartCards=\&amp;quot;FALSE\&amp;quot;;
+						VAPP.SecuredSettings.StartProgram = \&amp;quot;&amp;quot;+appurl+&amp;quot;\&amp;quot;;
+					
+						VAPP.Connect();
+					}
+					&amp;lt;/script&amp;gt; &amp;quot; );
+				sb.append(&amp;quot;&amp;lt;script&amp;gt; var G_VAPPID=&amp;apos;&amp;quot;+vappid+&amp;quot;&amp;apos;;var G_VAPPNAME=&amp;apos;&amp;quot;+ds.getStringDef(0,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;) +&amp;quot;&amp;apos;;&amp;lt;/script&amp;gt;&amp;quot;);
+			}
+		}
+		catch ( ee ) {
+			db.Rollback();
+			throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+	}
+	
+  
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GetTime</ID><NAME ></NAME><DATDSC >select b.guid,b.class,b.name,b.hh1,b.mm1,a.guid sxguid,a.phase,c.name phasename,a.time,a.maxseqid sxseqid,a.剩余分钟数
+  from (select a.guid,a.phase,a.time,nvl(max(seqid),0) maxseqid,
+               a.time-nvl(sum(hh2*60+mm2-hh1*60-mm1),0) 剩余分钟数
+          from EDU_SXHDR a,EDU_SXDTL b
+         where a.guid=b.formguid(+) and a.usr=&amp;apos;[%usrid]&amp;apos;
+           and (a.stat=&amp;apos;0&amp;apos; or a.stat=&amp;apos;3&amp;apos;)
+           and not exists (select 1 from EDU_SXHDR c where a.phase=c.phase and a.usr=c.usr and (c.stat=&amp;apos;2&amp;apos; or c.stat=&amp;apos;4&amp;apos;))
+         group by a.guid,a.phase,a.time
+        ) a, V_EDU_CURCOURSE b, EDU_PHASE c
+ where a.phase=c.id and a.剩余分钟数&amp;gt;0
+ order by b.coudat,b.hh1 desc,b.mm1 desc</DATDSC><C4 >GetTime</C4><C5 ></C5><C6 >GetTime</C6><C7 >GetTime</C7><C8 >GetTime</C8><C9 ></C9><C10 ></C10><C11 >GetTime</C11><C12 >GetTime</C12><C13 >GetTime</C13><C14 ></C14><C15 >GetTime</C15><C16 ></C16><C17 ></C17><C18 >GetTime</C18><C19 >GetTime</C19><C20 >GetTime</C20><C21 >GetTime</C21><C22 ></C22><C23 ></C23><C24 >GetTime</C24><C25 >GetTime</C25><C26 ></C26><C27 ></C27><C28 >GetTime</C28><C29 ></C29><C30 >GetTime</C30><C31 >GetTime</C31><C32 >GetTime</C32><C33 >GetTime</C33><C34 >GetTime</C34><C35 ></C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="1" ><ID >GetTopic</ID><NAME ></NAME><DATDSC >select a.id,a.typ,c.name typnam,a.name,a.note,decode(nvl(b.stat,&amp;apos;0&amp;apos;),&amp;apos;1&amp;apos;,&amp;apos;已完成&amp;apos;,&amp;apos;未完成&amp;apos;) flg
+  from EDU_TOPIC a,EDU_SXTOPIC b,V_EDU_TOPICTYPE c
+ where a.phase=b.phase(+) and a.id=b.topic(+) and a.typ=c.id and a.phase=&amp;apos;[%phase]&amp;apos; and b.usr(+)=&amp;apos;[%usrid]&amp;apos;
+ order by id</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >GetTopic1</C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >GetTopic</C13><C14 >GetTopic</C14><C15 >GetTopic</C15><C16 >GetTopic</C16><C17 >GetTopic</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >GetTopic</C21><C22 >GetTopic</C22><C23 >GetTopic</C23><C24 >GetTopic</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >GetTopic</C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 >GetTopic</C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="2" ><ID >InsertTime</ID><NAME ></NAME><DATDSC >insert into EDU_SXDTL (formguid,seqid,hh1,mm1,hh2,mm2)
+values (&amp;apos;[%sxguid]&amp;apos;,&amp;apos;[%sxseqid]&amp;apos;,to_char(sysdate,&amp;apos;HH24&amp;apos;),to_char(sysdate,&amp;apos;MI&amp;apos;),to_char(sysdate,&amp;apos;HH24&amp;apos;),to_char(sysdate,&amp;apos;MI&amp;apos;))</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >UpdTime</C8><C9 ></C9><C10 >IntTime</C10><C11 >IntTime</C11><C12 ></C12><C13 >InstTime</C13><C14 >InsertTime</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >InsertTime</C18><C19 ></C19><C20 ></C20><C21 >InsertTime</C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="3" ><ID >UpdateTime</ID><NAME ></NAME><DATDSC >update EDU_SXDTL set hh2=to_char(sysdate,&amp;apos;HH24&amp;apos;),mm2=to_char(sysdate,&amp;apos;MI&amp;apos;)
+ where formguid=&amp;apos;[%sxguid]&amp;apos; and seqid=&amp;apos;[%sxseqid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >GRDDSCDS_3</C9><C10 ></C10><C11 >UpdTime</C11><C12 >UpdTime</C12><C13 >UpTime</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="4" ><ID >InsertTopic</ID><NAME ></NAME><DATDSC >insert into EDU_SXTOPIC (phase,topic,usr,stat)
+values (&amp;apos;[%phase]&amp;apos;,&amp;apos;[%topic]&amp;apos;,&amp;apos;[%usr]&amp;apos;,&amp;apos;1&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >InsertTopic</C18><C19 ></C19><C20 ></C20><C21 >InsertTopic</C21><C22 ></C22><C23 ></C23><C24 >InsertTopic</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 >InsertTopic</C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="5" ><ID >getStuStat</ID><NAME ></NAME><DATDSC >select * from EDU_STUSTAT where usr=&amp;apos;[%usrid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >setStuStat	 	
+ 	 	
+update EDU_STUSTAT set act=&amp;apos;[%act]&amp;apos;,workid=&amp;apos;[%workid]&amp;apos; where usr=&amp;apos;[%usrid]&amp;apos;	f,sql</C26><C27 >getStuStat</C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="6" ><ID >setStuStat</ID><NAME ></NAME><DATDSC >update EDU_STUSTAT set stat=&amp;apos;[%stat]&amp;apos; where usr=&amp;apos;[%usrid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 >GRDDSCDS_6</C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="7" ><ID >setSXHdr</ID><NAME ></NAME><DATDSC >update EDU_SXHDR set stat=&amp;apos;[%stat]&amp;apos; where phase=&amp;apos;[%phase]&amp;apos; and usr=&amp;apos;[%usrid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 >setSXHdr</C34><C35 >setSXHdr</C35><C36 ></C36><C37 ></C37></ROW>
+<ROW num="8" ><ID >InsertPhase</ID><NAME ></NAME><DATDSC >insert into EDU_SXHDR(phase,time,usr)
+select phase,time,usr 
+  from (select min(b.id) phase,c.id usr 
+	  from EDU_COURSE a,V_EDU_PHASE b,USR c 
+	 where a.tiku=b.refid and a.class=c.deptid and a.guid=&amp;apos;[%course]&amp;apos; and c.org=&amp;apos;[%SYS_ORGID]&amp;apos; 
+	   and b.id||c.id not in (select phase||usr from EDU_SXHDR) 
+	   and c.id not in (select usr from EDU_SXHDR where stat in (&amp;apos;0&amp;apos;,&amp;apos;3&amp;apos;)) 
+	   and c.id=&amp;apos;[%usrid]&amp;apos;
+	 group by c.id 
+	) a,V_EDU_PHASE b 
+ where a.phase=b.id</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 >InsertPhase</C36><C37 >InsertPhase</C37></ROW>
+<ROW num="9" ><ID >QueryVAPPDTL</ID><NAME ></NAME><DATDSC >select * from VAPPDTL 
+where id=&amp;apos;[%id]&amp;apos; and formguid=
+(select guid from vapp where id=&amp;apos;[%vappid]&amp;apos; and sytid=&amp;apos;[%thissytid]&amp;apos;)</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

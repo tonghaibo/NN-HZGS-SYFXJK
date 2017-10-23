@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >NLS_TBTODB</MWID><NAME >获取批注</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >NLS_TBTODB.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+var sheet =0;
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;apos;执行&amp;apos;&amp;&amp;row==3 &amp;&amp;col==12){
+        	var param =new Object();
+    		param.thissytid = &amp;quot;MSG3&amp;quot;;
+    		try{
+    			msg = invokeOSFuncExt(&amp;quot;modify2&amp;quot;,param);
+    			alert(&amp;quot;共更新&amp;quot;+msg+&amp;quot;条数据&amp;quot;);
+    		}
+    		catch(e){
+    			alert(e);
+    		}
+	}
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellText(sheet,3,3,G_SYTID);
+}
+
+
+
+
+
+
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var mutil = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var javaio=new JavaPackage(&amp;quot;java.io&amp;quot;);
+function modify2()
+{
+    	 var oldpath =&amp;quot;&amp;quot;;
+    	 var prom=&amp;quot;&amp;quot;;
+    	 var path =&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;xmldb/grddb/syt&amp;quot;+thissytid;//动态路径
+         var len=getf(path,thissytid);
+    	 
+    	 if(prom==&amp;quot;&amp;quot;){
+    	 	return len;
+    	 }
+    	 else{
+    	 	return len;
+    	 }
+}
+function getf(oldpath1,thissytid1)
+{
+	var arong=&amp;quot;&amp;quot;;
+        var oldpath=oldpath1;
+        var thissytid=thissytid1;
+        //先把批注信息放到map中，在插入到数据库中
+        var file = new java.io.File(oldpath);//目录
+	var fold = file.listFiles(); //文件列表
+	fold =pub.EAFunc.sort(fold);
+	var len = fold.length();//文件数
+	var filename =&amp;quot;&amp;quot;;//文件名
+	var nofixname =&amp;quot;&amp;quot;;//不包括后缀的文件名
+	var prefix=&amp;quot;&amp;quot;;//文件后缀
+	var content=&amp;quot;&amp;quot;;//要读取的内容
+	var cnstr=&amp;quot;&amp;quot;;
+	var enstr=&amp;quot;&amp;quot;;
+	//创建临时文件夹
+        var dempath=&amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;xmldb/grddb/syt&amp;quot;+thissytid+&amp;quot;_demp/&amp;quot;;
+        pub.EAFunc.WriteToFile(dempath+&amp;quot;demp.xml&amp;quot;,&amp;quot; &amp;quot;);//保存新文件
+        var map = new mutil.LinkedHashMap();//有序
+        var arong=&amp;quot;&amp;quot;;
+        var in=0;
+        var flg=&amp;quot;&amp;quot;;
+        //flg=&amp;quot;abasad&amp;quot;;    
+        //flg= pub.EAFunc.Replace(flg,&amp;quot;a&amp;quot;,&amp;quot;*&amp;quot;);//全部替换
+        //throw new Exception(flg);
+	for(var i=0;i&amp;lt;len;i++){
+		file = fold[i];
+	    	if(file.isDirectory()){
+	        	arong=&amp;quot;无法读取文件夹&amp;quot;;
+	        }
+		else{
+	    		filename =file.getName();//文件名
+	    		nofixname =filename.substring(0,filename.lastIndexOf(&amp;quot;.&amp;quot;));//不包括后缀的文件名
+	        	prefix=filename.substring(filename.lastIndexOf(&amp;quot;.&amp;quot;)+1);//文件后缀
+	          	if(prefix==&amp;quot;zxg&amp;quot;){       	
+	          		pub.EAZip.deCompressFileToFile(file.getAbsolutePath(),dempath+&amp;quot;/demp.xml&amp;quot;);//解压文件    
+	          		content=pub.EAFunc.readFile(dempath+&amp;quot;/demp.xml&amp;quot;,&amp;quot;UTF-8&amp;quot;);//读取解压后的文件
+                                //判断是否存在批注
+	                	in=0;
+	          	 while(content.indexOf(&amp;quot;&amp;lt;Comment&amp;gt;&amp;quot;)&amp;gt;-1 &amp;&amp;content.indexOf(&amp;quot;&amp;lt;Data ss:Type=\&amp;quot;String\&amp;quot;&amp;gt;&amp;quot;)&amp;gt;-1 &amp;&amp; content.indexOf(&amp;quot;&amp;lt;/Data&amp;gt;&amp;quot;)&amp;gt;-1){       
+	          	
+	          	        try{                                                                                         
+                                                                                                                             
+		          	        if(content.substring(content.indexOf(&amp;quot;&amp;lt;/Data&amp;gt;&amp;quot;)+7,content.indexOf(&amp;quot;&amp;lt;/Data&amp;gt;&amp;quot;)+18).indexOf(&amp;quot;Comment&amp;quot;)&amp;gt;-1){
+			                	cnstr=content.substring(content.indexOf(&amp;quot;&amp;lt;Data ss:Type=\&amp;quot;String\&amp;quot;&amp;gt;&amp;quot;)+23,content.indexOf(&amp;quot;&amp;lt;/Data&amp;gt;&amp;quot;));//中文
+			                	enstr=content.substring(content.indexOf(&amp;quot;html:Color&amp;quot;)+21,content.indexOf(&amp;quot;&amp;lt;/Font&amp;gt;&amp;quot;));//注释
+			                }
+		                }
+		                catch(e){
+		                	throw new Exception(e);
+		                }
+		                if(map.containsKey(cnstr)){
+		          		arong=&amp;quot;重复的值&amp;quot;;
+		          	}
+		          	else{
+		          	        enstr=enstr+&amp;quot;+&amp;quot;+nofixname;
+		          		map.put(cnstr,enstr);
+		          	}
+		          	if(content.indexOf(&amp;quot;&amp;lt;/Comment&amp;gt;&amp;lt;/Cell&amp;gt;&amp;quot;)&amp;gt;-1){	
+		          		content=content.substring(content.indexOf(&amp;quot;&amp;lt;/Comment&amp;gt;&amp;lt;/Cell&amp;gt;&amp;quot;)+17);
+		          	}
+		          	in++;
+	          		if(in&amp;gt;800){
+	          			break;//防止出现循环
+	          		}	          		
+	          	}
+                  }
+             }
+         }
+         var f = new java.io.File(dempath+&amp;quot;/demp.xml&amp;quot;);
+         f.delete();//删除文件
+	 pub.EAFunc.deltree(dempath);//删除目录
+	 //把map中的数据插入到数据库中
+	 
+	 var db = new pubpack.EADatabase();
+	 var set = map.keySet();
+	 var it = set.iterator();
+	 var sql=&amp;quot;&amp;quot;;
+	 var title=0;
+	 var key = &amp;quot;&amp;quot;;
+	 var value=&amp;quot;&amp;quot;;
+	 var classid =&amp;quot;&amp;quot;;
+	 
+	 while(it.hasNext()){
+	         key = it.next();
+	         value=map.get(key);
+	         classid=value.substring(value.lastIndexOf(&amp;quot;+&amp;quot;)+1);
+	         value=value.substring(0,value.lastIndexOf(&amp;quot;+&amp;quot;));
+	         if(value.indexOf(&amp;quot;&amp;#10&amp;quot;)&amp;gt;-1){
+	         	value=pub.EAFunc.Replace(value,&amp;quot;&amp;#10;&amp;quot;,&amp;quot; &amp;quot;);
+	         }
+	        
+	         sql=&amp;quot;select * from nls where cnstr=&amp;apos;&amp;quot;+key+&amp;quot;&amp;apos; and classid=&amp;apos;&amp;quot;+classid+&amp;quot;&amp;apos; &amp;quot;;
+	         var ds=db.QuerySQL(sql);
+	         try{
+		        if(ds.getRowCount()&amp;lt;= 0 &amp;&amp; key !=&amp;quot; &amp;quot;){
+		                sql=&amp;quot;insert into nls (sytid,cnstr,nls,deststr,crtdat,classid)values(&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+key+&amp;quot;&amp;apos;,&amp;apos;en&amp;apos;,&amp;apos;&amp;quot;+value+&amp;quot;&amp;apos;,sysdate,&amp;apos;&amp;quot;+classid+&amp;quot;&amp;apos;)&amp;quot;;
+		        	db.ExcecutSQL(sql);                  		
+		        	title=8;
+		        }
+		        else if(ds.getRowCount()&amp;gt; 0 &amp;&amp; key !=&amp;quot; &amp;quot;){
+		        	 sql=&amp;quot;update nls set crtdat=sysdate,deststr=&amp;apos;&amp;quot;+value+&amp;quot;&amp;apos; where cnstr=&amp;apos;&amp;quot;+key+&amp;quot;&amp;apos;  and classid=&amp;apos;&amp;quot;+classid+&amp;quot;&amp;apos;&amp;quot;;
+		        	 db.ExcecutSQL(sql);
+		        	 title=9;
+		        }
+	        }
+	        catch(e){
+	        	throw new Exception(e);
+	        }
+	  }
+	  db.Commit();//提交
+	  db.Close();//关闭数据连接
+          return title; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

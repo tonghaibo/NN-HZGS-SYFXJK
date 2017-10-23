@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="USR"  dbname="" tablename="USR" fill="#FFFFCC" x="267" y="35" width="148"  height="46" url="">USR 用户表
+记录主要登录信息</rect>
+ <rect id="HR_USR"  dbname="" tablename="HR_USR" fill="#FFFFCC" x="85" y="34" width="145"  height="45" url="">HR_USR 
+记录用户详细信息</rect>
+ <rect id="A3_CUST"  dbname="" tablename="A3_CUST" fill="#FFFFCC" x="257" y="236" width="80"  height="40" url="">A3_CUST 
+客户资料表</rect>
+ <rect id="ORD_TMP"  dbname="" tablename="ORD_TMP" fill="#FFFFCC" x="127" y="378" width="80"  height="42" url="">ORD_TMP
+订单库 </rect>
+ <rect id="A3_CURORD"  dbname="" tablename="A3_CURORD" fill="#FFFFCC" x="378" y="378" width="80"  height="40" url="">A3_CURORD
+当前订单表 </rect>
+ <rect id="A3_DEPARTMENT"  dbname="" tablename="A3_DEPARTMENT" fill="#FFFFCC" x="379" y="237" width="80"  height="40" url="">A3_DEPARTMENT
+部门资料
+ </rect>
+ <rect id="A3_SUBTYPE"  dbname="" tablename="A3_SUBTYPE" fill="#FFFFCC" x="499" y="336" width="80"  height="40" url="">A3_SUBTYPE 
+客户类型维护</rect>
+ <rect id="A3_ITEM"  dbname="" tablename="A3_ITEM" fill="#FFFFCC" x="135" y="237" width="80"  height="40" url="">A3_ITEM 
+商品资料表</rect>
+ <rect id="A3_KAITEM"  dbname="" tablename="A3_KAITEM" fill="#FFFFCC" x="187" y="154" width="96"  height="53" url="">A3_KAITEM
+渠道商品对应表 </rect>
+ <circle id="circle_45123" cx="282" cy="252" x="282" y="252" width="32" height="19" >
+ </circle>
+ <circle id="circle_45124" cx="287" cy="252" x="287" y="252" width="30" height="43" >
+ </circle>
+ <circle id="circle_45125" cx="465" cy="198" x="465" y="198" width="79" height="82" >
+ </circle>
+ <ellipse id="ellipse_45126" cx="467" cy="244" x="467" y="244" width="145" height="94" >
+ </ellipse>
+ <connector id="connector_208_45132" from="A3_ITEM" to="point_45131" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_45134" from="A3_CUST" to="point_45131" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_45139" from="point_45131" to="point_45131" fromcp="11" tocp="11" type="208"  >
+ </connector>
+ <connector id="connector_208_45144" from="point_45131" to="point_45131" fromcp="21" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_45146" from="A3_DEPARTMENT" to="point_45131" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_108_45150" from="point_45131" to="ORD_TMP" fromcp="12" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_45153" from="A3_SUBTYPE" to="A3_CURORD" fromcp="12" tocp="32" type="108"  >
+ </connector>
+ <rect id="A3_SCTYPE"  dbname="" tablename="A3_SCTYPE" fill="#FFFFCC" x="501" y="408" width="80"  height="40" url="">A3_SCTYPE 
+销售分类</rect>
+ <connector id="connector_108_45154" from="A3_SCTYPE" to="A3_CURORD" fromcp="12" tocp="32" type="108"  >
+ </connector>
+ <rect  id="rect_214416" dbname="" tablename="ORD_TMP" fill="#FFFFCC" x="256" y="461" width="90" height="42" url="">正式订单库 </rect>
+ <connector id=" connector_208_214418" from="ORD_TMP" to="rect_214416" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_254616" from="A3_CURORD" to="rect_214416" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <rect id="rect_584616" x="288" y="335" width="19" height="13" stroke="#000000" fill="#FFFFCC" >
+ </rect>
+ <connector id="connector_208_584617" from="A3_ITEM" to="rect_584616" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_154916" from="A3_CUST" to="rect_584616" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_154917" from="A3_DEPARTMENT" to="rect_584616" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_154918" from="ORD_TMP" to="rect_584616" fromcp="21" tocp="23" type="208"  >
+ </connector>
+ <connector id="connector_208_574916" from="A3_CURORD" to="rect_584616" fromcp="21" tocp="23" type="208"  >
+ </connector>
+ <connector id="connector_208_574917" from="A3_ITEM" to="A3_KAITEM" fromcp="21" tocp="23" type="208"  >
+ </connector>
+ <connector id="connector_208_574918" from="A3_CUST" to="A3_KAITEM" fromcp="21" tocp="23" type="208"  >
+ </connector>
+ <text id="text_595316" x="308" y="329" width="89" height="32"   font-color="#FF0000">更新临时订单库基础信息</text>
+ <connector id="connector_208_515716" from="rect_595317" to="ORD_TMP" fromcp="23" tocp="12" type="208"  >
+ </connector>
+ <rect id="EBCONFIG"  dbname="" tablename="EBCONFIG" fill="#FFFFCC" x="38" y="237" width="80"  height="40" url="">EBCONFIG 
+网站登录配置表</rect>
+ <connector id="connector_208_241317" from="EBCONFIG" to="ORD_TMP" fromcp="23" tocp="12" type="208"  >
+ </connector>
+ <rect id="A3_USRCUST"  dbname="" tablename="A3_USRCUST" fill="#FFFFCC" x="377" y="156" width="80"  height="40" url="">A3_USRCUST </rect>
+ <connector id="connector_208_140415" from="HR_USR" to="A3_USRCUST" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_140417" from="A3_CUST" to="A3_USRCUST" fromcp="21" tocp="23" type="208"  >
+ </connector>
+ <connector id="connector_208_140419" from="A3_USRCUST" to="A3_CURORD" fromcp="32" tocp="21" type="208"  >
+ </connector>
+</svg>

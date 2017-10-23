@@ -1,0 +1,1250 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_app</MWID><NAME >APP框架</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_app.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+/****
+首页打开布局用f_openLocalURL(url)
+子页面打开布局用openWindow(url)
+****/
+function GetBody(){
+
+//组件里的参数直接使用
+var menu5str=MENU5;
+var menu4str=MENU4;
+var menu2str=MENU2;
+var menu3str=MENU3;
+var menu1str=MENU1;
+var htmltitle=HTMLTITLE;//网页标题
+var title1=TITLE1;
+var title2=TITLE2;
+var title3=TITLE3;
+var title4=TITLE4;
+var title5=TITLE5;
+var qty=DIVQTY;
+var boomflg=BOOMFLG;
+
+//var singnGuid=genFormguid();
+var html=&amp;quot;
+&amp;lt;!--HTML5 doctype--&amp;gt;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;&amp;quot;+htmltitle+&amp;quot;&amp;lt;/title&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;Content-type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot; /&amp;gt;
+    &amp;lt;META HTTP-EQUIV=\&amp;quot;Pragma\&amp;quot; CONTENT=\&amp;quot;no-cache\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot; /&amp;gt;
+    &amp;lt;!--这两个css 是必须的--&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-ss.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    	&amp;lt;!--这三个js 是http下载的jquery211.min.js不能去掉--&amp;gt;
+    	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/jquery211.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+	&amp;lt;!--这个appframework.ui.js必须放在前面--&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot; &amp;gt;
+	.copyright {
+	padding: 8px;
+	text-align: center;
+	font-size: 14px;
+	color:#B2B2B2;
+	}
+	&amp;lt;/style&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+var curwinid=0;
+var maxwinid=10;
+function f_openWebURL(url){
+	curwinid ++;
+	if(curwinid&amp;gt;maxwinid)curwinid=1;
+	$.get(url,function(data,status){				
+	document.getElementById(\&amp;quot;DOCWIN\&amp;quot;+curwinid).innerHTML=data;
+	});			
+	document.all(&amp;apos;a_gotoitem&amp;apos;+curwinid).click();
+}
+function f_openLocalURL(url) {
+        curwinid ++;
+        if (curwinid&amp;gt;maxwinid) curwinid=1;
+        var data = \&amp;quot;&amp;lt;iframe src=&amp;apos;\&amp;quot;+url+\&amp;quot;&amp;apos; width=100% height=100% frameborder=0 id=&amp;apos;iframe_test&amp;apos;&amp;gt;&amp;lt;/iframe&amp;gt;\&amp;quot;;
+        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).innerHTML=data;
+        document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click();
+}     
+
+&amp;lt;/script&amp;gt;	
+&amp;lt;!--公用js--&amp;gt;
+
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/showflgapp_jquery1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+&amp;lt;script type=text/javascript&amp;gt;
+function clicul(id){
+	var li=document.getElementById(id);
+	if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+		li.style.display=&amp;apos;block&amp;apos;;
+	}
+	else{
+	 	li.style.display=&amp;apos;none&amp;apos;;
+	}
+
+}
+&amp;lt;/script&amp;gt;
+
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-2.1.3.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;    
+    	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	function genup(url){
+	$(&amp;apos;#loadingDiv&amp;apos;).css(&amp;apos;display&amp;apos;,&amp;apos;block&amp;apos;);  
+	    $(&amp;apos;#popup&amp;apos;).slideDown();
+            document.getElementById(\&amp;quot;loadingafram\&amp;quot;).src=url; 
+	}
+	function gendown(){
+	$(&amp;apos;#loadingDiv&amp;apos;).css(&amp;apos;display&amp;apos;,&amp;apos;none&amp;apos;); 
+	$(&amp;apos;#popup&amp;apos;).slideUp();
+	}
+&amp;lt;/script&amp;gt;
+
+&amp;lt;style type=\&amp;quot;text/css\&amp;quot; &amp;gt;
+ #popup{
+  position: absolute;display:none; z-index:999999; background-color:#FFF; left: 601px; top: 217px; height: 150px; width: 217px;line-height:94px;text-align:center;
+  border: 1px solid #03F;
+}
+#embedding{
+  position: absolute; background-color: #36F; top: 94px;height:56px; width:217px;line-height:56px;text-align:center;
+}
+&amp;lt;/style&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-2.1.3.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;    
+ 
+&amp;lt;/head&amp;gt;
+&amp;lt;body &amp;gt;
+    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+        &amp;lt;header&amp;gt;
+            &amp;lt;h1&amp;gt;&amp;quot;+htmltitle+&amp;quot;&amp;lt;/h1&amp;gt;
+            &amp;quot;;
+            if(SETINFO == &amp;quot;1&amp;quot;) {
+            	html += &amp;quot;&amp;lt;img src=xlsgrid/images/flash/appicon/icon_73.png  style=\&amp;quot;float:right;width:45px;margin-right:10px;\&amp;quot; onclick=\&amp;quot;genup(&amp;apos;&amp;quot;+SETINFOURL+&amp;quot;&amp;apos;)\&amp;quot;  / &amp;gt;&amp;quot;;
+            }
+            html+=&amp;quot;&amp;lt;/header&amp;gt;
+
+		&amp;lt;div id=\&amp;quot;loadingDiv\&amp;quot; style=\&amp;quot;position:fixed;display:none;z-index:2000;top:10px;left:0px;width:100%;height:100%;background-color:#FFFFFF\&amp;quot;&amp;gt;
+		&amp;lt;div height=20% style=\&amp;quot;filter: alpha(opacity=45); opacity:0.45; height:40px;width:100%;position:fixed;left:0px;top:0px;background-color:#2c2c2c;\&amp;quot;&amp;gt;
+		&amp;lt;div style=\&amp;quot;position:fixed;top:10px;\&amp;quot;&amp;gt;&amp;lt;a style=\&amp;quot;margin-left:10px\&amp;quot; onclick=\&amp;quot;gendown()\&amp;quot;&amp;gt;返回&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
+		&amp;lt;/div&amp;gt;
+		&amp;lt;iframe id=\&amp;quot;loadingafram\&amp;quot; src=\&amp;quot;\&amp;quot; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;
+		&amp;lt;/div&amp;gt;
+        &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+        	    &amp;quot;;	
+        	    if(title1!=&amp;quot;&amp;quot; &amp;&amp; title1!=null){			
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第一个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title1+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel1\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-selected=\&amp;quot;true\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;	
+         	    	   
+		     	   if(menu1str!=&amp;quot;&amp;quot; &amp;&amp; menu1str!=null){
+		     	   
+		          	html+=getlayout(request,menu1str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+        	    if(title2!=&amp;quot;&amp;quot; &amp;&amp; title2!=null){			
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第二个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title2+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel2\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu2str!=&amp;quot;&amp;quot; &amp;&amp; menu2str!=null){   		
+		          	html+=getlayout(request,menu2str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+        	    if(title3!=&amp;quot;&amp;quot; &amp;&amp; title3!=null){			
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第三个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title3+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel3\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu3str!=&amp;quot;&amp;quot; &amp;&amp; menu3str!=null){   		
+		          	html+=getlayout(request,menu3str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+		     
+        	    if(title4!=&amp;quot;&amp;quot; &amp;&amp; title4!=null){			
+         	   	  
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第四个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title4+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel4\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu4str!=&amp;quot;&amp;quot; &amp;&amp; menu4str!=null){   		
+		          	html+=getlayout(request,menu4str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }
+		      if(title5!=&amp;quot;&amp;quot; &amp;&amp; title5!=null){			
+         	   	  
+         	   	   html+=&amp;quot;
+         	           &amp;lt;!--第五个布局---------&amp;gt;
+         	    	   &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title5+&amp;quot;\&amp;quot; id=\&amp;quot;all_panel5\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;   style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;&amp;quot;;		
+		     	   if(menu4str!=&amp;quot;&amp;quot; &amp;&amp; menu4str!=null){   		
+		          	html+=getlayout(request,menu5str);   
+		           }
+		     	   html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+		     }	
+		          
+		          html+=&amp;quot;
+		     		
+		     &amp;lt;!--10个循环的div---------&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;连接内部窗口不显示\&amp;quot; id=\&amp;quot;WININNER\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;;
+		          if(qty==0 || qty==null || qty==&amp;quot;&amp;quot;){
+		          	qty=10;
+		          }
+		          for(var i=1;i&amp;lt;=qty;i++){
+		          	html+=&amp;quot;&amp;lt;a href=&amp;apos;#PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; id=&amp;apos;a_gotopanel&amp;quot;+i+&amp;quot;&amp;apos; style=\&amp;quot;display：none;\&amp;quot;&amp;gt;直接跳转到win&amp;quot;+i+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+		          }
+		          html+=&amp;quot;&amp;lt;a href=&amp;apos;#PANEL_WIN0&amp;apos; id=&amp;apos;a_gotopanel0&amp;apos; style=\&amp;quot;display：none;\&amp;quot;&amp;gt;直接跳转到临时页面&amp;lt;/a&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+
+		     html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;     
+		     
+			   for(var i=0;i&amp;lt;=qty;i++){
+			   	html+=&amp;quot;
+			          	&amp;lt;div class=&amp;apos;panel&amp;apos; data-title=&amp;apos;&amp;quot;+htmltitle+&amp;quot;&amp;apos; id=&amp;apos;PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; data-footer=&amp;apos;none&amp;apos; style=&amp;apos;padding:0;&amp;apos;&amp;gt;
+				        &amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos; &amp;gt;
+				        &amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
+			        &amp;quot;;
+		          }
+		      html+=&amp;quot;
+		      &amp;lt;/div&amp;gt;&amp;lt;!--这个是pages 的结束--------------------------------------------------------------------------------&amp;gt;	         
+		         &amp;quot;;
+		            if( boomflg==null || boomflg==&amp;quot;&amp;quot;){
+		          	qty=0;
+		          }
+		         if(boomflg!=1){
+			         
+			         html+=&amp;quot;
+			         &amp;lt;!--Footer to add tabs if desired--&amp;gt;
+			        &amp;lt;footer&amp;gt;
+			            &amp;lt;!--五个div固定的菜单---------&amp;gt;
+			            &amp;quot;;
+			            if(title1!=&amp;quot;&amp;quot; &amp;&amp; title1!=null){
+			            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel1\&amp;quot; class=\&amp;quot;icon home\&amp;quot; id=&amp;apos;tab1&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title1+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;	
+			            }
+			            if(title2!=&amp;quot;&amp;quot; &amp;&amp; title2!=null){
+			            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel2\&amp;quot; class=\&amp;quot;icon heart\&amp;quot; id=&amp;apos;tab2&amp;apos; data-transition=\&amp;quot;up-reveal\&amp;quot;&amp;gt;&amp;quot;+title2+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+				    }
+				    if(title3!=&amp;quot;&amp;quot; &amp;&amp; title3!=null){
+				    	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel3\&amp;quot; class=\&amp;quot;icon pencil\&amp;quot; id=&amp;apos;tab3&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title3+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			            }
+			            if(title4!=&amp;quot;&amp;quot; &amp;&amp; title4!=null){
+			            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel4\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title4+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+				    }
+			            if(title5!=&amp;quot;&amp;quot; &amp;&amp; title5!=null){
+			            	html+=&amp;quot;&amp;lt;a href=\&amp;quot;#all_panel5\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab5&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title5+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+				    }
+	
+				    html+=&amp;quot;
+		
+			        &amp;lt;/footer&amp;gt;&amp;quot;;
+			}	
+	html+=&amp;quot;	        
+    &amp;lt;/div&amp;gt;&amp;lt;!--这个是view 的结束-------------------------------------------------------------------------------------&amp;gt;
+
+&amp;lt;/body&amp;gt;
+
+&amp;lt;/html&amp;gt;	
+&amp;quot;;
+return html;
+
+}
+
+
+//获取每个布局的编号
+function genSTR(str){
+
+	var sql=&amp;quot;&amp;quot;;
+	var ds=&amp;quot;&amp;quot;;
+	var db=null;
+	db = new pubpack.EADatabase();
+	var layid=&amp;quot;&amp;quot;;
+	try{
+		sql=&amp;quot;
+			SELECT B.* FROM LAYOBJ A ,LAYOBJDTL B  
+			WHERE A.GUID=B.FORMGUID 
+			AND A.ID =&amp;apos;MAINAPPFRAM&amp;apos; AND A.CLS=&amp;apos;CHIS&amp;apos;and B.id =&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;
+		&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()==1){
+			layid=ds.getStringAt(0,&amp;quot;VAL&amp;quot;);
+			return layid; 
+		}
+	}
+	catch(e){return &amp;quot;&amp;quot;;}
+	if(db!=null){db.Close();}
+}
+//获取布局的html
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var lang = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;lang&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,lang);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(&amp;quot;&amp;quot;);
+						
+			throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+
+//
+// 动态单个分组菜单
+// DBNAME,SQL,TITLE,TITLEICON,MENUID,SUBTITLE,SHOWSUBMENU
+// IFSHOWCOUNT
+// IFSHOWHEADCOUNT
+function GetAPPSubMenu()
+{
+	
+	var db = null;
+	var rethtml= &amp;quot;&amp;quot;;
+	if(SHOWSUBMENU==&amp;quot;&amp;quot;||SHOWSUBMENU==&amp;quot;null&amp;quot;||SHOWSUBMENU==null)SHOWSUBMENU = &amp;quot;0&amp;quot;;
+	if(IFSHOWCOUNT==&amp;quot;&amp;quot;||IFSHOWCOUNT==&amp;quot;null&amp;quot;||IFSHOWCOUNT==null)IFSHOWCOUNT= &amp;quot;1&amp;quot;;
+	if(IFSHOWHEADCOUNT==&amp;quot;&amp;quot;||IFSHOWHEADCOUNT==&amp;quot;null&amp;quot;||IFSHOWHEADCOUNT==null)IFSHOWHEADCOUNT= &amp;quot;1&amp;quot;;
+	
+
+
+
+	rethtml+=&amp;quot;&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    
+    &amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+	&amp;quot;;
+
+	try {
+		if(DBNAME!=&amp;quot;&amp;quot;)
+			db = new pubpack.EADatabase(DBNAME);	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		else db = new pubpack.EADatabase();
+		// 处理SQL的替代
+		var usrinfo  = web.EASession.GetLoginInfo(request);
+		SQL=web.EASession.GetSysValue(SQL,request);//替换request 中[%id]
+		SQL=web.EASession.GetSysValue(SQL,usrinfo);
+		var ds = db.QuerySQL(SQL);//列名称需要有ICON，NAME，URL，CNT（记录数）等字段
+		var subhtmlstr =&amp;quot;&amp;quot;;
+		var sumcount = 0 ;
+		var oldgroupid = &amp;quot;NULL&amp;quot;;
+		var MENUID = &amp;quot;&amp;quot;;
+		var MENUSUBTITLE = &amp;quot;&amp;quot;;
+		var displayflag = &amp;quot;none&amp;quot;;
+		if(SHOWSUBMENU == &amp;quot;1&amp;quot; ) displayflag = &amp;quot;block&amp;quot;;
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+			var NAME = ds.getStringDef(i,&amp;quot;NAME&amp;quot;,&amp;quot;&amp;quot;);
+			var SUBNAME = ds.getStringDef(i,&amp;quot;SUBNAME&amp;quot;,&amp;quot;&amp;quot;);
+			var ICON = ds.getStringDef(i,&amp;quot;ICON&amp;quot;,&amp;quot;&amp;quot;);
+			var ICONCOLOR = ds.getStringDef(i,&amp;quot;ICONCOLOR&amp;quot;,&amp;quot;#666666&amp;quot;);
+
+			var URL = ds.getStringDef(i,&amp;quot;URL&amp;quot;,&amp;quot;&amp;quot;);
+			var CNT= 1*ds.getStringDef(i,&amp;quot;CNT&amp;quot;,&amp;quot;0&amp;quot;);
+			//MENUTITLE,MENUICON,MENUSUBTITLE 
+			MENUID= ds.getStringDef(i,&amp;quot;MENUID&amp;quot;,&amp;quot;&amp;quot;);
+			var MENUTITLE= ds.getStringDef(i,&amp;quot;MENUTITLE&amp;quot;,&amp;quot;&amp;quot;);
+			var MENUICON= ds.getStringDef(i,&amp;quot;MENUICON&amp;quot;,&amp;quot;&amp;quot;);
+			
+			MENUSUBTITLE = ds.getStringDef(i,&amp;quot;MENUSUBTITLE&amp;quot;,&amp;quot;&amp;quot;);
+			var strShowCount = &amp;quot;&amp;quot;;
+			if(IFSHOWCOUNT==&amp;quot;1&amp;quot;)strShowCount +=&amp;quot;&amp;lt;div class=\&amp;quot;spans3\&amp;quot;&amp;gt;&amp;quot;+CNT+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+			if(oldgroupid !=MENUID){
+				if(i!=0) {
+					if(IFSHOWHEADCOUNT==&amp;quot;1&amp;quot;)
+					{
+						rethtml+=&amp;quot;&amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;&amp;quot;+sumcount +&amp;quot;&amp;lt;/span &amp;gt;&amp;quot;;
+						rethtml+=&amp;quot;&amp;lt;i&amp;gt;&amp;quot;+MENUSUBTITLE+&amp;quot;：&amp;quot;+sumcount+&amp;quot;&amp;lt;/i&amp;gt;&amp;quot;;
+					}
+					else   rethtml+=&amp;quot;&amp;lt;i&amp;gt;&amp;quot;+MENUSUBTITLE+&amp;quot;&amp;lt;/i&amp;gt;&amp;quot;;
+
+					 rethtml+=&amp;quot;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;
+			         	 &amp;lt;/li&amp;gt;
+					&amp;lt;/ul&amp;gt;
+					&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;SUB_&amp;quot;+ds.getStringDef(i-1,&amp;quot;MENUID&amp;quot;,&amp;quot;&amp;quot;)+&amp;quot;\&amp;quot; style=\&amp;quot;display:&amp;quot;+displayflag +&amp;quot;;margin-left:15px;margin-right:15px;\&amp;quot; style=\&amp;quot;margin:6px;\&amp;quot;&amp;gt;&amp;quot;;
+	
+					rethtml+=subhtmlstr ;
+					subhtmlstr = &amp;quot;&amp;quot;;
+					rethtml+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+				}
+				
+				// 加上分页标签
+				rethtml += &amp;quot;&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot; id=\&amp;quot;MENU&amp;quot;+MENUID+&amp;quot;\&amp;quot; onclick=\&amp;quot;clicul(&amp;apos;SUB_&amp;quot;+MENUID+&amp;quot;&amp;apos;);\&amp;quot; &amp;gt;
+			         		&amp;lt;li  align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#MYROOMpanel\&amp;quot;  style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span &amp;gt;&amp;quot;+MENUTITLE+&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+				sumcount = 0 ;
+			}
+			subhtmlstr += &amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;&amp;quot;+URL+&amp;quot;\&amp;quot; class=\&amp;quot;asa2\&amp;quot; style=\&amp;quot;text-transform:none;text-decoration:none;\&amp;quot; style=\&amp;quot;margin:6px;\&amp;quot;&amp;gt;
+					&amp;lt;li class=\&amp;quot;lis2\&amp;quot; id=\&amp;quot;\&amp;quot; style=\&amp;quot;border:0px;margin-bottom:4px;\&amp;quot;&amp;gt; &amp;lt;table width=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=60 align=left valign=middle&amp;gt;&amp;quot;;
+			if(ICON.length()&amp;gt;9 &amp;&amp; ICON.substring(0,9)==&amp;quot;glyphicon&amp;quot;)
+				subhtmlstr += &amp;quot;&amp;lt;font class=\&amp;quot;&amp;quot;+ICON+&amp;quot;\&amp;quot; style=\&amp;quot;font-size: 30px;font-style: normal;\&amp;quot; color=&amp;apos;&amp;quot;+ICONCOLOR +&amp;quot;&amp;apos;&amp;gt; &amp;lt;/font&amp;gt;&amp;quot;;
+			else if(ICON!=&amp;quot;&amp;quot;)
+				subhtmlstr += &amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+ICON+&amp;quot;&amp;apos; width=60 height=60  border=0&amp;gt;&amp;quot;;
+			else 	subhtmlstr += &amp;quot;&amp;lt;font class=\&amp;quot;glyphicon glyphicon-list-alt\&amp;quot; style=\&amp;quot;font-size: 30px;font-style: normal;\&amp;quot; color=&amp;apos;&amp;quot;+ICONCOLOR +&amp;quot;&amp;apos;&amp;gt;&amp;lt;/font&amp;gt;&amp;quot;;
+			subhtmlstr += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt; &amp;quot;;
+			subhtmlstr += &amp;quot;&amp;lt;font style=\&amp;quot;font-size: 16px;font-style: normal;color:#333333\&amp;quot;&amp;gt;  &amp;quot;+NAME+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;+strShowCount ;
+			if(SUBNAME!=&amp;quot;&amp;quot;)
+				subhtmlstr += &amp;quot;&amp;lt;BR&amp;gt;&amp;lt;font style=\&amp;quot;font-size: 12px;font-style: normal;color:#555555\&amp;quot;&amp;gt; &amp;quot;+SUBNAME+&amp;quot;&amp;lt;/font&amp;gt;&amp;quot;;
+			subhtmlstr += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/li&amp;gt;
+					&amp;lt;/a&amp;gt;	&amp;quot;;
+
+			sumcount += CNT;
+			oldgroupid  = MENUID;
+		}
+	
+		if(rethtml!=&amp;quot;&amp;quot;){
+			if(IFSHOWHEADCOUNT==&amp;quot;1&amp;quot;)
+			{
+				rethtml+=&amp;quot;&amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;&amp;quot;+sumcount +&amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+				rethtml+=&amp;quot;&amp;lt;i&amp;gt;&amp;quot;+MENUSUBTITLE+&amp;quot;：&amp;quot;+sumcount +&amp;quot;&amp;lt;/i&amp;gt;&amp;quot;;
+			}
+			else rethtml+=&amp;quot;&amp;lt;i&amp;gt;&amp;quot;+MENUSUBTITLE+&amp;quot;&amp;lt;/i&amp;gt;&amp;quot;;
+			
+			   rethtml+=&amp;quot;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;
+	         	  &amp;lt;/li&amp;gt;
+			&amp;lt;/ul&amp;gt;
+			&amp;lt;ul class=\&amp;quot;uls\&amp;quot; id=\&amp;quot;SUB_&amp;quot;+oldgroupid +&amp;quot;\&amp;quot; style=\&amp;quot;display:&amp;quot;+displayflag +&amp;quot;;margin-left:15px;margin-right:15px;\&amp;quot; style=\&amp;quot;margin:6px;\&amp;quot;&amp;gt;&amp;quot;;
+	
+			rethtml+=subhtmlstr ;
+			rethtml+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+		}
+			}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return rethtml;
+
+}
+
+//获取每个布局的编号
+function genFormguid(){
+
+	var sql=&amp;quot;&amp;quot;;
+	var ds=null;
+	var db=null;
+	db = new pubpack.EADatabase();
+	
+	var usr=web.EASession.GetLoginInfo(request);
+	var orgid=usr.getOrgid();
+	var accid=usr.getAccid();
+	var userid =usr.getUsrid();
+	//return userid+&amp;quot;_&amp;quot;+orgid ;
+	var layid=&amp;quot;&amp;quot;;
+	try{
+		sql=&amp;quot;
+			select guid from CHIS_PATINFO where formguid=(select guid from usr where id=&amp;apos;&amp;quot;+userid+&amp;quot;&amp;apos;)
+		&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()==1){
+			layid=ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+			return layid; 
+		}
+	}
+	catch(e){return &amp;quot;&amp;quot;;}
+	if(db!=null){db.Close();}
+}
+
+
+
+//
+// 
+//
+function GetAPPFrameBody()
+{	
+	if(DIVQTY==0 || DIVQTY==null || DIVQTY==&amp;quot;&amp;quot;)DIVQTY=10;
+	if(BOTTOMMENUICON==null)BOTTOMMENUICON=&amp;quot;&amp;quot;;
+	if(BOTTOMMENUNAME==null)BOTTOMMENUNAME=&amp;quot;&amp;quot;;
+	if(BOTTOMMENUURL==null)BOTTOMMENUURL=&amp;quot;&amp;quot;;
+	if(DIVBGCOLOR==0 || DIVBGCOLOR==null || DIVBGCOLOR==&amp;quot;&amp;quot;) DIVBGCOLOR=&amp;quot;#000&amp;quot;;
+	
+	var aName = BOTTOMMENUNAME.split(&amp;quot;,&amp;quot;);
+	
+	var aLayout = BOTTOMMENUURL.split(&amp;quot;,&amp;quot;);
+	
+	var aIcon = BOTTOMMENUICON.split(&amp;quot;,&amp;quot;);
+
+	var layout1 = &amp;quot;&amp;quot;;var layout2 = &amp;quot;&amp;quot;;var layout3 = &amp;quot;&amp;quot;;var layout4 = &amp;quot;&amp;quot;;var layout5 = &amp;quot;&amp;quot;;var layout6 = &amp;quot;&amp;quot;;var layout7 = &amp;quot;&amp;quot;;var layout8 = &amp;quot;&amp;quot;;var layout9 = &amp;quot;&amp;quot;;var layout10 = &amp;quot;&amp;quot;;var layout11 = &amp;quot;&amp;quot;;
+
+	
+	if(aLayout.length()&amp;gt;0)layout1 =aLayout[0];
+	if(aLayout.length()&amp;gt;1)layout2 =aLayout[1];
+	if(aLayout.length()&amp;gt;2)layout3 =aLayout[2];
+	if(aLayout.length()&amp;gt;3)layout4 =aLayout[3];
+	if(aLayout.length()&amp;gt;4)layout5 =aLayout[4];
+	if(aLayout.length()&amp;gt;5)layout6 =aLayout[5];
+	if(aLayout.length()&amp;gt;6)layout7 =aLayout[6];
+	if(aLayout.length()&amp;gt;7)layout8 =aLayout[7];
+	if(aLayout.length()&amp;gt;8)layout9 =aLayout[8];
+	if(aLayout.length()&amp;gt;9)layout10 =aLayout[9];
+	if(aLayout.length()&amp;gt;10)layout11 =aLayout[10];
+
+	var aDefIcon = &amp;quot;glyphicon glyphicon-home,glyphicon glyphicon-th-large,glyphicon glyphicon-picture,glyphicon glyphicon-user,glyphicon glyphicon-signal,glyphicon glyphicon-check,glyphicon glyphicon-inbox,glyphicon glyphicon-lock,glyphicon glyphicon-qrcode,glyphicon glyphicon-comment,glyphicon glyphicon-home,glyphicon glyphicon-th-large&amp;quot;.split(&amp;quot;,&amp;quot;);
+	var html=&amp;quot;
+
+
+  	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=&amp;apos;xlsgrid/images/flash/js/socket.io.js&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;	
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	var curwinid=0;
+	var maxwinid=10;
+	var socket = null;
+	var url = \&amp;quot;\&amp;quot;;
+	var isim = &amp;quot;+USRIM+&amp;quot;;
+	if(isim == &amp;apos;&amp;apos;) isim = 2; 
+	var DIVQTY=&amp;quot;+DIVQTY+&amp;quot;;
+	if(isim === 1) {
+		var iosocket = io.connect(&amp;apos;http://db.xmidware.com:9001&amp;apos;),
+		session, username, callingTo, duplicateMessages = [];
+		iosocket.emit(&amp;apos;login&amp;apos;, G_APP_USRGUID);
+	   	url =G_WEBBASE+\&amp;quot;rcall.jsp?sytid=CHIS&amp;mwid=CHISOS&amp;funcid=upStat&amp;myusrguid=\&amp;quot;+G_APP_USRGUID+\&amp;quot;&amp;flg=1&amp;userpwd=\&amp;quot;+G_APP_USERPWD+\&amp;quot;&amp;usrid=\&amp;quot;+G_APP_USRID+\&amp;quot;\&amp;quot;;
+		$.get(url,function(result) {
+			var str = result
+			str = str.replace(/\\n/g,&amp;apos;&amp;apos;);
+			console.log(\&amp;quot;在线\&amp;quot;+str);
+		});
+		
+		 iosocket.on(&amp;apos;messageReceived&amp;apos;, function(name,str,message){
+		 	switch (message.type){
+		 		case &amp;apos;loginout&amp;apos;:
+	 		  	url =G_WEBBASE+\&amp;quot;rcall.jsp?sytid=CHIS&amp;mwid=CHISOS&amp;funcid=upStat&amp;myusrguid=\&amp;quot;+name+\&amp;quot;&amp;flg=2&amp;userpwd=\&amp;quot;+G_APP_USERPWD+\&amp;quot;&amp;usrid=\&amp;quot;+G_APP_USRID+\&amp;quot;\&amp;quot;;
+				$.get(url,function(result) {
+					var str = result
+					str = str.replace(/\\n/g,&amp;apos;&amp;apos;);
+					console.log(\&amp;quot;离线\&amp;quot;+name);
+				});
+				break;
+			}
+		});
+
+		var _t = 2;
+		
+		window.onbeforeunload = function(){  
+			setTimeout(function(){_t = setTimeout(officeLine(), 0)}, 0);
+
+			iosocket.emit(&amp;apos;sendMessage&amp;apos;, G_APP_USRGUID,G_APP_USRGUID, {type: &amp;apos;loginout&amp;apos;});
+		}  
+		function officeLine(){
+			clearTimeout(_t);
+			console.log(_t);
+		}
+		
+		function xiaochu() {
+			document.getElementById(&amp;apos;bell&amp;apos;).innerHTML=&amp;apos;&amp;apos;
+		}
+	}
+	
+	function f_openLocalURL(url) {
+		try{parent.alertaudio(&amp;apos;&amp;apos;);}catch(e){}
+		var oldwinid = curwinid ;
+	        curwinid ++;
+	        if (curwinid&amp;gt;maxwinid) curwinid=1;
+	        //document.all(&amp;apos;a_gotopanelLOAD&amp;apos;).click(); 
+		if(oldwinid !=-1){// 首页打开，不需要
+	        	document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returntitle&amp;apos;,document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML);
+	        	document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returnseq&amp;apos;,oldwinid);
+	        	document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=\&amp;quot;&amp;lt;li class=&amp;apos;glyphicon glyphicon-chevron-left&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;nbsp; \&amp;quot;+document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML;
+	        }
+	        
+	        // 假设标题是序号  
+	        document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = &amp;apos;&amp;apos;;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;titlename&amp;apos;,&amp;apos;&amp;apos;);
+	        
+	        for ( var i=0;i&amp;lt;DIVQTY;i++)
+		         document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+i).style.display=&amp;apos;none&amp;apos;;
+	        document.getElementById(\&amp;quot;PANEL_WINLOADING\&amp;quot;).style.display=&amp;apos;&amp;apos;;
+		bWatingOpen  = true;
+		
+	        var data = \&amp;quot;&amp;lt;iframe id=&amp;apos;frame_win\&amp;quot;+curwinid+\&amp;quot;&amp;apos;src=&amp;apos;\&amp;quot;+url+\&amp;quot;&amp;apos; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;\&amp;quot;;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).innerHTML=data;
+	        
+	        setTimeout(&amp;apos;_settimeout()&amp;apos;,1000);
+	         
+	         
+
+//		document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click(); 
+
+//	        bWatingOpen  = true;
+//	        setTimeout(&amp;apos;_settimeout()&amp;apos;,500);//如果0.5分钟没有被子窗口触发
+	}
+	var bWatingOpen = false;
+	function _settimeout()
+	{
+		console.log(&amp;apos;timeout call ,&amp;apos;+bWatingOpen );
+		if(bWatingOpen) {
+			document.getElementById(\&amp;quot;PANEL_WINLOADING\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+		        document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+curwinid).style.display=&amp;apos;&amp;apos;;
+		}
+		bWatingOpen  = false;
+	}
+	function showbottommenu()
+	{
+		try{document.all(&amp;apos;bottommenu&amp;apos;).style.display=&amp;apos;&amp;apos;; }catch(e){alert(e);}
+		_resize();
+	}
+	function hidebottommenu()
+	{
+		try{document.all(&amp;apos;bottommenu&amp;apos;).style.display=&amp;apos;none&amp;apos;; }catch(e){}
+		_resize();
+	}
+	function showtopmenu()
+	{
+		try{document.all(&amp;apos;topmenu&amp;apos;).style.display=&amp;apos;&amp;apos;; }catch(e){alert(e);}
+		_resize();
+	}
+	function hidetopmenu()
+	{
+		try{document.all(&amp;apos;topmenu&amp;apos;).style.display=&amp;apos;none&amp;apos;; }catch(e){}
+		_resize();
+	}
+	// 返回上个节点     
+	function f_goback()
+	{	
+		try{parent.alertaudio(&amp;apos;&amp;apos;);}catch(e){}
+		var oldtitle = document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML;
+		//if(oldtitle ==&amp;apos;&amp;apos;)return &amp;apos;&amp;apos;;
+		
+		var retseq = document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).getAttribute(&amp;apos;returnseq&amp;apos;);
+		//document.all(&amp;apos;a_gotopanel&amp;apos;+retseq ).click();
+		document.getElementById(\&amp;quot;PANEL_WINLOADING\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+		for ( var i=0;i&amp;lt;DIVQTY;i++)
+	         	document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+i).style.display=&amp;apos;none&amp;apos;;
+	         document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+retseq ).style.display=&amp;apos;&amp;apos;;
+
+		var rettitle = document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+retseq ).getAttribute(&amp;apos;titlename&amp;apos;);
+		
+		document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = rettitle ;
+		var backhtml=  document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+retseq ).getAttribute(&amp;apos;returntitle&amp;apos;);
+		if(backhtml!=\&amp;quot;\&amp;quot;)
+			document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=\&amp;quot;&amp;lt;li class=&amp;apos;glyphicon glyphicon-chevron-left&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;nbsp; \&amp;quot; + backhtml;
+		else document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=&amp;apos;&amp;apos;;
+		showbottommenu();
+		showtopmenu();
+		document.all(&amp;apos;frame_win&amp;apos;+curwinid).src=&amp;apos;&amp;apos;;
+		curwinid --;
+		return oldtitle ;
+	}
+	var G_FIRSTTITLE = &amp;apos;&amp;apos;;//首页的标题
+	// 下级子窗口载入完毕后调用
+	// title 页面的标题
+	function f_childwndready(title)
+	{
+		console.log(&amp;apos;ready call &amp;apos;+title +bWatingOpen);
+		document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = title ;
+		document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid ).setAttribute(&amp;apos;titlename&amp;apos;,title );
+		if(curwinid ==0 )G_FIRSTTITLE= title;
+		if(bWatingOpen){
+			document.getElementById(\&amp;quot;PANEL_WINLOADING\&amp;quot;).style.display=&amp;apos;none&amp;apos;;
+
+			for ( var i=0;i&amp;lt;DIVQTY;i++)
+		         	document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+i).style.display=&amp;apos;none&amp;apos;;
+		         document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+curwinid).style.display=&amp;apos;&amp;apos;;
+		         //try{document.all(&amp;apos;frame_win&amp;apos;+curwinid).focus(); } catch(e){alert(e);}
+		}
+		bWatingOpen  = false;
+
+	}
+	//打开底部菜单
+	function f_click_bottom_menu(num)
+	{
+		var url = &amp;apos;&amp;apos;;
+		if(num==0)url=\&amp;quot;&amp;quot;+layout1+&amp;quot;\&amp;quot;;
+		if(num==1)url=\&amp;quot;&amp;quot;+layout2+&amp;quot;\&amp;quot;;
+		if(num==2)url=\&amp;quot;&amp;quot;+layout3+&amp;quot;\&amp;quot;;
+		if(num==3)url=\&amp;quot;&amp;quot;+layout4+&amp;quot;\&amp;quot;;
+		if(num==4)url=\&amp;quot;&amp;quot;+layout5+&amp;quot;\&amp;quot;;
+		if(num==5)url=\&amp;quot;&amp;quot;+layout6+&amp;quot;\&amp;quot;;
+		if(num==6)url=\&amp;quot;&amp;quot;+layout7+&amp;quot;\&amp;quot;;
+		if(num==7)url=\&amp;quot;&amp;quot;+layout8+&amp;quot;\&amp;quot;;
+		if(num==8)url=\&amp;quot;&amp;quot;+layout9+&amp;quot;\&amp;quot;;
+		if(num==9)url=\&amp;quot;&amp;quot;+layout10+&amp;quot;\&amp;quot;;
+		
+		//底部菜单，需要清空所有的历史返回记录;
+
+	        curwinid =1;
+	        if(num==0)curwinid=0;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returntitle&amp;apos;,&amp;apos;&amp;apos;);
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returnseq&amp;apos;,&amp;apos;&amp;apos;);
+	        document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=\&amp;quot;\&amp;quot;;
+	        // 假设标题是序号  
+	        document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = &amp;apos;&amp;apos;;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;titlename&amp;apos;,&amp;apos;&amp;apos;);
+		
+		
+	        if(num!=0){    
+	        	bWatingOpen = true;
+	        	for ( var i=0;i&amp;lt;DIVQTY;i++)
+		        	document.getElementById(&amp;apos;PANEL_WIN&amp;apos;+i).style.display=&amp;apos;none&amp;apos;;
+	       		document.getElementById(\&amp;quot;PANEL_WINLOADING\&amp;quot;).style.display=&amp;apos;&amp;apos;;
+//	       		alert(url);
+	        	var data = \&amp;quot;&amp;lt;iframe id=&amp;apos;frame_win\&amp;quot;+num+\&amp;quot;&amp;apos; src=&amp;apos;\&amp;quot;+url+\&amp;quot;&amp;apos; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;\&amp;quot;;
+	        	document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).innerHTML=data;
+	        	//try{document.all(&amp;apos;frame_win&amp;apos;+curwinid).focus(); } catch(e){alert(e);}
+
+	        	setTimeout(&amp;apos;_settimeout()&amp;apos;,1000);
+	        }
+	        else {
+	        	bWatingOpen= true;
+	        	f_childwndready(G_FIRSTTITLE);
+			
+	        }
+	        
+
+//	        document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click();
+	}
+	
+//	function f_deviceready() {
+//		console.log(navigator.notification);
+//	    	window.alert = navigator.notification.alert;
+//		window.confirm = navigator.notification.confirm;
+//		window.prompt = navigator.notification.prompt;
+//	function f_onload() {
+//
+//		document.addEventListener(&amp;apos;backbutton&amp;apos;, function (){
+//			
+//			if(f_goback()==&amp;apos;&amp;apos;){
+//				if(confirm(&amp;apos;是否要退出系统？&amp;apos;)==1)
+//					window.close();
+//			}
+//			return 1;
+//		}
+//		
+//		, false); // 返回键 			
+//
+//
+//	}
+	// 固定中间区域的高度
+	window.onresize=function()
+	{
+		 _resize();
+	}
+	function _resize(){
+		var topbottomheight = 101;
+		if(document.all(&amp;apos;topmenu&amp;apos;).style.display==&amp;apos;none&amp;apos;) {
+			document.all(&amp;apos;mainzone&amp;apos;).style.top = &amp;apos;0px&amp;apos;;
+			
+			topbottomheight  = topbottomheight -50;
+		}
+		else {
+			document.all(&amp;apos;mainzone&amp;apos;).style.top = &amp;apos;50px&amp;apos;;
+
+		}
+		if(document.all(&amp;apos;bottommenu&amp;apos;).style.display==&amp;apos;none&amp;apos;) topbottomheight  = topbottomheight -50;
+
+		var hh = $(window).height()-topbottomheight ;
+
+		document.all(&amp;apos;mainzone&amp;apos;).style.height = hh+&amp;apos;px&amp;apos;;
+
+
+//		document.all(&amp;apos;PANEL_WINLOADING&amp;apos;).style.height = hh+&amp;apos;px&amp;apos;;
+//		for ( var i=0;i&amp;lt;=DIVQTY;i++ ) 
+//			document.all(&amp;apos;PANEL_WIN&amp;apos;+i).style.height = (hh)+&amp;apos;px&amp;apos;;
+	}
+	function f_onload()
+	{
+		_resize();
+		curwinid  = -1;
+		f_openLocalURL(&amp;apos;&amp;quot;+DefLayoutURL+&amp;quot;&amp;apos;);
+
+	}
+	&amp;lt;/script&amp;gt;	
+
+	&amp;lt;/head&amp;gt;
+	&amp;lt;body&amp;gt; 
+	&amp;lt;div id=\&amp;quot;topmenu\&amp;quot; style=\&amp;quot;position: fixed;top:0px;left:0px;width:100%;height:50px;background-color:&amp;quot;+DIVBGCOLOR+&amp;quot;;filter: alpha(opacity=50); opacity:0.8; \&amp;quot;&amp;gt;
+	    		&amp;lt;table width=100% height=100% border=0&amp;gt;
+	    		&amp;lt;tr&amp;gt;&amp;lt;td width=30% align=center valign=middle&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=&amp;apos;javascript:f_goback();&amp;apos; &amp;gt;&amp;lt;font color=#FFFFFF size=3&amp;gt;&amp;lt;div id=\&amp;quot;CURTITLEBACK\&amp;quot;&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;
+	    		&amp;lt;td align=center valign=middle&amp;gt;&amp;lt;font color=#FFFFFF size=4&amp;gt;&amp;lt;div id=\&amp;quot;CURTITLE\&amp;quot;&amp;gt;&amp;quot;+HTMLTITLE+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+	    		&amp;lt;td width=15% align=center valign=middle&amp;gt;&amp;lt;font color=#FFFFFF size=4&amp;gt;&amp;lt;div id=\&amp;quot;RIGHTBUTTON\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt; &amp;quot;;
+	if(RIGHTTOPIMG!=null&amp;&amp; RIGHTTOPIMG!=&amp;quot;&amp;quot;) 
+		html+=&amp;quot;&amp;lt;td width=15% align=center valign=middle onclick=\&amp;quot;f_openLocalURL(&amp;apos;&amp;quot;+RIGHTTOPURL+&amp;quot;&amp;apos;);\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;pointer&amp;apos;\&amp;quot;&amp;gt;&amp;lt;font color=#FFFFFF size=4&amp;gt;&amp;lt;li id=&amp;apos;bell&amp;apos; onclick=\&amp;quot;xiaochu();\&amp;quot; class=&amp;apos;&amp;quot;+RIGHTTOPIMG+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+	else 	html+=&amp;quot;&amp;lt;td width=15% align=center valign=middle \&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;&amp;quot;;
+
+	html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;	
+ 	html+=&amp;quot;&amp;lt;div id=\&amp;quot;mainzone\&amp;quot; style=\&amp;quot;position: absolute;top:50px;left:0px;width:100%;height:100%;\&amp;quot;&amp;gt;
+ 		&amp;lt;div  data-title=&amp;apos;&amp;quot;+HTMLTITLE+&amp;quot;&amp;apos; id=&amp;apos;PANEL_WINLOADING&amp;apos; data-footer=&amp;apos;none&amp;apos; style=&amp;apos;width:100%;height:100%;padding:0;display:;&amp;apos; returntitle=\&amp;quot;\&amp;quot; returnseq=\&amp;quot;\&amp;quot; titlename=\&amp;quot;\&amp;quot;  &amp;gt;
+		          	&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos; &amp;gt;&amp;lt;br&amp;gt;&amp;lt;P align=center&amp;gt; 载入中，请稍候...&amp;lt;/p&amp;gt;
+			        &amp;lt;/div&amp;gt;
+		        	&amp;quot;;
+	
+	   for(var i=0;i&amp;lt;=DIVQTY;i++){
+		html+=&amp;quot;
+	          	&amp;lt;div  data-title=&amp;apos;&amp;quot;+HTMLTITLE+&amp;quot;&amp;apos; id=&amp;apos;PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; data-footer=&amp;apos;none&amp;apos; style=&amp;apos;width:100%;height:100%;padding:0;display:none;&amp;apos; returntitle=\&amp;quot;\&amp;quot; returnseq=\&amp;quot;\&amp;quot; titlename=\&amp;quot;\&amp;quot;  &amp;gt;
+		        &amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos; &amp;gt;
+		        &amp;lt;/div&amp;gt;
+	        &amp;quot;;
+
+          }
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	
+	       	
+	if(aName [0]!=&amp;quot;&amp;quot;){
+	     	html+=&amp;quot;
+	     	&amp;lt;div id=\&amp;quot;bottommenu\&amp;quot;  style=\&amp;quot;display: ;position: fixed;bottom:0; z-index: 180;height: 51px;width:100%;background: #0066a0;border-top: 1px solid #0066a0;_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop, 10)||0)-(parseInt(this.currentStyle.marginBottom, 10)||0)));\&amp;quot; &amp;gt;
+	     	&amp;lt;table  border=0 width=100%&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;;
+		for ( var i=0;i&amp;lt;aName.length();i++){
+			if(i&amp;gt;11)break;
+			var sWidth=100/aName.length();
+			var icon = aDefIcon[i];
+			if(aIcon.length()&amp;gt;i&amp;&amp;aIcon[i]!=&amp;quot;&amp;quot;)icon = aIcon[i];
+			if(aName [i]!=&amp;quot;&amp;quot;)
+		       		html+=&amp;quot;&amp;lt;td id=&amp;apos;tdbottom&amp;quot;+i+&amp;quot;&amp;apos; onclick=\&amp;quot;f_bottommenu(&amp;quot;+i+&amp;quot;);\&amp;quot; width=\&amp;quot;&amp;quot;+sWidth+&amp;quot;%\&amp;quot; style=\&amp;quot;cursor: pointer;\&amp;quot;&amp;gt;&amp;lt;table width=100% height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle&amp;gt; &amp;lt;font color=&amp;apos;#FFF&amp;apos; &amp;gt;&amp;lt;li class=\&amp;quot;&amp;quot;+icon +&amp;quot;\&amp;quot; style=\&amp;quot;font-size:20px;\&amp;quot;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle&amp;gt;&amp;lt;font color=#FFF style=\&amp;quot;font-size:14px;\&amp;quot;&amp;gt;&amp;quot;+aName [i]+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;	
+		}
+		html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+		&amp;lt;/div&amp;gt;
+		&amp;lt;script&amp;gt; 
+		function f_bottommenu(num){
+			for ( var i=0;i&amp;lt;&amp;quot;+aName.length()+&amp;quot;;i++){
+				if(i!=num) document.all(&amp;apos;tdbottom&amp;apos;+i).style.background=&amp;apos;#0066a0&amp;apos;;
+				else document.all(&amp;apos;tdbottom&amp;apos;+i).style.background=&amp;apos;#0088d1&amp;apos;;
+				
+			}
+			f_click_bottom_menu(num);
+		}
+		&amp;lt;/script&amp;gt;
+		&amp;quot;;
+	}
+
+	return html;
+	
+
+}
+// 老的APP布局，屏幕切换的时候可以滑动，但是不兼容很多浏览器，在手机上有卡顿
+function GetAPPFrameBodySlide()
+{	
+	if(DIVQTY==0 || DIVQTY==null || DIVQTY==&amp;quot;&amp;quot;)DIVQTY=10;
+	if(BOTTOMMENUICON==null)BOTTOMMENUICON=&amp;quot;&amp;quot;;
+	if(BOTTOMMENUNAME==null)BOTTOMMENUNAME=&amp;quot;&amp;quot;;
+	if(BOTTOMMENUURL==null)BOTTOMMENUURL=&amp;quot;&amp;quot;;
+	
+	var aName = BOTTOMMENUNAME.split(&amp;quot;,&amp;quot;);
+	
+	var aLayout = BOTTOMMENUURL.split(&amp;quot;,&amp;quot;);
+	
+	var aIcon = BOTTOMMENUICON.split(&amp;quot;,&amp;quot;);
+
+	var layout1 = &amp;quot;&amp;quot;;var layout2 = &amp;quot;&amp;quot;;var layout3 = &amp;quot;&amp;quot;;var layout4 = &amp;quot;&amp;quot;;var layout5 = &amp;quot;&amp;quot;;var layout6 = &amp;quot;&amp;quot;;
+	
+	if(aLayout.length()&amp;gt;0)layout1 =aLayout[0];
+	if(aLayout.length()&amp;gt;1)layout2 =aLayout[1];
+	if(aLayout.length()&amp;gt;2)layout3 =aLayout[2];
+	if(aLayout.length()&amp;gt;3)layout4 =aLayout[3];
+	if(aLayout.length()&amp;gt;4)layout5 =aLayout[4];
+	if(aLayout.length()&amp;gt;5)layout6 =aLayout[5];
+
+	var aDefIcon = &amp;quot;glyphicon glyphicon-home,glyphicon glyphicon-th-large,glyphicon glyphicon-picture,glyphicon glyphicon-user,glyphicon glyphicon-signal,glyphicon glyphicon-check&amp;quot;.split(&amp;quot;,&amp;quot;);
+	var html=&amp;quot;
+		    &amp;lt;!--这两个css 是必须的--&amp;gt;
+	    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-icons.css\&amp;quot; /&amp;gt;
+	    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+	    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-ss.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+	    
+
+    	&amp;lt;!--这三个js 是http下载的jquery211.min.js不能去掉--&amp;gt;
+    	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/jquery211.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+	&amp;lt;!--这个appframework.ui.js必须放在前面--&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+	var curwinid=0;
+	var maxwinid=10;
+	var socket = null;
+	var url = \&amp;quot;\&amp;quot;;
+	var isim = &amp;quot;+USRIM+&amp;quot;;
+	if(isim == &amp;apos;&amp;apos;) isim = 2; 
+	
+	if(isim === 1) {
+		socket = new WebSocket(\&amp;quot;ws://114.80.114.43:8000/\&amp;quot;);
+		socket.onopen = function(event) {
+			socket.send(JSON.stringify({
+				&amp;apos;EVENT&amp;apos;: &amp;apos;INWEB&amp;apos;,
+				&amp;apos;NAME&amp;apos;: G_APP_USRNAM,
+				&amp;apos;ID&amp;apos;  : G_APP_USRGUID,
+				&amp;apos;NUM&amp;apos; : 8
+			}));
+			
+			url =G_WEBBASE+ \&amp;quot;CHIS.CHISOS.upStat.osp?usrid=\&amp;quot;+G_APP_USRGUID+\&amp;quot;&amp;org=CHIS&amp;flg=1\&amp;quot;;
+			$.get(url,function(result) {
+				console.log(\&amp;quot;在线\&amp;quot;+result);
+			});
+		};
+		
+		socket.onmessage = function(event) {
+			var mData = JSON.parse(event.data);
+			if(mData &amp;&amp; mData.event) {
+				switch(mData.event) {
+					case &amp;apos;LOGOUT&amp;apos;:
+					url = G_WEBBASE+ \&amp;quot;CHIS.CHISOS.upStat.osp?usrid=\&amp;quot;+mData.uid+\&amp;quot;&amp;org=CHIS&amp;flg=2\&amp;quot;;
+					$.get(url,function(result) {
+						console.log(\&amp;quot;断线\&amp;quot;+mData.uid);
+					});
+					break;
+					
+					case &amp;apos;ZAIXIAN&amp;apos;:
+					if(mData.uid == G_APP_USRGUID) {
+						console.log(mData.zxid+\&amp;quot;向我咨询\&amp;quot;);
+					}
+					break;
+					
+					case &amp;apos;SPEAK&amp;apos;:
+					var content = mData.values;
+					var newUser = mData.user;
+					var uid = newUser.OGUID;
+					if(newUser.ACTION == &amp;apos;ZX&amp;apos;) {
+						if(uid == G_APP_USRGUID) {
+							document.getElementById(&amp;apos;bell&amp;apos;).innerHTML=&amp;apos;你有新消息&amp;apos;;
+						}
+					}
+					break;
+					
+					case &amp;apos;CALL&amp;apos;:
+					if(mData.oid== G_APP_USRGUID) {
+						alert(&amp;apos;请进入&amp;apos;+mData.NAME+&amp;apos;诊室就诊&amp;apos;);
+						var url = &amp;apos;L.sp?id=CHARTWE&amp;rom=&amp;apos;+mData.ROOM+&amp;apos;&amp;USERID=&amp;apos;+mData.oid+&amp;apos;&amp;docguid=&amp;apos;+mData.uid;
+						openWindow(url);
+					}
+					break;
+					
+					case &amp;apos;ROOMOVER&amp;apos;:
+					if(mData.uid == G_APP_USRGUID) {
+						var url = &amp;apos;L.sp?id=CHIS_APPFRAMN&amp;apos;;
+						parent.location.href=url;
+					}
+					break;
+				}
+			}
+		};
+		
+		var _t = 2;
+		
+		window.onbeforeunload = function(){  
+			setTimeout(function(){_t = setTimeout(officeLine(), 0)}, 0);
+			socket.send(JSON.stringify({
+				&amp;apos;EVENT&amp;apos;: &amp;apos;LOGOUT&amp;apos;,
+				&amp;apos;NAME&amp;apos;: G_APP_USRNAM,
+				&amp;apos;ID&amp;apos;  : G_APP_USRGUID
+			}));
+			url =G_WEBBASE+ \&amp;quot;CHIS.CHISOS.upStat.osp?usrid=\&amp;quot;+mData.uid+\&amp;quot;&amp;org=CHIS&amp;flg=2\&amp;quot;;
+			$.get(url,function(result) {
+				console.log(\&amp;quot;断线\&amp;quot;+mData.uid);
+			});    
+		}  
+		function officeLine(){
+			clearTimeout(_t);
+			alert(_t);
+			socket.send(JSON.stringify({
+				&amp;apos;EVENT&amp;apos;: &amp;apos;INWEB&amp;apos;,
+				&amp;apos;NAME&amp;apos;: G_APP_USRNAM,
+				&amp;apos;ID&amp;apos;  : G_APP_USRGUID,
+				&amp;apos;NUM&amp;apos;: _t
+			}));
+		}
+	}
+	
+	function f_openLocalURL(url) {
+		var oldwinid = curwinid ;
+	        curwinid ++;
+	        if (curwinid&amp;gt;maxwinid) curwinid=1;
+	        //document.all(&amp;apos;a_gotopanelLOAD&amp;apos;).click(); 
+
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returntitle&amp;apos;,document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML);
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returnseq&amp;apos;,oldwinid);
+	        document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=\&amp;quot;&amp;lt;li class=&amp;apos;glyphicon glyphicon-chevron-left&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;nbsp; \&amp;quot;+document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML;
+	        // 假设标题是序号  
+	        document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = &amp;apos;&amp;apos;;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;titlename&amp;apos;,&amp;apos;&amp;apos;);
+	            
+	         var data = \&amp;quot;&amp;lt;iframe src=&amp;apos;\&amp;quot;+url+\&amp;quot;&amp;apos; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;\&amp;quot;;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).innerHTML=data;
+	        
+	        bWatingOpen  = true;
+	        setTimeout(&amp;apos;_settimeout()&amp;apos;,500);//如果0.5分钟没有被子窗口触发
+	}
+	var bWatingOpen = false;
+	function _settimeout()
+	{
+		if(bWatingOpen) 
+			document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click(); 
+		bWatingOpen  = false;
+	}
+	function showbottommenu()
+	{
+		try{document.all(&amp;apos;bottommenu&amp;apos;).style.display=&amp;apos;&amp;apos;; }catch(e){alert(e);}
+	}
+	function hidebottommenu()
+	{
+		try{document.all(&amp;apos;bottommenu&amp;apos;).style.display=&amp;apos;none&amp;apos;; }catch(e){}
+	}
+	function showtopmenu()
+	{
+		try{document.all(&amp;apos;topmenu&amp;apos;).style.display=&amp;apos;&amp;apos;; }catch(e){alert(e);}
+	}
+	function hidetopmenu()
+	{
+		try{document.all(&amp;apos;topmenu&amp;apos;).style.display=&amp;apos;none&amp;apos;; }catch(e){}
+	}
+	// 返回上个节点     
+	function f_goback()
+	{
+		var retseq = document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).getAttribute(&amp;apos;returnseq&amp;apos;);
+		document.all(&amp;apos;a_gotopanel&amp;apos;+retseq ).click();
+		var rettitle = document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+retseq ).getAttribute(&amp;apos;titlename&amp;apos;);
+		document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = rettitle ;
+		var backhtml=  document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+retseq ).getAttribute(&amp;apos;returntitle&amp;apos;);
+		if(backhtml!=\&amp;quot;\&amp;quot;)
+			document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=\&amp;quot;&amp;lt;li class=&amp;apos;glyphicon glyphicon-chevron-left&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;nbsp; \&amp;quot; + backhtml;
+		else document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=&amp;apos;&amp;apos;;
+		showbottommenu();
+		showtopmenu();
+		curwinid --;
+	}
+	var G_FIRSTTITLE = &amp;apos;&amp;apos;;//首页的标题
+	// 下级子窗口载入完毕后调用
+	// title 页面的标题
+	function f_childwndready(title)
+	{
+		document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = title ;
+		document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid ).setAttribute(&amp;apos;titlename&amp;apos;,title );
+		if(curwinid ==0 )G_FIRSTTITLE= title;
+		if(bWatingOpen)document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click(); 
+		bWatingOpen  = false;
+
+	}
+	//打开底部菜单
+	function f_click_bottom_menu(num)
+	{
+		var url = &amp;apos;&amp;apos;;
+		if(num==0)url=\&amp;quot;&amp;quot;+layout1+&amp;quot;\&amp;quot;;
+		if(num==1)url=\&amp;quot;&amp;quot;+layout2+&amp;quot;\&amp;quot;;
+		if(num==2)url=\&amp;quot;&amp;quot;+layout3+&amp;quot;\&amp;quot;;
+		if(num==3)url=\&amp;quot;&amp;quot;+layout4+&amp;quot;\&amp;quot;;
+		if(num==4)url=\&amp;quot;&amp;quot;+layout5+&amp;quot;\&amp;quot;;
+		if(num==5)url=\&amp;quot;&amp;quot;+layout6+&amp;quot;\&amp;quot;;
+		//底部菜单，需要清空所有的历史返回记录;
+	        curwinid =1;
+	        if(num==0)curwinid=0;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returntitle&amp;apos;,&amp;apos;&amp;apos;);
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;returnseq&amp;apos;,&amp;apos;&amp;apos;);
+	        document.all(&amp;apos;CURTITLEBACK&amp;apos;).innerHTML=\&amp;quot;\&amp;quot;;
+	        // 假设标题是序号  
+	        document.all(&amp;apos;CURTITLE&amp;apos;).innerHTML = &amp;apos;&amp;apos;;
+	        document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).setAttribute(&amp;apos;titlename&amp;apos;,&amp;apos;&amp;apos;);
+	        if(num!=0){    
+	        	var data = \&amp;quot;&amp;lt;iframe src=&amp;apos;\&amp;quot;+url+\&amp;quot;&amp;apos; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;\&amp;quot;;
+	        	document.getElementById(\&amp;quot;PANEL_WIN\&amp;quot;+curwinid).innerHTML=data;
+	        }
+	        else {
+	        	f_childwndready(G_FIRSTTITLE);
+			
+	        }
+	        document.all(&amp;apos;a_gotopanel&amp;apos;+curwinid).click();
+	}
+	
+	
+	&amp;lt;/script&amp;gt;	
+	&amp;lt;!--公用js--&amp;gt;
+	
+	&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/showflgapp_jquery1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+
+	
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	
+	&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-2.1.3.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+
+	&amp;lt;/head&amp;gt;
+	&amp;lt;body&amp;gt; 
+	    &amp;lt;div id=\&amp;quot;CELL_0_0_0\&amp;quot; style=\&amp;quot;display:none;\&amp;quot;&amp;gt;隐藏&amp;lt;/div&amp;gt;
+	    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+	    	&amp;lt;div id=\&amp;quot;topmenu\&amp;quot; style=\&amp;quot;top:0px;left:0px;width:100%;height:50px;background-color:#000;filter: alpha(opacity=50); opacity:0.5; \&amp;quot;&amp;gt;
+	    		&amp;lt;table width=100% height=100% border=0&amp;gt;
+	    		&amp;lt;tr&amp;gt;&amp;lt;td width=30% align=center valign=middle&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos; onclick=&amp;apos;javascript:f_goback();&amp;apos; &amp;gt;&amp;lt;font color=#FFFFFF size=3&amp;gt;&amp;lt;div id=\&amp;quot;CURTITLEBACK\&amp;quot;&amp;gt;&amp;lt;/DIV&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;
+	    		&amp;lt;td align=center valign=middle&amp;gt;&amp;lt;font color=#FFFFFF size=4&amp;gt;&amp;lt;div id=\&amp;quot;CURTITLE\&amp;quot;&amp;gt;&amp;quot;+HTMLTITLE+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+	    		&amp;lt;td width=15% align=center valign=middle&amp;gt;&amp;lt;font color=#FFFFFF size=4&amp;gt;&amp;lt;div id=\&amp;quot;RIGHTBUTTON\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt; &amp;quot;;
+	if(RIGHTTOPIMG!=null&amp;&amp; RIGHTTOPIMG!=&amp;quot;&amp;quot;) 
+		html+=&amp;quot;&amp;lt;td width=15% align=center valign=middle onclick=\&amp;quot;f_openLocalURL(&amp;apos;&amp;quot;+RIGHTTOPURL+&amp;quot;&amp;apos;);\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;pointer&amp;apos;\&amp;quot;&amp;gt;&amp;lt;font color=#FFFFFF size=4&amp;gt;&amp;lt;li id=&amp;apos;bell&amp;apos; class=&amp;apos;&amp;quot;+RIGHTTOPIMG+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+	else 	html+=&amp;quot;&amp;lt;td width=15% align=center valign=middle \&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;&amp;quot;;
+
+	html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+		&amp;lt;/div&amp;gt;
+		 &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+		&amp;quot;;
+	html+=&amp;quot;&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+HTMLTITLE+&amp;quot;\&amp;quot; id=&amp;apos;PANEL_WIN0&amp;apos; data-footer=\&amp;quot;none\&amp;quot;  data-selected=\&amp;quot;true\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot; returntitle=\&amp;quot;\&amp;quot; returnseq=\&amp;quot;\&amp;quot; titlename=\&amp;quot;&amp;quot;+HTMLTITLE+&amp;quot;\&amp;quot;&amp;gt;
+         	    	    &amp;lt;iframe src=&amp;apos;&amp;quot;+DefLayoutURL+&amp;quot;&amp;apos; width=100% height=100% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;
+				&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;	
+         	    	   	          
+        html+=&amp;quot;
+	     		
+	     &amp;lt;!--10个循环的div---------&amp;gt;
+	     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;连接内部窗口不显示\&amp;quot; id=\&amp;quot;WININNER\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;;
+	          
+	          for(var i=0;i&amp;lt;=DIVQTY;i++){
+	          	html+=&amp;quot;&amp;lt;a href=&amp;apos;#PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; id=&amp;apos;a_gotopanel&amp;quot;+i+&amp;quot;&amp;apos; style=\&amp;quot;display：none;\&amp;quot;&amp;gt;直接跳转到win&amp;quot;+i+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+	          }
+//	          html+=&amp;quot;&amp;lt;a href=&amp;apos;#PANEL_WINLOAD&amp;apos; id=&amp;apos;a_gotopanelLOAD&amp;apos; style=\&amp;quot;display：none;\&amp;quot;&amp;gt;直接跳转到LOADING&amp;lt;/a&amp;gt;&amp;lt;br&amp;gt;&amp;quot;;
+
+	     html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;     
+		   for(var i=0;i&amp;lt;=DIVQTY;i++){
+		   	html+=&amp;quot;
+		          	&amp;lt;div class=&amp;apos;panel&amp;apos; data-title=&amp;apos;&amp;quot;+HTMLTITLE+&amp;quot;&amp;apos; id=&amp;apos;PANEL_WIN&amp;quot;+i+&amp;quot;&amp;apos; data-footer=&amp;apos;none&amp;apos; style=&amp;apos;padding:0;&amp;apos; returntitle=\&amp;quot;\&amp;quot; returnseq=\&amp;quot;\&amp;quot; titlename=\&amp;quot;\&amp;quot; &amp;gt;
+			        &amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos; &amp;gt;
+			        &amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
+		        &amp;quot;;
+	          }
+//	          html+=&amp;quot;
+//		          	&amp;lt;div class=&amp;apos;panel&amp;apos; data-title=&amp;apos;Loading&amp;apos; id=&amp;apos;PANEL_WINLOAD&amp;apos; data-footer=&amp;apos;none&amp;apos; style=&amp;apos;padding:0;&amp;apos; returntitle=\&amp;quot;\&amp;quot; returnseq=\&amp;quot;\&amp;quot; titlename=\&amp;quot;\&amp;quot; &amp;gt;
+//			        &amp;lt;img src=&amp;apos;xlsgrid/images/flash/images/loading.gif&amp;apos; style=&amp;apos;max-width=:100%;height=:auto;margin-top:30px;&amp;apos; &amp;gt;
+//			        &amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;
+//		        &amp;quot;;
+
+	      html+=&amp;quot;
+	      &amp;lt;/div&amp;gt; &amp;quot;;
+//	if(aName [0]!=&amp;quot;&amp;quot;){
+//	     	html+=&amp;quot;&amp;lt;footer id=\&amp;quot;bottommenu\&amp;quot; style=\&amp;quot;diaplay:block;\&amp;quot;&amp;gt;&amp;quot;;
+//		for ( var i=0;i&amp;lt;aName.length();i++){
+//			if(i&amp;gt;5)break;
+//			var icon = aDefIcon[i];
+//			if(aIcon.length()&amp;gt;i&amp;&amp;aIcon[i]!=&amp;quot;&amp;quot;)icon = aIcon[i];
+//			if(aName [i]!=&amp;quot;&amp;quot;)
+//		       		html+=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;&amp;quot;+icon +&amp;quot;\&amp;quot; id=&amp;apos;tab&amp;quot;+i+&amp;quot;&amp;apos; data-transition=\&amp;quot;none\&amp;quot; onclick=\&amp;quot;f_click_bottom_menu(&amp;quot;+i+&amp;quot;);\&amp;quot; style=\&amp;quot;font-size:20px;\&amp;quot;&amp;gt;&amp;lt;P style=\&amp;quot;font-size:14px;\&amp;quot;&amp;gt;&amp;quot;+aName [i]+&amp;quot;&amp;lt;/p&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;	
+//		}
+//		html+=&amp;quot;&amp;lt;/footer&amp;gt;&amp;quot;;
+//	}
+	
+	if(aName [0]!=&amp;quot;&amp;quot;){
+	     	html+=&amp;quot;&amp;lt;table border=0 width=100% height=100% id=\&amp;quot;bottommenu\&amp;quot; style=\&amp;quot;display: ;z-index: 180;height: 49px;background: #0066a0;border-top: 1px solid #0066a0;\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;;
+		for ( var i=0;i&amp;lt;aName.length();i++){
+			if(i&amp;gt;5)break;
+			var sWidth=100/aName.length();
+			var icon = aDefIcon[i];
+			if(aIcon.length()&amp;gt;i&amp;&amp;aIcon[i]!=&amp;quot;&amp;quot;)icon = aIcon[i];
+			if(aName [i]!=&amp;quot;&amp;quot;)
+		       		html+=&amp;quot;&amp;lt;td id=&amp;apos;tdbottom&amp;quot;+i+&amp;quot;&amp;apos; onclick=\&amp;quot;f_bottommenu(&amp;quot;+i+&amp;quot;);\&amp;quot; width=\&amp;quot;&amp;quot;+sWidth+&amp;quot;%\&amp;quot; style=\&amp;quot;cursor: pointer;\&amp;quot;&amp;gt;&amp;lt;table width=100% height=100% border=0&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle&amp;gt; &amp;lt;font color=&amp;apos;#FFF&amp;apos; &amp;gt;&amp;lt;li class=\&amp;quot;&amp;quot;+icon +&amp;quot;\&amp;quot; style=\&amp;quot;font-size:20px;\&amp;quot;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle&amp;gt;&amp;lt;font color=#FFF style=\&amp;quot;font-size:14px;\&amp;quot;&amp;gt;&amp;quot;+aName [i]+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;	
+		}
+		html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;script&amp;gt; 
+		function f_bottommenu(num){
+			for ( var i=0;i&amp;lt;&amp;quot;+aName.length()+&amp;quot;;i++){
+				if(i!=num) document.all(&amp;apos;tdbottom&amp;apos;+i).style.background=&amp;apos;#0066a0&amp;apos;;
+				else document.all(&amp;apos;tdbottom&amp;apos;+i).style.background=&amp;apos;#0088d1&amp;apos;;
+				
+			}
+			f_click_bottom_menu(num);
+		}
+		&amp;lt;/script&amp;gt;
+		&amp;quot;;
+	}
+	
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	return html;
+	
+
+}
+
+//
+// 
+//
+function GetAPPSubLayout()
+{
+	var rethtml= &amp;quot;
+	    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-icons.css\&amp;quot; /&amp;gt;
+	    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+	   
+	    &amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+	    &amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot; id=\&amp;quot;MENU&amp;quot;+LAYOUTID+&amp;quot;\&amp;quot; onclick=\&amp;quot;clicul(&amp;apos;SUBLAYOUT_&amp;quot;+LAYOUTID+&amp;quot;&amp;apos;);\&amp;quot; &amp;gt;
+        &amp;lt;li  align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;b style=\&amp;quot;background: url(xlsgrid/images/flash/images/showflgapp_jt.png) no-repeat;background-size: 15px 19px;\&amp;quot;&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;span &amp;gt;&amp;quot;+TITLE+&amp;quot;&amp;lt;/span&amp;gt;
+        &amp;lt;span class=\&amp;quot;spans2\&amp;quot; style=\&amp;quot;margin-top:10px;\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+	&amp;lt;i&amp;gt;&amp;quot;+SUBTITLE+&amp;quot;&amp;lt;/i&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/ul&amp;gt;
+	    &amp;quot;;                                                 
+	rethtml += &amp;quot;&amp;lt;div id=\&amp;quot;SUBLAYOUT_&amp;quot;+LAYOUTID+&amp;quot;\&amp;quot; style=\&amp;quot;display:block;margin-left:15px;margin-right:15px;\&amp;quot; style=\&amp;quot;margin:6px;\&amp;quot;&amp;gt;&amp;quot;;
+	rethtml+=getlayout(request,LAYOUTID) ;
+	rethtml+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+//	rethtml += &amp;quot;&amp;lt;script type=text/javascript&amp;gt;
+//			function clicul_&amp;quot;+LAYOUTID+&amp;quot;(id){
+//				var li=document.getElementById(id);
+//				if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+//					li.style.display=&amp;apos;block&amp;apos;;
+//				}
+//				else{
+//				 	li.style.display=&amp;apos;none&amp;apos;;
+//				}
+//			
+//			}
+//			&amp;lt;/script&amp;gt;&amp;quot;;
+	return rethtml;
+}
+//得到布局html
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDXM_JYPTBY_XMZZ</MWID><NAME >公共交易平台与报验登记项目对照</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDXM_JYPTBY_XMZZ.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >重点项目</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >xmppCheck</ID><NAME >匹配确认</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var ZXGFILE1 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var layoutxml=&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C0  height=\&amp;quot;20%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;2&amp;lt;/C0&amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C1  height=\&amp;quot;20%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;3&amp;lt;/C1&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C0  height=\&amp;quot;80%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;0&amp;lt;/C0&amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C1  height=\&amp;quot;80%\&amp;quot; width=\&amp;quot;50%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;1&amp;lt;/C1&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	_this.SetLayoutDS(layoutxml);
+	
+	var yymmList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YYYY_MM&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,2,2,1,yymmList);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,2,2,3,yymmList);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,3,2,1,yymmList);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,3,2,3,yymmList);
+	
+	_this.SetCellText(2,2,1,G_LOGDAT.substring(0,5)+&amp;quot;01&amp;quot;);
+	_this.SetCellText(2,2,3,G_LOGDAT.substring(0,7));
+	_this.SetCellText(3,2,1,G_LOGDAT.substring(0,5)+&amp;quot;01&amp;quot;);
+	_this.SetCellText(3,2,3,G_LOGDAT.substring(0,7));
+	
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	ZXGFILE1 = _this.SaveTempZXGFile(1);
+	
+	loadJYPTXM();
+	loadBYDJXM();
+	
+}
+
+function loadJYPTXM()
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,2);
+	_this.SetColVisible(0,4,-1);
+	_this.SetColVisible(0,5,-1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetMainCellRange(0,2,2,4,_this.GetColCount(0)-1);	
+	
+	var ym1 = _this.GetCellText(2,2,1);
+	var ym2 = _this.GetCellText(2,2,3);
+	var xmmc = _this.GetCellText(2,4,1);
+	var xml = _sql.query(&amp;quot;MAIN1&amp;quot;,&amp;quot;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2+&amp;quot;&amp;XMMC=&amp;quot;+xmmc);
+	_this.SetXmlDS(0,2,2,4,_this.GetColCount(0)-1,xml);
+	
+	var row = 0;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,2) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+			row ++;
+			_this.SetCellText(0,r,1,row);
+		}
+	}
+	
+	_this.AutoFixScreenWidth();
+}
+
+function loadBYDJXM()
+{
+	_this.LoadZXGFile(ZXGFILE1,-1,1);
+	_this.SetFixedRow(1,2);
+	_this.SetColVisible(1,5,-1);
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetMainCellRange(1,2,2,4,_this.GetColCount(0)-1);	
+	
+	var ym1 = _this.GetCellText(3,2,1);
+	var ym2 = _this.GetCellText(3,2,3);
+	var xmmc = _this.GetCellText(3,4,1);
+	var xml = _sql.query(&amp;quot;MAIN2&amp;quot;,&amp;quot;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2+&amp;quot;&amp;XMMC=&amp;quot;+xmmc);
+	_this.SetXmlDS(1,2,2,4,_this.GetColCount(0)-1,xml);
+	
+	var row = 0;
+	for (var r=_this.GetMainCellRangeRow1(1);r&amp;lt;=_this.GetMainCellRangeRow2(1);r++) {
+		if (_this.GetCellText(1,r,2) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(1,r,0);
+			row ++;
+			_this.SetCellText(1,r,1,row);
+		}
+	}
+	_this.AutoFixScreenWidth();
+}
+
+
+
+//匹配确认
+function xmppCheck()
+{
+	var jyptxmuuid = &amp;quot;&amp;quot;;
+	var jyptxmrow = -1;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,0) == &amp;quot;1&amp;quot;) {
+			jyptxmuuid = _this.GetCellText(0,r,4);
+			jyptxmrow = r;
+			break;
+		}
+	}
+	if (jyptxmuuid == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;请选择公共交易平台项目！&amp;quot;);
+		return;
+	}
+	
+	var bydjuuid = &amp;quot;&amp;quot;;
+	for (var r=_this.GetMainCellRangeRow1(1);r&amp;lt;=_this.GetMainCellRangeRow2(1);r++) {
+		if (_this.GetCellText(1,r,0) == &amp;quot;1&amp;quot;) {
+			if (bydjuuid == &amp;quot;&amp;quot;) bydjuuid += _this.GetCellText(1,r,5);
+			else bydjuuid += &amp;quot;,&amp;quot;+_this.GetCellText(1,r,5);
+		}
+	}
+	if (bydjuuid == &amp;quot;&amp;quot;) {
+//		alert(&amp;quot;请选择已报验登记项目！&amp;quot;);
+//		return;
+	}
+	
+	var param = new Object();
+	param.jyptxmuuid = jyptxmuuid;
+	param.bydjuuid = bydjuuid;
+	var ret = _this.invokeOSFuncExt(&amp;quot;xmppCheck&amp;quot;,param);
+	if (ret &amp;gt;= 0) {
+		alert(&amp;quot;保存成功！&amp;quot;);	
+		_this.SetCellText(0,jyptxmrow,5,bydjuuid);
+		loadBYDJXM();	
+	}
+	else {
+		alert(&amp;quot;保存失败：&amp;quot;+ret);
+	}
+}
+
+function selectOneRow(sheet,row,val) 
+{
+	for (var r=_this.GetMainCellRangeRow1(sheet);r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+		if (_this.GetCellText(sheet,r,1) != &amp;quot;&amp;quot;) {
+			_this.SetCellText(sheet,r,0,&amp;quot;0&amp;quot;);
+		}
+	}
+	_this.SetCellText(sheet,row,0,val);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0) { //发改委项目是单选
+		selectOneRow(sheet,row,newvalue);
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		if (sheet == 2) loadJYPTXM();
+		if (sheet == 3) loadBYDJXM();
+	}
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if (sheet == 0 &amp;&amp; row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet)) {
+		selectOneRow(sheet,row,&amp;quot;1&amp;quot;);
+		var bydjuuid = _this.GetCellText(0,row,5);
+		for (var r=_this.GetMainCellRangeRow1(1);r&amp;lt;=_this.GetMainCellRangeRow2(1);r++) {
+			var bydjstr = _this.GetCellText(1,r,5);
+			if (bydjuuid.indexOf(bydjstr) &amp;gt; -1) {
+				_this.SetCellText(1,r,0,&amp;quot;1&amp;quot;);
+				scrollToRow(1,r);
+			}
+			else if (_this.GetCellText(1,r,2) != &amp;quot;&amp;quot;) {
+				_this.SetCellText(1,r,0,&amp;quot;0&amp;quot;);
+			}
+		}
+
+	}
+}
+
+//滚动到某一行
+function scrollToRow(sheet,row)
+{
+	var pos = -60;
+	for (var r=0;r&amp;lt;row;r++) {
+		pos += _this.GetRowHeight(sheet,r);
+	}
+	_this.ScrollToPos(sheet,pos,0);
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function xmppCheck()
+{
+	var db = null;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;delete from tax_zdxm_jyptwbbyxm_dzb where jyptxmuuid=&amp;apos;&amp;quot;+jyptxmuuid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+
+		sql = &amp;quot;insert into tax_zdxm_jyptwbbyxm_dzb(jyptxmuuid,djxh,bydjuuid)
+			select &amp;apos;&amp;quot;+jyptxmuuid+&amp;quot;&amp;apos; jyptxmuuid,djxh,bydjuuid from dj_wbnsrjydbydj where 
+			bydjuuid in (&amp;quot;+pub.EAFunc.SQLIN(bydjuuid)+&amp;quot;)&amp;quot;;
+		ret = db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return ret;		
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN1</ID><NAME ></NAME><DATDSC >select xmmc,fgwxmdm,a.jyptxmuuid,
+       wm_concat(trim(b.bydjuuid)) bydjuuid,a.jyje,tjyf
+from tax_zdxm_jyptxm a,tax_zdxm_jyptwbbyxm_dzb b
+where a.jyptxmuuid=b.jyptxmuuid(+)
+  and a.tjyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+  and a.tjyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+  and a.xmmc like &amp;apos;%[%XMMC]%&amp;apos;
+group by xmmc,fgwxmdm,a.jyptxmuuid,a.jyje,tjyf  
+order by tjyf desc,xmmc,fgwxmdm,a.jyptxmuuid,a.jyje  
+</DATDSC><C4 >MAIN1</C4><C5 ></C5><C6 >MAIN1</C6><C7 >MAIN1</C7><C8 >MAIN1</C8></ROW>
+<ROW num="1" ><ID >MAIN2</ID><NAME ></NAME><DATDSC >select b.xmmc,b.xmje,a.wcjyhdssglzmbh,a.bydjuuid 
+from dj_wbnsrjydbydj a,(
+select bydjuuid,djxh,wcjyhwmc xmmc,wcjyhwzz xmje,
+	wcjyhwyxqxq dat1,wcjyhwyxqxz dat2
+from dj_wbnsrjydbydj_hwxx
+union all
+select bydjuuid,djxh,wcjylwmc xmmc,wcjylwdhtje xmje,
+	wcjylwyxqxq dat1,wcjylwyxqxz dat2 
+from dj_wbnsrjydbydj_lwxx
+) b where a.bydjuuid=b.bydjuuid
+  and to_char(dat1,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=&amp;apos;[%YM1]&amp;apos;
+  and to_char(dat2,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  and b.xmmc like &amp;apos;%[%XMMC]%&amp;apos;
+order by a.wcjyhdssglzmbh
+</DATDSC><C4 ></C4><C5 >MAIN2</C5><C6 ></C6><C7 >MAIN2</C7><C8 >MAIN2</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,425 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >TRKQRY</MWID><NAME >查询事务</NAME><NOTE ></NOTE><FILE >TRKQRY.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >process1</ID><NAME >等待我处理</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >GRDDSCDS_1</ID><NAME >我提交，未关闭</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="2" ><ID >process3</ID><NAME >我最后处理，未关闭</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="3" ><ID >process4</ID><NAME >我处理过，未关闭</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="4" ><ID >process6</ID><NAME >我提交，已关闭</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="5" ><ID >process5</ID><NAME >近期已处理</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="6" ><ID >build</ID><NAME >新建事务</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="7" ><ID >trkdtl</ID><NAME >处理事务</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >dat</ID><NAME >起始日期</NAME><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >dat2</ID><NAME >截止日期</NAME><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >PRIO</ID><NAME >优先级</NAME><KEYVAL >V_PRIO</KEYVAL><INPCTL >list</INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:DETAIL</DSKEY><NROW >3</NROW><NCOL >10</NCOL><ISMAIN >1</ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL></ROW>
+<ROW num="1" ><ID >2,-1,-1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：默认加载我的所有事务 
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/06 11:18:12
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet) 
+{      
+       _this.SetMainCellRange(sheet,2,1,4,10);//记住了，一定要设主数据区，不然_this.GetMainCellRangeRow1(sheet)会出现负数 
+       _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX);
+
+
+} 
+
+//================================================================//  
+// 函数：process1 
+// 说明：等待我处理的事务
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/01/06 13:02:08 
+// 修改日志： 
+//================================================================//  
+function process1()
+{
+        var param = &amp;quot;usr=&amp;quot;+usrid;
+        var ret = invokeOSFunc(&amp;quot;Fprocess1&amp;quot;,param);
+        clean(sheet);      
+        _this.SetXmlDS(sheet,2,1,4,10,ret);  
+
+}
+
+//================================================================// 
+// 函数：process2
+// 说明：我提交，未关闭的事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/06 13:05:34
+// 修改日志：
+//================================================================// 
+function process2()
+{
+        var param = &amp;quot;usr=&amp;quot;+usrid+&amp;quot;&amp;stat=&amp;quot;+1;
+        var ret = invokeOSFunc(&amp;quot;Fprocess2&amp;quot;,param);
+        clean(sheet); 
+        _this.SetXmlDS(sheet, 2,1,4,10,ret);
+}
+
+//================================================================// 
+// 函数：process3
+// 说明：我最后处理，未关闭的事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/06 13:05:53
+// 修改日志：
+//================================================================// 
+function process3()
+{
+        var param = &amp;quot;usr=&amp;quot;+usrid+&amp;quot;&amp;stat=&amp;quot;+2;
+        var ret = invokeOSFunc(&amp;quot;Fprocess3&amp;quot;,param);
+        clean(sheet); 
+        _this.SetXmlDS(sheet, 2,1,4,10,ret);
+}
+
+//================================================================// 
+// 函数：process4
+// 说明：我处理过，未关闭的事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/06 13:06:21
+// 修改日志：
+//================================================================// 
+function process4()
+{
+        var param = &amp;quot;usr=&amp;quot;+usrid+&amp;quot;&amp;stat=&amp;quot;+2;
+        var ret = invokeOSFunc(&amp;quot;Fprocess4&amp;quot;,param);
+        clean(sheet); 
+        _this.SetXmlDS(sheet, 2,1,4,10,ret);
+}
+
+//================================================================//  
+// 函数：process5 
+// 说明：近期已处理的事务 
+// 参数：  
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/01/06 13:06:58 
+// 修改日志： 
+//================================================================//  
+function process5()
+{
+        var param = &amp;quot;usr=&amp;quot;+usrid;
+        var ret = invokeOSFunc(&amp;quot;Fprocess5&amp;quot;,param);
+        clean(sheet); 
+        _this.SetXmlDS(sheet, 2,1,4,10,ret);
+}
+
+
+
+//================================================================// 
+// 函数：process6
+// 说明：我提交，已处理的事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/06 13:10:02
+// 修改日志：
+//================================================================// 
+function process6()
+{
+        var param = &amp;quot;usr=&amp;quot;+usrid+&amp;quot;&amp;stat=&amp;quot;+3;
+        var ret = invokeOSFunc(&amp;quot;Fprocess6&amp;quot;,param);
+        clean(sheet); 
+        _this.SetXmlDS(sheet, 2,1,4,10,ret); 
+}
+
+
+//================================================================//  
+// 函数：build 
+// 说明：点击按钮链接到新建事务中间件 
+// 参数：
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/03/06 13:07:34  
+// 修改日志： 
+//================================================================//  
+function build() 
+{
+         var url =  &amp;quot;ShowXlsGrid.sp?grdid=TRKHDR&amp;quot;;
+         window.open( url ,&amp;quot;新建事务&amp;quot;,&amp;quot;WIDTH=500,HEIGHT=480,left=0,top=0,toolbar=no,menu=no&amp;quot;);     
+
+}
+
+//================================================================//  
+// 函数：checkDClick 
+// 说明：防止点击到主数据区以外的地方响应事件 
+// 参数：sheet,行数，列数
+// 返回：
+// 样例：
+// 作者： 
+// 创建日期：11/01/06 15:29:05  
+// 修改日志：   在执行这个Function之前要先设置主数据区
+//================================================================//  
+function checkDClick(sheet,row,col) 
+{ 
+       return row&amp;gt;=_this.GetMainCellRangeRow1(sheet)&amp;&amp;row&amp;lt;=_this.GetMainCellRangeRow2(sheet)&amp;&amp;col&amp;gt;=_this.GetMainCellRangeCol1(sheet)&amp;&amp;col&amp;lt;=_this.GetMainCellRangeCol2(sheet);
+  
+} 
+
+//================================================================//  
+// 函数：clean 
+// 说明：刷新表格,即每次在载入新的数据前要清除掉之前表格里的数据，防止数据叠加
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/07/06 09:21:47 
+// 修改日志： 
+//================================================================//  
+function clean(sheet)
+{
+      var row1 = _this.GetMainCellRangeRow1(sheet); 
+      var row2 = _this.GetMainCellRangeRow2(sheet); 
+      var col1 = _this.GetMainCellRangeCol1(sheet); 
+      var col2 = _this.GetMainCellRangeCol2(sheet); 
+      for (var i=row1;i&amp;lt;=row2;i++) 
+      {
+            for (var j=col1;j&amp;lt;=col2;j++) 
+            {
+                   _this.SetCellText(sheet,i,j,&amp;quot;&amp;quot;);
+            }       
+      }
+      
+
+}
+
+//================================================================// 
+// 函数：trkdtl
+// 说明：鼠标双击单元格事件
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/03/06 11:34:55
+// 修改日志：
+//================================================================// 
+function trkdtl()
+{
+                //param_参数   查询中间件要如此传参                
+        var url = &amp;quot;ShowXlsGrid.sp?grdid=TRKDTL&amp;quot;;
+        window.open( url ,&amp;quot;事务处理&amp;quot;,&amp;quot;WIDTH=500,HEIGHT=490,left=0,top=0,toolbar=no,menu=no&amp;quot;);     
+
+}
+
+//================================================================//  
+// 函数：thisOnMouseLClick 
+// 说明：鼠标单击跳转页面 
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/07/06 15:02:19  
+// 修改日志：
+//================================================================//  
+function _thisOnMouseLClick(sheet,row,col)
+{
+        if(checkDClick(sheet,row,col))  
+          {  
+                var project = _this.GetCellText(sheet,row,1);
+                var title = _this.GetCellText(sheet,row,3);
+                var retitle = _this.GetCellText(sheet,row,4);
+                var url = &amp;quot;ShowXlsGrid.sp?grdid=TRKDTL&amp;quot;; 
+                window.open( url ,&amp;quot;事务处理&amp;quot;,&amp;quot;WIDTH=700,HEIGHT=490,left=0,top=0,toolbar=no,menu=no&amp;quot;);
+
+         } 
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包   
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );  
+var sql = &amp;quot;select a.project,a.id,a.title ,a.retitle,a.dtlusr,a.stat,a.prio,a.crtusr,a.crtdat &amp;quot; + 
+           &amp;quot; from trkhdr a,trkdtl b where a.guid=b.trkguid(+) &amp;quot;;
+
+
+
+
+function Fprocess1()  
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql1 = &amp;quot;and a.crtusr = &amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and a.stat=&amp;apos;1&amp;apos; order by a.prio desc&amp;quot;;
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql+sql1);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}
+
+function Fprocess2()  
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql1 = &amp;quot;and a.crtusr = &amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and a.stat like &amp;apos;%&amp;quot;+stat+&amp;quot;%&amp;apos; order by a.prio desc&amp;quot;;//and b.style not in(1,4)
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql+sql1);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}
+
+function Fprocess3()  
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql1 = &amp;quot;and a.crtusr = &amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and a.stat=&amp;apos;2&amp;apos; order by a.prio desc&amp;quot;;
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql+sql1);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}
+
+function Fprocess4()  
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql1 = &amp;quot;and a.crtusr = &amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and a.stat like &amp;apos;%&amp;quot;+stat+&amp;quot;%&amp;apos; order by a.prio desc&amp;quot;;//and b.style &amp;lt;&amp;gt;&amp;apos;4&amp;apos;
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql+sql1);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}
+
+function Fprocess5()  
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql1 = &amp;quot;and a.crtusr = &amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and a.stat =&amp;apos;3&amp;apos; order by a.crtdat desc&amp;quot;;
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql+sql1);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}
+
+function Fprocess6()  
+{
+      var ret = 0; 
+      var db = null;  
+      var ds = null; 
+      var sql1 = &amp;quot;and a.crtusr = &amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and a.stat like &amp;apos;%&amp;quot;+stat+&amp;quot;%&amp;apos; order by a.prio desc&amp;quot;;
+      try  
+      { 
+            db = new pubpack.EADatabase(); 
+            ds = db.QuerySQL(sql+sql1);           
+            return ds.GetXml() ; 
+      } 
+      catch(e) 
+      { 
+            throw e; 
+      }  
+      finally
+      {  
+            db.Close(); 
+      }       
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DETAIL</ID><NAME ></NAME><DATDSC >select a.project,a.id,a.title ,a.retitle,a.dtlusr,a.stat,a.prio,a.crtusr,a.crtdat 
+from trkhdr a,trkdtl b where a.guid=b.trkguid(+) and a.crtusr=&amp;apos;[%USRID]&amp;apos; and a.prio=&amp;apos;[%PRIO]&amp;apos;</DATDSC></ROW>
+<ROW num="1" ><ID >GRDPAMDS_1</ID><NAME ></NAME><DATDSC ></DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

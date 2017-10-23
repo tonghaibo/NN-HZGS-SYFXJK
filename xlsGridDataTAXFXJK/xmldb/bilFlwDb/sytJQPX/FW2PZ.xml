@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="预付款往来 生成 凭证" ID="FW2PZ">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESC name="数据流描述"></DESC>
+				<SrcHdrFlds name="源单据头的转换">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</SrcHdrFlds>
+				<DestHdrFlds name="目标单据的对应转换字段">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</DestHdrFlds>
+				<DESTCLS name="待生成的目标单据">PZ</DESTCLS>
+				<ValFld name="目标单据的字段">TAXMNY</ValFld>
+				<MappedMode name="单据映射关系。0:(默认)多源单据对一目标单据映射；1:一对一映射"></MappedMode>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总"></Filter>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生">//
+  //可用对象:eaContext,usrinf,srchdr,srcdtl(源单据明细),bilhdr(目标单据的单据头)
+  //      bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+  //      flwstaidx(当前状态行)
+  
+  
+  //end of func</OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生">//
+  //可用对象:eaContext,usrinf,srchdr,bilhdr(目标单据的单据头),bildtl(目标单据的明细)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+  //throw new Exception(客户编号);
+  var pub=new JavaPackage("com.xlsgrid.net.pub");
+  var 业务员编号 = "";//srchdr.getStringAt(0,"UID");
+  var 客户编号 = srchdr.getStringAt(0,"CORPID");
+  bilhdr.setValueAt(0,"REFID2",业务员编号);
+  bilhdr.setValueAt(0,"REFNAM2",客户编号);
+  bilhdr.setValueAt(0,"SUBTYP",srchdr.getStringAt(0,"BILTYP"));
+//附件数默认为1
+  bilhdr.setValueAt(0,"REFID1","1");
+
+  var c = bildtl.getRowCount()-1;
+//获取源单据的客户信息--  20060828 根据江苏财务经敢需要修改　高
+  var oldsrcbil = "";
+  var bilno = 0;
+  var bacc  = bildtl.getStringAt(0,"ACC");
+  var srcbiltyp=bildtl.getStringAt(0,"BILTYP");
+  for(var i=c;i&amp;gt;=0;i--)
+  {
+    //if(bacc== "TS") throw new Exception(bildtl.GetXml());
+    var srcbilid = bildtl.getStringAt(i,"BILID");
+    if(oldsrcbil != srcbilid )
+    {
+      oldsrcbil = srcbilid;
+      bilno ++;
+      var sql = "select CORPID from bilhdr where biltyp=&amp;apos;"+srcbiltyp+"&amp;apos; and acc=&amp;apos;"+
+            bacc +"&amp;apos; and bilid=&amp;apos;"+srcbilid+"&amp;apos;";
+      //throw new Exception(sql);
+      客户编号 = pub.EADbTool.GetSQL(sql);
+    }
+//--获取源单据的客户信息  
+    bildtl.setValueAt(i,"REFID2",业务员编号);
+    bildtl.setValueAt(i,"REFNAM2",客户编号);
+    
+//在凭证的第一条记录的摘要处显示客户名称－－20060824 根据云南财务田经理提出的要求 梁
+   
+  // 得到客户信息
+  var 往来预收单号 = bildtl.getStringAt(i,"BILID");
+  var 帐套号  = bildtl.getStringAt(i,"ACC");
+  var noteds = pub.EADbTool.QuerySQL("SELECT CORPNAM,REFNAM2 FROM BILHDR where acc=&amp;apos;"+帐套号+"&amp;apos; and bilid=&amp;apos;"+往来预收单号+"&amp;apos; and biltyp=&amp;apos;FW&amp;apos;");
+  var 客户名称 = "";   
+ 
+  if (noteds.getRowCount()&amp;gt;0){
+     客户名称 = noteds.getStringAt( 0,"CORPNAM" );
+  }
+  
+   // 填写摘要信息 
+   var 摘要 = bildtl.getStringAt(i,"REFNAM1") ; 
+   bildtl.setValueAt(i,"REFNAM1",摘要 + " " + 客户名称 );
+   
+//end 20060824
+
+//    var 贷方 = -1.0 * bildtl.getStringAt(i,"MNY");
+    //throw new Exception(贷方);
+//    if(贷方!=0) //清除数据流过程产生的额外数据
+//      bildtl.setValueAt(i,"TAXMNY","");
+  }
+   
+
+   
+
+  //end of func</OnConvert>
+				<OnDelete name="删除目标单据时发生">//
+  //可用对象:eaContext,_EADB
+  
+  //end of func</OnDelete>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+</ROW>
+</ROWSET>
+</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">FW</SRCCLS>
+				<ConvertMod name="单据转换模式:0=明细转换;1=(默认)整单转换;2=仅转换单据头"></ConvertMod>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">TAXMNY</ValFld>
+				<where name="datflwsta表的过滤条件">VALLEFT&amp;lt;&amp;gt;0</where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。">//
+  //可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)
+  //如果把bilhdr的BILID或bildtl的ITMID清空，则跳过该单据或明细
+  
+  //end of func</OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生">//
+  //可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);
+  //返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息
+  //如果把ds的BILID或ITMID清空，则跳过该单据或明细
+  //如果要保存额外信息到  datflwsta 中,请当sta=0时设置ds的字段,后台处理时回自动保存到
+  //对应的 datflwsta 字段中:
+  //  LOCID  --  REFID1      LOCNAM  --  REFNAM1
+  //  CORPID --  REFID2      CORPNAM --  REFNAM2
+  //  SUBTYP --  SRCSUBTYP
+  //var pub = new JavaPackage("com.xlsgrid.net.pub");
+  if(sta==1)
+  {
+    //var 借方 = 1.0 * ds.getStringAt(row,"TAXMNY");
+    //var 贷方 = pub.EAFunc.formatDouble( -1.0 * ds.getStringAt(row,"MNY"),2);
+    var 贷方 = -1.0 * bildtlraw.getStringAt(row,"MNY");
+    //var d = 1.0 * 贷方;
+    //throw new Exception("+贷方");
+    if(贷方!=0) //贷方也要生成数据
+      bildtlraw.setValueAt(row,"TAXMNY",贷方);
+    return "科目："+ds.getStringAt(row,"ITMID")+" "+ds.getStringAt(row,"ITMNAM")+" 发生额："+bildtlraw.getStringAt(row,"TAXMNY");
+  }
+  else
+  {
+    return "客户："+ds.getStringAt(0,"CORPNAM")+" 备注："+ds.getStringAt(0,"NOTE");
+  }
+  //end of func</OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生">//
+  //可用对象:eaContext,_EADB(EADatabase)
+  
+  //end of func</OnUnCkeck>
+</ROW>
+</ROWSET>
+</srcBil>
+</dataFlow>

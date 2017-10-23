@@ -1,0 +1,282 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ZDSY_XJLLB</MWID><NAME >现金流量表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZDSY_XJLLB.zxg</FILE><SCENE ></SCENE><FIXED >3,1</FIXED><CATTYP >重点税源管理</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var zlbsxl = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;85%&amp;quot;);
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	 _sql.querytods(&amp;quot;ZLBSXL&amp;quot;,&amp;quot;DJXH=&amp;quot;+DJXH);
+        zlbsxl = _this.XMLDS_GetString(0,&amp;quot;zlbsxl_dm&amp;quot;);
+	
+	loadBBRQ();	
+	var bbrq1 = _this.GetCellText(1,2,2);
+	var bbrq2 = _this.GetCellText(1,2,3);
+	if (bbrq1 != &amp;quot;&amp;quot; &amp;&amp; bbrq2 != &amp;quot;&amp;quot;) {
+		loadData(bbrq1,bbrq2);
+	}
+	
+}
+//加载报表日期列表
+function loadBBRQ()
+{
+	var xml = &amp;quot;&amp;quot;;
+	
+	if (zlbsxl==&amp;apos;ZL1001001&amp;apos;) {
+          var zcfzbmc=&amp;apos;SB_CWBB_QYKJZZYBQY_XJLLB&amp;apos;;   //（适用执行一般企业会计制度的企业）   
+          xml=_sql.query(&amp;quot;BBRQ_XJLLB_YBQY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;TABMNE=&amp;quot;+zcfzbmc);       
+        }  
+        else if (zlbsxl==&amp;apos;ZL1001018&amp;apos;) {
+          var zcfzbmc=&amp;apos;SB_CWBB_SYYH_XJLLB&amp;apos;;  //企业会计准则（商业银行）财务报表报送与信息采集
+          xml=_sql.query(&amp;quot;BBRQ_XJLLB_JRY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;TABMNE=&amp;quot;+zcfzbmc);   
+        } 
+        else if (zlbsxl==&amp;apos;ZL1001003&amp;apos;){
+          //  var zcfzbmc=&amp;apos;SB_CWBB_XQYKJZZ_LRB&amp;apos;;  //（适用执行小企业会计制度的企业）
+          xml=_sql.query(&amp;quot;BBRQ_XJLLB_XQY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH);      
+        }
+        else if (zlbsxl==&amp;apos;ZL1001019&amp;apos;){
+          var zcfzbmc=&amp;apos;SB_CWBB_ZQGS_XJLLB&amp;apos;;  //企业会计准则（证券公司）财务报表报送与信息采集利润表
+          xml=_sql.query(&amp;quot;BBRQ_XJLLB_JRY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;TABMNE=&amp;quot;+zcfzbmc);    
+        }
+        else if (zlbsxl==&amp;apos;ZL1001002&amp;apos;)
+        {   //利润表（适用执行企业会计制度的企业）
+          xml=_sql.query(&amp;quot;BBRQ_XJLLB_QYKJZZ&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH);      
+        }
+
+	_this.SetXmlDS(1,2,0,5,3,xml);
+	_this.SetFixedRow(1,2);
+	_this.SetFixedCol(1,1);
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+
+}
+
+//加载查询数据
+function loadData(bbrq1,bbrq2)
+{	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+//	 _sql.querytods(&amp;quot;ZLBSXL&amp;quot;,&amp;quot;DJXH=&amp;quot;+DJXH);
+//        var zlbsxl = _this.XMLDS_GetString(0,&amp;quot;zlbsxl_dm&amp;quot;);
+        var xml = &amp;quot;&amp;quot;;
+        if (zlbsxl==&amp;apos;ZL1001001&amp;apos;) {
+          var zcfzbmc=&amp;apos;SB_CWBB_QYKJZZYBQY_XJLLB&amp;apos;;   //（适用执行一般企业会计制度的企业）   
+          xml=_sql.query(&amp;quot;XJLLB_YBQY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;TABMNE=&amp;quot;+zcfzbmc+&amp;quot;&amp;BBRQ1=&amp;quot;+bbrq1+&amp;quot;&amp;BBRQ2=&amp;quot;+bbrq2);       
+        }  
+        else if (zlbsxl==&amp;apos;ZL1001018&amp;apos;) {
+          var zcfzbmc=&amp;apos;SB_CWBB_SYYH_XJLLB&amp;apos;;  //企业会计准则（商业银行）财务报表报送与信息采集
+          xml=_sql.query(&amp;quot;XJLLB_JRY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;TABMNE=&amp;quot;+zcfzbmc+&amp;quot;&amp;BBRQ1=&amp;quot;+bbrq1+&amp;quot;&amp;BBRQ2=&amp;quot;+bbrq2);   
+        } 
+        else if (zlbsxl==&amp;apos;ZL1001003&amp;apos;){
+          //  var zcfzbmc=&amp;apos;SB_CWBB_XQYKJZZ_LRB&amp;apos;;  //（适用执行小企业会计制度的企业）
+          xml=_sql.query(&amp;quot;XJLLB_XQY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;BBRQ1=&amp;quot;+bbrq1+&amp;quot;&amp;BBRQ2=&amp;quot;+bbrq2);      
+        }
+        else if (zlbsxl==&amp;apos;ZL1001019&amp;apos;){
+          var zcfzbmc=&amp;apos;SB_CWBB_ZQGS_XJLLB&amp;apos;;  //企业会计准则（证券公司）财务报表报送与信息采集利润表
+          xml=_sql.query(&amp;quot;XJLLB_JRY&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;TABMNE=&amp;quot;+zcfzbmc+&amp;quot;&amp;BBRQ1=&amp;quot;+bbrq1+&amp;quot;&amp;BBRQ2=&amp;quot;+bbrq2);    
+        }
+        else if (zlbsxl==&amp;apos;ZL1001002&amp;apos;)
+        {   //利润表（适用执行企业会计制度的企业）
+       //  var zcfzbmc=&amp;apos;SB_CWBB_QYKJZZ_LRB&amp;apos;; 
+          xml=_sql.query(&amp;quot;XJLLB_QYKJZZ&amp;quot;,&amp;quot;&amp;DJXH=&amp;quot;+DJXH+&amp;quot;&amp;BBRQ1=&amp;quot;+bbrq1+&amp;quot;&amp;BBRQ2=&amp;quot;+bbrq2);      
+        }
+
+        _this.SetXmlDS(0,3,1,_this.GetRowCount(0)-1,_this.GetColCount(0)-1,xml); 
+	_this.XMLDS_Parse(xml); 
+     
+
+    	_this.AutoFixScreenWidth();
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == 1 &amp;&amp; row &amp;gt;= 2) {
+		var dat1 = _this.GetCellText(1,row,2);
+		var dat2 = _this.GetCellText(1,row,3);
+		for (var r=2;r&amp;lt;_this.GetRowCount(1);r++) {
+			_this.SetCellText(1,r,0,&amp;quot;&amp;quot;);
+		}
+		_this.SetCellText(1,row,0,&amp;quot;*&amp;quot;);
+		if (dat1 != &amp;quot;&amp;quot; &amp;&amp; dat2 != &amp;quot;&amp;quot;) {
+			loadData(dat1,dat2);
+		}
+	}
+}
+
+    	</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >XJLLB_JRY</ID><NAME >商业银行、证券公司</NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(xmmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc, bqje,sqje sqje_1
+ from [%TABMNE]
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select ewbhxh,hmc,bqje,sqje_1,ssqq,ssqz 
+from tmp_xjllbbs 
+where ssqq=&amp;apos;[%BBRQ1]&amp;apos; and ssqz=&amp;apos;[%BBRQ2]&amp;apos;
+/*where ssqq in ( select ssqq from(
+select * from tmp_xjllbbs 
+order by ssqq desc )where rownum=1 ) */
+order by ewbhxh
+ </DATDSC><C4 >XJLLB_JRY</C4><C5 >XJLLB_JRY</C5><C6 >XJLLB_JRY</C6><C7 >XJLLB_JRY</C7></ROW>
+<ROW num="1" ><ID >XJLLB_QYKJZZ</ID><NAME ></NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(hmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc, je bqje, &amp;apos;&amp;apos; sqje_1
+ from SB_CWBB_QYKJZZ_XJLLB
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select ewbhxh,hmc,bqje,sqje_1,ssqq,ssqz 
+from tmp_xjllbbs 
+where ssqq=&amp;apos;[%BBRQ1]&amp;apos; and ssqz=&amp;apos;[%BBRQ2]&amp;apos;
+/*where ssqq in ( select ssqq from(
+select * from tmp_xjllbbs 
+order by ssqq desc )where rownum=1 ) */
+order by ewbhxh</DATDSC><C4 ></C4><C5 >XJLLB_QYKJZZ</C5><C6 ></C6><C7 >XJLLB_QYKJZZ</C7></ROW>
+<ROW num="2" ><ID >XJLLB_YBQY</ID><NAME ></NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(hmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc,  bqje,sqje_1
+ from [%TABMNE]
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select ewbhxh,hmc,bqje,sqje_1,ssqq,ssqz 
+from tmp_xjllbbs 
+where ssqq=&amp;apos;[%BBRQ1]&amp;apos; and ssqz=&amp;apos;[%BBRQ2]&amp;apos;
+/*where ssqq in ( select ssqq from(
+select * from tmp_xjllbbs
+order by ssqq desc )where rownum=1 ) */
+order by ewbhxh
+</DATDSC><C4 ></C4><C5 >XJLLB_YBQY</C5><C6 ></C6><C7 >XJLLB_YBQY</C7></ROW>
+<ROW num="3" ><ID >XJLLB_XQY</ID><NAME ></NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(hmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc, byje bqje, bnljje sqje_1
+ from SB_CWBB_XQYKJZZ_XJLLB
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select ewbhxh,hmc,bqje,sqje_1,ssqq,ssqz 
+from tmp_xjllbbs 
+where ssqq=&amp;apos;[%BBRQ1]&amp;apos; and ssqz=&amp;apos;[%BBRQ2]&amp;apos;
+/*where ssqq in ( select ssqq from(
+select * from tmp_xjllbbs
+order by ssqq desc )where rownum=1 ) */
+order by ewbhxh
+</DATDSC><C4 ></C4><C5 >XJLLB_XQY</C5><C6 ></C6><C7 >XJLLB_XQY</C7></ROW>
+<ROW num="4" ><ID >ZLBSXL</ID><NAME ></NAME><DATDSC >select b.zlbsxl_dm--,c.zlbsxlmc 
+from hx_sb.SB_ZLBSCJB@js3q a,hx_sb.SB_ZLBSSLDJB@js3q b , HX_DM_QG.DM_SB_ZLBSXL@js3q	c 
+where a.zlbsuuid=b.zlbsuuid
+and b.zlbsxl_dm=c.zlbsxl_dm
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;</DATDSC><C4 ></C4><C5 >ZLBSXL</C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="5" ><ID >BBRQ_XJLLB_YBQY</ID><NAME >报表日期</NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(hmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc,  bqje,sqje_1
+ from [%TABMNE]
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select &amp;apos;&amp;apos; sel,rownum rn,ssqq,ssqz from (
+	select * from (
+	select distinct ssqq,ssqz from tmp_xjllbbs
+	) order by ssqz desc
+) t	</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >BBRQ_XJLLB_YBQY</C7></ROW>
+<ROW num="6" ><ID >BBRQ_XJLLB_JRY</ID><NAME >报表日期</NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(xmmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc, bqje,sqje sqje_1
+ from [%TABMNE]
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select &amp;apos;&amp;apos; sel,rownum rn,ssqq,ssqz from (
+  select * from (
+  select distinct ssqq,ssqz from tmp_xjllbbs
+  ) order by ssqz desc
+) t  </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >GRDDSCDS_6</C7></ROW>
+<ROW num="7" ><ID >BBRQ_XJLLB_XQY</ID><NAME >报表日期</NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(hmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc, byje bqje, bnljje sqje_1
+ from SB_CWBB_XQYKJZZ_XJLLB
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select &amp;apos;&amp;apos; sel,rownum rn,ssqq,ssqz from (
+  select * from (
+  select distinct ssqq,ssqz from tmp_xjllbbs
+  ) order by ssqz desc
+) t  </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="8" ><ID >BBRQ_XJLLB_QYKJZZ</ID><NAME >报表日期</NAME><DATDSC >with tmp_xjllbbs as (
+select to_char(ssqq,&amp;apos;yyyy-mm-dd&amp;apos;)ssqq,to_char(ssqz,&amp;apos;yyyy-mm-dd&amp;apos;)ssqz,a.zlbscjuuid,ewbhxh,hmc,bqje,sqje_1
+from  hx_sb.SB_ZLBSCJB@js3q a, 
+(
+ select zlbscjuuid, ewbhxh,replace(hmc,&amp;apos;？&amp;apos;,&amp;apos;&amp;apos;) hmc, je bqje, &amp;apos;&amp;apos; sqje_1
+ from SB_CWBB_QYKJZZ_XJLLB
+ where sjgsdq like &amp;apos;14511%&amp;apos;
+)b
+where a.zlbscjuuid=b.zlbscjuuid
+and a.djxh=&amp;apos;[%DJXH]&amp;apos;
+and nvl(a.zfbz_1,&amp;apos;0&amp;apos;)!=&amp;apos;Y&amp;apos;
+)
+select &amp;apos;&amp;apos; sel,rownum rn,ssqq,ssqz from (
+  select * from (
+  select distinct ssqq,ssqz from tmp_xjllbbs
+  ) order by ssqz desc
+) t  </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

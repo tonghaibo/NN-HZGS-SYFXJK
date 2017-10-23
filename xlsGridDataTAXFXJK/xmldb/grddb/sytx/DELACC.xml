@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >DELACC</MWID><NAME >删除帐套数据</NAME><NOTE ></NOTE><FILE >DELACC.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+
+
+function Delete()
+{
+	// 通过Get的方式调用服务端的一个函数
+	var sParam =&amp;quot;thisaccid=&amp;quot;+_this.GetCellText(0,4,3);
+	try {
+		ret = invokeOSFunc(&amp;quot;Run&amp;quot;,sParam) ;       
+		alert ( ret );
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+}
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if ( id == &amp;quot;清空数据&amp;quot; ) 
+		Delete();  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function Run()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		db.ExcecutSQL(&amp;quot;delete from bildtlext where billguid in ( select guid from bildtl where acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;)&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from bildtl where acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from bilhdrext where billguid in ( select guid from bilhdr where acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;)&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from bilhdr where acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from datflwsta where acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from datflw where acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;&amp;quot;);
+			
+			
+		db.Commit();
+		msg = &amp;quot;删除数据成功&amp;quot; ;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

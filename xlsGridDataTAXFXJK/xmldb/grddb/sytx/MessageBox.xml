@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >MessageBox</MWID><NAME >JS提示窗口脚本</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >MessageBox.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >/******************************************************************************************* 
+* http://2lin.net 
+* Email:caoailin@gmail.com 
+* QQ:38062022 
+* Creation date: 2006-11-27 
+* 下面的内容可以拷贝到一个JS文件里面 
+*********************************************************************************************/ 
+
+
+// 控制按钮常量 
+var MB_OK = 0; 
+var MB_CANCEL = 1; 
+var MB_OKCANCEL = 2; 
+var MB_YES = 3; 
+var MB_NO = 4; 
+var MB_YESNO = 5; 
+var MB_YESNOCANCEL = 6; 
+
+// 控制按钮文本 
+var MB_OK_TEXT = &amp;quot;确定&amp;quot;; 
+var MB_CANCEL_TEXT = &amp;quot;取消&amp;quot;; 
+var MB_YES_TEXT = &amp;quot; 是 &amp;quot;; 
+var MB_NO_TEXT = &amp;quot; 否 &amp;quot;; 
+
+//提示图标 
+var MB_ICON = &amp;quot;http://www.xlsgrid.net/xlsgrid/xlsgrid/images/icon/6.png&amp;quot;; 
+
+
+//委托方法 
+var MB_OK_METHOD = null; 
+var MB_CANCEL_METHOD = null; 
+var MB_YES_METHOD = null; 
+var MB_NO_METHOD = null; 
+var MB_BACKCALL = null; 
+
+var MB_STR = &amp;apos;&amp;lt;style type=&amp;quot;text/css&amp;quot;&amp;gt;&amp;lt;!--&amp;apos; + 
+&amp;apos;body{margin:0px;}&amp;apos; + 
+&amp;apos;.msgbox_title{background-color: #B1CDF3;height:25px;position:relative;font-size:14px;line-height:25px;padding-left:10px;border-bottom:1px  solid #000;}&amp;apos; + 
+&amp;apos;.msgbox_control{text-align:center;clear:both;height:28px;}&amp;apos; + 
+&amp;apos;.msgbox_button{background-color: #B1CDF3;border:1px solid #003366;font-size:12px;line-height:20px;height:21px;}&amp;apos; + 
+&amp;apos;.msgbox_content{padding:10px;float:left;line-height: 20px;}&amp;apos; + 
+&amp;apos;.msgbox_icon{width: 50px;height: 50px;float: left;text-align: center;line-height:50px;padding-top:10px;}&amp;apos; + 
+&amp;apos;.msgbox_mask{position:absolute;left:0px;top:0px;z-index:99999;background-color:#333333;width:100%;height:100%;}&amp;apos; + 
+&amp;apos;.msgbox{background-color: #EFFAFE;position: absolute;height:auto;font-size:12px;top:50%;left:50%;border:1px solid #999999;}&amp;apos; + 
+&amp;apos;--&amp;gt;&amp;lt;/style&amp;gt;&amp;apos; + 
+&amp;apos;&amp;lt;div id=&amp;quot;msgBoxMask&amp;quot; class=&amp;quot;msgbox_mask&amp;quot; style=&amp;quot;filter: alpha(opacity=0);display:none;&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;apos; + 
+&amp;apos;&amp;lt;div class=&amp;quot;msgbox&amp;quot; style=&amp;quot;display:none; z-index:100000;&amp;quot; id=&amp;quot;msgBox&amp;quot;&amp;gt;&amp;apos; + 
+&amp;apos;&amp;lt;div class=&amp;quot;msgbox_title&amp;quot; id=&amp;quot;msgBoxTitle&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;apos; + 
+&amp;apos;&amp;lt;div class=&amp;quot;msgbox_icon&amp;quot; id=&amp;quot;msgBoxIcon&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;apos; + 
+&amp;apos;&amp;lt;div class=&amp;quot;msgbox_content&amp;quot; id=&amp;quot;msgBoxContent&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;apos; + 
+&amp;apos;&amp;lt;div class=&amp;quot;msgbox_control&amp;quot; id=&amp;quot;msgBoxControl&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;apos;; 
+
+var Timer = null; 
+
+document.write(MB_STR); 
+var icon = new Image(); 
+icon.src = MB_ICON; 
+
+/* 提示对话框 
+* 参数 1 : 提示内容 
+* 参数 2 : 提示标题 
+* 参数 3 : 图标路径 
+* 参数 4 : 按钮类型 
+*/ 
+
+function MessageBox(){ 
+var _content = arguments[0] || &amp;quot;这是一个对话框！&amp;quot;; 
+var _title = arguments[1] || &amp;quot;提示&amp;quot;; 
+var _icon = arguments[2] || MB_ICON; 
+var _button = arguments[3] || MB_OK; 
+MB_BACKCALL = arguments[4]; 
+
+var _iconStr = &amp;apos;&amp;lt;img src=&amp;quot;{0}&amp;quot;&amp;gt;&amp;apos;; 
+var _btnStr = &amp;apos;&amp;lt;input name=&amp;quot;{0}&amp;quot; id=&amp;quot;{0}&amp;quot; type=&amp;quot;button&amp;quot; class=&amp;quot;msgbox_button&amp;quot; value=&amp;quot;{1}&amp;quot; onclick=&amp;quot;MBMethod(this)&amp;quot; /&amp;gt;&amp;apos;; 
+
+
+switch(_button) 
+{ 
+case MB_CANCEL : _btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnCancel&amp;quot;, MB_CANCEL_TEXT); break; 
+
+case MB_YES : _btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnYes&amp;quot;, MB_YES_TEXT); break; 
+
+case MB_NO : _btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnNo&amp;quot;, MB_NO_TEXT); break; 
+
+case MB_OKCANCEL : 
+_btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnOk&amp;quot;, MB_OK_TEXT) + &amp;quot; &amp;quot; + 
+_btnStr.toFormatString(&amp;quot;msgBoxBtnCancel&amp;quot;, MB_CANCEL_TEXT); 
+break; 
+
+case MB_YESNO : 
+_btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnYes&amp;quot;, MB_YES_TEXT) + &amp;quot; &amp;quot; + 
+_btnStr.toFormatString(&amp;quot;msgBoxBtnNo&amp;quot;, MB_NO_TEXT); 
+break; 
+
+case MB_YESNOCANCEL : 
+_btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnYes&amp;quot;, MB_YES_TEXT) + &amp;quot; &amp;quot; + 
+_btnStr.toFormatString(&amp;quot;msgBoxBtnNo&amp;quot;, MB_NO_TEXT) + &amp;quot; &amp;quot; + 
+_btnStr.toFormatString(&amp;quot;msgBoxBtnCancel&amp;quot;, MB_CANCEL_TEXT); 
+break; 
+
+default : _btnStr = _btnStr.toFormatString(&amp;quot;msgBoxBtnOk&amp;quot;, MB_OK_TEXT); break; 
+
+} 
+//解决　FF 下会复位 
+ScrollTop = GetBrowserDocument().scrollTop; 
+ScrollLeft = GetBrowserDocument().scrollLeft; 
+GetBrowserDocument().style.overflow = &amp;quot;hidden&amp;quot;; 
+GetBrowserDocument().scrollTop = ScrollTop; 
+GetBrowserDocument().scrollLeft = ScrollLeft; 
+
+$(&amp;quot;msgBoxTitle&amp;quot;).innerHTML = _title; 
+$(&amp;quot;msgBoxIcon&amp;quot;).innerHTML = _iconStr.toFormatString(_icon); 
+$(&amp;quot;msgBoxContent&amp;quot;).innerHTML = _content; 
+$(&amp;quot;msgBoxControl&amp;quot;).innerHTML = _btnStr; 
+
+OpacityValue = 0; 
+$(&amp;quot;msgBox&amp;quot;).style.display = &amp;quot;&amp;quot;; 
+try{$(&amp;quot;msgBoxMask&amp;quot;).filters(&amp;quot;alpha&amp;quot;).opacity = 0;}catch(e){}; 
+$(&amp;quot;msgBoxMask&amp;quot;).style.opacity = 0; 
+$(&amp;quot;msgBoxMask&amp;quot;).style.display = &amp;quot;&amp;quot;; 
+$(&amp;quot;msgBoxMask&amp;quot;).style.height = GetBrowserDocument().scrollHeight + &amp;quot;px&amp;quot;; 
+$(&amp;quot;msgBoxMask&amp;quot;).style.width = GetBrowserDocument().scrollWidth + &amp;quot;px&amp;quot;; 
+
+Timer = setInterval(&amp;quot;DoAlpha()&amp;quot;,1); 
+//设置位置 
+$(&amp;quot;msgBox&amp;quot;).style.width = &amp;quot;100%&amp;quot;; 
+$(&amp;quot;msgBox&amp;quot;).style.width = ($(&amp;quot;msgBoxIcon&amp;quot;).offsetWidth + $(&amp;quot;msgBoxContent&amp;quot;).offsetWidth + 2) + &amp;quot;px&amp;quot;; 
+
+$(&amp;quot;msgBox&amp;quot;).style.marginTop = (-$(&amp;quot;msgBox&amp;quot;).offsetHeight/2 + GetBrowserDocument().scrollTop) + &amp;quot;px&amp;quot;; 
+$(&amp;quot;msgBox&amp;quot;).style.marginLeft = (-$(&amp;quot;msgBox&amp;quot;).offsetWidth/2 + GetBrowserDocument().scrollLeft) + &amp;quot;px&amp;quot;; 
+
+if(_button == MB_OK || _button == MB_OKCANCEL){ 
+$(&amp;quot;msgBoxBtnOk&amp;quot;).focus(); 
+}else if(_button == MB_YES || _button == MB_YESNO || _button == MB_YESNOCANCEL){ 
+$(&amp;quot;msgBoxBtnYes&amp;quot;).focus(); 
+} 
+
+} 
+
+var OpacityValue = 0; 
+var ScrollTop = 0; 
+var ScrollLeft = 0; 
+
+function GetBrowserDocument() 
+{ 
+var _dcw = document.documentElement.clientHeight; 
+var _dow = document.documentElement.offsetHeight; 
+var _bcw = document.body.clientHeight; 
+var _bow = document.body.offsetHeight; 
+
+if(_dcw == 0) return document.body; 
+if(_dcw == _dow) return document.documentElement; 
+
+if(_bcw == _bow &amp;&amp; _dcw != 0) 
+return document.documentElement; 
+else 
+return document.body; 
+} 
+
+function SetOpacity(obj,opacity){ 
+if(opacity &amp;gt;=1 ) opacity = opacity / 100; 
+
+try{obj.style.opacity = opacity; }catch(e){} 
+
+try{ 
+if(obj.filters){ 
+obj.filters(&amp;quot;alpha&amp;quot;).opacity = opacity * 100; 
+} 
+
+}catch(e){} 
+} 
+
+function DoAlpha(){ 
+if (OpacityValue &amp;gt; 20){clearInterval(Timer);return 0;} 
+OpacityValue += 5; 
+SetOpacity($(&amp;quot;msgBoxMask&amp;quot;),OpacityValue); 
+} 
+
+function MBMethod(obj) 
+{ 
+switch(obj.id) 
+{ 
+case &amp;quot;msgBoxBtnOk&amp;quot; : if(MB_BACKCALL) {MB_BACKCALL(MB_OK);} else {if(MB_OK_METHOD) MB_OK_METHOD();} break; 
+case &amp;quot;msgBoxBtnCancel&amp;quot; : if(MB_BACKCALL) {MB_BACKCALL(MB_CANCEL);} else {if(MB_CANCEL_METHOD) MB_CANCEL_METHOD();} break; 
+case &amp;quot;msgBoxBtnYes&amp;quot; : if(MB_BACKCALL) {MB_BACKCALL(MB_YES);} else {if(MB_YES_METHOD) MB_YES_METHOD();} break; 
+case &amp;quot;msgBoxBtnNo&amp;quot; : if(MB_BACKCALL) {MB_BACKCALL(MB_NO);} else {if(MB_NO_METHOD) MB_NO_METHOD();} break; 
+} 
+
+MB_OK_METHOD = null; 
+MB_CANCEL_METHOD = null; 
+MB_YES_METHOD = null; 
+MB_NO_METHOD = null; 
+MB_BACKCALL = null; 
+
+MB_OK_TEXT = &amp;quot;确定&amp;quot;; 
+MB_CANCEL_TEXT = &amp;quot;取消&amp;quot;; 
+MB_YES_TEXT = &amp;quot; 是 &amp;quot;; 
+MB_NO_TEXT = &amp;quot; 否 &amp;quot;; 
+
+$(&amp;quot;msgBox&amp;quot;).style.display = &amp;quot;none&amp;quot;; 
+$(&amp;quot;msgBoxMask&amp;quot;).style.display = &amp;quot;none&amp;quot;; 
+GetBrowserDocument().style.overflow = &amp;quot;&amp;quot;; 
+GetBrowserDocument().scrollTop = ScrollTop; 
+GetBrowserDocument().scrollLeft = ScrollLeft; 
+} 
+
+String.prototype.toFormatString = function(){ 
+var _str = this; 
+for(var i = 0; i &amp;lt; arguments.length; i++){ 
+_str = eval(&amp;quot;_str.replace(/\\{&amp;quot;+ i +&amp;quot;\\}/ig,&amp;apos;&amp;quot; + arguments[i] + &amp;quot;&amp;apos;)&amp;quot;); 
+} 
+return _str; 
+} 
+
+function $(obj){ 
+return document.getElementById(obj); 
+} 
+
+
+/////////////////////////////////////////////////////////////////////////////////////// 
+//调用示例
+/////////////////////////////////////////////////////////////////////////////////////// 
+
+function test() 
+{ 
+var _msg = &amp;quot;&amp;lt;font color=red&amp;gt;&amp;lt;b&amp;gt;演示：&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br/&amp;gt;普通对话框！&amp;quot;; 
+MessageBox(_msg); 
+} 
+
+function test1() 
+{ 
+MB_OK_METHOD = function(){alert(&amp;apos;你按了OK&amp;apos;);} 
+MB_YES_METHOD = function(){alert(&amp;apos;你按了YES&amp;apos;);} 
+MB_NO_METHOD = function(){alert(&amp;apos;你按了NO&amp;apos;);} 
+MB_CANCEL_METHOD = function(){alert(&amp;apos;你按了CANCEL&amp;apos;);} 
+
+var _msg = &amp;quot;&amp;lt;font color=red&amp;gt;&amp;lt;b&amp;gt;演示：&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br/&amp;gt;调用对话框。是、否、取消&amp;quot;; 
+MessageBox(_msg,&amp;quot;演示&amp;quot;,null,MB_YESNOCANCEL); 
+} 
+
+function test2() 
+{ 
+var _msg = &amp;quot;&amp;lt;font color=red&amp;gt;&amp;lt;b&amp;gt;演示：&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br/&amp;gt;调用对话框。是、否、取消&amp;quot;; 
+MessageBox(_msg,&amp;quot;演示&amp;quot;,MB_ICON,MB_YESNOCANCEL,callback); 
+} 
+
+function test4() 
+{ 
+var _msg = &amp;quot;&amp;lt;font color=red&amp;gt;&amp;lt;b&amp;gt;演示：&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br/&amp;gt;调用对话框。确定、取消&amp;quot;; 
+MessageBox(_msg,&amp;quot;演示&amp;quot;,MB_ICON,MB_OKCANCEL,callback); 
+} 
+
+function callback(value) 
+{ 
+switch(value) 
+{ 
+case MB_OK : alert(&amp;apos;你按了OK&amp;apos;); break; 
+case MB_YES : alert(&amp;apos;你按了YES&amp;apos;); break; 
+case MB_NO : alert(&amp;apos;你按了NO&amp;apos;); break; 
+case MB_CANCEL : alert(&amp;apos;你按了CANCEL&amp;apos;); break; 
+} 
+} 
+
+function test3() 
+{ 
+MB_YES_TEXT = &amp;quot;演示一&amp;quot;; 
+MB_NO_TEXT = &amp;quot;演示二&amp;quot;; 
+MB_CANCEL_TEXT = &amp;quot;演示三&amp;quot;; 
+var _msg = &amp;quot;&amp;lt;font color=red&amp;gt;&amp;lt;b&amp;gt;演示：&amp;lt;/b&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;br/&amp;gt;这是自定义的对话框&amp;lt;br/&amp;gt; &amp;lt;font color=green&amp;gt;MB_YES_TEXT MB_NO_TEXT MB_CANCEL_TEXT  MB_OK_TEXT&amp;lt;/font&amp;gt;&amp;quot;; 
+MessageBox(_msg,&amp;quot;演示&amp;quot;,MB_ICON,MB_YESNOCANCEL,callback); 
+} 
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

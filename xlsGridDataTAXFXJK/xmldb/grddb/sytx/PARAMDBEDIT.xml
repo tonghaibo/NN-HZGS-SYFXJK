@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >PARAMDBEDIT</MWID><NAME >基本参数定义</NAME><NOTE ></NOTE><FILE >PARAMDBEDIT.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >CreateView</ID><NAME >创建视图</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+var order;
+function _thisOnpost_loaddata(sheet)
+{
+       order = &amp;quot; order by id&amp;quot;;
+       if(typeof callfunc == &amp;quot;undefined&amp;quot;)
+         setButton();
+       // 构造3个 SQL
+       // 查询基本参数定义的数据表记录
+       selectSQL = &amp;quot;SELECT GUID,typ as 类型,ID as 编号,NAME as 名称,note as 说明,refid 引用 FROM PARAM&amp;quot;;
+       if (G_NLS == &amp;quot;en&amp;quot;) {
+       	selectSQL = &amp;quot;SELECT GUID,typ as TYPE,ID,NAME,note,refid as reference FROM PARAM&amp;quot;;
+       }
+                   
+       //新增数据
+       insertSQL = &amp;quot; insert into param( guid,typ,id,name,note,refid )&amp;quot;+
+                   &amp;quot; values( sys_guid(),?,?,?,?,? )&amp;quot;;
+       
+       // 修改基本参数定义的数据表记录
+       updateSQL = &amp;quot;UPDATE PARAM SET typ=?,id=?,name=?,note=?,refid=? &amp;quot;+             
+                   &amp;quot;where guid=?&amp;quot;;
+       //删除基本参数定义的数据表记录
+       deleteSQL = &amp;quot;delete param where guid=? &amp;quot;;
+            
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+        // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+var typecol=3;
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata()
+{
+  row0=_this.GetMainCellRangeRow1(sheet);
+  row1=_this.GetMainCellRangeRow2(sheet);
+  var row=row1;
+  for(;row&amp;gt;=row0;row--)
+  {
+    if(_this.GetCellText(0,row,typecol)==&amp;quot;&amp;quot;)
+      _this.SetRowVisible(sheet,row,-1);
+      //_this.DeleteRow(sheet,row);
+  }
+  if(cur_CodeId!=&amp;quot;&amp;quot;)
+  {
+    _this.SetColWidth(sheet,typecol,0);
+    if( _this.GetRowVisible(sheet,row+1)==-1 )
+    {
+    _this.SetColWidth(sheet,typecol+1,90);
+    _this.SetColWidth(sheet,typecol+2,90);
+    _this.SetColWidth(sheet,typecol+3,90);
+    }
+  }
+  else
+  {
+    _this.SetColWidth(sheet,typecol,-1);
+    _this.SetColWidth(sheet,typecol+1,-1);
+    _this.SetColWidth(sheet,typecol+2,-1);
+    _this.SetColWidth(sheet,typecol+3,-1);
+  }
+  if(cur_CodeId==&amp;quot;TYPECODE&amp;quot;)//编辑分类
+  {
+    //typ as 类型,ID as 编号,NAME as 名称,note as 说明,refid 引用
+    //_this.SetCellText(sheet,0,typecol,&amp;quot;&amp;quot;);
+    //_this.SetCellText(sheet,0,typecol+1,&amp;quot;&amp;quot;);
+    _this.SetCellText(sheet,0,typecol+2,&amp;quot;名称(编码分级)&amp;quot;);
+    _this.SetCellText(sheet,0,typecol+3,&amp;quot;说明(分级字段)&amp;quot;);
+    _this.SetCellText(sheet,0,typecol+4,&amp;quot;引用(表名称)&amp;quot;);
+  }
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+}
+
+var
+  cur_CodeId=&amp;quot;&amp;quot;;
+function OnSelectFL(codeid)
+{
+  cur_CodeId = codeid;
+  if(cur_CodeId!=&amp;quot;&amp;quot;)
+  {
+    parent.wherevar = &amp;quot; and typ=&amp;apos;&amp;quot;+codeid+&amp;quot;&amp;apos;&amp;quot;;
+  }
+  else
+    parent.wherevar = &amp;quot;&amp;quot;;
+  return false;
+}
+
+
+function f_dbeditafternewrow(sheet,row)
+{
+  if(cur_CodeId != &amp;quot;&amp;quot;)
+  {
+    _this.SetRowVisible(sheet,row,1);
+    _this.SetRowHeight(sheet,row,18);
+    _this.SetCellText(sheet,row,typecol,cur_CodeId);
+  }
+}
+
+//根据选定的分类，创建基本视图
+function CreateView()
+{
+  if(cur_CodeId==&amp;quot;&amp;quot;)
+  {
+    alert(&amp;quot;请先选择一个类别，然后再创建视图。&amp;quot;);
+    return;
+  }
+  var viewname=&amp;quot;V_&amp;quot;+cur_CodeId;
+  viewname=prompt(&amp;quot;请确定要创建的视图名称：&amp;quot;,viewname);
+//  if(confirm(&amp;quot;确实要重新创建视图\&amp;quot;&amp;quot;+viewname+&amp;quot;\&amp;quot;吗？&amp;quot;))
+  if(confirm(&amp;quot;确实要创建视图\&amp;quot;&amp;quot;+viewname+&amp;quot;\&amp;quot;吗？&amp;quot;))
+  {
+//    var sql = &amp;quot;CREATE OR REPLACE VIEW &amp;quot;+viewname+&amp;quot; AS &amp;quot;+
+    var sql = &amp;quot;CREATE VIEW &amp;quot;+viewname+&amp;quot; AS &amp;quot;+
+      &amp;quot;SELECT GUID,ID,NAME,REFID,NOTE,CRTUSR,CRTDAT FROM PARAM WHERE TYP=&amp;apos;&amp;quot;+cur_CodeId+&amp;quot;&amp;apos;&amp;quot;;
+    var ret=ExecuteSQL(sql);
+    if(ret==0)
+      alert(&amp;quot;创建/更新视图&amp;quot;+viewname+&amp;quot;成功。&amp;quot;);
+    else
+      alert(ret);
+  }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+function addBottomHtml(mwobj,request,sb,usrinfo)
+{
+  var script = request.getParameter(&amp;quot;script&amp;quot;);
+  if(!pub.EAFunc.isEmptyStr(script))
+  {
+    sb.append(&amp;quot;&amp;lt;SCRIPT language=jscript src=&amp;apos;&amp;quot;+script+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/SCRIPT&amp;gt;&amp;quot;);  
+  }
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >DESKTOPED</MWID><NAME >系统入口定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DESKTOPED.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >1,3,4</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >inst</ID><NAME >插入</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C10 >insert</C10><C11 >insert</C11><C12 >insert</C12></ROW>
+<ROW num="1" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 >save</C10><C11 >save</C11><C12 ></C12></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >typ</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >typ</C14></ROW>
+<ROW num="1" ><ID >refid</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >subtyp</C14></ROW>
+<ROW num="2" ><ID >redraw</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >GRDPAMDS_2</C14></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetColVisible(sheet,1,-1);
+	_this.SetColVisible(sheet,2,-1);
+	_this.SetColVisible(sheet,6,-1);
+	
+	if (typeof redraw == &amp;quot;undefined&amp;quot;) refid = invokeOSFunc(&amp;quot;getDeforg&amp;quot;,&amp;quot;&amp;quot;);
+	if (refid == &amp;quot;&amp;quot; || refid == null) refid = G_ORGID;
+	var sql = &amp;quot;select guid,typ,id,name,note,refid,&amp;apos;编辑欢迎首页&amp;apos;,&amp;apos;编辑功能菜单&amp;apos;,&amp;apos;删除&amp;apos; from PARAM where typ=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos; and refid=&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos; order by id&amp;quot;;
+	if (G_NLS == &amp;quot;en&amp;quot;) {
+		sql = &amp;quot;select guid,typ,id,name,note,refid,&amp;apos;WELCOME&amp;apos;,&amp;apos;EDIT&amp;apos;,&amp;apos;DELETE&amp;apos; from PARAM where typ=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos; and refid=&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos; order by id&amp;quot;;
+		
+		_this.SetCellText(sheet,1,4,&amp;quot;ORG:&amp;quot;);
+		_this.SetCellText(sheet,3,3,&amp;quot;URL&amp;quot;);
+		_this.SetCellText(sheet,3,4,&amp;quot;NAME&amp;quot;);
+		_this.SetCellText(sheet,3,5,&amp;quot;NOTE&amp;quot;);
+	}
+	
+	var ds = _this.QuerySQL(sql);
+	_this.SetMainCellRange(sheet,4,1,6,8);
+	_this.SetXmlDS(sheet,4,1,6,9,ds);
+	
+	_this.XMLDS_Parse(ds);
+	if (_this.XMLDS_GetRowCount() &amp;lt; 3) {
+		for (var row = 4; row &amp;lt; _this.GetRowCount(sheet); row ++) {
+			if (_this.GetCellText(sheet,row,2) == &amp;quot;&amp;quot;) {
+				_this.SetCellText(sheet,row,2,typ);
+				_this.SetCellText(sheet,row,6,refid);
+				_this.SetCellText(sheet,row,7,&amp;quot;编辑欢迎首页&amp;quot;);
+				_this.SetCellText(sheet,row,8,&amp;quot;编辑功能菜单&amp;quot;);
+				_this.SetCellText(sheet,row,9,&amp;quot;删除&amp;quot;);
+			}
+		}
+	}
+	
+	var list1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ORG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,1,5,list1);
+	_this.SetCellText(sheet,1,5,refid);
+	
+	for (var row = 4; row &amp;lt; _this.GetRowCount(sheet); row ++) {
+		_this.AutoFixOneRowHeight(sheet,row);
+	}
+	for (var col = 1; col &amp;lt; _this.GetColCount(sheet); col ++) {
+		_this.SetColName(sheet,col,&amp;quot;COL&amp;quot;+col);
+	}
+	//_this.SplitSheet(&amp;quot;0&amp;quot;, &amp;quot;V&amp;quot;, &amp;quot;50%&amp;quot;);
+	/*var layoutxml=&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C0  height=\&amp;quot;69%\&amp;quot; width=\&amp;quot;59%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;0&amp;lt;/C0&amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C1  height=\&amp;quot;99%\&amp;quot; width=\&amp;quot;40%\&amp;quot; ROWSPAN=\&amp;quot;2\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;3,4&amp;lt;/C1&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt;&amp;quot;+
+		 &amp;quot;&amp;lt;C0  height=\&amp;quot;29%\&amp;quot; width=\&amp;quot;59%\&amp;quot; ROWSPAN=\&amp;quot;1\&amp;quot; COLSPAN=\&amp;quot;1\&amp;quot;&amp;gt;1,2&amp;lt;/C0&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+
+	_this.SetLayoutDS(layoutxml);
+	*/
+	
+	var list2 = _this.CreateListValue();
+	_this.SetListValue(list2,&amp;quot;&amp;quot;,&amp;quot;中文（默认）&amp;quot;);
+	_this.SetListValue(list2,&amp;quot;en&amp;quot;,&amp;quot;英文&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,1,8,list2);
+	
+	_this.AutoFixScreenWidth();
+}
+
+//鼠标左键点击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (row &amp;gt; 3 &amp;&amp; col == 7) {	//WP8风格编辑
+		var org = _this.GetCellText(sheet,1,5);
+		var nls = _this.GetCellText(sheet,1,8);
+		var id = _this.GetCellText(sheet,row,3);
+		var val = &amp;quot;&amp;quot;;
+		
+		val = id.substring(id.indexOf(&amp;quot;Entry.jsp?menu=&amp;quot;)+&amp;quot;Entry.jsp?menu=&amp;quot;.length);
+		if (val.indexOf(&amp;quot;&amp;&amp;quot;) != -1) val = val.substring(0,val.indexOf(&amp;quot;&amp;&amp;quot;));
+		openWindow( &amp;quot;show.sp?grdid=swfwelcome&amp;candel=0&amp;myorgid=&amp;quot;+org+&amp;quot;&amp;layoutid=&amp;quot;+val+&amp;quot;&amp;nls=&amp;quot;+nls);
+//		http://3abill.com/bill/ROOT_3ABill/show.sp?grdid=swfwelcome&amp;candel=0&amp;myorgid=3ABill&amp;layoutid=EBILL/Layout.sp?id=mydesktop&amp;nls=
+//		openWindow( &amp;quot;show.sp?grdid=swfwelcome&amp;candel=0&amp;myorgid=&amp;quot;+org+&amp;quot;&amp;layoutid=&amp;quot;+val+&amp;quot;/Layout.sp?id=mydesktop&amp;nls=&amp;quot;+nls);
+	}
+	if (row &amp;gt; 3 &amp;&amp; col == 8) {
+		var org = _this.GetCellText(sheet,1,5);
+		var nls = _this.GetCellText(sheet,1,8);
+		var id = _this.GetCellText(sheet,row,3);
+		var val = &amp;quot;&amp;quot;;
+		
+		if (id.indexOf(&amp;quot;Layout.sp?id=&amp;quot;) != -1) {	//Layout.sp?id=MAIN
+			val = id.substring(id.indexOf(&amp;quot;Layout.sp?id=&amp;quot;)+&amp;quot;Layout.sp?id=&amp;quot;.length);
+			if (val.indexOf(&amp;quot;&amp;&amp;quot;) != -1) val = val.substring(0,val.indexOf(&amp;quot;&amp;&amp;quot;));
+			
+			openWindow( &amp;quot;show.sp?grdid=LayoutMain&amp;candel=0&amp;myorgid=&amp;quot;+org+&amp;quot;&amp;layoutid=&amp;quot;+val);
+		} else if (id.indexOf(&amp;quot;MyCloud.jsp?menu=&amp;quot;) != -1) { //MyCloud.jsp?menu=SPACEVAPP
+			val = id.substring(id.indexOf(&amp;quot;MyCloud.jsp?menu=&amp;quot;)+&amp;quot;MyCloud.jsp?menu=&amp;quot;.length);
+			if (val.indexOf(&amp;quot;&amp;&amp;quot;) != -1) val = val.substring(0,val.indexOf(&amp;quot;&amp;&amp;quot;));
+			
+			openWindow( &amp;quot;show.sp?grdid=SYSURLED&amp;grdtyp=Q&amp;myorgid=&amp;quot;+org+&amp;quot;&amp;menu=&amp;quot;+val+&amp;quot;&amp;loaddata=1&amp;quot; );
+		} else if (id.indexOf(&amp;quot;Entry.jsp?menu=&amp;quot;) != -1) { //Entry.jsp?menu=SPACEVAPP
+			val = id.substring(id.indexOf(&amp;quot;Entry.jsp?menu=&amp;quot;)+&amp;quot;Entry.jsp?menu=&amp;quot;.length);
+			if (val.indexOf(&amp;quot;&amp;&amp;quot;) != -1) val = val.substring(0,val.indexOf(&amp;quot;&amp;&amp;quot;));
+			
+			openWindow( &amp;quot;show.sp?grdid=SYSURLED&amp;grdtyp=Q&amp;myorgid=&amp;quot;+org+&amp;quot;&amp;menu=&amp;quot;+val+&amp;quot;&amp;loaddata=1&amp;quot; );
+		} else if (id.indexOf(&amp;quot;EntryCloud.jsp?menu=&amp;quot;) != -1) { //EntryCloud.jsp?menu=SPACEVAPP
+			val = id.substring(id.indexOf(&amp;quot;EntryCloud.jsp?menu=&amp;quot;)+&amp;quot;EntryCloud.jsp?menu=&amp;quot;.length);
+			if (val.indexOf(&amp;quot;&amp;&amp;quot;) != -1) val = val.substring(0,val.indexOf(&amp;quot;&amp;&amp;quot;));
+			
+			openWindow( &amp;quot;show.sp?grdid=SYSURLED&amp;grdtyp=Q&amp;myorgid=&amp;quot;+org+&amp;quot;&amp;menu=&amp;quot;+val+&amp;quot;&amp;loaddata=1&amp;quot; );
+		}
+	}
+	if (row &amp;gt; 3 &amp;&amp; col == 9) {
+		var guid = _this.GetCellText(sheet,row,1);
+		var name = _this.GetCellText(sheet,row,4);
+		
+		if (window.confirm(&amp;quot;是否确定删除 &amp;quot;+name+&amp;quot; ?&amp;quot;)) {
+			//POST方式调用网络OS函数
+			var param = new Object();
+			param.guid    = guid;
+			try {
+				var msg = invokeOSFuncExt(&amp;quot;delt&amp;quot;,param);
+				alert ( msg );
+				try { window.opener.lchref(); } catch ( ee ) { }
+				window.location.href = window.location.href;
+			}
+			catch (e) {
+				alert ( e );
+			}
+		}
+	}
+}
+
+//插入
+function inst()
+{
+	var row = _this.AppendRow(sheet,_this.GetRowCount(sheet)-1);
+	_this.SetCellText(sheet,row,2,typ);
+	_this.SetCellText(sheet,row,6,_this.GetCellText(sheet,1,5));
+	_this.SetCellText(sheet,row,7,&amp;quot;编辑欢迎首页&amp;quot;);
+	_this.SetCellText(sheet,row,8,&amp;quot;编辑功能菜单&amp;quot;);
+	_this.SetCellText(sheet,row,9,&amp;quot;删除&amp;quot;);
+}
+
+//保存
+function save()
+{
+	//POST方式调用网络OS函数
+	var param = new Object();
+	param.xmlstr = _this.GetXml(sheet,4,1,_this.GetRowCount(sheet)-1,8);
+	try {
+		var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert ( msg );
+		try { window.opener.lchref(); } catch ( ee ) { }
+		window.location.href = window.location.href;
+	}
+	catch (e) {
+		alert ( e );
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 1 &amp;&amp; col == 5) {
+		var org = _this.GetCellText(sheet,row,col);
+		window.location.href = &amp;quot;show.sp?grdid=DESKTOPED&amp;grdtyp=R&amp;typ=&amp;quot;+typ+&amp;quot;&amp;refid=&amp;quot;+org+&amp;quot;&amp;redraw=1&amp;sytid=x&amp;quot;;
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function getDeforg()
+{
+	return web.EAWebDeforg.GetDeforg(request);
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var msg = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+			var guid = ds.getStringAt(row,&amp;quot;COL1&amp;quot;);
+			var typ = ds.getStringAt(row,&amp;quot;COL2&amp;quot;);
+			var id = ds.getStringAt(row,&amp;quot;COL3&amp;quot;);
+			var name = ds.getStringAt(row,&amp;quot;COL4&amp;quot;);
+			var note = ds.getStringAt(row,&amp;quot;COL5&amp;quot;);
+			var refid = ds.getStringAt(row,&amp;quot;COL6&amp;quot;);
+			
+			if (guid != &amp;quot;&amp;quot;) {
+				sql = &amp;quot;update param set typ=&amp;apos;%s&amp;apos;,id=&amp;apos;%s&amp;apos;,name=&amp;apos;%s&amp;apos;,note=&amp;apos;%s&amp;apos;,refid=&amp;apos;%s&amp;apos; where guid=&amp;apos;%s&amp;apos;&amp;quot;.format([typ,id,name,note,refid,guid]);
+				db.ExcecutSQL(sql);
+			} else {
+				if (id != &amp;quot;&amp;quot;) {
+					sql = &amp;quot;insert into param (guid,typ,id,name,note,refid) values (sys_guid(),&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([typ,id,name,note,refid]);
+					db.ExcecutSQL(sql);
+				}
+			}
+		}
+		
+		db.Commit();
+		msg = &amp;quot;保存成功!&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+// 客户端param传入的参数可以直接使用
+function delt()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var msg = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		sql = &amp;quot;delete param where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		msg = &amp;quot;删除成功!&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1" background="xlsgrid/images/svgformbk.jpg">
+ <rect id="rect_535714" x="2" y="1" width="862" height="530" round="" stroke="#CDCDCD" fill="#D9D9D9" fillto="#C0C0C0" opacity="0.3" 属性="">
+ </rect>
+ <rect id="rect_5357111" x="10" y="9" width="846" height="514" round="" stroke="#CDCDCD" fill="#FFFFFF" opacity="0.5" 属性="">
+ </rect>
+ <rect id="rect_535414" x="11" y="33" width="844" height="17" round="" stroke="#000000" fill="#FFFFFF" fillto="#DFDFFF" 属性="" stroke-width="0">
+ </rect>
+ <polygon id="polygon_535424" points="782,330 782,402 837,364 782,330 782,330 782,330 782,330 782,330 782,330 782,330" fill="">
+ </polygon>
+ <rect id="报表中间件" x="134" y="107" width="94" height="30" round="10" stroke="#000000" fill="#FFFFD9" fillto="" 属性="" url="show.sp?grdid=SYSMW&thissytid=[%SYS_SYTID]&MWTYP=R&loaddata=1">报表中间件</rect>
+ <rect id="rect_380317" x="259" y="107" width="94" height="30" round="10" stroke="#000000" fill="#FFFFD9" fillto="" 属性="" url="show.sp?grdid=SYSMW&thissytid=[%SYS_SYTID]&MWTYP=Q&loaddata=1">查询中间件</rect>
+ <rect id="rect_380318" x="384" y="107" width="94" height="30" round="10" stroke="#000000" fill="#FFFFD9" fillto="" 属性="" url="show.sp?grdid=SYSMW&thissytid=[%SYS_SYTID]&MWTYP=F&loaddata=1">表单中间件</rect>
+ <rect id="rect_380319" x="509" y="107" width="94" height="30" round="10" stroke="#000000" fill="#FFFFD9" fillto="" 属性="" url="show.sp?grdid=SYSMW&thissytid=[%SYS_SYTID]&MWTYP=B&loaddata=1">单据中间件</rect>
+ <rect id="rect_380320" x="634" y="108" width="94" height="30" round="10" stroke="#000000" fill="#FFFFD9" fillto="" 属性="" url="show.sp?grdid=SYSMW&thissytid=[%SYS_SYTID]&MWTYP=M&loaddata=1">自定义中间件</rect>
+ <rect id="rect_182615" x="10" y="49" width="846" height="29" round="" stroke="#CDCDCD" fill="#B9B9FF" 属性="" opacity="0.5">
+ </rect>
+ <text id="重载工具" x="28" y="56" width="63" height="19" font-size="12" url="xlsgrid/jsp/design/reload.jsp" 属性="">重载工具</text>
+ <text id="text_182617" x="87" y="56" width="83" height="19" font-size="12" url="show.sp?grdid=webdirmgr" 属性="">WEB目录管理</text>
+ <text id="text_182618" x="182" y="56" width="93" height="19" font-size="12" url="show.sp?grdid=fileEditor" 属性="">中间件目录管理</text>
+ <text id="text_182619" x="285" y="56" width="93" height="19" font-size="12" url="show.sp?grdid=SQLINPUT">SQL操作工具</text>
+ <text id="text_182620" x="377" y="56" width="60" height="19" font-size="12" url="xlsgrid/jsp/pages/dbEdit.jsp?flag=PARAM&grdid=PARAMDBEDIT&grdtyp=M&sytid=x&title=PARAMS" 属性="">基本参数</text>
+ <line id="line_182621" x1="104" y1="106" x2="104" y2="498" stroke="#E4E4E4">
+ </line>
+ <text id="text_182622" x="48" y="119" width="33" height="19" font-size="12" url="" 属性="">UI层</text>
+ <text id="text_182623" x="48" y="199" width="33" height="19" font-size="12" url="" 属性="">流程</text>
+ <text id="text_182624" x="48" y="299" width="33" height="19" font-size="12" url="" 属性="">集成</text>
+ <line id="line_182625" x1="35" y1="164" x2="819" y2="164" stroke="#E4E4E4">
+ </line>
+ <line id="line_182626" x1="35" y1="254" x2="819" y2="254" stroke="#E4E4E4">
+ </line>
+ <rect id="rect_182627" x="300" y="194" width="94" height="30" round="10" stroke="#000000" fill="#D2D2FF" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=flow&todo=2&selsytid=[%SYS_SYTID]">工作流引擎</rect>
+ <rect id="rect_182628" x="425" y="195" width="94" height="30" round="10" stroke="#000000" fill="#D2D2FF" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=flow&todo=3&selsytid=[%SYS_SYTID]">单据流</rect>
+ <rect id="rect_182629" x="175" y="194" width="94" height="30" round="10" stroke="#000000" fill="#D2D2FF" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=flow&todo=1&selsytid=[%SYS_SYTID]">流程图设计</rect>
+ <rect id="rect_182630" x="550" y="195" width="94" height="30" round="10" stroke="#000000" fill="#D2D2FF" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=flow&todo=4&selsytid=[%SYS_SYTID]">数据库流向</rect>
+ <connector id="connector_108_182631" from="rect_380319" to="rect_182628" fromcp="23" tocp="21" type="108" stroke="#C0C0C0">
+ </connector>
+ <connector id="connector_108_182632" from="rect_380318" to="rect_182627" fromcp="23" tocp="21" type="108" stroke="#C0C0C0">
+ </connector>
+ <rect id="rect_182633" x="11" y="10" width="844" height="24" round="" stroke="#CDCDCD" fill="#DFDFFF" fillto="#FFFFFF" 属性="" stroke-width="0">
+ </rect>
+ <rect id="rect_182634" x="48" y="351" width="734" height="32" round="" stroke="#808080" fill="" fillto="" 属性="">
+ </rect>
+ <text id="WELCOME to XMIDWARE Platform" x="21" y="22" width="400" height="25" font-size="18" font-family="Arial" font-color="#800000">WELCOME to XMIDWARE USER DESIGNER</text>
+ <text id="text_64715" x="48" y="405" width="33" height="19" font-size="12" url="">构架</text>
+ <rect id="rect_64716" x="488" y="290" width="94" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="show.sp?grdid=ETLRun">ETL数据集成</rect>
+ <rect id="rect_64717" x="384" y="290" width="94" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="xlsgrid/jsp/pages/listform.jsp?&where=%20and%20a.sytid='[%SYS_SYTID]'&grdid=WS">WEB调用接口</rect>
+ <rect id="rect_64718" x="290" y="290" width="84" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="xlsgrid/jsp/pages/listform.jsp?&where=%20and%20a.sytid='[%SYS_SYTID]'&grdid=SSO">SSO单点登录</rect>
+ <rect id="rect_64719" x="112" y="290" width="84" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=layout&selsytid=[%SYS_SYTID]">网页布局管理</rect>
+ <text id="text_64720" x="415" y="358" width="43" height="19" font-size="14" url="">总线</text>
+ <rect id="rect_64721" x="465" y="392" width="94" height="30" round="10" stroke="#000000" fill="#E6E6E6" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=XMLEDITOR&xmlfile=xmldb/orgdb/orgdb.xml&rsid=ORGROOT&rid=ORG&filter=&flag=">组织</rect>
+ <rect id="rect_64722" x="305" y="392" width="94" height="30" round="10" stroke="#000000" fill="#E6E6E6" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=XMLEDITOR&xmlfile=xmldb/sytdb/sytdb.xml&rsid=SYTROOT&rid=SYT&filter=&flag=">系统</rect>
+ <rect id="rect_64723" x="385" y="452" width="94" height="30" round="10" stroke="#000000" fill="#E6E6E6" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=XMLEDITOR&xmlfile=xmldb/accdb/accdb.xml&rsid=ACCROOT&rid=ACC&filter=&flag=accdb&script=../../js/acced.js">应用（帐套）</rect>
+ <rect id="rect_64726" x="112" y="392" width="124" height="30" round="10" stroke="#000000" fill="#FFF7FF" fillto="#FFFFFF" 属性="" url="show.sp?grdid=subsyt&MYSYTID=[%SYS_SYTID]">子系统菜单定义</rect>
+ <line id="linearrow_64729" x1="534" y1="351" x2="534" y2="320" endcap="9" stroke="#C0C0C0" 属性="">
+ </line>
+ <line id="line_64730" x1="431" y1="351" x2="431" y2="320" endcap="9" stroke="#C0C0C0">
+ </line>
+ <line id="line_64731" x1="243" y1="351" x2="243" y2="320" endcap="9" stroke="#C0C0C0" 属性="">
+ </line>
+ <line id="line_64732" x1="156" y1="351" x2="156" y2="320" endcap="9" stroke="#C0C0C0">
+ </line>
+ <rect id="rect_64736" x="626" y="392" width="124" height="30" round="10" stroke="#000000" fill="#FFF7FF" fillto="#FFFFFF" 属性="" url="show.sp?grdid=orgusrrol&sytid=x">组织内人员权限设置</rect>
+ <text id="text_64738" x="273" y="438" width="79" height="19" font-size="12" url="ShowXlsGrid.sp?grdid=sytgraph" 属性="">系统继承关系</text>
+ <text id="text_64739" x="525" y="438" width="79" height="19" font-size="12" url="ShowXlsGrid.sp?grdid=orggraph" 属性="">组织层次关系</text>
+ <text id="text_224013" x="445" y="56" width="60" height="19" font-size="12" url="ShowXlsGrid.sp?grdid=XMLEDITOR&xmlfile=webdeforg.xml&rsid=ROWSET&rid=ROW">默认组织</text>
+ <text id="text_513611" x="512" y="56" width="70" height="19" font-size="12" url="show.sp?grdid=mwtoserver&sytid=x" 属性="">同步中间件</text>
+ <rect id="rect_123917" x="206" y="290" width="74" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="xlsgrid/jsp/pages/listform.jsp?&where=%20and%20a.sytid='[%SYS_SYTID]'&grdid=VAPP">应用虚拟化</rect>
+ <line id="line_123918" x1="332" y1="351" x2="332" y2="320" endcap="9" stroke="#C0C0C0" 属性="">
+ </line>
+ <connector id="connector_108_232116" from="rect_232109" to="rect_232110" fromcp="32" tocp="12" type="108" stroke="#C0C0C0">
+ </connector>
+ <connector id="connector_108_232117" from="rect_64726" to="rect_232109" fromcp="23" tocp="21" type="108">
+ </connector>
+ <connector id="connector_108_232121" from="rect_232110" to="rect_64736" fromcp="21" tocp="23" type="108" 属性="">
+ </connector>
+ <rect id="rect_160311" x="127" y="454" width="94" height="30" round="10" stroke="#000000" fill="#E6E6E6" fillto="#FFFFFF" 属性="" url="show.sp?grdid=SYSURLED&grdtyp=Q&sytid=x&loaddata=1">布局菜单</rect>
+ <connector id="connector_108_160312" from="rect_64726" to="rect_160311" fromcp="23" tocp="21" type="108">
+ </connector>
+ <rect id="rect_160313" x="641" y="454" width="94" height="30" round="10" stroke="#000000" fill="#E6E6E6" fillto="#FFFFFF" 属性="" url="show.sp?grdid=DESKTOPED&grdtyp=R&sytid=x&typ=DESKTOP">登陆首页</rect>
+ <connector id="connector_108_160314" from="rect_160313" to="rect_64736" fromcp="21" tocp="23" type="108">
+ </connector>
+ <text id="text_1911" x="592" y="56" width="70" height="19" font-size="12" url="show.sp?grdid=SYSMW&thissytid=&MWTYP=">查找中间件</text>
+ <text id="text_171710" x="673" y="56" width="70" height="19" font-size="12" url="show.sp?grdid=flowDBMain&xmlfile=index.dbflow" font-color="#FF0000" 属性="">从这里开始</text>
+ <rect id="rect_60316" x="592" y="290" width="74" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="xlsgrid/jsp/pages/listform.jsp?grdid=weixin_pubuser&pageindex=1&pagesize=20&datacc=0&accid=0">微信公众号</rect>
+ <rect id="rect_192017" x="676" y="290" width="74" height="30" round="10" stroke="#000000" fill="#C1FFC1" fillto="#FFFFFF" 属性="" url="xlsgrid/jsp/pages/dbEdit.jsp?title=%D7%E9%D6%AF&grdid=APP_ACOUNT&sytid=x&flag=LOC">APP关注号</rect>
+ <line id="line_192018" x1="629" y1="351" x2="629" y2="320" endcap="9" stroke="#C0C0C0" 属性="">
+ </line>
+ <line id="line_192019" x1="709" y1="351" x2="709" y2="320" endcap="9" stroke="#C0C0C0" 属性="">
+ </line>
+ <connector id="connector_108_293712" from="rect_64722" to="rect_64726" fromcp="12" tocp="32" type="108">
+ </connector>
+ <connector id="connector_108_293713" from="rect_64721" to="rect_64736" fromcp="32" tocp="12" type="108">
+ </connector>
+ <connector id="connector_208_444816" from="rect_64722" to="rect_64723" fromcp="23" tocp="21" type="208">
+ </connector>
+ <connector id="connector_208_444817" from="rect_64721" to="rect_64723" fromcp="23" tocp="21" type="208">
+ </connector>
+ <rect id="rect_717" x="299" y="238" width="94" height="30" round="10" stroke="#000000" fill="#C0C0C0" fillto="#FFFFFF" 属性="" url="show.sp?grdid=flowDBMain&xmlfile=index.dbflow">设计入口</rect>
+ <rect id="rect_718" x="425" y="239" width="94" height="30" round="10" stroke="#000000" fill="#C0C0C0" fillto="#FFFFFF" 属性="" url="ShowXlsGrid.sp?grdid=LHTMLFLOW">布局入口</rect>
+ <text id="text_553511" x="772" y="56" width="70" height="19" font-size="12" url="show.sp?grdid=SYSMW&thissytid=&MWTYP=">开发笔记</text>
+</svg>

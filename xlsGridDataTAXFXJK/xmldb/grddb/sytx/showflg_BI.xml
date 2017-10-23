@@ -1,0 +1,1154 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_BI</MWID><NAME >BI数据分析图</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_BI.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var tag = new JavaPackage(&amp;quot;com.xlsgrid.net.tag&amp;quot;);
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var xmldsform = new tag.XmlDSForm();
+
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+var lamath=new JavaPackage(&amp;quot;java.math&amp;quot;);
+
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+
+//
+// 
+//
+function Biwap(){
+	var iBIID = request.getParameter(&amp;quot;BIID&amp;quot;);
+	if(iBIID !=null) BI_GUID = iBIID ; 
+	var iBITITID = request.getParameter(&amp;quot;BITITID&amp;quot;);
+	if(iBITITID !=null) BI_TITID = iBITITID ; 
+	var iBI_TYP = request.getParameter(&amp;quot;BI_TYP&amp;quot;);//
+	if(iBI_TYP!=null) BI_TYP = iBI_TYP; 
+	var iBI_TYP1 = request.getParameter(&amp;quot;BI_TYP1&amp;quot;);//显示初始图形风格
+	if(iBI_TYP1!=null) DEFCHARTTYPE = iBI_TYP1; 	
+
+	if(TB_IFHEAD==null||TB_IFHEAD==&amp;quot;&amp;quot;||TB_IFHEAD==&amp;quot;null&amp;quot;)TB_IFHEAD=&amp;quot;false&amp;quot;;
+	if(TB_IFHEADBORDER==null||TB_IFHEADBORDER==&amp;quot;&amp;quot;||TB_IFHEADBORDER==&amp;quot;null&amp;quot;)TB_IFHEADBORDER=&amp;quot;false&amp;quot;;
+	if(TB_HEAD==null||TB_HEAD==&amp;quot;&amp;quot;||TB_HEAD==&amp;quot;null&amp;quot;)TB_HEAD=&amp;quot;&amp;quot;;
+	if(TB_WIDTH==null||TB_WIDTH==&amp;quot;&amp;quot;||TB_WIDTH==&amp;quot;null&amp;quot;)TB_WIDTH=&amp;quot;100%&amp;quot;;
+	if(TB_HEIGHT==null||TB_HEIGHT==&amp;quot;&amp;quot;||TB_HEIGHT==&amp;quot;null&amp;quot;)TB_HEIGHT=&amp;quot;100%&amp;quot;;
+	if(TB_ROLBGCOLOR==null||TB_ROLBGCOLOR==&amp;quot;&amp;quot;||TB_ROLBGCOLOR==&amp;quot;null&amp;quot;)TB_ROLBGCOLOR=&amp;quot;#d5d5d5&amp;quot;;
+	if(TB_BORDERCOLOR==null||TB_BORDERCOLOR==&amp;quot;&amp;quot;||TB_BORDERCOLOR==&amp;quot;null&amp;quot;)TB_BORDERCOLOR=&amp;quot;#cdcdcd&amp;quot;;
+	if(LINE_HEIGHT==null||LINE_HEIGHT==&amp;quot;&amp;quot;||LINE_HEIGHT==&amp;quot;null&amp;quot;)LINE_HEIGHT=&amp;quot;25px&amp;quot;;
+	if(TB_TABLW==null||TB_TABLW==&amp;quot;&amp;quot;||TB_TABLW==&amp;quot;null&amp;quot;)TB_TABLW=&amp;quot;true&amp;quot;;
+	if(TB_ENTBTYP==null||TB_ENTBTYP==&amp;quot;&amp;quot;||TB_ENTBTYP==&amp;quot;null&amp;quot;)TB_ENTBTYP=&amp;quot;&amp;quot;;
+	var usr = web.EASession.GetUserinfo(request);
+//	var usr = web.EASession.GetLoginInfo(request);
+	var sytid =pubpack.EAFunc.NVL( request.getParameter(&amp;quot;SYTID&amp;quot;),&amp;quot;&amp;quot;);
+	if(sytid==&amp;quot;&amp;quot;&amp;&amp;usr!=null){
+		sytid = usr.getSytid();
+	}
+	var topic = pub.EAFunc.NVL(BI_TITID,&amp;quot;&amp;quot;);
+	var modguid = pub.EAFunc.NVL(BI_GUID,&amp;quot;&amp;quot;);
+	var sql=getbisql(db,request,sytid,topic,modguid,usr);
+	if(IFROWSUM==null || IFROWSUM==&amp;quot;&amp;quot;) IFROWSUM = &amp;quot;1&amp;quot;;
+	if(IFCOLSUM==null || IFCOLSUM==&amp;quot;&amp;quot;) IFCOLSUM = &amp;quot;1&amp;quot;;
+	if(DEFCHARTTYPE==null || DEFCHARTTYPE==&amp;quot;&amp;quot;) DEFCHARTTYPE= &amp;quot;column&amp;quot;;
+
+	var ds=db.QuerySQL(sql);
+	
+//	throw new Exception(sql);	
+	if(ds.getRowCount()==0) return &amp;quot;没有查询到数据&amp;quot;;
+
+	if(BI_TYP==0){// 仅表格
+		return bityptable(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,IFROWSUM,IFCOLSUM);
+	}
+	else if(BI_TYP==1){//仅图
+		return bitypicon(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,DEFCHARTTYPE);
+	}
+	else if(BI_TYP==2){//上下分隔的图和表
+		var html=&amp;quot;&amp;lt;table width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+bitypicon(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,DEFCHARTTYPE)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td valign=top&amp;gt;&amp;quot;+bityptable(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,IFROWSUM,IFCOLSUM)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		return html;
+	}
+	else if(BI_TYP==3){//左表右图
+		var html=&amp;quot;&amp;lt;table width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td valign=top width=50%&amp;gt;&amp;quot;+bitypicon(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,DEFCHARTTYPE)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;td valign=top width=50%&amp;gt;&amp;quot;+bityptable(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,IFROWSUM,IFCOLSUM)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		return html;
+	}
+	else{//左图右表
+		var html=&amp;quot;&amp;lt;table width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td valign=top width=50%&amp;gt;&amp;quot;+bityptable(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,IFROWSUM,IFCOLSUM)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+		html+=&amp;quot;&amp;lt;td valign=top width=50%&amp;gt;&amp;quot;+bitypicon(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,DEFCHARTTYPE)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		return html;
+	}
+}
+
+//BI表格
+function bityptable(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,IFROWSUM,IFCOLSUM){
+	
+
+	var sb=new langpack.StringBuffer();
+	var sql=&amp;quot;&amp;quot;;
+	var trbgcolor=&amp;quot;#F9F9F9&amp;quot;;
+	var tdborder=0;
+//	TB_ENTBTYP=true;
+//	var vdim=db.GetSQL(&amp;quot;select vdim from DIM_TOPIC where refmod=&amp;apos;&amp;quot;+BI_GUID+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+BI_TITID+&amp;quot;&amp;apos;&amp;quot;);
+	var html=&amp;quot;&amp;lt;table borderColor=\&amp;quot;\&amp;quot;  align=\&amp;quot;center\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspcing=\&amp;quot;2\&amp;quot; cellpadding=\&amp;quot;2\&amp;quot; style=\&amp;quot;font-size:12px;border-collapse:collapse;line-height:&amp;quot;+LINE_HEIGHT+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;
+	var style=&amp;quot;&amp;quot;;
+	if(TB_IFHEADBORDER){
+		style=&amp;quot;style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px 1px;\&amp;quot;&amp;quot;;
+	}
+	if(TB_IFHEAD){
+		html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;quot;+style+&amp;quot; colspan=\&amp;quot;&amp;quot;+ds.getColumnCount()+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+TB_HEAD+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	//throw new Exception ( &amp;quot;IFCOLSUM=&amp;quot;+IFCOLSUM+&amp;quot;,IFROWSUM=&amp;quot;+IFROWSUM+&amp;quot;,rowcount()=&amp;quot;+ ds.getRowCount()+&amp;quot;,colcount=&amp;quot;+ds.getColumnCount() );
+	var hjcolstr=new Array();//列保存合计值
+	var rownum = ds.getRowCount();
+	if(IFCOLSUM!=&amp;quot;1&amp;quot;)rownum = rownum -1 ;
+	for(var r=0; r&amp;lt;=rownum ; r++){
+		var colsum=0;
+		var rowsum=0;
+		if(r==0){
+			html+=&amp;quot;&amp;lt;tr style=\&amp;quot;height:30px\&amp;quot; bgcolor=\&amp;quot;&amp;quot;+TB_ROLBGCOLOR+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+			for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+				html+=&amp;quot;&amp;lt;td background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+			}
+			if(IFROWSUM==&amp;quot;1&amp;quot;){
+				html+=&amp;quot;&amp;lt;td background=xlsgrid/images/xlsgrid/tab.bg.off.grid.gif style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px 1px;\&amp;quot;&amp;gt;合计&amp;lt;/td&amp;gt;&amp;quot;;
+			}
+			html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		if(TB_TABLW==true&amp;&amp;r%2==1) trbgcolor=&amp;quot;#F9F9F9&amp;quot;; else trbgcolor=&amp;quot;#FFFFFF&amp;quot;;
+		if(TB_ENTBTYP==true) tdborder=0;  else tdborder=1;
+		html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+trbgcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+		
+		for(var c=0;c&amp;lt; ds.getColumnCount();c++){
+			//最后一行合计
+			if(r==ds.getRowCount() ){
+				//throw new Exception(&amp;quot;最后一行合计&amp;quot;);
+				if(c==0&amp;&amp;ds.getColumnCount()&amp;gt;1)
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px 1px;\&amp;quot; align=center&amp;gt;合计&amp;lt;/td&amp;gt;&amp;quot;;
+				else{
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot; align=right&amp;gt;&amp;quot;+pubpack.EAFunc.formatMoney(hjcolstr[c],2)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+					
+					try{
+						rowsum=FloatAdd(hjcolstr[c],rowsum);
+					}
+					catch( eee ){
+						//throw new Exception ( &amp;quot;FloatAdd error jcolstr[c]=&amp;quot;+hjcolstr[c]+&amp;quot;,rowsum=&amp;quot;+rowsum+&amp;quot;,c=&amp;quot;+c+&amp;quot;,hjcolstr=&amp;quot;+hjcolstr +&amp;quot;,ds.getRowCount()=&amp;quot;+ds.getColumnCount()+&amp;quot;,e=&amp;quot;+ eee);
+					}
+				}
+				if(c==ds.getColumnCount()-1&amp;&amp;IFROWSUM==&amp;quot;1&amp;quot;){
+						html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot; align=right&amp;gt;&amp;quot;+pubpack.EAFunc.formatMoney(rowsum,2)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+				
+			}
+			else{
+				if(c&amp;gt;0){
+					var su=ds.getStringAt(r,c);
+					colsum=FloatAdd(colsum,su);
+					if(r==0){ 
+						hjcolstr[c]=ds.getStringAt(r,c); 
+					}
+					else if(r&amp;gt;0){
+					
+						hjcolstr[c]=FloatAdd(hjcolstr[c],ds.getStringAt(r,c));
+						
+					}
+				}
+				if(c==0&amp;&amp;ds.getColumnCount()&amp;gt;1)// 每行第一个单元格
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px 1px;\&amp;quot; align=center&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				else// 每行后续单元格，需要保留小数位
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot; align=right&amp;gt;&amp;quot;+pubpack.EAFunc.formatMoney(ds.getStringAt(r,c),2)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				if(c==ds.getColumnCount()-1&amp;&amp;IFROWSUM==&amp;quot;1&amp;quot;){//合计
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;;font-size:12px; border-width:1px 1px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot; align=right&amp;gt;&amp;quot;+pubpack.EAFunc.formatMoney(colsum,2)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+			}
+			
+		}
+		
+		html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+
+	}
+	
+	
+	html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+
+	return html;
+
+}
+//BI图形
+function bitypicon(db,ds,request,sytid,topic,modguid,usr,BI_GUID,BI_TITID,BI_TYP,TB_IFHEAD,TB_IFHEADBORDER,TB_HEAD,TB_WIDTH,TB_HEIGHT,TB_ROLBGCOLOR,TB_BORDERCOLOR,LINE_HEIGHT,TB_TABLW,TB_ENTBTYP,BI_TYP1){
+
+	var optionstr = &amp;quot;&amp;quot;;
+	var optionds = db.QuerySQL(&amp;quot;select * from V_CHARTTYPE&amp;quot;);
+	var cdcnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	for (var r = 0;r &amp;lt; optionds.getRowCount();r ++) {
+		var id = optionds.getStringAt(r,&amp;quot;ID&amp;quot;);
+		var name = optionds.getStringAt(r,&amp;quot;NAME&amp;quot;);
+		var typ = optionds.getStringAt(r,&amp;quot;TYP&amp;quot;);
+		optionstr += &amp;quot;&amp;lt;option value=&amp;apos;&amp;quot;+id+&amp;quot;-&amp;quot;+typ+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/option&amp;gt;&amp;quot;;
+	}
+	var html=&amp;quot;&amp;lt;table border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos;  style=&amp;apos;border: 1px solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;&amp;apos;  width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+								
+								&amp;lt;tr&amp;gt;&amp;lt;td height=50% valign=top&amp;gt;
+									&amp;lt;div id=&amp;apos;container&amp;quot;+cdcnt+&amp;quot;&amp;apos; style=&amp;apos;margin:0px; &amp;apos;&amp;gt;&amp;lt;/div&amp;gt;
+								&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+								&amp;lt;/table&amp;gt;&amp;quot;;
+	var style=&amp;quot;&amp;lt;style&amp;gt;
+			.navPoint {
+				COLOR: #225f98; CURSOR: hand; FONT-FAMILY: &amp;apos;Webdings&amp;apos;; FONT-SIZE: 9pt
+				}
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+   	 var options&amp;quot;+cdcnt+&amp;quot;={
+	        chart:{
+	            backgroundColor: &amp;apos;#FFFFFF&amp;apos;,
+	            plotBackgroundColor: null,
+		    plotBorderWidth: null,
+		    plotShadow: false,
+		    renderTo:&amp;apos;container&amp;quot;+cdcnt+&amp;quot;&amp;apos;  
+	        },
+	        exporting: {
+	            buttons: {
+	                contextButton: {
+	                    menuItems: [
+	                    	{
+	                       	 	text: &amp;apos;柱状图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;柱状图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;折线图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;折线图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;区域图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;区域图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;曲线区域图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;曲线区域图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;3D柱状图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;3D柱状图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;3D饼图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;3D饼图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;混合图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;混合图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                       	 	text: &amp;apos;柱形堆叠图&amp;apos;,
+	                        	onclick: function () {
+	                            		f_chgchart&amp;quot;+cdcnt+&amp;quot;(&amp;apos;柱形堆叠图&amp;apos;);
+	                       		}
+	                   	},
+	                   	{
+	                        	separator: true
+	                    	}
+	                   ]
+	                   .concat(Highcharts.getOptions().exporting.buttons.contextButton.menuItems)
+	                 }
+	       	   }
+	        },
+	        title: {
+	            text: &amp;apos;&amp;quot;+GetTopic(db,sytid,topic)+&amp;quot;&amp;apos;
+	        },
+	        plotOptions: {
+	            column: {
+	                depth: 25
+	            }
+	        },
+	        xAxis: {
+	            &amp;quot;+getxAxis(db,ds,sytid,topic,0)+&amp;quot;
+	        },
+	        yAxis: {
+	            allowDecimals: false,
+	            title: {
+	                text: &amp;apos;z &amp;apos;
+	            }
+	        },
+	        series: [&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;]
+	    };
+    	$(document).ready(function(){
+    		options&amp;quot;+cdcnt+&amp;quot;.chart.type =&amp;apos;&amp;quot;+BI_TYP1+&amp;quot;&amp;apos;;
+		var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+	});
+&amp;lt;/script&amp;gt;&amp;quot;;
+	script+=&amp;quot;&amp;lt;script&amp;gt;
+		function f_chgchart&amp;quot;+cdcnt+&amp;quot;(val){
+			if(val==&amp;apos;柱状图&amp;apos;){
+				options&amp;quot;+cdcnt+&amp;quot;.labels={};
+				options&amp;quot;+cdcnt+&amp;quot;.legend={};
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.type =&amp;apos;column&amp;apos;;
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;];
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={&amp;quot;+getxAxis(db,ds,sytid,topic,0)+&amp;quot;};
+				var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;折线图&amp;apos;){	
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.margin={};
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={&amp;quot;+getxAxis(db,ds,sytid,topic,0)+&amp;quot;};
+			 	options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };	
+        			options&amp;quot;+cdcnt+&amp;quot;.yAxis.plotLines=[{
+			                value: 0,
+			                width: 1,
+			                color: &amp;apos;#808080&amp;apos;
+			            }];
+				options&amp;quot;+cdcnt+&amp;quot;.chart.type =&amp;apos;line&amp;apos;;
+				options&amp;quot;+cdcnt+&amp;quot;.legend ={};
+				        options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;];
+				var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;区域图&amp;apos;){
+				options&amp;quot;+cdcnt+&amp;quot;.labels={};
+				options&amp;quot;+cdcnt+&amp;quot;.legend={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.margin={};
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={&amp;quot;+getxAxis(db,ds,sytid,topic,0)+&amp;quot;};
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.type =&amp;apos;area&amp;apos;;
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;];
+				
+				var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;曲线区域图&amp;apos;){
+				options&amp;quot;+cdcnt+&amp;quot;.labels={};
+				options&amp;quot;+cdcnt+&amp;quot;.legend={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.margin={};
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={&amp;quot;+getxAxis(db,ds,sytid,topic,0)+&amp;quot;};
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.type =&amp;apos;areaspline&amp;apos;;
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;];
+				 var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;3D柱状图&amp;apos;){
+				options&amp;quot;+cdcnt+&amp;quot;.labels={};
+				options&amp;quot;+cdcnt+&amp;quot;.legend={};
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={&amp;quot;+getxAxis(db,ds,sytid,topic,0)+&amp;quot;};
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.type=&amp;apos;column&amp;apos;;
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.margin=75;
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+				                enabled: true,
+				                alpha: 10,
+				                beta: 25,
+				                depth: 70
+				            };
+				 options&amp;quot;+cdcnt+&amp;quot;.plotOptions.column={
+				                depth: 25
+				            };
+				 options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;];
+				 var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;3D饼图&amp;apos;){
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.type=&amp;apos;pie&amp;apos;;
+				 options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				 options&amp;quot;+cdcnt+&amp;quot;.xAxis={};
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+			                enabled: true,
+			                alpha: 45,
+			                beta: 0
+			            };
+			           options&amp;quot;+cdcnt+&amp;quot;.series=[{
+				            type: &amp;apos;pie&amp;apos;,
+				            name: &amp;apos;合计&amp;apos;,
+				            data: &amp;quot;+getseriessum(db,ds,sytid,topic,0)+&amp;quot;
+				   }];
+				   
+				   options&amp;quot;+cdcnt+&amp;quot;.plotOptions={
+				            pie: {
+				                allowPointSelect: true,
+				                cursor: &amp;apos;pointer&amp;apos;,
+				                dataLabels: {
+				                    enabled: true,
+				                    color: &amp;apos;#cdcdcd&amp;apos;,
+				                    connectorColor: &amp;apos;#000000&amp;apos;,
+				                    format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt;: {point.percentage:.1f} %&amp;apos;
+				                }
+				            }
+				        };
+				 options&amp;quot;+cdcnt+&amp;quot;.labels={};
+			          var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;混合图&amp;apos;){
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={};
+				 options&amp;quot;+cdcnt+&amp;quot;.plotOptions={};
+				 options&amp;quot;+cdcnt+&amp;quot;.xAxis={};
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.margin={};
+				 options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getserieshunhe(db,ds,sytid,topic,0)+&amp;quot;];
+				 options&amp;quot;+cdcnt+&amp;quot;.labels= {                                                         
+			            items: [{                                                     
+			                html: &amp;apos;合计&amp;apos;,                          
+			                style: {                                                  
+			                    left: &amp;apos;150px&amp;apos;,                                         
+			                    top: &amp;apos;8px&amp;apos;,                                           
+			                    color: &amp;apos;black&amp;apos;                                        
+			                }                                                         
+			            }]                                                            
+			        };                                                          
+				 var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;柱形堆叠图&amp;apos;){
+				
+				options&amp;quot;+cdcnt+&amp;quot;.labels={};
+				options&amp;quot;+cdcnt+&amp;quot;.legend={};
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.margin={};
+				options&amp;quot;+cdcnt+&amp;quot;.chart.type =&amp;apos;column&amp;apos;;
+				 options&amp;quot;+cdcnt+&amp;quot;.chart.options3d={
+				                enabled: false,
+				                alpha: 0,
+				                beta: 0,
+				                depth: 100
+				            };
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={
+					            column: {
+					                stacking: &amp;apos;normal&amp;apos;
+					            }
+					        };
+				options&amp;quot;+cdcnt+&amp;quot;.series=[&amp;quot;+getseries(db,ds,sytid,topic,0)+&amp;quot;];
+				var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+			else if(val==&amp;apos;漏斗图&amp;apos;){
+				options&amp;quot;+cdcnt+&amp;quot;.labels={};
+				options&amp;quot;+cdcnt+&amp;quot;.legend={};
+				options&amp;quot;+cdcnt+&amp;quot;.plotOptions={
+					            series: {
+					                dataLabels: {
+					                    enabled: true,
+					                    format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt; ({point.y:,.0f})&amp;apos;,
+					                    color: &amp;apos;black&amp;apos;,
+					                    softConnector: true
+					                },
+					                neckWidth: &amp;apos;30%&amp;apos;,
+					                neckHeight: &amp;apos;25%&amp;apos;
+					            }
+					        };
+				options&amp;quot;+cdcnt+&amp;quot;.chart.type ={
+					            type: &amp;apos;funnel&amp;apos;,
+					            marginRight: 100
+					        };
+				
+				options&amp;quot;+cdcnt+&amp;quot;.series=[{
+						   name: &amp;apos;合计&amp;apos;,
+						   data: &amp;quot;+getseriessum(db,ds,sytid,topic,0)+&amp;quot;
+						}];
+				options&amp;quot;+cdcnt+&amp;quot;.xAxis={};
+				options&amp;quot;+cdcnt+&amp;quot;.yAxis={};
+				var chart = new Highcharts.Chart(options&amp;quot;+cdcnt+&amp;quot;);
+			}
+
+		}
+	
+	&amp;lt;/script&amp;gt;&amp;quot;;
+	return style+script+html;
+}
+//获取BI sql
+function getbisql(db,request,sytid,topic,modguid,usr){
+
+	db = new pub.EADatabase();
+	
+	var tablename = db.GetSQL(&amp;quot;select sourceds from dim_model where guid=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;);
+	var isCross = isCrossReport(db,sytid,topic);
+
+	var sql=&amp;quot;&amp;quot;;
+	if (!isCross) {
+		sql = &amp;quot;select &amp;quot;
+			+ getVdimWithName(db,sytid,topic,modguid,tablename) + &amp;quot;,&amp;quot;
+			+ getTarget(db,sytid,topic,true,modguid,tablename)
+			+ &amp;quot;\n  from &amp;quot;
+			+ tablename
+			+ &amp;quot;\n where &amp;quot;
+			+ getSearchParam(db,sytid,topic,request)
+			+ &amp;quot;\n group by &amp;quot;
+			+ getVdim(db,sytid,topic)
+			+ &amp;quot;\n order by &amp;quot;
+			+ getVdimOrders(db,sytid,topic,modguid,tablename);
+	} else {
+		sql = &amp;quot;select &amp;quot;
+			+ getVdimWithName(db,sytid,topic,modguid,tablename) + &amp;quot;,&amp;quot;
+			+ colDate2Char(db,sytid,topic,getTarget(db,sytid,topic,false,modguid,tablename))
+			+ &amp;quot;\n  from &amp;quot;
+			+ tablename
+			+ &amp;quot;\n where &amp;quot;
+			+ getSearchParam(db,sytid,topic,request);
+		var r_HCols = getVdimName(db,sytid,topic,modguid,tablename);		//交叉行字段
+		var r_VCols = getCrossCol(db,sytid,topic);	//交叉列字段
+		var r_VCol = getCrossTarget(db,sytid,topic);	//交叉值字段
+		var colsql = getColSQL(db,sytid,topic,r_VCols);	//交叉列字段SQL
+		var orderby = getVdimOrders(db,sytid,topic,modguid,tablename);		//行排序字段
+		sql = pub.EASqlFunc.GetSql2CrossTableSQL(db,sql,colsql,r_HCols,r_VCols,r_VCol,orderby);
+	}
+
+	var gusrinfo=web.EASession.GetUserinfo(request);
+	if(gusrinfo!=null){
+		sql=web.EASession.GetSysValue(sql,request);//替换request 中[%id]
+		sql=web.EASession.GetSysValue(sql,web.EASession.GetUserinfo(request));
+	}
+
+	return sql;
+}
+
+//获取维度（带中文名）
+function getVdimWithName(db,sytid,topic,modguid,tablename)
+{
+	var str = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var vdim = db.GetSQL(sql);
+	
+	var arr = vdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+		if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+		if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+		str += arr[i] +&amp;quot; as \&amp;quot;&amp;quot;+ colnam +&amp;quot;\&amp;quot;&amp;quot;;
+	}
+	return str;
+}
+
+//获取目标（带中文名）
+function getTarget(db,sytid,topic,sumflg,modguid,tablename)
+{
+	var str = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select hdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var hdim = db.GetSQL(sql);
+	
+	var arr = hdim.split(&amp;quot;,&amp;quot;);
+	if (!sumflg) {
+		for (var i = 0;i &amp;lt; arr.length();i ++) {
+			if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+			str += arr[i];
+		}
+	} else {
+		for (var i = 0;i &amp;lt; arr.length();i ++) {
+			var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+			if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+			
+			if (i == 0) {
+				str = &amp;quot;sum(&amp;quot;+ arr[i] +&amp;quot;) as \&amp;quot;&amp;quot;+ colnam +&amp;quot;\&amp;quot;&amp;quot;;
+			} else {
+				str += &amp;quot;,sum(&amp;quot;+ arr[i] +&amp;quot;) as \&amp;quot;&amp;quot;+ colnam +&amp;quot;\&amp;quot;&amp;quot;;
+			}
+		}
+	}
+	return str;
+}
+
+//获取查询条件
+function getSearchParam(db,sytid,topic,request)
+{
+	var where = &amp;quot;1=1&amp;quot;;
+	
+	var sql = &amp;quot;select refmod,lvl,to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) dat from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	
+	var ds = db.GetXMLSQL(sql);
+	var refmod = ds.getStringAt(0,&amp;quot;REFMOD&amp;quot;);
+	var lvl = ds.getStringAt(0,&amp;quot;LVL&amp;quot;);
+	var sysdate = ds.getStringAt(0,&amp;quot;DAT&amp;quot;);
+	
+	if (lvl != null &amp;&amp; lvl != &amp;quot;&amp;quot;) {
+		where += &amp;quot;\n   and &amp;quot;+lvl;
+	}
+	
+	sql = &amp;quot;select * from dim_dim where refmod=&amp;apos;%s&amp;apos; order by seq&amp;quot;.format([refmod]);
+
+	var dimxmlds = db.GetXMLSQL(sql);
+
+	for (var i = 0;i &amp;lt; dimxmlds.getRowCount();i ++) {
+		var id = dimxmlds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = dimxmlds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var datatyp = dimxmlds.getStringAt(i,&amp;quot;DATATYP&amp;quot;);
+		var control = dimxmlds.getStringAt(i,&amp;quot;CONTROL&amp;quot;);
+		var keyval = dimxmlds.getStringAt(i,&amp;quot;KEYVAL&amp;quot;);
+		var val = dimxmlds.getStringAt(i,&amp;quot;defval&amp;quot;);
+		var dat1 = &amp;quot;&amp;quot;;
+		var dat2 = &amp;quot;&amp;quot;;
+		var val =  pub.EAFunc.NVL(request.getParameter(id),&amp;quot;&amp;quot;);
+		if (datatyp == &amp;quot;DATE&amp;quot;) {
+			if(val!=&amp;quot;&amp;quot;)
+				where += &amp;quot;\n   and to_char(&amp;quot; + id + &amp;quot;,&amp;apos;YYYY-MM-DD&amp;apos;) like &amp;apos;&amp;quot;+mydat+&amp;quot;%&amp;apos; &amp;quot;;
+			dat1 = pub.EAFunc.NVL(request.getParameter(&amp;quot;STA&amp;quot;+id),&amp;quot;&amp;quot;);
+			dat2 = pub.EAFunc.NVL(request.getParameter(&amp;quot;END&amp;quot;+id),&amp;quot;&amp;quot;);
+			if(dat1!=&amp;quot;&amp;quot;)
+				where += &amp;quot;\n   and &amp;quot; + id + &amp;quot;&amp;gt;=to_date(decode(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01-01&amp;apos;,&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;;
+			if(dat2!=&amp;quot;&amp;quot;)
+				where += &amp;quot;\n   and &amp;quot; + id + &amp;quot;&amp;lt;=to_date(decode(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2900-01-01&amp;apos;,&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;)&amp;quot;;
+			
+
+		} else if(datatyp.indexOf(&amp;quot;CHAR&amp;quot;) &amp;gt;= 0) {
+			if(val!=&amp;quot;&amp;quot;){
+				if (datatyp.indexOf(&amp;quot;CHAR&amp;quot;) &amp;gt;= 0) where += &amp;quot;\n   and nvl(&amp;quot;+ id +&amp;quot;,&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ val +&amp;quot;%&amp;apos;&amp;quot;;
+				else where += &amp;quot;\n and nvl(&amp;quot;+ id +&amp;quot;,&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ val +&amp;quot;%&amp;apos;&amp;quot;;
+			}
+		}
+		else  {// 数字型
+			if(val!=&amp;quot;&amp;quot;)				
+				where += &amp;quot;\n   and to_char(&amp;quot; + id +&amp;quot;) like &amp;apos;&amp;quot;+val+&amp;quot;%&amp;apos; &amp;quot;;
+			
+			dat1 = pub.EAFunc.NVL(request.getParameter(&amp;quot;STA&amp;quot;+id),&amp;quot;&amp;quot;);
+			dat2 = pub.EAFunc.NVL(request.getParameter(&amp;quot;END&amp;quot;+id),&amp;quot;&amp;quot;);
+			if(dat1!=&amp;quot;&amp;quot;)
+				where += &amp;quot;\n   and &amp;quot; + id + &amp;quot;&amp;gt;=&amp;quot;+dat1;
+			if(dat2!=&amp;quot;&amp;quot;)
+				where += &amp;quot;\n   and &amp;quot; + id + &amp;quot;&amp;lt;=&amp;quot;+dat2;
+		}
+			
+//			if (val != &amp;quot;&amp;quot;) {
+//				if (control != &amp;quot;&amp;quot; &amp;&amp; keyval != &amp;quot;&amp;quot;) {
+//					if (datatyp.indexOf(&amp;quot;CHAR&amp;quot;) &amp;gt;= 0) where += &amp;quot;\n   and &amp;quot;+ id +&amp;quot;=&amp;apos;&amp;quot;+ val +&amp;quot;&amp;apos;&amp;quot;;
+//					else where += &amp;quot;\n   and to_char(&amp;quot;+ id +&amp;quot;)=&amp;apos;&amp;quot;+ val +&amp;quot;&amp;apos;&amp;quot;;
+//				} else {
+//					if (datatyp.indexOf(&amp;quot;CHAR&amp;quot;) &amp;gt;= 0) where += &amp;quot;\n   and nvl(&amp;quot;+ id +&amp;quot;,&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ val +&amp;quot;%&amp;apos;&amp;quot;;
+//					else where += &amp;quot;\n   and nvl(to_char(&amp;quot;+ id +&amp;quot;),&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ val +&amp;quot;%&amp;apos;&amp;quot;;
+//				}
+//			}
+		
+	}
+
+	return where;
+}
+
+//日期类型的转为字符型 select dat,itmid from aaa --&amp;gt; select to_char(dat,&amp;apos;yyyy-mm-dd&amp;apos;) dat,itmid from aaa
+function colDate2Char(db,sytid,topic,cols)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var arrcols = cols.split(&amp;quot;,&amp;quot;);
+	var incols = pub.EAFunc.SQLIN(cols);
+	var sql = &amp;quot;select * from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) and id in (%s)&amp;quot;.format([sytid,topic,incols]);
+	var ds = db.GetXMLSQL(sql);
+	var colid = ds.getStringAt(0,&amp;quot;ID&amp;quot;);
+	var coltyp = ds.getStringAt(0,&amp;quot;DATATYP&amp;quot;);
+	
+	for (var i = 0;i &amp;lt; arrcols.length();i ++) {
+		if (ret != &amp;quot;&amp;quot;) ret += &amp;quot;,&amp;quot;;
+		if (colid == arrcols[i] &amp;&amp; coltyp == &amp;quot;DATE&amp;quot;) ret += &amp;quot;to_char(&amp;quot;+arrcols[i]+&amp;quot;,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;+arrcols[i];
+		else ret += arrcols[i];
+	}
+	return ret;
+}
+
+
+
+//获取维度（中文名,用于交叉表行字段）
+function getVdimName(db,sytid,topic,modguid,tablename)
+{
+	var str = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var vdim = db.GetSQL(sql);
+	
+	var arr = vdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+		if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+		if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+		str += colnam;
+	}
+	return str;
+}
+
+
+//取得交叉列字段
+function getCrossCol(db,sytid,topic)
+{
+	var sql = &amp;quot;select b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	return db.GetSQL(sql);
+}
+
+//交叉值字段
+function getCrossTarget(db,sytid,topic)
+{
+	var sql = &amp;quot;select a.hdim,b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	var ds = db.GetXMLSQL(sql);
+	var hdim = ds.getStringAt(0,&amp;quot;HDIM&amp;quot;);
+	var vdim = ds.getStringAt(0,&amp;quot;ID&amp;quot;);
+	var arr = hdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		if (arr[i] != vdim) return arr[i];
+	}
+	return &amp;quot;&amp;quot;;
+}
+
+//交叉列字段SQL
+function getColSQL(db,sytid,topic,vcol)
+{
+	var sql = &amp;quot;select keyval,wher from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic,vcol]);
+	var ds = db.GetXMLSQL(sql);
+	var view_name = ds.getStringAt(0,&amp;quot;KEYVAL&amp;quot;);
+	var where = ds.getStringAt(0,&amp;quot;WHER&amp;quot;);
+	if (view_name == &amp;quot;&amp;quot;) {
+		return &amp;quot;&amp;quot;;
+	} else {
+		if (where != &amp;quot;&amp;quot;) where = &amp;quot; and &amp;quot; + where;
+		sql = &amp;quot;select name from &amp;quot;+ view_name +&amp;quot; where 1&amp;gt;0 &amp;quot; + where;
+		return sql;
+	}
+}
+//排序依据（中文名）
+function getVdimOrders(db,sytid,topic,modguid,tablename)
+{
+	var sql = &amp;quot;select orders,vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var ds = db.GetXMLSQL(sql);
+	
+	var str = ds.getStringAt(0,&amp;quot;ORDERS&amp;quot;);
+	var vdim = ds.getStringAt(0,&amp;quot;VDIM&amp;quot;);
+	
+	if (str != null &amp;&amp; str != &amp;quot;&amp;quot;) return str;
+	
+	str = &amp;quot;&amp;quot;;
+	var arr = vdim.split(&amp;quot;,&amp;quot;);
+	for (var i = 0;i &amp;lt; arr.length();i ++) {
+		var colnam = GetColname(db,arr[i],modguid,tablename); //获取字段名称
+		if (colnam == &amp;quot;&amp;quot;) colnam = arr[i];
+		if (str != &amp;quot;&amp;quot;) str += &amp;quot;,&amp;quot;;
+		str += colnam;
+	}
+	return str;
+}
+//是否交叉
+function isCrossReport(db,sytid,topic)
+{
+	var sql = &amp;quot;select a.hdim,b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.sytid=&amp;apos;%s&amp;apos; and a.id=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([sytid,topic]);
+	var rowcnt = db.GetSQLRowCount(sql);
+	if (rowcnt &amp;gt; 0) return true;
+	return false;
+}
+
+//获取维度
+function getVdim(db,sytid,topic)
+{
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	return db.GetSQL(sql);
+}
+
+//字段名称
+function GetColname(db,colid,modguid,tablename)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var ds = db.QuerySQL(&amp;quot;select name from dim_dim where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos; and upper(id)=upper(&amp;apos;&amp;quot;+colid+&amp;quot;&amp;apos;)&amp;quot;); //维度
+	if ( ds.getRowCount() &amp;gt; 0 ) ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+	else {
+		ds = db.QuerySQL(&amp;quot;select nvl(supername,&amp;apos;&amp;apos;)||&amp;apos; &amp;apos;||name name from dim_target where refmod=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos; and upper(id)=upper(&amp;apos;&amp;quot;+colid+&amp;quot;&amp;apos;)&amp;quot;); //目标
+		if ( ds.getRowCount() &amp;gt; 0 ) ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		else {
+			ds = db.QuerySQL(&amp;quot; select comments name from user_col_comments where upper(table_name)=upper(&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;) and upper(column_name)=upper(&amp;apos;&amp;quot;+colid+&amp;quot;&amp;apos;)&amp;quot;); //系统
+			if ( ds.getRowCount() &amp;gt; 0 ) ret = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		}
+	}
+	if ( ret == &amp;quot;&amp;quot; ) ret = colid;
+	return ret;
+}
+//得到主题
+function GetTopic(db,sytid,topicid)
+{
+	var ds = null;
+	var curtopic = topicid;
+
+	ds = db.QuerySQL(&amp;quot;select name,longname,hdim,vdim,hdim||&amp;apos;,&amp;apos;||vdim hvdim,nvl(picnote,&amp;apos;MSColumn3D-1&amp;apos;) picnote,vdimshowcol,piclocation,xchart from dim_topic where sytid=&amp;apos;&amp;quot;+sytid+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+topicid+&amp;quot;&amp;apos;&amp;quot;);
+	if ( ds.getRowCount() == 0 ) throw new Exception( &amp;quot;主题&amp;quot;+topicid+&amp;quot;没有找到&amp;quot; );
+	
+	var str =ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+	return str ;
+}
+
+//bchgxy	图型轴向 = 1 X和Y轴旋转
+function getseries(db,ds,sytid,topic,bchgxy){
+
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;&amp;quot;;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		for ( var r=statrow;r&amp;lt;torow;r++ ) {
+			str+=&amp;quot;{name: &amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var c=1;c&amp;lt;tocol;c++){
+				if(c==tocol-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(r==torow-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+			
+		}
+	} else {
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			str+=&amp;quot;{name: &amp;apos;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var r=1;r&amp;lt;torow;r++){
+				if(c==torow-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(c==tocol-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+		}
+	}
+
+	return str;
+}
+
+//bchgxy	图型轴向 = 1 X和Y轴旋转
+function getxAxis(db,ds,sytid,topic,bchgxy){
+
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var str=&amp;quot;&amp;quot;;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		str+=&amp;quot;categories:[&amp;quot;;
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			if(c==tocol-1)
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;apos;&amp;quot;;
+			else
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;apos;,&amp;quot;;
+		}
+		str+=&amp;quot;]&amp;quot;;
+	} 
+	else {
+		str+=&amp;quot;categories: [&amp;quot;;
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			if(r==torow-1)
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;&amp;quot;;
+			else
+				str+=&amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,&amp;quot;;
+		}
+		str+=&amp;quot;]&amp;quot;;
+	}
+	
+	return str;
+}
+
+//bchgxy图型轴向 = 1 X和Y轴旋转
+function getseriessum(db,ds,sytid,topic,bchgxy){
+
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;[&amp;quot;;
+	var sum=0;
+	var colsum=0;
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			sum+=colsum;
+		}
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+//			throw new Exception(colsum+&amp;quot;--&amp;quot;+sum+&amp;quot;===&amp;quot;+colsum*100/sum.toFixed(2));
+			if(r==torow-1)
+				str+=&amp;quot;[&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,&amp;quot;+colsum+&amp;quot;]&amp;quot;;
+			else
+				str+=&amp;quot;[&amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,&amp;quot;+colsum+&amp;quot;],&amp;quot;;
+		}
+	} 
+	else {
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			colsum=0;
+			for ( var r=0;r&amp;lt;torow;r++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			if(c==tocol-1)
+				str+=&amp;quot; [&amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,&amp;quot;+ds.getStringAt(tocol-1,ds.getColumnName(c))+&amp;quot;]&amp;quot;;
+			else
+				str+=&amp;quot; [&amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,&amp;quot;+ds.getStringAt(tocol-1,ds.getColumnName(c))+&amp;quot;],&amp;quot;;
+		}
+	}
+	str+=&amp;quot;]&amp;quot;;
+	return str;
+}
+
+//bchgxy	图型轴向 = 1 X和Y轴旋转
+function getserieshunhe(db,ds,sytid,topic,bchgxy){
+
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;&amp;quot;;
+	
+	if (bchgxy == &amp;quot;0&amp;quot;) {
+		for ( var r=statrow;r&amp;lt;torow;r++ ) {
+			str+=&amp;quot;{type:&amp;apos;column&amp;apos;,name: &amp;apos;&amp;quot;+ds.getStringAt(r,ds.getColumnName(0))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var c=1;c&amp;lt;tocol;c++){
+				if(c==tocol-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(r==torow-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+			
+		}
+	} else {
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			str+=&amp;quot;{type:&amp;apos;column&amp;apos;,name: &amp;apos;&amp;quot;+ds.getStringAt(0,ds.getColumnName(c))+&amp;quot;&amp;apos;,data: [&amp;quot;;
+			for(var r=1;r&amp;lt;torow;r++){
+				if(c==torow-1)
+					str+=ds.getStringAt(r,ds.getColumnName(c));
+				else
+					str+=ds.getStringAt(r,ds.getColumnName(c))+&amp;quot;,&amp;quot;;
+			}
+			str+=&amp;quot;]&amp;quot;;
+			if(c==tocol-1) str+=&amp;quot;}&amp;quot;; else str+=&amp;quot;},&amp;quot;;
+		}
+	}
+	str+=&amp;quot;,{type: &amp;apos;spline&amp;apos;, name: &amp;apos;平均&amp;apos;,data:&amp;quot;+getseriespingjun(db,ds,sytid,topic,bchgxy)+&amp;quot; },{type:&amp;apos;pie&amp;apos;,name: &amp;apos;合计饼图&amp;apos;,data:&amp;quot;+getseriessum(db,ds,sytid,topic,bchgxy)+&amp;quot;,center: [150, 80],                                            
+            size: 100,                                                    
+            showInLegend: false,                                          
+            dataLabels: {                                                 
+                enabled: true,
+                color: &amp;apos;#cdcdcd&amp;apos;,
+                connectorColor: &amp;apos;#000000&amp;apos;,
+                format: &amp;apos;&amp;lt;b&amp;gt;{point.name}&amp;lt;/b&amp;gt;: {point.percentage:.1f} %&amp;apos;
+
+            } }&amp;quot;;
+	return str;
+}
+
+
+//bchgxy图型轴向 = 1 X和Y轴旋转 去平均数
+function getseriespingjun(db,ds,sytid,topic,bchgxy){
+
+	var statrow=0;
+	var statcol=0;
+	var torow=ds.getRowCount();
+	var tocol=ds.getColumnCount();
+	var title = GetTopic(db,sytid,topic);
+	var str=&amp;quot;[&amp;quot;;
+	if (bchgxy == &amp;quot;1&amp;quot;) {
+		var sum=0;
+		var colsum=0;
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			sum+=colsum;
+		}
+		for ( var r=0;r&amp;lt;torow;r++ ) {
+			colsum=0;
+			for ( var c=1;c&amp;lt;tocol;c++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+//			throw new Exception(colsum+&amp;quot;--&amp;quot;+sum+&amp;quot;===&amp;quot;+colsum*100/sum.toFixed(2));
+//			colsum=colsum/sum;
+			colsum = pubpack.EAFunc.formatDouble(colsum,2);
+			if(r==torow-1)
+				str+=colsum;
+			else
+				str+=colsum+&amp;quot;,&amp;quot;;
+		}
+	} 
+	else {
+		var sum=0;
+		var colsum=0;
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			colsum=0;
+			for ( var r=0;r&amp;lt;torow;r++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			sum+=colsum;
+		}
+		for ( var c=1;c&amp;lt;tocol;c++ ) {
+			colsum=0;
+			for ( var r=0;r&amp;lt;torow;r++ ) {
+				colsum+=ds.getStringAt(r,ds.getColumnName(c))*1.00;
+			}
+			var a = &amp;quot;&amp;quot;;
+			try{
+				if(1*torow!=0)//注意被除数
+					a = pubpack.EAFunc.formatDouble(colsum/torow,2);
+			}
+			catch(e){}
+			if(c==tocol-1)
+				str+=a;
+			else
+				str+=a+&amp;quot;,&amp;quot;;
+		}
+	}
+	str+=&amp;quot;]&amp;quot;;
+	return str;
+}
+
+//
+// 
+//
+function GetMap() {
+	var html = &amp;quot;	&amp;lt;html&amp;gt;
+		&amp;lt;head&amp;gt;
+			&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot; /&amp;gt;
+			&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;initial-scale=1.0, user-scalable=no\&amp;quot; /&amp;gt;
+			&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+				body, html{width: 100%;height: 100%; margin:0;font-family:\&amp;quot;微软雅黑\&amp;quot;;}
+				#l-map{height:800px;width:100%;}
+			&amp;lt;/style&amp;gt;
+			&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?v=2.0&amp;ak=bcqnSYjGSOPcmxcDpG8T9nMs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+			&amp;lt;title&amp;gt;附近医院&amp;lt;/title&amp;gt;
+		&amp;lt;/head&amp;gt;
+		&amp;lt;body onload=\&amp;quot;load()\&amp;quot;&amp;gt;
+			&amp;lt;div id=\&amp;quot;l-map\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+			
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+			function load() {
+				navigator.geolocation.getCurrentPosition(onSuccess, onError,{ maximumAge: 3000, timeout: 10000, enableHighAccuracy: true });
+			}
+			
+			var onSuccess = function (position) {
+				var lat = position.coords.latitude;
+				var lng = position.coords.longitude;
+			if(lat!=&amp;apos;&amp;apos;&amp;&amp;lat!=null&amp;&amp;lng!=&amp;apos;&amp;apos;&amp;&amp;lng!=null){
+				var map = new BMap.Map(&amp;apos;l-map&amp;apos;);
+				var gpsPoint=new BMap.Point(lng,lat);
+				map.centerAndZoom(gpsPoint, 16);
+				map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件 v2.0
+
+				var marker1 = new BMap.Marker(gpsPoint);  // 创建标注	
+				map.addOverlay(marker1);              // 将标注添加到地图中	
+				
+				map.setCenter(gpsPoint);
+				var label = new BMap.Label(&amp;apos;当前位置&amp;apos;,{offset:new BMap.Size(20,-10)});
+				map.addOverlay(label);//添加标签
+
+				var local = new BMap.LocalSearch(map, {
+					renderOptions:{map: map, autoViewport:true}
+				});
+				local.searchNearby(&amp;apos;医院&amp;apos;, gpsPoint);
+			}
+			};
+			function onError(error) {  
+				alert(JSON.stringify(error)); 
+			} 
+		&amp;lt;/script&amp;gt;&amp;quot;;
+		
+		return html;
+}
+
+
+
+//求和
+function FloatAdd(arg1,arg2){  
+	
+	var r1;
+	var r2;
+	var m;  
+	try{
+	   	try{r1=arg1.toString().split(&amp;quot;.&amp;quot;)[1].length;}catch(e){r1=0;}  
+	   	try{r2=arg2.toString().split(&amp;quot;.&amp;quot;)[1].length;}catch(e){r2=0;}  
+	  	m=langpack.Math.pow(10,langpack.Math.max(r1,r2))  ;
+	  	return (arg1*m+arg2*m)/m;
+	}
+	catch( ee ){
+		throw new Exception (&amp;quot;FloatAdd arg1=&amp;quot;+arg1+&amp;quot;,arg2=&amp;quot;+arg2 +&amp;quot;,e=&amp;quot;+ee);
+	}
+//  	var b1=new lamath.BigDecimal(arg1.toString());
+//	var b2=new lamath.BigDecimal(arg2.toString());
+//    	return b1.add(b2);
+}
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

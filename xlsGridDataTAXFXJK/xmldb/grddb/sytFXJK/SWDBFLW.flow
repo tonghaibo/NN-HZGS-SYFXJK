@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="roundrect_115512" x="23" y="14" width="913" height="434" round="3" stroke="#000000" fill="#FFFFFF" fillto="#EEEEEE" >
+ </rect>
+ <connector id="connector_208_233921" from="rect_233917" to="rect_233918" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_265016" from="rect_233918" to="rhombus_265015" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_360518" from="rect_233916" to="rhombus_265015" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_108_190022" from="1号货柜" to="rect_190016" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_190023" from="1号货柜" to="rect_190019" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_190031" from="rect_190026" to="rect_190026" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_490416" from="rect_74827" to="rect_190026" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_490432" from="rect_190018" to="rect_490421" fromcp="23" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_108_171716" from="rect_190021" to="rect_490427" fromcp="23" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_108_244618" from="rect_224317" to="rect_244617" fromcp="22" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_244619" from="rect_244616" to="rect_224321" fromcp="11" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_188_244623" from="rect_224316" to="rect_224320" fromcp="22" tocp="22" type="188"  >
+ </connector>
+ <connector id="connector_108_351011" from="rect_190027" to="rect_111825" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <line id="line_450518" x1="32" y1="52" x2="919" y2="52"  fill="#0000FF" stroke-width="1" stroke="#000000">
+ </line>
+ <text id="text_450519" x="38" y="27" width="264" height="22"   stroke-width="" font-family="" font-size="14" font-color="#000000">【税务数据接口】</text>
+ <connector id="connector_108_553310" from="polygon_222318" to="polygon_512018" fromcp="12" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_144510" from="rect_301520" to="rect_301520" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_561212" from="polygon_222318" to="polygon_202418" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <rect  id="rect_535510" x="101" y="126" width="123" height="34" stroke="#000000" fill="#B3D9FF" url="show.sp?grdid=TaxData" round="15" fillto="#FFFFFF" 属性="">企业税务数据导入</rect>
+ <rect id="roundrect_581914" x="320" y="126" width="97" height="35" round="15" stroke="#000000" fill="#FFFFFF" fillto="#FFFFFF"  属性="" url="entry.sp?grdid=TaxDetail">税务情况表</rect>
+ <polygon id="userhand_225922" points="531,112 556,174 607,174 633,112 531,112 531,112" changeto="userhand" stroke="#000000" fill="#DDDDDD" fillto=""  url="flow.jsp?flowid=ThanMain.flow&syt=TAXMON">比对系统</polygon>
+ <connector id="connector_208_340722" from="rect_535510" to="roundrect_581914" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_340723" from="roundrect_581914" to="userhand_225922" fromcp="32" tocp="12" type="208"  >
+ </connector>
+</svg>

@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_WalMartbak</MWID><NAME >沃尔玛备份</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_WalMartbak.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);
+	_this.SaveTextFile( &amp;quot;d:/Tesco.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var protocolpack = new JavaPackage(&amp;quot;org.apache.commons.httpclient.protocol&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+var httpcall = new webget.HttpCall();
+var tagFilter = new JavaPackage(&amp;quot;org.htmlparser.filters&amp;quot;);
+var htmlutil = new JavaPackage(&amp;quot;org.htmlparser.util&amp;quot;);
+
+
+
+
+
+
+
+function start()
+{
+	return getOrderStr(&amp;quot;GMHD&amp;quot;,&amp;quot;2013-03-07&amp;quot;,&amp;quot;0012&amp;quot;,&amp;quot;sha528a&amp;quot;,&amp;quot;32165Zz&amp;quot;,&amp;quot;1&amp;quot;,&amp;quot;utf-8&amp;quot;);
+}
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{
+
+	code=&amp;quot;utf-8&amp;quot;; 
+	var turl=&amp;quot;https://rllogin.wal-mart.com/rl_security/rl_logon.aspx?ServerType=IIS1&amp;CTAuthMode=BASIC&amp;language=en&amp;CT_ORIG_URL=%2Fsitemap%2Fsitemap.aspx&amp;ct_orig_uri=%2Fsitemap%2Fsitemap.aspx&amp;quot;;
+	var parm=&amp;quot;__EVENTTARGET=&amp;__EVENTARGUMENT=&amp;__VIEWSTATE=%2FwEPDwULLTE0OTY5MTU2ODkPZBYCZg9kFgICCQ9kFgJmD2QWAmYPZBYCAgEPZBYCAgIPZBYCZg9kFgICAQ8PZBYEHgtvbm1vdXNlb3ZlcgUbdGhpcy5jbGFzc05hbWU9J2J0biBidG5ob3YnHgpvbm1vdXNlb3V0BRR0aGlzLmNsYXNzTmFtZT0nYnRuJ2RkPwsM6QfmB7nLs3YhaSzFQIMfpgs%3D&amp;__EVENTVALIDATION=%2FwEWBwLeg6%2BXDAK145qeCgK7iKX4CAKgmu7gDwLB2tiHDgLKw6LdBQLvz%2FGACruWvf18O2f4%2Bkt%2BWRX4INDqRZCf&amp;hidFailedLoginCount=&amp;redirect=%2Fsitemap%2Fsitemap.aspx&amp;hidPwdErrHandledFlag=FALSE&amp;txtUser=&amp;quot;+userid+&amp;quot;&amp;txtPass=&amp;quot;+passwd+&amp;quot;&amp;Login=%C1%AA%BB%FA%2F%B5%C7%C2%BC&amp;quot;;
+	var ret =httpcall.Get(turl+parm,code);//登录
+	ret =httpcall.Post(&amp;quot;https://retaillink.wal-mart.com/sitemap/sitemap.aspx&amp;quot;,code);//网址地图
+	ret =httpcall.Post(&amp;quot;https://retaillink.wal-mart.com/edi/default.aspx?ch=H19&amp;ukey=W5294&amp;quot;,code);//edi
+	ret =httpcall.Post(&amp;quot;https://retaillink.wal-mart.com/edi/edi.aspx?ch=H19&amp;ukey=W5294&amp;quot;,code);//edi
+	parm=&amp;quot;__VIEWSTATE=/wEPDwUJMTQzMDAxNzM1ZGRq6ZJylwOAalt0L3a7eDb8SUNhlA==&amp;DocumentType=850&amp;IsPaginated=true&amp;MailboxId=38415&amp;PageIndex=0&amp;PONumber=&amp;SortBy=3&amp;SortOrder=desc&amp;Status=20&amp;StoreNumber=&amp;VendorCountry=CN&amp;PageSize=100&amp;quot;;
+	ret =httpcall.Post(&amp;quot;https://retaillink.wal-mart.com/edi/webedi/&amp;quot;,parm,code);//webedi//查询默认是查询新增
+	parm=&amp;quot;__VIEWSTATE=%2FwEPDwUJMTQzMDAxNzM1ZGRq6ZJylwOAalt0L3a7eDb8SUNhlA%3D%3D&amp;MailboxId=38415&amp;VendorCountry=CN&amp;PONumber=&amp;StoreNumber=&amp;DocumentType=850&amp;Status=20&amp;SortBy=3&amp;SortOrder=DESC&amp;IsPaginated=false&amp;PageIndex=0&amp;PageSize=10&amp;quot;;
+	ret =httpcall.Post(&amp;quot;https://retaillink.wal-mart.com/edi/webedi/&amp;quot;,parm,code);//webedi//查询已接受的
+	return getBil(ret,httpcall,acc,dat,kaid,userid,passwd,deptid,code);
+}
+function getBil(note,httpcall,acc,dat,kaid,userid,passwd,deptid,code){
+	var str=&amp;quot;&amp;quot;;//明细字符串
+	
+	//	 &amp;lt;tr  style=&amp;quot;background-color: #EFF6FF&amp;quot; &amp;gt;
+	//            &amp;lt;td&amp;gt;
+	//                &amp;lt;input name=&amp;quot;[0].IsSelected&amp;quot; type=&amp;quot;checkbox&amp;quot; value=&amp;quot;true&amp;quot; /&amp;gt;&amp;lt;input name=&amp;quot;[0].IsSelected&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;false&amp;quot; /&amp;gt;               
+	//                &amp;lt;input name=&amp;quot;[0].Id&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;136896087&amp;quot; /&amp;gt;
+	//                &amp;lt;input name=&amp;quot;[0].VendorCountryCode&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;CN&amp;quot; /&amp;gt;
+	//                &amp;lt;input name=&amp;quot;[0].JointVentureTax&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;440301710936858&amp;quot; /&amp;gt;               
+	//                &amp;lt;input name=&amp;quot;[0].GroupControlNumber&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;850000325&amp;quot; /&amp;gt;
+	//                &amp;lt;input name=&amp;quot;[0].IntControlNumber&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;850000325&amp;quot; /&amp;gt;
+	//                &amp;lt;input name=&amp;quot;[0].SetControlNumber&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;366&amp;quot; /&amp;gt;
+	//            &amp;lt;/td&amp;gt;
+	//            &amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;&amp;lt;a href=&amp;quot;/edi/WebEDI/Document/ViewDetails/136896087?Type=850&amp;quot;&amp;gt;8700716482&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;
+	//            &amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;                01/21/2013            &amp;lt;/td&amp;gt;
+	//            &amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;                &amp;lt;input name=&amp;quot;[0].StoreNumber&amp;quot; type=&amp;quot;hidden&amp;quot; value=&amp;quot;0&amp;quot; /&amp;gt;                0            &amp;lt;/td&amp;gt;
+	//            &amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;                         &amp;lt;/td&amp;gt;
+	//            &amp;lt;td align=&amp;quot;center&amp;quot;&amp;gt;                0            &amp;lt;/td&amp;gt;
+	//            &amp;lt;td align=&amp;quot;right&amp;quot;&amp;gt;                26378.83            &amp;lt;/td&amp;gt;        
+	//        &amp;lt;/tr&amp;gt;
+	//格式如上	
+	note=pub.EAFunc.Replace(note,&amp;quot;&amp;lt;th&amp;quot;,&amp;quot;&amp;lt;td&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;&amp;lt;/th&amp;gt;&amp;quot;,&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;);//替换
+	//note=pub.EAFunc.Replace(note,&amp;quot;&amp;lt;input&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;\&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;=&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;;&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;:&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;].&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;&amp;lt;a href&amp;quot;,&amp;quot;&amp;quot;);//替换
+	note=pub.EAFunc.Replace(note,&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;,&amp;quot;&amp;quot;);//替换	
+	var nodelist = HtmlParser.parserHtml(note,code); 
+	var tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;);
+	var ds = HtmlParser.parserTableOne(tablist,code,new Array(&amp;quot;10&amp;quot;));
+	var herf=&amp;quot;&amp;quot;;
+	var strsplit=&amp;quot;&amp;quot;;
+	var bilid=&amp;quot;&amp;quot;;//订单号
+	var bildat=&amp;quot;&amp;quot;;//订单日期
+	var fadat=&amp;quot;&amp;quot;;//发货日期
+	var ccdat=&amp;quot;&amp;quot;;//取消日期
+	var fax=&amp;quot; &amp;quot;;
+	var tel=&amp;quot; &amp;quot;;
+	var CORPADDR=&amp;quot; &amp;quot;;
+	dat=dat.substring(8,10)+&amp;quot;/&amp;quot;+dat.substring(5,7)+&amp;quot;/&amp;quot;+dat.substring(0,4);
+	
+	for (var r=0;r&amp;lt;ds.getRowCount();r++){
+		herf=ds.getStringAt(r,&amp;quot;_javascriptSort2stylefont-weightbold&amp;quot;);
+		herf=herf.substring(herf.indexOf(&amp;quot;发票号&amp;quot;)+4,herf.length());
+		herf=herf.substring(herf.indexOf(&amp;quot;Details&amp;quot;)+7,herf.indexOf(&amp;quot;&amp;gt;&amp;quot;));
+		var strsplit=herf.split(&amp;quot;Type&amp;quot;);
+		herf=&amp;quot;https://retaillink.wal-mart.com/edi/WebEDI/Document/ViewDetails/&amp;quot;+strsplit[0]+&amp;quot;Type=&amp;quot;+strsplit[1];
+		///https://retaillink.wal-mart.com/edi/WebEDI/Document/ViewDetails/137105281?Type=850
+		var ret =httpcall.Get(herf,code);//点击发票号//这里取到的具体的单据信息是乱码(如果用post取的话)，改成用get就好了
+		ret =pub.EAFunc.Replace(ret,&amp;quot;&amp;lt;/&amp;quot;,&amp;quot;_&amp;lt;/&amp;quot;);//替换
+		ret =pub.EAFunc.Replace(ret,&amp;quot;&amp;lt;/strong&amp;gt;&amp;quot;,&amp;quot;&amp;quot;);//替换
+		ret =pub.EAFunc.Replace(ret,&amp;quot;&amp;lt;strong&amp;gt;&amp;quot;,&amp;quot;&amp;quot;);//替换
+		
+		var list = HtmlParser.parserHtml(ret,code); 
+		var tlist = HtmlParser.filterHtml(list,&amp;quot;table&amp;quot;);
+		var tds = HtmlParser.parserTableOne(tlist,code,new Array(&amp;quot;11&amp;quot;));
+		//这是表头信息
+		
+		if(tds.getRowCount()&amp;gt;0){
+			bilid=tds.getColumnName(1);
+			bildat=tds.getStringAt(0,bilid);
+			fadat=tds.getStringAt(2,bilid);
+			if(fadat.length()==9)
+      		       	fadat=fadat.substring(2,4)+&amp;quot;/&amp;quot;+fadat.substring(0,2)+&amp;quot;/&amp;quot;+fadat.substring(4,fadat.length()-1);
+      		       	bildat=bildat.substring(2,4)+&amp;quot;/&amp;quot;+bildat.substring(0,2)+&amp;quot;/&amp;quot;+bildat.substring(4,bildat.length()-1);
+			if(bildat!=dat){
+				break;
+			}		
+			ccdat=tds.getStringAt(2,bilid);
+			bilid=bilid.substring(1);
+		}
+		
+		//上面是表头信息，下面取明细格式如下：
+		//	&amp;lt;ROW num=&amp;quot;0&amp;quot; &amp;gt;
+		//		&amp;lt;_行号_&amp;gt;001_&amp;lt;/_行号_&amp;gt;
+		//		&amp;lt;_商品号_&amp;gt;009630502_&amp;lt;/_商品号_&amp;gt;
+		//		&amp;lt;_条码_&amp;gt;6903293470892_&amp;lt;/_条码_&amp;gt;
+		//		&amp;lt;_供应商商品号_&amp;gt;EAN_&amp;lt;/_供应商商品号_&amp;gt;
+		//		&amp;lt;_颜色_&amp;gt;47089_&amp;lt;/_颜色_&amp;gt;
+		//		&amp;lt;_尺码_&amp;gt;_&amp;lt;/_尺码_&amp;gt;
+		//		&amp;lt;_订货数量_&amp;gt;500ml_&amp;lt;/_订货数量_&amp;gt;
+		//		&amp;lt;_单位_&amp;gt;5_&amp;lt;/_单位_&amp;gt;
+		//		&amp;lt;_外包内盒装_&amp;gt;CA_&amp;lt;/_外包内盒装_&amp;gt;
+		//		&amp;lt;_成本_&amp;gt;1212_&amp;lt;/_成本_&amp;gt;
+		//		&amp;lt;_合计成本_&amp;gt;173.4300_&amp;lt;/_合计成本_&amp;gt;
+		//	&amp;lt;/ROW&amp;gt;
+		tds = HtmlParser.parserTableOne(tlist,code,new Array(&amp;quot;14&amp;quot;));
+		
+		var itemdtl=&amp;quot;&amp;quot;;
+		var num =1;
+		var spce=&amp;quot;&amp;quot;;
+		var first=0;
+		if(tds.getRowCount()&amp;gt;0){//这个循环是循环商品
+			
+			for(var i=0;i&amp;lt;tds.getRowCount();i+=4){
+					//首先分析有几个客户
+					try{
+						itemdtl=tds.getStringAt(i+3,&amp;quot;_商品号_&amp;quot;).split(&amp;quot;_&amp;quot;);
+						
+						for(var arr=8;arr&amp;lt;itemdtl.length();arr+=4){//这个循环是循环客户
+							spce=tds.getStringAt(i,&amp;quot;_成本_&amp;quot;);
+							//spce=spce.substring(0,2)+&amp;quot;/&amp;quot;+spce.substring(2,4);
+							//throw new Exception((spce.length()-1)/2);
+							first=(spce.length()-1)/2;
+							spce=spce.substring(0,first)+&amp;quot;/&amp;quot;+spce.substring(first,spce.length()-1);
+							if(str != &amp;quot;&amp;quot;)
+				 			str += &amp;quot;╃&amp;quot;;
+				 			
+							str += &amp;quot;NR ~~~&amp;quot;+userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+itemdtl[arr]+&amp;quot;~~~&amp;quot;+itemdtl[arr]+&amp;quot;~~~ ~~~&amp;quot;+itemdtl[arr]+&amp;quot;~~~&amp;quot;+bildat+&amp;quot;~~~&amp;quot;+fadat+&amp;quot;~~~&amp;quot;+
+							tel+&amp;quot;~~~&amp;quot;+fax+&amp;quot;~~~&amp;quot;+num+&amp;quot;~~~&amp;quot;+tds.getStringAt(i,&amp;quot;_商品号_&amp;quot;)+&amp;quot;~~~&amp;quot;+tds.getStringAt(i,&amp;quot;_条码_&amp;quot;)+&amp;quot;~~~&amp;quot;+spce+&amp;quot;~~~&amp;quot;+tds.getStringAt(i+2,&amp;quot;_商品号_&amp;quot;)+
+							&amp;quot;~~~ ~~~&amp;quot;+tds.getStringAt(i,&amp;quot;_外包内盒装_&amp;quot;)+&amp;quot;~~~&amp;quot;+itemdtl[arr+1]+&amp;quot;~~~&amp;quot;+0+&amp;quot;~~~&amp;quot;+tds.getStringAt(i,&amp;quot;_合计成本_&amp;quot;)+&amp;quot;~~~&amp;quot;+CORPADDR+&amp;quot;~~~ ~~~ &amp;quot;;
+							num++;
+						}
+					}catch (e){
+						throw new Exception(e.toString());
+					
+					}	
+			}
+			
+		}
+
+	}
+	str=pub.EAFunc.Replace(str,&amp;quot;商品说明&amp;quot;,&amp;quot;&amp;quot;);//替换
+	str=pub.EAFunc.Replace(str,&amp;quot;_&amp;quot;,&amp;quot;&amp;quot;);//替换
+	return str;
+	//throw new Exception(str);
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

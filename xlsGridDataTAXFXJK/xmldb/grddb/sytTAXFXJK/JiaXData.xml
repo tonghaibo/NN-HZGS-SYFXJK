@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >JiaXData</MWID><NAME >驾校数据采集</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >JiaXData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >数据采集</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,3); //设置单元格为一个选择文件的输入框
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,5,3);
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,7,3);
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,9,3);
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,11,3);
+
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,13,3);
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,15,3);
+	//_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,17,3);
+	_this.ShowTabBar(1);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+   	if(id == &amp;quot;导入&amp;quot;) {
+		if(!confirm(&amp;quot;确定导入文件？&amp;quot;)) return ;
+		
+		var filepath = &amp;quot;&amp;quot;;
+		filepath =_this.GetCellText(sheet,3,3); //获取导入文件路径
+		//alert(&amp;quot;filepath&amp;quot;+filepath);
+		if (filepath != &amp;quot;&amp;quot;) { 
+		           _this.SetCellText(sheet,3,3,&amp;quot;正在导入驾校数据...&amp;quot;+filepath);
+		           runImpl(filepath);
+                }
+                _this.SetCellText(sheet,3,3,&amp;quot;&amp;quot;);
+	}
+}
+
+function runImpl(filepath)
+{
+	try {
+		var tabnam =  runImp(filepath);
+		//alert(&amp;quot;tabnam&amp;quot;+tabnam);
+		if(tabnam != null &amp;&amp; tabnam != &amp;quot;&amp;quot;) {
+			var param = new Object();
+			param.tabnam = tabnam;
+			//param.typ = typ;
+			//param.thisorgid = G_ORGID;
+			var msg = invokeOSFuncExt(&amp;quot;importTree&amp;quot;,param);
+			_this.SetCellText(0,6,2,_this.GetCellText(0,6,2)+&amp;quot;\n&amp;quot;+msg);
+			alert(msg);			
+		}
+	}
+	catch(e) {
+		alert(&amp;quot;导入失败！&amp;quot;+e);
+	}
+}
+
+
+
+
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+//驾校数据导入
+function importTree()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var tabname = tabnam;
+	//var typ = typ;
+	var ret = &amp;quot;&amp;quot;;
+	var updcount = 0;
+	var inscount = 0;
+	try{
+		db = new pubpack.EADatabase();
+		
+		sql = &amp;quot;select * from user_tables where table_name=upper(&amp;apos;&amp;quot;+tabname+&amp;quot;&amp;apos;)&amp;quot;;
+		var cnt = db.GetSQLRowCount(sql);
+		if(cnt &amp;lt;= 0) return &amp;quot;无数据可以导入&amp;quot;;
+		
+		var mycnt = 0;
+		
+		//修改表，增加列名，存储数据所属月份
+		sql = &amp;quot;alter table &amp;quot;+tabname+&amp;quot; add sjssyf varchar2(60)&amp;quot;;		
+		mycnt = db.ExcecutSQL(sql);	
+		//if(mycnt == 0) {
+		//	db.Rollback();
+		//	return &amp;quot;导入失败！导入的文件格式不正确&amp;quot;+tabname;
+		//}
+		
+		//增加数据导入日期	
+		sql = &amp;quot;update &amp;quot;+tabname+&amp;quot;  set sjssyf=(select (case when yf&amp;lt;=9 then concat(nd,concat(0,yf)) else concat(nd,yf) end) sjssyf
+                from( select substr(substr(trim(ny),instr(trim(ny),&amp;apos;2&amp;apos;)),1,4)nd,substr(ny,instr(ny,&amp;apos;年&amp;apos;)+1, instr(ny,&amp;apos;月&amp;apos;)-instr(ny,&amp;apos;年&amp;apos;)-1)yf 
+                    from (select co0,substr(trim(co0),instr(trim(co0),&amp;apos;2&amp;apos;)) ny from &amp;quot;+tabname+&amp;quot;  where rownum=1) ))&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		//删除标题行数据
+               sql=&amp;quot;delete from &amp;quot;+tabname+&amp;quot; where (co0 like &amp;apos;%每月受理各培训驾校驾驶人月报表%&amp;apos; or co0 like &amp;apos;%驾校名称%&amp;apos; or co0 like &amp;apos;%合计%&amp;apos;or co0 is null)&amp;quot;;
+               db.ExcecutSQL(sql); 
+                                             
+
+		//插入数据--更新数据到：驾校受理数据表TAX_JIAXDATA，先行转列再插入数据	
+		//JIAXGUID 驾校数据UUID ; DIQLX 地区类型：本地、区内、区外 ;JIAZLX	 驾照类型：A1、A2、A3、B1、B2、C1、C2、C5	;
+            //LINGQLX 领取类型：初领、增驾;SHOULRS 受理人数;SJDRRQ 数据导入日期;SJSSYF 数据所属月份;JIAXMC 驾校名称;SFCSDM 收费参数代码
+
+		sql = &amp;quot; insert into TAX_JIAXDATA (JIAXMC,sfcsdm,diqlx,jiazlx,lingqlx,shoulrs,sjssyf)
+with tmp_hzl_jx as(
+select co0,sfcsdm,diqlx,jiazlx,lingqlx,to_number(shoulrs)shoulrs,sjssyf from 
+( 
+select co0,&amp;apos;01&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;A1&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co1 as shoulrs ,sjssyf  from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;02&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;A1&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co2 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;03&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;A2&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co3 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;04&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;A2&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co4 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;05&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;A3&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co5 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;06&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;A3&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co6 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;07&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;B1&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co7 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;08&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;B1&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co8 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;09&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;B2&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co9 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;10&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;B2&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co10 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;11&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;C1&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co11 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;12&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;C1&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co12 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;13&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;C2&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co13 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;14&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;C2&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co14 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;15&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;C5&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co15 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;16&amp;apos; sfcsdm,&amp;apos;本地&amp;apos; diqlx ,&amp;apos;C5&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co16 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;17&amp;apos; sfcsdm,&amp;apos;区内&amp;apos; diqlx ,&amp;apos;C1&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co17 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;18&amp;apos; sfcsdm,&amp;apos;区内&amp;apos; diqlx ,&amp;apos;C1&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co18 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;19&amp;apos; sfcsdm,&amp;apos;区外&amp;apos; diqlx ,&amp;apos;C1&amp;apos;jiazlx,&amp;apos;初领&amp;apos;lingqlx, co19 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  union all
+select co0,&amp;apos;20&amp;apos; sfcsdm,&amp;apos;区外&amp;apos; diqlx ,&amp;apos;C1&amp;apos;jiazlx,&amp;apos;增驾&amp;apos;lingqlx, co20 as shoulrs ,sjssyf from  &amp;quot;+tabname+&amp;quot;  
+)where (to_number(shoulrs)&amp;lt;&amp;gt;0 and shoulrs is not null) 
+)select * from tmp_hzl_jx 
+where not exists (
+select a.JIAXMC,a.sfcsdm,a.diqlx,a.jiazlx,a.lingqlx,a.shoulrs,a.sjssyf
+ from TAX_JIAXDATA a ,tmp_hzl_jx t
+    where a.JIAXMC=t.co0 and a.sfcsdm=t.sfcsdm and a.diqlx=t.diqlx and a.jiazlx=t.jiazlx and a.lingqlx=t.lingqlx and a.shoulrs= t.shoulrs 
+       and a.sjssyf=t.sjssyf ) &amp;quot;;	
+			
+		inscount = db.ExcecutSQL(sql);	
+							
+		ret = &amp;quot;导入完成！共新增&amp;quot;+inscount+&amp;quot;条记录，更新&amp;quot;+updcount +&amp;quot;条记录&amp;quot;;
+		//删除临时表
+		sql = &amp;quot;drop table &amp;quot;+tabname;
+		db.ExcecutSQL(sql);			
+
+		return ret;
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	
+	finally {
+		if(db != null)	db.Close();
+	}
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

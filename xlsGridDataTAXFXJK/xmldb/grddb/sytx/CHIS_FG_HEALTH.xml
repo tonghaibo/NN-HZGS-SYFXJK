@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_FG_HEALTH</MWID><NAME >MENU2</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_FG_HEALTH.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;); 
+//
+function GetBody(){
+
+	var html=&amp;quot;
+	
+	&amp;lt;!--这两个css 是必须的--&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/appframe-icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    &amp;lt;link href=\&amp;quot;xlsgrid/images/flash/css/appframe-ss.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+    &amp;lt;!--这三个js 是http下载的jquery211.min.js不能去掉--&amp;gt;
+    &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script src=\&amp;quot;xlsgrid/images/flash/js/jquery211.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt; 
+	&amp;lt;!--这个appframework.ui.js必须放在前面--&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;	
+&amp;lt;!--公用js--&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/showflgapp_jquery1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/showflgapp_menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+
+	
+	&amp;lt;ul class=\&amp;quot;mainmenu\&amp;quot;&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=MEDICATION&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;用药(10)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;把信赖交给我，把健康交给你&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=DIETCHIS&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;饮食(9)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;均衡饮食运动，健康常伴你左右&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=MOTIONCHIS&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;运动(5)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;源泉运动是健康的&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=MONITORCHIS&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;监测(3)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;您的健康卫士&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=MISSIONCHIS&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;宣教(1)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;预防保健生活化，享受健康一路发&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+		&amp;lt;li align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;openWindow(&amp;apos;L.sp?id=RESERVATIONCHIS&amp;apos;);\&amp;quot; style=\&amp;quot;text-decoration:none;\&amp;quot;&amp;gt;&amp;lt;em&amp;gt;&amp;lt;/em&amp;gt;&amp;lt;p&amp;gt;&amp;lt;span&amp;gt;预约提醒(13)&amp;lt;/span&amp;gt;&amp;lt;i&amp;gt;预防保健生活化，享受健康一路发&amp;lt;/i&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;b&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+	&amp;lt;/ul&amp;gt;	
+	&amp;lt;/p&amp;gt;
+	&amp;quot;;
+	return html;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

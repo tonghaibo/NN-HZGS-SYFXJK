@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >TK_SP2</MWID><NAME >管理员核查</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TK_SP2.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >TAX_TRKHDR</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >2</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,6,2</ID><CELLID ></CELLID><NAME >审批结果</NAME><VALFLD >SP_RES</VALFLD><DEFVAL >通过</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_TAX_SP</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,3,2</C18><C19 ></C19></ROW>
+<ROW num="1" ><ID >0,8,2</ID><CELLID ></CELLID><NAME >审批内容</NAME><VALFLD >SP_NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,5,2</C17><C18 >0,5,2</C18><C19 ></C19></ROW>
+<ROW num="2" ><ID >0,11,4</ID><CELLID ></CELLID><NAME >审批人</NAME><VALFLD >SP_NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,8,5</C18><C19 ></C19></ROW>
+<ROW num="3" ><ID >0,11,2</ID><CELLID ></CELLID><NAME >审批时间</NAME><VALFLD >SP_TIME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,8,3</C18><C19 ></C19></ROW>
+<ROW num="4" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >企业编号</NAME><VALFLD >CMID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="5" ><ID >0,4,2</ID><CELLID ></CELLID><NAME >企业名称</NAME><VALFLD >CMNAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="6" ><ID >0,5,6</ID><CELLID ></CELLID><NAME >稽查类型</NAME><VALFLD >SUBTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,5,7</C19></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+var tmp =&amp;quot;&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellText(sheet,11,4,G_USRNAM);
+	_this.SetCellText(sheet,6,2,0);
+	
+	tmp = _this.GetCellText(0,5,6);
+	if(tmp == &amp;quot;6&amp;quot;)
+	{
+		_this.SetCellText(0,3,1,&amp;quot;电表编号：&amp;quot;);
+	}
+}
+
+//电表号操作
+//function getDB()
+//{
+//	var DB = _this.GetCellText(0,2,5);
+//	window.open(&amp;quot;show.sp?grdid=TK_DBCX&amp;DBNO=&amp;quot;+DB);
+//}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	//alert(id);return;
+	if (id == &amp;quot;udf_stm2332&amp;quot; ) {
+		var res = _this.GetCellText(0,6,2);
+		
+		var param = new Object();
+		param.ammno = _this.GetCellText(0,3,2);
+		param.thisusrid = G_USRID;
+		if(tmp == &amp;quot;6&amp;quot;){
+			if(res == 0){
+			var ret = invokeOSFuncExt(&amp;quot;updateFlag&amp;quot;,param);
+			alert(ret);
+			}else{
+				var ret = invokeOSFuncExt(&amp;quot;updateFlag2&amp;quot;,param);
+				alert(ret);
+			}
+		}
+	}
+	
+	if (id == &amp;quot;udf_stm2433&amp;quot; ) {
+		var res = _this.GetCellText(0,6,2);
+		
+		var param = new Object();
+		param.ammno = _this.GetCellText(0,3,2);
+		param.thisusrid = G_USRID;
+		if(tmp != &amp;quot;6&amp;quot;){
+			if(res == 0){
+			var ret = invokeOSFuncExt(&amp;quot;updateFlag3&amp;quot;,param);
+			alert(ret);
+			}else{
+				var ret = invokeOSFuncExt(&amp;quot;updateFlag4&amp;quot;,param);
+			alert(ret);
+			}
+		}
+	}
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+function updateFlag()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;insert into tax_notinammno(ammno,crtusr) values(&amp;apos;&amp;quot;+ammno+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thisusrid+&amp;quot;&amp;apos;)&amp;quot;;
+		ret += db.ExcecutSQL(sql);
+		db.Commit();
+		return &amp;quot;任务完成! 已标志电表号为非国税管户&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return &amp;quot;操作失败&amp;quot;+e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function updateFlag2()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;delete from tax_notinammno where ammno=&amp;apos;&amp;quot;+ammno+&amp;quot;&amp;apos;&amp;quot;;
+		ret += db.ExcecutSQL(sql);
+
+		db.Commit();
+		return &amp;quot;任务退回! 已标志电表号为国税管户&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return &amp;quot;操作失败&amp;quot;+e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+
+function updateFlag3()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;insert into TAX_NOTAXCOM(cmid,crtusr) values(&amp;apos;&amp;quot;+ammno+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thisusrid+&amp;quot;&amp;apos;)&amp;quot;;
+		ret += db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return &amp;quot;任务完成! 已标志企业为非工业纳税企业&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return &amp;quot;操作失败&amp;quot;+e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function updateFlag4()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		sql = &amp;quot;delete from TAX_NOTAXCOM where cmid=&amp;apos;&amp;quot;+ammno+&amp;quot;&amp;apos;&amp;quot;;
+		ret += db.ExcecutSQL(sql);
+	
+		db.Commit();
+		return &amp;quot;任务退回! 已标志企业为工业纳税企业&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return &amp;quot;操作失败&amp;quot;+e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

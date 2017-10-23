@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_Lawson</MWID><NAME >罗森</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_Lawson.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;Main&amp;quot;);
+	_this.SetCellText(0,0,0,msg);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var HClient = new JavaPackage(&amp;quot;org.apache.commons.httpclient&amp;quot;);
+var method = new JavaPackage(&amp;quot;org.apache.commons.httpclient.methods&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code) 
+{
+	var ret = &amp;quot;&amp;quot;;
+	try{
+		var db = new pubpack.EADatabase();
+		var httpcall = new webget.HttpCall();
+		var httpclient = new HClient.HttpClient();
+		//登录罗森的供应商入口
+		ret = httpcall.Post(&amp;quot;http://edi.lawson.com.cn/login.asp&amp;quot;,&amp;quot;user=&amp;quot; + userid + &amp;quot;&amp;pwd=&amp;quot; + passwd);
+		//返回要抓取网页数据的HTML文档
+		ret = httpcall.Get(&amp;quot;http://edi.lawson.com.cn/download.asp&amp;quot;,code);
+		//解析html字符串
+		var HtmlParser = new x_WG_HtmlParser();
+		var nodelist = HtmlParser.parserHtml(ret,code);
+		
+		//得到过滤要处理的标签后的nodelist对象
+		nodelist = HtmlParser.filterHtml(nodelist,&amp;quot;Form&amp;quot;);
+
+		var form = null;
+		var formAttr = &amp;quot;&amp;quot;;
+		var formlist = null;
+		//只处理Form中包含&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;的部分
+		for (var i = 0;i&amp;lt;nodelist.size();i++)
+		{
+			form = nodelist.elementAt(i);	
+			formAttr = form.getAttribute(&amp;quot;action&amp;quot;);	 
+			if (formAttr.indexOf(&amp;quot;download&amp;quot;) &amp;gt; -1)
+			{
+				formlist = form.getChildren();
+				//只处理TD标签
+				var list = HtmlParser.filterHtml(formlist,&amp;quot;TD&amp;quot;);
+				var edidat = list.elementAt(2).getFirstChild().getText();
+				
+				//得到From中的日期，判断是不是指定日期
+				edidat = edidat.substring(edidat.indexOf(&amp;quot;-&amp;quot;)-4,edidat.lastIndexOf(&amp;quot;:&amp;quot;)+3);
+				var curdat = db.GetSQL(&amp;quot;select to_char(to_date(&amp;apos;&amp;quot;+edidat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;) from dual&amp;quot;);
+
+				if (curdat.equals(dat))
+				{
+					//如果是当天取出对应的&amp;lt;a&amp;gt;标签中的链接地址
+					var link = HtmlParser.filterHtml(formlist,&amp;quot;A&amp;quot;);
+					link = link.elementAt(0);
+					var urlpath = &amp;quot;http://edi.lawson.com.cn&amp;quot;+HtmlParser.urlCodeTrnas(link.getAttribute(&amp;quot;href&amp;quot;),link.getStringText(),code);
+					//下载文件到指定目录
+					HtmlParser.downloadFile(urlpath,&amp;quot;d:/EDIDownloads/&amp;quot;+link.getStringText());						
+				}
+				
+			}
+		}	
+				
+	}catch(e){
+		throw new Exception(e);
+	}
+	finally
+	{
+		if(db != null)
+			db.Close();
+	}	
+}
+
+function Main()
+{
+	return getOrderStr(&amp;quot;&amp;quot;,&amp;quot;2010-09-04&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;003697&amp;quot;,&amp;quot;003697&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;UTF-8&amp;quot;); 	
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

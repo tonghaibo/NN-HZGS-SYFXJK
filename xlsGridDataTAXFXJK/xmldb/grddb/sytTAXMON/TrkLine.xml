@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >TrkLine</MWID><NAME >按月走势图</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TrkLine.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >chart1</ID><NAME ></NAME><ACTTYP >CHART4</ACTTYP><URL >stat</URL><URLTARGET >cnt</URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >320</IMG><IMGMOUSE >160</IMGMOUSE><C10 >chart1</C10><C11 >chart1</C11><C12 >chart1</C12><C13 >chart1</C13><C14 >chart1</C14><C15 >chart1</C15><C16 >chart1</C16><C17 >chart1</C17><C18 >chart1</C18><C19 >chart1</C19><C20 >chart1</C20><C21 >chart1</C21><C22 >chart1</C22></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >stats</ID><NAME >状态</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >stats</C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >7</NROW><NCOL >3</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,1,0</C21><C22 >0,1,0</C22></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >/*select substr(b.id,6) dat,cnt
+from(
+select to_char(a.dat,&amp;apos;YYYY-MM&amp;apos;) 日期,count(*) cnt
+from (
+select dat from tax_trkhdr a where tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select crtdat from trkhdr a where dtlusr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+) a
+where to_char(a.dat,&amp;apos;YYYY-MM&amp;apos;)=to_char(sysdate,&amp;apos;YYYY-MM&amp;apos;) 
+group by to_char(a.dat,&amp;apos;YYYY-MM&amp;apos;)
+) a, v_yyyy_mm b
+where  a.日期(+)=b.id
+and id like to_char(sysdate,&amp;apos;YYYY&amp;apos;)||&amp;apos;%&amp;apos; 
+order by b.id asc
+*/
+
+select stat,sum(cnt) cnt from (
+select decode(stat,&amp;apos;1&amp;apos;,&amp;apos;未分派&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;已完成&amp;apos;,&amp;apos;其他&amp;apos;) stat,count(*) cnt
+from (
+select dat,stat from tax_trkhdr a where acc=&amp;apos;[%SYS_ACCID]&amp;apos; and tousr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+union all
+select crtdat dat,stat from trkhdr a where acc=&amp;apos;[%SYS_ACCID]&amp;apos; and dtlusr=(select name from usr where org=&amp;apos;[%SYS_ORGID]&amp;apos; and id=&amp;apos;[%SYS_USRID]&amp;apos;)
+) a
+where to_char(a.dat,&amp;apos;YYYY-MM&amp;apos;)=to_char(sysdate,&amp;apos;YYYY-MM&amp;apos;) 
+group by stat
+)group by stat
+</DATDSC><C4 >main</C4><C5 >main</C5><C6 >main</C6><C7 >main</C7><C8 >main</C8><C9 >main</C9><C10 >main</C10><C11 >main</C11><C12 >main</C12><C13 >main</C13><C14 >main</C14><C15 >main</C15><C16 >main</C16><C17 >main</C17><C18 >main</C18><C19 >main</C19><C20 >main</C20><C21 >main</C21></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

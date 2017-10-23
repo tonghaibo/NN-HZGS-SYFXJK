@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1" background="xlsgrid/images/xmidwarebk.jpg">
+ <rect id="F1:TAXMON:TK:核实任务"  round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F"  fill="#EEEEEE"   fillto="#FFFFFF" x="307" y="71" width="120"  height="60" selectflag="mouseclick"  menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F1:TAXMON:TK:核实任务[%quot]/[%right]"  属性="">核实任务</rect>
+ <connector id="connector_208_125919" from="F1:TAXMON:TK:核实任务" to="roundrect_125917" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_125920" from="F1:TAXMON:TK:核实任务" to="rect_125918" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <polygon id="flow_trknewtyp1" selsytid="TAXMON"  points="339,296 327,296 326,303 339,296 339,229 200,229 200,303 326,303 339,296 339,296 339,296 339,296 339,296" flowid="trknewtyp1" flowname="trknewtyp1.dbflow的名称" changeto="page" stroke="#000000" fill="#FFFFCC"  xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:TAXMON:trknewtyp1[%quot]/[%right]"  属性="" url="flow.jsp?flowid=trk_main1.flow">疑似漏管</polygon>
+ <polygon id="flow_trknewtyp2" selsytid="TAXMON"  points="539,296 527,296 526,303 539,296 539,229 400,229 400,303 526,303 539,296 539,296 539,296 539,296 539,296" flowid="trknewtyp2" flowname="trknewtyp2.dbflow的名称" changeto="page" stroke="#000000" fill="#FFFFCC"  xmlmenu="[%left]item name=[%quot]打开该子图[%quot] id=[%quot]m_flow_:TAXMON:trknewtyp2[%quot]/[%right]"  url="flow.jsp?flowid=trk_main2.flow">申报异常</polygon>
+ <connector id="connector_208_61116" from="F1:TAXMON:TK:核实任务" to="flow_trknewtyp1" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_61117" from="F1:TAXMON:TK:核实任务" to="flow_trknewtyp2" fromcp="23" tocp="21" type="208"  >
+ </connector>
+</svg>

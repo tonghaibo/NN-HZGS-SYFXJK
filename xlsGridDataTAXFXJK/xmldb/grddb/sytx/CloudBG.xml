@@ -1,0 +1,381 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CloudBG</MWID><NAME >云桌面背景切换</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CloudBG.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD >1</HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >选择作为背景</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >save</C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var curimgpath = &amp;quot;&amp;quot;;
+var imgpatharry = null;
+var imgpatharry2 = null;
+//数据加载完毕
+var rowcount = 0;
+var sheet1 = 3;
+function _thisOnpost_loaddata(sheet)
+{
+	//_this.ShowToolBar(0);
+	_this.SetColVisible(0,3,-1);//原始图片地址列
+	_this.SetColVisible(0,4,-1);//缩略图地址列
+	_this.SetSheetName(0,&amp;quot;预览图片&amp;quot; );
+	
+	
+	_this.SetSheetName(0,&amp;quot;系统推荐&amp;quot; );
+	var sheet2 = _this.AddSheet(&amp;quot;桌面库&amp;quot;);
+	var sheet3 = _this.AddSheet(&amp;quot;我提交的&amp;quot;);
+	_this.ShowTabBar(1);	
+	sheet1 = _this.AddSheet(&amp;quot;预览页面&amp;quot;);
+	_this.SplitSheet(&amp;quot;0,1,2&amp;quot;,&amp;quot;H&amp;quot;,&amp;quot;260&amp;quot;);
+	_this.SetCurrentSheet(sheet1);
+	_this.ShowTabBar(1);
+//	_this.LoadZXGFile(zxgRoot+&amp;quot;CloudBGPreview.zxg&amp;quot;,-1,sheet1);
+	//先判断用户是否已经有设定背景,如果有,则预览,没有,预览图为空白
+	var img = _this.LoadImage(&amp;quot;org/XLSGRID/images/bananer.gif&amp;quot;);
+//  	_this.SetToImage(&amp;quot;&amp;quot;,1,3,1,img);
+	var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot;?&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;svg title=\&amp;quot;SVGform\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fill-type=\&amp;quot;1\&amp;quot; &amp;gt;&amp;quot;+  //background=\&amp;quot;xlsgrid/images/xmidwarebk.jpg\&amp;quot;
+		//&amp;quot; &amp;lt;img id=\&amp;quot;img_1\&amp;quot; x=\&amp;quot;0\&amp;quot; y=\&amp;quot;0\&amp;quot; src=\&amp;quot;org/XLSGRID/images/bananer.gif\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; stroke-width=\&amp;quot;1\&amp;quot; width=\&amp;quot;\&amp;quot; height=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+
+		//&amp;quot; &amp;lt;/img&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	_this.SetToSVGForm(&amp;quot;&amp;quot;,1,-1,-1,xml);
+  	_this.SetCurrentSheet(sheet);
+  	//显示系统默认背景
+  	var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot;?&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;svg title=\&amp;quot;SVGform\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fill-type=\&amp;quot;1\&amp;quot; &amp;gt;&amp;quot;; //background=\&amp;quot;xlsgrid/images/xmidwarebk.jpg\&amp;quot;
+	_sql.querytods(&amp;quot;MAIN&amp;quot;,&amp;quot;&amp;quot;);
+	var y1=6;
+	var y2=17;
+	
+	if ( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+		imgpatharry2 = new Array(_this.XMLDS_GetRowCount());
+		for(var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++){
+			var path =_this.XMLDS_GetString(i,&amp;quot;MPATH&amp;quot;);//图片路径
+			imgpatharry2[i]=_this.XMLDS_GetString(i,&amp;quot;PATH&amp;quot;);
+			var cury1=y1+158*i;
+			var cury2=y2+158*i;
+			xml +=&amp;quot; &amp;lt;rect id=\&amp;quot;rect_img_&amp;quot;+i+&amp;quot;\&amp;quot; x=\&amp;quot;5\&amp;quot; y=\&amp;quot;&amp;quot;+cury1+&amp;quot;\&amp;quot; width=\&amp;quot;232\&amp;quot; height=\&amp;quot;152\&amp;quot; round=\&amp;quot;10\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fillto=\&amp;quot;#FFFFFF\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;&amp;quot;+
+				&amp;quot; &amp;lt;img  id=\&amp;quot;img_&amp;quot;+i+&amp;quot;\&amp;quot; x=\&amp;quot;17\&amp;quot; y=\&amp;quot;&amp;quot;+cury2+&amp;quot;\&amp;quot; src=\&amp;quot;&amp;quot;+path +&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; stroke-width=\&amp;quot;1\&amp;quot; width=\&amp;quot;207\&amp;quot; height=\&amp;quot;120\&amp;quot; 属性=\&amp;quot;\&amp;quot; round=\&amp;quot;300\&amp;quot;url=\&amp;quot;javascript:clickimg(&amp;apos;&amp;quot;+i+&amp;quot;&amp;apos;);\&amp;quot;&amp;gt;&amp;quot;+
+				&amp;quot; &amp;lt;/img&amp;gt;&amp;quot;;
+			
+		}		
+	}
+
+		
+	xml +=	&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	rowcount=2;
+	_this.SetToSVGForm(&amp;quot;&amp;quot;,0,-1,-1,xml);
+	//显示系统默认背景
+  	var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot;?&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;svg title=\&amp;quot;SVGform\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fill-type=\&amp;quot;1\&amp;quot; &amp;gt;&amp;quot;; //background=\&amp;quot;xlsgrid/images/xmidwarebk.jpg\&amp;quot;
+	_sql.querytods(&amp;quot;MYBG&amp;quot;,&amp;quot;&amp;quot;);
+	var y1=6;
+	var y2=17;
+	
+	if ( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+		imgpatharry2 = new Array(_this.XMLDS_GetRowCount());
+		for(var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++){
+			var path =_this.XMLDS_GetString(i,&amp;quot;MPATH&amp;quot;);//图片路径
+			imgpatharry2[i]=_this.XMLDS_GetString(i,&amp;quot;PATH&amp;quot;);
+			var cury1=y1+158*i;
+			var cury2=y2+158*i;
+			xml +=&amp;quot; &amp;lt;rect id=\&amp;quot;rect_img_&amp;quot;+i+&amp;quot;\&amp;quot; x=\&amp;quot;5\&amp;quot; y=\&amp;quot;&amp;quot;+cury1+&amp;quot;\&amp;quot; width=\&amp;quot;232\&amp;quot; height=\&amp;quot;152\&amp;quot; round=\&amp;quot;10\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fillto=\&amp;quot;#FFFFFF\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;&amp;quot;+
+				&amp;quot; &amp;lt;img  id=\&amp;quot;img_&amp;quot;+i+&amp;quot;\&amp;quot; x=\&amp;quot;17\&amp;quot; y=\&amp;quot;&amp;quot;+cury2+&amp;quot;\&amp;quot; src=\&amp;quot;&amp;quot;+path +&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; stroke-width=\&amp;quot;1\&amp;quot; width=\&amp;quot;207\&amp;quot; height=\&amp;quot;120\&amp;quot; 属性=\&amp;quot;\&amp;quot; round=\&amp;quot;300\&amp;quot;url=\&amp;quot;javascript:clickimg(&amp;apos;&amp;quot;+i+&amp;quot;&amp;apos;);\&amp;quot;&amp;gt;&amp;quot;+
+				&amp;quot; &amp;lt;/img&amp;gt;&amp;quot;;
+			
+		}		
+	}
+
+		
+	xml +=	&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	rowcount=2;
+	_this.SetToSVGForm(&amp;quot;&amp;quot;,sheet2 ,-1,-1,xml);
+
+}
+
+//保存
+function save()
+{
+	var imgpath = curimgpath;
+	try{
+		var ret = invokeOSFunc(&amp;quot;save&amp;quot;,&amp;quot;&amp;orgid=&amp;quot;+G_ORGID+&amp;quot;&amp;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;imgpath=&amp;quot;+imgpath) ;
+		alert(&amp;quot;选择成功!需要刷新后桌面背景才会更改.&amp;quot;);
+		window.close();
+	}catch(e){
+		alert(e);
+	}
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	
+	if(sheet==&amp;quot;0&amp;quot;&amp;&amp;col==&amp;quot;2&amp;quot;){//选择的图片列号
+		var imgpath=_this.GetCellText(0,row,3);//源图片地址
+		if(imgpath!=null&amp;&amp;imgpath!=&amp;quot;&amp;quot;){
+			curimgpath = imgpath;
+			_this.SetFocusCell(0,0,0);
+			_this.SetCellText(1,0,0,&amp;quot;&amp;quot;);
+//  			_this.SetToImage(&amp;quot;&amp;quot;,1,3,1,imgpatharry[row-2]);
+			var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot;?&amp;gt;&amp;quot;+
+					&amp;quot;&amp;lt;svg title=\&amp;quot;SVGform\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fill-type=\&amp;quot;1\&amp;quot; background=\&amp;quot;xlsgrid/images/xmidwarebk.jpg\&amp;quot;&amp;gt;&amp;quot;+
+					&amp;quot; &amp;lt;img id=\&amp;quot;img_1\&amp;quot; x=\&amp;quot;0\&amp;quot; y=\&amp;quot;0\&amp;quot; src=\&amp;quot;&amp;quot;+imgpatharry2[row-2]+&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; stroke-width=\&amp;quot;1\&amp;quot; width=\&amp;quot;\&amp;quot; height=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+
+					&amp;quot; &amp;lt;/img&amp;gt;&amp;quot;+
+					&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+				_this.SetToSVGForm(&amp;quot;&amp;quot;,1,-1,-1,xml);
+  			_this.SetFocusCell(1,0,0);
+		}
+	}
+	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;选择作为背景&amp;quot;){
+		save();
+	}
+}
+function clickimg(id){
+		for(var i=0;i&amp;lt;rowcount;i++){
+			_this.XMLCTL_SetAttribe(&amp;quot;CELL_0_-1_-1&amp;quot;,&amp;quot;rect_img_&amp;quot;+i,&amp;quot;fill&amp;quot;,&amp;quot;#FFFFFF&amp;quot; );
+			_this.XMLCTL_SetAttribe(&amp;quot;CELL_0_-1_-1&amp;quot;,&amp;quot;rect_img_&amp;quot;+i,&amp;quot;fillto&amp;quot;,&amp;quot;#FFFFFF&amp;quot; );
+		}
+		_this.XMLCTL_SetAttribe(&amp;quot;CELL_0_-1_-1&amp;quot;,&amp;quot;rect_img_&amp;quot;+id,&amp;quot;fill&amp;quot;,&amp;quot;#EBF3FD&amp;quot; );
+		_this.XMLCTL_SetAttribe(&amp;quot;CELL_0_-1_-1&amp;quot;,&amp;quot;rect_img_&amp;quot;+id,&amp;quot;fillto&amp;quot;,&amp;quot;#FFFFFF&amp;quot; );
+		curimgpath = imgpatharry2[id];
+		var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot;?&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;svg title=\&amp;quot;SVGform\&amp;quot; fill=\&amp;quot;#FFFFFF\&amp;quot; fill-type=\&amp;quot;1\&amp;quot; &amp;gt;&amp;quot;+  //background=\&amp;quot;xlsgrid/images/xmidwarebk.jpg\&amp;quot;&amp;gt;
+			&amp;quot; &amp;lt;img id=\&amp;quot;img_1\&amp;quot; x=\&amp;quot;0\&amp;quot; y=\&amp;quot;0\&amp;quot; src=\&amp;quot;&amp;quot;+curimgpath +&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; stroke-width=\&amp;quot;1\&amp;quot; width=\&amp;quot;\&amp;quot; height=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+
+			&amp;quot; &amp;lt;/img&amp;gt;&amp;quot;+
+			//&amp;quot;&amp;lt;rect id=\&amp;quot;roundrect_474516\&amp;quot; x=\&amp;quot;18\&amp;quot; y=\&amp;quot;17\&amp;quot; width=\&amp;quot;80\&amp;quot; height=\&amp;quot;35\&amp;quot; round=\&amp;quot;5\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; fill=\&amp;quot;#DDDDDD\&amp;quot; fillto=\&amp;quot;#FFFFFF\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; url=\&amp;quot;javascript:save();\&amp;quot;&amp;gt;选择&amp;lt;/rect&amp;gt;&amp;quot;+
+			&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+
+		_this.SetToSVGForm(&amp;quot;imgzoom&amp;quot;,sheet1,-1,-1,xml);
+  		_this.SetFocusCell(1,0,0);
+  		
+		_this.setRedraw(1);//刷新
+		_this.SVGFORM_ZOOM(&amp;quot;imgzoom&amp;quot;,-2);
+
+ 
+} 
+
+
+//上传图片
+function UploadImage2()
+{
+	var row=_this.GetCurrentRow(0);
+	if ( row &amp;lt;1 ) {alert(&amp;quot;请选中行，再上传文件&amp;quot;);return;}
+	var id=_this.GetCellText(0,row,5);
+	var workdir = _this.GetWorkDir();
+	var SYSURLID = &amp;quot;public2&amp;quot;;
+	var deforg=thisorgid;
+	var webdir = &amp;quot;webresource/images/&amp;quot;+ deforg+ &amp;quot;/usr&amp;quot;+G_USRID+&amp;quot;/&amp;quot; ;
+	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+	  var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+	  form.reset();
+	  btn.click();
+	var filename = btn.value;
+
+	var fs = filename.split(&amp;quot;\\&amp;quot;);
+		// 上传文件到xlsGridData
+		var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+		//2010-10新增，加上内容的编号，以避免文件名冲突
+		var newfilename= fs[fs.length-1];
+		var srcfilnam = fs[fs.length-1];
+		
+		var newfilenames=newfilename.split(&amp;quot;.&amp;quot;);
+		newfilename=newfilenames[0]+&amp;quot;-&amp;quot;+id;
+		if(newfilenames.length&amp;gt;1)
+			newfilename+=&amp;quot;.&amp;quot;+newfilenames[1];
+		_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+		_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+		_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir ,0);	//远程保存的目录
+
+		_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,newfilename,0);//注意这里只能是文件名，用于远程保存的文件名
+		_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+		var ret=_this.SendHttpRequest(); 
+
+		_this.CloseHttpRequest();
+//		var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+//		var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+//		var str = ret.substring(loc1+7,loc2);
+//		files+=&amp;quot;&amp;quot;+(i+1)+&amp;quot;.&amp;quot;+filename+&amp;quot;:&amp;quot;+str +&amp;quot;\n&amp;quot;;
+//		alert( files);
+		// 从xlsGridData同步到web
+		try {
+			invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+deforg  +&amp;quot;&amp;sysurlid=&amp;quot;+SYSURLID) ;       
+		}
+		catch ( e ) {
+			alert ( e );
+		}
+		if ( ret.indexOf(&amp;quot;成功&amp;quot;)&amp;gt;0 ){
+			_this.SetCellText(0,row,12,&amp;quot;images/&amp;quot;+ deforg+ &amp;quot;/&amp;quot;+SYSURLID+&amp;quot;/&amp;quot;+newfilename);
+			
+
+			if(_this.GetCellText(0,row,2)==&amp;quot;&amp;quot;)//图片上传的一个bug，修改状态上传后没有写到数据库
+			_this.SetCellText(0,row,2,&amp;quot;U&amp;quot;);
+			
+			alert( &amp;quot;文件&amp;quot;+filename +&amp;quot;已上传为&amp;quot;+newfilename+&amp;quot;，请点击右上角的【保存】按钮保存本页信息&amp;quot;);
+
+		}
+		else alert ( ret );
+//		alert( ret);
+		
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );//加载类包 
+
+function save(){
+	var db = null;
+	var orgid =  webpack.EAWebDeforg.GetDeforg(request);
+	var usr=web.EASession.GetLoginInfo(request);//获取当前用户信息	
+	var orgid= usr.getLogorg();
+	try {
+		db = new pubpack.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		sql = &amp;quot;select * from usrprofile where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;AND ORG=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount()&amp;lt;1){
+			//找不到该用户的信息添加记录
+			sql = &amp;quot;insert into usrprofile (id,org,BGPICTURE )values(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+imgpath+&amp;quot;&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+		}else{
+			sql = &amp;quot;update usrprofile set BGPICTURE =&amp;apos;&amp;quot;+imgpath+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;AND ORG=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+//		throw new Exception(orgid+&amp;quot;imgpath=&amp;quot;+imgpath);
+	}catch(e){
+		db.Rollback();
+		throw new Exception(e);
+	}finally{
+		if ( db != null )
+		db.Close();
+	}	
+}
+
+function adddesktop(){
+	var db = null;
+	var usr=web.EASession.GetLoginInfo(request);//获取当前用户信息		
+	var usrid=usr.getUsrid();
+	var orgid= usr.getLogorg();
+ 
+	try {
+		db = new pubpack.EADatabase();
+		pubpack.EAFunc.Log(&amp;quot;CloudBG.adddesktop--&amp;quot;);
+		var sql = &amp;quot;&amp;quot;;
+		sql = &amp;quot;select * from usrprofiledtl where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;AND ORG=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;and refguid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;AND TYP=&amp;apos;MYDESKTOP&amp;apos;&amp;quot;;
+		
+		var ds = db.QuerySQL(sql);
+ 
+		if(ds.getRowCount()&amp;lt;1){
+			//找不到该用户的信息添加记录
+			sql = &amp;quot;insert into usrprofiledtl (id,org,refguid ,TYP)values(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;apos;MYDESKTOP&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+			pubpack.EAFunc.Log(sql);
+ 		}
+		db.Commit();
+ 
+		return sql;
+	}catch(e){
+		db.Rollback();
+		pubpack.EAFunc.Log(&amp;quot;CloudBG.adddesktop:&amp;quot;+e.toString());
+		throw new Exception(e);
+	}finally{
+		if ( db != null )
+		db.Close();
+	}	
+}
+function deldesktop(){
+	var db = null;
+	var usr=web.EASession.GetLoginInfo(request);//获取当前用户信息		
+	var usrid=usr.getUsrid();
+	var orgid= usr.getLogorg();
+
+	try {
+		db = new pubpack.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		sql = &amp;quot;delete from usrprofiledtl where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;AND ORG=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;and refguid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;AND TYP=&amp;apos;MYDESKTOP&amp;apos;&amp;quot;;
+		var str = db.ExcecutSQL(sql);
+		db.Commit();
+		return sql;
+	}catch(e){
+		db.Rollback();
+		throw new Exception(e);
+	}finally{
+		if ( db != null )
+		db.Close();
+	}	
+}
+
+// 复制xlsGridData到web
+// 参数 deforg  sysurlid 
+function copytoweb()
+{
+	var srcpath = basePath +&amp;quot;webresource/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+sysurlid+&amp;quot;/&amp;quot;; 
+	var destpath = pubpack.EAOption.approot+&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/&amp;quot;+sysurlid+&amp;quot;/&amp;quot;;
+	pubpack.EAFunc.copyDirectiory(srcpath,destpath,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+	return &amp;quot;服务端：文件已从&amp;quot;+ srcpath +&amp;quot;同步到&amp;quot;+destpath ;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select * from (
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage0.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage0.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage1.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage1.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage2.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage2.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage3.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage3.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage4.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage4.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage5.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage5.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage6.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage6.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage7.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage7.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage8.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage8.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage9.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage9.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage10.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage10.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage11.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage11.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage12.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage12.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage13.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage13.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage14.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage14.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;10&amp;apos;img,&amp;apos;xlsgrid/images/flash/images/bgimage15.jpg&amp;apos; path,&amp;apos;xlsgrid/images/flash/images/bgimage15.jpg&amp;apos;  mpath from dual
+union all
+select &amp;apos;11&amp;apos;img,icon path,icon2 mpath from sysurl where refid like &amp;apos;Background&amp;apos;
+)
+order by img </DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9></ROW>
+<ROW num="1" ><ID >GETUSRBG</ID><NAME ></NAME><DATDSC >SELECT BGPICTURE FROM USRPROFILE WHERE ID=&amp;apos;&amp;quot;+SYS_USRID+&amp;quot;&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >GETUSRBG</C8><C9 ></C9></ROW>
+<ROW num="2" ><ID >MYBG</ID><NAME ></NAME><DATDSC >select &amp;apos;11&amp;apos;img,refid1 path,refid1 mpath 
+from usrprofiledtl where id =&amp;apos;[%SYS_USRID]&amp;apos; and org = &amp;apos;[%SYS_ORGID]&amp;apos;and typ = &amp;apos;MYBG&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >MYBG</C8><C9 ></C9></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

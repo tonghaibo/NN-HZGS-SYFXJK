@@ -1,0 +1,1059 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >SelBilFlw</MWID><NAME >选择数据流状态数据</NAME><NOTE ></NOTE><FILE >SelBilFlw.zxg</FILE><FIXED >4,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><WIDTHMOD >1</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >execBilFlw</ID><NAME >保存</NAME><TIP ></TIP><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><BTNORD >8</BTNORD><C7 ></C7></ROW>
+<ROW num="1" ><ID >back</ID><NAME >关闭</NAME><TIP ></TIP><IMG ></IMG><IMGMOUSE ></IMGMOUSE><BTNORD >9</BTNORD><C7 ></C7></ROW>
+<ROW num="2" ><ID >forceclose</ID><NAME >强制关闭</NAME><TIP ></TIP><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><BTNORD >3</BTNORD><C7 >forceclose</C7></ROW>
+<ROW num="3" ><ID >filter</ID><NAME >条件查询</NAME><TIP ></TIP><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><BTNORD >2</BTNORD><C7 ></C7></ROW>
+<ROW num="4" ><ID >nextPage</ID><NAME >下一页</NAME><TIP ></TIP><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><BTNORD >1</BTNORD><C7 ></C7></ROW>
+<ROW num="5" ><ID >prePage</ID><NAME >上一页</NAME><TIP ></TIP><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><BTNORD >0</BTNORD><C7 ></C7></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+//      数据流选择处理程序
+//
+//      要求参数：
+//          datflw 数据流的ID
+//              
+//================================================================// 
+
+var action=&amp;apos;&amp;apos;;
+var datflw=&amp;quot;&amp;quot;;
+var where=&amp;quot;&amp;quot;;
+var osfunc=&amp;quot;&amp;quot;;
+var extwhere = &amp;quot;&amp;quot;;
+var untprice=&amp;quot;1&amp;quot;; //是否对转换数进行单位转换
+var forceMappedmode=&amp;apos;&amp;apos;;
+var curpage = 0;
+var corpsperpage = 5;
+fixedsize = false;
+//================================================================// 
+// 函数：execBilFlw
+// 说明：把数据集提交回服务端
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/05 14:28:53
+// 修改日志：
+//================================================================//
+function execBilFlw()
+{
+  _this.XMLDS_SetCurrentDsID(xmlds);
+  var param = new Object;
+  if (typeof refbil != &amp;quot;undefined&amp;quot;)
+    param.refbil = refbil; //传递额外的refbil查询参数
+  param.bilflwid = datflw;
+  param.bilxml = _this.XMLDS_GetXml();
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  if(forceMappedmode!=&amp;quot;&amp;quot; &amp;&amp; forceMappedmode==0)
+  {
+    var msg = invokeOSFuncExt(&amp;quot;batchconv&amp;quot;,param);
+    return checkResult(msg,&amp;quot;批量转换成功&amp;quot;);
+  }
+  var msg = invokeOSFuncExt(&amp;quot;runbilFlw&amp;quot;,param);
+  var success = checkResult(msg,&amp;quot;&amp;quot;);
+  if(success)
+  {
+      if(confirm(&amp;quot;保存成功。是否打开目标单据?&amp;quot;))
+      {
+        var bil = msg.split(&amp;quot;,&amp;quot;)
+        if(bil.length&amp;gt;1)
+        {
+        var width = screen.width;
+       	var height = screen.height;
+       	var option =&amp;quot;WIDTH=&amp;quot;+width +&amp;quot;,HEIGHT=&amp;quot;+(height*1-20) +&amp;quot;,left=0,top=0,toolbar=no,menu=no,resizable=yes&amp;quot;;
+
+          var url = &amp;quot;ShowXlsGrid.sp?grdid=&amp;quot;+bil[0]+&amp;quot;&amp;bilid=&amp;quot;+bil[1]
+               +&amp;quot;&amp;datflw=&amp;quot;+datflw+&amp;quot;&amp;action=&amp;quot;+action+&amp;quot;&amp;datacc=&amp;quot;+bil[3]+&amp;quot;&amp;osfunc=&amp;quot;+osfunc;
+          window.open( url ,&amp;quot;&amp;quot;,option ); 
+
+          clearolddata();
+          loaddatflw();
+        }else
+          alert(&amp;quot;返回结果格式错误:&amp;quot;+msg);
+      }
+      else {
+          clearolddata();
+          loaddatflw();
+//          alert(&amp;quot;开始&amp;quot;);
+      }
+      try{
+//          alert(&amp;quot;注意下面的信息:&amp;quot;);
+//          alert(&amp;quot;就是:&amp;quot;+window.opener);
+          	window.opener.doit();
+          }catch(e){
+          	//alert(&amp;quot;出事了:&amp;quot;+e);
+          }
+  }
+
+}
+
+var xmlds=0;
+var xmldsmsg=0 ;
+var uisheet = 0;
+  var datCol0 = 1;
+  var datCol1 = 1;
+  var datRow0 = 3;
+  var datRow1;
+//================================================================// 
+// 函数： _thisOnpost_loaddata
+// 说明：调用getBillDsXml()服务端脚本，利用获得的数据构造选择界面
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/05 14:27:47
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+  //解释action参数
+  if(action.length&amp;gt;0)
+  {
+    var params = action.split(&amp;quot;~&amp;quot;);
+    if(params.length==2)
+    {
+      untprice = params[0];
+      extwhere = params[1];
+    }
+  }
+  xmldsmsg = _this.XMLDS_GetCurrentDsID();
+  curpage=1;
+  var listval = _this.CreateListValue();
+  var msg = invokeOSFunc(&amp;quot;loadclasstyp&amp;quot;,&amp;quot;&amp;quot;);
+  if(!msg)
+  {
+    alert(&amp;quot;操作错误,可能是网络连接错误或服务器异常。&amp;quot;);
+    return;
+  }
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  _this.XMLDS_Reset();
+  _this.XMLDS_Parse(msg);
+  var ismsg = !!_this.XMLDS_GetString(0,&amp;quot;_ServerMsg_&amp;quot;);
+  
+  _this.SetListValue(listval ,&amp;quot;&amp;quot;,&amp;quot; 全部&amp;quot;);
+    if(ismsg )
+    {
+      alert(_this.XMLDS_GetString(0,&amp;quot;TOPIC&amp;quot;));
+      return;
+    }else
+    {
+      var c = _this.XMLDS_GetRowCount();
+      for(var i=0;i&amp;lt;c;i++)
+      {
+        _this.SetListValue(listval ,_this.XMLDS_GetString(i,&amp;quot;id&amp;quot;),_this.XMLDS_GetString(i,&amp;quot;name&amp;quot;));
+      }
+    }
+  _this.SetTocomboBox(&amp;quot;&amp;quot;,0,1,1,listval);
+  //debugger;
+  //_this.SetAttribe(&amp;quot;CELL_0_1_1&amp;quot;,_this.ATTR_CELL_READONLY,0);
+  //_this.SetToCheckBox(&amp;quot;large&amp;quot;,0,1,1,&amp;quot;大包装&amp;quot;,1,0);
+  //_this.SetToCheckBox(&amp;quot;small&amp;quot;,0,1,2,&amp;quot;小包装&amp;quot;,1,0);
+  //if(typeof manquery==&amp;apos;undefined&amp;apos;)
+  loaddatflw();
+}
+
+var hasprepage = false;
+var hasnextpage= false;
+
+function loaddatflw()
+{
+  //debugger
+  //var params = new Object();
+  //params.accid = accid;
+  //params.bilflwcls = datflw;
+  //params.where = where + getitemfilter();
+  //params.corpsperpage = corpsperpage;
+  //params.curpage = curpage;
+  
+  //var xml = invokeOSFuncExt(&amp;quot;getBillDsXml&amp;quot;,params,true);
+  //alert ( untprice );
+  var hideDetail=false;
+  var canSelDtl = true;
+  _this.SetRedraw(-1);
+  try
+  {
+    if(!xmlds)
+      xmlds= _this.XMLDS_CREATE();
+    else
+      _this.XMLDS_SetCurrentDsID(xmlds);
+   //06-1-10 使用压缩进行数据载入   
+    _this.XMLDS_Load(&amp;quot;RunScript.sp?accid=&amp;quot;+accid+&amp;quot;&amp;sytid=&amp;quot;+G_SYTID+&amp;quot;&amp;canzip=1&amp;quot;+&amp;quot;&amp;usrloc=&amp;quot;+G_USRLOC+&amp;quot;&amp;osfunc=&amp;quot;+osfunc+
+     &amp;quot;&amp;grdtyp=&amp;quot;+grdtyp+&amp;quot;&amp;grdid=&amp;quot;+grdid+&amp;quot;&amp;func=getBillDsXml&amp;bilflwcls=&amp;quot;+datflw+&amp;quot;&amp;where=&amp;quot;+
+	     (where + extwhere  + getitemfilter()).replace(/%/g,&amp;quot;%25&amp;quot;)+&amp;quot;&amp;corpsperpage=&amp;quot;+corpsperpage+&amp;quot;&amp;curpage=&amp;quot;+curpage);
+//alert(&amp;quot;RunScript.sp?accid=&amp;quot;+accid+&amp;quot;&amp;sytid=&amp;quot;+G_SYTID+&amp;quot;&amp;canzip=1&amp;quot;+&amp;quot;&amp;usrloc=&amp;quot;+G_USRLOC+&amp;quot;&amp;osfunc=&amp;quot;+osfunc+
+//     &amp;quot;&amp;grdtyp=&amp;quot;+grdtyp+&amp;quot;&amp;grdid=&amp;quot;+grdid+&amp;quot;&amp;func=getBillDsXml&amp;bilflwcls=&amp;quot;+datflw+&amp;quot;&amp;where=&amp;quot;+
+//	     (where + extwhere  + getitemfilter()).replace(/%/g,&amp;quot;%25&amp;quot;)+&amp;quot;&amp;corpsperpage=&amp;quot;+corpsperpage+&amp;quot;&amp;curpage=&amp;quot;+curpage);
+//var w = window.open();
+//w.document.body.innerText = _this.XMLDS_GetXml();
+//_this.SetCellText(0,1,1,_this.XMLDS_GetXml());
+
+    //_this.XMLDS_Parse(xml);
+    var rowcount = _this.XMLDS_GetRowCount();
+    var fields = _this.XMLDS_GetColumnCount();
+    datCol1 = datCol0 + fields;
+    var lastCol = _this.GetColCount(uisheet)-1;
+    var lastRow = _this.GetRowCount(uisheet)-1;
+    //_this.SetRedraw(-1);
+   
+    if(rowcount == 0)
+    {
+          _this.SetRedraw(1);
+          _this.SetCellText(0,4,3,&amp;quot;没有符合条件的单据。&amp;quot;);
+          _this.SetCellColor(0,4,3,255,0,0)
+          //alert(&amp;quot;没有符合条件的单据。&amp;quot;);
+          return;
+    }
+    _this.SetCellBkColor(uisheet,-1,-1,255,255,255);      // 背景色为白色
+    datRow1 = datRow0 + rowcount;
+    for(var i=lastRow;i&amp;lt;datRow1;i++)
+    {
+      _this.AppendRow(uisheet,datRow0);
+    }
+    var curRow = datRow0-1;
+    var oldmw = &amp;quot;&amp;quot;;
+    var oldbil = &amp;quot;&amp;quot;;
+    var nBillCount = 0 ;      // 保存单据编号的个数
+    for(var i=0;i&amp;lt;rowcount;i++)
+    {
+      curRow++;
+      var mwid = _this.XMLDS_GetStringAt(i,0);
+      var bilid = _this.XMLDS_GetStringAt(i,1);
+      var beginBil = (oldmw!=mwid)||(oldbil!=bilid);
+      if(beginBil)
+      {
+        if(i==rowcount-1)//(mwid==&amp;quot;上一页&amp;quot;)||(bilid==&amp;quot;下一页&amp;quot;))
+        {
+          _this.SetCellText(uisheet,curRow,datCol0,mwid);
+          _this.SetCellText(uisheet,curRow,datCol0+1,bilid);
+          hasprepage = mwid!=&amp;quot;&amp;quot;;
+          hasnextpage = bilid!=&amp;quot;&amp;quot;;
+          break;
+        }
+        oldmw=mwid; oldbil=bilid;
+        _this.SetCellText(uisheet,curRow,datCol0,mwid+&amp;quot;-&amp;quot;+bilid);
+        _this.SetCellText(uisheet,curRow,datCol0+2,_this.XMLDS_GetStringAt(i,5));
+        // 为单据头设置颜色
+        //for( var col=1;col&amp;lt;=6;col++)  _this.SetCellBkColor(uisheet,curRow,col,0xFF,0xFF,0x00);
+        _this.AppendRow(uisheet,datRow1-1);
+        datRow1++;
+        beginBil=false;
+        nBillCount ++;
+        _this.SetCellText(uisheet,curRow,datCol0-1,nBillCount);     // 序号
+        _this.SetCellShowText(uisheet,curRow,datCol0+1,_this.XMLDS_GetStringAt(i,7));     // 日期
+        _this.SetToBoolBox(uisheet,curRow,datCol0+4 );
+        _this.SetAttribe(&amp;quot;CELL_&amp;quot;+uisheet+&amp;quot;_&amp;quot;+curRow+&amp;quot;_&amp;quot;+(datCol0+5),_this.ATTR_CELL_READONLY,1);
+      var convmod = _this.XMLDS_GetString(i,&amp;quot;ConvertMod&amp;quot;);
+      hideDetail = convmod == &amp;apos;1&amp;apos;;
+      canSelDtl = convmod == &amp;apos;0&amp;apos; || convmod == &amp;apos;3&amp;apos;;
+      if(hideDetail)
+        _this.SetCellText(uisheet,curRow,datCol0+3,&amp;quot;双击查看明细&amp;quot;);
+        
+        curRow++;
+      }
+      // 设置单据明细
+      var bilseq= _this.XMLDS_GetStringAt(i,2);
+      var bilval= _this.XMLDS_GetStringAt(i,3);
+      // 设置 行号1.1
+      _this.SetCellShowText(uisheet,curRow,datCol0-1,nBillCount +&amp;quot;.&amp;quot;+bilseq);
+      
+      _this.SetCellShowText(uisheet,curRow,datCol0+1,&amp;quot; &amp;quot;);      //
+      _this.SetCellText(uisheet,curRow,datCol0+1,i);      //保存对应xmlds的行号
+      _this.SetCellText(uisheet,curRow,datCol0+2,_this.XMLDS_GetStringAt(i,6));
+      //_this.SetCellWrapText(uisheet,curRow,datCol0+2,1);
+      if(untprice==&amp;quot;1&amp;quot;)
+      {
+        var untnum = _this.XMLDS_GetString(i,&amp;quot;UNTNUM&amp;quot;);
+//            //得到的数量已经是大单位，因此需要换算
+//            bilval = 1.0 * bilval * untnum;
+        if(untnum==&amp;quot;&amp;quot;) untnum=1;
+        _this.SetToFracBox(uisheet,curRow,datCol0+3,untnum , 1);
+        _this.SetToFracBox(uisheet,curRow,datCol0+5,untnum , 1);
+      }
+      _this.SetCellText(uisheet,curRow,datCol0+3,bilval);
+      _this.SetCellText(uisheet,curRow,datCol0+5,0);
+      if(hideDetail)
+        _this.SetRowVisible(uisheet,curRow,-1);
+      if(canSelDtl)
+        _this.SetToBoolBox(uisheet,curRow,datCol0+4 );
+      else
+        //_this.SetAttribe(&amp;quot;CELL_&amp;quot;+uisheet+&amp;quot;_&amp;quot;+curRow+&amp;quot;_&amp;quot;+(datCol0+5),_this.ATTR_CELL_READONLY,1);
+        _this.SetCellLock(uisheet,curRow,datCol0+5,1);
+
+    }
+        //删除空白格式行
+       // _this.DeleteRow(uisheet,datRow1);
+    datRow1--; //去除末行状态行
+    datRow1--; //数据行计数以0为基数,不是1
+    _this.XMLDS_SetString(0,&amp;quot;SELECTFLG&amp;quot;,0);
+    
+    // 设置主数据区，可以进行排序处理
+    _this.SetMainCellRange(uisheet,datRow0,datCol0,datRow1,datCol1) ;
+    _this.SetFixedCol(uisheet ,1);
+    _this.SetFixedRow(uisheet,datRow0);
+    
+    var ismsg = !!_this.XMLDS_GetString(0,&amp;quot;_ServerMsg_&amp;quot;);
+    if(ismsg )
+    {
+      alert(_this.XMLDS_GetString(0,&amp;quot;TOPIC&amp;quot;));
+      return;
+    }
+  }
+  catch(e)
+  {
+        alert(e.message);
+  }
+    _this.SetRedraw(1);
+    _this.Redraw();
+    _this.RefreshFormula();
+}
+//================================================================// 
+// 函数：ClearArea
+// 说明：清除一个选择区域中的选中状态
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:53:57
+// 修改日志：
+//================================================================// 
+function ClearArea(begin,end)
+{
+  var checkCol = datCol0+4;
+  for(i=begin;i&amp;lt;end;i++)
+  {
+  var xmlrow = _this.GetCellText(0,i,datCol0+1);
+  if(!!xmlrow &amp;&amp; (xmlrow!=&amp;quot;下一页&amp;quot;) )
+  {
+    _this.XMLDS_SetString(xmlrow,&amp;quot;SELECTFLG&amp;quot;,0);
+    var canSelDtl = _this.XMLDS_GetString(xmlrow,&amp;quot;ConvertMod&amp;quot;) == &amp;apos;0&amp;apos;;
+    if(canSelDtl) //设置核选框的选中状态
+      _this.SetCellText(0,i,checkCol ,0);
+    //设置或清除勾单数
+    _this.SetCellText(0,i,checkCol + 1 , 0);
+    _this.XMLDS_SetString(xmlrow,&amp;quot;val2Convert&amp;quot;,0)
+ }
+ else
+   _this.SetCellText(0,i,checkCol ,0);
+ }
+}
+//================================================================// 
+// 函数：ClearRowState
+// 说明：如果是1对1模式,清除其它单据的选中状态
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:22:43
+// 修改日志：
+//================================================================// 
+function ClearRowState(row)
+{
+  var bilbegin = datRow0;
+  var bilend = datRow1;
+  var i;
+  for(i=row;i&amp;gt;=datRow0;i--)
+  {
+    if(!!_this.GetCellText(0,i,datCol0))
+    {
+      bilbegin = i;
+      break;
+    }
+  }
+  for(i=row+1;i&amp;lt;=datRow1;i++)
+  {
+    if(!!_this.GetCellText(0,i,datCol0))
+    {
+      bilend = i;
+      break;
+    }
+  }
+  ClearArea(datRow0,bilbegin);
+  //ClearArea(bilend,datRow1-1);
+  ClearArea(bilend,datRow1+1);
+}
+
+//================================================================// 
+// 函数：_thisOnCellModify
+// 说明：保存勾单数到xmlds中
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/01/05 17:08:56
+// 修改日志：
+//================================================================// 
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+  _this.SetRedraw(-1);
+  _this.XMLDS_SetCurrentDsID(xmlds);
+  var checkCol = datCol0+4;
+  var val2convCol = checkCol + 1;
+  if((row&amp;gt;=datRow0)&amp;&amp;(row&amp;lt;=datRow1)&amp;&amp;((col==checkCol )||(col==val2convCol)))
+  {
+    _this.XMLDS_SetCurrentDsID(xmlds);
+    var check = newvalue;
+    //选中行到数据行末尾
+    var a = row + 1;
+    var b = datRow1;
+    //明细行的datCol0没有单据编号；如果是明细行，则仅处理该行
+    if(_this.GetCellText(sheet,row,datCol0)==&amp;quot;&amp;quot;)
+    {
+      a = row;
+      b = row;
+    }
+    //单据映射关系。0:多源单据对一目标单据映射；1:一对一映射
+    var singleMode = _this.XMLDS_GetString(0,&amp;quot;MappedMode&amp;quot;) == &amp;apos;1&amp;apos;;
+    if(!!forceMappedmode) singleMode = forceMappedmode == &amp;apos;1&amp;apos;;
+    if(singleMode)
+      ClearRowState(row);
+    //遍历一个区域
+    for(var i=a;i&amp;lt;=b;i++)
+    {
+     //如果达到下一个单据头,则中断,否则进行处理.
+     if(!_this.GetCellText(sheet,i,datCol0))
+     {
+        xmlrow = _this.GetCellText(sheet,i,datCol0+1);
+        if(!!xmlrow)
+        {
+          if(col==val2convCol) check = 1;
+          _this.XMLDS_SetString(xmlrow,&amp;quot;SELECTFLG&amp;quot;,check);
+          
+          var canSelDtl = _this.XMLDS_GetString(xmlrow,&amp;quot;ConvertMod&amp;quot;) == &amp;apos;0&amp;apos;;
+          if(canSelDtl) //设置核选框的选中状态
+            _this.SetCellText(sheet,i,checkCol ,check);
+          var newval = 0;
+          var valleft = _this.GetCellText(sheet,i,checkCol - 1);
+          if(col==val2convCol)
+            newval = _this.GetCellText(sheet,i,val2convCol );
+          else
+          if(check==&amp;apos;1&amp;apos;)
+          {  
+             newval = valleft;//_this.GetCellText(sheet,i,checkCol - 1);
+          }
+          //设置或清除勾单数
+          var valmod = _this.XMLDS_GetString(xmlrow,&amp;quot;ValueMod&amp;quot;);
+          var bilid = _this.XMLDS_GetString(xmlrow,&amp;quot;srcbil&amp;quot;);
+          try
+          {
+          var valshow = _this.GetCellShowText(sheet,i,checkCol - 1);
+          switch(valmod)
+          {
+            case &amp;quot;1&amp;quot;: if(newval&amp;lt;0) throw bilid+&amp;quot;的勾单数必须大于等于0.&amp;quot;; break;
+            case &amp;quot;2&amp;quot;: if(Math.abs(newval)&amp;gt;Math.abs(valleft)) throw bilid+&amp;quot;的勾单数必须小于等于可用数:&amp;quot;+valshow ; break;
+            case &amp;quot;3&amp;quot;: if(newval&amp;lt;0 || (Math.abs(newval)&amp;gt;Math.abs(valleft))) throw bilid+&amp;quot;勾单数必须介于0和&amp;quot;+valshow+&amp;quot;之间.!&amp;quot;; break;
+          }
+          }catch(e)
+          {
+            alert(e);
+            //清除选择状态
+            _this.SetCellText(sheet,i,checkCol ,0);
+            _this.XMLDS_SetString(xmlrow,&amp;quot;SELECTFLG&amp;quot;,0);
+            newval=0;
+          }
+          _this.SetCellText(sheet,i,val2convCol , newval);
+          _this.XMLDS_SetString(xmlrow,&amp;quot;val2Convert&amp;quot;,newval)
+       }
+       //_this.Redraw();
+     }
+     else
+     {
+        break;
+     }
+    }
+  }
+    _this.SetRedraw(1);
+    _this.Redraw();
+    _this.RefreshFormula();
+}
+
+function back()
+{
+  if(window.history.length==0)window.close();else window.history.back();
+}
+
+function forcedel()
+{
+  if(!confirm(&amp;quot;确实要删除选中的信息吗？&amp;quot;)) return;
+  _this.XMLDS_SetCurrentDsID(xmlds);
+  var param = new Object;
+  param.bilxml = _this.XMLDS_GetXml();
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  var msg = invokeOSFuncExt(&amp;quot;forcedel&amp;quot;,param);
+  if(!!msg)
+  {
+    alert(msg);
+    location.reload();
+  }
+}
+
+function forceclose()
+{
+  if(!confirm(&amp;quot;确实要设置选中的信息为“已关闭”状态吗？&amp;quot;)) return;
+  var pwd = prompt(&amp;quot;请输入授权密码：&amp;quot;,&amp;quot;&amp;quot;);
+  _this.XMLDS_SetCurrentDsID(xmlds);
+  var param = new Object;
+  param.sytid = G_SYTID;
+  param.pwd = pwd;
+  param.bilxml = _this.XMLDS_GetXml();
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  var msg = invokeOSFuncExt(&amp;quot;forceclose&amp;quot;,param);
+  if(!!msg)
+  {
+    alert(msg);
+        _this.SetRedraw(0);   
+        clearolddata();
+        loaddatflw();
+//    location.reload();
+        _this.SetRedraw(1);
+   }
+   try{
+//          alert(&amp;quot;注意下面的信息:&amp;quot;);
+//          alert(&amp;quot;就是:&amp;quot;+window.opener);
+          	window.opener.doit();
+          }catch(e){
+          	//alert(&amp;quot;出事了:&amp;quot;+e);
+          }
+
+}
+
+function clearolddata()
+{
+  for(var i=datRow0;i&amp;lt;=datRow1;i++)
+  {
+    _this.DeleteRow(0,datRow0);
+  }
+  _this.AppendRow(0,datRow0);
+  _this.AppendRow(0,datRow0);
+  datRow1= datRow0+1;
+}
+
+//================================================================// 
+// 函数：filter
+// 说明：显示一个条件选择界面，按选定的条件进行数据过滤
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/11/05 15:15:32
+// 修改日志：
+//================================================================// 
+function filter()
+{
+  var vurl = &amp;quot;xlsgrid/jsp/pages/selDatFlw.jsp?flwid=&amp;quot;+datflw+&amp;quot;&amp;pagesize=&amp;quot;+corpsperpage;
+  var param = new Object();
+  param.window = this;
+  where = window.showModalDialog(vurl ,param, &amp;quot;dialogwidth:480pt;dialogheight:400pt;resizable:yes ;&amp;quot;);
+  if(!where)
+    return;
+  
+  curpage = 1;
+  clearolddata();
+  loaddatflw();
+}
+
+function nextPage()
+{
+  if(!hasnextpage)
+  {
+    alert(&amp;apos;已达末页。&amp;apos;);
+    return;
+  }
+  _this.SetRedraw(0);
+  clearolddata();
+  curpage++;
+  loaddatflw();
+  if(_this.XMLDS_GetRowCount()&amp;lt;=0)
+    curpage--;
+  _this.SetRedraw(1);    
+}
+
+function prePage()
+{
+  _this.SetRedraw(0);
+  if(!hasprepage)
+  {
+    alert(&amp;apos;已达首页。&amp;apos;);
+    return;
+  }
+  
+  clearolddata();
+  curpage--;
+  if(curpage&amp;lt;=0)
+    curpage=1;
+  loaddatflw();
+  _this.SetRedraw(1);
+}
+
+function _thisOnMouseDClick(sheet,row,col)
+{
+  if(row&amp;gt;datRow1-1 || row&amp;lt;datRow0) return;
+  var bil=_this.GetCellText(sheet,row,datCol0);
+  if(!!bil)
+  {
+    if(col==1)
+    {
+    var itms = bil.split(&amp;apos;-&amp;apos;);
+    var url = &amp;quot;ShowXlsGrid.sp?bilid=&amp;quot;+itms[1]+&amp;quot;&amp;grdid=&amp;quot;+itms[0];
+    window.open(url);
+    }
+    else
+    {
+      toggleBill(row);
+    }
+  }
+}
+
+//================================================================// 
+// 函数：getitemfilter
+// 说明：获取过滤大小包装的where语句
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/05 17:03:47
+// 修改日志：
+//================================================================// 
+function getitemfilter()
+{
+  /*
+  var large = _this.GetCellText(0,1,1)==&amp;apos;1&amp;apos;;  
+  var small = _this.GetCellText(0,1,2)==&amp;apos;1&amp;apos;;
+  var filter=&amp;quot;&amp;quot;;
+  if(small || large)
+  {
+  filter=&amp;quot; and acc=&amp;apos;&amp;quot;+accid+&amp;quot;&amp;apos; and flw=&amp;apos;&amp;quot;+datflw+&amp;quot;&amp;apos; and refid3 like &amp;apos;00%&amp;apos;&amp;quot;;
+  if(small)
+    filter +=&amp;quot; and substr(refid3,5,1)=&amp;apos;0&amp;apos;&amp;quot;;
+  var cond = &amp;quot; and&amp;quot;;
+  if(small &amp;&amp; large)
+    cond = &amp;quot; or&amp;quot;;
+  if(large)
+    filter += cond + &amp;quot; substr(refid3,5,1)=&amp;apos;1&amp;apos;&amp;quot;;
+  }
+  */
+  var fil = _this.GetCellText(0,1,1);
+  if(!!fil)
+    fil = &amp;quot; and &amp;quot;+fil;
+  //alert(fil);
+  return fil;
+}
+
+function _thisOnMouseLClick(sheet,row,col)
+{
+  //var r0=_this.GetRowCount(0)-2;
+  if(row==datRow1+1)
+  {
+    if(_this.GetCellText(0,row,col)==&amp;quot;&amp;quot;)
+      return;
+    switch(col)
+    {
+      case 1:
+        prePage();
+        break;
+      case 2:
+        nextPage();
+        break;
+    }
+  }
+}
+
+function manquery()
+{
+ // loaddatflw();
+ _this.ShowToolBar(0);
+}
+
+function checkResult(result,msg)
+{
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  if(!result)
+  {
+    alert(&amp;quot;操作错误,可能是网络连接错误或服务器异常。&amp;quot;);
+    return false;
+  }
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  _this.XMLDS_Reset();
+  _this.XMLDS_Parse(result);
+  var ismsg = !!_this.XMLDS_GetString(0,&amp;quot;_ServerMsg_&amp;quot;);
+  
+    if(ismsg )
+    {
+      alert(_this.XMLDS_GetString(0,&amp;quot;TOPIC&amp;quot;));
+      return false;
+    }
+    else
+    {
+      if(!!msg) alert(msg);
+      return true;
+    }
+}
+
+//================================================================// 
+// 函数：batchconv
+// 说明：批量转换，由外部调用
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/11/06 13:55:13
+// 修改日志：
+//================================================================// 
+function batchconv(kemuid,kemuname,kemujsh,kemumemo,bildat)
+{
+  _this.XMLDS_SetCurrentDsID(xmlds);
+  var param = new Object;
+  param.bilflwid = datflw;
+  param.bilxml = _this.XMLDS_GetXml();
+  param.kemuid = kemuid;
+  param.kemuname = kemuname;
+  param.kemumemo = kemumemo;
+  param.kemujsh = kemujsh;
+  param.bildat = bildat;
+
+  _this.XMLDS_SetCurrentDsID(xmldsmsg);
+  var msg = invokeOSFuncExt(&amp;quot;batchconv&amp;quot;,param);
+  return checkResult(msg,&amp;quot;批量转换成功。&amp;quot;);
+}
+
+function _thisOnListSelChange(id, oldsel, cursel)
+{
+  _this.SetRedraw(0);    
+  curpage = 1;
+  clearolddata();
+  loaddatflw();  
+  _this.SetRedraw(1);
+}
+
+function toggleBill(row)
+{
+  var sheet = 0;
+  row++;
+  var show = _this.GetRowVisible(sheet,row);
+  show = -show;
+  while(row&amp;lt;=datRow1)
+  {
+    var bil=_this.GetCellText(sheet,row,datCol0);
+    if(!!bil)
+      break;
+    _this.SetRowVisible(sheet,row,show);
+    row++;
+  }
+  return row;
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var grd= new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+
+//================================================================// 
+// 函数：getAviableBill
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/05 16:14:30
+// 修改日志：
+//================================================================//
+var totalBils=0;
+function getAviableBill(db, sytid, accid,usrloc, bilFlwID, ExtraWhere,page,pagesize,仓库代储)
+{
+    //取得指定数据流类在xmlds中的行号
+    var FlwDefds = xmldb.EAXmlDB.getFlwLnkDestDs(sytid);
+    
+    var colidx = FlwDefds.getColumnLoc(xmldb.EAXmlDB.flwLnkID);
+    var rowidx = FlwDefds.Find(bilFlwID,colidx);
+    var MappedMode = FlwDefds.getStringDef(rowidx,xmldb.EAXmlDB.flwLnkMapMod,&amp;quot;0&amp;quot;); 
+    //取得指定数据流类的明细在xmlds中的行号集合
+    var flwsrcds = xmldb.EAXmlDB.getFlwLnkSrcDs(sytid);
+
+
+    var list = flwsrcds.getRowList(xmldb.EAXmlDB.flwLnkID,bilFlwID);
+    pub.EAFunc.assertsFmt(list.size()&amp;gt;0,&amp;quot;%s没有定义数据流:%s&amp;quot;,sytid,bilFlwID);
+    var srcBilTypCol = flwsrcds.getColumnLoc(xmldb.EAXmlDB.flwLnkSrcBil);
+    //pub.EAFunc.WriteToFile( &amp;quot;/u/1.txt&amp;quot;, flwsrcds.GetXml() );
+    
+    var iterator = list.iterator();
+    //EADatabase db = new EADatabase();
+    var result = new pub.EAXmlDS();
+    //String[] hdrFields = EAOption.get(&amp;quot;FlwHdrFields&amp;quot;).split(&amp;quot;,&amp;quot;);
+    //依次处理各个单据明细
+    var datflwsql=&amp;quot;&amp;quot;;
+    var servlet = new JavaPackage(&amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+    var stawhere =&amp;quot; flw=&amp;apos;&amp;quot;+bilFlwID+&amp;quot;&amp;apos; and (endflg is null or endflg=&amp;apos;0&amp;apos;) and &amp;quot;;
+    if(!仓库代储)
+      stawhere += &amp;quot; a.acc=&amp;apos;&amp;quot;+accid+&amp;quot;&amp;apos; and &amp;quot;;
+    //gld: 07-1-5;MOMJ2MC时，需要MO在前。特殊的情况另外再考虑增加额外的排序条件
+    var order0 = &amp;quot; order by srcbiltyp desc,srcbil desc&amp;quot;;
+    //var dtlfilter=&amp;quot;&amp;quot;;
+    var ConvertMod=&amp;quot;&amp;quot;;
+    while(iterator.hasNext())
+    {
+      var row = iterator.next();
+      ConvertMod = flwsrcds.getValueAt(row,&amp;quot;ConvertMod&amp;quot;);
+      var srcbiltyp = flwsrcds.getValueAt(row,srcBilTypCol);
+      var ValueMod = flwsrcds.getStringDef(row,&amp;quot;ValueMod&amp;quot;,&amp;quot;0&amp;quot;);
+      var ConvertTimes = flwsrcds.getStringDef(row,&amp;quot;ConvertTimes&amp;quot;,&amp;quot;0&amp;quot;);
+      var filter = flwsrcds.getValueAt(row,xmldb.EAXmlDB.flwLnkSrcFilter);
+      if (pub.EAFunc.isEmptyStr(filter))
+        filter = &amp;quot;valleft&amp;lt;&amp;gt;0&amp;quot;;
+      if(datflwsql!=&amp;quot;&amp;quot;)
+        datflwsql += &amp;quot;\nunion all\n&amp;quot;;
+      datflwsql += 
+         pub.EAFunc.format(&amp;quot;select distinct a.acc,srcbil,srcbiltyp,&amp;quot;+
+            &amp;quot;&amp;apos;%s&amp;apos; MappedMode,&amp;apos;%s&amp;apos; ConvertMod,&amp;apos;%s&amp;apos; ValueMod,&amp;apos;%s&amp;apos; ConvertTimes from datflwsta a,bilhdr b \n&amp;quot;,
+          [MappedMode,ConvertMod,ValueMod,ConvertTimes]);
+      if(仓库代储)
+        datflwsql += &amp;quot;,(select id,subacc from loc) c where b.locid=c.id and c.subacc=&amp;apos;&amp;quot;+accid+&amp;quot;&amp;apos;\n and &amp;quot;;
+      else datflwsql += &amp;quot; where &amp;quot;;
+      //触发来源单据的onFilterLoc事件，获取仓库的过滤sql子句
+      var locfil = &amp;quot;b.locid is null or b.locid like &amp;apos;&amp;quot;+usrloc+&amp;quot;%&amp;apos;&amp;quot;;
+      var ret=servlet.RunScript.ExecMwOsEx(sytid,srcbiltyp,&amp;quot;onFilterLoc&amp;quot;,[request,srcbiltyp,bilFlwID,usrloc,locfil]);
+      if(!pub.EAFunc.isEmptyStr(ret))
+        locfil=ret;      
+      //2008-04 修改跨帐套生成的问题,如果报错，需要在datflwsta中增加一个SRCACC字段（该字段在执行单据审核创建datflwsta会自动增加）
+     // datflwsql += &amp;quot;nvl(a.srcacc,a.acc)=b.acc and a.srcbil=b.bilid and a.srcbiltyp=b.biltyp and (&amp;quot;+locfil+&amp;quot;) and &amp;quot;
+     
+      datflwsql += &amp;quot;a.acc=b.acc and a.srcbil=b.bilid and a.srcbiltyp=b.biltyp and (&amp;quot;+locfil+&amp;quot;) and &amp;quot; 
+         +stawhere + filter + &amp;quot; and srcbiltyp = &amp;apos;&amp;quot;+srcbiltyp+&amp;quot;&amp;apos; &amp;quot; + ExtraWhere;
+         //+ pub.EAFunc.format(&amp;quot; and(SRCBILTYP=&amp;apos;%s&amp;apos; and %s)&amp;quot;,srcbiltyp,filter);
+      //dtlfilter += pub.EAFunc.format(&amp;quot; and(a.SRCBILTYP=&amp;apos;%s&amp;apos; and %s)&amp;quot;,srcbiltyp,filter);
+    }
+    //System.out.println(datflwsql);
+    var order1 = &amp;quot;,CRTDAT desc,srcbilseq&amp;quot;;
+    
+    //refid1,refid2,refid3,srcsubtyp等字段可以在数据流中访问
+    //ConvertMod,MappedMode 给客户端脚本用
+    var fields = &amp;quot;a.SRCBILTYP, a.srcbil,SRCBILSEQ,VALLEFT,0 as val2Convert, MEMO1,MEMO2,SRCBILDAT,ConvertMod,MappedMode, a.GUID, a.untnum,a.refid1,a.refid2,a.refid3,srcsubtyp,ConvertTimes,ValueMod,a.acc dataAcc &amp;quot;;
+    var stasql = &amp;quot;&amp;quot;;
+// 2014，如果是单据头转换，不需要和来源的bildtl做对应
+	if(ConvertMod==&amp;quot;2&amp;quot;){
+		stasql = 
+		&amp;quot;select &amp;quot; + fields +&amp;quot; from datflwsta a,(select * from(select rownum-1 rid, t.* from(&amp;quot;
+		+datflwsql +order0
+		+pub.EAFunc.format(&amp;quot;) t where rownum&amp;lt;=%s*%s)where rid&amp;gt;=(%s-1)*%s)&amp;quot;, [page,pagesize,page,pagesize])
+		// 2008/11 过滤掉一个单据中已经部分记录可用数为0的情况
+		+pub.EAFunc.format(&amp;quot;b where a.acc=b.acc and a.srcbil=b.srcbil and a.srcbiltyp=b.srcbiltyp and (endflg is null or endflg=&amp;apos;0&amp;apos;) and flw=&amp;apos;%s&amp;apos; and a.VALLEFT&amp;lt;&amp;gt;0 &amp;quot;,bilFlwID)
+		//+dtlfilter
+		+order0 + order1 ;
+	}else{
+	      stasql =
+	      &amp;quot;select &amp;quot; + fields +&amp;quot; from datflwsta a,(select * from(select rownum-1 rid, t.* from(&amp;quot;
+               +datflwsql +order0
+               +pub.EAFunc.format(&amp;quot;) t where rownum&amp;lt;=%s*%s)where rid&amp;gt;=(%s-1)*%s)&amp;quot;, [page,pagesize,page,pagesize])
+               // 2008/11 过滤掉一个单据中已经部分记录可用数为0的情况
+               +pub.EAFunc.format(&amp;quot;b,bildtl c where a.acc=b.acc and a.srcbil=b.srcbil and a.srcbiltyp=b.srcbiltyp and a.srcbil=c.bilid and a.acc=c.acc and a.srcbiltyp=c.biltyp and a.srcbilseq=c.seqid and (endflg is null or endflg=&amp;apos;0&amp;apos;) and flw=&amp;apos;%s&amp;apos; and a.VALLEFT&amp;lt;&amp;gt;0 &amp;quot;,bilFlwID)
+               //+dtlfilter
+               +order0 + order1 ;
+
+	}
+
+
+
+    //System.out.println(stasql); 
+    stasql = pub.EAFunc.XmlToStd(stasql );
+    //throw new Exception(stasql);
+    var flwsta = db.QuerySQL(stasql );
+    result.Append(flwsta);
+      
+    var countsql =&amp;quot;select count(*) from(select distinct acc,srcbil,srcbiltyp from (&amp;quot;+datflwsql+&amp;quot;) )t &amp;quot;;
+    //throw new Exception(countsql);
+    totalBils = db.GetSQL(countsql);
+    
+    return result;
+  }
+  
+//================================================================// 
+// 函数：getBillDsXml
+// 说明：得到数据流的数据集
+// 参数：
+// 返回：xml
+// 样例：
+// 作者：
+// 创建日期：11/04/05 15:40:57
+// 修改日志：
+//================================================================// 
+function getBillDsXml()
+{
+
+    var db=null;
+    try{
+//throw new Exception(osfunc);
+    var 仓库代储 = &amp;quot;loctyp3&amp;quot; == osfunc;
+      db = new pub.EADatabase();
+      var retds = getAviableBill(db,sytid,accid,usrloc,bilflwcls,where,curpage,corpsperpage,仓库代储);
+      var r = retds.getRowCount();
+      var pos = 1 * curpage * corpsperpage;
+      if(r&amp;gt;0)
+      {
+        //if( (1 * curpage &amp;gt; 1) || (pos &amp;lt; totalBils) )
+          retds.AddNullRow(r-1);
+        if(1 * curpage &amp;gt; 1)
+          retds.setValueAt(r,0,&amp;quot;上一页&amp;quot;);
+        if(pos&amp;lt;totalBils)
+          retds.setValueAt(r,1,&amp;quot;下一页&amp;quot;);
+      }
+      return retds.GetXml();
+    }
+    catch(e)
+    {
+      return pub.EAFunc.formatClientMsg(e.toString(),-1,&amp;quot;&amp;quot;);
+    }
+    finally
+    {
+      if(db!=null)
+        db.Close();
+    }
+}
+
+//================================================================// 
+// 函数：runbilFlw
+// 说明：执行数据流转换操作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/11/06 12:38:32
+// 修改日志：
+//================================================================// 
+function runbilFlw()
+{
+    try
+    {
+      var msg = grd.EABilflw.ExecBilFlw(request,bilflwid,bilxml);
+      return msg;
+    }
+    catch(e)
+    {
+      throw e;
+      //return pub.EAFunc.formatClientMsg(e.toString(),-1,&amp;quot;&amp;quot;);
+    }
+}
+
+function forcedel()
+{
+  return grd.EABilflw.forcedel(bilxml);
+}
+
+function checkPWD(usr,usrpwd)
+{
+  try
+  {
+    pub.EADbTool.GetSQL(&amp;quot;select id from usr where id=&amp;apos;&amp;quot;+usr+&amp;quot;&amp;apos; and passwd=&amp;apos;&amp;quot;+usrpwd+&amp;quot;&amp;apos;&amp;quot;);
+    return true;
+  }
+  catch(e)
+  {
+    return false;
+  }
+}
+
+function forceclose()
+{
+  var chk = checkPWD(&amp;quot;DATFLWMGR&amp;quot;,pwd);
+  if(!chk)
+  {
+    var db = new xmldb.EASYTXmlDB(sytid);
+    var adminusr = db.getAdminUsr();
+    chk = checkPWD(adminusr,pwd);
+  }
+  if(!chk)
+    throw new pub.EAException(&amp;quot;授权密码错误，请联系管理员获取授权密码。&amp;quot;);
+  return grd.EABilflw.forceclose(bilxml);
+}
+
+//================================================================// 
+// 函数：batchconv
+// 说明：批量转换。每个来源单据生成一个目标单据。
+// 特殊的处理，例如生成结算单的科目，在数据流中处理。
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/11/06 12:31:29
+// 修改日志：
+//================================================================// 
+function batchconv()
+{
+    var msg = &amp;quot;&amp;quot;;
+    try
+    {
+      var ds = new pub.EAXmlDS(bilxml);
+      var c = ds.getRowCount();
+      var i=0;
+      var oldmw=&amp;quot;&amp;quot;;
+      var oldbil=&amp;quot;&amp;quot;;
+      while(i&amp;lt;c)
+      {
+        if(ds.getStringAt(i,&amp;quot;SELECTFLG&amp;quot;)!=&amp;quot;1&amp;quot;)
+        {
+          i++;
+          continue;
+        }
+        var mwid = ds.getStringAt(i,&amp;quot;SRCBILTYP&amp;quot;);
+        var bilid = ds.getStringAt(i,&amp;quot;SRCBIL&amp;quot;);
+        var beginBil = (oldmw!=mwid)||(oldbil!=bilid);
+        
+        var tmpds = new pub.EADS();
+        if(beginBil)
+        {
+          oldmw=mwid;
+          oldbil=bilid;
+          beginBil=false;
+          while(!beginBil &amp;&amp; i&amp;lt;c)
+          {
+            tmpds.copyOneRow(ds,i);
+            i++;
+            if(i&amp;gt;=c)
+              break;
+            mwid = ds.getStringAt(i,&amp;quot;SRCBILTYP&amp;quot;);
+	    bilid = ds.getStringAt(i,&amp;quot;SRCBIL&amp;quot;);
+            beginBil = (oldmw!=mwid)||(oldbil!=bilid);
+          }
+          i--;
+          //把客户端传递过来的参数传递给数据流
+          //throw new Exception(tmpds.GetXml());
+          msg += grd.EABilflw.ExecBilFlw(request,bilflwid,tmpds.GetXml());
+          
+        }
+        i++;
+      }
+      //var msg = grd.EABilflw.ExecBilFlw(request,bilflwid,bilxml);
+      return msg;
+    }
+    catch(e)
+    {
+      return pub.EAFunc.formatClientMsg(msg+&amp;quot;\r\n&amp;quot;+e.toString(),-1,&amp;quot;&amp;quot;);
+    }
+}
+
+//获取分类；数据流的条件从note字段获取
+function loadclasstyp()
+{
+  var ds = pub.EADbTool.QuerySQL(&amp;quot;select note id,name from V_BASCAT1&amp;quot;);
+  return ds.GetXml();
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><UNTNUM >0小单位换算比率</UNTNUM><TONNUM >0标准单位换算比率</TONNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >PageTable_gn</MWID><NAME ></NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >PageTable_gn.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function page_table()
+{
+	var sql=&amp;quot;&amp;quot;;
+	var trbgcolor=&amp;quot;#F9F9F9&amp;quot;;
+	var tdborder=0;
+//	TB_ENTBTYP=true;
+	var html=&amp;quot;
+		&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		a:link { 
+		color:#000000; 
+		text-decoration:none; 
+		} 
+		a:visited { 
+		color:#000000; 
+		text-decoration:none; 
+		} 
+		a:hover { 
+		color:#0166CB; 
+		text-decoration:underline; 
+		} 
+		a:active { 
+		color:#0166CB; 
+		text-decoration:none; 
+		} 
+	&amp;lt;/style&amp;gt;
+	&amp;lt;table id=\&amp;quot;mytable\&amp;quot; borderColor=\&amp;quot;\&amp;quot; align=\&amp;quot;center\&amp;quot; width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot; cellspcing=\&amp;quot;2\&amp;quot; cellpadding=\&amp;quot;2\&amp;quot; style=\&amp;quot;border-collapse:collapse;line-height:&amp;quot;+LINE_HEIGHT+&amp;quot;\&amp;quot; &amp;gt;
+        &amp;lt;tbody id=\&amp;quot;table2\&amp;quot; &amp;gt;&amp;quot;;
+	if(SQLTXT!=&amp;quot;&amp;quot;){
+		sql=SQLTXT;
+		sql=pub.EAFunc.Replace(sql,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		sql=pub.EAFunc.Replace(sql,&amp;quot;&amp;lt;&amp;quot;,&amp;quot;&amp;lt;&amp;quot;);
+		sql=pub.EAFunc.Replace(sql,&amp;quot;&amp;gt;&amp;quot;,&amp;quot;&amp;gt;&amp;quot;);
+		sql=web.EASession.GetSysValue(sql,request);//替换request 中[%id]
+		sql=web.EASession.GetSysValue(sql,web.EASession.GetUserinfo(request));
+
+		var ds=db.QuerySQL(sql);
+		var style=&amp;quot;&amp;quot;;
+		if(TB_IFHEADBORDER){
+			style=&amp;quot;style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px 1px; font-size: 20px;\&amp;quot;&amp;quot;;
+		}
+		if(TB_IFHEAD){
+			html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;quot;+style+&amp;quot; colspan=\&amp;quot;&amp;quot;+ds.getColumnCount()+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+TB_HEAD+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		for(var r=0; r&amp;lt;ds.getRowCount(); r++){
+			if(r%9==0){
+				html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+TB_ROLBGCOLOR+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+				for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+				html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+			}
+			if(TB_TABLW==true&amp;&amp;r%2==1) trbgcolor=&amp;quot;#F9F9F9&amp;quot;; else trbgcolor=&amp;quot;#FFFFFF&amp;quot;;
+			if(TB_ENTBTYP==true) tdborder=0;  else tdborder=1;
+			html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+trbgcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+			for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+				if(c==0&amp;&amp;ds.getColumnCount()&amp;gt;1)
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				else if(c==ds.getColumnCount()-1)
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				else
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				
+			}
+			html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+
+		}
+	}
+	
+	html+=&amp;quot;&amp;lt;/tbody&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	if(TB_ISPAGE==true){			
+		html+=&amp;quot;&amp;lt;div align=\&amp;quot;center\&amp;quot; style=\&amp;quot;margin-top:15px\&amp;quot;&amp;gt;
+		  &amp;lt;span id=\&amp;quot;spanFirst\&amp;quot;&amp;gt;第一页&amp;lt;/span&amp;gt; 
+		  &amp;lt;span id=\&amp;quot;spanPre\&amp;quot;&amp;gt;上一页&amp;lt;/span&amp;gt; 
+		  &amp;lt;span id=\&amp;quot;spanNext\&amp;quot;&amp;gt;下一页&amp;lt;/span&amp;gt; 
+		  &amp;lt;span id=\&amp;quot;spanLast\&amp;quot;&amp;gt;最后一页&amp;lt;/span&amp;gt; 
+		  第&amp;lt;span id=\&amp;quot;spanPageNum\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;页/共&amp;lt;span id=\&amp;quot;spanTotalPage\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;页
+	      &amp;lt;/div&amp;gt;
+		      &amp;lt;script&amp;gt;
+			      var theTable = document.getElementById(\&amp;quot;table2\&amp;quot;);
+			      var totalPage = document.getElementById(\&amp;quot;spanTotalPage\&amp;quot;);
+			      var pageNum = document.getElementById(\&amp;quot;spanPageNum\&amp;quot;);
+			 
+			      var spanPre = document.getElementById(\&amp;quot;spanPre\&amp;quot;);
+			      var spanNext = document.getElementById(\&amp;quot;spanNext\&amp;quot;);
+			      var spanFirst = document.getElementById(\&amp;quot;spanFirst\&amp;quot;);
+			      var spanLast = document.getElementById(\&amp;quot;spanLast\&amp;quot;);
+			 
+			      var numberRowsInTable = theTable.rows.length;
+			      var pageSize =10;
+			      var page = 1;
+				  
+			     //下一页
+			      function next() {
+			         hideTable();
+			         currentRow = pageSize * page;
+			          maxRow = currentRow + pageSize;
+			          if (maxRow &amp;gt; numberRowsInTable) maxRow = numberRowsInTable;
+			          for (var i = currentRow; i &amp;lt; maxRow; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			          page++;
+			         
+			         if (maxRow==numberRowsInTable) {nextText(); lastText(); }
+			          showPage();
+			          preLink();
+			          firstLink();
+			      }
+			     //上一页
+			      function pre() {
+			         hideTable();
+			         page--;
+			         currentRow = pageSize * page;
+			          maxRow = currentRow - pageSize;
+			          if (currentRow &amp;gt; numberRowsInTable) currentRow = numberRowsInTable;
+			          for (var i = maxRow; i &amp;lt; currentRow; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			         if (maxRow == 0) { preText(); firstText(); }
+			          showPage();
+			          nextLink();
+			          lastLink();
+			      }
+			     //第一页
+			      function first() {
+			          hideTable();
+			          page = 1;
+			          for (var i = 0; i &amp;lt; pageSize; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			          showPage();
+			          preText();
+			          nextLink();
+			          lastLink();
+			      }
+			     //最后一页
+			      function last() {
+			          hideTable();
+			          page = pageCount();
+			          currentRow = pageSize * (page - 1);
+			          for (var i = currentRow; i &amp;lt; numberRowsInTable; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			          showPage();
+			          preLink();
+			          nextText();
+			          firstLink();
+			      }
+			
+			     function hideTable() {
+			          for (var i = 0; i &amp;lt; numberRowsInTable; i++) {
+			              theTable.rows[i].style.display = &amp;apos;none&amp;apos;;
+			          }
+			      }
+			     function showPage() {
+			          pageNum.innerHTML = page;
+			      }
+			     //总共页数
+			      function pageCount() {
+			          var count = 0;
+			          
+			          if (numberRowsInTable % pageSize != 0) count = 1;
+			          return parseInt(numberRowsInTable / pageSize) + count;
+			      }
+			     //显示链接
+			      function preLink() { spanPre.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:pre();&amp;apos;&amp;gt;上一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function preText() { spanPre.innerHTML = \&amp;quot;上一页\&amp;quot;; }
+			 
+			      function nextLink() { spanNext.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:next();&amp;apos;&amp;gt;下一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function nextText() { spanNext.innerHTML = \&amp;quot;下一页\&amp;quot;; }
+			
+			      function firstLink() { spanFirst.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:first();&amp;apos;&amp;gt;第一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function firstText() { spanFirst.innerHTML = \&amp;quot;第一页\&amp;quot;; }
+			
+			      function lastLink() { spanLast.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:last();&amp;apos;&amp;gt;最后一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function lastText() { spanLast.innerHTML = \&amp;quot;最后一页\&amp;quot;; }
+			
+			     //隐藏表格
+			      function hide() {
+
+			          for (var i = pageSize; i &amp;lt; numberRowsInTable; i++) {
+			              theTable.rows[i].style.display = &amp;apos;none&amp;apos;;
+			          }
+			      	var a=pageCount();
+	
+			         totalPage.innerHTML = a;
+			    
+			         pageNum.innerHTML = &amp;apos;1&amp;apos;;
+			         
+			         if(pageSize&amp;lt;=numberRowsInTable) nextLink();
+			         if(pageSize&amp;lt;=numberRowsInTable) lastLink();
+			      }
+			     hide();
+			 &amp;lt;/script&amp;gt;  
+		  &amp;quot;;
+	}
+	if(TB_ISPAGE==false){
+		html+=&amp;quot;&amp;quot;;
+	}
+	return html;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

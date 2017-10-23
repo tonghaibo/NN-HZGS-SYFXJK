@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >SJCJ_QK</MWID><NAME >数据采集情况</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SJCJ_QK.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >1,-1,-1</ID><CELLID ></CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP >STRING</VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var ZXGFILE1 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	ZXGFILE1 = _this.SaveTempZXGFile(1);
+	_this.SetFixedRow(0,2);
+	_this.SetFixedRow(0,1);
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;95%&amp;quot;);
+	_this.SetCellText(1,1,8,&amp;quot;1&amp;quot;);
+	sjcj_qk(1);
+}
+//表数据先填充到主数据区域-分页显示 
+function sjcj_qk(page)
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,2);
+	_this.SetFixedRow(0,1);
+	_this.SetFixedRow(0,3);
+	_this.SetMainCellRange(0,3,1,5,7);
+	var xml=_sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;page=&amp;quot;+page);
+	_this.SetXmlDS(0,3,1,5,7,xml);
+	taCount();
+	_this.AutoFixScreenWidth();
+
+} 
+
+//得到表的记录数并写入
+function taCount()
+{	
+	var dblink=&amp;quot;&amp;quot;;
+	var owner=&amp;quot;&amp;quot;;
+	var table_name=&amp;quot;&amp;quot;;
+	var str=&amp;quot;&amp;quot;;
+	
+	for(var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++){
+		owner=_this.GetCellText(0,r,3);
+		dblink=_this.GetCellText(0,r,2);
+		table_name=_this.GetCellText(0,r,4);
+		if(owner==&amp;quot;&amp;quot;||dblink==&amp;quot;&amp;quot;||table_name==&amp;quot;&amp;quot;) return alert(&amp;quot;主数据区域无数据！&amp;quot;);
+		str=&amp;quot;select count(*) from &amp;quot;+owner+&amp;quot;.&amp;quot;+table_name+&amp;quot;@&amp;quot;+dblink;
+		 wherestr=&amp;quot;&amp;quot;;
+		if( CK_COL(dblink,owner,table_name,&amp;quot;SJGSDQ&amp;quot;)==&amp;quot;1&amp;quot;){
+			if(wherestr==&amp;quot;&amp;quot;){
+				wherestr+=&amp;quot; where SJGSDQ like &amp;apos;14511%&amp;apos;&amp;quot;
+			}else{
+				wherestr+=&amp;quot; or SJGSDQ like &amp;apos;14511%&amp;apos;&amp;quot;
+			}
+
+		}
+		if(CK_COL(dblink,owner,table_name,&amp;quot;ZGSWSKFJ_DM&amp;quot;)==&amp;quot;1&amp;quot;){
+			if(wherestr==&amp;quot;&amp;quot;){
+				wherestr+=&amp;quot; where ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;
+			}else{
+				wherestr+=&amp;quot; or ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;
+			}
+
+		}
+		if(CK_COL(dblink,owner,table_name,&amp;quot;ZGSWJ_DM&amp;quot;)==&amp;quot;1&amp;quot;){
+			if(wherestr==&amp;quot;&amp;quot;){
+				wherestr+=&amp;quot; where ZGSWJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;
+			}else{
+				wherestr+=&amp;quot; or ZGSWJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;
+			}
+		}
+		wherestr = wherestr.replace(/%/g,escape(&amp;quot;%&amp;quot;));
+			str+=wherestr;
+
+		_sql.querytods(&amp;quot;YSJBC&amp;quot;,&amp;quot;str=&amp;quot;+str);				
+		_this.SetCellText(0,r,6,_this.XMLDS_GetStringAt(0,0));
+		_sql.querytods(&amp;quot;YCJSJ&amp;quot;,&amp;quot;table_name=&amp;quot;+table_name);
+		_this.SetCellText(0,r,7,_this.XMLDS_GetStringAt(0,0));	
+							
+	}
+	_this.AutoFixScreenWidth();
+}
+
+//鼠标左键点击-实现翻页
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if(sheet==1&amp;&amp;row==1){
+		if(col==4){
+			if(_this.GetCellText(1,1,8)==&amp;quot;1&amp;quot;){
+				 alert(&amp;quot;本页是第一页没有上一页！&amp;quot;);
+			}else{
+				sjcj_qk(_this.GetCellText(1,1,8)-1);
+				_this.set(1,1,8,_this.GetCellText(1,1,8)-1);
+			}
+		}
+		if(col==6){
+			var num=_this.GetCellText(1,1,8)-1+2;
+			_this.SetCellText(1,1,8,num);
+			sjcj_qk(num);
+			
+		}
+	}
+}
+//判断列是否存在
+function CK_COL(db,owner,table_name,column_name)
+{
+	
+	var allstr=&amp;quot;all_tab_columns@&amp;quot;+db;
+	_sql.querytods(&amp;quot;CX&amp;quot;,&amp;quot;owner=&amp;apos;&amp;quot;+owner+&amp;quot;&amp;apos;&amp;table_name=&amp;apos;&amp;quot;+table_name+&amp;quot;&amp;apos;&amp;col_name=&amp;apos;&amp;quot;+column_name+&amp;quot;&amp;apos;&amp;allstr=&amp;quot;+allstr);	
+	return _this.XMLDS_GetStringAt(0,0);
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select t.* from
+(select rownum a, dblink, owner, table_name, table_common
+   from tax_jssjtbb
+   where tbbz=&amp;apos;1&amp;apos;)t
+   where t.a&amp;gt;([%page]-1)*50
+   and t.a&amp;lt;[%page]*50</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 ></C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11></ROW>
+<ROW num="1" ><ID >YSJBC</ID><NAME ></NAME><DATDSC >[%str]</DATDSC><C4 >YSJBC</C4><C5 >YSJBC</C5><C6 >YSJBC</C6><C7 >YSJBC</C7><C8 >YSJBC</C8><C9 ></C9><C10 ></C10><C11 >YSJBC</C11></ROW>
+<ROW num="2" ><ID >YCJSJ</ID><NAME ></NAME><DATDSC >select count(*) b from [%table_name]</DATDSC><C4 >YCJSJ</C4><C5 >YCJSJ</C5><C6 >YCJSJ</C6><C7 >YCJSJ</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >YCJSJ</C11></ROW>
+<ROW num="3" ><ID >CX</ID><NAME ></NAME><DATDSC >select count(*)
+   from [%allstr]
+  where owner = [%owner]
+    and table_name =[%table_name]
+    and column_name =[%col_name]</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

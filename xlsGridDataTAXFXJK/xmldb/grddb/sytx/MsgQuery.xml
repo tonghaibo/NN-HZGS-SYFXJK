@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >MsgQuery</MWID><NAME >消息系统数据查询</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >MsgQuery.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >FROMUSR</ID><NAME >发送人</NAME><NOTNULL ></NOTNULL><KEYVAL >V_USR</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="1" ><ID >TOUSR</ID><NAME >接受人</NAME><NOTNULL ></NOTNULL><KEYVAL >V_USR</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="2" ><ID >TITLE</ID><NAME >标题关键字</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="3" ><ID >DAT1</ID><NAME >开始时间</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="4" ><ID >DAT2</ID><NAME >截止时间</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+<ROW num="5" ><ID >MSGTYP</ID><NAME >消息类型</NAME><NOTNULL ></NOTNULL><KEYVAL >V_MSGTYP</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >GEN</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >5</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+function _thisOnMouseDClick(sheet,row,col)
+{
+      if ( col == 4 ) 
+            alert ( _this.GetCellText(0,row,col) );   
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+  _this.OpenHttpRequest(&amp;quot;http://www.xlsgrid.net/web/index.htm&amp;quot;,&amp;quot;POST&amp;quot;);
+  _this.SendHttpRequest();
+  alert(&amp;quot;asdfasd&amp;quot;);
+  alert(&amp;quot;&amp;apos;//&amp;quot;);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >SELECT to_char(a.crtdat,&amp;apos;YYYY-MM-DD hh24:mi&amp;apos;) ,a.title,trim(a.crtusrnam) crtusrnam,nvl(b.name,&amp;apos;&amp;apos;) tousr ,note 
+FROM MSG A, USR B
+where a.tousr=b.id(+) and 
+( a.id is not  null or (a.id is null and (a.crtusr=&amp;apos;[%SYS_USRID]&amp;apos; or a.tousr=&amp;apos;[%SYS_USRID]&amp;apos;) )  )
+and to_char(a.crtdat,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=decode(&amp;apos;[%DAT1]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01-01&amp;apos;,&amp;apos;[%DAT1]&amp;apos;)
+and to_char(a.crtdat,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=decode(&amp;apos;[%DAT2]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2999-01-01&amp;apos;,&amp;apos;[%DAT2]&amp;apos;)
+and a.crtusr like &amp;apos;[%FROMUSR]%&amp;apos; and nvl(a.tousr,&amp;apos; &amp;apos;) like &amp;apos;[%TOUSR]%&amp;apos; 
+and (a.title like &amp;apos;%[%TITLE]%&amp;apos; or a.note like &amp;apos;%[%TITLE]%&amp;apos; )
+and NVL(a.id,&amp;apos;GEN&amp;apos; ) like &amp;apos;[%MSGTYP]%&amp;apos;
+ORDER BY A.CRTDAT desc</DATDSC><C4 >MAIN</C4></ROW>
+<ROW num="1" ><ID >TEST</ID><NAME ></NAME><DATDSC >select * from usr</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

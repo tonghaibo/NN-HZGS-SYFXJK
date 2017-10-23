@@ -1,0 +1,248 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >StoneData</MWID><NAME >矿石数据导入</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >StoneData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >数据采集</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >NSRPP</ID><NAME >纳税人匹配</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,5,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,7,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,9,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,11,3);
+
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,13,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,15,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,17,3);
+	_this.ShowTabBar(1);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+   	if(id == &amp;quot;导入&amp;quot;) {
+		if(!confirm(&amp;quot;确定导入文件？&amp;quot;)) return ;
+		
+		var filepath = &amp;quot;&amp;quot;;
+		var typ = &amp;quot;&amp;quot;;
+		
+		for (var i=3;i&amp;lt;=5;i=i+2) {
+			if (i == 3) { typ = 1; filepath =_this.GetCellText(sheet,3,3); } 	//出卡数据
+			else if (i == 5) { typ = 2; filepath =_this.GetCellText(sheet,5,3); }	//收货数据
+			
+			if (filepath != &amp;quot;&amp;quot;) {
+				if (typ == 1 || typ == 2) {
+					if (typ == 1) _this.SetCellText(sheet,7,2,&amp;quot;正在导入企业出卡数据...&amp;quot;+filepath);
+					else if (typ == 2) _this.SetCellText(sheet,7,2,&amp;quot;正在导入企业收货数据...&amp;quot;+filepath);
+					runImpl(filepath,typ);
+				}
+				_this.SetCellText(sheet,i,3,&amp;quot;&amp;quot;);
+			}
+			
+		}
+	}
+}
+
+function runImpl(filepath,typ)
+{
+	try {
+		var tabnam =  runImp(filepath);
+		if(tabnam != null &amp;&amp; tabnam != &amp;quot;&amp;quot;) {
+			var param = new Object();
+			param.tabnam = tabnam;
+			param.typ = typ;
+			param.thisorgid = G_ORGID;
+			var msg = invokeOSFuncExt(&amp;quot;importStone&amp;quot;,param);
+			_this.SetCellText(0,7,2,msg);
+			alert(msg);			
+		}
+	}
+	catch(e) {
+		alert(&amp;quot;导入失败！&amp;quot;+e);
+	}
+}
+
+
+//纳税人匹配
+function NSRPP()
+{
+	//window.showModalDialog(&amp;quot;show.sp?grdid=STONE_NSRPP&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:1000px;dialoHeight:800px&amp;quot;);
+	window.open(&amp;quot;show.sp?grdid=STONE_NSRPP&amp;quot;);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+//石材数据导入（包括出卡数据和加工企业收货数据）
+function importStone()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var tabname = tabnam;
+	var typ = typ;
+	var ret = &amp;quot;&amp;quot;;
+	var updcount = 0;
+	var inscount = 0;
+	try{
+		db = new pubpack.EADatabase();
+		
+		sql = &amp;quot;select * from user_tables where table_name=upper(&amp;apos;&amp;quot;+tabname+&amp;quot;&amp;apos;)&amp;quot;;
+		var cnt = db.GetSQLRowCount(sql);
+		if(cnt &amp;lt;= 0) return &amp;quot;无数据可以导入&amp;quot;;
+		
+		//增加纳税人登记序号列
+		sql = &amp;quot;alter table &amp;quot;+tabname+&amp;quot; add djxh varchar2(30)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		//纳税人识别号也有可能变更了，但是在石材系统中没有更改 的情况
+		
+
+		var mycnt = 0;
+		
+		if (typ == 1) {
+		
+			//取得导入数据的年月
+			sql = &amp;quot;select substr(co0,6,7) yymm from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%查询年月%&amp;apos;&amp;quot;;
+			var yymm = db.GetSQL(sql);	
+			
+			//导入的中间表数据清理，删除文件中的垃圾行数据
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%矿企出卡月报表%&amp;apos; or co0 is null or co1 is null or co0 = &amp;apos;纳税人识别号&amp;apos; or co2 is null&amp;quot;;
+			mycnt = db.ExcecutSQL(sql);		
+			if(mycnt == 0) {
+				db.Rollback();
+				return &amp;quot;导入失败！导入的文件格式不正确&amp;quot;+tabname;
+			}
+			
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; tmp set djxh=(select djxh from TAX_STONE_DZB dzb where (tmp.co0=dzb.nsrsbh or tmp.co1=dzb.qymc) and rownum=1)&amp;quot;;
+			db.ExcecutSQL(sql);
+
+			//先更新 后插入
+			//矿企出卡数据文件格式
+			//0年月 1纳税人识别号 2出卡企业名称 3对应企业 4车次 5出卡卡口 6收货企业 7重量合计(吨) 8碎石(吨) 9荒料(吨) 10板材(吨) 11碎石（二类） 12铁矿(吨) 13放行废料(吨) 14建筑用大理石 15建筑用砂
+			//0纳税人识别号 1出卡企业名称 2对应企业 3车次 4出卡卡口 5收货企业 6重量合计(吨) 7碎石(吨) 8荒料(吨) 9板材(吨) 10碎石（二类） 11铁矿(吨) 12放行废料(吨) 13建筑用大理石 14建筑用砂
+			sql = &amp;quot;update tax_stonedata a set (NSRMC,DYQYMC,CS,KHKZ,QYS,ZLHJ,SS,HL,BC,SS2L,TK,FXFL,JZYDLS,JZYS) =(
+					select co1,co2,co3,co4,co5,co6,co7,co8,co9,co10,co11,co12,co13,co14
+					from &amp;quot;+tabname+&amp;quot; b 
+					where a.YYMM=&amp;apos;&amp;quot;+yymm+&amp;quot;&amp;apos; and a.nsrsbh = b.co0 and rownum=1) 
+				where a.YYMM=&amp;apos;&amp;quot;+yymm+&amp;quot;&amp;apos; and a.crbz=&amp;apos;1&amp;apos; and a.nsrsbh in (select co0 from &amp;quot;+tabname+&amp;quot;)&amp;quot;;	
+			updcount = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_stonedata(CRBZ,YYMM,NSRSBH,NSRMC,DYQYMC,CS,KHKZ,QYS,ZLHJ,SS,HL,BC,SS2L,TK,FXFL,JZYDLS,JZYS,DJXH)
+			       select &amp;apos;1&amp;apos; crbz,&amp;apos;&amp;quot;+yymm+&amp;quot;&amp;apos; yymm,co0,co1,co2,co3,co4,co5,co6,co7,co8,co9,co10,co11,co12,co13,co14,djxh 
+			       from &amp;quot;+tabname+&amp;quot; a 
+			       where not exists (select 1 from tax_stonedata b where b.yymm=&amp;apos;&amp;quot;+yymm+&amp;quot;&amp;apos; and b.nsrsbh=a.co0 and b.crbz=&amp;apos;1&amp;apos;) &amp;quot;;					
+			inscount = db.ExcecutSQL(sql);
+		
+		}
+		//收货加工企业数据
+		else if (typ == 2) {
+			//增加纳税人登记序号列
+			sql = &amp;quot;alter table &amp;quot;+tabname+&amp;quot; add nsrsbh varchar2(30)&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			//更新sbh,djxh
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; tmp set (djxh,nsrsbh)=(select djxh,nsrsbh from TAX_STONE_DZB dzb where tmp.co1=dzb.qymc and rownum=1)&amp;quot;;
+			db.ExcecutSQL(sql);
+		
+			//取得导入数据的年月
+			sql = &amp;quot;select substr(co0,6,7) yymm from &amp;quot;+tabname+&amp;quot; where co0 like &amp;apos;%查询日期%&amp;apos;&amp;quot;;
+			var yymm = db.GetSQL(sql);
+			sql = &amp;quot;update &amp;quot;+tabname+&amp;quot; set co0=&amp;apos;&amp;quot;+yymm+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			//导入的中间表数据清理，删除文件中的垃圾行数据
+			//sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co1 is null or co1 like &amp;apos;纳税人识别号%&amp;apos;&amp;quot;;
+			sql = &amp;quot;delete from &amp;quot;+tabname+&amp;quot; where co1 is null or co1 like &amp;apos;%收货单位%&amp;apos; or co0=&amp;apos;企业收货月报表&amp;apos; or co0=&amp;apos;收货月份&amp;apos; or co0 like &amp;apos;%查询日期%&amp;apos;&amp;quot;;
+			mycnt = db.ExcecutSQL(sql);			
+			if(mycnt == 0) {
+				db.Rollback();
+				return &amp;quot;导入失败！导入的文件格式不正确&amp;quot;+tabname+&amp;quot;,mycnt=&amp;quot;+mycnt ;
+			}
+			
+			
+			//先更新 后插入
+			//加工企业数据文件格式
+			//0年月 1纳税人识别号 2收货单位	3收货次数 4出卡企业 5矿种 6收货合计(吨) 7碎石(吨) 8荒料(吨) 9板材(吨) 10碎石（二类）(吨) 11铁矿 12放行废料(吨)	
+			//0收货月份 1收货单位 2收货次数 3出卡企业 4矿种 5收货合计(吨) 6碎石(吨)	7荒料(吨) 8板材(吨) 9碎石（二类）(吨)10铁矿 11放行废料(吨)	
+
+			sql = &amp;quot;update tax_stonedata a set (CS,QYS,KHKZ,ZLHJ,SS,HL,BC,SS2L,TK,FXFL) =(
+					select co2,co3,co4,co5,co6,co7,co8,co9,co10,co11
+					from &amp;quot;+tabname+&amp;quot; b 
+					where a.YYMM = b.co0 and a.nsrmc=b.co1) 
+				where crbz=&amp;apos;2&amp;apos; and (yymm,nsrmc) in (select co0,co1 from &amp;quot;+tabname+&amp;quot;)&amp;quot;;	
+			updcount = db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_stonedata(CRBZ,YYMM,NSRSBH,NSRMC,CS,QYS,KHKZ,ZLHJ,SS,HL,BC,SS2L,TK,FXFL,DJXH)
+			       select &amp;apos;2&amp;apos; crbz,nvl(co0,&amp;apos; &amp;apos;) co0,nsrsbh,co1,co2,co3,co4,co5,co6,co7,co8,co9,co10,co11,djxh 
+			       from &amp;quot;+tabname+&amp;quot; a 
+			       where not exists (select 1 from tax_stonedata b where b.yymm=a.co0 and b.nsrmc=a.co1 and b.crbz=&amp;apos;2&amp;apos;) &amp;quot;;					
+			inscount = db.ExcecutSQL(sql);
+		
+		}
+		
+		//自动匹配写入对照表
+		sql = &amp;quot;insert into tax_stone_dzb(nsrsbh,qymc,djxh)
+			select * from (
+			select distinct a.nsrsbh,a.nsrmc,dj.djxh 
+			from tax_stonedata a,dj_nsrxx dj
+			where a.nsrsbh=dj.nsrsbh
+			and a.djxh is null
+			and a.nsrsbh not in (select nsrsbh from tax_stone_dzb)
+			)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;insert into tax_stone_dzb(nsrsbh,qymc,djxh)
+			select * from (
+			select distinct dj.nsrsbh,a.nsrmc,dj.djxh 
+			from tax_stonedata a,dj_nsrxx dj
+			where a.nsrmc=dj.nsrmc
+			and a.djxh is null
+			and a.nsrmc not in (select qymc from tax_stone_dzb)
+			)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		//更新石材数据表数据
+		sql = &amp;quot;update tax_stonedata a set (nsrsbh,djxh)=(select nsrsbh,djxh from TAX_STONE_DZB b where a.nsrmc=b.qymc and rownum=1)
+			where exists (select 1 from TAX_STONE_DZB dzb where a.nsrmc=dzb.qymc)&amp;quot;;
+		db.ExcecutSQL(sql);
+
+		
+		ret = &amp;quot;导入完成！共新增&amp;quot;+inscount+&amp;quot;条记录，更新&amp;quot;+updcount +&amp;quot;条记录&amp;quot;;
+		//删除临时表
+		sql = &amp;quot;drop table &amp;quot;+tabname;
+		db.ExcecutSQL(sql);			
+
+		return ret;
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+	}
+	
+	finally {
+		if(db != null)	db.Close();
+	}
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

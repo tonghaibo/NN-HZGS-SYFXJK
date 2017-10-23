@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >nlsEdit</MWID><NAME >国际化维护</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >nlsEdit.zxg</FILE><SCENE ></SCENE><FIXED >2,2</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >0</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >newRow</ID><NAME >新增</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C10 >save</C10><C11 >deleteRw</C11><C12 >newRow</C12></ROW>
+<ROW num="1" ><ID >deleteRow</ID><NAME >删除</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><C10 ></C10><C11 >delerow</C11><C12 >deleteRow</C12></ROW>
+<ROW num="2" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 ></C10><C11 ></C11><C12 >save2</C12></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >SYTID</ID><NAME >系统</NAME><NOTNULL ></NOTNULL><KEYVAL >SYT</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_SYTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >XT</C15><C16 >SYTID</C16></ROW>
+<ROW num="1" ><ID >CNSTR</ID><NAME >原文关键字</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >CNSTR</C16></ROW>
+<ROW num="2" ><ID >ENSTR</ID><NAME >译文关键字</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >ENSTR</C16></ROW>
+<ROW num="3" ><ID >CLASSID</ID><NAME >分类编号</NAME><NOTNULL ></NOTNULL><KEYVAL >NLS_CLASS</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >classid</C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >5</NROW><NCOL >7</NCOL><PAGES >0</PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,1</C20><C21 ></C21><C22 >0,6,2</C22><C23 >0,2,2</C23></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	_this.SetRowVisible(sheet,0,-1);
+  	_this.SetColVisible(sheet,7,-1);
+  	_this.SetColVisible(sheet,8,-1);
+
+  	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+  	
+  	for (var r=1;r&amp;lt;_this.GetRowCount(sheet);r++) {
+  		_this.SetToBoolBox(sheet,r,1);
+  	}
+  	
+  	_this.SetMainCellRange(sheet,2,2,_this.GetRowCount(sheet)-1,7);
+  	_this.SetMainCellRangeAppendAuto(sheet,1);
+
+  	_this.SetColName(sheet,2,&amp;quot;SYTID&amp;quot;);
+  	_this.SetColName(sheet,3,&amp;quot;CLASSID&amp;quot;);
+  	_this.SetColName(sheet,4,&amp;quot;CNSTR&amp;quot;);
+  	_this.SetColName(sheet,5,&amp;quot;NLS&amp;quot;);
+  	_this.SetColName(sheet,6,&amp;quot;DESTSTR&amp;quot;);
+  	_this.SetColName(sheet,7,&amp;quot;GUID&amp;quot;);
+  	_this.SetColName(sheet,8,&amp;quot;FLG&amp;quot;);
+  	
+  	_this.SetFixedRow(sheet,2);
+}
+
+//保存
+function save()
+{  	
+  	var param = new Object();
+	param.xmlstr =_this.GetXml(0,2,2,_this.GetRowCount(0)-1,8);
+	param.usrid = G_USRID;
+	param.thisaccid = G_ACCID;
+	param.thissytid = G_SYTID;
+	param.thisorgid = G_ORGID;
+	var msg =&amp;quot;&amp;quot;;
+	try {
+		//alert(param.xmlstr);
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		if (msg*1 &amp;gt;= 0 ) {
+			alert(&amp;quot;保存成功！共修改&amp;quot;+msg+&amp;quot;条记录&amp;quot;);
+
+		}
+	}
+	catch (e) {
+		alert ( e );
+	}	
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (col &amp;gt; 1) {
+		_this.SetCellText(sheet,row,8,&amp;quot;*&amp;quot;);  //修改标志
+	}
+	if (row == 1 &amp;&amp; col == 1) {
+		for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;_this.GetMainCellRangeRow2(0);r++) {
+			_this.SetCellText(0,r,1,newvalue);
+		}
+	}
+}
+
+//删除
+function deleteRow()
+{
+	for (var row=2;row&amp;lt;_this.GetRowCount(0);row++) {
+		if (_this.GetCellText(0,row,1) == &amp;quot;1&amp;quot;) {
+			_this.SetCellText(0,row,8,&amp;quot;-&amp;quot;);  //删除标志  
+			_this.SetRowVisible(0,row,-1);
+		}
+	}
+}
+
+//新增
+function newRow()
+{
+	var cr = _this.GetCurrentRow(0);
+	if (cr == -1) cr = 2;
+	_this.AppendRow(0,cr);
+	_this.SetCellText(0,cr+1,2,G_SYTID);
+	_this.SetCellText(0,cr+1,5,&amp;quot;en&amp;quot;);
+}
+</GRDJSDS_VALUE><C2 >5</C2></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+//保存单据
+function save()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;	
+	var ret = 0;
+	try {   
+		db = new pubpack.EADatabase();
+		var ds = new pubpack.EAXmlDS(xmlstr);	
+ 		for (var row=0;row&amp;lt;ds.getRowCount();row++) { 
+			var guid =  ds.getStringAt(row,&amp;quot;GUID&amp;quot;);
+			var classid=ds.getStringAt(row,&amp;quot;CLASSID&amp;quot;);
+			var sytid = ds.getStringAt(row,&amp;quot;SYTID&amp;quot;);
+			var cnstr = ds.getStringAt(row,&amp;quot;CNSTR&amp;quot;);
+			var nls = ds.getStringAt(row,&amp;quot;NLS&amp;quot;);
+			var deststr = ds.getStringAt(row,&amp;quot;DESTSTR&amp;quot;);	
+			var flag = ds.getStringAt(row,&amp;quot;FLG&amp;quot;);
+			
+			//判断是否已新增						
+			if((guid == &amp;quot;&amp;quot; || guid == null) &amp;&amp; cnstr != &amp;quot;&amp;quot;){
+				sql = &amp;quot; insert into NLS(GUID,SYTID,CNSTR,NLS,DESTSTR,CLASSID) values (sys_guid(),&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;.format([sytid,cnstr,nls,deststr,classid]);					
+				ret += db.ExcecutSQL(sql);
+			}
+			else if (flag == &amp;quot;*&amp;quot;){	
+				sql = &amp;quot; update NLS set SYTID=&amp;apos;&amp;quot;+sytid+&amp;quot;&amp;apos;,CNSTR=&amp;apos;&amp;quot;+cnstr+&amp;quot;&amp;apos;,NLS=&amp;apos;&amp;quot;+nls+&amp;quot;&amp;apos;,DESTSTR=&amp;apos;&amp;quot;+deststr+&amp;quot;&amp;apos;,CLASSID=&amp;apos;&amp;quot;+classid+&amp;quot;&amp;apos; where guid =&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;		
+				ret += db.ExcecutSQL(sql);
+			}
+			else if (flag == &amp;quot;-&amp;quot;){	
+				sql = &amp;quot; delete from NLS  where guid =&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;		
+				ret += db.ExcecutSQL(sql);
+			}	
+		}	
+		db.Commit();		
+	} catch ( e ) {
+		db.Rollback(); 
+		return e.toString();
+		throw new pubpack.EAException(e.toString());
+	}	
+	return ret;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select sytid,
+       classid,
+	cnstr,
+	nls,
+	deststr,
+	guid,
+	&amp;apos;&amp;apos; flg
+from nls
+where sytid like &amp;apos;[%SYTID]%&amp;apos;	
+  and nvl(cnstr,&amp;apos; &amp;apos;) like &amp;apos;%[%CNSTR]%&amp;apos;
+  and nvl(deststr,&amp;apos; &amp;apos;) like &amp;apos;%[%ENSTR]%&amp;apos;
+  and nvl(classid,&amp;apos; &amp;apos;) like &amp;apos;%[%CLASSID]%&amp;apos;
+order by crtdat desc</DATDSC><GRDJSDS >DSC:</GRDJSDS><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

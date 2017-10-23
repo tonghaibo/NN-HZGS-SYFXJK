@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>LOCDBEDIT</MWID><NAME>仓库数据维护</NAME><NOTE></NOTE><FILE>LOCDBEDIT.zxg</FILE><FIXED></FIXED><CATTYP>02</CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+       setButton();
+       // 构造3个 SQL
+       // 查询仓库数据表记录
+       selectSQL = &amp;quot;SELECT GUID,ORG as 组织编号,ID as 仓库编号,NAME as 仓库名称,LONGNAME as 全称,ACC 帐套号,LOCTYP as 分类, &amp;quot;+
+                        &amp;quot;SUBACC 代储公司, &amp;quot;+//, SUBLOCID 代存仓库
+                        &amp;quot;ADDR as 地址,MAN as 仓库主管,TEL as 电话,FAX as 传真, &amp;quot;+
+                        &amp;quot;DEFSLT1 as 默认库位1码头默认收货仓位, &amp;quot;+
+                        &amp;quot;DEFSLT2 as 默认库位2月台默认收货仓位, &amp;quot;+
+                        &amp;quot;DEFSLT3 as 默认库位3销售退货仓位, &amp;quot;+
+                        &amp;quot;DEFSLT4 as 默认库位4加工的合格品, &amp;quot;+
+                        &amp;quot;DEFSLT5 as 默认库位5加工的不合格品, &amp;quot;+
+                        &amp;quot;DEFSLT6 as 默认库位6加工原料库位投料区, &amp;quot;+
+                        &amp;quot;DEFSLT7 as 默认库位7出货的默认库位 &amp;quot;+
+                        &amp;quot;from LOC where  LOCTYP in (&amp;apos;0&amp;apos;,&amp;apos;3&amp;apos;) and ORG =&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;;
+       //新增仓库数据表记录
+       insertSQL = &amp;quot;insert into LOC(GUID,ORG,ID,NAME,LONGNAME,ACC,LOCTYP,SUBACC,ADDR,MAN,TEL,FAX,&amp;quot;+
+                  &amp;quot;DEFSLT1,DEFSLT2,DEFSLT3,DEFSLT4,DEFSLT5,DEFSLT6,DEFSLT7 &amp;quot;+
+                  //,CRTUSR,CRTDAT 
+                  &amp;quot; )  VALUES( sys_guid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? )  &amp;quot;;
+       // 修改仓库数据表记录
+       updateSQL = &amp;quot;update LOC set org=?,id=?,name=?,LONGNAME=?,acc=?,LOCTYP=?,SUBACC=?,ADDR=?,MAN=?,TEL=?,FAX=?, &amp;quot;+
+                   &amp;quot;DEFSLT1=?,DEFSLT2=?,DEFSLT3=?,DEFSLT4=?,DEFSLT5=?,DEFSLT6=?,DEFSLT7=? &amp;quot;+
+                   //,CRTUSR=?,CRTDAT=to_date(?,&amp;apos;YYYY-MM-DD&amp;apos;)  &amp;quot;+
+                   &amp;quot;where guid=? &amp;quot;;
+       //删除仓库数据表记录
+       deleteSQL = &amp;quot;delete LOC where guid=? &amp;quot;;            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+      _this.SetColVisible(sheet,3,-1);
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_LOCTYP&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var acclist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ACCLIST&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+             {
+                  var str = _this.GetCellText(sheet,row,8);
+                  _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,8,listid0);
+                  _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,9,acclist );
+              }
+
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+      if( sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==4 ){
+            _this.SetCellText(sheet,row,3,orgid);
+            _this.SetCellText(sheet,row,4,orgid+newvalue);
+      }
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>
+//基本数据维护保存数据前
+//脚本在此进行操作校验，比如验证数据是否可以安全删除
+//action: + 插入; U 更新; - 删除
+//datads: 维护界面传过来的数据
+//rowno: 当前要操作的数据行
+function beforeSaveDbData(action,eadb,datads,rowno)
+//var eadb = new pub.EADatabase(); var datads = new EAXmlDS();
+{
+  var guid = datads.getStringAt(rowno,&amp;quot;guid&amp;quot;);
+  var orgid=datads.getStringAt(rowno,&amp;quot;组织编号&amp;quot;);
+  var locid=datads.getStringAt(rowno,&amp;quot;仓库编号&amp;quot;);
+  if(guid == &amp;quot;&amp;quot;) return;
+  var oldid;
+  var usecount;
+  //try{
+  	oldid = eadb.GetSQL(&amp;quot;select id from LOC where guid=&amp;apos;%s&amp;apos;&amp;quot;.format([guid]));
+  	usecount = eadb.GetSQL(&amp;quot;select count(*) from bilhdr where org=&amp;apos;%s&amp;apos; and locid=&amp;apos;%s&amp;apos;&amp;quot;.format([orgid,oldid]));
+  //}catch(e) {return;}
+  if( usecount&amp;gt;0)
+    if( action==&amp;quot;-&amp;quot; || (action==&amp;quot;U&amp;quot; &amp;&amp; oldid != locid) )
+    {
+      throw new Exception(&amp;quot;仓库%s已经使用,不能修改或删除该仓库。&amp;quot;.format([oldid]));
+    }
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,241 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >orggraph</MWID><NAME >组织机构图</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >orggraph.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >SetDesignMode</ID><NAME >进入退出设计模式</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var svgsheet = 0;
+var datasheet ;
+var tablesheet ;
+var LEVEL = 0;
+var MAXLEVEL = 0;
+
+// 把id,name,refid的xmlds转换为一个组织机构图 目前版本1.0，需要一个空的sheet做过度算法，日后有时间改为完全用控件的xmlds
+// SVGLEVEL(sheet,title)
+// sheet 空的sheet做过度算法
+// title: 标题 如果为空，=ROOT
+// xml: xmlds描述的数据字符串
+function SVGLEVEL(sheet,title,xml,menuid)
+{
+	this.m_sheet = sheet;
+	this.m_width  = 80;
+	this.m_height = 80;  
+	this.m_title = title;
+	this.m_xml = xml;
+	this.m_menuid = menuid ;
+	
+	this.LEVEL = 0;
+	this.MAXLEVEL = 0;
+	// 层的颜色列表如果超过循环
+//	this.m_color = new Array(&amp;quot;#00cc99&amp;quot;,&amp;quot;#C2CC0D&amp;quot;,&amp;quot;#71CC16&amp;quot;,&amp;quot;#FFCCFF&amp;quot;,&amp;quot;#CC68CC&amp;quot;,&amp;quot;#66FFCC&amp;quot;,&amp;quot;#DD0000&amp;quot;,&amp;quot;#FF9966&amp;quot;,&amp;quot;#C2A00D&amp;quot;,&amp;quot;#71A216&amp;quot;,&amp;quot;#66FFCC&amp;quot;);	
+	this.m_color = new Array(&amp;quot;#FEFEFE&amp;quot;,&amp;quot;#EEEEEE&amp;quot;,&amp;quot;#EDEDED&amp;quot;,&amp;quot;#DDDDDD&amp;quot;,&amp;quot;#DEDEDE&amp;quot;,&amp;quot;#CDCDCD&amp;quot;,&amp;quot;#CCCCCC&amp;quot;,&amp;quot;#BCBCBC&amp;quot;,&amp;quot;#BBBBBBB&amp;quot;,&amp;quot;#ABABAB&amp;quot;,&amp;quot;#AAAAAAA&amp;quot;);
+	this.m_color1 = new Array(&amp;quot;#0D767E&amp;quot;,&amp;quot;#999966&amp;quot;,&amp;quot;#006600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#CC6744&amp;quot;,&amp;quot;#669999&amp;quot;,&amp;quot;#880000&amp;quot;,&amp;quot;#FF6600&amp;quot;,&amp;quot;#CC6733&amp;quot;,&amp;quot;#666633&amp;quot;,&amp;quot;#66FF99&amp;quot;);	
+	
+	this.load = SVGLEVEL_load;			// 重新载入
+	this.parselevel= SVGLEVEL_parselevel;			// 递归
+}
+// 解析重新生成svgchar
+function SVGLEVEL_load()
+{
+	if ( _this.GetReleaseNo()&amp;lt;&amp;quot;4.42&amp;quot;) {
+		alert ( &amp;quot;要正确显示图表，要求您的控件在4.42以上，请升级您的硕格控件&amp;quot; );
+		return;
+	}
+	// 初始化
+	_this.SetRowCount(this.m_sheet , 2 );
+	_this.SetColCount(this.m_sheet, 2 );
+	_this.SetCellText(this.m_sheet,0,0,&amp;quot;ROOT&amp;quot;);
+	_this.XMLDS_Parse(this.m_xml);
+	this.parselevel(&amp;quot;ROOT&amp;quot;);	// 递归
+	
+	// 根据xmlds得到一个svg图的xml字符串
+	var svg= &amp;quot;&amp;quot;;
+	svg = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt;&amp;lt;svg  &amp;gt; &amp;quot;;//bgcolor=\&amp;quot;#D3E5FA\&amp;quot; 
+	var dwidth = (this.m_width*8/10)+12;
+	var dheight = (this.m_height/2)+10;
+	for ( var i=0;i&amp;lt;_this.GetRowCount(this.m_sheet);i++ ) {// 行循环
+		var oldorg = &amp;quot;&amp;quot;;
+		var oldorgname = &amp;quot;&amp;quot;;
+		var num = 1; // 连续的个数
+		var oldstartseq = -1;// 开始计算的位置
+		for ( var c=0;c&amp;lt;_this.GetColCount(this.m_sheet);c++ ) {// 列循环
+			var orgid = _this.GetCellText(this.m_sheet,i,c);
+			var orgname = orgid +&amp;quot;\r\n&amp;quot;+_this.GetCellShowText(this.m_sheet,i,c);
+			if ( orgid==&amp;quot;ROOT&amp;quot; ) orgname=this.m_title;
+			if ( orgid!= &amp;quot;&amp;quot; &amp;&amp; oldstartseq == -1 ) 
+				oldstartseq  = c;
+			if (  orgid!= oldorg ) {
+				if ( oldorg!=&amp;quot;&amp;quot; ) {
+					var refid = _this.GetCellText(this.m_sheet,i-1,oldstartseq  );
+					var x = (this.m_width*oldstartseq  +this.m_width*1/10)+(num-1)*this.m_width/2;
+					var y = (this.m_height*i+this.m_height*1/5);
+					var menuid = this.m_menuid;
+					if ( oldorg==&amp;quot;ROOT&amp;quot;) menuid = -1;
+					svg += &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+oldorg+&amp;quot;\&amp;quot; fillto=\&amp;quot;#FFFFFF\&amp;quot; fontsize=\&amp;quot;10\&amp;quot;  fill=\&amp;quot;&amp;quot;+this.m_color[i%this.m_color.length]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+x+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+dwidth+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+dheight+&amp;quot;\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot; menuid=\&amp;quot;&amp;quot;+menuid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+oldorgname+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;							
+					if ( refid!= &amp;quot;&amp;quot; ) 
+						svg += &amp;quot;&amp;lt;connector from=\&amp;quot;&amp;quot;+refid+&amp;quot;\&amp;quot; to=\&amp;quot;&amp;quot;+oldorg+&amp;quot;\&amp;quot; fromcp=\&amp;quot;23\&amp;quot; tocp=\&amp;quot;21\&amp;quot; type=\&amp;quot;208\&amp;quot; id=\&amp;quot;connector_&amp;quot;+refid+&amp;quot;_&amp;quot;+oldorg+&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot;/&amp;gt;&amp;quot;;							
+				}
+				oldorg=orgid;
+				oldorgname  = orgname ;
+				num = 1;
+				oldstartseq = c;
+			}
+			else 			num++;
+		}
+		if (  oldorg != &amp;quot;&amp;quot; ) {
+			var refid = _this.GetCellText(this.m_sheet,i-1,oldstartseq  );
+			var x = (this.m_width*oldstartseq  +this.m_width*1/10)+(num-1)*this.m_width/2;
+			var y = (this.m_height*i+this.m_height*1/5);
+			svg += &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+oldorg+&amp;quot;\&amp;quot; fill=\&amp;quot;&amp;quot;+this.m_color[i%this.m_color.length]+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+x+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+dwidth+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+dheight+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+oldorgname+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;							
+			if ( refid!= &amp;quot;&amp;quot; ) 
+				svg += &amp;quot;&amp;lt;connector from=\&amp;quot;&amp;quot;+refid+&amp;quot;\&amp;quot; to=\&amp;quot;&amp;quot;+oldorg+&amp;quot;\&amp;quot; fromcp=\&amp;quot;23\&amp;quot; tocp=\&amp;quot;21\&amp;quot; type=\&amp;quot;208\&amp;quot; id=\&amp;quot;connector_&amp;quot;+refid+&amp;quot;_&amp;quot;+oldorg+&amp;quot;\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot;/&amp;gt;&amp;quot;;							
+			
+		}
+		
+	}
+	
+	//svg += &amp;quot;&amp;lt;text x=\&amp;quot;&amp;quot;+x1+&amp;quot;\&amp;quot; y=\&amp;quot;5\&amp;quot; width=\&amp;quot;&amp;quot;+(x2-x1)+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+y1+&amp;quot;\&amp;quot; font-family=\&amp;quot;&amp;quot;+this.m_titlefontname +&amp;quot;\&amp;quot; font-size=\&amp;quot;&amp;quot;+this.m_titlefontsize+&amp;quot;\&amp;quot; align=\&amp;quot;center\&amp;quot; valign=\&amp;quot;middle\&amp;quot;&amp;gt;&amp;quot;+this.m_title+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+	svg+=&amp;quot;&amp;lt;/svg&amp;gt;&amp;quot;;
+	return svg;
+}
+// 递归，展现二级结构
+function SVGLEVEL_parselevel(parantid)
+{	
+	this.LEVEL ++;
+	//alert ( this.LEVEL + &amp;quot;,&amp;quot;+parantid );
+	if ( this.LEVEL&amp;gt;this.MAXLEVEL) {
+		this.MAXLEVEL = this.LEVEL;
+		_this.InsertRow(this.m_sheet,_this.GetRowCount(this.m_sheet)-1 );
+	}
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		var refid = _this.XMLDS_GetString(i,&amp;quot;REFID&amp;quot;);
+		if ( refid == &amp;quot;&amp;quot; ) refid = &amp;quot;ROOT&amp;quot;;
+
+		if ( refid==parantid ) {
+			// 找出下级的所有
+			var id = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+			var name = _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+			
+			// 增加本级节点
+			
+			for ( var c =_this.GetColCount(this.m_sheet)-2;c&amp;gt;=0;c--){
+				
+				if (_this.GetCellText(this.m_sheet,this.LEVEL-1,c) == parantid ) {
+					
+					// 在本列的后面增加
+					var curcol = c;
+					
+					if ( _this.GetCellText(this.m_sheet,this.LEVEL,c)==&amp;quot;&amp;quot; ) {
+						//  如果是下面一行是空的
+						
+					}  
+					else {
+						curcol = _this.InsertCol(this.m_sheet ,c+1 );
+						_this.SetColWidth(this.m_sheet,curcol,100);
+						_this.SetCellText(this.m_sheet ,this.LEVEL-1,curcol,parantid );
+					}
+					_this.SetCellText(this.m_sheet ,this.LEVEL,curcol,id );
+					_this.SetCellShowText(this.m_sheet ,this.LEVEL,curcol,name  );
+					for ( var rr=this.LEVEL-1;rr&amp;gt;=0 ;rr--) {
+						var leftval = _this.GetCellText(this.m_sheet ,rr,curcol-1);
+						var rightval = _this.GetCellText(this.m_sheet ,rr,curcol);
+
+						if ( leftval!= &amp;quot;&amp;quot; &amp;&amp; rightval ==&amp;quot;&amp;quot; ) 
+							_this.SetCellText(this.m_sheet ,rr,curcol,leftval );
+					}
+					break;
+				} 
+			}
+			// 递归
+			this.parselevel(id);		
+		}
+	}
+	this.LEVEL --;
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var xml = &amp;quot;&amp;quot;;
+	var sParam = &amp;quot;&amp;quot;;
+        try {
+                xml = invokeOSFunc(&amp;quot;GetORGDS&amp;quot;,sParam) ;     
+                alert ( xml );  
+        }
+        catch ( e ) {
+                  alert ( e );
+        }	
+
+	var tablesheet = _this.AddSheet(&amp;quot;表格&amp;quot;);
+	var menuid = -1;
+	try {	
+		var menuxml = &amp;quot;&amp;lt;folder name=\&amp;quot;部门|仓库|门店定义\&amp;quot;&amp;gt;&amp;lt;item id=\&amp;quot;m_edit_loc\&amp;quot; name=\&amp;quot;打开编辑窗口\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_show_loc\&amp;quot; name=\&amp;quot;打开图形窗口\&amp;quot;/&amp;gt;&amp;lt;/folder&amp;gt;&amp;lt;item id=\&amp;quot;m_edit_role\&amp;quot; name=\&amp;quot;权限管理\&amp;quot;/&amp;gt;&amp;quot;;
+		menuid = _this.LoadMenu( menuxml );
+	}catch ( e ) {alert ( &amp;quot;提示：请升级控件到4.48以上版本&amp;quot; );}
+	var svgorg = new SVGLEVEL(tablesheet, &amp;quot;组织机构图&amp;quot;,xml,menuid  );
+	var svg = svgorg.load();
+	
+	_this.SetToSVGForm(&amp;quot;&amp;quot;,0,-1,-1,svg);
+	_this.ShowTabBar(1);
+}
+
+
+//undefined
+var bDesignMode = 0;
+function SetDesignMode()
+{
+	if ( bDesignMode == 0 ) {
+		bDesignMode  = 1;
+	}
+	else bDesignMode =0;
+	_this.SetDesignMode(bDesignMode );
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+
+// JS传入的参数（yymm）可以直接使用
+function GetORGDS()
+{
+      var ds0 = xmldbpack.EAORGXmlDB.getOrgDs();	
+      var ds = new pubpack.EADS();
+      ds.copyfrom(ds0);
+      for ( var c=0;c&amp;lt;ds.getColumnCount();c++ ) {
+      	var colnam= ds.getColumnName(c);
+      	if ( colnam!= &amp;quot;ID&amp;quot; &amp;&amp; colnam!=&amp;quot;NAME&amp;quot; &amp;&amp; colnam!=&amp;quot;REFID&amp;quot; ) {
+      		ds.removeColumn(c);
+      		c--;
+      	}
+      }
+      /*
+      for ( var r=0;r&amp;lt;ds.getRowCount();r++){
+      	if(ds.getStringAt(r,&amp;quot;REFID&amp;quot;)==&amp;quot;&amp;quot;)
+      		ds.setValueAt(r,&amp;quot;REFID&amp;quot;,&amp;quot;ROOT&amp;quot; );
+      }
+      var newrow = ds.AddRow(-1);
+      ds.setValueAt(newrow,&amp;quot;ID&amp;quot;, &amp;quot;ROOT&amp;quot;);
+      ds.setValueAt(newrow,&amp;quot;ID&amp;quot;, &amp;quot;根&amp;quot;);
+      ds.setValueAt(newrow,&amp;quot;REFID&amp;quot;, &amp;quot;&amp;quot;);
+	*/
+      return ds.GetXml();
+      
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

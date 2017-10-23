@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_65710" x="4" y="28" width="748" height="460" stroke="#000000" fill="#feffe1" >
+ </rect>
+ <text id="text_65711" x="4" y="5" width="319" height="23"   font-family="Arial" font-color="#0000ff" font-size="15">【标准化作业流程－需求变动流程图】
+</text>
+ <rect id="rect_65712" x="532" y="82" width="157" height="59" stroke="#000000" fill="#a2d0ff" >实施阶段</rect>
+ <rect id="rect_65713" x="61" y="82" width="157" height="59" stroke="#000000" fill="#a2d0ff" >需求阶段</rect>
+ <rect id="rect_65714" x="218" y="82" width="157" height="59" stroke="#000000" fill="#a2d0ff" >开发阶段</rect>
+ <rect id="rect_65715" x="375" y="82" width="157" height="59" stroke="#000000" fill="#a2d0ff" >培训阶段</rect>
+ <rect id="rect_65716" x="218" y="141" width="157" height="307" stroke="#000000" fill="#FFFFCC" >
+ </rect>
+ <rect id="rect_65717" x="61" y="141" width="157" height="307" stroke="#000000" fill="#FFFFCC" >
+ </rect>
+ <rect id="rect_65718" x="375" y="141" width="157" height="307" stroke="#000000" fill="#FFFFCC" >
+ </rect>
+ <rect id="rect_65719" x="532" y="141" width="157" height="307" stroke="#000000" fill="#FFFFCC" >
+ </rect>
+ <rect id="rect_65720" x="98" y="152" width="85" height="40" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_SAMODIFY&entry=modify&processid=0">需求录入</rect>
+ <rect id="rect_65723" x="98" y="210" width="85" height="40" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_SAMODIFY&processid=1">客户确认</rect>
+ <rect id="rect_65724" x="258" y="210" width="85" height="40" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_SAMODIFY&processid=2">设计完成</rect>
+ <rect id="rect_65725" x="411" y="214" width="85" height="40" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_SAMODIFY&processid=5">提交手册</rect>
+ <rect id="rect_65726" x="411" y="333" width="85" height="40" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_SAMODIFY&processid=6">培训完毕</rect>
+ <rect id="rect_65727" x="565" y="333" width="85" height="40" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_SAMODIFY&processid=7">实施完成</rect>
+ <connector id="connector_208_212011" from="rect_65720" to="rect_65723" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_212012" from="rect_65723" to="rect_65724" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_212014" from="rect_65725" to="rect_65726" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_212015" from="rect_65726" to="rect_65727" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect id="rect_94311" x="568" y="37" width="102" height="38" stroke="#000000" fill="#FFFFCC"  url="../ROOT_XLSGRID/SelectGridParameter.sp?isfilldata=true&grdtyp=R&sytid=XLSGRID&grdid=TRK_SALIST&sytid=XLSGRID">需求变动报表</rect>
+ <text id="text_363014" x="601" y="469" width="147" height="20"   font-color="#adadad">xlsGrid.net 硕格中间件
+</text>
+ <connector id="connector_208_223814" from="rect_65723" to="rect_65727" fromcp="23" tocp="23" type="208"  >
+ </connector>
+ <rect  id="rect_253814" x="258" y="271" width="85" height="40" stroke="#000000" fill="#acacff" url="entry.sp?grdid=TRK_SAMODIFY&processid=3">开发完成</rect>
+ <rect  id="rect_253815" x="258" y="333" width="85" height="40" stroke="#000000" fill="#acacff" url="entry.sp?grdid=TRK_SAMODIFY&processid=4">测试通过</rect>
+ <connector id="connector_208_253816" from="rect_65724" to="rect_253814" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_253817" from="rect_253814" to="rect_253815" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_253818" from="rect_253815" to="rect_65725" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect  id="rect_272015" x="565" y="214" width="85" height="40" stroke="#000000" fill="#acacff" url="entry.sp?grdid=TRK_SAMODIFY&processid=8">完成的需求</rect>
+</svg>

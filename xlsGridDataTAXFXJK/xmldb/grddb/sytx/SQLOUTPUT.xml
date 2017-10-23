@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>SQLOUTPUT</MWID><NAME>SQL输出</NAME><NOTE></NOTE><FILE>SQLOUTPUT.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var page = 1;
+var nrow= 10;
+var rows= 0;
+
+var sql=&amp;quot;select * from usr&amp;quot;;
+
+function _thisOnpost_loaddata(sheet)
+{
+       _this.AddToolbarButton(&amp;quot;com_pre&amp;quot;,&amp;quot;上一页&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,80);
+       _this.AddToolbarButton(&amp;quot;com_next&amp;quot;,&amp;quot;下一页&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,100);
+//ExecuteSQL(sql)
+var 影响的记录数 = ExecuteSQL(&amp;quot;update usr set id=id where org=&amp;apos;TS&amp;apos;&amp;quot;);
+alert(影响的记录数);
+       var countsql = &amp;quot;SELECT COUNT(*) FROM (&amp;quot;+sql+&amp;quot;)&amp;quot; ;
+//pageno,pagese: 分页用,-1表示不分页
+//zip:是否压缩传输结果集,如果省略该参数则默认为压缩
+//newds，如果省略该参数，则使用当前的XMLDS,否则新增一个XMLDS
+//返回结果集的XMLDS ID，-1表示查询失败
+//function QuerySQLDS(sql,pageno,pagesize,zip,newds)
+//演示直接把查询结果保存到控件的XMLDS
+         var dsid = -1;
+         try {
+               dsid = QuerySQLDS(countsql,-1,-1,true,true);
+               //dsfsdf
+               
+               //
+         }catch ( e ) {
+               alert ( e );     
+         }
+         alert(&amp;quot;result ds id:&amp;quot;+dsid);
+        // alert(_this.XMLDS_GetRowCount());
+         rows = _this.XMLDS_GetStringAt(0,0);
+        // alert(_this.XMLDS_GetColumnCount());
+        // var test=_this.XMLDS_GetStringAt(0,1);
+        alert(&amp;quot;total rows:&amp;quot;+rows);
+        Load(sql,page,nrow,0,1,0,2,2)   
+       // column=_this.XMLDS_GetString(1,1);
+       // alert(column);   
+        
+}
+//================================================================// 
+// 函数：Load
+// 说明：在指定的位置载入SQL查询结果
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/01/05 23:03:00
+// 修改日志：
+//================================================================// 
+function Load(sql,page,nrow,sheet,row1,col1,row2,col2)
+{
+//演示把查询结果作为xml字符串返回
+      var resultxml = QuerySQL(sql,page,nrow,true);
+      //alert(resultxml);
+      
+      _this.SetXmlDS(sheet,row1,col1,row2,col2,resultxml );
+      
+      _this.LoadScene(sheet,4);
+      _this.XMLDS_Reset();
+      _this.XMLDS_Parse(resultxml);
+       alert(_this.XMLDS_GetColumnCount()); 
+      alert(_this.XMLDS_GetRowCount());
+      var test=_this.XMLDS_GetStringAt(0,4);
+      alert(test);
+     
+}
+
+function pre()
+{
+      if(page&amp;gt;1)
+      {
+      page --;
+      _this.SetRowCount(0,3);
+      Load( sql, page,nrow, 0,1,0,2,2 );
+      }
+}
+
+function next()
+{
+      if(page*nrow&amp;lt;rows)
+      {
+      page ++;
+      _this.SetRowCount(0,3);
+      Load( sql, page,nrow, 0,1,0,2,2 );
+      }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

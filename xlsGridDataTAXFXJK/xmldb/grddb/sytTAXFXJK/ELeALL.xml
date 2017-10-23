@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >ELeALL</MWID><NAME >企业用电量合计表</NAME><NOTE ></NOTE><NOACCNAME >0</NOACCNAME><FILE >ELeALL.zxg</FILE><SCENE ></SCENE><FIXED >6,1</FIXED><CATTYP >第三方数据查询</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME >WMS</DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYMM1</ID><NAME >起始年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YYMM</C13><C14 ></C14><C15 >YYMM</C15><C16 >YYMM1</C16><C17 >YYMM1</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >YYMM1</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 >YYMM1</C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 >YYMM1</C36><C37 >YYMM1</C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="1" ><ID >CMID</ID><NAME >企业</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_COMPANY</KEYVAL><INPCTL >select</INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >编号或名称</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >CORPID</C13><C14 >CORPID</C14><C15 >CORPID</C15><C16 >CORPID</C16><C17 >CORPID</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >CORPID</C22><C23 ></C23><C24 >CORPID</C24><C25 >CORPID</C25><C26 >CORPID</C26><C27 >CORPID</C27><C28 >CMID</C28><C29 >CMID</C29><C30 >CMID</C30><C31 >CMID</C31><C32 ></C32><C33 >CMID</C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 >CMID</C37><C38 >CMID</C38><C39 >CMID</C39><C40 ></C40><C41 >CMID</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="2" ><ID >TYP</ID><NAME >电力公司</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_ELECOMPANY</KEYVAL><INPCTL >idlist</INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 >TYP</C15><C16 >TYP</C16><C17 >TYP</C17><C18 ></C18><C19 >TYP</C19><C20 ></C20><C21 ></C21><C22 >TYP</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >TYP</C29><C30 ></C30><C31 >TYP</C31><C32 ></C32><C33 >TYP</C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 >TYP</C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >TYP</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 >TYP</C46><C47 ></C47></ROW>
+<ROW num="3" ><ID >YYMM2</ID><NAME >截止年月</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >YYMM2</C16><C17 >YYMM2</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >YYMM2</C21><C22 >YYMM2</C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >YYMM2</C29><C30 ></C30><C31 >YYMM2</C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 >YYMM2</C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="4" ><ID >ELEQTY1</ID><NAME >用电区间(大于)</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >5</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >单位：度</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >ELEQTY1</C21><C22 >ELEQTY1</C22><C23 >ELEQTY1</C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >ELEQTY1</C29><C30 ></C30><C31 >ELEQTY1</C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 >ELEQTY1</C40><C41 >ELEQTY1</C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="5" ><ID >ELEQTY2</ID><NAME >用电区间(小于)</NAME><NOTNULL >0</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >6</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >单位：度</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >ELEQTY2</C21><C22 ></C22><C23 >ELEQTY2</C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >ELEQTY2</C29><C30 ></C30><C31 >ELEQTY2</C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="6" ><ID >TYPCLSID</ID><NAME >个性化行业</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_COMPCLS</KEYVAL><INPCTL >select</INPCTL><DISPORD >21</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 >TYPCLSID</C31><C32 >TYPCLSID</C32><C33 ></C33><C34 >TYPCLSID</C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 >TYPCLSID</C40><C41 ></C41><C42 >TYPCLSID</C42><C43 >TYPCLSID</C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="7" ><ID >TAXMAN</ID><NAME >税管员</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_TAXMAN</KEYVAL><INPCTL >list</INPCTL><DISPORD >99</DISPORD><SQLWHE >deptid like (select decode(scope,&amp;apos;ALL&amp;apos;,&amp;apos;%&amp;apos;,substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,0,7 )||&amp;apos;%&amp;apos;) from v_depts where id=&amp;apos;[%SYS_DEPTID]&amp;apos;) order by name</SQLWHE><DEFVAL > </DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG >1</VISFLG><KEYFLG >1</KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 >TAXMAN</C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >TAXMAN</C41><C42 ></C42><C43 ></C43><C44 >TAXMAN</C44><C45 ></C45><C46 ></C46><C47 >TAXMAN</C47></ROW>
+<ROW num="8" ><ID >GDS</ID><NAME >供电所</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_GDS</KEYVAL><INPCTL >select</INPCTL><DISPORD >42</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 >GDS</C41><C42 >GDS</C42><C43 ></C43><C44 ></C44><C45 >GDS</C45><C46 ></C46><C47 ></C47></ROW>
+<ROW num="9" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD >98</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,3</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%YYMM1]至[%YYMM2]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,3,2</C20><C21 >0,3,2</C21><C22 ></C22><C23 >0,3,2</C23><C24 ></C24><C25 >0,3,3</C25><C26 >0,3,3</C26><C27 ></C27></ROW>
+<ROW num="1" ><ID >0,4,3</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:GETCORPNAM,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,4,2</C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 >0,4,3</C25><C26 >0,4,3</C26><C27 ></C27></ROW>
+<ROW num="2" ><ID >0,3,7</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%TYP]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP >COMBOBOX</CTLTYP><DYNCTL ></DYNCTL><LISTID >V_TAX_ELECOMPANY</LISTID><ISCROSS ></ISCROSS><HROW >0</HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,3,4</C21><C22 >0,3,4</C22><C23 ></C23><C24 ></C24><C25 >0,3,5</C25><C26 >0,3,7</C26><C27 ></C27></ROW>
+<ROW num="3" ><ID >2,-1,-1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >0,3,7</C26><C27 ></C27></ROW>
+<ROW num="4" ><ID >0,4,7</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%TYPCLSID]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP >COMBOBOX</CTLTYP><DYNCTL ></DYNCTL><LISTID >TAX_COMPCLASS</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27></ROW>
+<ROW num="5" ><ID >0,6,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >2</NROW><NCOL >11</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 >0,6,1</C27></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( row&amp;gt;=6 &amp;&amp; row&amp;gt;=_this.GetMainCellRangeRow1(sheet)&amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) ) {
+		var id= _this.GetCellText(sheet,row,2);
+		window.open(&amp;quot;show.sp?grdid=EleDetail&amp;CMID=&amp;quot;+id+&amp;quot;&amp;YYMM1=&amp;quot;+YYMM1+&amp;quot;&amp;YYMM2=&amp;quot;+YYMM2+&amp;quot;&amp;TAXMAN=&amp;quot;+TAXMAN);
+	}
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	if (_this.GetCellText(sheet,3,7) == &amp;quot;&amp;quot;) {
+		_this.SetCellText(sheet,3,7,&amp;quot;全部&amp;quot;);
+	}
+	if (_this.GetCellText(sheet,4,7) == &amp;quot;&amp;quot;) {
+		_this.SetCellText(sheet,4,7,&amp;quot;全部&amp;quot;);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//替换SQL参数
+function replaceParam(mwobj,request,sql)
+{
+	var hy = pub.EAFunc.NVL(request.getParameter(&amp;quot;TYPCLSID&amp;quot;),&amp;quot;&amp;quot;);
+	var gds = pub.EAFunc.NVL(request.getParameter(&amp;quot;GDS&amp;quot;),&amp;quot;&amp;quot;);
+	if (hy != &amp;quot;&amp;quot;) {
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%TYPCLSID]&amp;quot;,&amp;quot;and b.typclsid like &amp;apos;&amp;quot;+hy+&amp;quot;%&amp;apos;&amp;quot;);
+	}
+	if (gds != &amp;quot;&amp;quot;) {
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%GDS]&amp;quot;,&amp;quot;and a.gds in (select name from v_tax_gds where id=&amp;apos;&amp;quot;+gds+&amp;quot;&amp;apos;)&amp;quot;);
+	}
+	return sql;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,
+	(select name from v_swjg sw where sw.id=substr(swjg_dm,0,7)) swjg_dm,
+	id,name,lawman,gds,eleqty,elemny,taxman, town,addr 
+from (
+select * from (
+	select b.swjg_dm,nvl(b.id,&amp;apos;--&amp;apos;) id,sum(nvl(a.eleqty,0)) eleqty,
+		nvl(d.name,&amp;apos;--&amp;apos;) taxman,nvl(b.lawman,&amp;apos;--&amp;apos;) lawman,nvl(b.name,a.usrnam) name,
+		max(b.addr) addr,max(a.gds) gds,max(town) town,sum(nvl(a.elemny,0)) elemny
+	from tax_eledata a,tax_company b, tax_cmpammno c,v_tax_taxman d
+	where a.usrid=c.ammno(+) and b.taxman=d.id(+)
+	  and c.cmid=b.id(+)
+	  and a.yymm&amp;gt;=&amp;apos;[%YYMM1]&amp;apos; 
+	  and a.yymm&amp;lt;=&amp;apos;[%YYMM2]&amp;apos;
+	  and (a.usrid like &amp;apos;%[%CMID]%&amp;apos; or a.usrnam like &amp;apos;%[%CMID]%&amp;apos; 
+	  	or b.id like &amp;apos;%[%CMID]%&amp;apos; or b.name like &amp;apos;%[%CMID]%&amp;apos;)
+	  and a.typ like &amp;apos;[%TYP]%&amp;apos;
+	  [%TYPCLSID]
+	  [%GDS]
+	group by b.swjg_dm,b.id,d.name,lawman,nvl(b.name,a.usrnam)
+) a 
+where a.eleqty&amp;gt;=decode(&amp;apos;[%ELEQTY1]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%ELEQTY1]&amp;apos;)
+and a.eleqty&amp;lt;=decode(&amp;apos;[%ELEQTY2]&amp;apos;,&amp;apos;&amp;apos;,99999999999,&amp;apos;[%ELEQTY2]&amp;apos;)
+and a.taxman like &amp;apos;%[%TAXMAN]%&amp;apos;
+and substr(a.swjg_dm,0,7) like &amp;apos;[%ZGSWJG]%&amp;apos;
+order by swjg_dm,eleqty desc
+)</DATDSC><C4 ></C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16><C17 >MAIN</C17><C18 >MAIN</C18><C19 >MAIN</C19><C20 >MAIN</C20><C21 >MAIN</C21><C22 >MAIN</C22><C23 >MAIN</C23><C24 >MAIN</C24><C25 >MAIN</C25><C26 ></C26><C27 >MAIN</C27><C28 >MAIN</C28><C29 >MAIN</C29><C30 >MAIN</C30><C31 >MAIN</C31><C32 >MAIN</C32><C33 >MAIN</C33><C34 >MAIN</C34><C35 >MAIN</C35><C36 >MAIN</C36><C37 >MAIN</C37><C38 >MAIN</C38><C39 >MAIN</C39><C40 >MAIN</C40><C41 >MAIN</C41><C42 >MAIN</C42><C43 >MAIN</C43><C44 >MAIN</C44><C45 >MAIN</C45><C46 >MAIN</C46><C47 >MAIN</C47><C48 >MAIN</C48><C49 >MAIN</C49><C50 >MAIN</C50><C51 >MAIN</C51><C52 ></C52><C53 >MAIN</C53><C54 >MAIN</C54><C55 >MAIN</C55><C56 >MAIN</C56><C57 >MAIN</C57><C58 >MAIN</C58><C59 >MAIN</C59><C60 >MAIN</C60><C61 >MAIN</C61><C62 >MAIN</C62><C63 >MAIN</C63><C64 >MAIN</C64></ROW>
+<ROW num="1" ><ID >GETCORPNAM</ID><NAME ></NAME><DATDSC >select nvl((select max(name) from tax_company where id like &amp;apos;[%CMID]&amp;apos;),&amp;apos;所有&amp;apos;) name from dual  
+</DATDSC><C4 >GETCORPNAM</C4><C5 ></C5><C6 >GETCORPNAM</C6><C7 ></C7><C8 ></C8><C9 >GETCORPNAM</C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 >GETCORPNAM</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >GETCORPNAM</C17><C18 >GETCORPNAM</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >GETCORPNAM</C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 >GETCORPNAM</C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 >GETCORPNAM</C51><C52 >GETCORPNAM</C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64></ROW>
+<ROW num="2" ><ID >getEleTyp</ID><NAME ></NAME><DATDSC >select name from V_TAX_ELECOMPANY where id like &amp;apos;%[%TYP]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50><C51 ></C51><C52 >get</C52><C53 ></C53><C54 ></C54><C55 ></C55><C56 ></C56><C57 ></C57><C58 ></C58><C59 ></C59><C60 ></C60><C61 ></C61><C62 ></C62><C63 ></C63><C64 ></C64></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

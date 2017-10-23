@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >H01DTL</MWID><NAME >个性化行业税收入库明细表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >H01DTL.zxg</FILE><SCENE ></SCENE><FIXED >5,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >GXHZTAX</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >HY</ID><NAME >行业</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >HY</C13><C14 ></C14></ROW>
+<ROW num="1" ><ID >YYMM1</ID><NAME >起始时间</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YYMM1</C13><C14 ></C14></ROW>
+<ROW num="2" ><ID >YYMM2</ID><NAME >截止时间</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YYMM2</C13><C14 ></C14></ROW>
+<ROW num="3" ><ID >hyname</ID><NAME >行业名称</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >hyname</C13><C14 ></C14></ROW>
+<ROW num="4" ><ID >s1</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >s1</C14></ROW>
+<ROW num="5" ><ID >s2</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,8</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%hyname]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,2,7</C20><C21 >0,2,8</C21><C22 ></C22></ROW>
+<ROW num="1" ><ID >0,3,4</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%YYMM1]~[%YYMM2]合计</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,3,4</C21><C22 ></C22></ROW>
+<ROW num="2" ><ID >0,3,8</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%YYMM1]~[%YYMM2]入库情况合计</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,3,8</C21><C22 ></C22></ROW>
+<ROW num="3" ><ID >0,5,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >2</NROW><NCOL >15</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 >0,5,2</C21><C22 >0,5,2</C22></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >select rownum,id,name,hj1,hj2,z,e,zzs1,xfs1,sds1,sdsw1,zzs2,xfs2,sds2,sdsw2 from (
+select c.id,c.name,a.SEHJ/10000 hj1,b.SEHJ/10000 hj2,&amp;apos;&amp;apos; z,&amp;apos;&amp;apos; e,a.ZZS/10000 zzs1,a.xfs/10000 xfs1,a.sds/10000 sds1,a.sdsw/10000 sdsw1,b.ZZS/10000 zzs2,b.xfs/10000 xfs2,b.sds/10000 sds2,b.sdsw/10000 sdsw2 from
+(select b.id,b.name,sum(sehj) sehj, sum(zzs) zzs,sum(xfs) xfs,sum(sds) sds,sum(sdsw) sdsw
+from tax_kpdata a,tax_company b
+where a.NSRSBH=b.id(+)
+and b.typclsid like &amp;apos;[%HY]%&amp;apos;
+and to_char(jkfsrq,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;[%YYMM1]&amp;apos;
+and to_char(jkfsrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YYMM2]&amp;apos;
+group by b.id,b.name
+) a,
+(select b.id,b.name,sum(sehj) sehj,sum(zzs) zzs,sum(xfs) xfs,sum(sds) sds,sum(sdsw) sdsw
+from tax_kpdata a,tax_company b
+where a.NSRSBH=b.id(+)
+and b.typclsid like &amp;apos;[%HY]%&amp;apos;
+and to_char(jkfsrq,&amp;apos;yyyy-mm&amp;apos;) &amp;gt;= to_char(add_months(to_date(&amp;apos;[%YYMM1]&amp;apos;,&amp;apos;YYYY-MM&amp;apos;),-12),&amp;apos;YYYY-MM&amp;apos;)
+and to_char(jkfsrq,&amp;apos;yyyy-mm&amp;apos;) &amp;lt;= to_char(add_months(to_date(&amp;apos;[%YYMM2]&amp;apos;,&amp;apos;YYYY-MM&amp;apos;),-12),&amp;apos;YYYY-MM&amp;apos;)
+group by b.id,b.name
+) b,
+(
+  select distinct b.id,b.name from tax_kpdata a,tax_company b 
+  where to_char(jkfsrq,&amp;apos;yyyy-mm&amp;apos;) &amp;gt;= to_char(add_months(to_date(&amp;apos;[%YYMM1]&amp;apos;,&amp;apos;YYYY-MM&amp;apos;),-12),&amp;apos;YYYY-MM&amp;apos;)
+  and to_char(jkfsrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;[%YYMM2]&amp;apos; and b.typclsid like  &amp;apos;[%HY]%&amp;apos;
+ and a.nsrsbh=b.id(+)
+) c
+where c.id=a.id(+) and c.id=b.id(+)
+order by a.SEHJ desc
+)</DATDSC><C4 >main</C4><C5 >main</C5><C6 >main</C6><C7 >main</C7><C8 >main</C8><C9 >main</C9><C10 >main</C10><C11 >main</C11><C12 >main</C12></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

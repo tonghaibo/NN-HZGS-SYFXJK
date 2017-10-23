@@ -1,0 +1,429 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >mwGrdDef</MWID><NAME >分栏指标定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >mwGrdDef.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >restore</ID><NAME >初始化</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >1</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >init</C10></ROW>
+<ROW num="1" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >2</BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >save</C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var CKsheet = -1; //参考界面
+var dtlrng = &amp;quot;&amp;quot;; //明细区域
+var isHave = false; //是否存在
+var lms = 1;  //栏目数
+var num1 = 0; //共建sheet数目
+var num2 = 0; //当前sheet数目
+var rows = 0; //明细区域行数
+var startRow = 0; //明细起始行
+var startCol = 0; //明细起始列
+var endRow = 0; //明细截至行
+var endCol = 0; //明细截至列
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(sheet,&amp;quot;H&amp;quot;,&amp;quot;200&amp;quot;);
+	_this.ShowTabBar(1);
+	
+	var param = new Object();
+	param.cursytid = cursytid;
+	param.mwid = mwid;
+	try {
+		dtlrng = invokeOSFuncExt(&amp;quot;getDtlrng&amp;quot;,param);
+		if (dtlrng != null &amp;&amp; dtlrng != &amp;quot;&amp;quot;) {
+			var arr = dtlrng.split(&amp;quot;,&amp;quot;);
+			
+			startRow = 1*arr[0];
+			startCol = 1*arr[1];
+			endRow = 1*arr[2];
+			endCol = 1*arr[3];
+			
+			rows = endRow-startRow+1;
+		}
+	}
+	catch (e) {
+		alert ( e );
+	}
+	
+	_sql.querytods(&amp;quot;getmwGrdDef&amp;quot;,&amp;quot;cursytid=&amp;quot;+cursytid+&amp;quot;&amp;mwid=&amp;quot;+mwid);
+	if (_this.XMLDS_GetRowCount() &amp;gt; 0) {
+		isHave = true;
+		lms = 1*_this.XMLDS_GetString(0,&amp;quot;LMS&amp;quot;);
+		var collist = _this.XMLDS_GetString(0,&amp;quot;COLLIST&amp;quot;);
+		var arr = collist.split(&amp;quot;,&amp;quot;);
+		
+		for (var i = 0; i &amp;lt; arr.length; i ++) {
+			_this.SetCellText(sheet,5+2*i,2,arr[i]);
+		}
+	} else {
+		_this.SetCellText(sheet,5,2,&amp;quot;0&amp;quot;);
+	}
+	_this.SetCellText(sheet,3,2,lms);
+	
+	init(sheet,lms);
+	CKsheet = _this.AddSheet(&amp;quot;&amp;quot;);
+	_this.LoadZXGFile(homeurl+&amp;quot;LoadScript.sp?typ=file&amp;sytid=&amp;quot;+cursytid+&amp;quot;&amp;grdid=&amp;quot;+mwid+&amp;quot;&amp;file=&amp;quot;+mwid+&amp;quot;.zxg&amp;quot;,0,CKsheet);
+	_this.SetSheetName(CKsheet,&amp;quot;参考源界面&amp;quot;);
+	createLM(sheet,lms,0);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( sheet == 0 &amp;&amp; col == 2 ) {
+		if ( isNaN(newvalue) ) {
+			alert(&amp;quot;请输入数字&amp;quot;);
+			return;
+		}
+		
+		_this.SetRedraw(1);
+		
+		if (row == 3) lms = 1*_this.GetCellText(sheet,3,2);
+		init(sheet,lms);
+		
+		for (var i = 5; i &amp;lt;= 3+2*lms; ) {
+			if (_this.GetCellText(sheet,i,2) == &amp;quot;&amp;quot;) {
+				_this.SetRedraw(1);
+				_this.SetCellFocus(sheet,i-1,2);
+				return;
+			}
+			i += 2;
+		}
+		
+		if (num2 &amp;gt; lms) {
+			num2 = 0;
+			for (var i = 1; i &amp;lt;= num1; i ++) {
+				var str = _this.GetSheetName(i+1);
+				if (str.indexOf(&amp;quot; &amp;quot;) != -1) {
+					if (1*str.split(&amp;quot; &amp;quot;)[1] &amp;lt;= lms) {
+						num2 ++;
+					} else {
+						_this.MergeCells(i,2,2,2,2);
+						_this.SetCellLock(i,2,2,1);
+						for (var j = 1; j &amp;lt; _this.GetColCount(i+1); j ++) {
+							_this.AppendCol(i,_this.GetColCount(i)-1);
+							_this.SetCellText(i,1,_this.GetColCount(i)-1,_this.GetCellText(i+1,1,j));
+							_this.SetCellLock(i,1,_this.GetColCount(i)-1,0);
+							_this.SetColWidth(i,_this.GetColCount(i)-1,92);
+							_this.SetCellBorder(i,1,_this.GetColCount(i)-1,1,1,1,1);
+							_this.SetCellTopBorderColor(i,1,_this.GetColCount(i)-1,194,194,194);
+							_this.SetCellBottomBorderColor(i,1,_this.GetColCount(i)-1,194,194,194);
+							_this.SetCellLeftBorderColor(i,1,_this.GetColCount(i)-1,194,194,194);
+							_this.SetCellRightBorderColor(i,1,_this.GetColCount(i)-1,194,194,194);
+							_this.SetCellHAlign(i,1,_this.GetColCount(i)-1,2);
+						}
+						_this.MergeCells(i,2,2,_this.GetRowCount(i)-1,_this.GetColCount(i)-1);
+						_this.DeleteSheet(i+1);
+						_this.SetRedraw(1);
+					}
+				}
+			}
+		}
+		
+		if (num2 &amp;lt;= lms) {
+			createLM(0,lms,num2);
+		}
+	}
+}
+
+//创建（修正）各栏目指标（行列）
+//	num:创建前sheet数目
+function createLM(sheet,lms,num)
+{
+	for (var i = 0; i &amp;lt; lms; i ++) {
+		var LMparamRow = 5+2*i; //栏目起始列信息所在位置
+		var LMstartCol = _this.GetCellText(sheet,LMparamRow,2); //栏目起始列
+		var nextLMstartCol = &amp;quot;&amp;quot;; //下一栏起始列
+		
+		for (var j = LMparamRow+2; j &amp;lt; _this.GetRowCount(sheet); ) {
+			nextLMstartCol = _this.GetCellText(sheet,j,2);
+			if (nextLMstartCol != &amp;quot;&amp;quot;) break;
+			j = j + 2;
+		}
+		if (nextLMstartCol == &amp;quot;&amp;quot;) nextLMstartCol = endCol;
+		
+		if (i &amp;lt; num) {
+			_this.MergeCells(i+2,2,2,2,2);
+			_this.SetCellLock(i+2,2,2,1);
+			for (var c = _this.GetColCount(i+2)-1; c &amp;gt; 1*nextLMstartCol-1*LMstartCol; c --) {
+				_this.DeleteCol(i+2,c);
+			}
+			_this.MergeCells(i+2,2,2,_this.GetRowCount(i+2)-1,_this.GetColCount(i+2)-1);
+		} else {
+			var LMsheet = _this.AddSheet(&amp;quot;第 &amp;quot;+(i+1)+&amp;quot; 栏&amp;quot;);
+			setSheetInfo(LMsheet,rows,1*nextLMstartCol-1*LMstartCol-startCol+2,i+1,1*LMstartCol);
+			num1 ++;num2 ++;
+		}
+	}
+}
+
+function init(sheet,lms)
+{
+	for(var i = 5 ;i &amp;lt; _this.GetRowCount(sheet); i ++) {
+		_this.SetRowVisible(sheet,i,1);
+	}
+	
+	var startR = 4+2*lms;
+	for(var i = startR;i &amp;lt; _this.GetRowCount(sheet); i ++) {
+		_this.SetRowVisible(sheet,i,-1);
+		_this.SetCellText(sheet,i,2,&amp;quot;&amp;quot;);
+	}
+}
+
+var idxR = 1; //指标编号
+var idxC = 1; //指标项编号
+function setSheetInfo(sheet,row,col,lm,lmstartcol)
+{
+	idxC = 1; //指标项编号
+	_this.SetRedraw(0);
+	for (var c = 0; c &amp;lt;= col; c ++) {
+		_this.AppendCol(sheet,-1);
+		_this.SetColWidth(sheet,0,112);
+	}
+	
+	for (var r = 0; r &amp;lt;= row; r ++) {
+		_this.AppendRow(sheet,-1);
+		_this.SetRowHeight(sheet,0,24);
+	}
+	
+	for (var r = 1; r &amp;lt; _this.GetRowCount(sheet); r ++) {
+		for (var c = 1; c &amp;lt; _this.GetColCount(sheet); c ++) {
+			_this.SetCellBorder(sheet,r,c,1,1,1,1);
+			_this.SetCellTopBorderColor(sheet,r,c,194,194,194);
+			_this.SetCellBottomBorderColor(sheet,r,c,194,194,194);
+			_this.SetCellLeftBorderColor(sheet,r,c,194,194,194);
+			_this.SetCellRightBorderColor(sheet,r,c,194,194,194);
+			
+			if (r == 1 || c == 1) _this.SetCellLock(sheet,r,c,0);
+			
+			if (!isHave &amp;&amp; r != 1 &amp;&amp; c == 1) {
+				var str = _this.GetCellText(CKsheet,startRow+r-2,startCol+lmstartcol-1);
+				var s = / /g;
+				str = str.replace(s,&amp;quot;&amp;quot;);
+				str = str.replace(&amp;quot;&amp;&amp;quot;,&amp;quot;&amp;quot;);
+				var msg = mwid+&amp;quot;_&amp;quot;+idxR;
+				if (str != &amp;quot;&amp;quot;) msg += &amp;quot;_&amp;quot;+str;
+				_this.SetCellText(sheet,r,c,msg);
+				idxR ++;
+			}
+			
+			if (!isHave &amp;&amp; r == 1 &amp;&amp; c != 1) {
+				var str = _this.GetCellText(CKsheet,startRow-1,startCol+lmstartcol+c-2);
+				var s = / /g;
+				str = str.replace(s,&amp;quot;&amp;quot;);
+				str = str.replace(&amp;quot;&amp;&amp;quot;,&amp;quot;&amp;quot;);
+				var msg = mwid+&amp;quot;_&amp;quot;+lm+idxC;
+				if (str != &amp;quot;&amp;quot;) msg += &amp;quot;_&amp;quot;+str;
+				_this.SetCellText(sheet,r,c,msg);
+				_this.SetCellHAlign(sheet,r,c,2);
+				idxC ++;
+			}
+		}
+	}
+	
+	if (isHave) {
+		_sql.querytods(&amp;quot;getmwGrdRowDef&amp;quot;,&amp;quot;cursytid=&amp;quot;+cursytid+&amp;quot;&amp;mwid=&amp;quot;+mwid+&amp;quot;&amp;lm=&amp;quot;+lm);
+		for ( var i = 0;i&amp;lt;_this.XMLDS_GetRowCount(); i++) {
+			_this.SetCellText(sheet,2 + i,1,_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+		}
+		
+		_sql.querytods(&amp;quot;getmwGrdColDef&amp;quot;,&amp;quot;cursytid=&amp;quot;+cursytid+&amp;quot;&amp;mwid=&amp;quot;+mwid+&amp;quot;&amp;lm=&amp;quot;+lm);
+		for ( var j = 0;j&amp;lt;_this.XMLDS_GetRowCount(); j++) {
+			_this.SetCellText(sheet,1,2 + j,_this.XMLDS_GetString(j,&amp;quot;NAME&amp;quot;));
+			_this.SetCellHAlign(sheet,1,2 + j,2);
+		}
+	}
+	
+	var xmlmenu = &amp;quot;&amp;lt;folder name=\&amp;quot;增加列数\&amp;quot;&amp;gt;&amp;lt;ITEM name=\&amp;quot;增加一列\&amp;quot; id=\&amp;quot;m_list\&amp;quot;&amp;gt;&amp;lt;/ITEM&amp;gt;&amp;lt;/folder&amp;gt;&amp;quot;;
+	for ( var c = 1; c &amp;lt;= _this.GetColCount(sheet); c ++ ) {
+		_this.SetAttribe(&amp;quot;CELL_&amp;quot;+sheet+&amp;quot;_&amp;quot;+ 1 +&amp;quot;_&amp;quot;+ c, _this.ATTR_CELL_MENUXML, xmlmenu);
+	}
+	
+	_this.SetColWidth(sheet,0,12);
+	_this.SetRowHeight(sheet,0,12);
+	_this.SetColWidth(sheet,1,145);
+	_this.SetCellLock(sheet,1,1,1);
+	_this.SetFixedCol(sheet,2);
+	_this.SetFixedRow(sheet,2);
+	_this.MergeCells(sheet,2,2,_this.GetRowCount(sheet)-1,_this.GetColCount(sheet)-1);
+	_this.SetRedraw(1);
+}
+
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	_this.MergeCells(sheet,2,2,2,2);
+	if ( menuitemid == &amp;quot;m_list&amp;quot; ) {
+		_this.AppendCol(sheet,col);
+		_this.SetCellLock(sheet,1,col+1,0);
+	}
+	_this.MergeCells(sheet,2,2,_this.GetRowCount(sheet)-1,_this.GetColCount(sheet)-1);
+	_this.SetRedraw(1);
+}
+
+//保存
+function save()
+{
+	//POST方式调用网络OS函数
+	var param = new Object();
+	param.cursytid = cursytid;
+	param.mwid = mwid;
+	param.lms = lms;
+	
+	var collist = &amp;quot;&amp;quot;;
+	for(var i = 5;i &amp;lt;= 3+2*lms;) {
+		var str = _this.GetCellText(sheet,i,2);
+		if (str == &amp;quot;&amp;quot;) {
+			alert(&amp;quot;请输入必填信息！&amp;quot;);
+			return;
+		}
+		if(collist != &amp;quot;&amp;quot;) collist += &amp;quot;,&amp;quot;;
+		collist += str;
+		i += 2;
+	}
+	param.collist = collist;
+	
+	/*
+	---------------------------
+	&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt; &amp;lt;ROWSET&amp;gt; &amp;lt;ROW num=&amp;quot;1&amp;quot; SELECTFLAG=&amp;quot;0&amp;quot; name=&amp;quot;&amp;quot;&amp;gt; &amp;lt;COL1&amp;gt;指标表汇总&amp;lt;/COL1&amp;gt; &amp;lt;COL2&amp;gt;&amp;lt;/COL2&amp;gt; &amp;lt;/ROW&amp;gt; &amp;lt;/ROWSET&amp;gt; 
+	---------------------------
+	*/
+	var rowxml = &amp;quot;&amp;quot;;
+	var colxml = &amp;quot;&amp;quot;;
+	for(var i = 1;i &amp;lt;= lms ;i ++) {
+		for(var r = 2;r &amp;lt; _this.GetRowCount(i+1) ;r ++) {
+			rowxml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+i+r+&amp;quot;\&amp;quot;&amp;gt; &amp;lt;LM&amp;gt;&amp;quot;+i+&amp;quot;&amp;lt;/LM&amp;gt;  &amp;lt;ID&amp;gt;&amp;quot;+(r-2)+&amp;quot;&amp;lt;/ID&amp;gt;  &amp;lt;NAME&amp;gt;&amp;quot;+_this.GetCellText(i+1,r,1)+&amp;quot;&amp;lt;/NAME&amp;gt; &amp;lt;/ROW&amp;gt;&amp;quot;;
+		}
+		for(var c = 2;c &amp;lt; _this.GetColCount(i+1) ;c ++) {
+			colxml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+i+r+&amp;quot;\&amp;quot;&amp;gt; &amp;lt;LM&amp;gt;&amp;quot;+i+&amp;quot;&amp;lt;/LM&amp;gt;  &amp;lt;ID&amp;gt;&amp;quot;+(c-2)+&amp;quot;&amp;lt;/ID&amp;gt;  &amp;lt;NAME&amp;gt;&amp;quot;+_this.GetCellText(i+1,1,c)+&amp;quot;&amp;lt;/NAME&amp;gt; &amp;lt;/ROW&amp;gt;&amp;quot;;
+		}
+	}
+	rowxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt; &amp;lt;ROWSET&amp;gt; &amp;quot;+rowxml+&amp;quot; &amp;lt;/ROWSET&amp;gt; &amp;quot;;
+	colxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt; &amp;lt;ROWSET&amp;gt; &amp;quot;+colxml+&amp;quot; &amp;lt;/ROWSET&amp;gt; &amp;quot;;
+	param.rowxml = rowxml;
+	param.colxml = colxml;
+	try {
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert ( msg );
+	}
+	catch (e) {
+		alert ( e );
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == CKsheet) {
+		alert(&amp;quot;当前列：&amp;quot;+(col-startCol));
+	}
+}
+
+//初始化
+function restore()
+{
+	_sql.run(&amp;quot;restore&amp;quot;,&amp;quot;cursytid=&amp;quot;+cursytid+&amp;quot;&amp;mwid=&amp;quot;+mwid);
+	
+	window.location.href = window.location.href;
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb = new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+function getDtlrng()
+{
+	var grdxmldb = new xmldb.EAGRDXmlDB(cursytid,mwid);
+	var grdds = grdxmldb.getGrdDS();
+	var dtlrng = grdds.getStringAt(0,&amp;quot;DTLRNG&amp;quot;);
+	return dtlrng;
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var rowds = new pubpack.EAXmlDS(rowxml);	// 客户端可以传入一个xml
+		
+		sql = &amp;quot;delete from Mwgrddef where sytid=&amp;apos;&amp;quot;+cursytid+&amp;quot;&amp;apos; and grdid=&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into Mwgrddef(sytid,grdid,lms,collist) values(&amp;apos;&amp;quot;+cursytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+lms+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+collist+&amp;quot;&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;delete from Mwgrdrowdef where sytid=&amp;apos;&amp;quot;+cursytid+&amp;quot;&amp;apos; and grdid=&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		for ( var row=0;row&amp;lt;rowds.getRowCount();row ++ ) {
+			var LM = rowds.getValueAt(row,&amp;quot;LM&amp;quot;);
+			var IDS = rowds.getValueAt(row,&amp;quot;ID&amp;quot;);
+			var NAMES = rowds.getValueAt(row,&amp;quot;NAME&amp;quot;);
+			sql = &amp;quot;insert into Mwgrdrowdef(sytid,grdid,LM,ID,NAME) values(&amp;apos;&amp;quot;+cursytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+LM+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+IDS+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+NAMES+&amp;quot;&amp;apos;) &amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		sql = &amp;quot;delete from Mwgrdcoldef where sytid=&amp;apos;&amp;quot;+cursytid+&amp;quot;&amp;apos; and grdid=&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		var colds = new pubpack.EAXmlDS(colxml);
+		for ( var col=0;col&amp;lt;colds.getRowCount();col ++ ) {
+			var LM = colds.getValueAt(col,&amp;quot;LM&amp;quot;);
+			var IDS = colds.getValueAt(col,&amp;quot;ID&amp;quot;);
+			var NAMES = colds.getValueAt(col,&amp;quot;NAME&amp;quot;);
+			sql = &amp;quot;insert into Mwgrdcoldef(sytid,grdid,LM,ID,NAME) values(&amp;apos;&amp;quot;+cursytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+LM+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+IDS+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+NAMES+&amp;quot;&amp;apos;) &amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		sql = &amp;quot;update mwformdtl d set (idx,idxitem) =
+			       (select b.name, c.name
+			          from mwformhdr h, mwgrdrowdef b, mwgrdcoldef c
+			         where d.formguid=h.guid and h.repid=&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;
+			           and d.syt=b.sytid and h.repid=b.grdid
+			           and d.syt=c.sytid and h.repid=c.grdid
+			           and d.seqid=b.lm || &amp;apos;_&amp;apos; || b.id || &amp;apos;_&amp;apos; || c.id
+			           and b.lm=c.lm)
+			 where formguid in (select guid from mwformhdr where repid=&amp;apos;&amp;quot;+mwid+&amp;quot;&amp;apos;)&amp;quot;;
+                db.ExcecutSQL(sql);
+		
+		db.Commit();
+		msg = &amp;quot;保存成功！&amp;quot;;
+	}
+	catch ( e ) {
+		db.Rollback();
+		throw new pubpack.EAException ( e.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >getmwGrdDef</ID><NAME ></NAME><DATDSC >select * from MWGRDDEF where sytid=&amp;apos;[%cursytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;</DATDSC><C4 >getmwGrdDef</C4><C5 >getmwGrdDef</C5><C6 >getmwGrdDef</C6><C7 >getmwGrdDef</C7></ROW>
+<ROW num="1" ><ID >getmwGrdRowDef</ID><NAME ></NAME><DATDSC >select lm,name from Mwgrdrowdef
+ where sytid=&amp;apos;[%cursytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos; and lm=&amp;apos;[%lm]&amp;apos;
+ order by lm,to_number(id)</DATDSC><C4 >GRDDSCDS_1</C4><C5 ></C5><C6 ></C6><C7 >getmwGrdRowDef</C7></ROW>
+<ROW num="2" ><ID >getmwGrdColDef</ID><NAME ></NAME><DATDSC >select lm,name from Mwgrdcoldef
+ where sytid=&amp;apos;[%cursytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos; and lm=&amp;apos;[%lm]&amp;apos;
+ order by lm,to_number(id)</DATDSC><C4 ></C4><C5 >getmwGrdColDef</C5><C6 ></C6><C7 >getmwGrdColDef</C7></ROW>
+<ROW num="3" ><ID >restore</ID><NAME ></NAME><DATDSC >delete from MWGRDDEF where sytid=&amp;apos;[%cursytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;;
+delete from MWGRDROWDEF where sytid=&amp;apos;[%cursytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;;
+delete from MWGRDCOLDEF where sytid=&amp;apos;[%cursytid]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,455 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >Lobject2</MWID><NAME ></NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >Lobject2.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >LAYOBJ</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >ID 编号,NAME 名称,CLS 分类,TITLE 标题,LOGOIMG LOGO图片</COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,5,3</ID><CELLID ></CELLID><NAME >编号</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE >0</IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="1" ><ID >0,5,6</ID><CELLID ></CELLID><NAME >名称</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="2" ><ID >0,5,10</ID><CELLID ></CELLID><NAME >分类</NAME><VALFLD >CLS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_LAYOBJ_CLASS</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="3" ><ID >0,15,3</ID><CELLID ></CELLID><NAME >标题显示模式</NAME><VALFLD >TITLEMODE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,15,3</C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="4" ><ID >0,16,3</ID><CELLID ></CELLID><NAME >是否显示标题</NAME><VALFLD >IFTITILE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="5" ><ID >0,17,6</ID><CELLID ></CELLID><NAME >显示标题</NAME><VALFLD >TITLE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="6" ><ID >0,19,3</ID><CELLID ></CELLID><NAME >标题</NAME><VALFLD >TITLE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="7" ><ID >0,19,6</ID><CELLID ></CELLID><NAME >标题图标</NAME><VALFLD >TITLEICON</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="8" ><ID >0,7,6</ID><CELLID ></CELLID><NAME >窗口外间距</NAME><VALFLD >WNDOUT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,21,3</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="9" ><ID >0,7,10</ID><CELLID ></CELLID><NAME >窗口内间距</NAME><VALFLD >WNDIN</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,21,6</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="10" ><ID >0,27,3</ID><CELLID ></CELLID><NAME >窗口风格</NAME><VALFLD >WNDMOD</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="11" ><ID >0,27,6</ID><CELLID ></CELLID><NAME >排序</NAME><VALFLD >SORTBY</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="12" ><ID >0,31,3</ID><CELLID ></CELLID><NAME >SQL语句</NAME><VALFLD >SQLTXT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,33,4</C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="13" ><ID >0,31,4</ID><CELLID ></CELLID><NAME >OS系统</NAME><VALFLD >OSSYT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="14" ><ID >0,31,6</ID><CELLID ></CELLID><NAME >分行数</NAME><VALFLD >LAYROW</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="15" ><ID >0,32,4</ID><CELLID ></CELLID><NAME >OS函数</NAME><VALFLD >OSFUNC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="16" ><ID >0,32,6</ID><CELLID ></CELLID><NAME >OS函数的参数</NAME><VALFLD >OSPARAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="17" ><ID >0,3,7</ID><CELLID ></CELLID><NAME >系统编号</NAME><VALFLD >SYTID</VALFLD><DEFVAL >[%SYS_SYTID]</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >0,3,7</C21></ROW>
+<ROW num="18" ><ID >0,43,3</ID><CELLID ></CELLID><NAME >分列数</NAME><VALFLD >LAYCOL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="19" ><ID >0,45,6</ID><CELLID ></CELLID><NAME >分行数</NAME><VALFLD >LAYROW</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,43,6</C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="20" ><ID >0,47,3</ID><CELLID ></CELLID><NAME >是否显示滚动条</NAME><VALFLD >IFSCROLLBAR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="21" ><ID >0,41,3</ID><CELLID ></CELLID><NAME >JSCSS</NAME><VALFLD >PREHTML</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >MULTLINE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="22" ><ID >0,7,3</ID><CELLID ></CELLID><NAME >预览图片的路径</NAME><VALFLD >LOGOIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >0</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="23" ><ID >0,9,3</ID><CELLID ></CELLID><NAME >整个控件的背景颜色</NAME><VALFLD >OBJBKCOLOR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="24" ><ID >0,9,6</ID><CELLID ></CELLID><NAME >背景图片</NAME><VALFLD >BKIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="25" ><ID >0,11,10</ID><CELLID ></CELLID><NAME >备注</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="26" ><ID >0,3,8</ID><CELLID ></CELLID><NAME >预览图片的宽度</NAME><VALFLD >LOGOIMGW</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="27" ><ID >0,3,9</ID><CELLID ></CELLID><NAME >预览图片的高度</NAME><VALFLD >LOGOIMGH</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="28" ><ID >0,3,6</ID><CELLID ></CELLID><NAME >默认组织号</NAME><VALFLD >DEFORG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 >0,3,6</C20><C21 ></C21></ROW>
+<ROW num="29" ><ID >0,9,10</ID><CELLID ></CELLID><NAME >边框颜色</NAME><VALFLD >BKBORDOR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="30" ><ID >0,11,3</ID><CELLID ></CELLID><NAME >嵌入前面HTML</NAME><VALFLD >ONHTMLGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >MULTLINE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="31" ><ID >0,11,6</ID><CELLID ></CELLID><NAME >嵌入后面HTML</NAME><VALFLD >POSTHTMLGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >MULTLINE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="32" ><ID >0,17,3</ID><CELLID ></CELLID><NAME >标题或者直接是一个HTML</NAME><VALFLD >TITLEHTML</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >MULTLINE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="33" ><ID >0,19,10</ID><CELLID ></CELLID><NAME >标题背景颜色</NAME><VALFLD >TITLBFKCOLOR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="34" ><ID >0,21,3</ID><CELLID ></CELLID><NAME >标题字体颜色</NAME><VALFLD >TITLEFKCOLOR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="35" ><ID >0,21,6</ID><CELLID ></CELLID><NAME >标题字体大小</NAME><VALFLD >TITLEFONTSIZE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="36" ><ID >0,21,10</ID><CELLID ></CELLID><NAME >标题对齐方式</NAME><VALFLD >TITLEALIGN</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="37" ><ID >0,29,3</ID><CELLID ></CELLID><NAME >数据来源</NAME><VALFLD >DSMOD</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="38" ><ID >0,29,6</ID><CELLID ></CELLID><NAME >条件</NAME><VALFLD >WHEREBY</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="39" ><ID >0,29,10</ID><CELLID ></CELLID><NAME >排序</NAME><VALFLD >SORTBY</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="40" ><ID >0,33,3</ID><CELLID ></CELLID><NAME >分列数</NAME><VALFLD >LAYCOL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="41" ><ID >0,31,10</ID><CELLID ></CELLID><NAME >每页行记录数</NAME><VALFLD >PAGEROW</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="42" ><ID >0,35,3</ID><CELLID ></CELLID><NAME >OS中间件</NAME><VALFLD >OSMWID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="43" ><ID >0,35,6</ID><CELLID ></CELLID><NAME >OS函数</NAME><VALFLD >OSFUNC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="44" ><ID >0,35,10</ID><CELLID ></CELLID><NAME >OS函数的参数</NAME><VALFLD >OSPARAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="45" ><ID >0,39,3</ID><CELLID ></CELLID><NAME >HTML</NAME><VALFLD >HTMLGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="46" ><ID >0,33,10</ID><CELLID ></CELLID><NAME >点击列表打开的布局</NAME><VALFLD >OPENLAYID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="47" ><ID >0,33,6</ID><CELLID ></CELLID><NAME >分行数</NAME><VALFLD >LAYROW</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="48" ><ID >0,37,3</ID><CELLID ></CELLID><NAME >IFRAME的URL</NAME><VALFLD >IFRAMEURL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="49" ><ID >0,23,6</ID><CELLID ></CELLID><NAME >标题点击地址</NAME><VALFLD >TITLEURL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="50" ><ID >0,23,7</ID><CELLID ></CELLID><NAME >标题点击TARGET</NAME><VALFLD >TITLETARGET</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="51" ><ID >0,23,3</ID><CELLID ></CELLID><NAME >标题背景图片</NAME><VALFLD >TITLEBKIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+<ROW num="52" ><ID >0,23,10</ID><CELLID ></CELLID><NAME >标题高度</NAME><VALFLD >TITLEHEIGHT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >TEST</ID><NAME >试运行</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >SaveAS</ID><NAME >另存为</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+var G_IMAGEMENUXML = &amp;quot;&amp;lt;item id=\&amp;quot;m_img_select\&amp;quot; name=\&amp;quot;选择WEB图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_selectlib\&amp;quot; name=\&amp;quot;选择图库\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_modify\&amp;quot; name=\&amp;quot;编辑图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_preview\&amp;quot; name=\&amp;quot;预览图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_upload\&amp;quot; name=\&amp;quot;选择本地图片上传\&amp;quot;/&amp;gt;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	if(_this.GetCellText(0,3,6)==&amp;quot;&amp;quot;){
+		_this.SetCellText(0,3,6,G_DEFORG);
+	}
+	if(_this.GetCellText(0,3,7)==&amp;quot;&amp;quot;){
+		_this.SetCellText(0,3,7,G_SYTID);
+	}
+	var list0 = _this.CreateListValue();
+	_sql.querytods(&amp;quot;SYSURL&amp;quot;, &amp;quot;&amp;quot; );
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ){
+		_this.SetListValue(list0,_this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;),_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+	}
+	_this.SetToComboBox(&amp;quot;&amp;quot;,0,29,3,list0);
+//	var list1=_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=moduletyp&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot; );
+	var list1 = _this.CreateListValue();
+	_sql.querytods(&amp;quot;LHTML&amp;quot;,&amp;quot;&amp;quot;);
+	for(var i =0;i&amp;lt;_this.XMLDS_GetRowCount();i++){
+		_this.SetListValue(list1,_this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;),_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+	}
+//	alert(_this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;));
+//	var list1 = _this.CreateListValue();//.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SHOWFLAG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot; );
+//	_this.SetListValue(list1,&amp;quot;HTML&amp;quot;,&amp;quot;HTML&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;OS&amp;quot;,&amp;quot;OS脚本&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;MW&amp;quot;,&amp;quot;中间件界面&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FRAME&amp;quot;,&amp;quot;内部FRAME&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;FRAMEGROUP&amp;quot;,&amp;quot;分页FRAME组&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;SCROLLIMAGE&amp;quot;,&amp;quot;滚动图片&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOOLBAR&amp;quot;,&amp;quot;系统默认工具栏&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;MENU&amp;quot;,&amp;quot;菜单栏&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FLASH&amp;quot;,&amp;quot;视频演示&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;表格&amp;quot;,&amp;quot;表格(标准)&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;空白表格&amp;quot;,&amp;quot;空白表格&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOPMENU&amp;quot;,&amp;quot;顶层分页菜单&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;WEIXINBO&amp;quot;,&amp;quot;微信微博&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;SCROLLIMG&amp;quot;,&amp;quot;左右滚动图片&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;LOGINSEARCH&amp;quot;,&amp;quot;登录信息和搜索&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;LOGIN&amp;quot;,&amp;quot;登录主窗口&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TITLELIST&amp;quot;,&amp;quot;简约型的标题列表&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOUBLELIST&amp;quot;,&amp;quot;多列型的标题列表&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;IMGTITLELIST&amp;quot;,&amp;quot;图文标题列表&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TBODY&amp;quot;,&amp;quot;正文&amp;quot;);
+
+	
+	
+//	_this.SetListValue(list1,&amp;quot;INFORMATION&amp;quot;,&amp;quot;公告栏&amp;quot;);
+
+	
+//	_this.SetListValue(list1,&amp;quot;FRAMELOGIN&amp;quot;,&amp;quot;单点登录内部FRAME&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;FRAMEGROUPLOGIN&amp;quot;,&amp;quot;单点登录分页FRAME组&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;HTMLSTR&amp;quot;,&amp;quot;HTML字符串&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;LOGIN&amp;quot;,&amp;quot;登录&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;WELCOME&amp;quot;,&amp;quot;登录后欢迎页面&amp;quot;);
+	
+//	_this.SetListValue(list1,&amp;quot;SETUP&amp;quot;,&amp;quot;第一次进入系统&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TQ&amp;quot;,&amp;quot;即时通讯&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;HEADIMG&amp;quot;,&amp;quot;系统默认标题栏&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;DOWNLOADSVGFORM&amp;quot;,&amp;quot;下载控件&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;DOWNLOAD3AMOBILE&amp;quot;,&amp;quot;下载手机版本&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;MSG&amp;quot;,&amp;quot;公共消息窗口&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;TAB&amp;quot;,&amp;quot;滑动分页标签&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;CHART&amp;quot;,&amp;quot;分析图&amp;quot;);	
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,0,27,3,list1);
+	
+	var list2 = _this.CreateListValue();
+	_this.SetListValue(list2,&amp;quot;NVL&amp;quot;,&amp;quot;不显示标题&amp;quot;);
+	_this.SetListValue(list2,&amp;quot;STD&amp;quot;,&amp;quot;标准标题&amp;quot;);
+	_this.SetListValue(list2,&amp;quot;HTML&amp;quot;,&amp;quot;自定义HTML标题&amp;quot;);
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,0,15,3,list2);
+	list3 = _this.CreateListValue();
+	_this.SetListValue(list3,&amp;quot;LEFT&amp;quot;,&amp;quot;左对齐&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;CENTER&amp;quot;,&amp;quot;居中对齐&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;RIGHT&amp;quot;,&amp;quot;右对齐&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 0,21,10,list3)  ;	
+
+
+	_this.SetToButton(&amp;quot;&amp;quot;,sheet,7,4,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+	_this.SetToButton(&amp;quot;&amp;quot;,sheet,9,7,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+	_this.SetToButton(&amp;quot;&amp;quot;,sheet,19,7,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+	_this.SetToButton(&amp;quot;&amp;quot;,sheet,23,4,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,G_IMAGEMENUXML,0,16,16);
+
+	titlemode_modify()
+	bodymode_modify();
+
+	
+	
+}
+
+//SelectBox控件修改单元格内容
+function _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where)
+{
+	return 1;
+}
+//标题类型修改后
+function titlemode_modify()
+{
+	var ROW1= 17;var ROW2=24;
+	var titlemode = _this.GetCellText(0,15,3);
+	_this.SetRedraw(0);
+	if (titlemode == &amp;quot;STD&amp;quot; ) {
+		for ( var r=ROW1;r&amp;lt;=ROW1+1;r++ )_this.SetRowVisible(0,r,0);
+		for ( var r=ROW1+2;r&amp;lt;=ROW2;r++ )_this.SetRowVisible(0,r,1);
+	}
+	else if (titlemode == &amp;quot;HTML&amp;quot; ) {
+		for ( var r=ROW1;r&amp;lt;=ROW1+1;r++ )_this.SetRowVisible(0,r,1);
+		for ( var r=ROW1+2;r&amp;lt;=ROW2;r++ )_this.SetRowVisible(0,r,0);
+	}
+	else {
+		for ( var r=ROW1;r&amp;lt;=ROW2;r++ )_this.SetRowVisible(0,r,0);
+	}
+	_this.SetRedraw(1);	
+}
+//BODY类型修改后
+function bodymode_modify()
+{
+	var ROW1= 29;var ROW2=39;
+	var titlemode = _this.GetCellText(0,27,3);
+	_this.SetRedraw(0);
+//	_this.SetListValue(list1,&amp;quot;HTML&amp;quot;,&amp;quot;HTML&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;OS&amp;quot;,&amp;quot;OS脚本&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;SQL&amp;quot;,&amp;quot;SQL&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;MW&amp;quot;,&amp;quot;中间件界面&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FRAME&amp;quot;,&amp;quot;内部FRAME&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;FRAMEGROUP&amp;quot;,&amp;quot;分页FRAME组&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;SCROLLIMAGE&amp;quot;,&amp;quot;滚动图片&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOOLBAR&amp;quot;,&amp;quot;系统默认工具栏&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;MENU&amp;quot;,&amp;quot;菜单栏&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FLASH&amp;quot;,&amp;quot;视频演示&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;表格&amp;quot;,&amp;quot;表格(标准)&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;空白表格&amp;quot;,&amp;quot;空白表格&amp;quot;);	
+	
+	for ( var r=ROW1;r&amp;lt;=ROW2;r++ )_this.SetRowVisible(0,r,0);
+	if (titlemode == &amp;quot;HTML&amp;quot; ) {
+		for ( var r=39;r&amp;lt;=ROW2+1;r++ )_this.SetRowVisible(0,r,1);
+	}
+	else if (titlemode == &amp;quot;OS&amp;quot; ) {
+		for ( var r=34;r&amp;lt;=35;r++ )_this.SetRowVisible(0,r,1);
+	}
+	else if (titlemode == &amp;quot;MW&amp;quot; ) {
+		for ( var r=34;r&amp;lt;=35;r++ )_this.SetRowVisible(0,r,1);
+	}
+	else if (titlemode == &amp;quot;FRAME&amp;quot;||titlemode == &amp;quot;LOGIN&amp;quot; ) {
+		for ( var r=36;r&amp;lt;=37;r++ )_this.SetRowVisible(0,r,1);
+	}
+	else {
+		for ( var r=29;r&amp;lt;=35;r++ )_this.SetRowVisible(0,r,1);
+	}
+	_this.SetRedraw(1);	
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;选择&amp;quot;){
+//		var retval=window.showModalDialog(&amp;quot;iconbatch.sp?rettyp=WEBPATH&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=500pt; dialogWidth=800pt;status=no&amp;quot;); 
+//		if (retval!=&amp;quot;&amp;quot; &amp;&amp; retval!=undefined )
+//			_this.SetCellText(sheet,row,col-2, retval );
+	}
+	else if(id==&amp;quot;样例&amp;quot;){
+		var html= &amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; bgcolor=\&amp;quot;#000080\&amp;quot; height=\&amp;quot;30\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=\&amp;quot;30\&amp;quot;&amp;gt;&amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/icon/icon_3.png\&amp;quot; width=\&amp;quot;30\&amp;quot; height=\&amp;quot;30\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td&amp;gt;&amp;nbsp;&amp;lt;font color=\&amp;quot;#FFFFFF\&amp;quot; size=\&amp;quot;3\&amp;quot; &amp;gt;TITLE&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;	&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+		if(_this.GetCellText(0,17,3)==&amp;quot;&amp;quot;)_this.SetCellText(0,17,3,html);
+		else if ( confirm( &amp;quot;样例会覆盖现有的内容，是否继续？&amp;quot; ) == 1) _this.SetCellText(0,17,3,&amp;quot;&amp;quot;);
+	}
+	else if ( id==&amp;quot;HTML编辑器&amp;quot; ) {
+		var guid=_this.GetCellText(sheet,row,3);
+		var ret = window.showModalDialog(&amp;quot;show.sp?grdid=HtmlEdit&amp;guid=&amp;quot;+guid,null,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+		if(ret!=undefined)
+		{
+			_this.SetCellText(sheet,row,3,ret);
+			_this.SetCellShowText(sheet,row,3,_this.HttpCall(&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret));
+		}
+	}
+
+}
+
+
+//点击菜单项
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	var id=menuitemid;
+	//&amp;quot;&amp;lt;item id=\&amp;quot;m_img_select\&amp;quot; name=\&amp;quot;选择图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_modify\&amp;quot; name=\&amp;quot;编辑图片\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;m_img_preview\&amp;quot; name=\&amp;quot;预览图片\&amp;quot;/&amp;gt;&amp;quot;;
+
+	if(id==&amp;quot;m_img_modify&amp;quot;){
+		var imgurl = _this.GetCellText(sheet,row,col-1);
+		var imgguid = &amp;quot;&amp;quot;;
+		var prestr = &amp;quot;EAFormBlob.sp?guid=&amp;quot;;
+		if(imgurl.substring(0,prestr.length)==prestr){
+			imgguid = imgurl.substring(prestr.length );
+		}
+		try{
+			var bw = _this.GetCellText(sheet,3,8);
+			var bh = _this.GetCellText(sheet,3,9);
+			if(bh==&amp;quot;&amp;quot;||row!==7)bh= &amp;quot;120&amp;quot;;
+			if(bw==&amp;quot;&amp;quot;||row!==7)bw= &amp;quot;120&amp;quot;;
+
+			var url = &amp;quot;show.sp?grdid=ImageEdit&amp;formguid=&amp;quot;+imgguid +&amp;quot;&amp;bigimgw=&amp;quot;+bw+&amp;quot;&amp;bigimgh=&amp;quot;+bh+&amp;quot;&amp;imgw=&amp;imgh=&amp;smlimgw=&amp;smlimgh=&amp;quot;;
+			
+			var ret = window.showModalDialog(url,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+			if(ret!=undefined){
+				
+				var ss = ret.split(&amp;quot;,&amp;quot;);
+				_this.SetCellText(sheet,row,col-1,prestr+ss[0]);
+				if(ss.length&amp;gt;=5&amp;&amp;row==7){
+					_this.SetCellText(sheet,3,8,ss[3]);
+					_this.SetCellText(sheet,3,9,ss[4]);
+				}
+			}
+		}catch(e){}
+	}
+	else if(id==&amp;quot;m_img_select&amp;quot;){
+		var retval=window.showModalDialog(&amp;quot;iconbatch.sp?rettyp=WEBPATH&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=500pt; dialogWidth=800pt;status=no&amp;quot;); 
+		if (retval!=&amp;quot;&amp;quot; &amp;&amp; retval!=undefined ){
+			_this.SetCellText(sheet,row,col-1, retval );
+		}
+	}
+	else if(id==&amp;quot;m_img_selectlib&amp;quot;){
+		var retval=window.showModalDialog(&amp;quot;LAYIMG.sp&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=500pt; dialogWidth=800pt;status=no&amp;quot;); 
+		if (retval!=&amp;quot;&amp;quot; &amp;&amp; retval!=undefined ){
+			SetImageURL (sheet,row,col,retval );	//skinguid=
+		}
+	}	
+	else if(id==&amp;quot;m_img_preview&amp;quot;){
+		previewimg(_this.GetCellText(sheet,row,col-1));
+	}
+	else if(id==&amp;quot;m_img_upload&amp;quot;){//选择本地图片上传
+		var filename = _this.SelectFile(&amp;quot;&amp;quot;);
+		if (filename !=&amp;quot;&amp;quot; ) {
+			_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+			_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,filename ,1);
+			_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,&amp;quot;&amp;quot;,0);
+			_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+			_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+			_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,filename ,0);
+			var ret = _this.SendHttpRequest();
+			_this.CloseHttpRequest();
+			if(ret!=&amp;quot;&amp;quot; ) {
+				_this.SetCellText(sheet,row,col-1, &amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret);
+			}
+		}
+	}
+	else if ( id==&amp;quot;HTML编辑器&amp;quot; ) {
+		var guid=_this.GetCellText(sheet,row,3);
+		var ret = window.showModalDialog(&amp;quot;show.sp?grdid=HtmlEdit&amp;guid=&amp;quot;+guid,null,&amp;quot;dialogwidth:1024pt;dialogheight:600pt;help:yes;resizable:yes;&amp;quot;);
+		if(ret!=undefined)
+		{
+			_this.SetCellText(sheet,row,3,ret);
+			_this.SetCellShowText(sheet,row,3,_this.HttpCall(&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret));
+		}
+	}
+	
+
+
+
+}
+function previewimg(url){
+	window.open(url);
+	//var w = window.open(&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;width:800;height:600&amp;quot;);
+	//w.document.body.innerHTML=&amp;quot;&amp;lt;img src=&amp;apos;http://www.xlsgrid.net/xlsgrid/ROOT_XLSGRID/&amp;quot;+url+&amp;quot;&amp;apos;&amp;gt;&amp;quot;;
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if(sheet==0 &amp;&amp; row==15 &amp;&amp; col ==3 ) titlemode_modify();
+	if(sheet==0 &amp;&amp; row==27 &amp;&amp; col ==3 ) bodymode_modify();
+
+
+}
+
+//试运行
+function TEST()
+{
+	window.open(&amp;quot;L.sp?objid=&amp;quot; +_this.GetCellText(0,5,3),&amp;quot;&amp;quot;,&amp;quot;&amp;quot; );
+
+}
+//另存为
+function SaveAS()
+{
+	var id=prompt(&amp;quot;请输入新的ID号&amp;quot;,&amp;quot;&amp;quot;);
+	if(id!=undefined&amp;&amp;id!=&amp;quot;&amp;quot; ) {
+		// 通过Get的方式调用服务端的一个函数
+		var sParam =&amp;quot;id=&amp;quot;+id+&amp;quot;&amp;deforg=&amp;quot;+G_DEFORG+&amp;quot;&amp;oldid=&amp;quot;+_this.GetCellText(0,5,3);
+		try {
+			ret = invokeOSFunc(&amp;quot;SaveAS&amp;quot;,sParam) ;    
+			if(ret!=&amp;quot;&amp;quot;&amp;&amp;confirm(&amp;quot;复制成功，是否打开？&amp;quot;)==1){
+				openWindow(&amp;quot;show.sp?grdid=LObject&amp;guid=&amp;quot;+ret);
+			}   
+		}
+		catch ( e ) {
+			alert ( e );
+		}	
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+
+// 客户端param传入的参数可以直接使用
+function SaveAS()
+{
+	var db = null;
+	var guid = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		guid = db.GetSQL(&amp;quot;select sys_guid() guid from dual&amp;quot;);
+		var ds = db.QuerySQL(&amp;quot;select COLUMN_NAME from user_tab_columns where table_name=&amp;apos;LAYOBJ&amp;apos;&amp;quot;);
+		var cols=&amp;quot;&amp;quot;;
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++){
+			var colname= ds.getStringAt(i,&amp;quot;COLUMN_NAME&amp;quot;);
+			if(colname!=&amp;quot;GUID&amp;quot;&amp;&amp; colname!=&amp;quot;ID&amp;quot;){
+				cols+=&amp;quot;,&amp;quot;+colname;	
+			}
+		}
+		var sql =&amp;quot;insert into LAYOBJ(guid,id&amp;quot;+cols+&amp;quot;) select &amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;+cols+&amp;quot; from LAYOBJ where id=&amp;apos;&amp;quot;+oldid+&amp;quot;&amp;apos; and deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos;&amp;quot;;
+		
+		var retnum=db.ExcecutSQL(sql);
+		
+		db.Commit();	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return guid ;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SYSURL</ID><NAME ></NAME><DATDSC >select * from V_LSYSURLCLASS where orgid=&amp;apos;[%SYS_DEFORG]&amp;apos;
+order by id</DATDSC><C4 >SYSURL</C4><C5 ></C5><C6 >SYSURL</C6></ROW>
+<ROW num="1" ><ID >createview</ID><NAME ></NAME><DATDSC >CREATE OR REPLACE VIEW V_LSYSURLCLASS AS 
+select distinct org orgid,refid id, name  from lsysurl where refid is not null  order by org,refid
+ 
+ create table LSYSURL ( 
+	GUID CHAR(32) default SYS_GUID()  not null ,
+	ORG VARCHAR2(20),
+	NAME VARCHAR2(256),
+	NOTE VARCHAR2(1024),
+	HTMLGUID VARCHAR2(32),
+	URL VARCHAR2(256),
+	ICON VARCHAR2(256),
+	SEQID NUMBER(22),
+	CRTDAT DATE default SYSDATE,
+	REFID VARCHAR2(20),
+	ID VARCHAR2(20),
+	SUPPERID VARCHAR2(20),
+	TARGET VARCHAR2(256),
+	ICON2 VARCHAR2(256) );
+  comment on column LSYSURL.GUID is &amp;apos;内部ID&amp;apos; ;
+ comment on column LSYSURL.ORG is &amp;apos;组织&amp;apos; ;
+ comment on column LSYSURL.NAME is &amp;apos;名称&amp;apos; ;
+ comment on column LSYSURL.NOTE is &amp;apos;备注&amp;apos; ;
+ comment on column LSYSURL.HTMLGUID is &amp;apos;正文&amp;apos; ;
+ comment on column LSYSURL.URL is &amp;apos;地址~比如entry.sp show.sp 或直接的URL地址&amp;apos; ;
+ comment on column LSYSURL.ICON is &amp;apos;图片的地址&amp;apos; ;
+ comment on column LSYSURL.SEQID is &amp;apos;排序号&amp;apos; ;
+ comment on column LSYSURL.CRTDAT is &amp;apos;创建日期&amp;apos; ;
+ comment on column LSYSURL.REFID is &amp;apos;栏目~如友好连接、产品介绍、项目介绍&amp;apos; ;
+ comment on column LSYSURL.ID is &amp;apos;编号&amp;apos; ;
+ comment on column LSYSURL.SUPPERID is &amp;apos;树状结构的上层编码&amp;apos; ;
+ comment on column LSYSURL.TARGET is &amp;apos;&amp;apos; ;
+ comment on column LSYSURL.ICON2 is &amp;apos;图标2的地址&amp;apos; ;
+</DATDSC><C4 ></C4><C5 >createview</C5><C6 >createview</C6></ROW>
+<ROW num="2" ><ID >LHTML</ID><NAME ></NAME><DATDSC >select ID,NAME from LHTML</DATDSC><C4 ></C4><C5 ></C5><C6 >LHTML</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

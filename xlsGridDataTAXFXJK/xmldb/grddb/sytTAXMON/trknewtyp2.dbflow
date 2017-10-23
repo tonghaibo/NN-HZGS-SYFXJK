@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="roundrect_584216" x="207" y="23" width="181" height="36" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >申报异常处理流程
+newtyp=2</rect>
+ <polygon id="userinput_584217" points="62,108 62,145 203,145 203,99 62,108 62,108" changeto="userinput" stroke="#000000" fill="#DDDDDD" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >自查补报流程
+newsubtyp=5</polygon>
+ <polygon  id="polygon_584219" points="352,108 352,145 493,145 493,99 352,108 352,108" changeto="userinput" stroke="#000000" fill="#DDDDDD" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">电表维护流程
+newsubtyp=6</polygon>
+ <rect id="rect_584220" x="78" y="177" width="108" height="34" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1"  属性="">21.填写“企业自查补报申请确认表”</rect>
+ <rect  id="rect_584221" x="78" y="242" width="108" height="34" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">22.填写“查补税款单”</rect>
+ <polygon id="rhombus_584223" points="79,338 129,367 186,338 129,312 79,338 79,338 79,338" changeto="rhombus" stroke="#000000" fill="#CCFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >23.补缴是否足额</polygon>
+ <rect id="roundrect_584224" x="81" y="409" width="103" height="39" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >9.任务完成</rect>
+ <rect  id="rect_584225" x="368" y="182" width="108" height="34" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">24.企业电表号增删改操作</rect>
+ <rect  id="rect_584226" x="368" y="249" width="108" height="34" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" 属性="">25.电力税负异常检查</rect>
+ <polygon  id="polygon_584227" points="379,341 421,370 466,341 421,315 379,341 379,341 379,341" changeto="rhombus" stroke="#000000" fill="#CCFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">是否异常</polygon>
+ <rect  id="rect_584228" x="371" y="412" width="103" height="39" round="15" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">9.任务完成</rect>
+ <connector id="connector_108_584229" from="roundrect_584216" to="userinput_584217" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_584230" from="roundrect_584216" to="polygon_584219" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_208_584231" from="userinput_584217" to="rect_584220" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584232" from="rect_584220" to="rect_584221" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584233" from="rect_584221" to="rhombus_584223" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584234" from="rhombus_584223" to="roundrect_584224" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584237" from="polygon_584219" to="rect_584225" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584238" from="rect_584225" to="rect_584226" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584239" from="rect_584226" to="polygon_584227" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584240" from="polygon_584227" to="rect_584228" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_584242" from="rhombus_584223" to="rect_584220" fromcp="32" tocp="32" type="208"  >
+ </connector>
+ <text id="text_584243" x="109" y="368" width="40" height="30" font-size="14" >否</text>
+ <text  id="text_584244" x="184" y="318" width="40" height="30" font-size="14">是</text>
+ <text  id="text_584245" x="365" y="313" width="40" height="30" font-size="14" 属性="">是</text>
+ <text  id="text_584246" x="426" y="377" width="40" height="30" font-size="14">否</text>
+ <connector id="connector_208_584247" from="polygon_584227" to="userinput_584217" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <text id="text_301917" x="542" y="18" width="240" height="240" font-size="14" >说明：
+1.	“企业自查补报申请确认表”格式见附件。
+2.	“查补税款单”格式见附件。
+3.	需要构建一个判断机制，企业多次补缴的金额=自查补报申请确认表的金额，则核实任务可以完成，否则不能点击任务完成。
+4.	如果补缴金额小于自查补报申请确认表，由于客观原因是在无法完成补缴的，需要提交领导层审核，领导层有权限审核后结束核实任务。
+</text>
+ <text id="text_482610" x="546" y="318" width="240" height="120" font-size="14" >工作流的状态流转：
+提交 - 12 - 13 - 21 - 22 - 23 - 9
+提交 - 24 - 25 - 9
+提交 - 24 - 25 - 21 - 22 - 23 - 9</text>
+ <rect id="F2:TAXMON:TK:核实任务"  round="5" selgrdid="TK" selsytid="TAXMON" selgrdtyp="F"  fill="#EEEEEE"   fillto="#FFFFFF" x="80" y="21" width="100"  height="36" selectflag="mouseclick"  menuid="-1" url="entry.sp?grdid=TK" xmlmenu="[%left]item name=[%quot]修改该中间件[%quot] id=[%quot]m_grd_:F2:TAXMON:TK:核实任务[%quot]/[%right]" >表单:TK
+核实任务</rect>
+</svg>

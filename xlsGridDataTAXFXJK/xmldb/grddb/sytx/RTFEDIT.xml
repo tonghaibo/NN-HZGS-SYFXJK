@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >RTFEDIT</MWID><NAME >RTF排版编辑工具</NAME><NOTE ></NOTE><FILE >RTFEDIT.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：初始化
+// 参数：url=.. 如果url为非空，在url的指定位置载入一个RTF
+//       如果url=&amp;apos;&amp;apos; 调用opener.GetRTF函数得到string
+//       savertf=&amp;apos;y&amp;apos; 是否需要保存，如果保存，出现保存按钮，调用opener.SaveRTF函数
+//       onlytext =&amp;quot;Y&amp;quot; 仅文字框，不带格式
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/27/06 13:30:19
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+      _this.SetRowCount(sheet,0);
+      _this.SetColCount(sheet,0);
+      _this.SetCellFont(sheet,-1,-1,&amp;quot;宋体&amp;quot;,9,400);
+      var myurl = &amp;quot;&amp;quot;;
+      try {myurl = url; }catch ( e ) {}
+      var myonlytext = &amp;quot;&amp;quot;;
+      try {myonlytext  = onlytext ; }catch ( e ) {}
+      if ( myurl.length&amp;gt;0 ) 
+             _this.LoadToRichEdit(&amp;quot;&amp;quot;,sheet,-1,-1,myurl);
+      else {
+            try { str=opener.GetRTF(); }
+            catch ( e ) {}
+            if ( myonlytext ==&amp;quot;y&amp;quot;||myonlytext ==&amp;quot;Y&amp;quot;) {
+                  _this.SetToCodeEditor(&amp;quot;&amp;quot;,sheet,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+                  _this.SetCellText(sheet,-1,-1,str);
+            }
+            else {
+                  _this.SetToRichEdit(&amp;quot;&amp;quot;,sheet,-1,-1,str);
+            }
+      }
+      var mysave = &amp;quot;&amp;quot;;
+      try {mysave = savertf; }catch ( e ) {}
+      if ( mysave==&amp;quot;y&amp;quot;||mysave==&amp;quot;Y&amp;quot; ) {
+            _this.AddToolbarButton(&amp;quot;com_ok&amp;quot;,&amp;quot;确认&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,1,60);
+            _this.AddToolbarButton(&amp;quot;com_cancel&amp;quot;,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,2,1,60);      
+      }
+}
+
+
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+       if ( id == &amp;quot;com_ok&amp;quot; ) {
+             try { str=opener.SaveRTF(_this.GetCellText(sheet,-1,-1)); }
+             catch ( e ) {}
+             window.close();
+       }
+       else if ( id == &amp;quot;com_cancel&amp;quot; ) {
+            window.close();
+       }            
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

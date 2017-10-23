@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >GN_ZCXQ</MWID><NAME >资产详情</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >GN_ZCXQ.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >公安</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >GN_ZCXQHDR</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >a.DAT &amp;quot;单据日期&amp;quot;,a.CARDID &amp;quot;卡片编号&amp;quot;,a.YZCID &amp;quot;原资产编号&amp;quot;,(select name from V_STC_BUYER where id=a.ZCTYPNAM) &amp;quot;资产分类名称&amp;quot;,(select name from V_STC_BUYER where id=a.ZCNAM) &amp;quot;资产名称&amp;quot;,a.YSXMID &amp;quot;预算项目编号&amp;quot;,(select name from V_STC_BUYER where id=a.GETWAY) &amp;quot;取得方式&amp;quot;,(select name from V_STC_BUYER where id=a.PRITYP) &amp;quot;价值类型&amp;quot;,(select name from V_STC_BUYER where id=a.ZJSTAT) &amp;quot;折旧状态&amp;quot;,a.GGTYP &amp;quot;规格型号&amp;quot;,a.PROFACT &amp;quot;生产厂家&amp;quot;,a.BRAND &amp;quot;品牌&amp;quot;,(select name from V_YESNO where id=a.XTZC) &amp;quot;信通资产&amp;quot;</COLLIST><WHERE >and 1=1</WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL >3</IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,7,5</ID><CELLID ></CELLID><NAME >资产分类名称</NAME><VALFLD >ZCTYPNAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_STC_BUYER</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="1" ><ID >0,25,11</ID><CELLID ></CELLID><NAME >创建修改时间</NAME><VALFLD >CRTDAT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >DATE</CTLTYP><LISTID >DATE</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="2" ><ID >0,5,5</ID><CELLID ></CELLID><NAME >卡片编号</NAME><VALFLD >CARDID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="3" ><ID >0,5,11</ID><CELLID ></CELLID><NAME >原资产编号</NAME><VALFLD >YZCID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="4" ><ID >0,7,11</ID><CELLID ></CELLID><NAME >资产名称</NAME><VALFLD >ZCNAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="5" ><ID >0,9,5</ID><CELLID ></CELLID><NAME >预算项目编号</NAME><VALFLD >YSXMID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="6" ><ID >0,9,11</ID><CELLID ></CELLID><NAME >取得方式</NAME><VALFLD >GETWAY</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_STC_BUYER</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="7" ><ID >0,11,5</ID><CELLID ></CELLID><NAME >价值类型</NAME><VALFLD >PRITYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_ITEM</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="8" ><ID >0,11,11</ID><CELLID ></CELLID><NAME >折旧状态</NAME><VALFLD >ZJSTAT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_STC_BUYER</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="9" ><ID >0,13,5</ID><CELLID ></CELLID><NAME >规格型号</NAME><VALFLD >GGTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="10" ><ID >0,13,11</ID><CELLID ></CELLID><NAME >生产厂家</NAME><VALFLD >PROFACT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="11" ><ID >0,15,5</ID><CELLID ></CELLID><NAME >品牌</NAME><VALFLD >BRAND</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="12" ><ID >0,15,11</ID><CELLID ></CELLID><NAME >信通资产</NAME><VALFLD >XTZC</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="13" ><ID >0,1,15</ID><CELLID ></CELLID><NAME >表单号</NAME><VALFLD >BILID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="14" ><ID >0,19,5</ID><CELLID ></CELLID><NAME >管理部门</NAME><VALFLD >MANDEPT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_XLSGRID_DEPT</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="15" ><ID >0,19,11</ID><CELLID ></CELLID><NAME >使用人</NAME><VALFLD >USRNAM</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	//_this.ShowToolBar(1);
+	//_this.ShowTabBar(1);
+	var sql=&amp;quot;select id,name from V_YESNO&amp;quot;;
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,0,15,11,createListValues(sql));
+	//_this.SetToDateBox(&amp;quot;&amp;quot;,0,19,5,&amp;quot;&amp;quot;);
+	var sql1 = &amp;quot;select id,name from V_STC_BUYER&amp;quot;;
+	var sql2 = &amp;quot;select id,name from(select &amp;apos;1&amp;apos; id,&amp;apos;台灯&amp;apos; name from dual &amp;quot;+
+	&amp;quot;union all select &amp;apos;2&amp;apos; id,&amp;apos;显示器&amp;apos; name from dual &amp;quot;+
+	&amp;quot;union all select &amp;apos;3&amp;apos; id,&amp;apos;投影仪&amp;apos; name from dual &amp;quot;+
+	&amp;quot;union all select &amp;apos;4&amp;apos; id,&amp;apos;多功能一体机&amp;apos; name from dual)&amp;quot;;
+	_this.SetToComboBox(&amp;quot;&amp;quot;,0,7,11,createListValues(sql2));
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,2,1,createListValues(sql2));
+	
+	var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;lt;请选择类型 imageid=\&amp;quot;4\&amp;quot;&amp;gt;&amp;lt;通用设备 selgrdtyp=\&amp;quot;B\&amp;quot; imageid=\&amp;quot;2\&amp;quot; sytflg=\&amp;quot;XLSGRID\&amp;quot;&amp;gt;&amp;lt;/通用设备&amp;gt; &amp;lt;专用设备 selgrdtyp=\&amp;quot;R\&amp;quot; imageid=\&amp;quot;3\&amp;quot; sytflg=\&amp;quot;XLSGRID\&amp;quot;&amp;gt;&amp;lt;/专用设备&amp;gt; 	&amp;lt;家具用具 selgrdtyp=\&amp;quot;Q\&amp;quot; imageid=\&amp;quot;7\&amp;quot; sytflg=\&amp;quot;XLSGRID\&amp;quot;&amp;gt;&amp;lt;/家具用具&amp;gt; 		&amp;lt;无形资产 selgrdtyp=\&amp;quot;F\&amp;quot; imageid=\&amp;quot;8\&amp;quot; sytflg=\&amp;quot;XLSGRID\&amp;quot;&amp;gt;&amp;lt;/无形资产&amp;gt;&amp;lt;/请选择类型&amp;gt;&amp;quot;;
+	_this.SetToTreeCtrl(&amp;quot;&amp;quot;,1,-1,-1,xml);
+	
+	_this.SplitSheet(&amp;quot;1&amp;quot;,&amp;quot;H&amp;quot;,160);
+	
+}
+function createListValues(sql){
+	var id = &amp;quot;&amp;quot;;
+	var name = &amp;quot;&amp;quot;;
+	var listid = _this.CreateListValue();
+	QuerySQLDS(sql);
+	var count = _this.XMLDS_GetRowCount();
+	for(var i = 0;i &amp;lt; count;i ++){
+		id = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+		name = _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+		_this.SetListValue(listid,id,name);
+	}
+	return listid;
+}
+
+function setLayout()
+{
+	var layoutxml = &amp;quot;&amp;quot;;
+	
+	layoutxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROWSET&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;C1  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;120\&amp;quot;&amp;gt;1&amp;lt;/C1&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;C2  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;100%\&amp;quot;&amp;gt;0&amp;lt;/C2&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;/ROW&amp;gt; &amp;quot;+
+
+	&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	_this.SetLayoutDS(layoutxml);
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if(sheet==1 &amp;&amp; row==2 &amp;&amp; col==1 &amp;&amp; newvalue!=&amp;quot;&amp;quot;){
+		_this.SetCellText(0,7,11,_this.GetCellText(1,2,1));
+		_this.SetCellShowText(0,7,11,_this.GetCellShowText(1,2,1));
+		
+		if(_this.GetCellText(0,7,11)==&amp;quot;1&amp;quot;){
+			_this.SetRowVisible(0,13,-1);
+			_this.SetRowVisible(0,14,-1);
+			_this.SetRowVisible(0,15,1);	
+			_this.SetRowVisible(0,16,1);
+		}
+		if(_this.GetCellText(0,7,11)==&amp;quot;2&amp;quot;){
+			_this.SetRowVisible(0,13,1);
+			_this.SetRowVisible(0,14,1);
+			_this.SetRowVisible(0,15,-1);
+			_this.SetRowVisible(0,16,-1);	
+		}
+		if(_this.GetCellText(0,7,11)==&amp;quot;3&amp;quot;){
+			_this.SetRowVisible(0,13,1);
+			_this.SetRowVisible(0,14,1);
+			_this.SetRowVisible(0,15,1);
+			_this.SetRowVisible(0,16,1);	
+		}
+		if(_this.GetCellText(0,7,11)==&amp;quot;4&amp;quot;){
+			_this.SetRowVisible(0,13,1);
+			_this.SetRowVisible(0,14,1);	
+			_this.SetRowVisible(0,15,1);
+			_this.SetRowVisible(0,16,1);
+		}
+		
+	}
+	if(sheet==1 &amp;&amp; row==2 &amp;&amp; col==1 &amp;&amp; newvalue==&amp;quot;&amp;quot;){
+			_this.SetCellText(0,7,11,&amp;quot;&amp;quot;);
+			_this.SetCellShowText(0,7,11,&amp;quot;&amp;quot;);
+			_this.SetRowVisible(0,13,1);
+			_this.SetRowVisible(0,14,1);	
+			_this.SetRowVisible(0,15,1);
+			_this.SetRowVisible(0,16,1);
+		}
+}
+
+
+//单据列表加载完毕
+function _thisOnpostloadListForm(sheet)
+{
+	alert(_this.GetRowCount() );
+//	_this.SetColVisible(0,3,0);
+//	_this.SetColVisible(0,4,0);
+//	_this.SetColVisible(0,5,0);
+//	alert ( &amp;quot;fjsadklfjsaflkj &amp;quot; );
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+
+	if(sheet==0&amp;&amp;row==3&amp;&amp;col==13){
+		if(_this.GetCellText(sheet,row,col)==&amp;quot;&amp;quot;){
+			_this.SetToImage(&amp;quot;&amp;quot;,sheet,row,col,11);
+			for( var i=row+2;i&amp;lt;17;i++)
+				_this.SetRowVisible(sheet,i,0);
+			_this.SetCellText(sheet,row,col,&amp;quot;1&amp;quot;);
+		}
+		else {
+			_this.SetToImage(&amp;quot;&amp;quot;,sheet,row,col,10);
+			for( var i=row+2;i&amp;lt;17;i++)
+				_this.SetRowVisible(sheet,i,1);
+			_this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+
+		}
+		
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

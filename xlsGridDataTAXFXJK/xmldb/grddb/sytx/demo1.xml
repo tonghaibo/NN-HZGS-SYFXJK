@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >demo1</MWID><NAME >demo</NAME><NOTE >COMFUNC</NOTE><FILE >demo1.zxg</FILE><FIXED ></FIXED><CATTYP >COMFUNC</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><NOACCNAME >1</NOACCNAME></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >demo</ID><NAME >test</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >read</ID><NAME >读取文件</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="2" ><ID >uploadFile</ID><NAME >上传文件</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+function _thisOnpost_loaddata(sheet)
+{
+	//_this.SaveImageFile();
+	
+	
+}
+//function read()
+//{
+//  alert(invokeOSFunc(&amp;quot;read&amp;quot;,&amp;quot;&amp;quot;));
+//}
+//
+//function uploadFile()
+//{ 
+//  var saveUrl = homeurl+&amp;quot;UploadZXG.sp&amp;quot;;
+//  _this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+//  _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,&amp;quot;c:\\Demo.asm&amp;quot;,1);
+//  _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,&amp;quot;c:\\poos.txt&amp;quot;,1);
+//  _this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+//  _this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,&amp;quot;POS&amp;quot;,0);
+//  var ret=_this.SendHttpRequest(); 
+//  _this.CloseHttpRequest();
+//}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var json = new JavaPackage(&amp;quot;net.sf.json&amp;quot;);
+
+function Response()
+{
+	//response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+	//request.setCharacterEncoding(&amp;quot;UTF-8&amp;quot;);
+	
+	//URL传递过来的方式是&amp;quot;&amp;lb=&amp;quot;+java.net.URLEncoder.encode(lb,&amp;quot;gbk&amp;quot;)
+	var mylocation = pub.EAFunc.NVL(request.getParameter(&amp;quot;lb&amp;quot;),&amp;quot;&amp;quot;);
+	mylocation = java.net.URLDecoder.decode(mylocation,&amp;quot;utf-8&amp;quot;);
+	//mylocation = pub.EAJ2meUtil.changeCharset(mylocation,&amp;quot;gbk&amp;quot;,&amp;quot;utf-8&amp;quot;);
+	var location_x = request.getParameter(&amp;quot;lx&amp;quot;);
+	var location_y = request.getParameter(&amp;quot;ly&amp;quot;);
+	
+	//var html = getBaiduMap(location_x,location_y,mylocation);
+	//html = getGoogleMap(location_x,location_y,mylocation);
+	
+	var code = request.getParameter(&amp;quot;code&amp;quot;);
+	var url = &amp;quot;https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx28aa2668339fb4b2&amp;secret=f7d9a13993dea13a7977497cdc29883d&amp;code=&amp;quot;+code+&amp;quot;&amp;grant_type=authorization_code&amp;quot;;
+	var httpcall = new webget.HttpCall();
+	var result = httpcall.Get(url,&amp;quot;UTF-8&amp;quot;);
+	
+	var html = testShare(openid);
+	return html;
+}
+
+function testShare(openid)
+{
+	var openidstr = &amp;quot;&amp;quot;;
+	if (openid != &amp;quot;&amp;quot;) {
+		openidstr = &amp;quot;&amp;lt;p&amp;gt; openid=&amp;quot;+openid;
+	}
+	
+	var html = &amp;quot;&amp;quot;;
+	//html = pub.EAFunc.readFile(&amp;quot;/u/share.html&amp;quot;,&amp;quot;UTF-8&amp;quot;);
+	html = &amp;quot;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt; 
+&amp;lt;head&amp;gt; 
+    &amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+    &amp;lt;link rel=\&amp;quot;dns-prefetch\&amp;quot; href=\&amp;quot;http://mmbiz.qpic.cn\&amp;quot;&amp;gt;
+    &amp;lt;link rel=\&amp;quot;dns-prefetch\&amp;quot; href=\&amp;quot;http://res.wx.qq.com\&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;test&amp;lt;/title&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0\&amp;quot; /&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-status-bar-style\&amp;quot; content=\&amp;quot;black\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;format-detection\&amp;quot; content=\&amp;quot;telephone=no\&amp;quot;&amp;gt;
+
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/page_mp_article20701f.css\&amp;quot;/&amp;gt;
+    &amp;lt;!--[if lt IE 9]&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;http://res.wx.qq.com/mmbizwap/zh_CN/htmledition/style/page/page_mp_article_pc20701f.css\&amp;quot;/&amp;gt;
+    &amp;lt;![endif]--&amp;gt;
+
+    &amp;lt;style&amp;gt;
+    	ol,ul{list-style-position:inside;}
+    &amp;lt;/style&amp;gt;
+    
+    &amp;lt;script type=&amp;apos;text/javascript&amp;apos; src=&amp;apos;xlsgrid/js/jquery-1.3.2.min.js&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+			//分享成功回调函数
+			function shareSuccess(sharetype) {
+				$.ajax({type:&amp;apos;GET&amp;apos;,
+								url:\&amp;quot;RunSql.sp?usrid=xlsgrid&amp;userpwd=0&amp;sql=insert into log(str)values(&amp;apos;微信分享成功typ=1&amp;apos;)\&amp;quot;,
+								dataType:&amp;apos;text/xml&amp;apos;,
+								error:function(XMLResponse){
+									alert(&amp;apos;send failed!&amp;apos;+XMLResponse); 
+								},
+								success:function(xml) {
+									alert(&amp;apos;send ok...&amp;apos;);
+								}
+					});
+			}
+
+			document.addEventListener(&amp;apos;WeixinJSBridgeReady&amp;apos;, function onBridgeReady() {
+              // 发送给好友
+              WeixinJSBridge.on(&amp;apos;menu:share:appmessage&amp;apos;, function (argv) {
+                  WeixinJSBridge.invoke(&amp;apos;sendAppMessage&amp;apos;, {
+                      \&amp;quot;appid\&amp;quot;: \&amp;quot;123\&amp;quot;,
+                      \&amp;quot;img_url\&amp;quot;: \&amp;quot;http://bcs.duapp.com/api100/image/logo/lover.jpg\&amp;quot;,
+                      \&amp;quot;img_width\&amp;quot;: \&amp;quot;160\&amp;quot;,
+                      \&amp;quot;img_height\&amp;quot;: \&amp;quot;160\&amp;quot;,
+                      \&amp;quot;link\&amp;quot;: \&amp;quot;http://api100.duapp.com/card/\&amp;quot;,
+                      \&amp;quot;desc\&amp;quot;:  \&amp;quot;山无陵，天地合，乃敢与君绝。\&amp;quot;,
+                      \&amp;quot;title\&amp;quot;: \&amp;quot;爱情贺卡\&amp;quot;
+                  }, function (res) {
+                      //_report(&amp;apos;send_msg&amp;apos;, res.err_msg);
+                      shareSuccess(&amp;apos;1&amp;apos;);
+                  })
+              });
+
+              // 分享到朋友圈
+              WeixinJSBridge.on(&amp;apos;menu:share:timeline&amp;apos;, function (argv) {
+                  WeixinJSBridge.invoke(&amp;apos;shareTimeline&amp;apos;, {
+                      \&amp;quot;img_url\&amp;quot;: \&amp;quot;http://bcs.duapp.com/api100/image/logo/newyear.jpg\&amp;quot;,
+                      \&amp;quot;img_width\&amp;quot;: \&amp;quot;160\&amp;quot;,
+                      \&amp;quot;img_height\&amp;quot;: \&amp;quot;160\&amp;quot;,
+                      \&amp;quot;link\&amp;quot;: \&amp;quot;http://www.xlsgrid.net\&amp;quot;,
+                      \&amp;quot;desc\&amp;quot;:  \&amp;quot;Best wishes for a wonderful new year.\&amp;quot;,
+                      \&amp;quot;title\&amp;quot;: \&amp;quot;分享程序测试\&amp;quot;
+                  }, function (res) {
+                      //_report(&amp;apos;timeline&amp;apos;, res.err_msg);
+                      //alert(&amp;apos;share finish callback.&amp;apos;+res);
+                      shareSuccess(&amp;apos;2&amp;apos;);
+                  });
+              });
+          }, false)
+      &amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt; 
+
+&amp;lt;body id=\&amp;quot;activity-detail\&amp;quot;&amp;gt;
+
+	&amp;lt;div class=\&amp;quot;rich_media\&amp;quot;&amp;gt;
+		
+		&amp;lt;div class=\&amp;quot;rich_media_inner\&amp;quot;&amp;gt;
+			&amp;lt;h2 class=\&amp;quot;rich_media_title\&amp;quot; id=\&amp;quot;activity-name\&amp;quot;&amp;gt;test&amp;lt;/h2&amp;gt;
+			
+			&amp;lt;div class=\&amp;quot;rich_media_meta_list\&amp;quot;&amp;gt;
+				&amp;lt;em id=\&amp;quot;post-date\&amp;quot; class=\&amp;quot;rich_media_meta text\&amp;quot;&amp;gt;2014-09-18&amp;lt;/em&amp;gt;
+				&amp;lt;em class=\&amp;quot;rich_media_meta text\&amp;quot;&amp;gt;harry&amp;lt;/em&amp;gt;
+				&amp;lt;a class=\&amp;quot;rich_media_meta link nickname\&amp;quot; href=\&amp;quot;javascript:viewProfile();\&amp;quot; id=\&amp;quot;post-user\&amp;quot;&amp;gt;硕格软件&amp;lt;/a&amp;gt;
+			&amp;lt;/div&amp;gt;
+
+			&amp;lt;div id=\&amp;quot;page-content\&amp;quot; class=\&amp;quot;rich_media_content_wrp\&amp;quot;&amp;gt;
+		
+				&amp;lt;div id=\&amp;quot;img-content\&amp;quot;&amp;gt;
+					
+					&amp;lt;div class=\&amp;quot;rich_media_thumb\&amp;quot; id=\&amp;quot;media\&amp;quot;&amp;gt;
+						&amp;lt;img onerror=\&amp;quot;this.parentNode.removeChild(this)\&amp;quot; src=\&amp;quot;http://mmbiz.qpic.cn/mmbiz/t4l43QDP1ohmsQhVsGQxkhl3pLUSQDd7INw7x3BpWXRGvWj5ncWuZXg6RKUQlabNWq5ibhPY2PFQA0iawpjSyGDQ/0\&amp;quot; /&amp;gt;
+					&amp;lt;/div&amp;gt;
+					
+					&amp;lt;div class=\&amp;quot;rich_media_content\&amp;quot; id=\&amp;quot;js_content\&amp;quot;&amp;gt;
+						&amp;lt;p&amp;gt;请问：世界上最厉害的运动是什么？&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;答：足球&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;lt;br  /&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;请问：中国最厉害的运动是什么？&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;答：中国足球&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;&amp;lt;br  /&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;p&amp;gt;哪呢。。。。。&amp;lt;/p&amp;gt;
+					&amp;quot;+openidstr+&amp;quot;
+					&amp;lt;/div&amp;gt;
+					
+					&amp;lt;div class=\&amp;quot;rich_media_tool\&amp;quot; id=\&amp;quot;js_toobar\&amp;quot;&amp;gt;
+						&amp;lt;a class=\&amp;quot;media_tool_meta link_primary meta_extra\&amp;quot; href=\&amp;quot;javascript:report_article();\&amp;quot;&amp;gt;举报&amp;lt;/a&amp;gt;
+					&amp;lt;/div&amp;gt;
+					
+				&amp;lt;/div&amp;gt;
+				
+			&amp;lt;/div&amp;gt;
+
+		&amp;lt;/div&amp;gt;
+
+	&amp;lt;/div&amp;gt;
+           
+        
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;&amp;quot;;
+
+
+	return html;
+}
+
+// 百度地图
+function getBaiduMap(location_x,location_y,mylocation) 
+{
+	var html = &amp;quot;&amp;lt;!DOCTYPE html&amp;gt;
+		&amp;lt;html&amp;gt;
+		&amp;lt;head&amp;gt;
+		&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot; /&amp;gt;
+		&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;initial-scale=1.0, user-scalable=no\&amp;quot; /&amp;gt;
+		&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+		&amp;lt;/style&amp;gt;
+		&amp;lt;!--&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?type=quick&amp;v=1.0&amp;ak=bcqnSYjGSOPcmxcDpG8T9nMs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;--&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://api.map.baidu.com/api?v=2.0&amp;ak=bcqnSYjGSOPcmxcDpG8T9nMs\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://developer.baidu.com/map/jsdemo/demo/convertor.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;title&amp;gt;微信地图网页-我的位置&amp;lt;/title&amp;gt;
+		&amp;lt;/head&amp;gt;
+		&amp;lt;body&amp;gt;
+		&amp;lt;div id=\&amp;quot;allmap\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		var mylocation = &amp;apos;&amp;quot;+mylocation+&amp;quot;&amp;apos;;
+		var location_x = &amp;quot;+location_x+&amp;quot;;
+		var location_y = &amp;quot;+location_y+&amp;quot;;
+		// 百度地图API功能
+		var map = new BMap.Map(\&amp;quot;allmap\&amp;quot;);            // 创建Map实例
+		var gpsPoint = new BMap.Point(location_y,location_x);
+		map.centerAndZoom(gpsPoint,16);  //初始化时，即可设置中心点和地图缩放级别。
+		//map.setCenter(\&amp;quot;南宁\&amp;quot;);
+		//map.addControl(new BMap.ZoomControl());          //添加地图缩放控件 v1.0
+		map.addControl(new BMap.NavigationControl());  //添加默认缩放平移控件 v2.0
+		
+		var marker1 = new BMap.Marker(gpsPoint);  // 创建标注
+		map.addOverlay(marker1);              // 将标注添加到地图中		
+		var opts = {
+		  width : 200,     // 信息窗口宽度
+		  height: 80,     // 信息窗口高度
+		  title : \&amp;quot;我的位置\&amp;quot; // 信息窗口标题
+		}
+		//创建信息窗口
+		var infoWindow1 = new BMap.InfoWindow(mylocation,opts);
+		//marker1.openInfoWindow(infoWindow1,opts);
+		marker1.addEventListener(\&amp;quot;click\&amp;quot;, function(){this.openInfoWindow(infoWindow1,opts);});
+		//map.openInfoWindow(infoWindow,point); //开启信息窗口
+		
+//		//创建信息窗口
+//		var infoWindow1 = new BMap.InfoWindow(mylocation);
+//		marker1.addEventListener(\&amp;quot;click\&amp;quot;, function(){this.openInfoWindow(infoWindow1);});
+		
+		setTimeout(function(){
+		    //BMap.Convertor.translate(gpsPoint,0,translateCallback);     //GPS坐标 真实经纬度转成百度坐标
+		    BMap.Convertor.translate(gpsPoint,2,translateCallback);     //谷歌坐标 真实经纬度转成百度坐标
+		}, 2000);
+
+		//坐标转换完之后的回调函数
+		translateCallback = function (point){
+		    var marker2 = new BMap.Marker(point);
+		    map.addOverlay(marker2);
+		    //创建信息窗口
+		    var infoWindow2 = new BMap.InfoWindow(mylocation,opts);
+		    marker2.openInfoWindow(infoWindow2,opts);
+		    marker2.addEventListener(\&amp;quot;click\&amp;quot;, function(){this.openInfoWindow(infoWindow2,opts);});
+		    map.setCenter(point);
+		    //alert(point.lng + &amp;apos;,&amp;apos; + point.lat);
+		}
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	return html;
+
+}
+
+// 谷歌地图
+function getGoogleMap(location_x,location_y,mylocation) 
+{
+	var html = &amp;quot;&amp;lt;!DOCTYPE html&amp;gt;
+		&amp;lt;html&amp;gt;
+		&amp;lt;head&amp;gt;
+		&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot; /&amp;gt;
+		&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;initial-scale=1.0, user-scalable=no\&amp;quot; /&amp;gt;
+		&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;
+		body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;}
+		&amp;lt;/style&amp;gt;
+		&amp;lt;script src=&amp;apos;http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=true_or_false&amp;key=ABQIAAAADEgO6kqjKx2W3NKoYkXzGhTepiFuMo4rdqjr65BYebADdmCbPBSZRe2SjhGp7UEHeh4Eg90T-LJuxw&amp;sensor=true&amp;apos; type=&amp;apos;text/javascript&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;title&amp;gt;微信地图网页-我的位置&amp;lt;/title&amp;gt;
+		&amp;lt;/head&amp;gt;
+		&amp;lt;body&amp;gt;
+		&amp;lt;div id=\&amp;quot;allmap\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		&amp;lt;/body&amp;gt;
+		&amp;lt;/html&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;
+		var mylocation = &amp;apos;&amp;quot;+mylocation+&amp;quot;&amp;apos;;
+		var location_x = &amp;quot;+location_x+&amp;quot;;
+		var location_y = &amp;quot;+location_y+&amp;quot;;
+		// 百度地图API功能
+		var map = new GMap2(document.getElementById(\&amp;quot;allmap\&amp;quot;));          // 创建Map实例
+		if (GBrowserIsCompatible()) {
+		        map.addControl(new GSmallMapControl());
+			map.addControl(new GMapTypeControl());
+			map.setCenter(new GLatLng(location_x,location_y), 15);
+			
+			var latlng = new GLatLng(location_x,location_y);
+			var marker = new GMarker(latlng, {title:mylocation,draggable:false});
+			map.addOverlay(marker);
+			marker.openInfoWindow(mylocatin);
+
+	
+	        }
+		
+
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	return html;
+
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1????</BILID><SUBTYP >0???</SUBTYP><CORPID >0??????</CORPID><CORPNAM >0??????</CORPNAM><LOCID >0??|????</LOCID><LOCNAM >0??|????</LOCNAM><DAT >0????</DAT><CRTUSR >1???</CRTUSR><CRTUSRNAM >0?????</CRTUSRNAM><CRTDAT >0????</CRTDAT><CHKUSR >1???</CHKUSR><CHKUSRNAM >0?????</CHKUSRNAM><CHKDAT >0????</CHKDAT><REFID1 >0????1</REFID1><REFNAM1 >0????1</REFNAM1><REFID2 >0????2</REFID2><REFNAM2 >0????2</REFNAM2><NOTE >0????</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1????</SEQID><ITMID >1????</ITMID><ITMNAM >0????</ITMNAM><ITMSPC >0??</ITMSPC><UNIT >0????</UNIT><PRICE >0??</PRICE><QTY >0??</QTY><TAXTYP >0????</TAXTYP><NOTAXMNY >0?????</NOTAXMNY><TAXMNY >0??</TAXMNY><MNY >0????</MNY><REFID1 >0????1</REFID1><REFNAM1 >0????1</REFNAM1><REFID2 >0????2</REFID2><REFNAM2 >0????2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

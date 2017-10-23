@@ -1,0 +1,558 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >html_test</MWID><NAME >html_test</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >html_test.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >TOPICID
+</ID><NAME >主题id</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >TOPICID
+</C13></ROW>
+<ROW num="1" ><ID >SYTID</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_SYTID]</DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >SYTID</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var tag = new JavaPackage(&amp;quot;com.xlsgrid.net.tag&amp;quot;);
+var xmldsform = new tag.XmlDSForm();
+var EAfunc = new pubpack.EAFunc();
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+  var ret = &amp;quot;&amp;lt;script language = &amp;apos;javascript&amp;apos;&amp;gt;
+	    	    	function showInfo(str)
+	    	    	{
+	    	    		for(var i = 0;i &amp;lt;  6;i ++)
+	    	    			document.getElementById(&amp;apos;topic&amp;apos;+i).style.display = &amp;apos;none&amp;apos;;
+	    	    		document.getElementById(str).style.display = &amp;apos;block&amp;apos;;
+	    	    	}
+	    	    &amp;lt;/script&amp;gt;
+	    	   &amp;lt;body background=&amp;apos;xlsgrid/images/bk.gif&amp;apos;&amp;gt;&amp;lt;table&amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td  align = &amp;apos;left&amp;apos; style=&amp;apos;font-size:13px&amp;apos;  style=&amp;apos;cursor:pointer;&amp;apos; onclick=&amp;apos;showInfo(&amp;apos;topic0&amp;apos;)&amp;apos;&amp;gt;按日期查询&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr id = topic0 
+			    &amp;gt;&amp;lt;td&amp;gt;&amp;lt;form name = f0 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=DIMREP_PC&amp;apos; Target=&amp;apos;_right&amp;apos;&amp;gt; 
+&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main-right.css&amp;apos;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; bgcolor=&amp;apos;000000&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;table align=&amp;apos;center&amp;apos; border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=1 cellpadding=4 class=&amp;apos;EAGRID-TABLE&amp;apos; &amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;开始日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_STADAT0() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f0.STADAT0.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=STADAT0 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_STADAT0();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;截止日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_ENDDAT0() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f0.ENDDAT0.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=ENDDAT0 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_ENDDAT0();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品编号：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;商品编号0&amp;apos; id=&amp;apos;商品编号0&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;商品编号0&amp;apos;,&amp;apos;V_ITEMnam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;商品编号0&amp;apos;,&amp;apos;商品编号0nam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;商品编号0nam&amp;apos; id=&amp;apos;商品编号0nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;渠道：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;KA0&amp;apos; id=&amp;apos;KA0&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;KA0&amp;apos;,&amp;apos;V_KAnam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;KA0&amp;apos;,&amp;apos;KA0nam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;KA0nam&amp;apos; id=&amp;apos;KA0nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品系列：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=text name=商品系列0 size=20 value=&amp;apos;&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;/TABLE&amp;gt;
+
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = SX1&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = XLSGRID&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos;查询&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;!--
+	          		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos;查询&amp;apos; onclick = &amp;apos;window.open(&amp;apos;show.sp?grdid=DIMREP_PC&amp;topic=SX1&amp;sytid=XLSGRID&amp;apos;,&amp;apos;_right&amp;apos;);&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+	          		    --&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td  align = &amp;apos;left&amp;apos; style=&amp;apos;font-size:13px&amp;apos;  style=&amp;apos;cursor:pointer;&amp;apos; onclick=&amp;apos;showInfo(&amp;apos;topic1&amp;apos;)&amp;apos;&amp;gt;销售按商品统计&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr id = topic1 
+			     style=&amp;apos;display:none;&amp;apos;&amp;gt;&amp;lt;td&amp;gt;&amp;lt;form name = f2 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=DIMREP_PC&amp;apos; Target=&amp;apos;_right&amp;apos;&amp;gt; 
+&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main-right.css&amp;apos;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; bgcolor=&amp;apos;000000&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;table align=&amp;apos;center&amp;apos; border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=1 cellpadding=4 class=&amp;apos;EAGRID-TABLE&amp;apos; &amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;开始日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_STADAT1() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f2.STADAT1.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=STADAT1 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_STADAT1();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;截止日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_ENDDAT1() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f2.ENDDAT1.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=ENDDAT1 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_ENDDAT1();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品编号：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;商品编号1&amp;apos; id=&amp;apos;商品编号1&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;商品编号1&amp;apos;,&amp;apos;V_ITEMnam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;商品编号1&amp;apos;,&amp;apos;商品编号1nam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;商品编号1nam&amp;apos; id=&amp;apos;商品编号1nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;渠道：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;KA1&amp;apos; id=&amp;apos;KA1&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;KA1&amp;apos;,&amp;apos;V_KAnam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;KA1&amp;apos;,&amp;apos;KA1nam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;KA1nam&amp;apos; id=&amp;apos;KA1nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品系列：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=text name=商品系列1 size=20 value=&amp;apos;&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;/TABLE&amp;gt;
+
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = SX2&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = XLSGRID&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos;查询&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;!--
+	          		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos;查询&amp;apos; onclick = &amp;apos;window.open(&amp;apos;show.sp?grdid=DIMREP_PC&amp;topic=SX1&amp;sytid=XLSGRID&amp;apos;,&amp;apos;_right&amp;apos;);&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+	          		    --&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td  align = &amp;apos;left&amp;apos; style=&amp;apos;font-size:13px&amp;apos;  style=&amp;apos;cursor:pointer;&amp;apos; onclick=&amp;apos;showInfo(&amp;apos;topic2&amp;apos;)&amp;apos;&amp;gt;销售按业务组统计&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr id = topic2 
+			     style=&amp;apos;display:none;&amp;apos;&amp;gt;&amp;lt;td&amp;gt;&amp;lt;form name = f2 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=DIMREP_PC&amp;apos; Target=&amp;apos;_right&amp;apos;&amp;gt; 
+&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main-right.css&amp;apos;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; bgcolor=&amp;apos;000000&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;table align=&amp;apos;center&amp;apos; border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=1 cellpadding=4 class=&amp;apos;EAGRID-TABLE&amp;apos; &amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;开始日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_STADAT2() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f2.STADAT2.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=STADAT2 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_STADAT2();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;截止日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_ENDDAT2() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f2.ENDDAT2.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=ENDDAT2 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_ENDDAT2();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品编号：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;商品编号2&amp;apos; id=&amp;apos;商品编号2&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;商品编号2&amp;apos;,&amp;apos;V_ITEMnam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;商品编号2&amp;apos;,&amp;apos;商品编号2nam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;商品编号2nam&amp;apos; id=&amp;apos;商品编号2nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;渠道：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;KA2&amp;apos; id=&amp;apos;KA2&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;KA2&amp;apos;,&amp;apos;V_KAnam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;KA2&amp;apos;,&amp;apos;KA2nam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;KA2nam&amp;apos; id=&amp;apos;KA2nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品系列：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=text name=商品系列2 size=20 value=&amp;apos;&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;/TABLE&amp;gt;
+
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = SX4&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = XLSGRID&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos;查询&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;!--
+	          		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos;查询&amp;apos; onclick = &amp;apos;window.open(&amp;apos;show.sp?grdid=DIMREP_PC&amp;topic=SX1&amp;sytid=XLSGRID&amp;apos;,&amp;apos;_right&amp;apos;);&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+	          		    --&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td  align = &amp;apos;left&amp;apos; style=&amp;apos;font-size:13px&amp;apos;  style=&amp;apos;cursor:pointer;&amp;apos; onclick=&amp;apos;showInfo(&amp;apos;topic3&amp;apos;)&amp;apos;&amp;gt;销售按销售类型统计&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr id = topic3 
+			     style=&amp;apos;display:none;&amp;apos;&amp;gt;&amp;lt;td&amp;gt;&amp;lt;form name = f3 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=DIMREP_PC&amp;apos; Target=&amp;apos;_right&amp;apos;&amp;gt; 
+&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main-right.css&amp;apos;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; bgcolor=&amp;apos;000000&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;table align=&amp;apos;center&amp;apos; border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=1 cellpadding=4 class=&amp;apos;EAGRID-TABLE&amp;apos; &amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;开始日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_STADAT3() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f3.STADAT3.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=STADAT3 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_STADAT3();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;截止日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_ENDDAT3() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f3.ENDDAT3.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=ENDDAT3 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_ENDDAT3();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品编号：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;商品编号3&amp;apos; id=&amp;apos;商品编号3&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;商品编号3&amp;apos;,&amp;apos;V_ITEMnam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;商品编号3&amp;apos;,&amp;apos;商品编号3nam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;商品编号3nam&amp;apos; id=&amp;apos;商品编号3nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;渠道：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;KA3&amp;apos; id=&amp;apos;KA3&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;KA3&amp;apos;,&amp;apos;V_KAnam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;KA3&amp;apos;,&amp;apos;KA3nam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;KA3nam&amp;apos; id=&amp;apos;KA3nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品系列：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=text name=商品系列3 size=20 value=&amp;apos;&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;/TABLE&amp;gt;
+
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = SX5&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = XLSGRID&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos;查询&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;!--
+	          		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos;查询&amp;apos; onclick = &amp;apos;window.open(&amp;apos;show.sp?grdid=DIMREP_PC&amp;topic=SX1&amp;sytid=XLSGRID&amp;apos;,&amp;apos;_right&amp;apos;);&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+	          		    --&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td  align = &amp;apos;left&amp;apos; style=&amp;apos;font-size:13px&amp;apos;  style=&amp;apos;cursor:pointer;&amp;apos; onclick=&amp;apos;showInfo(&amp;apos;topic4&amp;apos;)&amp;apos;&amp;gt;销售按条线中心统计&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr id = topic4 
+			     style=&amp;apos;display:none;&amp;apos;&amp;gt;&amp;lt;td&amp;gt;&amp;lt;form name = f4 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=DIMREP_PC&amp;apos; Target=&amp;apos;_right&amp;apos;&amp;gt; 
+&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main-right.css&amp;apos;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; bgcolor=&amp;apos;000000&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;table align=&amp;apos;center&amp;apos; border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=1 cellpadding=4 class=&amp;apos;EAGRID-TABLE&amp;apos; &amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;开始日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_STADAT4() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f4.STADAT4.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=STADAT4 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_STADAT4();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;截止日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_ENDDAT4() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f4.ENDDAT4.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=ENDDAT4 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_ENDDAT4();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品编号：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;商品编号4&amp;apos; id=&amp;apos;商品编号4&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;商品编号4&amp;apos;,&amp;apos;V_ITEMnam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;商品编号4&amp;apos;,&amp;apos;商品编号4nam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;商品编号4nam&amp;apos; id=&amp;apos;商品编号4nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;渠道：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;KA4&amp;apos; id=&amp;apos;KA4&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;KA4&amp;apos;,&amp;apos;V_KAnam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;KA4&amp;apos;,&amp;apos;KA4nam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;KA4nam&amp;apos; id=&amp;apos;KA4nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品系列：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=text name=商品系列4 size=20 value=&amp;apos;&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;/TABLE&amp;gt;
+
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = SX6&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = XLSGRID&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos;查询&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;!--
+	          		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos;查询&amp;apos; onclick = &amp;apos;window.open(&amp;apos;show.sp?grdid=DIMREP_PC&amp;topic=SX1&amp;sytid=XLSGRID&amp;apos;,&amp;apos;_right&amp;apos;);&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+	          		    --&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td  align = &amp;apos;left&amp;apos; style=&amp;apos;font-size:13px&amp;apos;  style=&amp;apos;cursor:pointer;&amp;apos; onclick=&amp;apos;showInfo(&amp;apos;topic5&amp;apos;)&amp;apos;&amp;gt;销售按系列统计&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr id = topic5 
+			     style=&amp;apos;display:none;&amp;apos;&amp;gt;&amp;lt;td&amp;gt;&amp;lt;form name = f5 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=DIMREP_PC&amp;apos; Target=&amp;apos;_right&amp;apos;&amp;gt; 
+&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main-right.css&amp;apos;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; bgcolor=&amp;apos;000000&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+&amp;lt;table align=&amp;apos;center&amp;apos; border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=1 cellpadding=4 class=&amp;apos;EAGRID-TABLE&amp;apos; &amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;开始日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_STADAT5() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f5.STADAT5.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=STADAT5 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_STADAT5();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;截止日期：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;&amp;lt;SCRIPT LANGUAGE=javascript&amp;gt;
+&amp;lt;!--
+function sel_ENDDAT5() {
+  var ret   = window.showModalDialog( &amp;apos;/xlsgrid/xlsgrid/jsp/pages/calendardlg.htm&amp;apos;,&amp;apos;&amp;apos; , &amp;apos;dialogwidth:150pt;dialogheight:150pt&amp;apos; ); 
+  if ( ret != null &amp;&amp;  ret != &amp;apos;&amp;apos; ) {
+    f5.ENDDAT5.value = ret ; 
+  }
+}
+//--&amp;gt;
+&amp;lt;/SCRIPT&amp;gt;
+&amp;lt;input type=text name=ENDDAT5 size=20 value=&amp;apos;2010-11-18&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img  src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; onclick=&amp;apos;javascript:sel_ENDDAT5();&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;点击选择日期&amp;apos;&amp;apos;&amp;gt;
+&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品编号：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;商品编号5&amp;apos; id=&amp;apos;商品编号5&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;商品编号5&amp;apos;,&amp;apos;V_ITEMnam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;商品编号5&amp;apos;,&amp;apos;商品编号5nam&amp;apos;,&amp;apos;V_ITEM&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;商品编号5nam&amp;apos; id=&amp;apos;商品编号5nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;渠道：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=&amp;apos;text&amp;apos; name=&amp;apos;KA5&amp;apos; id=&amp;apos;KA5&amp;apos; onchange=&amp;apos;javacript:SELECTID_ONCHANGE(&amp;apos;KA5&amp;apos;,&amp;apos;V_KAnam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;);&amp;apos; size=20 value=&amp;apos;&amp;apos;  style=&amp;apos;width:90;&amp;apos;/&amp;gt;
+&amp;lt;img onclick=&amp;apos;SELECTID_POPWIN(&amp;apos;KA5&amp;apos;,&amp;apos;KA5nam&amp;apos;,&amp;apos;V_KA&amp;apos;,&amp;apos;&amp;apos;,1,&amp;apos;xlsgrid-zlt369n&amp;apos;,&amp;apos;80&amp;apos;,&amp;apos;/xlsgrid&amp;apos;,&amp;apos;&amp;apos;)&amp;apos; onmouseover=&amp;apos; this.style.cursor=&amp;apos;hand&amp;apos;; title=&amp;apos;选择&amp;apos;&amp;apos; src=&amp;apos;/xlsgrid/xlsgrid/images/forderopen.gif&amp;apos; &amp;gt;
+&amp;lt;span  name=&amp;apos;KA5nam&amp;apos; id=&amp;apos;KA5nam&amp;apos; /&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;TR  class=&amp;apos;EAGRID-TR&amp;apos;&amp;gt;
+&amp;lt;td  class=&amp;apos;EARID-TD&amp;apos; align=right&amp;gt;商品系列：&amp;lt;/td&amp;gt;
+&amp;lt;td class=&amp;apos;EARID-TD&amp;apos; align=left &amp;gt;
+&amp;lt;input type=text name=商品系列5 size=20 value=&amp;apos;&amp;apos; style=&amp;apos;width:90;&amp;apos;/&amp;gt;&amp;nbsp;&amp;nbsp;
+&amp;lt;/td&amp;gt;
+&amp;lt;/TABLE&amp;gt;
+
+&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/TABLE&amp;gt;
+&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = SX3&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = XLSGRID&amp;gt;
+	            		    &amp;lt;/td&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos;查询&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;!--
+	          		    &amp;lt;td align = &amp;apos;right&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos;查询&amp;apos; onclick = &amp;apos;window.open(&amp;apos;show.sp?grdid=DIMREP_PC&amp;topic=SX1&amp;sytid=XLSGRID&amp;apos;,&amp;apos;_right&amp;apos;);&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;
+	          		    --&amp;gt;
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt; 
+	   	  &amp;lt;/body&amp;gt;&amp;quot;;
+	   	   return ret ;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

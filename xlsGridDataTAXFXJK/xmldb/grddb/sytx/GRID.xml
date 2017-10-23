@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >GRID</MWID><NAME >中间件详细设计文档</NAME><FILE >GRID.zxg</FILE><syt >x</syt><WIDTHMOD >1</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><FUNCJS ></FUNCJS><NAME >保存</NAME><IMG ></IMG><IMGMOUSE ></IMGMOUSE><TIP ></TIP><C7 ></C7></ROW>
+<ROW num="1" ><ID >viewDoc</ID><FUNCJS ></FUNCJS><NAME >预览</NAME><IMG ></IMG><IMGMOUSE ></IMGMOUSE><TIP ></TIP><C7 ></C7></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var G_SHEETHELP = 6;
+var G_OPENSHEET = -1;
+function _thisOnpost_loaddata()
+{
+	try{G_OPENSHEET=opensheet;}catch(e){}
+
+
+	
+	for ( var s = 0;s&amp;lt;=5;s++) {
+		var url = &amp;quot;DownloadFromXlsGridData.sp?filename=xmldb/grddb/syt&amp;quot;+ssytid+&amp;quot;/doc/&amp;quot;+sgrdid+s+&amp;quot;.html&amp;quot;;
+		var sss = _this.HttpCall(url); 
+		_this.SetToCodeEditor(&amp;quot;rtf_&amp;quot;+s,s,-1,-1,sss,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+//		_this.LoadToCodeEditor(&amp;quot;rtf_&amp;quot;+s,s,-1,-1,url,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+	var url = &amp;quot;DownloadFromXlsGridData.sp?filename=xmldb/grddb/syt&amp;quot;+ssytid+&amp;quot;/doc/&amp;quot;+sgrdid+&amp;quot;HELP&amp;quot;+&amp;quot;.doc&amp;quot;;
+	var docxml = _this.HttpCall(url); 
+
+	_this.SetSheetName( G_SHEETHELP,&amp;quot;帮助文档&amp;quot;);
+	_this.SetToSVGForm(&amp;quot;&amp;quot;,G_SHEETHELP,7,3,&amp;quot;&amp;quot;);
+	_this.SetCellDocumentType( G_SHEETHELP,7,3,&amp;quot;Word.Document&amp;quot;);
+	if(docxml!=&amp;quot;&amp;quot;){
+		_this.SetCellText(G_SHEETHELP,7,3,docxml);
+		_this.SetCellText(G_SHEETHELP,7,4,&amp;quot;双击进行修改&amp;quot;);
+	}
+	else
+		_this.SetCellText(G_SHEETHELP,7,4,&amp;quot;双击进行新增和编辑&amp;quot;);
+
+	_this.SetToFileSelectBox( &amp;quot;&amp;quot;,G_SHEETHELP,9,3);	
+	/*
+	if(G_OPENSHEET!=-1 ){
+		alert ( G_OPENSHEET);
+
+		_this.SetCurrentSheet(G_OPENSHEET);
+		
+		_this.ShowTabBar(1);
+		_this.SetRedraw(1);
+	}
+        else */
+        _this.ShowTabBar(1);
+}
+// Excel编辑后
+function _thisOnShellExecuteFileModify(filepath,classname)
+{
+	
+	if(classname !=&amp;quot;OpusApp&amp;quot;){
+		_this.SetRedraw(0);
+		var s =_this.GetCurrentSheet();
+		_this.LoadToCodeEditor(&amp;quot;rtf_&amp;quot;+s,s,-1,-1,filepath,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+		_this.SetRedraw(1);
+	}
+}
+
+function save(){
+	var cnt = 0 ;
+	for ( var s = 0;s&amp;lt;=5;s++) {
+		var str = _this.GetCellText(s,-1,-1);
+
+		if ( str.trim()!= &amp;quot;&amp;quot; ) {
+			var sdir = &amp;quot;xmldb/grddb/syt&amp;quot;+ssytid+&amp;quot;/doc/&amp;quot;;
+			var sfile = &amp;quot;&amp;quot;+sgrdid+s+&amp;quot;.html&amp;quot;;
+			
+			var filename = _this.SaveTextFileToTempDir(str);
+			// 上传文件到xlsGridData
+			var saveUrl = &amp;quot;UploadToXlsGridData.sp&amp;quot;;
+			_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+			_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,sdir  ,0);	//远程保存的目录
+			_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,sfile ,0);//注意这里只能是文件名，用于远程保存的文件名
+			_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+			var ret=_this.SendHttpRequest(); 
+			_this.CloseHttpRequest();
+			var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+			var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+			var str = ret.substring(loc1+7,loc2);
+			cnt ++;
+		}
+			
+	}
+	//提交Word.document
+	if(1&amp;gt;0){
+		var sdir = &amp;quot;xmldb/grddb/syt&amp;quot;+ssytid+&amp;quot;/doc/&amp;quot;;
+		var sfile = &amp;quot;&amp;quot;+sgrdid+&amp;quot;HELP&amp;quot;+&amp;quot;.doc&amp;quot;;
+		var str = _this.GetCellText(G_SHEETHELP,7,3);
+		
+		if(str!=&amp;quot;&amp;quot;){
+			var filename = _this.SaveTextFileToTempDir(str);
+			// 上传文件到xlsGridData
+			var saveUrl = &amp;quot;UploadToXlsGridData.sp&amp;quot;;
+			_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+			_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,sdir  ,0);	//远程保存的目录
+			_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,sfile ,0);//注意这里只能是文件名，用于远程保存的文件名
+			_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+			var ret=_this.SendHttpRequest(); 
+			_this.CloseHttpRequest();
+			var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+			var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+			var str = ret.substring(loc1+7,loc2);
+			cnt ++;
+		}
+	}
+	if(1&amp;gt;0){
+		var sdir = &amp;quot;xmldb/grddb/syt&amp;quot;+ssytid+&amp;quot;/doc/&amp;quot;;
+		var sfile = &amp;quot;&amp;quot;+sgrdid+&amp;quot;&amp;quot;+&amp;quot;.swf&amp;quot;;
+		var str = _this.GetCellText(G_SHEETHELP,9,3);
+		if(str!=&amp;quot;&amp;quot; ){
+			var filename = _this.SaveTextFileToTempDir(str);
+			// 上传文件到xlsGridData
+			var saveUrl = &amp;quot;UploadToXlsGridData.sp&amp;quot;;
+			_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+			_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+			_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,sdir  ,0);	//远程保存的目录
+			_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,sfile ,0);//注意这里只能是文件名，用于远程保存的文件名
+			_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+			var ret=_this.SendHttpRequest(); 
+			_this.CloseHttpRequest();
+			var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+			var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+			var str = ret.substring(loc1+7,loc2);
+			cnt ++;
+		}
+	}
+	
+
+	if ( cnt &amp;gt; 0 ) alert ( &amp;quot;成功提交了&amp;quot;+cnt+&amp;quot;个文档&amp;quot; );
+	else alert ( &amp;quot;没有文档可以提交&amp;quot; );
+}
+
+//预览
+function viewDoc()
+{
+	window.open(&amp;quot;xlsgrid/jsp/pages/previewDoc.jsp?sytid=&amp;quot;+ssytid+&amp;quot;&amp;mwid=&amp;quot;+sgrdid);
+}
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if(sheet == G_SHEETHELP &amp;&amp; row == 7&amp;&amp; col == 3 ) {
+		_this.SetAttribe(&amp;quot;SHEET_6&amp;quot;,&amp;quot;WORD_LISTENEDIT_PAGE_WIDTH&amp;quot;,&amp;quot;11906&amp;quot;);// 监听的时候固定的WORD的纸张宽度
+		_this.SetAttribe(&amp;quot;SHEET_6&amp;quot;,&amp;quot;WORD_LISTENEDIT_PAGE_HEIGHT&amp;quot;,&amp;quot;16838&amp;quot;);// 监听的时候固定的WORD的纸张高度
+		_this.SetCellText(G_SHEETHELP,7,4,&amp;quot;双击进行修改&amp;quot;);
+
+		_this.ListenEditByDocumentType(sheet,row,col);
+	
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >querymwname</ID><NAME ></NAME><DATDSC >select name from sysmw where syt=&amp;apos;[%thissytid]&amp;apos; and id=&amp;apos;[%mwid]&amp;apos;</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

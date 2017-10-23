@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >JM_BillEnter</MWID><NAME >报单提交页面</NAME><NOTE ></NOTE><NOACCNAME >1</NOACCNAME><FILE >JM_BillEnter.zxg</FILE><SCENE >10</SCENE><FIXED >3,3</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD >9</HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><ACTTYP >1</ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >0</BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >CORPID</ID><NAME >门店编号</NAME><NOTNULL ></NOTNULL><KEYVAL >A3_CUST</KEYVAL><INPCTL >idlist</INPCTL><DISPORD >0</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >CORPID</C14><C15 >CORPID</C15><C16 >CORPID</C16></ROW>
+<ROW num="1" ><ID >ITMTYP</ID><NAME >商品分类</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_ITEMCLASS</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >ITMTYP</C13><C14 >ITMTYP</C14><C15 ></C15><C16 >ITMTYP</C16></ROW>
+<ROW num="2" ><ID >SOID</ID><NAME >订单号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >SOID</C14><C15 ></C15><C16 >SOID</C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >5</NROW><NCOL >6</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS >1</ISCROSS><HROW >1</HROW><HCOLS >itmguid,cust,商品,单位</HCOLS><ROWORDER ></ROWORDER><VCOLS >sctyp</VCOLS><VCOLSQL >select sc.name nam from a3_sctype sc,v_a3_ka ka,a3_cust c
+where sc.org = ka.org
+and sc.defid = ka.corptyp
+and c.refguid = ka.guid
+and c.id = &amp;apos;[%CORPID]&amp;apos;
+order by sc.id</VCOLSQL><VALUECOL >qty</VALUECOL><C20 >0,1,0</C20><C21 >0,1,0</C21><C22 >0,2,0</C22><C23 >0,2,0</C23><C24 >0,2,0</C24></ROW>
+<ROW num="1" ><ID >0,1,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:CORPNAM,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >0,1,2</C24></ROW>
+<ROW num="2" ><ID >0,1,4</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:ITMTYP,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >0,1,4</C24></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var web = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+function Response()
+{
+//	request.setCharacterEncoding(&amp;quot;UTF-8&amp;quot;);
+	var func = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;func&amp;quot;),&amp;quot;&amp;quot;);
+	var data = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;_this&amp;quot;),&amp;quot;&amp;quot;);
+	var corpid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;CORPID&amp;quot;),&amp;quot;&amp;quot;);
+	var soid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;SOID&amp;quot;),&amp;quot;&amp;quot;);
+//	var subtyp = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;SUBTYP&amp;quot;),&amp;quot;&amp;quot;);
+	var usr = web.EASession.GetLoginInfo(request);
+	var usrid = usr.getUsrid();
+	var accid = usr.getAccid();
+	var sytid = usr.getSytid();
+	var orgid = usr.getOrgid();
+	var db = null;
+	var xml = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	var sql2 = &amp;quot;&amp;quot;;
+	var sql3 = &amp;quot;&amp;quot;;
+	var sql4 = &amp;quot;&amp;quot;;
+	var sql5 = &amp;quot;&amp;quot;;
+	var msg = &amp;quot;&amp;quot;;
+	var cnt = 0;
+	var cnt2 = 0;
+	var out = response.getOutputStream();
+	response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+	try
+	{
+		db = new pubpack.EADatabase();
+		if(func==&amp;quot;save&amp;quot;)
+		{		
+//			out.println(java.net.URLDecoder.decode(data));	
+//			return ;
+			xml = pubpack.EAJ2meUtil.getMainCellRangeXml(data);
+//			out.println(corpid);
+//			return;
+			var row = xml.getRowCount()-1;
+			var col = xml.getColumnCount();
+			for(var i = 0;i&amp;lt;row;i++)
+			{
+				var item = xml.get(i+1,1);
+				var cust = xml.get(i+1,2);
+				for(var j = 5;j&amp;lt;col;j++)
+				{
+//					var sctyp = xml.get(0,j);
+//					out.println(&amp;quot;sctype&amp;quot;+sctyp);
+					var scname = xml.get(0,j); //取得标题行内容
+					var qty = 1*xml.get(i+1,j); //取出QTY并转化成数字
+					//根据组织号和标题行内容取出销售类型对应的ID
+					var sctyp = &amp;quot;1&amp;quot;;
+					sql2 = &amp;quot;select sc.id from A3_SCTYPE sc,a3_cust c,v_a3_ka ka 
+						where sc.org = c.org and sc.name=&amp;apos;&amp;quot;+scname+&amp;quot;&amp;apos; 
+						and sc.defid = ka.corptyp 
+						and ka.guid = c.refguid 
+						and c.id = &amp;apos;&amp;quot;+corpid+&amp;quot;&amp;apos;&amp;quot;; 
+//					sql2 = &amp;quot;select id from A3_SCTYPE where org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; and name=&amp;apos;&amp;quot;+scname+&amp;quot;&amp;apos;&amp;quot;;
+					var sctyp = db.GetSQL(sql2);
+					//根据组织号，ITEM，CUST，USRID，SUBTYP判断A3_CURORD中有无记录
+					sql3 = &amp;quot;select guid from A3_CURORD where org=&amp;apos;&amp;quot;+orgid
+					+&amp;quot;&amp;apos; and cust=&amp;apos;&amp;quot;+cust+&amp;quot;&amp;apos; and item=&amp;apos;&amp;quot;+item+&amp;quot;&amp;apos; and crtusr=&amp;apos;&amp;quot;+usrid
+					+&amp;quot;&amp;apos; and sctyp=&amp;apos;&amp;quot;+sctyp+&amp;quot;&amp;apos;&amp;quot;;
+					var uxml = db.GetXMLSQL(sql3);
+					if(uxml.getRowCount()&amp;gt;0)
+					{
+						var uguid = uxml.getStringAt(0,&amp;quot;guid&amp;quot;); //如果有取出对应的GUID
+//						out.println(uguid);
+						if(uguid.length()&amp;gt;0&amp;&amp;qty==&amp;quot;0&amp;quot;)//如果存在记录但是QTY为0则删除记录
+						{
+//							out.println(&amp;quot;进入删除！&amp;quot;);
+//							sql4 = &amp;quot;delete from A3_CURORD where guid =&amp;apos;&amp;quot;+uguid+&amp;quot;&amp;apos;&amp;quot;;
+//							cnt = db.ExcecutSQL(sql4);
+//							cnt2++;
+						}
+						else if(uguid.length()&amp;gt;0)//记录存在则更新记录
+						{
+//							out.println(&amp;quot;进入更新！&amp;quot;);
+							sql5 = &amp;quot;update A3_CURORD set qty=&amp;quot;+qty+&amp;quot; where guid=&amp;apos;&amp;quot;+uguid+&amp;quot;&amp;apos;&amp;quot;;
+							cnt = db.ExcecutSQL(sql5);
+							cnt2++;
+						}
+					}
+					else
+					{
+						if(qty&amp;gt;0) //如果没有记录并且QTY大于0则插入记录
+						{
+//							out.println(&amp;quot;进入插入！&amp;quot;);
+							sql = &amp;quot;insert into A3_CURORD(org,acc,qty,item,cust,crtusr,sctyp,corpsoid) &amp;quot;
+							+&amp;quot;values(&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+accid+&amp;quot;&amp;apos;,abs(&amp;quot;+qty+&amp;quot;),&amp;apos;&amp;quot;+item+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+cust+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;
+							+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+sctyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+soid+&amp;quot;&amp;apos;)&amp;quot;;
+							cnt = db.ExcecutSQL(sql);
+							cnt2++;
+						}
+					}
+				}
+			}
+			db.Commit();
+			var arrHreftxt = new Array(&amp;quot;返回上一页&amp;quot;,&amp;quot;返回客户列表&amp;quot;,&amp;quot;返回主页&amp;quot;,&amp;quot;重新登录&amp;quot;);
+               		var arrHref = new Array(&amp;quot;show.sp?grdid=JM_BillEnter&amp;CORPID=&amp;quot;+corpid+&amp;quot;&amp;SOID=&amp;quot;+soid+&amp;quot;&amp;ITMTYP=&amp;quot;,&amp;quot;show.sp?grdid=JM_CORPList&amp;quot;,&amp;quot;../j2memydesktop.jsp&amp;quot;,&amp;quot;../j2melogin.jsp&amp;quot;);
+               		var ret = pubpack.EAJ2meUtil.returnPage(&amp;quot;成功操作了:&amp;quot;+cnt2+&amp;quot;条记录！&amp;quot;,arrHreftxt,arrHref);
+               		out.println(ret);
+//			out.println(&amp;quot;成功操作了:&amp;quot;+cnt2+&amp;quot;条记录！&amp;quot;);
+		}
+	}
+	catch ( ee )
+	{
+		db.Rollback();
+		out.println(ee.toString());
+	}
+	finally
+	{
+		if (db!=null) db.Close();
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select a.itmguid,a.cust,a.商品,a.单位,a.sctyp,cu.qty as qty 
+from 
+(select i.guid itmguid,i.id itmid,c.guid cust,i.shtnam 商品,i.unit 单位,s.id sctypid,s.name sctyp
+From a3_kaitem ct,a3_cust c,a3_item i,A3_Sctype s,v_a3_ka ka
+where ct.item = i.guid
+and ct.ka = c.refguid
+and ct.ka = ka.guid
+and c.id = &amp;apos;[%CORPID]&amp;apos;
+and s.defid = ka.corptyp
+and i.refid = &amp;apos;[%ITMTYP]&amp;apos;
+and i.useflg = &amp;apos;1&amp;apos;
+and ct.useflg = &amp;apos;1&amp;apos;) a,a3_curord cu
+where cu.sctyp(+)= a.sctypid
+and cu.item(+) = a.itmguid
+and cu.cust(+)= a.cust
+order by a.itmid,a.sctyp</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+<ROW num="1" ><ID >CORPNAM</ID><NAME ></NAME><DATDSC >select name from A3_CUST where id = &amp;apos;[%CORPID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >CORPNAM</C8></ROW>
+<ROW num="2" ><ID >ITMTYP</ID><NAME ></NAME><DATDSC >select name from V_ITEMCLASS where id = &amp;apos;[%ITMTYP]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >ITMTYP</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

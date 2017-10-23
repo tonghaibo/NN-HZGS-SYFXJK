@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>ACCITMDBEDIT</MWID><NAME>财务科目数据维护</NAME><NOTE></NOTE><FILE>ACCITMDBEDIT.zxg</FILE><FIXED></FIXED><CATTYP>02</CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+
+function _thisOnpost_loaddata(sheet)
+{
+       if( typeof order==&amp;quot;undefined&amp;quot;)
+         order = &amp;quot; and org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;&amp;quot;;
+       setButton();
+       // 构造3个 SQL
+       // 查询用户数据表记录
+       selectSQL = &amp;quot;select GUID,REFID as 上级科目编号, ID as 科目编号,NAME as 科目名称,NOTE as 备注,DEFWAY as 默认借贷方向,&amp;quot;+
+                   &amp;quot;ENDFLG as 末级标志 &amp;quot;+
+                   &amp;quot;from ACCITM where org is null or org=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;;
+       //新增用户数据表记录
+       insertSQL = &amp;quot;INSERT INTO ACCITM ( GUID,REFID,ID,NAME,NOTE,DEFWAY,ENDFLG,ORG &amp;quot;+
+                   &amp;quot; ) values( sys_guid(),?,?,?,?,?,?,&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; )&amp;quot;;
+       // 修改用户数据表记录
+       updateSQL = &amp;quot;UPDATE ACCITM SET REFID =?, ID=?,NAME=?,NOTE=?,DEFWAY=?, &amp;quot;+
+                   &amp;quot;ENDFLG=? &amp;quot;+
+                   &amp;quot;where guid=?&amp;quot;;
+       //删除用户数据表记录
+       deleteSQL = &amp;quot;delete ACCITM where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+function f_dbeditpostloaddata(){
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+          var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ACCTYP&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ENDFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+             {
+                  _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid0);
+                   _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,8,listid1);
+             }
+      if(!!codeid)            //避免分页的时候codeid丢失  ,两个“非“运算符结合使用，可保证(!!codeid)为布尔类型 
+        parent.codeid = codeid;
+      codeid = parent.codeid;
+       
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+  if(col==3)
+  {
+    var parent=codeid ;//_this.GetCellText(sheet,row,3);
+    var l=parent.length;
+    var a = newvalue.substr(1,l);
+    if(a!=parent)
+      _this.SetCellText(sheet,row,col,parent+newvalue);
+  }
+  
+}
+
+function f_dbeditafternewrow(sheet,row)
+{
+  row0=_this.GetMainCellRangeRow1(sheet);
+  row1=_this.GetMainCellRangeRow2(sheet);
+  if(row&amp;gt;row0 &amp;&amp; row &amp;lt;=row1)
+  {
+    _this.SetCellText(sheet,row,3,_this.GetCellText(sheet,row0,3));
+    _this.SetCellText(sheet,row,7,_this.GetCellText(sheet,row0,7));
+    _this.SetCellText(sheet,row,8,_this.GetCellText(sheet,row0,8));
+    _this.SetFocusCell(sheet,row,3);
+  }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

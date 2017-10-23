@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >CheckBills</MWID><NAME >批量操作单据</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CheckBills.zxg</FILE><FIXED >1,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >1</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >CHECK</ID><NAME >批量审核</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 >Save</C7><C8 >Save</C8><C9 >Save</C9><C10 >Save</C10><C11 >Save</C11><C12 >CHECK</C12></ROW>
+<ROW num="1" ><ID >UNCHECK</ID><NAME >批量弃审</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >BILTYP</ID><NAME >单据类型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >idlist</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >BILTYP</C18><C19 >BILTYP</C19><C20 >BILTYP</C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >BILTYP</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >BILTYP</C28><C29 >BILTYP</C29><C30 ></C30><C31 >BILTYP</C31></ROW>
+<ROW num="1" ><ID >BILID</ID><NAME >单据编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >FLW</C21><C22 ></C22><C23 ></C23><C24 >FLW</C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >BILID</C28><C29 ></C29><C30 ></C30><C31 ></C31></ROW>
+<ROW num="2" ><ID >STAT</ID><NAME >单据状态</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_STAT</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >STAT</C28><C29 ></C29><C30 >STAT</C30><C31 >STAT</C31></ROW>
+<ROW num="3" ><ID >开始日期</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31></ROW>
+<ROW num="4" ><ID >DAT1</ID><NAME >开始日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 >DATE1</C28><C29 ></C29><C30 ></C30><C31 ></C31></ROW>
+<ROW num="5" ><ID >DAT2</ID><NAME >结束日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >1,-1,-1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 >1,-1,-1</C30><C31 ></C31><C32 ></C32></ROW>
+<ROW num="1" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >2</NROW><NCOL >11</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 >0,1,1</C30><C31 >0,1,1</C31><C32 >0,1,1</C32></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet=0;
+var stat = &amp;quot;0&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetColVisible(0,1,-1);
+	_this.SetColVisible(0,3,-1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX );  
+	stat = document.all.STAT.value;
+
+}
+
+function CHECK()
+{
+	operate(&amp;quot;CHECK&amp;quot;);
+}
+
+function UNCHECK()
+{
+	operate(&amp;quot;UNCHECK&amp;quot;);
+}
+
+function operate(o)
+{
+	var xml = getXml(0,o);
+//	alert(xml);
+  	//POST方式调用网络OS函数
+	var param = new Object();
+	param.xmlstr = xml;
+	param.o = o;
+//	alert(param.o);
+	param.usrid = G_USRID;
+	param.acc = G_ACCID;
+	var msg = &amp;quot;&amp;quot;;
+	if(o==&amp;quot;CHECK&amp;quot;&amp;&amp;stat==&amp;quot;2&amp;quot;){
+		alert(&amp;quot;单据均已审核!&amp;quot;);
+		return;
+	}
+	if(o==&amp;quot;UNCHECK&amp;quot;&amp;&amp;stat==&amp;quot;1&amp;quot;){
+		alert(&amp;quot;单据均未审核!&amp;quot;);
+		return;
+	}
+	try {
+//		alert(&amp;quot;xxx&amp;quot;);
+		msg = invokeOSFuncExt(&amp;quot;operate&amp;quot;,param);
+		alert(&amp;quot;成功操作&amp;quot;+msg+&amp;quot;张单据&amp;quot;);
+//		window.location.reload();
+	}
+	catch (e) {
+		alert ( e );
+	}
+}
+
+//获得xml
+function getXml(sheet,o){
+	var row1 = _this.GetMainCellRangeRow1(sheet);
+	var row2 = _this.GetMainCellRangeRow2(sheet);
+	var xml=&amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;UTF-8&amp;apos;?&amp;gt;&amp;quot;+&amp;quot;\n&amp;quot;;
+	var k=0;
+	xml = xml+&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;+&amp;quot;\n&amp;quot;
+	for(var row=row1;row&amp;lt;=row2;row++){
+		
+		if(_this.GetRowSelected(sheet,row)==1){
+			var stat =_this.GetCellText(sheet,row,11);
+			if((o==&amp;quot;CHECK&amp;quot;&amp;&amp;stat==&amp;quot;未审&amp;quot;)||(o==&amp;quot;UNCHECK&amp;quot;&amp;&amp;stat==&amp;quot;已审&amp;quot;)){
+				xml = xml+&amp;quot;&amp;lt;ROW NUM=&amp;apos;&amp;quot;+k+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+&amp;quot;\n&amp;quot;;
+				var guid = _this.GetCellText(sheet,row,1);
+				var biltyp = _this.GetCellText(sheet,row,3);
+				var bilid = _this.GetCellText(sheet,row,5);
+				
+				xml = xml+&amp;quot;&amp;lt;guid&amp;gt;&amp;quot;+guid+&amp;quot;&amp;lt;/guid&amp;gt; \n&amp;quot;;
+				xml = xml+&amp;quot;&amp;lt;biltyp&amp;gt;&amp;quot;+biltyp+&amp;quot;&amp;lt;/biltyp&amp;gt; \n&amp;quot;;
+				xml = xml+&amp;quot;&amp;lt;bilid&amp;gt;&amp;quot;+bilid+&amp;quot;&amp;lt;/bilid&amp;gt; \n&amp;quot;;
+				xml = xml+&amp;quot;&amp;lt;/ROW&amp;gt; \n&amp;quot;
+				k++;
+			}
+			
+		}
+	}
+	xml = xml + &amp;quot;&amp;lt;/ROWSET&amp;gt; \n&amp;quot;;
+	return xml;
+}
+
+
+
+//双击选择主数据区行
+function _thisOnDblClickMainCellRangeRow(sheet,row)
+{
+  var biltyp = _this.GetCellText(sheet,row,3);
+  var bilid = _this.GetCellText(sheet,row,5);
+  window.open(&amp;quot;show.sp?grdid=&amp;quot;+biltyp+&amp;quot;&amp;ACC=&amp;quot;+G_ACCID+&amp;quot;&amp;bilid=&amp;quot;+bilid);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var grd = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+// 客户端param传入的参数可以直接使用
+
+function operate(){
+//	throw new pubpack.EAException(xmlstr);
+	var db = null;
+	
+	try{
+		var xmlds = new pubpack.EAXmlDS(xmlstr);
+		var e = new grd.EABillGrid();	
+		db = new pubpack.EADatabase();
+//		throw new Exception(&amp;quot;o:&amp;quot;+o);
+		var msg = 0;	
+		for(var row=0;row&amp;lt; xmlds.getRowCount();row++)
+		{
+			var guid = xmlds.getStringAt(row,&amp;quot;guid&amp;quot;);
+			var biltyp = xmlds.getStringAt(row,&amp;quot;biltyp&amp;quot;);
+			var bilid = xmlds.getStringAt(row,&amp;quot;bilid&amp;quot;);
+			
+			if(o==&amp;quot;CHECK&amp;quot;){
+				e.CheckOneBill(db,acc,biltyp,bilid,usrid);
+//				db.Commit();
+			}else if(o==&amp;quot;UNCHECK&amp;quot;){
+				e.CheckOneBill(db,acc,biltyp,bilid,usrid,true);
+			}else{
+				throw new pubpack.EAException(&amp;quot;发现异常操作指示:&amp;quot;+o);
+			}
+
+			msg++;
+		}
+		db.Commit();
+		return msg;	
+	}catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+}
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select a.guid,
+b.id||&amp;apos;-&amp;apos;||b.name,
+a.biltyp,a.subtyp||&amp;apos;-&amp;apos;||b.subdesc,
+a.bilid,
+to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;),
+a.crtusr||&amp;apos;-&amp;apos;||a.crtusrnam,
+to_char(dat,&amp;apos;yyyy-mm-dd&amp;apos;),
+a.corpid||&amp;apos;-&amp;apos;||a.corpnam,
+a.locid||&amp;apos;-&amp;apos;||a.locnam,
+decode(a.stat,&amp;apos;1&amp;apos;,&amp;apos;未审&amp;apos;,&amp;apos;2&amp;apos;,&amp;apos;已审&amp;apos;) 
+from bilhdr a,biltypref b
+where a.stat like &amp;apos;%[%STAT]%&amp;apos;
+and a.biltyp like &amp;apos;%[%BILTYP]%&amp;apos;
+and a.bilid like &amp;apos;%[%BILID]%&amp;apos;
+and a.biltyp = b.id 
+and nvl(a.subtyp,&amp;apos;1&amp;apos;) = b.subtyp
+and to_char(a.dat,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;gt;=decode(&amp;apos;[%DAT1]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01-01&amp;apos;,&amp;apos;[%DAT1]&amp;apos;) 
+and to_char(a.dat,&amp;apos;yyyy-mm-dd&amp;apos;)&amp;lt;=decode(&amp;apos;[%DAT2]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2999-12-31&amp;apos;,&amp;apos;[%DAT2]&amp;apos;)
+order by a.crtdat,a.biltyp,b.subtyp,a.bilid
+
+ 
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16><C17 >MAIN</C17><C18 >MAIN</C18><C19 >MAIN</C19><C20 >MAIN</C20><C21 >MAIN</C21><C22 >MAIN</C22><C23 >MAIN</C23><C24 >MAIN</C24><C25 >MAIN</C25><C26 >MAIN</C26><C27 >MAIN</C27><C28 >MAIN</C28><C29 >MAIN</C29><C30 >MAIN</C30><C31 >MAIN</C31><C32 >MAIN</C32><C33 >MAIN</C33><C34 >MAIN</C34><C35 >MAIN</C35><C36 >MAIN</C36><C37 ></C37><C38 >MAIN</C38><C39 >MAIN</C39><C40 >MAIN</C40><C41 >MAIN</C41><C42 >MAIN</C42><C43 >MAIN</C43><C44 >MAIN</C44><C45 >MAIN</C45><C46 >MAIN</C46><C47 >MAIN</C47><C48 >MAIN</C48><C49 >MAIN</C49><C50 >MAIN</C50><C51 >MAIN</C51><C52 >MAIN</C52><C53 >MAIN</C53><C54 >MAIN</C54><C55 >MAIN</C55><C56 >MAIN</C56><C57 >MAIN</C57><C58 >MAIN</C58><C59 >MAIN</C59><C60 >MAIN</C60><C61 >MAIN</C61></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

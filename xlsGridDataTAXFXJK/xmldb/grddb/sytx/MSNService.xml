@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>MSNService</MWID><NAME>即时通讯服务工具</NAME><NOTE></NOTE><FILE>MSNService.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheetOutput = 0;
+var sheetToolbar = 1;
+var sheetInput = 2;
+var sheetImg;
+var sheetIcon;
+var sheetText;
+
+
+//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/12/06 22:06:18
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+      document.title= &amp;quot;即时沟通工具&amp;quot; ;
+      _this.SetSheetName(sheetOutput,&amp;quot;通讯区&amp;quot; );
+      _this.ShowTabBar(1);
+//      sheetToolbar =_this.AddSheet(&amp;quot;工具&amp;quot;);
+      sheetInput =_this.AddSheet(&amp;quot;输入&amp;quot;);
+      sheetImg=_this.AddSheet(&amp;quot;图片库&amp;quot;);
+      sheetIcon=_this.AddSheet(&amp;quot;符号库&amp;quot;);
+      sheetText=_this.AddSheet(&amp;quot;常用语言&amp;quot;);
+      _this.SetCellBkColor(sheetOutput,-1,-1,255,255,255);
+      //_this.SetCellBkColor(sheetToolbar ,-1,-1,255,255,255);
+      _this.SetCellBkColor(sheetInput ,-1,-1,255,255,255);
+      _this.SetCellBkColor(sheetImg,-1,-1,255,255,255);
+      _this.SetCellBkColor(sheetIcon,-1,-1,255,255,255);
+      _this.SetCellBkColor(sheetText,-1,-1,255,255,255);
+
+      
+      _this.SplitSheet(sheetOutput ,&amp;quot;V&amp;quot;,&amp;quot;70%&amp;quot;);
+//      _this.SplitSheet(sheetInput ,&amp;quot;H&amp;quot;,&amp;quot;90%&amp;quot;);
+//      _this.SplitSheet(sheetToolbar,&amp;quot;V&amp;quot;,&amp;quot;20&amp;quot;);
+
+      _this.SetCellLock(sheetOutput,-1,-1,1);
+      _this.SetToRichEdit(&amp;quot;&amp;quot;,sheetInput,-1,-1,&amp;quot;&amp;quot;);
+      _this.SetToRichEdit(&amp;quot;&amp;quot;,sheetOutput ,-1,-1,&amp;quot;&amp;quot;);
+      _this.SetCurrentSheet(sheetInput );
+      _this.SetFocusCell(sheetInput, -1, -1 );
+      
+      _this.AddToolbarButton(&amp;quot;com_addfile&amp;quot;,&amp;quot;发送文件&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,80);
+      _this.SetRowCount(sheetText,10);
+      _this.SetColCount(sheetText,2);
+      _this.LoadScene(sheetText,4);
+      
+      
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,209 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >GSMN</MWID><NAME >广西糖网</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >GSMN.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);  
+	_this.SaveTextFile( &amp;quot;d:/GXTW.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var httpcall = new webget.HttpCall();
+var HtmlParser = new x_WG_HtmlParser();
+//function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+
+function start()
+{
+	var ret = &amp;quot;&amp;quot;;
+	var code = &amp;quot;GBK&amp;quot;;
+	var nodelist = null;
+	var tablist = null;
+	var ds = null; 
+	var msg = &amp;quot;&amp;quot;;
+	var msg1 = &amp;quot;&amp;quot;;
+	try
+	{
+		ret = httpcall.Get(&amp;quot;http://app.gsmn.cn/price.jhtml?pppp=5&amp;quot;,code);
+		ret = httpcall.Get(&amp;quot;http://app.gsmn.cn/price.do?action=real&amp;type=more&amp;pppp=5&amp;quot;,code);
+		ret = httpcall.Get(&amp;quot;http://app.gsmn.cn/price.do?action=real&amp;quot;,code);
+		ret = httpcall.Get(&amp;quot;http://market.gsmn.cn/market/sdk/detail/list.html&amp;quot;,code);
+		nodelist = HtmlParser.parserHtml(ret,code);
+		tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;); 	
+		ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;1&amp;quot;),&amp;quot;O&amp;quot;);	
+		var GX_list = new Array(&amp;quot;_交货期&amp;quot;,&amp;quot;_开盘价&amp;quot;,&amp;quot;_最高价&amp;quot;,&amp;quot;_最低价&amp;quot;,&amp;quot;_最新价&amp;quot;,&amp;quot;_成交量&amp;quot;,&amp;quot;_涨跌幅&amp;quot;,&amp;quot;_订货量&amp;quot;);
+		//广西~~~交货期~~~开盘价~~~最高价~~~最低价~~~申买价~~~申卖价~~~最新价~~~涨跌幅~~~成交量~~~订货量~~~结算价~~~昨结算 
+		for(var row = 0;row &amp;lt; ds.getRowCount()-1 ;row ++ )
+		{
+			if(msg != &amp;quot;&amp;quot;)
+				msg += &amp;quot;╃&amp;quot;;
+			msg += &amp;quot;广西~~~&amp;quot;;
+			for(var r = 0;r &amp;lt; GX_list.length(); r ++)
+			{
+				for(var col = 0;col &amp;lt; ds.getColumnCount();col ++)
+				{
+					var colnam = ds.getColumnName(col);
+					if( GX_list[r] == colnam)
+					{
+						msg += ds.getStringDef(row,GX_list[r],&amp;quot;0&amp;quot;);
+						if(col &amp;lt; ds.getColumnCount()-1 )
+							msg += &amp;quot;~~~&amp;quot;;
+						break;
+					}
+				}
+			}		
+		}
+		ret = httpcall.Get(&amp;quot;http://info.sugarinfo.net/sugarinfo.asp&amp;quot;,code);
+		nodelist = HtmlParser.parserHtml(ret,code);
+		tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;); 	
+		ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;1&amp;quot;),&amp;quot;O&amp;quot;);
+		var YN_list = new Array(&amp;quot;_交货期&amp;quot;,&amp;quot;_开市价&amp;quot;,&amp;quot;_最高价&amp;quot;,&amp;quot;_最低价&amp;quot;,&amp;quot;_最新价&amp;quot;,&amp;quot;_成交量&amp;quot;,&amp;quot;_涨跌&amp;quot;,&amp;quot;_订货量&amp;quot;);
+		//云南~~~交货期~~~开市价~~~买价~~~卖价~~~最新价~~~涨跌~~~最低价~~~最高价~~~成交量~~~订货量  
+		for(var row = 0;row &amp;lt; ds.getRowCount()-1 ;row ++ )
+		{
+			if(msg != &amp;quot;&amp;quot;)
+				msg += &amp;quot;╃&amp;quot;;
+			msg += &amp;quot;云南~~~&amp;quot;;
+			for(var r = 0;r &amp;lt; GX_list.length(); r ++)
+			{
+				for(var col = 0;col &amp;lt; ds.getColumnCount();col ++)
+				{
+					var colnam = ds.getColumnName(col);
+					if( YN_list[r] == colnam)
+					{
+						msg += ds.getStringDef(row,YN_list[r],&amp;quot;0&amp;quot;);
+						if(col &amp;lt; ds.getColumnCount()-1 )
+							msg += &amp;quot;~~~&amp;quot;;
+						break;
+					}
+				}
+			}		
+		}
+		ret = httpcall.Get(&amp;quot;http://www.zce.cn/DelaQuote.htm&amp;quot;,code);
+		nodelist = HtmlParser.parserHtml(ret,code);
+		tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;); 	
+		ds = HtmlParser.parserTable(tablist,code,new Array(&amp;quot;0&amp;quot;),&amp;quot;O&amp;quot;);
+		var ZZ_list = new Array(&amp;quot;_合约&amp;quot;,&amp;quot;_今开盘&amp;quot;,&amp;quot;_最高价&amp;quot;,&amp;quot;_最低价&amp;quot;,&amp;quot;_最新价&amp;quot;,&amp;quot;_成交量&amp;quot;,&amp;quot;_涨跌&amp;quot;,&amp;quot;_订货量&amp;quot;);
+		//郑州~~~合约~~~昨结算~~~今开盘~~~最高价~~~最低价~~~最新价~~~涨跌~~~最高买~~~最低卖~~~成交量~~~持仓量~~~今结算~~~买盘量~~~卖盘量  
+		for(var row = 0;row &amp;lt; ds.getRowCount()-1 ;row ++ )
+		{	
+			if(ds.getStringAt(row,&amp;quot;_合约&amp;quot;) != &amp;quot;小计&amp;quot;)
+			{
+				if(msg != &amp;quot;&amp;quot;)
+					msg += &amp;quot;╃&amp;quot;;
+				msg += &amp;quot;郑州~~~&amp;quot;;
+				for(var r = 0;r &amp;lt; ZZ_list.length()-1;r ++)
+				{
+					for(var col = 0;col &amp;lt; ds.getColumnCount();col ++)
+					{
+						var colnam = ds.getColumnName(col);
+						if( ZZ_list[r] == colnam)
+						{
+							msg += ds.getStringDef(row,ZZ_list[r],&amp;quot;0&amp;quot;);
+							if(col &amp;lt; ds.getColumnCount() )
+								msg += &amp;quot;~~~&amp;quot;;
+							break;
+						}
+						
+					}
+				}
+				msg += &amp;quot;0~~~&amp;quot;;
+			}
+		}	
+		
+		ret = httpcall.Get(&amp;quot;http://www.sugarinfo.net/front/sugarMarket/cityShow.jsp&amp;quot;,code);
+		nodelist = HtmlParser.parserHtml(ret,code);
+		tablist = HtmlParser.filterHtml(nodelist,&amp;quot;table&amp;quot;); 	
+		ds = parserTableOne(tablist,code,new Array(&amp;quot;10&amp;quot;));
+		for(var row = 0;row &amp;lt; ds.getRowCount(); row ++)
+		{
+			if(msg1 != &amp;quot;&amp;quot;)
+				msg1 += &amp;quot;╃&amp;quot;;
+			msg1 += &amp;quot;白砂糖~~~&amp;quot;;
+			for(var col = 0;col &amp;lt; ds.getColumnCount();col ++)
+			{
+				var colnam = ds.getColumnName(col);
+				msg1 += ds.getStringAt(row,colnam)+&amp;quot;~~~&amp;quot;;
+			}
+		}
+		ds = parserTableOne(tablist,code,new Array(&amp;quot;11&amp;quot;));
+		for(var row = 0;row &amp;lt; ds.getRowCount(); row ++)
+		{
+			if(msg1 != &amp;quot;&amp;quot;)
+				msg1 += &amp;quot;╃&amp;quot;;
+			msg1 += &amp;quot;绵白糖~~~&amp;quot;;
+			for(var col = 0;col &amp;lt; ds.getColumnCount();col ++)
+			{
+				var colnam = ds.getColumnName(col);
+				msg1 += ds.getStringAt(row,colnam)+&amp;quot;~~~&amp;quot;;
+			}
+		}
+		return msg+&amp;quot;#&amp;#&amp;&amp;quot;+msg1;
+	}
+	catch(e)
+	{
+		throw new Exception(e);
+	}
+}
+
+function parserTableOne(nodelist,code,tabidxArr)
+{
+	var node = null;	//&amp;lt;table&amp;gt;
+	var rows = null;	//&amp;lt;tr&amp;gt;
+	var cols = null;	//&amp;lt;td&amp;gt;
+	var col_first = null;
+	var Val = &amp;quot;&amp;quot;;
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;&amp;quot;+code+&amp;quot;&amp;apos;?&amp;gt;\n&amp;lt;ROWSET&amp;gt;\n&amp;quot;; 	
+	//如果订单的标题与明细是一个TABLE的结构
+	if (tabidxArr.length() == 1 ) 
+	{	
+		node = nodelist.elementAt(tabidxArr[0]);
+		//得到所有的&amp;lt;tr&amp;gt;
+		rows = node.getRows();
+		//第一行标题作为xml的标签
+		var FirstRowList = rows[0].getColumns();
+		//明细数据作为xml的值	
+		for (var r = 1;r &amp;lt; rows.length();r++)
+		{
+			var notes = &amp;quot;&amp;quot;;
+			xml += &amp;quot;&amp;lt;ROW&amp;gt;\n&amp;quot;;
+			cols = rows[r].getColumns();
+			for (var c = 0;c &amp;lt; FirstRowList.length();c++)
+			{
+				if(notes != &amp;quot;&amp;quot;)
+					notes += &amp;quot;,&amp;quot;;	
+				var TitleVal = HtmlParser.ReplaceStrToNull(&amp;quot;_&amp;quot;+FirstRowList[c].toPlainTextString().trim(),new Array(&amp;quot;(&amp;quot;,&amp;quot;)&amp;quot;,&amp;quot;/&amp;quot;,&amp;quot; &amp;quot;,&amp;quot;&amp;lt;br&amp;gt;&amp;quot;,&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;-+&amp;quot;));
+				if(notes.indexOf(TitleVal) &amp;gt; -1)
+					TitleVal = TitleVal+&amp;quot;_&amp;quot;+TitleVal; 
+				if( c &amp;gt;= cols.length()) 
+					Val = &amp;quot;&amp;quot;;	
+				else			
+					Val = HtmlParser.ReplaceStrToNull(cols[c].toPlainTextString().trim(),new Array(&amp;quot;&amp;nbsp;&amp;quot;,&amp;quot;/&amp;quot;,&amp;quot; &amp;quot;,&amp;quot;-+&amp;quot;));
+				xml += &amp;quot;&amp;lt;&amp;quot;+TitleVal+&amp;quot;&amp;gt;&amp;quot;+Val+&amp;quot;&amp;lt;/&amp;quot;+TitleVal+&amp;quot;&amp;gt;\n&amp;quot;;
+				notes += TitleVal;
+			}
+			
+			xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}	
+	xml += &amp;quot;&amp;lt;/ROWSET&amp;gt;\n&amp;quot;;
+	return new pubpack.EAXmlDS(xml); 	
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >LHTML</MWID><NAME >新布局的OS解释扩展</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >LHTML.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+//WNDMOD 的类型（不断扩展中）
+//	_this.SetListValue(list1,&amp;quot;HTML&amp;quot;,&amp;quot;HTML&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;OS&amp;quot;,&amp;quot;OS脚本&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;MW&amp;quot;,&amp;quot;中间件界面&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FRAME&amp;quot;,&amp;quot;内部FRAME&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;FRAMEGROUP&amp;quot;,&amp;quot;分页FRAME组&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;SCROLLIMAGE&amp;quot;,&amp;quot;滚动图片&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOOLBAR&amp;quot;,&amp;quot;系统默认工具栏&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;MENU&amp;quot;,&amp;quot;菜单栏&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FLASH&amp;quot;,&amp;quot;视频演示&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;表格&amp;quot;,&amp;quot;表格(标准)&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;空白表格&amp;quot;,&amp;quot;空白表格&amp;quot;);
+//
+//WNDMOD 窗口风格, DSMOD 数据来源 ,WHEREBY 条件, SORTBY 排序,SQLTXT  SQL语句, LAYCOL 分列数 ,LAYROW 分行数,MOREURL 每页行记录数, OSMWID OS中间件, OSFUNC OS函数,OSPARAM OS函数的参数,IFRAMEURL IFRAME的URL,IFSCROLLBAR 是否显示滚动条,HTMLGUID,MOREURL,OPENLAYID HTML
+function GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{	
+//	return WNDMOD;
+
+	//HTML
+	if(WNDMOD==&amp;quot;HTML&amp;quot;) return _GetHTML(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//菜单栏
+	if(WNDMOD==&amp;quot;MENU&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+
+	//顶层分页菜单
+	if(WNDMOD==&amp;quot;TOPMENU&amp;quot;)  return _GetOS2(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+
+	//微信微博
+	if(WNDMOD==&amp;quot;WEIXINBO&amp;quot;) return _GetOS3(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//左右滚动图片
+	if(WNDMOD==&amp;quot;SCROLLIMG&amp;quot;) return _GetOS3(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+	//登入
+	if(WNDMOD==&amp;quot;LOGINSEARCH&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//上下滚动图片
+	if(WNDMOD==&amp;quot;SX_SCROLLIMG&amp;quot;) return _GetOS3(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//公告栏
+	if(WNDMOD==&amp;quot;TITLELIST&amp;quot;) return _GetTITLELIST(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//登录主窗口
+	if(WNDMOD==&amp;quot;LOGIN&amp;quot;) return _GetOS4(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//多列标题栏
+	if(WNDMOD==&amp;quot;TOUBLELIST&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//图文标题栏
+	if (WNDMOD==&amp;quot;IMGTITLELIST&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	if (WNDMOD==&amp;quot;TBODY&amp;quot;) return _GetTBODY(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//滚动文字
+	if (WNDMOD==&amp;quot;texscoll&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+	//3A登录
+	if(WNDMOD==&amp;quot;LOGIN3A&amp;quot;) return _GetOS5(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+		//W8风格商品显示
+	if(WNDMOD==&amp;quot;W8ITEM&amp;quot;) return _GetOS3(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+	//分页列表
+	if (WNDMOD == &amp;quot;TITLEPAGE&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//图文标题加省略内容
+	if (WNDMOD == &amp;quot;IMGTEXT&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	//单列遮罩DIV
+	if (WNDMOD == &amp;quot;SINGDIV&amp;quot;) return _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	return &amp;quot;&amp;quot;;
+	
+
+
+	
+}
+// HTML 
+function _GetHTML(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	
+	return  db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+HTMLGUID+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;);
+}
+function _GetTBODY(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var html = &amp;quot;&amp;quot;;
+	
+	var layhdrguid= request.getParameter( &amp;quot;layhdrguid&amp;quot; ) ;
+	var sql = &amp;quot;select A.* from LSYSURL a,formblob b,formblob img where a.icon=img.guid(+) and a.htmlguid=b.guid and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos;&amp;quot;;
+	var ds = db.QuerySQL(sql);
+	var title = &amp;quot;&amp;quot;;
+	var crtdat = &amp;quot;&amp;quot;;
+	var image = &amp;quot;&amp;quot;;
+	if(ds.getRowCount()&amp;gt;0){
+		title = ds.getStringAt(0,&amp;quot;NAME&amp;quot;);
+		crtdat = ds.getStringAt(0,&amp;quot;CRTDAT&amp;quot;);
+		image = ds.getStringAt(0,&amp;quot;ICON&amp;quot;);
+	}
+	var context = db.getBlob2String(&amp;quot;select b.bdata from LSYSURL a,formblob b where a.htmlguid=b.guid and a.guid=&amp;apos;&amp;quot;+layhdrguid+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;);
+	html = &amp;quot;  
+		&amp;lt;table   &amp;gt;
+		&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;h1 style=\&amp;quot;   text-align: center; \&amp;quot;&amp;gt;&amp;quot;+title +&amp;quot;&amp;lt;/h1&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;quot;+crtdat+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;hr style=\&amp;quot;border-bottom: 1px solid #DFDFDF; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px\&amp;quot; size=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;quot;;
+	if(image!=&amp;quot;&amp;quot;){
+		html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+image +&amp;quot;\&amp;quot; border=\&amp;quot;0\&amp;quot; /&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	
+	html+= &amp;quot;
+		 &amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;table     width=90% style=\&amp;quot;text-align: left;\&amp;quot;  &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+context +&amp;quot; &amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		&amp;lt;/table&amp;gt;
+
+		 &amp;quot;;
+//	html = &amp;quot;&amp;lt;p align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;b&amp;gt;&amp;lt;font size=\&amp;quot;4\&amp;quot;&amp;gt;标题&amp;lt;/font&amp;gt;&amp;lt;/b&amp;gt;&amp;lt;/p&amp;gt;
+//		&amp;lt;hr style=\&amp;quot;border-bottom: 1px solid #DFDFDF; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px\&amp;quot; size=\&amp;quot;0\&amp;quot;&amp;gt;
+//		&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;
+//		&amp;lt;p&amp;gt;&amp;lt;img src=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+//		&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;80%\&amp;quot; cellspacing=\&amp;quot;10\&amp;quot;&amp;gt;
+//		 &amp;lt;tr&amp;gt;
+//		  &amp;lt;td&amp;gt;&amp;quot;+context +&amp;quot;&amp;lt;/td&amp;gt;
+//		 &amp;lt;/tr&amp;gt;
+//		&amp;lt;/table&amp;gt;
+//		&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;&amp;quot;;
+//	html = &amp;quot;  &amp;lt;h1 style=\&amp;quot; height: auto;  text-align: center;margin-top: 10px;\&amp;quot;&amp;gt;&amp;quot;+title +&amp;quot;&amp;lt;/h1&amp;gt;
+//		&amp;lt;div id=\&amp;quot;fbdate\&amp;quot; style=\&amp;quot;text-align: center;\&amp;quot;&amp;gt;2014&amp;lt;/div&amp;gt;
+//		&amp;lt;div id=\&amp;quot;wenzi\&amp;quot; style=\&amp;quot;width: 630px; text-align: justify;margin: 0 auto;line-height: 23px;;BSHARE_POP blkContainerSblkCon clearfix blkContainerSblkCon_14;\&amp;quot;&amp;gt;
+//		&amp;lt;div id=\&amp;quot;maincontent\&amp;quot;&amp;gt;&amp;lt;div id=\&amp;quot;ivs_content\&amp;quot;&amp;gt;&amp;quot;+context +&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;br&amp;gt;&amp;lt;/div&amp;gt; &amp;quot;;
+//	html = &amp;quot;&amp;lt;h1 style=\&amp;quot; text-align: center;margin-top: 10px;\&amp;quot;&amp;gt;&amp;quot;+title +&amp;quot;&amp;lt;/h1&amp;gt;&amp;quot;;
+	return  html;
+}
+function _GetTITLELIST(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var html = &amp;quot;&amp;quot;;
+	if(LAYCOL ==&amp;quot;&amp;quot;)LAYCOL =&amp;quot;1&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	
+	// &amp;quot;+WHEREBY +&amp;quot; &amp;quot;+SORTBY;
+	var ds=db.QuerySQL(sql);
+//	for(var i=0;i&amp;lt;ds.getRowCount();i++){
+//		html+=  &amp;quot;&amp;lt;li style=\&amp;quot;color:#999999\&amp;quot;&amp;gt;&amp;lt;a href=&amp;apos;&amp;quot;+ds.get(i,&amp;quot;URL&amp;quot;)+&amp;quot;&amp;apos; target=&amp;apos;&amp;quot;+ds.get(i,&amp;quot;URL&amp;quot;)+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+//	}
+
+	html +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+		
+	for(var i=0;i&amp;lt;ds.getRowCount();i++){
+
+		html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+		
+		html +=&amp;quot;&amp;lt;td width=\&amp;quot;30\&amp;quot;&amp;gt;&amp;quot;;
+		html +=&amp;quot;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot;\&amp;quot; width=20 height=20/&amp;gt;&amp;quot;;
+		html +=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		
+		html +=&amp;quot;&amp;lt;td style=\&amp;quot;border-bottom: 1px dotted #C0C0C0; line-height:200% \&amp;quot;&amp;gt;&amp;quot;;
+		var url =ds.get(i,&amp;quot;URL&amp;quot;) ;
+		if(OPENLAYID!=&amp;quot;&amp;quot;){
+			url = &amp;quot;L.sp?id=&amp;quot;+OPENLAYID+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			html +=&amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos; &amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+			
+		}
+		else if(url !=&amp;quot;&amp;quot;)
+			html +=&amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos; target=&amp;apos;&amp;quot;+ds.get(i,&amp;quot;TARGET&amp;quot;)+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+ds.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+		else html +=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+
+		html +=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+		html +=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+
+	} 
+			
+		
+		html +=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	return html;
+}
+//xs
+function _GetOS1(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var parent = new x_LHTML1();
+	return parent.GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+//xd
+function _GetOS2(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var parent = new x_LHTML2();
+	return &amp;quot;&amp;quot;;
+//	return parent.GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+//xl
+function _GetOS3(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var parent = new x_LHTML3();
+	return parent.GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+//LI
+function _GetOS4(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var parent = new x_LHTML4();
+	return parent.GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+function _GetOS5(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var parent = new x_LHTML5();
+	return parent.GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+function _GetIF(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	var html=&amp;quot;&amp;quot;;
+       if(DSMOD==&amp;quot;新闻&amp;quot; || DSMOD==&amp;quot;会议信息&amp;quot; || DSMOD==&amp;quot;友情链接&amp;quot;){
+	html=&amp;quot;&amp;lt;div style=\&amp;quot;border:1px #999999 solid; width:100%; height:100%\&amp;quot;&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;table width=100% border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;td&amp;gt;&amp;lt;h3 style=\&amp;quot;color:#FF0000\&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+DSMOD+&amp;quot;&amp;lt;/h3&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;td&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos;&amp;gt;&amp;lt;h3 align=\&amp;quot;right\&amp;quot; style=\&amp;quot;color:#FF0000\&amp;quot;&amp;gt;&amp;lt;u&amp;gt;more&amp;lt;/u&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;/h3&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;td colspan=\&amp;quot;2\&amp;quot;&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;	
+	      var xml=db.QuerySQL(&amp;quot;select name,icon from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;);
+	      for(var i=0;i&amp;lt;xml.getRowCount();i++){
+			html+=  &amp;quot;&amp;lt;li style=\&amp;quot;color:#999999\&amp;quot;&amp;gt;&amp;quot;+xml.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+			                              
+	        }
+		html+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+                return html;
+	}
+	else if(DSMOD==&amp;quot;经典案例&amp;quot;){
+	   html=&amp;quot;&amp;lt;div style=\&amp;quot;border:1px #999999 solid; width:100%; height:100%\&amp;quot;&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;table width=100%  height=100% border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;td&amp;gt;&amp;lt;h3 style=\&amp;quot;color:#FF0000\&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+DSMOD+&amp;quot;&amp;lt;/h3&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+	                  &amp;quot;&amp;lt;td&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos;&amp;gt;&amp;lt;h3 align=\&amp;quot;right\&amp;quot; style=\&amp;quot;color:#FF0000\&amp;quot;&amp;gt;&amp;lt;u&amp;gt;more&amp;lt;/u&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;/h3&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;+   
+	                 &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;+
+	                 	&amp;quot;&amp;lt;td style=\&amp;quot;border-right-color:#999999; border-right-style:solid; border-right-width:2px\&amp;quot;&amp;gt;&amp;quot;+
+	                	 &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;	
+		     			 var xml=db.QuerySQL(&amp;quot;select name from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;);
+		     			 for(var i=0;i&amp;lt;xml.getRowCount();i++){
+						html+=  &amp;quot;&amp;lt;li style=\&amp;quot;color:#999999\&amp;quot;&amp;gt;&amp;quot;+xml.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+				                              
+		       		 	}
+				html+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;+
+	               		 &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;+
+	                
+	                 	&amp;quot;&amp;lt;td&amp;gt;&amp;quot;+
+		                	 &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;	
+			     		 var xml=db.QuerySQL(&amp;quot;select name from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;);
+			      		for(var i=0;i&amp;lt;xml.getRowCount();i++){
+						html+=  &amp;quot;&amp;lt;li style=\&amp;quot;color:#999999\&amp;quot;&amp;gt;&amp;quot;+xml.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+					                              
+			        	}
+					html+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;+
+	                	&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+		return html;
+	}
+	
+	else if(DSMOD==&amp;quot;友情衔接&amp;quot;){
+	   html=&amp;quot;&amp;lt;div style=\&amp;quot;border:1px #999999 solid; width:100%; height:100%\&amp;quot;&amp;gt;&amp;quot;+
+                 &amp;quot;&amp;lt;table width=100% height=100% border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;td&amp;gt;&amp;lt;h3 style=\&amp;quot;color:#FF0000\&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;quot;+DSMOD+&amp;quot;&amp;lt;/h3&amp;gt;&amp;lt;a href=&amp;apos;#&amp;apos;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+//	                 &amp;quot;&amp;lt;td&amp;gt;&amp;lt;h3 align=\&amp;quot;right\&amp;quot; style=\&amp;quot;color:#FF0000\&amp;quot;&amp;gt;&amp;lt;u&amp;gt;more&amp;lt;/u&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;/h3&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;+   
+	                 &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;+
+	                 	&amp;quot;&amp;lt;td &amp;gt;&amp;quot;+
+	                	 &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;	
+		     			 var xml=db.QuerySQL(&amp;quot;select name from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and seqid &amp;lt;=5&amp;quot;);
+		     			 for(var i=0;i&amp;lt;xml.getRowCount();i++){
+						html+=  &amp;quot;&amp;lt;li style=\&amp;quot;color:#999999\&amp;quot;&amp;gt;&amp;quot;+xml.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+				                              
+		       		 	}
+				html+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;+
+	               		 &amp;quot;&amp;lt;/td&amp;gt;&amp;quot;+
+	                
+	                 	&amp;quot;&amp;lt;td&amp;gt;&amp;quot;+
+		                	 &amp;quot;&amp;lt;ul&amp;gt;&amp;quot;;	
+			     		 var xml=db.QuerySQL(&amp;quot;select name from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and seqid between 6 and 10&amp;quot;);
+			      		for(var i=0;i&amp;lt;xml.getRowCount();i++){
+						html+=  &amp;quot;&amp;lt;li style=\&amp;quot;color:#999999\&amp;quot;&amp;gt;&amp;quot;+xml.getStringAt(i,&amp;quot;name&amp;quot;)+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+					                              
+			        	}
+					html+=&amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;+
+	                	&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;+
+	                 &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;+
+                &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+		return html;
+	}
+	
+	return html;
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

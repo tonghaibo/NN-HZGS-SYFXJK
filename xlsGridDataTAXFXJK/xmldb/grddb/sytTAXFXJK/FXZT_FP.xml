@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FXZT_FP</MWID><NAME >发票类主题分析</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FXZT_FP.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >主题分析</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >InitData</ID><NAME >生成分析数据</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	
+	showchart();
+
+}
+
+//生成分析数据
+function InitData()
+{
+	window.showModalDialog(&amp;quot;show.sp?grdid=FXZT_InitFP&amp;FXDL=02&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:600px;dialogHeight:400px&amp;quot;);
+
+}
+
+function getxml()
+{
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var rw = 0;
+	for ( var r=6;r&amp;lt;_this.GetRowCount(0)-1;r++ ) {
+		xml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(rw++)+&amp;quot;\&amp;quot; name=\&amp;quot;&amp;quot;+_this.GetCellText(0,r,3)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;符合数量&amp;gt;&amp;quot;+_this.GetCellText(0,r,4)+&amp;quot;&amp;lt;/符合数量&amp;gt;\n&amp;quot;;
+		//xml += &amp;quot;&amp;lt;占比&amp;gt;&amp;quot;+_this.GetCellText(0,r,5)+&amp;quot;&amp;lt;/占比&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+	}
+	xml += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	return xml;
+
+}
+  
+function showchart()
+{
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// 如果要自己定义分析图的程序，可以在附件脚本文件中添加如xlsgrid/js/x/SVGChart.djs ,通过修改x/SVGChart来建立个性化的分析图程序
+	// １、分析图来源的是一个XML
+
+	var xml = getxml();
+
+	// ２.建立分析图
+	// SVGChart(objid,sheet,row,col,type,title,xtitle,ytitle,width,height,xml)
+	// objid: SetToSvgform 的Object ID编号
+	// sheet,row,col, 图表所在的表格位置
+	// type: =0 线图 =1 直方图 =2 立方图　=3 饼图
+	// title: 标题 xtitle x轴名称 ytitle y轴名称
+	// width,height: 要求固定的高度和宽度，如果是自动适应窗口的大小，设置为-1，-1
+	// xml: xmlds描述的数据字符串
+	var title = &amp;quot;风险特征分布情况&amp;quot;;
+	var ltitle = &amp;quot;占比&amp;quot;;
+
+	var w = document.body.offsetWidth*0.90;
+	var chart = new SVGChart(&amp;quot;CHART_1&amp;quot;,0,3,1,3,title,&amp;quot;风险特征&amp;quot;,ltitle,600 ,400,xml );
+	//chart.hidecol(1);	chart.hidecol(2);chart.hidecol(3);	chart.hidecol(4);chart.hidecol(5);	chart.hidecol(7);
+	//chart.m_xscalefontsize = 8;	// 标题字体大小	
+	chart.m_bShowLinePoint = 1 ;
+	
+	chart.m_bshowyline = 1;
+	chart.m_bshowxline = 1;
+	chart.m_bShowLinePoint  = 1;
+	chart.m_bShowSeralName = 1;
+	
+	chart.load();
+	
+	setTimeout (&amp;quot;chgtoimg(&amp;apos;CHART_1&amp;apos;)&amp;quot;,500); 
+	
+}
+// 由于新空间的载入SVG改为后台，所以要用定时器来放到后台更行图片
+function chgtoimg(chartid)
+{
+	var imgfile=_this.SVGFORM_SaveImageTempFile(chartid);
+	if(imgfile!=&amp;quot;&amp;quot; ) 
+		_this.LoadToImage(&amp;quot;&amp;quot;,0 ,3,1,imgfile);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

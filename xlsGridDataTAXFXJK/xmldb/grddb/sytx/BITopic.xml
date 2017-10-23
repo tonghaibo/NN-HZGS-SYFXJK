@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >BITopic</MWID><NAME >BI主题定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BITopic.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP >0</BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >DIM_TOPIC</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >ID 主题编号,NAME 主题名称,REFMOD 引用模型,HDIM 水平方向维度,VDIM 垂直方向维度,CRTUSER 创建人,TO_CHAR(CRTDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) 创建时间</COLLIST><WHERE ></WHERE><ORDER >SYTID,REFMOD,ID</ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><WIDTHMOD >1</WIDTHMOD><SHOWBTN >1,2</SHOWBTN></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >引用模型</NAME><VALFLD >REFMOD</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >COMBOBOX</CTLTYP><LISTID >V_DIMMODEL</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,7,2</C17><C18 >0,3,2</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >0,3,2</C22><C23 ></C23></ROW>
+<ROW num="1" ><ID >0,4,2</ID><CELLID ></CELLID><NAME >系统号</NAME><VALFLD >SYTID</VALFLD><DEFVAL >[%SYS_SYTID]</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 >0,4,2</C23></ROW>
+<ROW num="2" ><ID >0,4,3</ID><CELLID ></CELLID><NAME >组织号</NAME><VALFLD >ORGID</VALFLD><DEFVAL >[%SYS_ORGID]</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="3" ><ID >0,4,4</ID><CELLID ></CELLID><NAME >创建人</NAME><VALFLD >CRTUSER</VALFLD><DEFVAL >[%SYS_USRID]</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="4" ><ID >0,5,2</ID><CELLID ></CELLID><NAME >主题编号</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="5" ><ID >0,6,2</ID><CELLID ></CELLID><NAME >主题名称</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="6" ><ID >0,7,2</ID><CELLID ></CELLID><NAME >主题标题</NAME><VALFLD >LONGNAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="7" ><ID >0,8,2</ID><CELLID ></CELLID><NAME >水平方向维度,参考DIM_TARGET的目标字段，多个用逗号分隔</NAME><VALFLD >HDIM</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="8" ><ID >0,9,2</ID><CELLID ></CELLID><NAME >垂直方向维度,参考DIM_DIM的维度字段，多个用逗号分隔</NAME><VALFLD >VDIM</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="9" ><ID >0,10,2</ID><CELLID ></CELLID><NAME >图型显示</NAME><VALFLD >VDIMSHOWCOL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="10" ><ID >0,11,2</ID><CELLID ></CELLID><NAME >过滤条件</NAME><VALFLD >LVL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="11" ><ID >0,12,2</ID><CELLID ></CELLID><NAME >排序依据</NAME><VALFLD >ORDERS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="12" ><ID >0,13,2</ID><CELLID ></CELLID><NAME >上级编号</NAME><VALFLD >REFID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="13" ><ID >0,14,2</ID><CELLID ></CELLID><NAME >外部链接</NAME><VALFLD >URL</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="14" ><ID >0,15,2</ID><CELLID ></CELLID><NAME >是否显示横行合计</NAME><VALFLD >XCHART</VALFLD><DEFVAL >0</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="15" ><ID >0,16,2</ID><CELLID ></CELLID><NAME >是否显示纵向合计</NAME><VALFLD >YCHART</VALFLD><DEFVAL >1</DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="16" ><ID >0,17,2</ID><CELLID ></CELLID><NAME >分析图型</NAME><VALFLD >PICNOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="17" ><ID >0,18,2</ID><CELLID ></CELLID><NAME >溯源维度</NAME><VALFLD >PICLOCATION</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+<ROW num="18" ><ID >0,19,2</ID><CELLID ></CELLID><NAME >客户端脚本</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >CODEEDITOR</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetRowVisible(sheet,4,-1);
+	_this.SetRowVisible(sheet,16,-1);
+	_this.SetCellColor(sheet,10,5,120,120,120);
+	_this.SetCellColor(sheet,11,5,120,120,120);
+	_this.SetCellColor(sheet,12,5,120,120,120);
+	
+	if (typeof guid == &amp;quot;undefined&amp;quot;) {
+		try { _this.SetCellText(sheet,3,2,refmod); } catch ( e ) { }
+		try { _this.SetCellText(sheet,4,2,selsytid); } catch ( e ) { }
+		try { _this.SetCellText(sheet,5,2,topicid); } catch ( e ) { }
+		try { if (name != &amp;quot;right&amp;quot;) _this.SetCellText(sheet,6,2,name); } catch ( e ) { }
+		try { _this.SetCellText(sheet,7,2,lognam); } catch ( e ) { }
+		try { _this.SetCellText(sheet,8,2,val1); } catch ( e ) { }
+		try { _this.SetCellText(sheet,9,2,val2); } catch ( e ) { }
+		try { _this.SetCellText(sheet,13,2,refid); } catch ( e ) { }
+	}
+	
+	var modguid = _this.GetCellText(sheet,3,2);
+	var modname = _this.GetCellShowText(sheet,3,2);
+	var thissytid = _this.GetCellText(sheet,4,2);
+	var topicid = _this.GetCellText(sheet,5,2);
+	var reftopid = _this.GetCellText(sheet,13,2);
+	
+	//计算主题的编号
+	var modid = &amp;quot;&amp;quot;;
+	var ss = modname.split(&amp;quot;-&amp;quot;);
+	if (ss.length &amp;gt; 1) modid = ss[0];
+	
+	if (topicid == &amp;quot;&amp;quot; &amp;&amp; modid != &amp;quot;&amp;quot;) {
+		if (reftopid == &amp;quot;&amp;quot;) _sql.querytods(&amp;quot;getmaxid1&amp;quot;,&amp;quot;thissytid=&amp;quot;+thissytid+&amp;quot;&amp;refmod=&amp;quot;+modguid);
+		else _sql.querytods(&amp;quot;getmaxid2&amp;quot;,&amp;quot;thissytid=&amp;quot;+thissytid+&amp;quot;&amp;refmod=&amp;quot;+modguid+&amp;quot;&amp;refid=&amp;quot;+reftopid);
+		
+		var maxid = &amp;quot;&amp;quot;;	
+		var newid = &amp;quot;&amp;quot;;
+		
+		if (_this.XMLDS_GetRowCount() &amp;gt; 0) {
+			maxid = _this.XMLDS_GetString(0,&amp;quot;ID&amp;quot;);
+			ss = maxid.split(&amp;quot;-&amp;quot;);
+			if (ss.length &amp;gt; 1) {
+				ss[ss.length-1] = 1*ss[ss.length-1]+1;
+				for (var i=0;i&amp;lt;ss.length;i++) {
+					if (i != 0) newid += &amp;quot;-&amp;quot;;
+					newid += ss[i];
+				}
+			} else {	//没有找到最大值，从1开始
+				if (reftopid == &amp;quot;&amp;quot;) newid = modid +&amp;quot;-1&amp;quot;;
+				else newid = reftopid +&amp;quot;-1&amp;quot;;
+			}
+		}
+		_this.SetCellText(sheet,5,2,newid);
+	}
+	
+	var thisguid = &amp;quot;&amp;quot;;
+	try { thisguid = guid; }catch ( e ) { }
+	
+	if ( thisguid == &amp;quot;&amp;quot; ) {
+		_this.SetToStandardCell(sheet,1,5);
+		_this.SetCellText(sheet,1,5,&amp;quot;&amp;quot;);
+		_this.SetCellLeftBorder(sheet,1,5,0);	_this.SetCellRightBorder(sheet,1,5,0);	_this.SetCellBottomBorder(sheet,1,5,0);	_this.SetCellTopBorder(sheet,1,5,0);
+		_this.SetToStandardCell(sheet,1,6);
+		_this.SetCellText(sheet,1,6,&amp;quot;&amp;quot;);
+		_this.SetCellLeftBorder(sheet,1,6,0);	_this.SetCellRightBorder(sheet,1,6,0);	_this.SetCellBottomBorder(sheet,1,6,0);	_this.SetCellTopBorder(sheet,1,6,0);
+	} else {
+		var xmlmenu = &amp;quot;&amp;lt;item id=\&amp;quot;com_addnew_level\&amp;quot; name=\&amp;quot;本级别\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;com_addnew_nextlevel\&amp;quot; name=\&amp;quot;下级别\&amp;quot;/&amp;gt;&amp;quot;;
+		_this.SetToButton(&amp;quot;com_new&amp;quot;,sheet,1,5,&amp;quot;添加新主题&amp;quot;,&amp;quot;&amp;quot;,xmlmenu,0,-1,-1);
+		 xmlmenu = &amp;quot;&amp;lt;item id=\&amp;quot;com_copynew_level\&amp;quot; name=\&amp;quot;本级别\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;com_copynew_nextlevel\&amp;quot; name=\&amp;quot;下级别\&amp;quot;/&amp;gt;&amp;quot;;
+		_this.SetToButton(&amp;quot;com_copy&amp;quot;,sheet,1,6,&amp;quot;复制并添加&amp;quot;,&amp;quot;&amp;quot;,xmlmenu,0,-1,-1);
+	}
+	
+	var list = _this.CreateListValue();
+	_this.SetListValue(list,&amp;quot;0&amp;quot;,&amp;quot;不显示&amp;quot;);
+	_this.SetListValue(list,&amp;quot;1&amp;quot;,&amp;quot;显示&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,15,2,list);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,16,2,list);
+	
+	_sql.querytods(&amp;quot;charttype&amp;quot;,&amp;quot;&amp;quot;);
+	var list =_this.CreateListValue();
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ) {
+		_this.SetListValue(list,_this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;),_this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;));
+	}
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,17,2,list);
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	var modguid = _this.GetCellText(sheet,3,2);
+	if (modguid == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;请先选择分析模型！&amp;quot;);
+		return;
+	}
+	
+	if ((row == 8 || row == 9 || row == 18) &amp;&amp; col == 6) {
+		_this.QuerySQLDS(&amp;quot;select * from dim_model where guid=&amp;apos;&amp;quot;+modguid+&amp;quot;&amp;apos;&amp;quot;);
+		var table_name = _this.XMLDS_GetString(0,&amp;quot;SOURCEDS&amp;quot;);
+		
+		var selval = _this.GetCellText(sheet,row,2);
+		var table_name1 = &amp;quot;DIM_TARGET&amp;quot;;
+		if (row == 9 || row == 18) table_name1 = &amp;quot;DIM_DIM&amp;quot;;
+		var url =&amp;quot;show.sp?grdid=BISelCol&amp;table_name=&amp;quot;+table_name+&amp;quot;&amp;table_name1=&amp;quot;+table_name1+&amp;quot;&amp;modguid=&amp;quot;+modguid+&amp;quot;&amp;selval=&amp;quot;+selval;
+		var ret = window.showModalDialog(url);
+		if (ret != &amp;quot;&amp;quot; &amp;&amp; ret != null) _this.SetCellText(sheet,row,2,ret);
+	} 
+}
+
+//点击菜单项
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	if (menuitemid == &amp;quot;com_copynew_level&amp;quot;) {	//添加同级新主题
+		window.location = &amp;quot;show.sp?grdid=BITopic&amp;refid=&amp;quot;+_this.GetCellText(sheet,13,2)+&amp;quot;&amp;selsytid=&amp;quot;+_this.GetCellText(sheet,4,2)+&amp;quot;&amp;refmod=&amp;quot;+_this.GetCellText(sheet,3,2)+&amp;quot;&amp;val1=&amp;quot;+_this.GetCellText(sheet,8,2)+&amp;quot;&amp;val2=&amp;quot;+_this.GetCellText(sheet,9,2)+&amp;quot;&amp;name=&amp;quot;+_this.GetCellText(sheet,6,2)+&amp;quot;&amp;lognam=&amp;quot;+_this.GetCellText(sheet,7,2);
+	}
+	if (menuitemid == &amp;quot;com_copynew_nextlevel&amp;quot;) {	//添加新主题
+		window.location = &amp;quot;show.sp?grdid=BITopic&amp;refid=&amp;quot;+_this.GetCellText(sheet,5,2)+&amp;quot;&amp;selsytid=&amp;quot;+_this.GetCellText(sheet,4,2)+&amp;quot;&amp;refmod=&amp;quot;+_this.GetCellText(sheet,3,2)+&amp;quot;&amp;val1=&amp;quot;+_this.GetCellText(sheet,8,2)+&amp;quot;&amp;val2=&amp;quot;+_this.GetCellText(sheet,9,2)+&amp;quot;&amp;name=&amp;quot;+_this.GetCellText(sheet,6,2)+&amp;quot;&amp;lognam=&amp;quot;+_this.GetCellText(sheet,7,2);
+	}
+	if (menuitemid == &amp;quot;com_addnew_level&amp;quot;) {		//添加同级主题
+		window.location = &amp;quot;show.sp?grdid=BITopic&amp;refid=&amp;quot;+_this.GetCellText(sheet,13,2)+&amp;quot;&amp;selsytid=&amp;quot;+_this.GetCellText(sheet,4,2)+&amp;quot;&amp;refmod=&amp;quot;+_this.GetCellText(sheet,3,2);
+	}
+	if (menuitemid == &amp;quot;com_addnew_nextlevel&amp;quot;) {	//添加子主题
+		window.location = &amp;quot;show.sp?grdid=BITopic&amp;refid=&amp;quot;+_this.GetCellText(sheet,5,2)+&amp;quot;&amp;selsytid=&amp;quot;+_this.GetCellText(sheet,4,2)+&amp;quot;&amp;refmod=&amp;quot;+_this.GetCellText(sheet,3,2)+&amp;quot;&amp;topicid=&amp;quot;+_this.GetCellText(sheet,5,2)+&amp;quot;_1&amp;quot;;
+	}
+}
+
+//保存单据数据后
+function _thisOnaftersave(success)
+{
+	try { parent.frames(&amp;quot;left&amp;quot;).f_refresh(); } catch ( e ) { }
+	return success;
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;F_run_deletebutton1&amp;quot;) {
+		if (window.confirm(&amp;quot;删除本单据，是否继续？&amp;quot;)) {
+			var ret = _sql.run(&amp;quot;delete&amp;quot;,&amp;quot;guid=&amp;quot;+guid);
+			if (ret == 1) alert(&amp;quot;删除成功！&amp;quot;);
+			else alert(&amp;quot;删除失败！&amp;quot;);
+		}
+		
+		try { parent.location.href = &amp;quot;framelayout.sp?leftgrdid=BITreeDef&amp;rightflowid=&amp;rightflowsyt=&amp;quot;; } catch ( e ) { }
+		return 1;
+	}
+}
+
+//单据列表加载完毕
+function _thisOnpostloadListBill(sheet)
+{
+	try {
+		var v_mod = selectBillGrid.CreateListValueByXMLDS(selectBillGrid.HttpCall(&amp;quot;XmlDB.sp?bind=V_DIMMODEL&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+		for (var i=selectBillGrid.GetMainCellRangeRow1(sheet);i&amp;lt;=selectBillGrid.GetMainCellRangeRow2(sheet);i++) {
+			selectBillGrid.SetToComboBox(&amp;quot;&amp;quot;,sheet,i,5,v_mod);
+			selectBillGrid.SetCellHAlign(sheet,i,5,0);
+		}
+	} catch ( e ) { }
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	try {
+		pub.EADbTool.ExcecutSQL(&amp;quot;alter table DIM_TOPIC add VDIMSHOWCOL varchar2(255)&amp;quot;);
+	} catch ( e ) { }
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >getmaxid1</ID><NAME ></NAME><DATDSC >select max(id) id from dim_topic
+ where sytid=&amp;apos;[%thissytid]&amp;apos; and refmod=&amp;apos;[%refmod]&amp;apos; and refid is null</DATDSC><C4 ></C4><C5 >getmaxid0</C5><C6 ></C6><C7 >getmaxid0</C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >getmaxid0</C11></ROW>
+<ROW num="1" ><ID >getmaxid2</ID><NAME ></NAME><DATDSC >select max(id) id from dim_topic
+ where sytid=&amp;apos;[%thissytid]&amp;apos; and refmod=&amp;apos;[%refmod]&amp;apos; and refid=&amp;apos;[%refid]&amp;apos;
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >getmaxid1</C11></ROW>
+<ROW num="2" ><ID >charttype</ID><NAME ></NAME><DATDSC >select id||&amp;apos;-&amp;apos;||typ id,name from v_charttype</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >charttype</C7><C8 >charttype</C8><C9 ></C9><C10 >charttype</C10><C11 >charttype</C11></ROW>
+<ROW num="3" ><ID >delete</ID><NAME ></NAME><DATDSC >delete from DIM_TOPIC where guid=&amp;apos;[%guid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >del</C8><C9 >deletebill</C9><C10 ></C10><C11 >delete</C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

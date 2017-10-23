@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FX0103_1</MWID><NAME >非正常或异址经营明细</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FX0103_1.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >风险特征库</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >NSRID</ID><NAME >纳税人识别号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >NSRID</C13></ROW>
+<ROW num="1" ><ID >FRXM</ID><NAME >法定代表人姓名</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="2" ><ID >FRSFZH</ID><NAME >法定代表人身份证号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+<ROW num="3" ><ID >tjlx</ID><NAME >统计类型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >TJLX</C13></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SetToBoolBox(0,1,0);
+	_this.SetMainCellRange(0,2,1,4,_this.GetColCount(0)-1);
+	loadData();
+	var r=_this.GetMainCellRangeRow1(0);
+	//alert(&amp;quot;r=&amp;quot;+r);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);		 
+	}
+
+}
+
+//加载查询数据
+function loadData()
+{	
+      _this.SetFixedRow(0,2);
+//      alert(&amp;quot;tjlx=&amp;quot;+tjlx);
+      if (tjlx==10){
+      	    try {
+	          var xml = _sql.query(&amp;quot;MAIN1&amp;quot;,&amp;quot;&amp;FRXM=&amp;quot;+frxm+&amp;quot;&amp;FRSFZH=&amp;quot;+frsfzh);
+	     } catch(e) { _this.SetCellText(0,1,2,e.toString()); }
+	} 
+	
+     if (tjlx==11) {
+     	      try {
+	          var xml = _sql.query(&amp;quot;MAIN2&amp;quot;,&amp;quot;&amp;FRXM=&amp;quot;+frxm+&amp;quot;&amp;FRSFZH=&amp;quot;+frsfzh);
+	      } catch(e) { _this.SetCellText(0,1,2,e.toString()); }
+
+     }
+
+     if (tjlx==12) {
+     	      try {
+	          var xml = _sql.query(&amp;quot;MAIN3&amp;quot;,&amp;quot;&amp;FRXM=&amp;quot;+frxm+&amp;quot;&amp;FRSFZH=&amp;quot;+frsfzh);
+	      } catch(e) { _this.SetCellText(0,1,2,e.toString()); }
+
+     }
+
+	_this.SetXmlDS(0,2,1,4,_this.GetColCount(0)-1,xml); 
+	//讲query 查询返回的结果显示在客户端，第一个参数为sheet号，第二个参数为开始显示数据的行号，第三个参数为列号，第四、五个参数为sheet中的最大行，最大列
+	//var lh=_this.GetRowCount(0)-1 ;
+	//alert(&amp;quot;lh=&amp;quot;+lh);
+
+	_this.XMLDS_Parse(xml); 
+	
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN1</ID><NAME ></NAME><DATDSC >--本市正常经营
+select rownum,
+fddbrxm  &amp;quot;法人姓名&amp;quot;,
+fddbrsfzjhm &amp;quot;法人身份证号码&amp;quot;,
+nvl(shxydm,nsrsbh) &amp;quot;纳税人识别号&amp;quot; ,
+nsrmc &amp;quot;纳税人名称&amp;quot; ,
+(select djzclxmc from DM_DJ_DJZCLX lx where lx.djzclx_dm=dj.djzclx_dm )&amp;quot;登记注册类型&amp;quot;,
+scjydz &amp;quot;生产经营地址&amp;quot;,
+zcdz  &amp;quot;注册地址&amp;quot;,
+(select nsrztmc from DM_GY_NSRZT zt where zt.nsrzt_dm=dj.nsrzt_dm  )&amp;quot;纳税人状态&amp;quot;,
+(select swjgmc from DM_GY_SWJG swjg WHERE dj.ZGSWJ_DM=swjg.swjg_dm) &amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where dj.zgswskfj_dm=jg.swjg_dm ) &amp;quot;主管税务所（科、分局）&amp;quot;
+from hx_dj.dj_nsrxx@js3q dj
+where trim(fddbrxm)=&amp;apos;[%FRXM]&amp;apos; and trim(fddbrsfzjhm)=&amp;apos;[%FRSFZH]&amp;apos; 
+and zgswskfj_dm like &amp;apos;14511%&amp;apos;
+and dj.nsrzt_dm in (&amp;apos;03&amp;apos;)</DATDSC><C4 >MAIN1</C4><C5 >MAIN1</C5></ROW>
+<ROW num="1" ><ID >MAIN2</ID><NAME ></NAME><DATDSC >
+--外地正常经营
+select rownum,
+fddbrxm  &amp;quot;法人姓名&amp;quot;,
+fddbrsfzjhm &amp;quot;法人身份证号码&amp;quot;,
+nvl(shxydm,nsrsbh) &amp;quot;纳税人识别号&amp;quot; ,
+nsrmc &amp;quot;纳税人名称&amp;quot; ,
+(select djzclxmc from DM_DJ_DJZCLX lx where lx.djzclx_dm=dj.djzclx_dm )&amp;quot;登记注册类型&amp;quot;,
+scjydz &amp;quot;生产经营地址&amp;quot;,
+zcdz  &amp;quot;注册地址&amp;quot;,
+(select nsrztmc from DM_GY_NSRZT zt where zt.nsrzt_dm=dj.nsrzt_dm  )&amp;quot;纳税人状态&amp;quot;,
+(select swjgmc from DM_GY_SWJG swjg WHERE dj.ZGSWJ_DM=swjg.swjg_dm)&amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where dj.zgswskfj_dm=jg.swjg_dm )&amp;quot;主管税务所（科、分局）&amp;quot;
+from hx_dj.dj_nsrxx@js3q dj
+where fddbrxm=&amp;apos;[%FRXM]&amp;apos; and fddbrsfzjhm=&amp;apos;[%FRSFZH]&amp;apos; 
+and zgswskfj_dm not like &amp;apos;14511%&amp;apos;
+and dj.nsrzt_dm in (&amp;apos;03&amp;apos;)</DATDSC><C4 >MAIN2</C4><C5 >MAIN2</C5></ROW>
+<ROW num="2" ><ID >MAIN3</ID><NAME ></NAME><DATDSC >--外地非正常经营
+select rownum,
+fddbrxm  &amp;quot;法人姓名&amp;quot;,
+fddbrsfzjhm &amp;quot;法人身份证号码&amp;quot;,
+nvl(shxydm,nsrsbh) &amp;quot;纳税人识别号&amp;quot; ,
+nsrmc &amp;quot;纳税人名称&amp;quot; ,
+(select djzclxmc from DM_DJ_DJZCLX lx where lx.djzclx_dm=dj.djzclx_dm )&amp;quot;登记注册类型&amp;quot;,
+scjydz &amp;quot;生产经营地址&amp;quot;,
+zcdz  &amp;quot;注册地址&amp;quot;,
+(select nsrztmc from DM_GY_NSRZT zt where zt.nsrzt_dm=dj.nsrzt_dm  )&amp;quot;纳税人状态&amp;quot;,
+(select swjgmc from DM_GY_SWJG swjg WHERE dj.ZGSWJ_DM=swjg.swjg_dm)&amp;quot;主管税务机关&amp;quot;,
+(select swjgmc from DM_GY_SWJG jg where dj.zgswskfj_dm=jg.swjg_dm )&amp;quot;主管税务所（科、分局）&amp;quot;
+from hx_dj.dj_nsrxx@js3q dj
+where fddbrxm=&amp;apos;[%FRXM]&amp;apos; and fddbrsfzjhm=&amp;apos;[%FRSFZH]&amp;apos; 
+and zgswskfj_dm not like &amp;apos;14511%&amp;apos;
+and dj.nsrzt_dm in (&amp;apos;05&amp;apos;)</DATDSC><C4 >MAIN3</C4><C5 >MAIN3</C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,525 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >TaxData</MWID><NAME >税务数据导入</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TaxData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,3);
+//	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,5,3);
+	_this.ShowTabBar(1);
+	
+//	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,7,3,&amp;quot;&amp;quot;);
+//	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,7,5,&amp;quot;&amp;quot;);
+	var yymm=_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_YYYY_MM&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);	
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,7,3,yymm);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,7,5,yymm);
+}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+   	if(id == &amp;quot;导入&amp;quot; ){
+		if(!confirm(&amp;quot;确定导入文件？&amp;quot;)) return ;		
+		var filepath = _this.GetCellText(sheet,3,3);
+		if(filepath != &amp;quot;&amp;quot;) {
+			 runImpl(filepath);
+		}
+	}
+	else if(id == &amp;quot;数据库同步&amp;quot; ){
+		var dat1 = _this.GetCellText(sheet,7,3);
+		var dat2 = _this.GetCellText(sheet,7,5);
+		if (dat1 == &amp;quot;&amp;quot; || dat2 == &amp;quot;&amp;quot;) {
+			alert(&amp;quot;请选择同步日期范围！&amp;quot;);
+			return ;
+		}
+		try{		
+//			_this.SetCellText(0,11,2,&amp;quot;正在从数据库同步数据...&amp;quot;);
+//			var msg = invokeOSFunc(&amp;quot;syncTaxData&amp;quot;,&amp;quot;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2);
+//			alert(msg);
+//			_this.SetCellText(0,11,2,msg);
+
+			var jobid = &amp;quot;TaxData&amp;quot;;
+	    		_sql.querytods(&amp;quot;GetSEQ&amp;quot;,&amp;quot;&amp;quot;);
+			var seqid= _this.XMLDS_GetString(0,&amp;quot;val&amp;quot;);
+			var thisjobid = jobid +seqid;	
+			_sql.querytods(&amp;quot;QueryRunOSTimer&amp;quot;,&amp;quot;jobid=&amp;quot;+jobid );
+			if( _this.XMLDS_GetRowCount()&amp;gt;0 ){
+				//有一个作业正在运行，打开进度框
+				thisjobid = _this.XMLDS_GetString(0,&amp;quot;ID&amp;quot;);
+				window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+			}
+			else {
+				var sParam =&amp;quot;jobid=&amp;quot;+thisjobid+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;jobnam=税务数据同步&amp;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2;
+				try {
+					var ret = invokeOSFunc(&amp;quot;genbatch&amp;quot;,sParam) ;
+					
+					if ( ret!=&amp;quot;&amp;quot; ) {
+						window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+ thisjobid ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+					}   
+				}
+				catch ( e ) {
+					alert (e);
+				}
+			}
+
+		}
+		catch(e) {
+			alert(e);
+		}
+	}
+}
+//导入税务基本信息
+//function runImpls(filepath)
+//{
+//	try {
+//		var tabnam =  runImp(filepath);
+//		alert(tabnam);
+//		if(tabnam != null &amp;&amp; tabnam != &amp;quot;&amp;quot;) {
+//			var param = new Object();
+//			param.tabnam = tabnam;
+//			var msg = invokeOSFuncExt(&amp;quot;inTax&amp;quot;,param);
+//			_this.SetCellText(0,13,2,_this.GetCellText(0,13,2)+&amp;quot;\n&amp;quot;+msg);
+//			alert(msg);			
+//		}
+//	}
+//	catch(e) {
+//		alert(&amp;quot;导入失败！&amp;quot;+e);
+//	}
+//}
+	
+//导入税务数据
+function runImpl(filepath)
+{
+	try{
+		
+		_this.SetCellText(0,11,2,&amp;quot;正在上传文件...&amp;quot;);
+		var filename = upLoadFile(filepath);
+		_this.SetCellText(0,11,2,&amp;quot;正在导入...&amp;quot;);
+		var param = new Object();
+		param.filename = &amp;quot;/u/filestore&amp;quot;+filename;
+		var msg = invokeOSFuncExt(&amp;quot;insert&amp;quot;,param);
+		alert(msg);
+		_this.SetCellText(0,11,2,msg);
+	}
+	catch(e) {
+		alert(e);
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 7 &amp;&amp; col == 3) {
+		_this.SetCellText(sheet,7,5,newvalue);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+var timepack = new JavaPackage( &amp;quot;com.xlsgrid.net.time&amp;quot; );
+
+function insert()
+{
+	var db = null ;
+	var ds = null ;
+	var ps = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	
+	try {		
+		db = new pubpack.EADatabase();
+		
+		//加载xmlDS
+		var excelgrid = new xlsdb.excelgrid();
+		for (var sheet = 0;sheet &amp;lt;= 12;sheet++) {
+			var xmlds = excelgrid.GetXmlDS(filename,sheet);	
+			if (xmlds.getColumnCount() &amp;gt; 3) {
+				var table =  db.GetSQL(&amp;quot;select &amp;apos;PG_&amp;apos;||TAX_NEXTVAL.nextval from dual&amp;quot;);
+				var params = &amp;quot;&amp;quot;;
+				var columns = &amp;quot;&amp;quot;;
+
+				//创建临时表		
+				sql = &amp;quot;create table &amp;quot;+table+&amp;quot; (&amp;quot;;
+				for (var col = 0;col &amp;lt; xmlds.getColumnCount();col ++) {
+					if (col &amp;gt; 0) sql += &amp;quot;,&amp;quot;;
+					sql += &amp;quot;CO&amp;quot;+col+&amp;quot; varchar2(255) \n&amp;quot;;
+					if (columns != &amp;quot;&amp;quot;) columns += &amp;quot;,&amp;quot;;
+					columns += &amp;quot;CO&amp;quot;+col;
+					if (params != &amp;quot;&amp;quot;) params += &amp;quot;,&amp;quot;;
+					params += &amp;quot;?&amp;quot;;
+				}
+				sql += &amp;quot;) &amp;quot;;
+				db.ExcecutSQL(sql);
+				
+				//导入临时表
+				//最后一列日期类型的 导入后变成了数字，如何转成日期？
+				//to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;) co5
+				var updatesql = &amp;quot;insert into &amp;quot;+table+&amp;quot; (&amp;quot;+columns +&amp;quot;) values (&amp;quot;+params+&amp;quot;)&amp;quot;;
+				ps = db.GetConn().prepareStatement(updatesql);
+				
+				var rowcount = xmlds.getRowCount();
+				for(var rows=0;rows&amp;lt;rowcount;rows++) {
+					for(var cols=0;cols&amp;lt;xmlds.getColumnCount();cols++) {
+						var colname=xmlds.getColumnName(cols);
+						var colstr=xmlds.getStringAt(rows,colname);
+						ps.setString(cols+1,colstr);
+					}
+					ps.addBatch();
+				}
+				ps.executeBatch();
+				
+				sql = &amp;quot;delete from &amp;quot; +table+ &amp;quot; where co0 is null or co0=&amp;apos;纳税人识别号&amp;apos; or co1=&amp;apos;纳税人识别号&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);
+				
+				sql = &amp;quot;update &amp;quot; +table+ &amp;quot; set co5=to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5)-2,&amp;apos;yyyymmdd&amp;apos;),
+					co6=to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co6)-2,&amp;apos;yyyymmdd&amp;apos;)&amp;quot;;
+				db.ExcecutSQL(sql);
+				
+				//写入正式目标表
+//				sql = &amp;quot;update TAX_TAXDATA a set (SOMNY,TAXMNY,SDTAXMNY)=(
+//					SELECT nvl(to_number(trim(co2)),0),nvl(to_number(trim(co3)),0),nvl(to_number(trim(co4)),0)
+//					 from &amp;quot;+table+&amp;quot; b where a.id=b.co0 and a.yymm=to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(b.co5),&amp;apos;yyyy-mm&amp;apos;))
+//					where exists (select 1 from &amp;quot;+table+&amp;quot; where a.ID=co0 and a.YYMM=to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;))&amp;quot;;
+//				db.ExcecutSQL(sql);
+//				sql=&amp;quot;INSERT INTO TAX_TAXDATA(YYMM,ID,NAME,SOMNY,TAXMNY,SDTAXMNY)
+//					SELECT to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;) co5,trim(co0),trim(co1),nvl(to_number(trim(co2)),0),nvl(to_number(trim(co3)),0),nvl(to_number(trim(co4)),0)
+//				 	from &amp;quot;+table+&amp;quot; a where not exists(select 1 from TAX_TAXDATA where TAX_TAXDATA.ID=a.co0 and YYMM=to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;))&amp;quot;;
+//				ret += db.ExcecutSQL(sql);
+
+				//先更新中间表tax_tmp_taxdata
+				sql = &amp;quot;update tax_tmp_taxdata a set (xssr,sbzzse)=(select sum(nvl(to_number(trim(co2)),0)) somny,sum(nvl(to_number(trim(co3)),0)) taxmny from &amp;quot;+table+&amp;quot; b
+						where a.nsrsbh=b.co0 and a.ssdat=to_date(b.co5,&amp;apos;yyyymmdd&amp;apos;) and a.pzxh=b.co7 group by co0,co5,co7)
+					where (nsrsbh,ssdat,pzxh) in (select co0,to_date(co5,&amp;apos;yyyymmdd&amp;apos;),co7 from &amp;quot;+table+&amp;quot;)&amp;quot;;
+				db.ExcecutSQL(sql);
+				sql = &amp;quot;insert into tax_tmp_taxdata(nsrsbh,nsrmc,xssr,ssdat,sbdat,sbzzse,pzxh,czry_mc)
+          				select co0,co1,nvl(to_number(trim(co2)),0) somny,to_date(co5,&amp;apos;yyyymmdd&amp;apos;) ssdat,to_date(co6,&amp;apos;yyyymmdd&amp;apos;) sbdat,
+						nvl(to_number(trim(co3)),0) taxmny,co7,co8 from &amp;quot;+table+&amp;quot;  
+					where (co0,to_date(co5,&amp;apos;yyyymmdd&amp;apos;),co7) not in (select nsrsbh,ssdat,pzxh from tax_tmp_taxdata)&amp;quot;;
+				db.ExcecutSQL(sql);
+//				db.Commit();
+//				db = new pubpack.EADatabase();
+
+				//再更新进正式表tax_taxdata
+				ret = updateTaxData(db);
+
+				
+				//drop临时表
+				sql = &amp;quot;drop table &amp;quot; + table;
+				db.ExcecutSQL(sql);
+			}
+		}
+		db.Commit();
+		return &amp;quot;导入成功，记录数&amp;quot;+ret;
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		pub.EAFunc.Log(&amp;quot;导入税务数据文件出错&amp;quot;+e.toString());
+		return e.toString();
+	}
+	finally {
+		if(db != null) db.Close();
+	}
+
+}
+
+function genbatch()
+{
+	var db = null;
+	var jobseqid  = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	
+		jobseqid = jobid;
+		var tim = new timepack.EARunOSTimer(); 
+		tim.init(jobseqid,jobnam,&amp;quot;TAXMON&amp;quot;,&amp;quot;TaxData&amp;quot;,&amp;quot;syncTaxData&amp;quot;, &amp;quot;jobid=&amp;quot;+jobid+&amp;quot;&amp;jobseqid=&amp;quot;+jobseqid+&amp;quot;&amp;dat1=&amp;quot;+dat1+&amp;quot;&amp;dat2=&amp;quot;+dat2);
+	}
+	catch ( ee ) {
+		throw new pub.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return jobseqid  ;// 返回后台分配的作业编号
+
+}
+
+var percent = 0;
+//同步税务数据
+function syncTaxData()
+{
+	var db = null ;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	var ret1 = 0;
+	var ret2 = 0;
+	var tmptable1 = &amp;quot;&amp;quot;;
+	var tmptable2 = &amp;quot;&amp;quot;;
+	
+	try {		
+		db = new pubpack.EADatabase();
+		tmptable1 = db.GetSQL(&amp;quot;select &amp;apos;TAX_TMPTAXDAT_&amp;apos;||to_char(sysdate,&amp;apos;hh24miss&amp;apos;) from dual&amp;quot;);
+		tmptable2 = tmptable1 + &amp;quot;_2&amp;quot;;
+		sql = &amp;quot;create table &amp;quot;+tmptable1+&amp;quot; as 
+			select bb.nsrsbh,utl_raw.cast_to_varchar2(bb.nsr_name) nsrmc,cc.xssr,cc.sbzzse,cc.sssq_Q,
+			TO_DATE(substr(to_char(cc.sbrq,&amp;apos;YYYYMMDD&amp;apos;),1,8),&amp;apos;YYYYMMDD&amp;apos;) sbdat,cc.pzxh,
+			utl_raw.cast_to_varchar2(bb.czry_name) czry_mc from 
+			(
+			select a.nsrsbh,a.nsr_name,e.czry_name
+			from v_tax_dj_nsrxx@taxdb a,v_tax_dm_czry@taxdb e
+			where a.ZG_SWGY_DM=e.CZRY_DM
+			and a.NSR_SWJG_DM like &amp;apos;1451101%&amp;apos;
+			) bb,
+			(
+			select aa.nsrsbh,sum(aa.YZHWLWBHSXSE)xssr ,sum(aa.YNSE)sbzzse ,sssq_Q,sbrq,pzxh
+			from 
+			(select k.NSRSBH,k.YZHWLWBHSXSE,k.YBTSE,k.YNSE,k.SSSQ_Q,k.sbrq,k.pzxh
+			from sb_zzs_xgmnsr_2005@taxdb k
+			where 
+			k.sbbl=1
+			and k.bcsblx in(&amp;apos;&amp;apos;,&amp;apos;0&amp;apos;) 
+			and k.yxbz=&amp;apos;Y&amp;apos;
+			--and k.sbrq&amp;gt;=to_date(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			--and k.sbrq&amp;lt;=to_date(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			and to_char(k.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;
+			and to_char(k.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;
+			and not exists 
+			(select 1 from  sb_zzs_xgmnsr_2005@taxdb l 
+			where l.scsbpzxh=k.pzxh)
+			union all
+			--2有补充申报
+			select k.NSRSBH,k.YZHWLWBHSXSE,k.YBTSE,k.YNSE,k.SSSQ_Q,k.sbrq,k.pzxh
+			from sb_zzs_xgmnsr_2005@taxdb k
+			where 
+			k.sbbl=1
+			and k.bcsblx in(&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;)  
+			and k.yxbz=&amp;apos;Y&amp;apos;
+			--and k.sbrq&amp;gt;=to_date(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			--and k.sbrq&amp;lt;=to_date(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			and to_char(k.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;
+			and to_char(k.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;
+			and not exists 
+			(select 1 from  sb_zzs_xgmnsr_2005@taxdb l 
+			where l.scsbpzxh=k.pzxh)
+			) aa
+			group by aa.nsrsbh,aa.SSSQ_Q,aa.sbrq,aa.pzxh
+			) cc
+			where bb.nsrsbh=cc.nsrsbh&amp;quot;;
+		
+		percent = 20;
+		notify(jobid,percent,&amp;quot;正在同步[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]一般纳税人申报信息...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;create table &amp;quot;+tmptable2+&amp;quot; as 
+			select xx.nsrsbh,utl_raw.cast_to_varchar2(xx.nsr_name) nsrmc,qysf.xssr,qysf.sbzzse,qysf.SSSQ_Q,
+			 TO_DATE(substr(to_char(qysf.sbrq,&amp;apos;YYYYMMDD&amp;apos;),1,8),&amp;apos;YYYYMMDD&amp;apos;) sbdat,qysf.pzxh,
+			 utl_raw.cast_to_varchar2(xx.czry_name) czry_mc from 
+			(select S.nsrsbh,S.nsr_name,S.nsr_swjg_dm,h.czry_name
+			      from v_tax_dj_nsrxx@taxdb S,DJ_NSRXX_KZ@taxdb T,v_tax_dm_czry@taxdb h
+			      where  S.NSRSBH=T.NSRSBH
+			          and s.ZG_SWGY_DM=h.CZRY_DM       
+			) xx,   
+			(select nsrsbh sbh,sum(sysl_xse + jyzs_xse)xssr ,sum(jxse) jxse,sum(YNSEHJ)sbzzse ,SSSQ_Q,pzxh,sbrq
+			from
+			(
+			select a.nsrsbh,a.sysl_xse,a.jyzs_xse,a.ynsehj,a.JXSE,a.SSSQ_Q,pzxh,sbrq
+			from sb_zzs_2003_ybnsr@taxdb a --正常申报
+			where
+			  not exists
+			  (
+			    select 1 from sb_zzs_2003_ybnsr@taxdb b
+			    where
+			      b.yxbz=&amp;apos;Y&amp;apos;
+			      and b.sbbl in (&amp;apos;1&amp;apos;,&amp;apos;3&amp;apos;)
+			      and b.bcsblx in (&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;)
+			      and b.sssq_q=a.sssq_q
+			      and b.sssq_z=a.sssq_z
+			      and b.nsrsbh=a.nsrsbh
+			  )
+			  and a.yxbz=&amp;apos;Y&amp;apos;
+			  and a.sbbl in (&amp;apos;1&amp;apos;,&amp;apos;3&amp;apos;)
+			  and (a.bcsblx=&amp;apos;0&amp;apos; or a.bcsblx is null)
+			  --and a.sbrq&amp;gt;=to_date(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			  --and a.sbrq&amp;lt;=to_date(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			  and to_char(a.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;
+			  and to_char(a.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;			
+			union all
+			select a.nsrsbh,a.sysl_xse,a.jyzs_xse,a.ynsehj,a.JXSE,a.SSSQ_Q,pzxh,sbrq
+			from sb_zzs_2003_ybnsr@taxdb a --补充申报
+			where
+			  not exists
+			  (
+			    select 1 from sb_zzs_2003_ybnsr@taxdb b
+			    where
+			      a.pzxh=b.scsbpzxh
+			      and b.yxbz=&amp;apos;Y&amp;apos;
+			      and b.sbbl in (&amp;apos;1&amp;apos;,&amp;apos;3&amp;apos;)
+			      and b.bcsblx in (&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;)   
+			      and b.sssq_q=a.sssq_q
+			      and b.sssq_z=a.sssq_z
+			      and b.nsrsbh=a.nsrsbh
+			  )
+			  and a.yxbz=&amp;apos;Y&amp;apos;
+			  and a.sbbl in (&amp;apos;1&amp;apos;,&amp;apos;3&amp;apos;)
+			  and a.bcsblx in (&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;) 
+			  --and a.sbrq&amp;gt;=to_date(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			  --and a.sbrq&amp;lt;=to_date(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;YYYYMMDD&amp;apos;)
+			  and to_char(a.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;gt;=&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;
+			  and to_char(a.sbrq,&amp;apos;yyyy-mm&amp;apos;)&amp;lt;=&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;
+			) bb
+			group by nsrsbh,SSSQ_Q,pzxh,sbrq
+			) qysf
+			where xx.nsrsbh=qysf.sbh
+			   and xx.nsr_swjg_dm like &amp;apos;%1451101%&amp;apos;&amp;quot;;
+		percent = 50;
+		notify(jobid,percent,&amp;quot;正在同步[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]小规模纳税人申报信息...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+		db.ExcecutSQL(sql);
+
+		percent = 60;
+		notify(jobid,percent,&amp;quot;正在更新一般纳税人申报数据[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+		
+		//先更新中间表tax_tmp_taxdata
+		sql = &amp;quot;update tax_tmp_taxdata a set (xssr,sbzzse)=(select sum(xssr) somny,sum(sbzzse) taxmny from &amp;quot;+tmptable1+&amp;quot; b
+				where a.nsrsbh=b.nsrsbh and a.ssdat=b.sssq_q and a.pzxh=b.pzxh group by nsrsbh,ssdat,pzxh)
+			where (nsrsbh,ssdat,pzxh) in (select nsrsbh,sssq_q,pzxh from &amp;quot;+tmptable1+&amp;quot;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into tax_tmp_taxdata(nsrsbh,nsrmc,xssr,ssdat,sbdat,sbzzse,pzxh,czry_mc)
+			select nsrsbh,nsrmc,xssr,sssq_q,sbdat,sbzzse,pzxh,czry_mc from &amp;quot;+tmptable1+&amp;quot; 
+			where (nsrsbh,sssq_q,pzxh) not in (select nsrsbh,ssdat,pzxh from tax_tmp_taxdata)&amp;quot;;
+		db.ExcecutSQL(sql);
+
+		percent = 70;
+		notify(jobid,percent,&amp;quot;正在更新小规模纳税人申报数据[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+
+		sql = &amp;quot;update tax_tmp_taxdata a set (xssr,sbzzse)=(select sum(xssr) somny,sum(sbzzse) taxmny from &amp;quot;+tmptable2+&amp;quot; b
+				where a.nsrsbh=b.nsrsbh and a.ssdat=b.sssq_q and a.pzxh=b.pzxh group by nsrsbh,ssdat,pzxh)
+			where (nsrsbh,ssdat,pzxh) in (select nsrsbh,sssq_q,pzxh from &amp;quot;+tmptable2+&amp;quot;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into tax_tmp_taxdata(nsrsbh,nsrmc,xssr,ssdat,sbdat,sbzzse,pzxh,czry_mc)
+			select nsrsbh,nsrmc,xssr,sssq_q,sbdat,sbzzse,pzxh,czry_mc from &amp;quot;+tmptable2+&amp;quot; 
+			where (nsrsbh,sssq_q,pzxh) not in (select nsrsbh,ssdat,pzxh from tax_tmp_taxdata)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		db = new pubpack.EADatabase();
+		
+		percent = 90;
+		notify(jobid,percent,&amp;quot;正在更新正式库数据[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+
+		//再更新进正式表tax_taxdata
+//		sql = &amp;quot;update tax_taxdata a set (somny,taxmny)=(
+//		select somny,taxmny from (
+//		  select nsrsbh,sum(xssr) somny,sum(sbzzse) taxmny,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;) yymm
+//		  from tax_tmp_taxdata group by nsrsbh,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;)
+//		) b where a.id=b.nsrsbh and a.yymm=b.yymm
+//		) where (a.id,a.yymm) in (select nsrsbh,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;) from tax_tmp_taxdata)&amp;quot;;
+//		ret1 += db.ExcecutSQL(sql);
+//
+//		percent = 90;
+//		notify(jobid,percent,&amp;quot;正在写入正式库数据[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]...&amp;quot;,&amp;quot;Run&amp;quot;);//后台通知外部
+//		
+//		sql = &amp;quot;insert into tax_taxdata(yymm,id,name,somny,taxmny)
+//		select to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;) yymm,nsrsbh,nsrmc,sum(xssr) somny,sum(sbzzse) taxmny
+//		from tax_tmp_taxdata where (nsrsbh,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;)) not in (select id,yymm from tax_taxdata)
+//		group by to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;),nsrsbh,nsrmc&amp;quot;;
+//		ret2 += db.ExcecutSQL(sql);
+		
+		ret += updateTaxData(db);
+
+		db.Commit();
+		percent = 100;
+		notify(jobid,percent,&amp;quot;同步[&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;]税务数据完成，记录数&amp;quot;+ret,&amp;quot;end&amp;quot;);//后台通知外部
+		
+		return &amp;quot;同步完成，记录数&amp;quot;+ret;
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		notify(jobid,percent,&amp;quot;同步过程出现异常：&amp;quot;+e.toString(),&amp;quot;Run&amp;quot;);//后台通知外部
+		return e.toString();
+	}
+	finally {
+		if(db != null) db.Close();
+		try { if (tmptable1 != &amp;quot;&amp;quot;) pub.EADbTool.ExcecutSQL(&amp;quot;drop table &amp;quot; + tmptable1); } catch (e1) {}
+		try { if (tmptable2 != &amp;quot;&amp;quot;) pub.EADbTool.ExcecutSQL(&amp;quot;drop table &amp;quot; + tmptable2); } catch (e2) {}
+	}
+}
+
+//更新进正式表tax_taxdata
+function updateTaxData(db)
+{
+	var ret = 0;
+	var sql = &amp;quot;update tax_taxdata a set (somny,taxmny)=(
+	select somny,taxmny from (
+	  select nsrsbh,sum(xssr) somny,sum(sbzzse) taxmny,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;) yymm
+	  from tax_tmp_taxdata group by nsrsbh,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;)
+	) b where a.id=b.nsrsbh and a.yymm=b.yymm
+	) where --(a.id,a.yymm) in (select nsrsbh,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;) from tax_tmp_taxdata)
+	exists (select 1 from tax_tmp_taxdata b where a.id=b.nsrsbh and a.yymm=to_char(b.ssdat,&amp;apos;yyyy-mm&amp;apos;))&amp;quot;;
+	ret += db.ExcecutSQL(sql);
+	
+	sql = &amp;quot;insert into tax_taxdata(yymm,id,name,somny,taxmny)
+	select to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;) yymm,nsrsbh,nsrmc,sum(xssr) somny,sum(sbzzse) taxmny
+	from tax_tmp_taxdata a
+	where --(nsrsbh,to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;)) not in (select id,yymm from tax_taxdata)
+	not exists (select 1 from tax_taxdata b where a.nsrsbh=b.id and to_char(a.ssdat,&amp;apos;yyyy-mm&amp;apos;)=b.yymm)
+	group by to_char(ssdat,&amp;apos;yyyy-mm&amp;apos;),nsrsbh,nsrmc&amp;quot;;
+	ret += db.ExcecutSQL(sql);
+	return ret;
+}
+
+
+// 通知外部当前的运行情况
+function notify(jobseqid,percent,note,stat)
+{
+	var db = null;
+	if ( percent &amp;lt; 0 ) return &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		note = pubpack.EAFunc.Replace( note, &amp;quot;&amp;apos;&amp;quot;,&amp;quot;‘&amp;quot; );
+		var str = stat+&amp;quot; &amp;quot;+percent+&amp;quot;% &amp;quot;+note;
+		db.ExcecutSQL(&amp;quot;insert into log(str)values(&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;)&amp;quot;);
+		if(note==&amp;quot;&amp;quot;){
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		else {
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,percentnote=&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+			db.ExcecutSQL(&amp;quot;insert into RunOSTimerDTL(id,name ) values(&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;)&amp;quot; );
+		}
+		db.Commit();
+	}
+	catch ( e ) {
+		//pubpack.EAFunc.Log( e.toString() );
+		db.Rollback();
+		return &amp;quot;ERROR&amp;quot; ;
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot;OK&amp;quot;;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GetSEQ</ID><NAME ></NAME><DATDSC >select seq_etl.nextval val from dual</DATDSC><C4 ></C4></ROW>
+<ROW num="1" ><ID >QueryRunOSTimer</ID><NAME ></NAME><DATDSC >select id from RunOSTimer
+where upper(stat)=&amp;apos;RUN&amp;apos; and id like &amp;apos;[%jobid]%&amp;apos;</DATDSC><C4 >QueryRunOSTimer</C4></ROW>
+<ROW num="2" ><ID >QueryRunOSTimerExist</ID><NAME ></NAME><DATDSC >select count(*) from RunOSTimer
+where (stat=&amp;apos;end&amp;apos; or stat=&amp;apos;error&amp;apos;) and id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4></ROW>
+<ROW num="3" ><ID >DeleteQueryRunOSTimer</ID><NAME ></NAME><DATDSC >delete from RunOSTimer where  id=&amp;apos;[%jobid]&amp;apos;;
+delete from RunOSTimerDTL where  id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,749 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_list</MWID><NAME >列表类的显示风格</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_list.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+//文字列表分页
+function titlepage(){
+var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; order by crtdat desc &amp;quot;  ;
+
+	var ds=db.QuerySQL(sql);
+	
+	html += &amp;quot;&amp;lt;script src=\&amp;quot;http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;script &amp;gt;
+		    $(document).ready(function(){
+		            $(\&amp;quot;#ol ul li:gt(10)\&amp;quot;).hide();//初始化，前面4条数据显示，其他的数据隐藏。
+		            var total_q=$(\&amp;quot;#ol ul li\&amp;quot;).index()+1;//总数据
+		            
+		            var current_page=10;//每页显示的数据
+		            var current_num=1;//当前页数
+		            var total_page= Math.round(total_q/current_page);//总页数  
+		            var next=$(\&amp;quot;.next\&amp;quot;);//下一页
+		            var prev=$(\&amp;quot;.prev\&amp;quot;);//上一页
+		            $(\&amp;quot;.total\&amp;quot;).text(total_page);//显示总页数
+		            $(\&amp;quot;.current_page\&amp;quot;).text(current_num);//当前的页数
+		             
+		            //下一页
+		            $(\&amp;quot;.next\&amp;quot;).click(function(){
+		                if(current_num==total_page){
+		                        return false;//如果大于总页数就禁用下一页
+		                    }
+		                    else{
+		                        $(\&amp;quot;.current_page\&amp;quot;).text(++current_num);//点击下一页的时候当前页数的值就加1
+		                        $.each($(&amp;apos;#ol ul li&amp;apos;),function(index,item){
+		                            var start = current_page* (current_num-1);//起始范围
+		                            var end = current_page * current_num;//结束范围
+		                            if(index &amp;gt;= start &amp;&amp; index &amp;lt; end){//如果索引值是在start和end之间的元素就显示，否则就隐
+		                                $(this).show();
+		                            }else {
+		                                $(this).hide(); 
+		                            }
+		                        });
+		                    }
+		            });
+		            //上一页方法
+		            $(\&amp;quot;.prev\&amp;quot;).click(function(){
+		                    if(current_num==1){
+		                        return false;
+		                    }else{
+		                        $(\&amp;quot;.current_page\&amp;quot;).text(--current_num);
+		                        $.each($(&amp;apos;#ol ul li&amp;apos;),function(index,item){
+		                            var start = current_page* (current_num-1);//起始范围
+		                            var end = current_page * current_num;//结束范围
+		                            if(index &amp;gt;= start &amp;&amp; index &amp;lt; end){//如果索引值是在start和end之间的元素就显示，否则就隐藏
+		                                $(this).show();
+		                            }else {
+		                                $(this).hide(); 
+		                            }
+		                        });     
+		                    }
+		                     
+		                })
+		    })
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	html += &amp;quot;&amp;lt;style&amp;gt;
+		    .main{width:100%;zoom:1;margin:0 auto;}
+		    .item{width:100%;overflow:hidden;}
+		   
+		    .clear{zoom:1;}
+		    .clear:after{content:\&amp;quot;\&amp;quot;;display:block;height:0;clear:both;visibility:hidden;}
+		    
+		    .page_btn{padding-top:20px;}
+		    .page_btn a{cursor:pointer;padding:5px;border:solid 1px #ccc;font-size:12px;}
+		    .page_box{float:right;}
+		    .num{padding:0 10px;}
+		&amp;lt;/style&amp;gt;&amp;quot;;
+	
+	
+	html += &amp;quot;&amp;lt;div class=\&amp;quot;main\&amp;quot;&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;div class=\&amp;quot;item\&amp;quot; id=\&amp;quot;ol\&amp;quot;&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;ul class=\&amp;quot;clear\&amp;quot;&amp;gt;&amp;quot;;
+	for (var r = 0; r &amp;lt; ds.getRowCount(); r ++) {
+		var icon = ds.getStringAt(r,&amp;quot;icon&amp;quot;);
+		var name = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+		var url = ds.getStringAt(r,&amp;quot;url&amp;quot;);
+
+		if (url != &amp;quot;&amp;quot;) {
+			url = &amp;quot;L.sp?id=&amp;quot;+OPENLAYID+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(r,&amp;quot;GUID&amp;quot;);
+			html += &amp;quot;&amp;lt;li&amp;gt;&amp;lt;a target=\&amp;quot;&amp;quot;+ds.getStringAt(r,&amp;quot;target&amp;quot;)+&amp;quot;\&amp;quot; href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;&amp;quot;;
+		} else {
+			html += &amp;quot;&amp;lt;li&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/li&amp;gt;&amp;quot;;
+		}
+	}
+	html += &amp;quot;&amp;lt;/ul&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;div class=\&amp;quot;page_btn clear\&amp;quot;&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;span class=\&amp;quot;page_box\&amp;quot;&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;a class=\&amp;quot;prev\&amp;quot;&amp;gt;上一页&amp;lt;/a&amp;gt;&amp;lt;span class=\&amp;quot;num\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;current_page\&amp;quot;&amp;gt;1&amp;lt;/span&amp;gt;&amp;lt;span style=\&amp;quot;padding:0 3px;\&amp;quot;&amp;gt;/&amp;lt;/span&amp;gt;&amp;lt;span class=\&amp;quot;total\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;a class=\&amp;quot;next\&amp;quot;&amp;gt;下一页&amp;lt;/a&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;/span&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	
+	return html;
+
+
+}
+
+//多列标题栏测试div
+function toublelist1(){
+var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	sql+=&amp;quot;)&amp;quot;;
+	// &amp;quot;+WHEREBY +&amp;quot; &amp;quot;+SORTBY;
+	var ds=db.QuerySQL(sql);
+	html += &amp;quot;&amp;lt;div style=\&amp;quot;background-color:#E5E5E5;\&amp;quot;&amp;gt;&amp;quot;;
+	var n = 0;
+	var val = &amp;quot;&amp;quot;;
+	
+	for (var r=0;r&amp;lt;LAYCOL;r++) {
+		html +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+		for (var i=0;i&amp;lt;LAYROW;i++) {
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;height:20px; padding:2px;\&amp;quot;&amp;gt;&amp;quot;;
+			if (n &amp;lt; ds.getRowCount()) {
+				val = ds.getStringAt(n,&amp;quot;name&amp;quot;);
+				var dat = ds.getStringAt(n,&amp;quot;crtdat&amp;quot;);
+				if (ds.getStringAt(n,&amp;quot;icon&amp;quot;) != &amp;quot;&amp;quot;) {
+					html +=&amp;quot;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.getStringAt(n,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot; width=20 height=20/&amp;gt;&amp;quot;;
+				}
+				var url = ds.getStringAt(n,&amp;quot;url&amp;quot;) ;
+				if(OPENLAYID!=&amp;quot;&amp;quot;){
+					url = &amp;quot;L.sp?id=&amp;quot;+OPENLAYID+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(n,&amp;quot;GUID&amp;quot;);
+				}
+				
+				if (ds.getStringAt(n,&amp;quot;url&amp;quot;) != &amp;quot;&amp;quot;) {
+					html +=&amp;quot;&amp;lt;a href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot; target=\&amp;quot;&amp;quot;+ds.getStringAt(n,&amp;quot;target&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+				} else {
+					html +=val;
+				}
+
+			} else {
+				break;
+			}
+			n++;
+			
+		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+		}
+		html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+	}
+	html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+
+}
+
+//多列型的标题列表
+function toublelist(){
+		var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	sql+=&amp;quot;)&amp;quot;;
+	// &amp;quot;+WHEREBY +&amp;quot; &amp;quot;+SORTBY;
+	var ds=db.QuerySQL(sql);
+	html += &amp;quot;&amp;lt;div style=\&amp;quot;background-color:#E5E5E5;\&amp;quot;&amp;gt;&amp;quot;;
+	var n = 0;
+	var val = &amp;quot;&amp;quot;;
+	
+	for (var r=0;r&amp;lt;LAYCOL;r++) {
+		html +=&amp;quot;&amp;lt;table&amp;gt;&amp;quot;;
+		for (var i=0;i&amp;lt;LAYROW;i++) {
+		html += &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;;
+		html += &amp;quot;&amp;lt;div style=\&amp;quot;height:20px; padding:2px;\&amp;quot;&amp;gt;&amp;quot;;
+			if (n &amp;lt; ds.getRowCount()) {
+				val = ds.getStringAt(n,&amp;quot;name&amp;quot;);
+				var dat = ds.getStringAt(n,&amp;quot;crtdat&amp;quot;);
+				if (ds.getStringAt(n,&amp;quot;icon&amp;quot;) != &amp;quot;&amp;quot;) {
+					html +=&amp;quot;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.getStringAt(n,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot; width=20 height=20/&amp;gt;&amp;quot;;
+				}
+				var url = ds.getStringAt(n,&amp;quot;url&amp;quot;) ;
+				if(OPENLAYID!=&amp;quot;&amp;quot;){
+					url = &amp;quot;L.sp?id=&amp;quot;+OPENLAYID+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(n,&amp;quot;GUID&amp;quot;);
+				}
+				
+				if (ds.getStringAt(n,&amp;quot;url&amp;quot;) != &amp;quot;&amp;quot;) {
+					html +=&amp;quot;&amp;lt;a href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot; target=\&amp;quot;&amp;quot;+ds.getStringAt(n,&amp;quot;target&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+				} else {
+					html +=val;
+				}
+
+			} else {
+				break;
+			}
+			n++;
+			
+		html += &amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+		}
+		html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+
+	}
+	html += &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+}
+
+//左边带图片单列列表(简约型的列表)
+function titlelist(){
+var html = &amp;quot;&amp;quot;;
+	
+
+	var sql = &amp;quot; select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+= &amp;quot; ) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	else sql+=&amp;quot;)&amp;quot;;
+	// &amp;quot;+WHEREBY +&amp;quot; &amp;quot;+SORTBY;
+	//直接ＳＱＬ查询
+	if (SQLTXT != &amp;quot;&amp;quot;) sql = SQLTXT;
+	var ds=db.QuerySQL(sql);
+	html += &amp;quot;&amp;lt;table valign=\&amp;quot;top\&amp;quot; width=100% &amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;tr&amp;gt;&amp;quot;;
+	var n = 0;
+	var val = &amp;quot;&amp;quot;;
+	if(LAYCOL == &amp;quot;&amp;quot; ) LAYCOL = &amp;quot;1&amp;quot;;
+	if(LAYROW == &amp;quot;&amp;quot; ) LAYROW = &amp;quot;20&amp;quot;;
+	if(maxtitlelen==null||maxtitlelen==&amp;quot;null&amp;quot;)maxtitlelen = &amp;quot;&amp;quot;;
+	if(borderstyle==null||borderstyle==&amp;quot;null&amp;quot;)borderstyle= &amp;quot;&amp;quot;;
+	//=0(默认)无边框线 =1 下方虚线 =2 表格线
+	var sBorderStyle = &amp;quot;border-bottom: 1px dotted #C0C0C0;&amp;quot;;
+	if(borderstyle==&amp;quot;0&amp;quot;)
+		sBorderStyle = &amp;quot;&amp;quot;;
+	if(borderstyle==&amp;quot;2&amp;quot;) sBorderStyle = &amp;quot;border: 1px solid #C0C0C0;&amp;quot;;
+
+	if(rowheight==null||rowheight==&amp;quot;null&amp;quot;||rowheight==&amp;quot;&amp;quot;)rowheight= &amp;quot;30&amp;quot;;
+	if(cellbkcolor==null||cellbkcolor==&amp;quot;null&amp;quot;)cellbkcolor= &amp;quot;&amp;quot;;
+	var sCellBkColorStyle = &amp;quot;&amp;quot;;
+	if(cellbkcolor!=&amp;quot;&amp;quot;)sCellBkColorStyle  = &amp;quot;bgcolor=\&amp;quot;&amp;quot;+cellbkcolor+&amp;quot;\&amp;quot;&amp;quot;;
+	
+	for (var r=0;r&amp;lt;LAYCOL;r++) {
+		html += &amp;quot;&amp;lt;td valign=\&amp;quot;top\&amp;quot;  &amp;gt;&amp;quot;;
+		html +=&amp;quot;&amp;lt;table width=100%&amp;gt;&amp;quot;;
+		for (var i=0;i&amp;lt;LAYROW;i++) {
+			if (n &amp;lt; ds.getRowCount()) {
+				val = ds.getStringAt(n,&amp;quot;name&amp;quot;);
+				if(maxtitlelen !=&amp;quot;&amp;quot;) {
+					if(val.length()&amp;gt;maxtitlelen) 
+						val = val.substring(0,maxtitlelen )+&amp;quot;...&amp;quot;;
+				}
+				var dat = ds.getStringAt(n,&amp;quot;crtdat&amp;quot;);
+				html +=&amp;quot;&amp;lt;tr height=\&amp;quot;&amp;quot;+rowheight+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;td &amp;quot;+sCellBkColorStyle +&amp;quot; &amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;table cellpadding=\&amp;quot;0\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; width=100%&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;tr height=&amp;quot;+rowheight+&amp;quot;&amp;gt;&amp;quot;;
+				var icon = ds.getStringAt(n,&amp;quot;icon2&amp;quot;) ;
+				if (icon  != &amp;quot;&amp;quot;) {
+					html +=&amp;quot;&amp;lt;td width=\&amp;quot;30\&amp;quot; style=\&amp;quot;&amp;quot;+sBorderStyle +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+					if(icon.substring(0,9)==&amp;quot;glyphicon&amp;quot; ) 
+						html +=&amp;quot;&amp;lt;span class=&amp;apos;&amp;quot;+icon+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+					else if(icon.substring(0,1)==&amp;quot;&amp;lt;&amp;quot; ) 
+						html +=icon;
+					else html +=&amp;quot;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.getStringAt(n,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot; width=20 height=20/&amp;gt;&amp;quot;;
+					html +=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+				
+				html +=&amp;quot;&amp;lt;td style=\&amp;quot;&amp;quot;+sBorderStyle +&amp;quot;\&amp;quot; align=left &amp;gt;&amp;quot;;
+				var url = ds.getStringAt(n,&amp;quot;url&amp;quot;) ;
+				if(OPENLAYID!=&amp;quot;&amp;quot;){
+					url = &amp;quot;L.sp?id=&amp;quot;+OPENLAYID+&amp;quot;&amp;layhdrguid=&amp;quot;+ds.getStringAt(n,&amp;quot;GUID&amp;quot;);
+				}
+				
+				if (ds.getStringAt(n,&amp;quot;url&amp;quot;) != &amp;quot;&amp;quot;) {
+					html +=&amp;quot;&amp;lt;a href=\&amp;quot;&amp;quot;+url+&amp;quot;\&amp;quot; target=\&amp;quot;&amp;quot;+ds.getStringAt(n,&amp;quot;target&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/a&amp;gt;&amp;quot;;
+				} else {
+					html +=val;
+				}
+				html +=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				html +=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+			} else {
+				break;
+			}
+			n++;
+		}
+		
+		html +=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+		html +=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+	}
+	html += &amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+	html += &amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	
+	return html;
+}
+//
+// 
+//
+function crttable(){
+
+	var sql=&amp;quot;&amp;quot;;
+	var trbgcolor=&amp;quot;#F9F9F9&amp;quot;;
+	var tdborder=0;
+//	TB_ENTBTYP=true;
+	var html=&amp;quot;&amp;lt;table id=\&amp;quot;mytable\&amp;quot; borderColor=\&amp;quot;\&amp;quot; align=\&amp;quot;center\&amp;quot; width=\&amp;quot;&amp;quot;+TB_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+TB_HEIGHT+&amp;quot;\&amp;quot; cellspcing=\&amp;quot;2\&amp;quot; cellpadding=\&amp;quot;2\&amp;quot; style=\&amp;quot;border-collapse:collapse;line-height:&amp;quot;+LINE_HEIGHT+&amp;quot;\&amp;quot; &amp;gt;
+        &amp;lt;tbody id=\&amp;quot;table2\&amp;quot; &amp;gt;&amp;quot;;
+	 
+	if(SQLTXT!=&amp;quot;&amp;quot;){
+		sql=SQLTXT;
+		sql=pub.EAFunc.Replace(sql,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		sql=pub.EAFunc.Replace(sql,&amp;quot;&amp;lt;&amp;quot;,&amp;quot;&amp;lt;&amp;quot;);
+		sql=pub.EAFunc.Replace(sql,&amp;quot;&amp;gt;&amp;quot;,&amp;quot;&amp;gt;&amp;quot;);
+		sql=web.EASession.GetSysValue(sql,request);//替换request 中[%id]
+		sql=web.EASession.GetSysValue(sql,web.EASession.GetUserinfo(request));
+
+		var ds=db.QuerySQL(sql);
+		var style=&amp;quot;&amp;quot;;
+		if(TB_IFHEADBORDER==&amp;quot;true&amp;quot;){
+			style=&amp;quot;style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px 1px; font-size: 20px;\&amp;quot;&amp;quot;;
+		}
+		if(TB_IFHEAD==&amp;quot;true&amp;quot;){
+			html+=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;center\&amp;quot; &amp;quot;+style+&amp;quot; colspan=\&amp;quot;&amp;quot;+ds.getColumnCount()+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+TB_HEAD+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+		}
+		for(var r=0; r&amp;lt;ds.getRowCount(); r++){
+			if(r==0){
+				html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+TB_ROLBGCOLOR+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+				for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getColumnName(c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				}
+				html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+			}
+			if(TB_TABLW==&amp;quot;true&amp;quot;&amp;&amp;r%2==1) trbgcolor=&amp;quot;#F9F9F9&amp;quot;; else trbgcolor=&amp;quot;#FFFFFF&amp;quot;;
+			if(TB_ENTBTYP==&amp;quot;true&amp;quot;) tdborder=0;  else tdborder=1;
+			html+=&amp;quot;&amp;lt;tr bgcolor=\&amp;quot;&amp;quot;+trbgcolor+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+			for(var c=0;c&amp;lt;ds.getColumnCount();c++){
+				if(c==0&amp;&amp;ds.getColumnCount()&amp;gt;1)
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px 1px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				else if(c==ds.getColumnCount()-1)
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px 1px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				else
+					html+=&amp;quot;&amp;lt;td style=\&amp;quot;border:solid &amp;quot;+TB_BORDERCOLOR+&amp;quot;; border-width:1px &amp;quot;+tdborder+&amp;quot;px 1px &amp;quot;+tdborder+&amp;quot;px;\&amp;quot;&amp;gt;&amp;quot;+ds.getStringAt(r,c)+&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;
+				
+			}
+			html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot;;
+
+		}
+	}
+	
+	html+=&amp;quot;&amp;lt;/tbody&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	if(TB_ISPAGE==&amp;quot;true&amp;quot;){			
+		html+=&amp;quot;&amp;lt;div align=\&amp;quot;center\&amp;quot; style=\&amp;quot;margin-top:15px\&amp;quot;&amp;gt;
+		  &amp;lt;span id=\&amp;quot;spanFirst\&amp;quot;&amp;gt;第一页&amp;lt;/span&amp;gt; 
+		  &amp;lt;span id=\&amp;quot;spanPre\&amp;quot;&amp;gt;上一页&amp;lt;/span&amp;gt; 
+		  &amp;lt;span id=\&amp;quot;spanNext\&amp;quot;&amp;gt;下一页&amp;lt;/span&amp;gt; 
+		  &amp;lt;span id=\&amp;quot;spanLast\&amp;quot;&amp;gt;最后一页&amp;lt;/span&amp;gt; 
+		  第&amp;lt;span id=\&amp;quot;spanPageNum\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;页/共&amp;lt;span id=\&amp;quot;spanTotalPage\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;页
+	      &amp;lt;/div&amp;gt;
+		      &amp;lt;script&amp;gt;
+			      var theTable = document.getElementById(\&amp;quot;table2\&amp;quot;);
+			      var totalPage = document.getElementById(\&amp;quot;spanTotalPage\&amp;quot;);
+			      var pageNum = document.getElementById(\&amp;quot;spanPageNum\&amp;quot;);
+			 
+			      var spanPre = document.getElementById(\&amp;quot;spanPre\&amp;quot;);
+			      var spanNext = document.getElementById(\&amp;quot;spanNext\&amp;quot;);
+			      var spanFirst = document.getElementById(\&amp;quot;spanFirst\&amp;quot;);
+			      var spanLast = document.getElementById(\&amp;quot;spanLast\&amp;quot;);
+			 
+			      var numberRowsInTable = theTable.rows.length;
+			      var pageSize =10;
+			      var page = 1;
+				  
+			     //下一页
+			      function next() {
+			         hideTable();
+			         currentRow = pageSize * page;
+			          maxRow = currentRow + pageSize;
+			          if (maxRow &amp;gt; numberRowsInTable) maxRow = numberRowsInTable;
+			          for (var i = currentRow; i &amp;lt; maxRow; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			          page++;
+			         if (maxRow == numberRowsInTable) { nextText(); lastText(); }
+			          showPage();
+			          preLink();
+			          firstLink();
+			      }
+			     //上一页
+			      function pre() {
+			         hideTable();
+			         page--;
+			         currentRow = pageSize * page;
+			          maxRow = currentRow - pageSize;
+			          if (currentRow &amp;gt; numberRowsInTable) currentRow = numberRowsInTable;
+			          for (var i = maxRow; i &amp;lt; currentRow; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			         if (maxRow == 0) { preText(); firstText(); }
+			          showPage();
+			          nextLink();
+			          lastLink();
+			      }
+			     //第一页
+			      function first() {
+			          hideTable();
+			          page = 1;
+			          for (var i = 0; i &amp;lt; pageSize; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			          showPage();
+			          preText();
+			          nextLink();
+			          lastLink();
+			      }
+			     //最后一页
+			      function last() {
+			          hideTable();
+			          page = pageCount();
+			          currentRow = pageSize * (page - 1);
+			          for (var i = currentRow; i &amp;lt; numberRowsInTable; i++) {
+			              theTable.rows[i].style.display = &amp;apos;&amp;apos;;
+			          }
+			          showPage();
+			          preLink();
+			          nextText();
+			          firstLink();
+			      }
+			
+			     function hideTable() {
+			          for (var i = 0; i &amp;lt; numberRowsInTable; i++) {
+			              theTable.rows[i].style.display = &amp;apos;none&amp;apos;;
+			          }
+			      }
+			     function showPage() {
+			          pageNum.innerHTML = page;
+			      }
+			     //总共页数
+			      function pageCount() {
+			          var count = 0;
+			          
+			          if (numberRowsInTable % pageSize != 0) count = 1;
+			          return parseInt(numberRowsInTable / pageSize) + count;
+			      }
+			     //显示链接
+			      function preLink() { spanPre.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:pre();&amp;apos;&amp;gt;上一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function preText() { spanPre.innerHTML = \&amp;quot;上一页\&amp;quot;; }
+			 
+			      function nextLink() { spanNext.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:next();&amp;apos;&amp;gt;下一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function nextText() { spanNext.innerHTML = \&amp;quot;下一页\&amp;quot;; }
+			
+			      function firstLink() { spanFirst.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:first();&amp;apos;&amp;gt;第一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function firstText() { spanFirst.innerHTML = \&amp;quot;第一页\&amp;quot;; }
+			
+			      function lastLink() { spanLast.innerHTML = \&amp;quot;&amp;lt;a href=&amp;apos;javascript:last();&amp;apos;&amp;gt;最后一页&amp;lt;/a&amp;gt;\&amp;quot;; }
+			      function lastText() { spanLast.innerHTML = \&amp;quot;最后一页\&amp;quot;; }
+			
+			     //隐藏表格
+			      function hide() {
+			          for (var i = pageSize; i &amp;lt; numberRowsInTable; i++) {
+			              theTable.rows[i].style.display = &amp;apos;none&amp;apos;;
+			          }
+			      	var a=pageCount();
+	
+			         totalPage.innerHTML = a;
+			    
+			         pageNum.innerHTML = &amp;apos;1&amp;apos;;
+			         
+			         nextLink();
+			         lastLink();
+			      }
+			     hide();
+			 &amp;lt;/script&amp;gt;  
+		  &amp;quot;;
+	}
+	if(TB_ISPAGE==&amp;quot;false&amp;quot;){
+		html+=&amp;quot;&amp;quot;;
+	}
+	return html;
+}
+//
+// 
+//id,name,img,url,crtdat,note
+function wximgtitletyp(){
+	
+	var sql=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	var ds=&amp;quot;&amp;quot;;
+	
+	if(SQLTXT!=&amp;quot;&amp;quot;){
+		sql=SQLTXT;
+		sql=pub.EAFunc.Replace(sql,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		var usrinfo = web.EASession.GetUserinfo(request);
+		if(usrinfo!=null){
+			sql=web.EASession.GetSysValue(sql,request);//替换request 中[%id]
+			sql=web.EASession.GetSysValue(sql,web.EASession.GetUserinfo(request));
+		}
+		
+		ds=db.QuerySQL(sql);
+	}
+	else{
+		if(DSMOD==&amp;quot;&amp;quot;) return &amp;quot;选择数据来源或sql！&amp;quot;;
+		sql=&amp;quot;select id,name,icon2 img,url,to_char(crtdat,&amp;apos;MM-dd&amp;apos;) crtdat,note from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;;
+		ds=db.QuerySQL(sql);
+	}
+	
+	for(var i=0;i&amp;lt;ds.getRowCount();i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+		var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+		var img=ds.getStringAt(i,&amp;quot;img&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		var crtdat=ds.getStringDef(i,&amp;quot;crtdat&amp;quot;,&amp;quot;&amp;quot;);
+		var note=ds.getStringDef(i,&amp;quot;note&amp;quot;,&amp;quot;&amp;quot;);
+		if(note.length()&amp;gt;15) note=note.substring(0,15)+&amp;quot;.....&amp;quot;;
+		if(WX_CELLSPACING==null) WX_CELLSPACING = 5;
+		//onMouseOut=\&amp;quot;tabonmouseup(this.id)\&amp;quot; onMouseOver=\&amp;quot;tabonmousedown(this.id)\&amp;quot; 移动到对象出发事件
+		html+=&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot;  cellspacing=\&amp;quot;&amp;quot;+WX_CELLSPACING+&amp;quot;\&amp;quot; id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot;  onclick=\&amp;quot;tabonmousedown(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; onMouseDown=\&amp;quot;tabonmousedown(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;)\&amp;quot; onMouseUp=\&amp;quot;tabonmouseup(this.id)\&amp;quot; onmousemove=\&amp;quot;tabonmouseover(this.id)\&amp;quot;  onMouseOut=\&amp;quot;tabonmouseup(this.id)\&amp;quot;   style=\&amp;quot; border:1px #CCCCCC solid;border-width:0px 0px 1px 1px;\&amp;quot;&amp;gt;
+			&amp;lt;tr &amp;gt;
+				&amp;lt;td width=\&amp;quot;&amp;quot;+WX_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+WX_HEIGHT+&amp;quot;\&amp;quot; rowspan=\&amp;quot;2\&amp;quot;&amp;gt;&amp;lt;img width=\&amp;quot;&amp;quot;+WX_WIDTH+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+WX_HEIGHT+&amp;quot;\&amp;quot;  src=\&amp;quot;&amp;quot;+img+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td  height=\&amp;quot;49%\&amp;quot; align=\&amp;quot;left\&amp;quot; style=\&amp;quot;font-size: 18px;color: &amp;quot;+WX_TITLECOLOR+&amp;quot;;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/td&amp;gt;
+				&amp;lt;td align=\&amp;quot;right\&amp;quot; style=\&amp;quot;font-size: 16px;color: &amp;quot;+WX_NOTECOLOR+&amp;quot;;\&amp;quot;&amp;gt;&amp;quot;+crtdat+&amp;quot;&amp;lt;/td&amp;gt;
+			&amp;lt;/tr&amp;gt;
+			&amp;lt;tr&amp;gt;
+				&amp;lt;td height=\&amp;quot;49%\&amp;quot; colspan=\&amp;quot;2\&amp;quot; align=\&amp;quot;left\&amp;quot; style=\&amp;quot;font-size: 14px;color: &amp;quot;+WX_NOTECOLOR+&amp;quot;;\&amp;quot;&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/td&amp;gt;
+			&amp;lt;/tr&amp;gt;
+		&amp;lt;/table&amp;gt;&amp;quot;;
+	}
+	html+=&amp;quot;&amp;lt;p align=center&amp;gt;共&amp;quot;+ds.getRowCount()+&amp;quot;笔记录&amp;quot;;
+	
+	var script=&amp;quot;&amp;lt;script&amp;gt;
+			function tabonmousedown(id,url){
+				document.getElementById(id).background=\&amp;quot;&amp;quot;+WX_ONCLICKCOLOR+&amp;quot;\&amp;quot;;//backgroundColor
+				window.location.href=url;
+				
+			}
+			function tabonmouseup(id){
+				document.getElementById(id).background=\&amp;quot;#FFFFFF\&amp;quot;;//
+			}
+			function tabonmouseover(id){
+				document.getElementById(id).background=\&amp;quot;#DEDEDE\&amp;quot;;//
+			}
+
+		&amp;lt;/script&amp;gt;&amp;quot;;
+	return script+html;
+}
+
+//
+// 
+//
+function APPDISPLAY(){
+	var sb=new langpack.StringBuffer();
+	var sql=&amp;quot;select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;;
+	var ds=db.QuerySQL(sql);
+	var cnt = db.GetSQL(&amp;quot;select CDMSSMCNT.Nextval CNT from dual&amp;quot;);
+	var num = db.GetSQL(&amp;quot;select count(*) from hin_his where cadnum=&amp;apos;310107193207170864&amp;apos;&amp;quot;);
+	var dtlds =null;
+	if (num &amp;gt; 0) {
+		sql=&amp;quot;select * from hin_his where cadnum=&amp;apos;310107193207170864&amp;apos;&amp;quot;;
+		dtlds = db.QuerySQL(sql);
+	}
+	
+	var table=&amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;quot;;
+			
+	var refnam=&amp;quot;&amp;quot;;
+	var refurl=&amp;quot;&amp;quot;;
+	for(var i=0;i&amp;lt;ds.getRowCount();i++){
+		var id=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+		var name=ds.getStringAt(i,&amp;quot;name&amp;quot;);
+		var img=ds.getStringAt(i,&amp;quot;icon2&amp;quot;);
+		var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+		var refid=ds.getStringAt(i,&amp;quot;CONTEXTES&amp;quot;);//上层div编号已dsy_+refid
+		url=pub.EAFunc.Replace(url,&amp;quot;#$amp;&amp;quot;,&amp;quot;&amp;&amp;quot;);
+		if(refnam==&amp;quot;&amp;quot;){
+			refnam=db.GetSQL(&amp;quot;select name from LSYSURL where id=&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos;&amp;quot;);
+			refurl=db.GetSQL(&amp;quot;select url from LSYSURL where id=&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		if (id == &amp;quot;12163&amp;quot; &amp;&amp; num &amp;gt; 0) {
+			table+=&amp;quot;&amp;lt;tr id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; style=\&amp;quot;cursor:pointer;\&amp;quot; onMouseDown=\&amp;quot;tabonmousedown&amp;quot;+cnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+refnam+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+refurl+&amp;quot;&amp;apos;)\&amp;quot; onMouseUp=\&amp;quot;tabonmouseup&amp;quot;+cnt+&amp;quot;(this.id)\&amp;quot; onMouseOut=\&amp;quot;tabonmouseup&amp;quot;+cnt+&amp;quot;(this.id)\&amp;quot;&amp;gt;
+					&amp;lt;td width=\&amp;quot;50px\&amp;quot; height=\&amp;quot;50px\&amp;quot;&amp;gt;&amp;lt;img width=\&amp;quot;40px\&amp;quot; height=\&amp;quot;40px\&amp;quot; src=\&amp;quot;&amp;quot;+img+&amp;quot;\&amp;quot; style=\&amp;quot;color:red;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+					&amp;lt;td align=\&amp;quot;left\&amp;quot; style=\&amp;quot;font-size:18px;color:#333333;\&amp;quot;&amp;gt;
+						&amp;lt;table&amp;gt;
+							&amp;lt;tr&amp;gt;
+								&amp;lt;td style=\&amp;quot;font-size:18px;color:#333333;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/td&amp;gt;
+								&amp;lt;td align=\&amp;quot;center\&amp;quot;&amp;gt;
+									 &amp;lt;div style=\&amp;quot;width:20px; height:20px;background-color:#F00; border-radius:25px;\&amp;quot;&amp;gt;         
+									 	&amp;lt;span style=\&amp;quot;width:20px; height:20;pxdisplay:block; color:#FFF; text-align:center\&amp;quot;&amp;gt;&amp;quot;+num+&amp;quot;&amp;lt;/span&amp;gt;
+									 &amp;lt;/div&amp;gt;
+								&amp;lt;/td&amp;gt;
+							&amp;lt;/tr&amp;gt;
+							
+						&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt; &amp;quot;;
+		} else {
+			table+=&amp;quot;&amp;lt;tr id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; style=\&amp;quot;cursor:pointer;\&amp;quot; onMouseDown=\&amp;quot;tabonmousedown&amp;quot;+cnt+&amp;quot;(this.id,&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+refnam+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+refurl+&amp;quot;&amp;apos;)\&amp;quot; onMouseUp=\&amp;quot;tabonmouseup&amp;quot;+cnt+&amp;quot;(this.id)\&amp;quot; onMouseOut=\&amp;quot;tabonmouseup&amp;quot;+cnt+&amp;quot;(this.id)\&amp;quot;&amp;gt;
+					&amp;lt;td width=\&amp;quot;50px\&amp;quot; height=\&amp;quot;50px\&amp;quot;&amp;gt;&amp;lt;img width=\&amp;quot;40px\&amp;quot; height=\&amp;quot;40px\&amp;quot; src=\&amp;quot;&amp;quot;+img+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+					&amp;lt;td align=\&amp;quot;left\&amp;quot; style=\&amp;quot;font-size:18px;color:#333333;\&amp;quot;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt; &amp;quot;;
+		}
+	}
+	table+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+
+	sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width:100%; height:100%;\&amp;quot;&amp;gt;&amp;lt;div id=\&amp;quot;valid&amp;quot;+cnt+&amp;quot;\&amp;quot; style=\&amp;quot;width:100%; height:100%; display:block;\&amp;quot;&amp;gt;&amp;quot;+table+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+	
+	
+	sb.append(&amp;quot;&amp;lt;script&amp;gt;
+			function tabonmousedown&amp;quot;+cnt+&amp;quot;(id,url,refid,refnam,refurl){
+				var len=refids.length;
+				var ref=refid+&amp;apos;__&amp;apos;+refnam+&amp;apos;__&amp;apos;+refurl;
+    				if(eqArray(refids,ref)); 
+					refids[len]=ref;
+				document.getElementById(id).style.backgroundColor=\&amp;quot;#EEEEEE\&amp;quot;;
+				document.getElementById(\&amp;quot;dsy_menu\&amp;quot;).style.display=\&amp;quot;block\&amp;quot;;
+				$.ajax({
+					url: url+&amp;apos;&amp;hashead=n&amp;apos;,
+					type: &amp;apos;POST&amp;apos;,
+					success: function(result){
+						document.getElementById(\&amp;quot;dsy_\&amp;quot;+refids[0].split(&amp;apos;__&amp;apos;)[0]).innerHTML=result;
+						fdisplay&amp;quot;+cnt+&amp;quot;(ref);
+					}
+				});
+				
+			}
+			
+			function eqArray(str,str1){
+				for(var i=0;i&amp;lt;str.length;i++){
+					if(str[i]==str1)
+					return 1;
+				}
+				return 0;
+			}
+			
+//			function delArray(str,str1){
+//				var del=0;
+//				for(var i=0;i&amp;lt;str.length;i++){
+//					if(del==1)
+//						str.shift();
+//					if(str[i]==str1){
+//						del=1;
+//					}
+//					
+//				}
+//				return 0;
+//			}
+			
+			function tabonmouseup&amp;quot;+cnt+&amp;quot;(id){
+				document.getElementById(id).style.backgroundColor=\&amp;quot;#FFFFFF\&amp;quot;;
+			}
+			function fdisplay&amp;quot;+cnt+&amp;quot;(clackid){
+				delArray(refids,clackid);
+
+				document.getElementById(\&amp;quot;dsy_menu\&amp;quot;).style.display=&amp;apos;block&amp;apos;;
+				var div=&amp;apos;&amp;apos;;
+				for(var i=0;i&amp;lt;refids.length;i++){
+					var id=&amp;apos;dsy_&amp;apos;+refids[i].split(&amp;apos;__&amp;apos;)[0];
+					var name=refids[i].split(&amp;apos;__&amp;apos;)[1];
+					var url=refids[i].split(&amp;apos;__&amp;apos;)[2];
+					div+=&amp;apos;&amp;lt;DIV onclick=\&amp;quot;clickmenu(url,id)\&amp;quot; style=\&amp;quot;color:#666666;cursor: pointer;float: left;font-size: 14px;height:25px;padding: 0px 15px;border-right:1px solid #CFCFCF;position: relative;\&amp;quot;&amp;gt;&amp;apos;+name+&amp;apos;&amp;lt;/DIV&amp;gt;&amp;apos;;
+				}
+				document.getElementById(\&amp;quot;dsy_menu\&amp;quot;).innerHTML=div;
+			}
+			function clickmenu(url,id){
+				$.ajax({
+					url: url+&amp;apos;&amp;hashead=n&amp;apos;,
+					type: &amp;apos;POST&amp;apos;,
+					success: function(result){
+						document.getElementById(id).innerHTML=result;
+					}
+				});
+			}
+		&amp;lt;/script&amp;gt;&amp;quot;);
+	return sb.toString();
+}
+
+//
+//标题，图片，正文，附件
+//title,crtdat,img,context,fileguid,filename
+function PRJTBODY(){
+
+	var html = &amp;quot;&amp;quot;;
+	var prjguid= request.getParameter(&amp;quot;guid&amp;quot; ) ;
+	var sql =SQLTXT;
+	var where=&amp;quot;&amp;quot;;
+	if(prjguid!=&amp;quot;&amp;quot;||prjguid!=null) sql=&amp;quot;select * from (&amp;quot;+SQLTXT+&amp;quot;) where guid=&amp;apos;&amp;quot;+prjguid+&amp;quot;&amp;apos;&amp;quot;;
+	
+	var ds = db.QuerySQL(sql);
+	var title = &amp;quot;&amp;quot;;
+	var crtdat = &amp;quot;&amp;quot;;
+	var image = &amp;quot;&amp;quot;;
+	var context=&amp;quot;&amp;quot;;
+	var fileguid=&amp;quot;&amp;quot;;
+	var filename=&amp;quot;&amp;quot;;
+	var TITLESIZE=4;
+	var noteblob=&amp;quot;&amp;quot;;
+	if(ds.getRowCount()&amp;gt;0){
+		title = ds.getStringAt(0,&amp;quot;title&amp;quot;);
+		crtdat = ds.getStringAt(0,&amp;quot;crtdat&amp;quot;);
+		image = ds.getStringAt(0,&amp;quot;img&amp;quot;);
+		context =ds.getStringAt(0,&amp;quot;context&amp;quot;);
+		fileguid=ds.getStringAt(0,&amp;quot;fileguid&amp;quot;);
+		filename=ds.getStringAt(0,&amp;quot;filename&amp;quot;);
+	}
+	if(context!=&amp;quot;&amp;quot;){
+		sql = &amp;quot;select BDATA from formblob where guid=&amp;apos;&amp;quot;+context +&amp;quot;&amp;apos;&amp;quot;;
+		noteblob= db.getBlob2String(sql,&amp;quot;BDATA&amp;quot;);
+	}	
+	html = &amp;quot;&amp;lt;table width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;quot;;
+	html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;font size=&amp;quot;+TITLESIZE+&amp;quot;&amp;gt; &amp;quot;+title +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;quot;+crtdat+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;hr style=\&amp;quot;border-bottom: 1px solid #DFDFDF; padding-left: 4px; padding-right: 4px; padding-top: 1px; padding-bottom: 1px\&amp;quot; size=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		 &amp;quot;;
+	
+	if(image!=&amp;quot;&amp;quot;){
+		html +=&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+image +&amp;quot;\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	
+	html+= &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=center &amp;gt;&amp;lt;table  width=90% style=\&amp;quot;text-align: left;\&amp;quot;  &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;quot;+noteblob+&amp;quot; &amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	if(filename!=&amp;quot;&amp;quot;){
+		html+= &amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=left&amp;gt;附件：&amp;lt;a href=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+fileguid+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;font color=#4169E1&amp;gt;&amp;quot;+filename+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;quot;;
+	}
+	html+=&amp;quot;&amp;lt;/table&amp;gt;&amp;quot;;
+	return  html;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

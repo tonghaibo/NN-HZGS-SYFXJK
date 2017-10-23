@@ -1,0 +1,893 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >test28</MWID><NAME >test28</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >test28.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >LAYHDR</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST >DEFORG 默认组织号,ID 编号,NAME 名称,CLS 分类,NOTE 描述,TITLE 页面标题</COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >0</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL >0</IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><CELLID ></CELLID><NAME >编号</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="1" ><ID >0,5,1</ID><CELLID ></CELLID><NAME >名称</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="2" ><ID >0,6,1</ID><CELLID ></CELLID><NAME >分类</NAME><VALFLD >CLS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_LAYHDR_CLASS</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,5,1</C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="3" ><ID >0,7,1</ID><CELLID ></CELLID><NAME >描述</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="4" ><ID >0,8,1</ID><CELLID ></CELLID><NAME >页面标题</NAME><VALFLD >TITLE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="5" ><ID >0,15,1</ID><CELLID ></CELLID><NAME >页面宽度</NAME><VALFLD >FKWIDTH</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="6" ><ID >0,16,1</ID><CELLID ></CELLID><NAME >页面高度</NAME><VALFLD >FKHEIGHT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="7" ><ID >0,11,1</ID><CELLID ></CELLID><NAME >背景颜色</NAME><VALFLD >BKCOLOR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="8" ><ID >0,12,1</ID><CELLID ></CELLID><NAME >背景图片</NAME><VALFLD >BKIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="9" ><ID >0,20,1</ID><CELLID ></CELLID><NAME >水平对齐</NAME><VALFLD >FKALIGN</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="10" ><ID >0,21,1</ID><CELLID ></CELLID><NAME >垂直对齐方式</NAME><VALFLD >FKVALIGN</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="11" ><ID >0,22,1</ID><CELLID ></CELLID><NAME >窗体间空隙</NAME><VALFLD >CELLSPACE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="12" ><ID >0,23,1</ID><CELLID ></CELLID><NAME >窗体内空隙</NAME><VALFLD >CELLPADDING</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="13" ><ID >0,24,1</ID><CELLID ></CELLID><NAME >列表内空隙</NAME><VALFLD >OBJPADDING</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="14" ><ID >0,26,1</ID><CELLID ></CELLID><NAME >定时刷新时间</NAME><VALFLD >RELOADTIME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="15" ><ID >0,28,1</ID><CELLID ></CELLID><NAME >页面前HTML</NAME><VALFLD >ONHTMLGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="16" ><ID >0,27,1</ID><CELLID ></CELLID><NAME >JSCSS等HTML</NAME><VALFLD >PREHTML</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >MULTLINE</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="17" ><ID >0,1,3</ID><CELLID ></CELLID><NAME >默认组织号</NAME><VALFLD >DEFORG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,1,4</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="18" ><ID >0,32,1</ID><CELLID ></CELLID><NAME >主设计界面ZXG的GUID</NAME><VALFLD >ZXGGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >0,29,3</C21><C22 >0,32,3</C22><C23 >0,32,1</C23><C24 ></C24></ROW>
+<ROW num="19" ><ID >0,32,2</ID><CELLID ></CELLID><NAME >主设计界面SXG的GUID</NAME><VALFLD >SXGGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 >0,24,3</C20><C21 >0,29,2</C21><C22 >0,30,2</C22><C23 >0,32,2</C23><C24 ></C24></ROW>
+<ROW num="20" ><ID >0,9,1</ID><CELLID ></CELLID><NAME >LOGO图标地址</NAME><VALFLD >LOGOIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,9,1</C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="21" ><ID >0,10,1</ID><CELLID ></CELLID><NAME >LOGO图标地址W</NAME><VALFLD >LOGOIMGW</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,8,3</C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="22" ><ID >0,10,3</ID><CELLID ></CELLID><NAME >LOGO图标地址H</NAME><VALFLD >LOGOIMGH</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,8,4</C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="23" ><ID >0,13,1</ID><CELLID ></CELLID><NAME >背景填充模式</NAME><VALFLD >BKIMGTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 >0,13,1</C23><C24 ></C24></ROW>
+<ROW num="24" ><ID >0,17,1</ID><CELLID ></CELLID><NAME >前景色</NAME><VALFLD >FKCOLOR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="25" ><ID >0,18,1</ID><CELLID ></CELLID><NAME >前景边框颜色</NAME><VALFLD >FKGRID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="26" ><ID >0,19,1</ID><CELLID ></CELLID><NAME >前景填充图片</NAME><VALFLD >FKIMG</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="27" ><ID >0,29,1</ID><CELLID ></CELLID><NAME >页面后HTML</NAME><VALFLD >POSTHTMLGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="28" ><ID >0,30,1</ID><CELLID ></CELLID><NAME >行高度描述列表</NAME><VALFLD >ROWHEIGHTS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="29" ><ID >0,31,1</ID><CELLID ></CELLID><NAME >列宽度描述列表</NAME><VALFLD >COLWIDTHS</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+<ROW num="30" ><ID >0,32,0</ID><CELLID ></CELLID><NAME >客户端脚本GUID</NAME><VALFLD >JSGUID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >TestRUN</ID><NAME >测试</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >TestRUN</C10></ROW>
+<ROW num="1" ><ID >SaveAS</ID><NAME >另存为</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);
+
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);
+
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var layoutid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;id&amp;quot;),&amp;quot;&amp;quot;) ;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+
+
+
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	response.setContentType(&amp;quot;text/html;charset=UTF-8&amp;quot;);//response.setContentType(&amp;quot;text/html; charset=GBK&amp;quot;);
+	var sb=new langpack.StringBuffer();
+	
+
+	try {
+		if(skin!=&amp;quot;&amp;quot;)request.getSession().setAttribute(&amp;quot;USERSKIN&amp;quot;,skin);//修改皮肤可以通过 L.sp?id=index&amp;skin=blue  
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		if(objid!=&amp;quot;&amp;quot;) {//这是一个组件的测试页面
+		
+			sb.append(&amp;quot;&amp;lt;!DOCTYPE html PUBLIC \&amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN\&amp;quot; \&amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\&amp;quot;&amp;gt;&amp;lt;html  xmlns=\&amp;quot;http://www.w3.org/1999/xhtml\&amp;quot;&amp;gt;&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;TESTRUN&amp;lt;/title&amp;gt;&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, minimum-scale=1, maximum-scale=2,user-scalable=no\&amp;quot;&amp;gt;&amp;lt;meta name=\&amp;quot;format-detection\&amp;quot; content=\&amp;quot;telephone=no\&amp;quot;&amp;gt;&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=UTF-8\&amp;quot;/&amp;gt;&amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot;&amp;gt;&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0\&amp;quot; /&amp;gt;&amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot;&amp;gt;    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-status-bar-style\&amp;quot; content=\&amp;quot;black\&amp;quot;&amp;gt;    &amp;lt;meta name=\&amp;quot;format-detection\&amp;quot; content=\&amp;quot;telephone=no\&amp;quot;&amp;gt;&amp;lt;script language=\&amp;quot;javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/wnd.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;script language=\&amp;quot;javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);//&amp;lt;LINK rel=stylesheet type=text/css HREF=\&amp;quot;xlsgrid/css/layout.css\&amp;quot;&amp;gt;
+			sb.append(&amp;quot;&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes\&amp;quot; /&amp;gt; &amp;quot;);
+			sb.append(&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;\n&amp;quot;);
+			sb.append(&amp;quot;A { TEXT-DECORATION: none}\n&amp;quot;);
+			sb.append(&amp;quot;A:link { TEXT-DECORATION: none}\n&amp;quot;);
+			sb.append(&amp;quot;A:visited { TEXT-DECORATION: none}\n&amp;quot;);
+			sb.append(&amp;quot;A:hover { TEXT-DECORATION: underline}\n&amp;quot;);
+			sb.append(&amp;quot;TD {FONT-SIZE: 10.5pt;FONT-FAMILY: 微软雅黑;}\n&amp;quot;);
+			sb.append(&amp;quot;BODY {FONT-SIZE: 10.5pt;FONT-FAMILY: 微软雅黑;height:100%;}\n&amp;quot;);
+			sb.append(&amp;quot;HTML {height:100%;}\n&amp;quot;);
+			sb.append(&amp;quot;&amp;lt;/style&amp;gt;\n&amp;quot;);
+			sb.append(&amp;quot;&amp;lt;/head&amp;gt;\n&amp;quot;);
+
+
+			sb.append( &amp;quot;&amp;lt;body  topmargin=0 leftmargin=0 rightmargin=0 bottommargin=0&amp;gt;&amp;quot;);
+				
+			GetLayoutItem(db,request,sb,&amp;quot;[%IMAGE deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; ctrltype=&amp;apos;obj&amp;apos; ctrlid=&amp;apos;&amp;quot;+objid+&amp;quot;&amp;apos; ]&amp;quot;,0,0,0);
+			sb.append(&amp;quot;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+		}
+		else {
+			// 布局的html
+			GetLayoutHTML(db,request,sb,deforg,layoutid,1);
+		}
+	}
+	catch ( ee ) {
+		db.Rollback();
+		sb.append(ee.toString());
+		//throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return sb.toString();
+}
+//得到某个布局的html
+//ifneedhead=0 只显示html内容(&amp;lt;body&amp;gt;里面)不显示html前缀
+function GetLayoutHTML(db,request,sb,deforg,layoutid,ifneedhead)
+{
+			
+			var ds = db.QuerySQL(&amp;quot;select * from LAYHDR where deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+layoutid+&amp;quot;&amp;apos;&amp;quot; );
+			var colwidths = ds.get(0,&amp;quot;COLWIDTHS&amp;quot; );
+			var rowheights = ds.get(0,&amp;quot;ROWHEIGHTS&amp;quot; );
+			var sColW = colwidths.split(&amp;quot;,&amp;quot;);
+			var sRowH = rowheights .split(&amp;quot;,&amp;quot;);
+
+	
+			if(ds.getRowCount()==0) return &amp;quot;十分抱歉，你要找的页面不存在（&amp;quot;+deforg+&amp;quot;-&amp;quot;+layoutid+&amp;quot;)&amp;quot;;
+			var CELLPADDING = 0;
+			if(ds.get(0,&amp;quot;CELLPADDING&amp;quot;)!=&amp;quot;&amp;quot;)  CELLPADDING  =1*ds.get(0,&amp;quot;CELLPADDING&amp;quot;);	//单元格之间的间隙	
+			var CELLSPACE =0;
+			if(ds.get(0,&amp;quot;CELLSPACE&amp;quot;)!=&amp;quot;&amp;quot;)CELLSPACE  = 1*ds.get(0,&amp;quot;CELLSPACE&amp;quot;);		//外延边距	
+			var layflg = ds.get(0,&amp;quot;LAYFLG&amp;quot;);		//布局风格
+			if(layflg == &amp;quot;&amp;quot; ) layflg = &amp;quot;TABLE_R_0&amp;quot;;//DIV_R_0&amp;quot;;
+			
+			
+			var sxgguid = ds.get(0,&amp;quot;SXGGUID&amp;quot;);
+			var sxg = db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+sxgguid +&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;);
+
+			var sxgds = new grdpack.EASXGParse();//deforg,id);f
+			var rowheight = pubpack.EAFunc.getXmlAttribute(sxg,&amp;quot;rowheight&amp;quot;);
+			var colwidth = pubpack.EAFunc.getXmlAttribute(sxg,&amp;quot;colwidth&amp;quot;);
+			var combine = pubpack.EAFunc.getXmlAttribute(sxg,&amp;quot;combine&amp;quot;);
+			var cellvalue = pubpack.EAFunc.getXmlAttribute(sxg,&amp;quot;cellvalue&amp;quot; );
+			
+			sxgds.initRowCol(rowheight,colwidth);
+			for ( var i=0;i&amp;lt;sxgds.rows;i++){
+			
+				for ( var c=0;c&amp;lt;sxgds.cols;c++){
+					sxgds.SetCellHide(i,c,false);
+					//sb.append(&amp;quot;i=&amp;quot;+i+&amp;quot;,c=&amp;quot;+c+&amp;quot;,hide=&amp;quot;+sxgds.GetCellHide(i,c) +&amp;quot;&amp;lt;br&amp;gt;&amp;quot;);
+				}
+			}
+			sxgds.initCellValue(cellvalue);
+			sxgds.initCellCombine(combine);
+			if(ifneedhead!=0){
+				sb.append(&amp;quot;&amp;lt;!DOCTYPE html PUBLIC \&amp;quot;-//W3C//DTD XHTML 1.0 Transitional//EN\&amp;quot; \&amp;quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\&amp;quot;&amp;gt;&amp;lt;html  xmlns=\&amp;quot;http://www.w3.org/1999/xhtml\&amp;quot;&amp;gt;&amp;lt;head&amp;gt;&amp;lt;title&amp;gt;&amp;quot;+ds.get(0,&amp;quot;TITLE&amp;quot;)+&amp;quot;&amp;lt;/title&amp;gt;&amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=UTF-8\&amp;quot;/&amp;gt;&amp;lt;script language=\&amp;quot;javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/wnd.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;lt;script language=\&amp;quot;javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);//&amp;lt;LINK rel=stylesheet type=text/css HREF=\&amp;quot;xlsgrid/css/layout.css\&amp;quot;&amp;gt;
+				sb.append(&amp;quot;&amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes\&amp;quot; /&amp;gt; &amp;quot;);
+				sb.append(&amp;quot;\n&amp;lt;script&amp;gt;\n&amp;quot;);
+				//var logininfo = webpack.EASession.GetUserinfo(request);
+				//if (logininfo != null)  sb.append(&amp;quot;var homeurl=\&amp;quot;&amp;quot;+logininfo.getHomeURL()+&amp;quot;\&amp;quot;;var mainurl=\&amp;quot;&amp;quot;+logininfo.getMainurl()+&amp;quot;\&amp;quot;; \n&amp;quot;);
+				if( ds.get(0,&amp;quot;PREHTML&amp;quot;)!=&amp;quot;&amp;quot;)sb.append(db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+ds.get(0,&amp;quot;PREHTML&amp;quot;)+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;) );
+					
+				sb.append(&amp;quot;function keysubmit(evt){ \n&amp;quot;);
+				sb.append(&amp;quot; try {\n&amp;quot;);
+				sb.append(&amp;quot;   if(evt.keyCode==&amp;apos;13&amp;apos;){ \n&amp;quot;);
+				sb.append(&amp;quot;     if ( document.all(&amp;apos;userpwd&amp;apos;).value ==&amp;apos;&amp;apos; ) document.all(&amp;apos;userpwd&amp;apos;).focus(); \n&amp;quot;);
+				sb.append(&amp;quot;     else f_login.submit(); \n&amp;quot;);
+				sb.append(&amp;quot;   }\n&amp;quot;);
+				sb.append(&amp;quot; }catch(e){}&amp;quot;);
+				sb.append(&amp;quot;}\n&amp;lt;/script&amp;gt;&amp;quot;); 
+				sb.append(&amp;quot;&amp;lt;style type=&amp;apos;text/css&amp;apos;&amp;gt;\n&amp;quot;);
+				sb.append(&amp;quot;A { TEXT-DECORATION: none}\n&amp;quot;);
+				sb.append(&amp;quot;A:link { TEXT-DECORATION: none}\n&amp;quot;);
+				sb.append(&amp;quot;A:visited { TEXT-DECORATION: none}\n&amp;quot;);
+				sb.append(&amp;quot;A:hover { TEXT-DECORATION: underline}\n&amp;quot;);
+				sb.append(&amp;quot;TD {FONT-SIZE: 10.5pt;FONT-FAMILY: 微软雅黑;background-size:100% 100%;}\n&amp;quot;);
+				sb.append(&amp;quot;BODY {FONT-SIZE: 10.5pt;FONT-FAMILY: 微软雅黑;height:100%;}\n&amp;quot;);
+				sb.append(&amp;quot;HTML {height:100%;}\n&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;/style&amp;gt;\n&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;/head&amp;gt;&amp;quot;);
+				if(ds.get(0,&amp;quot;JSGUID&amp;quot;)!=&amp;quot;&amp;quot;)
+					sb.append( &amp;quot;&amp;lt;script src=&amp;apos;EAFormBlob.sp?guid=&amp;quot;+ds.get(0,&amp;quot;JSGUID&amp;quot;)+&amp;quot;&amp;apos;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;);
+				var bkcolor =ds.get(0,&amp;quot;BKCOLOR&amp;quot;);
+				var pagebkcolor = &amp;quot;bgcolor=\&amp;quot;&amp;quot;+bkcolor+&amp;quot;\&amp;quot;&amp;quot;;if(bkcolor ==&amp;quot;&amp;quot;)pagebkcolor =&amp;quot;&amp;quot;;
+				sb.append( &amp;quot;&amp;lt;body &amp;quot;+pagebkcolor+&amp;quot; topmargin=0 leftmargin=0 rightmargin=0 bottommargin=0 onkeydown=\&amp;quot;keysubmit(event)\&amp;quot; &amp;quot;);//onLoad=\&amp;quot;try{document.all(&amp;apos;usrid&amp;apos;).focus();}catch(e){} try{user_onload();}catch(e){}\&amp;quot;
+				if(ds.get(0,&amp;quot;RELOADTIME&amp;quot;)!=&amp;quot;&amp;quot;)sb.append( &amp;quot;try{setInterval(&amp;apos;location.reload()&amp;apos;,&amp;quot;+ds.get(0,&amp;quot;RELOADTIME&amp;quot;)+&amp;quot;*1000);}catch(e){window.status=&amp;apos;定时任务定义错误&amp;apos;;}&amp;quot;);
+				if(ds.get(0,&amp;quot;BKIMGTYP&amp;quot;)==&amp;quot;FULLSCREEN&amp;quot;)sb.append( &amp;quot; scroll=no  &amp;quot;);
+				if((ds.get(0,&amp;quot;BKIMGTYP&amp;quot;)==&amp;quot;DEFAULT&amp;quot;||ds.get(0,&amp;quot;BKIMGTYP&amp;quot;)==&amp;quot;&amp;quot;)&amp;&amp;ds.get(0,&amp;quot;BKIMG&amp;quot;)!=&amp;quot;&amp;quot; )sb.append( &amp;quot; background=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;BKIMG&amp;quot;)+&amp;quot;\&amp;quot; &amp;quot;);
+				if(ds.get(0,&amp;quot;BKCOLOR&amp;quot;)!=&amp;quot;&amp;quot; )sb.append( &amp;quot; bgcolor=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;BKCOLOR&amp;quot;)+&amp;quot;\&amp;quot; &amp;quot;);
+				sb.append(&amp;quot;&amp;gt;\n&amp;quot;);//body
+				///sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;vertically_center\&amp;quot; style=\&amp;quot;display: inline;\&amp;quot;&amp;gt;&amp;quot;);
+				if(ds.get(0,&amp;quot;BKIMGTYP&amp;quot;)==&amp;quot;FULLSCREEN&amp;quot;&amp;&amp;ds.get(0,&amp;quot;BKIMG&amp;quot;)!=&amp;quot;&amp;quot; )
+					sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;page_&amp;quot;+layoutid+&amp;quot;\&amp;quot; style=\&amp;quot;width:100%;height:100%;position:absolute;z-index:-1;top:0px;left:0px\&amp;quot; &amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;BKIMG&amp;quot;)+&amp;quot;\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt; \n&amp;quot;);
+				// 
+				
+
+			}
+			else {
+				if(ds.get(0,&amp;quot;BKIMGTYP&amp;quot;)==&amp;quot;FULLSCREEN&amp;quot;&amp;&amp;ds.get(0,&amp;quot;BKIMG&amp;quot;)!=&amp;quot;&amp;quot; ){
+					//TD可拉伸背景填充，TD必须设置为 position:relative;img图片设置width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;
+					sb.append(&amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+ds.get(0,&amp;quot;BKIMG&amp;quot;)+&amp;quot;&amp;apos; style=\&amp;quot;width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;\&amp;quot;/&amp;gt; &amp;quot;);
+				}
+				//
+			}
+			//判断是否需要背景和前景
+			if(!(ds.get(0,&amp;quot;FKALIGN&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp;ds.get(0,&amp;quot;FKVALIGN&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp;ds.get(0,&amp;quot;FKWIDTH&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKHEIGHT&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKGRID&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKCOLOR&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKIMG&amp;quot;)==&amp;quot;&amp;quot; )){
+			
+				sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;TABLE_BK\&amp;quot; border=0 cellspacing=0 cellpadding=0 width=100% height=100%&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;FKALIGN&amp;quot;),&amp;quot;CENTER&amp;quot;)+&amp;quot;\&amp;quot; valign=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;FKVALIGN&amp;quot;),&amp;quot;MIDDLE&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;TABLE_&amp;quot;+layoutid+&amp;quot;_FK\&amp;quot; border=0 cellspacing=0 cellpadding=0 &amp;quot;+ifnotnull(ds.get(0,&amp;quot;FKWIDTH&amp;quot;),&amp;quot; width=&amp;quot;+ds.get(0,&amp;quot;FKWIDTH&amp;quot;))+&amp;quot; &amp;quot;+ifnotnull(ds.get(0,&amp;quot;FKHEIGHT&amp;quot;),&amp;quot; height=&amp;quot;+ds.get(0,&amp;quot;FKHEIGHT&amp;quot;))+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;LEFT\&amp;quot; align=\&amp;quot;TOP\&amp;quot; style=\&amp;quot;&amp;quot;+ifnotnull(ds.get(0,&amp;quot;FKGRID&amp;quot;),&amp;quot;border: 1px solid &amp;quot;+ds.get(0,&amp;quot;FKGRID&amp;quot;)+&amp;quot;;&amp;quot;)+&amp;quot; &amp;quot;+ifnotnull(ds.get(0,&amp;quot;FKCOLOR&amp;quot;),&amp;quot;background-color:  &amp;quot;+ds.get(0,&amp;quot;FKCOLOR&amp;quot;)+&amp;quot;;&amp;quot;)+&amp;quot; &amp;quot; + ifnotnull(ds.get(0,&amp;quot;FKIMG&amp;quot;),&amp;quot; background-image: url(&amp;apos;&amp;quot;+ds.get(0,&amp;quot;FKIMG&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;);
+			}
+			
+			var slayflg = layflg.split(&amp;quot;_&amp;quot;);
+			var wflg = &amp;quot;1&amp;quot;;//百分比还是pt =1 % else pt
+			var aflg = &amp;quot;R&amp;quot;;//相对还是绝对还是流 A  R F
+			var dflg = &amp;quot;DIV&amp;quot;;//DIV TABLE
+			if(slayflg.length()&amp;gt;=3){
+				dflg =slayflg[0];aflg =slayflg[1];wflg =slayflg[2];
+			}
+//			DIV_R_0   默认相对布局-铺满-用于网站   
+//			DIV_R_1   默认相对布局-精确-用于网站   
+//			DIV_A_0   漂浮绝对定位布局-精确-用于云桌面   
+//			DIV_A_1   漂浮绝对定位布局-精确-用于云桌面   
+//			DIV_F_0   流布局-铺满-自适应手机屏幕   
+//			DIV_F_0   流布局-精确-自适应手机屏幕   
+//			TABLE_R_0   传统表格布局-铺满-用于表格类   
+//			TABLE_R_1   传统表格布局-精确-用于表格类 
+
+			// 从sxg取出各个单元格数据
+			if(dflg ==&amp;quot;TABLE&amp;quot;){
+				sb.append( &amp;quot;\n&amp;lt;table id=\&amp;quot;PAGE_MAIN_&amp;quot;+layoutid+&amp;quot;\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=100% id=\&amp;quot;TABLE_MAIN\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;quot;);
+			}
+			else {
+				sb.append( &amp;quot;\n&amp;lt;div id=\&amp;quot;PAGE_MAIN_&amp;quot;+layoutid+&amp;quot;\&amp;quot; style=\&amp;quot;position:relative ;width:100%;height:100%;\&amp;quot; &amp;gt;&amp;quot;);//margin:&amp;quot;+CELLSPACE+&amp;quot;px;
+			}
+
+			var rows= sxgds.rows;
+			var cols = sxgds.cols;
+			var sSumHeight=&amp;quot;&amp;quot;;//sSumHeight=&amp;quot; height=\&amp;quot;&amp;quot;+pageheightfix+&amp;quot;%\&amp;quot; &amp;quot;;
+			var sumwidth = 0;
+			var sumheight = 0;
+			for(var c=0;c&amp;lt;cols;c++){
+				try{sumwidth+=1*getcolw(sxgds,sColW,c)+1*CELLPADDING ;}catch(ee){}
+			}
+			if(cols&amp;gt;0) sumwidth+=CELLPADDING ;
+			for(var c=0;c&amp;lt;rows;c++){
+				try{sumheight +=1*getrowh(sxgds,sRowH,c)+1*CELLPADDING ;}catch(ee){}
+			}
+			if(rows&amp;gt;0) sumheight +=CELLPADDING ;			
+			
+			if(dflg==&amp;quot;DIV&amp;quot;&amp;&amp;aflg==&amp;quot;R&amp;quot;) {//  默认相对布局-铺满-用于网站
+				f_getdivtree(sb,sxgds,dflg,aflg,wflg,sColW,sRowH,sumwidth,sumheight,CELLPADDING ,0,0,rows-1,cols-1,0,db,request);	//递归，获取树形的DIV结构
+			}
+			else {
+				for ( var r=0;r&amp;lt;rows;r++ ){
+					var rh = 0;
+					try{rh = sxgds.GetCellRowHeight(r,0);}catch(ee){}
+					if(dflg ==&amp;quot;TABLE&amp;quot;) sb.append(&amp;quot;&amp;lt;tr &amp;gt;&amp;quot;);
+					for ( var c=0;c&amp;lt;cols;c++){
+						var colw = getcellcolw(sxgds,sColW,r,c,CELLPADDING ); 
+						var rowh = getcellrowh(sxgds,sRowH,r,c,CELLPADDING );
+	
+						var rowspan =sxgds.GetCellRowSpan(r,c)+1;  // 合并的个数
+						var colspan=sxgds.GetCellColSpan(r,c)+1;
+						//判断是否hide,或临时变量=1，说明在解析过程已经被合并
+						if(sxgds.GetCellHide(r,c)==false){
+							var nCombinerow=0;
+							var nEndRow=r;
+							var top = 0;
+							var left =0;
+							for ( var rr=0;rr&amp;lt;r;rr++) top+=CELLPADDING +getrowh(sxgds,sRowH,r);
+							for ( var cc=0;cc&amp;lt;c;cc++) left+=CELLPADDING +getcolw(sxgds,sColW,c);
+							//float:left;
+							if(dflg ==&amp;quot;TABLE&amp;quot;){
+								sb.append(&amp;quot;&amp;lt;td width=\&amp;quot;&amp;quot;+NStr(colw,sumwidth,wflg)+&amp;quot;\&amp;quot; height=&amp;quot;+NStr(rowh,sumheight ,wflg)+&amp;quot; align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot; &amp;quot;);
+								if( rowspan&amp;gt;1)sb.append(&amp;quot; rowspan=&amp;quot;+rowspan);
+								if( colspan&amp;gt;1)sb.append(&amp;quot; colspan=&amp;quot;+colspan);
+								sb.append(&amp;quot;&amp;gt;&amp;quot;);
+							}
+							else {
+								sb.append(&amp;quot;\r\n&amp;lt;div id=\&amp;quot;DIV_&amp;quot;+r+&amp;quot;_&amp;quot;+c+&amp;quot;\&amp;quot; style=\&amp;quot;position: absolute; top: &amp;quot;+NStr(top,sumheight ,wflg)+&amp;quot;; left: &amp;quot;+NStr(left,sumwidth,wflg)+&amp;quot;;width:&amp;quot;+NStr(colw,sumwidth,wflg)+&amp;quot;;height:&amp;quot;+NStr(rowh,sumheight ,wflg)+&amp;quot;;margin:0px;\&amp;quot;   &amp;quot;);//padding:10px;  //width=\&amp;quot;&amp;quot;+colw+&amp;quot;\&amp;quot; height=&amp;quot;+rowh+&amp;quot; align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot;						//if( rowspan&amp;gt;1)sb.append(&amp;quot; rowspan=&amp;quot;+rowspan);
+								sb.append(&amp;quot;&amp;gt;&amp;quot;);
+							}
+							
+							sb.append(&amp;quot;\n&amp;lt;!-- layout item &amp;quot;+ r+&amp;quot;_&amp;quot;+c+&amp;quot;--&amp;gt;\n&amp;quot;);
+							
+	              					var  str = sxgds.GetCellText(r,c);
+	
+	              					GetLayoutItem(db,request,sb,str,r,c,0);
+		              				
+		              				sb.append(&amp;quot;\n&amp;lt;!-- end layout item &amp;quot;+ r+&amp;quot;_&amp;quot;+c+&amp;quot;--&amp;gt;\n&amp;quot;);
+		              				if(dflg ==&amp;quot;TABLE&amp;quot;)sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;quot; );
+							else sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;quot; );
+		                    		}
+		                    	}	
+					if(dflg ==&amp;quot;TABLE&amp;quot;)sb.append(&amp;quot;&amp;lt;/tr&amp;gt;&amp;quot; );
+				}
+			}
+			if(dflg ==&amp;quot;TABLE&amp;quot;)sb.append(&amp;quot;&amp;lt;/table&amp;gt;&amp;quot; );
+			else sb.append( &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;);	//&amp;lt;/td&amp;gt;&amp;lt;/table&amp;gt;
+			if(!(ds.get(0,&amp;quot;FKALIGN&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp;ds.get(0,&amp;quot;FKVALIGN&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp;ds.get(0,&amp;quot;FKWIDTH&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKHEIGHT&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKGRID&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKCOLOR&amp;quot;)==&amp;quot;&amp;quot; &amp;&amp; ds.get(0,&amp;quot;FKIMG&amp;quot;)==&amp;quot;&amp;quot; )){
+				sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;\n&amp;quot;);// FK TABLE
+				sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;\n&amp;quot;);// BK TABLE
+			}
+			if(ifneedhead!=0)sb.append(&amp;quot;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+
+}
+//递归，获取树形的DIV结构
+function f_getdivtree(sb,sxgds,dflg,aflg,wflg,sColW,sRowH,sumwidth,sumheight,CELLPADDING,r1,c1,r2,c2,loopnum,db,request)
+{
+	if(loopnum&amp;gt;50) return ;
+	
+
+	loopnum=loopnum+1;
+	//sb.append( &amp;quot;f_fgetdivtree&amp;quot;+ &amp;quot;(&amp;quot;+r1+&amp;quot;,&amp;quot;+c1+&amp;quot;)(&amp;quot;+r2+&amp;quot;,&amp;quot;+c2+&amp;quot;) &amp;lt;BR&amp;gt;&amp;quot;);
+	//1.得到（r1,c1）可能的切割线
+	
+	var ret = f_getsplit(sb,sxgds,r1,c1,r2,c2);
+	//sb.append( &amp;quot;return &amp;quot;+ret+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot; );
+	var ss = ret.split(&amp;quot;,&amp;quot;);
+	if(ret !=&amp;quot;&amp;quot;&amp;&amp;ss.length()&amp;gt;=4){// 可以分割
+		var colw= 0;
+		var rowh= 0;
+		for(var c=c1;c&amp;lt;=1*ss[1];c++)
+			colw+=getcolw(sxgds,sColW,c);
+		for(var r=r1;r&amp;lt;=1*ss[0];r++)	
+			rowh+=getrowh(sxgds,sRowH,r);
+	
+		sb.append( &amp;quot;&amp;lt;div id=\&amp;quot;div_&amp;quot;+r1+&amp;quot;_&amp;quot;+c1+&amp;quot;_&amp;quot;+ss[0]+&amp;quot;_&amp;quot;+ss[1]+&amp;quot;\&amp;quot; style=\&amp;quot; float:left;border:dotted 1px black;width:&amp;quot;+NStr(colw,sumwidth,wflg)+&amp;quot;;height:&amp;quot;+NStr(rowh,sumheight ,wflg)+&amp;quot;;\&amp;quot; &amp;gt;\n&amp;quot; );
+		f_getdivtree(sb,sxgds,dflg,aflg,wflg,sColW,sRowH,sumwidth,sumheight,CELLPADDING,r1,c1,1*ss[0],1*ss[1],loopnum,db,request);
+		sb.append( &amp;quot;&amp;lt;/div&amp;gt;\n&amp;quot; );
+		
+		colw= 0;
+		rowh= 0;
+		for(var c=1*ss[3];c&amp;lt;=c2;c++)
+			colw+=getcolw(sxgds,sColW,c);
+		for(var r=1*ss[2];r&amp;lt;=r2;r++)
+			rowh+=getrowh(sxgds,sRowH,r);
+		sb.append( &amp;quot;&amp;lt;div id=\&amp;quot;div_&amp;quot;+ss[2]+&amp;quot;_&amp;quot;+ss[3]+&amp;quot;_&amp;quot;+r2+&amp;quot;_&amp;quot;+c2+&amp;quot;\&amp;quot; style=\&amp;quot;float:left;border:dotted 1px black;width:&amp;quot;+NStr(colw,sumwidth,wflg)+&amp;quot;;height:&amp;quot;+NStr(rowh,sumheight ,wflg)+&amp;quot;;\&amp;quot;&amp;gt;\n&amp;quot; );
+		f_getdivtree(sb,sxgds,dflg,aflg,wflg,sColW,sRowH,sumwidth,sumheight,CELLPADDING,1*ss[2],1*ss[3],r2,c2,loopnum,db,request);
+		sb.append( &amp;quot;&amp;lt;/div&amp;gt;\n&amp;quot; );
+	}
+	else {//
+		var colw = getcellcolw(sxgds,sColW,r1,c1,CELLPADDING ); 
+		var rowh = getcellrowh(sxgds,sRowH,r1,c1,CELLPADDING );
+		var top = 0;	var left =0;
+		for ( var rr=0;rr&amp;lt;r1;rr++) top+=CELLPADDING +getrowh(sxgds,sRowH,r1);
+		for ( var cc=0;cc&amp;lt;c1;cc++) left+=CELLPADDING +getcolw(sxgds,sColW,c1);
+		// 本节点的内容
+		//sb.append( &amp;quot;=============================内容&amp;quot;+r1+&amp;quot;,&amp;quot;+c1+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot; );
+		sb.append(&amp;quot;\r\n&amp;lt;div id=\&amp;quot;CELL_&amp;quot;+r1+&amp;quot;_&amp;quot;+c1+&amp;quot;\&amp;quot; style=\&amp;quot;border:dotted 1px black;width:&amp;quot;+NStr(colw,sumwidth,wflg)+&amp;quot;;height:&amp;quot;+NStr(rowh,sumheight ,wflg)+&amp;quot;;margin:&amp;quot;+CELLPADDING+&amp;quot;px;\&amp;quot; &amp;gt;&amp;quot;);//padding:10px; //position: absolute; top: &amp;quot;+NStr(top,sumheight ,wflg)+&amp;quot;; left: &amp;quot;+NStr(left,sumwidth,wflg)+&amp;quot;;
+		
+	
+		sb.append(&amp;quot;value of &amp;quot; +r1+&amp;quot;,&amp;quot;+c1+&amp;quot;&amp;quot; );
+		sb.append( &amp;quot;&amp;lt;/div&amp;gt;\n&amp;quot; );
+
+		
+	}
+	
+
+	//else sb.append( &amp;quot;布局过于复杂，无法解释&amp;quot; );
+}
+
+//得到（r1,c1,r2,c2）可能的切割线
+//返回“”，表示不能再分割了
+function f_getsplit(sb,sxgds,r1,c1,r2,c2)
+{
+	var colspan =sxgds.GetCellColSpan(r1,c1);  // 合并的个数
+	var rowspan=sxgds.GetCellRowSpan(r1,c1);
+
+	var comr2 = r1+rowspan;
+	var comc2 = c1+colspan;
+//	sb.append( &amp;quot;f_getsplit(&amp;quot;+r1+&amp;quot;,&amp;quot;+c1+&amp;quot;)(&amp;quot;+r2+&amp;quot;,&amp;quot;+c2+&amp;quot;) combine(&amp;quot;+comr2+&amp;quot;,&amp;quot;+comc2 +&amp;quot;)&amp;lt;BR&amp;gt;&amp;quot; );
+	if(checkrowover(sxgds,r1,c1,r2,c2,comr2,comc2)==false&amp;&amp;comr2 !=r2){
+		//sb.append(&amp;quot;水平割一刀&amp;quot;+&amp;quot;&amp;quot;+ &amp;quot;&amp;quot;+ comr2+&amp;quot;,&amp;quot;+comc2+&amp;quot;,&amp;quot;+(comr2+1)+&amp;quot;,&amp;quot;+c1+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot; );
+		return &amp;quot;&amp;quot;+ comr2+&amp;quot;,&amp;quot;+c2+&amp;quot;,&amp;quot;+(comr2+1)+&amp;quot;,&amp;quot;+c1;
+	}
+	else if(checkcolover(sxgds,r1,c1,r2,c2,comr2,comc2)==false&amp;&amp;comc2 !=c2){
+		//sb.append(&amp;quot;竖向割一刀&amp;quot;+&amp;quot;&amp;quot;+ comr2+&amp;quot;,&amp;quot;+comc2+&amp;quot;,&amp;quot;+r1+&amp;quot;,&amp;quot;+(comc2+1)+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot; );
+		return &amp;quot;&amp;quot;+ comr2+&amp;quot;,&amp;quot;+comc2+&amp;quot;,&amp;quot;+r1+&amp;quot;,&amp;quot;+(comc2+1);
+
+	}
+	return &amp;quot;&amp;quot;;	
+}
+// 判断本行（含合并）到最右边为止，是否有超出的内容
+// 如果有超出的内容，返回true 
+function checkcolover(sxgds,r1,c1,r2,c2,comr2,comc2)
+{
+	for (var r = r1;r&amp;lt;=comr2 ;r++){
+		for (var c = c1;c&amp;lt;c2; c++){
+			if(r!=r1&amp;&amp; c!=c1){
+				if(sxgds.GetCellHide(r,c)!=false){
+					if(r+sxgds.GetCellRowSpan(r,c)&amp;gt;comr2){
+						return ture;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+// 判断本列（含合并）到最下边为止，是否有超出的内容
+// 如果有超出的内容，返回true 
+function checkrowover(sxgds,r1,c1,r2,c2,comr2,comc2)
+{
+	for (var r = r1;r&amp;lt;=r2;r++){
+		for (var c = c1;c&amp;lt;comc2; c++){
+			if(r!=r1&amp;&amp; c!=c1){
+				if(GetCellHide(r,c)!=false){
+					if(c+sxgds.GetCellColSpan(r,c)&amp;gt;comc2){
+						return true;
+					}
+				}
+			}
+		}
+	}
+	return false;
+}
+
+//返回百分比还是px
+function NStr(num,sum,flg){
+	if(flg==&amp;quot;0&amp;quot;)return &amp;quot;&amp;quot;+(100*num/sum)+&amp;quot;%&amp;quot;;
+	else return &amp;quot;&amp;quot;+num+&amp;quot;px&amp;quot;;
+}
+//处理某个单元格里面的字符
+function GetLayoutItem(db,request,sb,str,r,c,layoutid)
+{
+	var ds = db.QuerySQL(&amp;quot;select * from LAYHDR where deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+layoutid+&amp;quot;&amp;apos;&amp;quot; );
+
+	var fkheight = ds.get(0,&amp;quot;FKHEIGHT&amp;quot;);
+	throw new Exception(&amp;quot;dddd&amp;quot;+fkheight );
+	if ( str == &amp;quot;&amp;quot; ) {sb.append(&amp;quot;&amp;nbsp;&amp;quot;);return ;}
+	if(str.length()&amp;gt;=8)
+		str = str.substring(8);//[%IMAGE 
+	var idx = -1;
+	var oldidx= 0;
+	var layobjds = null;
+	var deforg = &amp;quot;&amp;quot;;
+	var ctrlid = &amp;quot;&amp;quot;;var ctrltype =&amp;quot;&amp;quot;;
+	var src = &amp;quot;&amp;quot;;	var width = &amp;quot;&amp;quot;; var height = &amp;quot;&amp;quot;; var border = &amp;quot;&amp;quot;; var background=&amp;quot;&amp;quot;;var text = &amp;quot;&amp;quot;;var color=&amp;quot;&amp;quot;;var html = &amp;quot;&amp;quot;;var size=&amp;quot;&amp;quot;;var align=&amp;quot;&amp;quot; ; var valign=&amp;quot;&amp;quot;; var url=&amp;quot;&amp;quot;; var target=&amp;quot;&amp;quot;; var cellspace = &amp;quot;&amp;quot;;var bkcolor=&amp;quot;&amp;quot;;var val=&amp;quot;&amp;quot;; 
+	var overflow_x=&amp;quot;&amp;quot;;var overflow_y=&amp;quot;&amp;quot;;var fontcolor=&amp;quot;&amp;quot;;var fontsize=&amp;quot;&amp;quot;;
+	while((idx=str.indexOf(&amp;quot;=&amp;apos;&amp;quot;,idx+1))&amp;gt;0){
+		var attrid = str.substring(oldidx,idx);
+		if(attrid.substring(0,1)==&amp;quot; &amp;quot;)attrid=attrid.substring(1);
+		oldidx=	str.indexOf(&amp;quot;&amp;apos; &amp;quot;,idx+1)+2;
+		var attrval= str.substring(idx+2,oldidx-2);
+		if(oldidx==1)
+			attrval= str.substring(idx+2,str.length-1);
+		if(attrid==&amp;quot;ctrlid&amp;quot;)ctrlid=attrval;
+		else if(attrid==&amp;quot;ctrltype&amp;quot;)ctrltype =attrval;//=pag,obj
+		else if(attrid==&amp;quot;deforg&amp;quot;)deforg =attrval;
+		else if(attrid==&amp;quot;src&amp;quot;)src =attrval;
+		else if(attrid==&amp;quot;width&amp;quot;)width =attrval;
+		else if(attrid==&amp;quot;height&amp;quot;)height=attrval;
+		else if(attrid==&amp;quot;border&amp;quot;)border =attrval;
+		else if(attrid==&amp;quot;background&amp;quot;)background=attrval;
+		else if(attrid==&amp;quot;text&amp;quot;)text=attrval;
+		else if(attrid==&amp;quot;color&amp;quot;)color=attrval;
+		else if(attrid==&amp;quot;size&amp;quot;)size=attrval;
+		else if(attrid==&amp;quot;html&amp;quot;)html=attrval;
+		else if(attrid==&amp;quot;align&amp;quot;)align=attrval;
+		else if(attrid==&amp;quot;valign&amp;quot;)valign=attrval;
+		else if(attrid==&amp;quot;target&amp;quot;)target=attrval;
+		else if(attrid==&amp;quot;url&amp;quot;)url=attrval;
+		else if(attrid==&amp;quot;cellspace&amp;quot;)cellspace=attrval;		
+		else if(attrid==&amp;quot;bkcolor&amp;quot;)bkcolor=attrval;	
+		else if(attrid==&amp;quot;value&amp;quot;)val=attrval;
+		
+		else if(attrid==&amp;quot;fontcolor&amp;quot;)fontcolor=attrval;
+		else if(attrid==&amp;quot;fontsize&amp;quot;)fontsize=attrval;
+		
+		else if(attrid==&amp;quot;overflow-x&amp;quot;)overflow_x=attrval;	
+		else if(attrid==&amp;quot;overflow-y&amp;quot;)overflow_y=attrval;			
+		
+	}
+	
+	if(deforg!=&amp;quot;&amp;quot; &amp;&amp; ctrlid!=&amp;quot;&amp;quot; ) {
+		var sURLHTML=  &amp;quot;&amp;quot;;
+		if(url!=&amp;quot;&amp;quot;){
+			var sClick =&amp;quot;&amp;quot;;
+			if ( target == &amp;quot;&amp;quot; || target==&amp;quot;_self&amp;quot;  ) //||targetLayoutid.length()!=0
+		          sClick=&amp;quot;javascript:window.location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;;&amp;quot;;
+		        else if ( target==&amp;quot;_blank&amp;quot; ) 
+		          sClick=&amp;quot;javascript:window.open(&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;);&amp;quot;;
+		        else if ( target!=&amp;quot;_self&amp;quot; ) 
+		          sClick=&amp;quot;javascript:frames[&amp;apos;&amp;quot;+target+&amp;quot;&amp;apos;].location=&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;;&amp;quot;;
+			sURLHTML=&amp;quot; onclick=\&amp;quot;&amp;quot;+sClick+&amp;quot;\&amp;quot; onmouseover=\&amp;quot;this.style.cursor=&amp;apos;hand&amp;apos;;\&amp;quot;&amp;quot;; 
+		}
+		if(ctrlid==&amp;quot;IMAGE&amp;quot;){
+			//[%IMAGE deforg=&amp;apos;XLSGRID&amp;apos; ctrltype=&amp;apos;obj&amp;apos; ctrlid=&amp;apos;IMAGE&amp;apos; id=&amp;apos;IMAGE-1&amp;apos; src=&amp;apos;xlsgrid/images/flash/icon/icon_171.png&amp;apos; value=&amp;apos;图片&amp;apos;  width=&amp;apos;&amp;apos; height=&amp;apos;&amp;apos; border=&amp;apos;0&amp;apos; background=&amp;apos;&amp;apos; ]
+			var imghtml = &amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+src +&amp;quot;&amp;apos; style=&amp;apos;border-color:#BBBBBB&amp;apos; border=&amp;quot;+ifnull(border,&amp;quot;0&amp;quot;)+&amp;quot; border=&amp;quot;+ifnull(border,&amp;quot;0&amp;quot;)+&amp;quot; &amp;quot;+ifnotnull(width,&amp;quot;width=&amp;quot;+width)+&amp;quot; &amp;quot;+ifnotnull(height,&amp;quot;height=&amp;quot;+height)+&amp;quot; &amp;gt;&amp;quot;;
+			if ( src ==&amp;quot;&amp;quot; ) imghtml = &amp;quot;&amp;nbsp;&amp;quot;;
+			var sStyle = &amp;quot;style=\&amp;quot;&amp;quot;;
+			if(background!=&amp;quot;&amp;quot;)
+				sStyle += &amp;quot;background-image: url(&amp;apos;&amp;quot;+background+&amp;quot;&amp;apos;); background-repeat: repeat-x;&amp;quot;;
+			sStyle += &amp;quot;\&amp;quot;&amp;quot;;
+			sb.append(&amp;quot;&amp;lt;table  border=0 width=100% height=100% cellspacing=\&amp;quot;&amp;quot;+cellspace+&amp;quot;\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td &amp;quot;+sStyle +&amp;quot; bgcolor=\&amp;quot;&amp;quot;+bkcolor+&amp;quot;\&amp;quot; align=&amp;quot;+ifnull(align,&amp;quot;left&amp;quot;)+&amp;quot; valign=&amp;quot;+ifnull(valign,&amp;quot;top&amp;quot;)+sURLHTML+&amp;quot;&amp;gt;&amp;quot;+imghtml+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot; );
+		}
+		else if(ctrlid==&amp;quot;WP8ICON&amp;quot;){
+			var imghtml = &amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+src +&amp;quot;&amp;apos; border=&amp;quot;+ifnull(border,&amp;quot;0&amp;quot;)+&amp;quot; &amp;quot;+ifnotnull(width,&amp;quot;width=&amp;quot;+width)+&amp;quot; &amp;quot;+ifnotnull(height,&amp;quot;height=&amp;quot;+height)+&amp;quot; &amp;gt;&amp;quot;;
+			if ( src ==&amp;quot;&amp;quot; ) imghtml = &amp;quot;&amp;nbsp;&amp;quot;;
+			var sStyle = &amp;quot;style=\&amp;quot;&amp;quot;;
+			if(background!=&amp;quot;&amp;quot;)
+				sStyle += &amp;quot;background-image: url(&amp;apos;&amp;quot;+background+&amp;quot;&amp;apos;); background-repeat: repeat-x;&amp;quot;;
+			sStyle += &amp;quot;\&amp;quot;&amp;quot;;
+			sb.append(&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;&amp;quot;+cellspace+&amp;quot;\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;&amp;lt;td &amp;quot;+sStyle+&amp;quot; bgcolor=\&amp;quot;&amp;quot;+bkcolor+&amp;quot;\&amp;quot; align=&amp;quot;+ifnull(align,&amp;quot;center&amp;quot;)+&amp;quot; valign=&amp;quot;+ifnull(valign,&amp;quot;middle&amp;quot;)+sURLHTML+&amp;quot;&amp;gt;&amp;quot;+imghtml+&amp;quot;&amp;lt;br&amp;gt;&amp;lt;font size=\&amp;quot;&amp;quot;+ifnull(fontsize,&amp;quot;2&amp;quot;)+&amp;quot;\&amp;quot; color=\&amp;quot;&amp;quot;+ifnull(fontcolor,&amp;quot;#FFFFFF&amp;quot;)+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot; );
+
+		}
+		else if(ctrlid==&amp;quot;ICONTEXT&amp;quot;){//图文混排
+			var imghtml = &amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+src +&amp;quot;&amp;apos; border=&amp;quot;+ifnull(border,&amp;quot;0&amp;quot;)+&amp;quot; &amp;quot;+ifnotnull(width,&amp;quot;width=&amp;quot;+width)+&amp;quot; &amp;quot;+ifnotnull(height,&amp;quot;height=&amp;quot;+height)+&amp;quot; &amp;gt;&amp;quot;;
+			if ( src ==&amp;quot;&amp;quot; ) imghtml = &amp;quot;&amp;nbsp;&amp;quot;;
+			var sStyle = &amp;quot;style=\&amp;quot;&amp;quot;;
+			
+			if(background!=&amp;quot;&amp;quot;)
+				sStyle += &amp;quot;background-image: url(&amp;apos;&amp;quot;+background+&amp;quot;&amp;apos;); background-repeat: repeat-x;&amp;quot;;
+			sStyle += &amp;quot;\&amp;quot;&amp;quot;;
+			sb.append(&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;&amp;quot;+cellspace+&amp;quot;\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;&amp;lt;td &amp;quot;+sStyle+&amp;quot; bgcolor=\&amp;quot;&amp;quot;+bkcolor+&amp;quot;\&amp;quot; align=&amp;quot;+ifnull(align,&amp;quot;center&amp;quot;)+&amp;quot; valign=&amp;quot;+ifnull(valign,&amp;quot;middle&amp;quot;)+sURLHTML+&amp;quot;&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;overflow:hidden; \&amp;quot;&amp;gt;&amp;lt;div style=\&amp;quot;float:left;\&amp;quot; &amp;gt;&amp;quot;+imghtml+&amp;quot;&amp;lt;br&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div style=\&amp;quot;height:0px;\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;&amp;quot;+ifnull(fontsize,&amp;quot;2&amp;quot;)+&amp;quot;\&amp;quot; color=\&amp;quot;&amp;quot;+ifnull(fontcolor,&amp;quot;#FFFFFF&amp;quot;)+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/br&amp;gt;&amp;lt;font  style=\&amp;quot; float:left\&amp;quot;  size=\&amp;quot;&amp;quot;+ifnull(fontsize,&amp;quot;2&amp;quot;)+&amp;quot;\&amp;quot; color=\&amp;quot;&amp;quot;+ifnull(fontcolor,&amp;quot;#FFFFFF&amp;quot;)+&amp;quot;\&amp;quot; &amp;gt;&amp;quot;+text+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot; );
+
+		}
+
+		else if(ctrlid==&amp;quot;TEXT&amp;quot;){		
+			//[%IMAGE deforg=&amp;apos;XLSGRID&amp;apos; ctrltype=&amp;apos;obj&amp;apos; ctrlid=&amp;apos;IMAGE&amp;apos; id=&amp;apos;IMAGE-1&amp;apos; src=&amp;apos;xlsgrid/images/flash/icon/icon_171.png&amp;apos; value=&amp;apos;图片&amp;apos;  width=&amp;apos;&amp;apos; height=&amp;apos;&amp;apos; border=&amp;apos;0&amp;apos; background=&amp;apos;&amp;apos; ]
+			sb.append(&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=left valign=right &amp;quot;+sURLHTML+&amp;quot;&amp;gt;&amp;lt;font &amp;quot;+ifnotnull(fontsize,&amp;quot;size=&amp;quot;+size)+&amp;quot; &amp;quot;+ifnotnull(color,&amp;quot;color=&amp;quot;+fontcolor)+&amp;quot;&amp;gt;&amp;quot;+text+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot; );
+		}
+		else if(ctrlid==&amp;quot;HTML&amp;quot;){
+			//[%IMAGE deforg=&amp;apos;XLSGRID&amp;apos; ctrltype=&amp;apos;obj&amp;apos; ctrlid=&amp;apos;IMAGE&amp;apos; id=&amp;apos;IMAGE-1&amp;apos; src=&amp;apos;xlsgrid/images/flash/icon/icon_171.png&amp;apos; value=&amp;apos;图片&amp;apos;  width=&amp;apos;&amp;apos; height=&amp;apos;&amp;apos; border=&amp;apos;0&amp;apos; background=&amp;apos;&amp;apos; ]
+			if(html!=&amp;quot;&amp;quot; ){
+				var sStyle = &amp;quot;style=\&amp;quot;&amp;quot;;
+				if(background!=&amp;quot;&amp;quot;)
+				sStyle += &amp;quot;background-image: url(&amp;apos;&amp;quot;+background+&amp;quot;&amp;apos;); background-repeat: repeat-x;&amp;quot;;
+				sStyle += &amp;quot;\&amp;quot;&amp;quot;;
+				sb.append(&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td &amp;quot;+sStyle+&amp;quot; align=left valign=right &amp;gt;&amp;quot;+db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+html+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;)+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot; );
+			}
+		}else if(ctrlid==&amp;quot;ITEM&amp;quot;){//商品展示
+			var imghtml = &amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+src +&amp;quot;&amp;apos; border=&amp;quot;+ifnull(border,&amp;quot;0&amp;quot;)+&amp;quot; &amp;quot;+ifnotnull(width,&amp;quot;width=&amp;quot;+width)+&amp;quot; &amp;quot;+ifnotnull(height,&amp;quot;height=&amp;quot;+height)+&amp;quot; &amp;gt;&amp;quot;;
+			if ( src ==&amp;quot;&amp;quot; ) imghtml = &amp;quot;&amp;nbsp;&amp;quot;;
+			var sStyle = &amp;quot;style=\&amp;quot;&amp;quot;;
+			if(background!=&amp;quot;&amp;quot;)
+				sStyle += &amp;quot;background-image: url(&amp;apos;&amp;quot;+background+&amp;quot;&amp;apos;); background-repeat: repeat-x;&amp;quot;;
+			sStyle += &amp;quot;\&amp;quot;&amp;quot;;
+			var divHeight=&amp;quot;style=\&amp;quot;position:relative;display:block;&amp;quot;;
+			if(height!=&amp;quot;&amp;quot;)
+				divHeight += &amp;quot;height=&amp;quot;+height;
+			divHeight +=&amp;quot;\&amp;quot;&amp;quot;;
+
+			sb.append(&amp;quot;&amp;lt;table border=0 width=100% height=100% cellspacing=\&amp;quot;&amp;quot;+cellspace+&amp;quot;\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;  &amp;gt;&amp;lt;tr &amp;gt;&amp;lt;td &amp;quot;+sStyle+&amp;quot; bgcolor=\&amp;quot;&amp;quot;+bkcolor+&amp;quot;\&amp;quot; align=&amp;quot;+ifnull(align,&amp;quot;center&amp;quot;)+&amp;quot; valign=&amp;quot;+ifnull(valign,&amp;quot;middle&amp;quot;)+sURLHTML+&amp;quot;&amp;gt;&amp;quot;);
+			sb.append(&amp;quot;&amp;lt;div &amp;quot;+divHeight +&amp;quot; &amp;gt;&amp;quot;+imghtml+&amp;quot;&amp;lt;div style=\&amp;quot;background:#000;position:absolute;bottom:0;left:0;color:#fff;filter:alpha(opacity=30); width:100%;\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;&amp;quot;+ifnull(fontsize,&amp;quot;2&amp;quot;)+&amp;quot;\&amp;quot; color=\&amp;quot;&amp;quot;+ifnull(fontcolor,&amp;quot;#FFFFFF&amp;quot;)+&amp;quot;\&amp;quot;  style=\&amp;quot;position:relative; \&amp;quot;&amp;gt;&amp;quot;+val+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot; );
+
+		}
+
+		else {
+			if(ctrltype==&amp;quot;pag&amp;quot;){
+				//sb.append(&amp;quot;&amp;lt;div id=\&amp;quot;div_page&amp;quot;+ctrlid+&amp;quot;\&amp;quot; width=100% height=100%&amp;gt;\n&amp;quot;);
+				sb.append(&amp;quot;&amp;lt;table border=0 cell width=100% height=100% cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=left valign=top style=\&amp;quot;position:relative;\&amp;quot;&amp;gt;&amp;quot;);
+				GetLayoutHTML(db,request,sb,deforg,ctrlid,0);
+				sb.append(&amp;quot;\n&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;\n&amp;quot;);
+
+				//sb.append(&amp;quot;\n&amp;lt;/div&amp;gt;\n&amp;quot;);
+				
+			}
+			else {
+				//sb.append(&amp;quot;select * from layobj where deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+ctrlid+&amp;quot;&amp;apos;&amp;quot;);
+				var ds = db.QuerySQL(&amp;quot;select * from layobj where deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+ctrlid+&amp;quot;&amp;apos;&amp;quot;);
+				if(ds.getRowCount()&amp;gt;0){
+					
+					if( ds.get(0,&amp;quot;PREHTML&amp;quot;)!=&amp;quot;&amp;quot;)sb.append(db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+ds.get(0,&amp;quot;PREHTML&amp;quot;)+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;) );
+	
+					//GUID &amp;quot;内部唯一编号&amp;quot;,ID &amp;quot;编号&amp;quot;,NAME &amp;quot;名称&amp;quot;,CLS &amp;quot;分类&amp;quot;,WNDMOD &amp;quot;窗口风格已不用&amp;quot;,IFTITILE &amp;quot;是否显示标题已不用&amp;quot;,TITLE &amp;quot;标题&amp;quot;,BKCOLOR &amp;quot;背景颜色&amp;quot;,BKIMG &amp;quot;背景图片&amp;quot;,WNDOUT &amp;quot;窗口外间距&amp;quot;,WNDIN &amp;quot;窗口内间距&amp;quot;,DSMOD &amp;quot;数据来源&amp;quot;,SORTBY &amp;quot;排序&amp;quot;,WHEREBY &amp;quot;条件&amp;quot;,SQLTXT &amp;quot;SQL语句&amp;quot;,OSSYT &amp;quot;OS系统&amp;quot;,OSMWID &amp;quot;OS中间件&amp;quot;,OSFUNC &amp;quot;OS函数&amp;quot;,OSPARAM &amp;quot;OS函数的参数&amp;quot;,SYTID &amp;quot;组件所在系统编号&amp;quot;,SHOMOD &amp;quot;显示风格&amp;quot;,CRTDAT &amp;quot;创建日期&amp;quot;,LAYCOL &amp;quot;分列数&amp;quot;,LAYROW &amp;quot;分行数&amp;quot;,IFPAGE &amp;quot;是否分页&amp;quot;,PAGEROW &amp;quot;每页行记录数&amp;quot;,IFSCROLLBAR &amp;quot;是否显示滚动条&amp;quot;,LOGOIMG &amp;quot;预览图片的路径&amp;quot;,OBJBKCOLOR &amp;quot;整个控件的背景颜色&amp;quot;,OBJBKIMG &amp;quot;整个控件的背景图片&amp;quot;,NOTE &amp;quot;备注&amp;quot;,LOGOIMGW &amp;quot;预览图片的宽度&amp;quot;,LOGOIMGH &amp;quot;预览图片的高度&amp;quot;,DEFORG &amp;quot;默认组织号&amp;quot;,TITLEICON &amp;quot;标题图标&amp;quot;,TITLEHTML &amp;quot;标题或者直接是一个HTML&amp;quot;,TITLEFONTSIZE &amp;quot;标题字体大小&amp;quot;,WNDBORDER &amp;quot;窗口边框颜色&amp;quot;,LISTIN &amp;quot;表格之间的间距&amp;quot;,TITLEFKCOLOR &amp;quot;标题字体颜色&amp;quot;,TITLBFKCOLOR &amp;quot;标题背景颜色&amp;quot;,ONHTMLGUID &amp;quot;嵌入前面HTML&amp;quot;,POSTHTMLGUID &amp;quot;嵌入后面HTML&amp;quot;,BKBORDOR &amp;quot;边框颜色&amp;quot;
+					sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;TABLE_CELL&amp;quot;+r+&amp;quot;_&amp;quot;+c+&amp;quot;\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;WNDOUT&amp;quot;),&amp;quot;0&amp;quot;)+&amp;quot;\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot; style=\&amp;quot;&amp;quot;);
+					var styleHTML=&amp;quot;&amp;quot;;
+					if(ds.get(0,&amp;quot;BKBORDOR&amp;quot;)!=&amp;quot;&amp;quot;)sb.append(&amp;quot;border: 1px solid &amp;quot;+ds.get(0,&amp;quot;BKBORDOR&amp;quot;)+&amp;quot;;&amp;quot;);
+					if(ds.get(0,&amp;quot;BKIMG&amp;quot;)!=&amp;quot;&amp;quot;){
+						sb.append(&amp;quot;background-image: url(&amp;apos;&amp;quot;+ds.get(0,&amp;quot;BKIMG&amp;quot;)+&amp;quot;&amp;apos;); background-repeat: repeat-x\&amp;quot;&amp;gt; \n&amp;quot;);
+						//sb.append(&amp;quot;position:relative;\&amp;quot;&amp;gt; \n&amp;quot;);
+						//sb.append(&amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+ds.get(0,&amp;quot;BKIMG&amp;quot;)+&amp;quot;&amp;apos; border=0 style=\&amp;quot;width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;\&amp;quot;&amp;gt;&amp;quot;);//
+					}
+					else sb.append(&amp;quot;\&amp;quot;&amp;gt; \n&amp;quot;);
+					sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot;  width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot;  cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;\n&amp;quot;);
+					
+					// 显示标题
+					if(ds.get(0,&amp;quot;TITLEMODE&amp;quot;)!=&amp;quot;&amp;quot;&amp;&amp; ds.get(0,&amp;quot;TITLEMODE&amp;quot;)!=&amp;quot;NVL&amp;quot;){//TITLEBKIMG
+						if(ds.get(0,&amp;quot;TITLEMODE&amp;quot;)==&amp;quot;STD&amp;quot;){
+							var sUrl = &amp;quot;&amp;lt;a href=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;TITLEURL&amp;quot;)+&amp;quot;\&amp;quot; target=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;TITLETARGET&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+							var sUrlEnd = &amp;quot;&amp;quot;;
+							if(ds.get(0,&amp;quot;TITLEURL&amp;quot;)==&amp;quot;&amp;quot;){sUrl =&amp;quot;&amp;quot;;sUrlEnd =&amp;quot;&amp;quot;;}
+							sb.append(&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot; height=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;TITLEHEIGHT&amp;quot;),&amp;quot;30&amp;quot;)+&amp;quot;\&amp;quot;  cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;quot;+ifnotnull(ds.get(0,&amp;quot;TITLBFKCOLOR&amp;quot;),&amp;quot;bgcolor=&amp;quot;+ds.get(0,&amp;quot;TITLBFKCOLOR&amp;quot;))+&amp;quot; style=\&amp;quot;position:relative;\&amp;quot;&amp;gt; &amp;quot;);//ifnotnull(ds.get(0,&amp;quot;BKBORDOR&amp;quot;),&amp;quot;border-bottom: 1px solid &amp;quot;+ds.get(0,&amp;quot;BKBORDOR&amp;quot;)+&amp;quot;;&amp;quot;)+
+							if(ds.get(0,&amp;quot;TITLEBKIMG&amp;quot;)!=&amp;quot;&amp;quot;){
+								//TD可拉伸背景填充，TD必须设置为 position:relative;img图片设置width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;
+								sb.append(&amp;quot;&amp;lt;img src=&amp;apos;&amp;quot;+ds.get(0,&amp;quot;TITLEBKIMG&amp;quot;)+&amp;quot;&amp;apos; border=0 style=\&amp;quot;width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;\&amp;quot;&amp;gt;&amp;quot;);//
+							}
+								//style=&amp;quot;position:relative;&amp;quot;&amp;gt;&amp;lt;img src=&amp;apos;EAFormBlob.sp?guid=E58DCBED67194382BABBC13562E5FA24&amp;apos; style=&amp;quot;width:100%;height:100%;position:absolute;top:0;left:0;z-index:-1;&amp;quot;/&amp;gt; 
+
+							sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;TABLE_TITLE_&amp;quot;+r+&amp;quot;_&amp;quot;+c+&amp;quot;\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;5\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;
+										&amp;lt;tr&amp;gt;&amp;lt;td width=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;TITLEHEIGHT&amp;quot;),&amp;quot;30&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt; &amp;quot;+
+										ifnotnull(ds.get(0,&amp;quot;TITLEICON&amp;quot;),&amp;quot; &amp;lt;img border=0 src=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;TITLEICON&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;&amp;quot; )
+										+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;td align=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;TITLEALIGN&amp;quot;),&amp;quot;left&amp;quot;)+&amp;quot;\&amp;quot; valign=\&amp;quot;middle\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;font size=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;TITLEFONTSIZE&amp;quot;),&amp;quot;2&amp;quot;)+&amp;quot;\&amp;quot; color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;&amp;quot;+sUrl +ds.get(0,&amp;quot;TITLE&amp;quot;)+sUrlEnd +&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+									&amp;lt;/table&amp;gt;
+								&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt; \n&amp;quot; );
+						}
+						else if(ds.get(0,&amp;quot;TITLEMODE&amp;quot;)==&amp;quot;HTML&amp;quot;){
+							sb.append( db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+ds.get(0,&amp;quot;TITLEHTML&amp;quot;)+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;) );
+						}
+					}
+					var overf=&amp;quot;&amp;quot;;
+					var overf2=&amp;quot;&amp;quot;;
+					if(overflow_x==&amp;quot;1&amp;quot;){ overf=&amp;quot;&amp;lt;div style=&amp;apos;width:&amp;quot;+ifnull(width,&amp;quot;500&amp;quot;)+&amp;quot;px;height:&amp;quot;+ifnull(height,&amp;quot;300&amp;quot;)+&amp;quot;px; overflow-x:auto;&amp;apos;&amp;gt;&amp;quot;; overf2=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;}
+					if(overflow_y==&amp;quot;1&amp;quot;){ overf=&amp;quot;&amp;lt;div style=&amp;apos;width:&amp;quot;+ifnull(width,&amp;quot;500&amp;quot;)+&amp;quot;px;height:&amp;quot;+ifnull(height,&amp;quot;300&amp;quot;)+&amp;quot;px;overflow-y:auto;&amp;apos;&amp;gt;&amp;quot;; overf2=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;}
+					if(overflow_y==&amp;quot;1&amp;quot;&amp;&amp;overflow_x==&amp;quot;1&amp;quot;){ overf=&amp;quot;&amp;lt;div style=&amp;apos;width:&amp;quot;+ifnull(width,&amp;quot;500&amp;quot;)+&amp;quot;px;height:&amp;quot;+ifnull(height,&amp;quot;300&amp;quot;)+&amp;quot;px;overflow:auto;&amp;apos;&amp;gt;&amp;quot;; overf2=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;}
+					sb.append(&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot; &amp;quot;+ifnotnull(ds.get(0,&amp;quot;OBJBKCOLOR&amp;quot;),&amp;quot;bgcolor=\&amp;quot;&amp;quot;+ds.get(0,&amp;quot;OBJBKCOLOR&amp;quot;)+&amp;quot;\&amp;quot;&amp;quot;)+&amp;quot;&amp;gt;
+								&amp;lt;table id=\&amp;quot;TABLE_CELL_&amp;quot;+r+&amp;quot;_&amp;quot;+c+&amp;quot;_MAIN\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;&amp;quot;+ifnull(ds.get(0,&amp;quot;WNDIN&amp;quot;),&amp;quot;0&amp;quot;)+&amp;quot;\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;
+									&amp;lt;tr&amp;gt;&amp;lt;td align=left valign=top&amp;gt;&amp;quot;+overf+
+									GetBody(db,request,deforg,ds.get(0,&amp;quot;WNDMOD&amp;quot;),ds.get(0,&amp;quot;DSMOD&amp;quot;),ds.get(0,&amp;quot;WHEREBY&amp;quot;),ds.get(0,&amp;quot;SORTBY&amp;quot;),ds.get(0,&amp;quot;SQLTXT&amp;quot;),ds.get(0,&amp;quot;LAYCOL&amp;quot;),ds.get(0,&amp;quot;LAYROW&amp;quot;),ds.get(0,&amp;quot;PAGEROW&amp;quot;),ds.get(0,&amp;quot;OSMWID&amp;quot;),ds.get(0,&amp;quot;OSFUNC&amp;quot;),ds.get(0,&amp;quot;OSPARAM&amp;quot;),ds.get(0,&amp;quot;IFRAMEURL&amp;quot;),ds.get(0,&amp;quot;IFSCROLLBAR&amp;quot;),ds.get(0,&amp;quot;HTMLGUID&amp;quot;),ds.get(0,&amp;quot;MOREURL&amp;quot;),ds.get(0,&amp;quot;OPENLAYID&amp;quot;) )
+									+overf2+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+								&amp;lt;/table&amp;gt;
+							&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+						&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt; &amp;quot;);
+						
+				
+			//		sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;TABLE_CELL&amp;quot;+r+&amp;quot;_&amp;quot;+c+&amp;quot;_BK\&amp;quot; border=0 cellspacing=&amp;quot;+ifnull(ds.get(0,&amp;quot;WNDOUT&amp;quot;),&amp;quot;0&amp;quot;)+&amp;quot; width=100% height=100%&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td align=CENTER valign=MIDDLE style=\&amp;quot;&amp;quot;+ifnotnull(ds.get(0,&amp;quot;OBJBKCOLOR&amp;quot;),&amp;quot;background-color:  &amp;quot;+ds.get(0,&amp;quot;OBJBKCOLOR&amp;quot;)+&amp;quot;;&amp;quot;)+&amp;quot; &amp;quot; + ifnotnull(ds.get(0,&amp;quot;OBJBKCOLOR&amp;quot;),&amp;quot; background-image: url(&amp;apos;&amp;quot;+ds.get(0,&amp;quot;OBJBKCOLOR&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;);
+			///		ifnotnull(ds.get(0,&amp;quot;BKBORDOR&amp;quot;),&amp;quot;border: 1px solid &amp;quot;+ds.get(0,&amp;quot;FKGRID&amp;quot;)+&amp;quot;;&amp;quot;)+&amp;quot; &amp;quot;+
+					//sb.append(&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td ifnull(ds.get(0,&amp;quot;FKVALIGN&amp;quot;),&amp;quot;MIDDLE&amp;quot;)&amp;gt; &amp;quot; );WNDOUT 
+						
+					//sb.append(&amp;quot;AAA&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;\n&amp;quot;);
+				}
+				else {
+					sb.append(&amp;quot;data not found: deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+ctrlid+&amp;quot;&amp;apos;&amp;quot;);
+				}
+			}
+		}
+		
+	
+	}
+	
+}
+//WNDMOD 窗口风格, DSMOD 数据来源 ,WHEREBY 条件, SORTBY 排序,SQLTXT  SQL语句, LAYCOL 分列数 ,LAYROW 分行数,PAGEROW 每页行记录数, OSMWID OS中间件, OSFUNC OS函数,OSPARAM OS函数的参数,IFRAMEURL IFRAME的URL,IFSCROLLBAR 是否显示滚动条,HTMLGUID HTML
+// ,MOREURL  更多按钮,OPENLAYID  点击列表打开的布局：
+function GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,PAGEROW ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	//在服务端OS中引用其他中间件的服务端脚本
+	//说明：x_SQLINPUT是指x系统SQLINPUT中间件
+	if(WNDMOD==&amp;quot;TBODY&amp;quot;){
+		var ds = db.QuerySQL(&amp;quot;select OSSYT,OSMWID,OSFUNC from LHTML where id=&amp;apos;&amp;quot;+WNDMOD+&amp;quot;&amp;apos;&amp;quot;);
+		if(ds.getRowCount()&amp;gt;0){
+			var OSSYT = ds.getStringAt(0,&amp;quot;OSSYT&amp;quot;);
+			var OSMWID = ds.getStringAt(0,&amp;quot;OSMWID&amp;quot;);
+			var OSFUNC = ds.getStringAt(0,&amp;quot;OSFUNC&amp;quot;);
+			var eas = new pub.EAScript(null);                		 
+			//参数找到后，就执行方法，上面所指的funname其实是文件名字，MyFun是文件的根节点，funName是方法名字
+			try{
+				eas.DefineScopeVar(&amp;quot;db&amp;quot;, db);
+				eas.DefineScopeVar(&amp;quot;request&amp;quot;, request);
+				eas.DefineScopeVar(&amp;quot;deforg&amp;quot;, deforg);
+				eas.DefineScopeVar(&amp;quot;WNDMOD&amp;quot;, WNDMOD);
+				eas.DefineScopeVar(&amp;quot;DSMOD&amp;quot;, DSMOD);
+				eas.DefineScopeVar(&amp;quot;WHEREBY&amp;quot;, WHEREBY);
+				eas.DefineScopeVar(&amp;quot;SORTBY&amp;quot;, SORTBY);
+				eas.DefineScopeVar(&amp;quot;SQLTXT&amp;quot;, SQLTXT );
+				eas.DefineScopeVar(&amp;quot;LAYCOL&amp;quot;, LAYCOL );
+				eas.DefineScopeVar(&amp;quot;LAYROW&amp;quot;, LAYROW);
+				eas.DefineScopeVar(&amp;quot;PAGEROW&amp;quot;, PAGEROW );
+				eas.DefineScopeVar(&amp;quot;OSMWID&amp;quot;, OSMWID);
+				eas.DefineScopeVar(&amp;quot;OSFUNC&amp;quot;, OSFUNC);
+				eas.DefineScopeVar(&amp;quot;OSPARAM&amp;quot;, OSPARAM);
+				eas.DefineScopeVar(&amp;quot;IFRAMEURL&amp;quot;, IFRAMEURL);
+				eas.DefineScopeVar(&amp;quot;IFSCROLLBAR&amp;quot;, IFSCROLLBAR);
+				eas.DefineScopeVar(&amp;quot;HTMLGUID&amp;quot;, HTMLGUID);
+				eas.DefineScopeVar(&amp;quot;MOREURL&amp;quot;, MOREURL);
+				eas.DefineScopeVar(&amp;quot;OPENLAYID&amp;quot;, OPENLAYID);
+				var ret =  eas.CallClassFunc(&amp;quot;&amp;quot;+OSSYT +&amp;quot;_&amp;quot;+OSMWID+&amp;quot;&amp;quot;,&amp;quot;&amp;quot;+OSFUNC+&amp;quot;&amp;quot;,null).castToString();
+				return ret;
+			}catch(e){
+				throw new Exception(e);
+			}
+		}else{
+			return &amp;quot;&amp;quot;;
+		}
+	}
+	
+	var parent = new x_LHTML();
+	return parent.GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,PAGEROW ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+
+
+// if val1==val2 then var3 else val4
+function ifcase(val1,val2,val3,val4)
+{	
+	if(val1==val2)return val3;else return val4;
+}
+// if val1==&amp;quot;&amp;quot; then va2
+function ifnull(val1,val2)
+{	
+	if(&amp;quot;&amp;quot;+val1==&amp;quot;&amp;quot;)return val2;else return val1;
+}
+// if val1==&amp;quot;&amp;quot; then va2 else return &amp;quot;&amp;quot;
+function ifnotnull(val1,val2)
+{	
+	if(&amp;quot;&amp;quot;+val1==&amp;quot;&amp;quot;)return &amp;quot;&amp;quot;;else return val2;
+}
+
+// 客户端param传入的参数可以直接使用
+function SaveAS()
+{
+	var db = null;
+	var guid = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		guid = db.GetSQL(&amp;quot;select sys_guid() guid from dual&amp;quot;);
+		var ds = db.QuerySQL(&amp;quot;select COLUMN_NAME from user_tab_columns where table_name=&amp;apos;LAYHDR&amp;apos;&amp;quot;);
+		var cols=&amp;quot;&amp;quot;;
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++){
+			var colname= ds.getStringAt(i,&amp;quot;COLUMN_NAME&amp;quot;);
+			if(colname!=&amp;quot;GUID&amp;quot;&amp;&amp; colname!=&amp;quot;ID&amp;quot;){
+				cols+=&amp;quot;,&amp;quot;+colname;	
+			}
+		}
+		var sql =&amp;quot;insert into LAYHDR(guid,id&amp;quot;+cols+&amp;quot;) select &amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;+cols+&amp;quot; from layhdr where id=&amp;apos;&amp;quot;+oldid+&amp;quot;&amp;apos; and deforg=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos;&amp;quot;;
+		
+		var retnum=db.ExcecutSQL(sql);
+		
+		db.Commit();	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return guid ;
+}
+
+function GetColor()
+{
+	var ret = &amp;quot;&amp;quot;;
+	try {
+		var txt =pubpack.EAFunc.readFile( pubpack.AppStartListener.approot + path + &amp;quot;/readme.txt&amp;quot; );
+		var ss = txt.split(&amp;quot;\r\n&amp;quot;);
+		for ( var i=0;i&amp;lt;ss.length();i++){
+			var sss = ss[i].split(&amp;quot;,&amp;quot;);
+			if(sss.length()&amp;gt;=2&amp;&amp; sss[0]==filename){
+				ret = sss[1];break;
+			}
+		}
+	}catch(e){
+		ret=e.toString();
+	}
+	return ret;
+}
+//得到单元格的高度，（考虑到合并因素）
+function getcellcolw(sxgds,sColW,row,col,CELLPADDING )
+{
+	if(sxgds.GetCellHide(row,col)==true)return 0;
+	
+	var colw = 1*getcolw(sxgds,sColW,col);
+	//得到被合并单元格的宽度
+	var rowspan = sxgds.GetCellColSpan(row,col);
+	var colspan = sxgds.GetCellRowSpan(row,col);
+	for ( var j=0;j&amp;lt;rowspan;j++ ) {
+		colw +=1*getcolw(sxgds,sColW,col+j+1)+1*CELLPADDING ;
+	}
+	return colw;
+}
+
+function getcellrowh(sxgds,sRowH,row,col,CELLPADDING )
+{
+	if(sxgds.GetCellHide(row,col)==true)return 0;
+	var rowh = 1*getrowh(sxgds,sRowH,row);
+	//得到被合并单元格的gao度
+	var rowspan = sxgds.GetCellColSpan(row,col);
+	var colspan = sxgds.GetCellRowSpan(row,col);
+	for ( var j=0;j&amp;lt;colspan;j++ ) {
+		rowh +=1*getrowh(sxgds,sRowH,row+j+1)+1*CELLPADDING ;
+	}
+	return rowh;
+}
+
+// 只取原始大小
+function getcolw(sxgds,sColW,c)
+{
+	var colw = sxgds.aColwidth[c];
+	if(c&amp;lt;sColW.length() &amp;&amp; sColW[c]!=&amp;quot;&amp;quot;  &amp;&amp; sColW[c].substring(sColW[c].length()-1) !=&amp;quot;%&amp;quot; )
+		colw = sColW[c];
+	return colw;
+}
+function getrowh(sxgds,sRowH,r)
+{
+	var rowh = sxgds.aRowheight[r];
+	if(r&amp;lt;sRowH.length() &amp;&amp; sRowH[r]!=&amp;quot;&amp;quot; &amp;&amp; sRowH[r].substring(sRowH[r].length()-1) !=&amp;quot;%&amp;quot;)
+		rowh = sRowH[r];//取自定义列宽
+	return rowh;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >CREATEHDRTABLE</ID><NAME ></NAME><DATDSC >drop table LAYHDR cascade constraints;
+create table LAYHDR ( 
+	GUID CHAR(32) default sys_guid()   not null ,
+	ID VARCHAR2(256) not null ,
+	DEFORG VARCHAR2(20) not null ,
+	NAME VARCHAR2(256),
+	CLS VARCHAR2(256),
+	NOTE VARCHAR2(500),
+	TITLE VARCHAR2(256),
+	WIDTHFIX VARCHAR2(20),
+	WIDTHFIXTYP VARCHAR2(2),
+	HEIGHTFIX VARCHAR2(20),
+	HEIGHTFIXTYP CHAR(2),
+	BKCOLOR VARCHAR2(20),
+	BKIMG VARCHAR2(256),
+	ALIGN VARCHAR2(20),
+	VALIGN VARCHAR2(20),
+	CELLSPACE VARCHAR2(20),
+	CELLPADDING VARCHAR2(20),
+	OBJPADDING VARCHAR2(20),
+	SHOWHEADIMG CHAR(1),
+	SHOWTOOLBAR CHAR(1),
+	RELOADTIME VARCHAR2(20),
+	FIXROWHEIGHT CHAR(1),
+	ONHTMLID VARCHAR2(20),
+	POSTHTMLID VARCHAR2(20),
+	CRTDAT DATE default sysdate
+ ,
+	ZXGGUID CHAR(32),
+	SXGGUID CHAR(32) );
+  comment on column LAYHDR.GUID is &amp;apos;内部唯一编号&amp;apos; ;
+ comment on column LAYHDR.ID is &amp;apos;编号&amp;apos; ;
+ comment on column LAYHDR.DEFORG is &amp;apos;默认组织号&amp;apos; ;
+ comment on column LAYHDR.NAME is &amp;apos;名称&amp;apos; ;
+ comment on column LAYHDR.CLS is &amp;apos;分类&amp;apos; ;
+ comment on column LAYHDR.NOTE is &amp;apos;描述&amp;apos; ;
+ comment on column LAYHDR.TITLE is &amp;apos;页面标题&amp;apos; ;
+ comment on column LAYHDR.WIDTHFIX is &amp;apos;页面宽度&amp;apos; ;
+ comment on column LAYHDR.WIDTHFIXTYP is &amp;apos;页面宽度单位&amp;apos; ;
+ comment on column LAYHDR.HEIGHTFIX is &amp;apos;页面高度&amp;apos; ;
+ comment on column LAYHDR.HEIGHTFIXTYP is &amp;apos;页面高度单位&amp;apos; ;
+ comment on column LAYHDR.BKCOLOR is &amp;apos;背景颜色&amp;apos; ;
+ comment on column LAYHDR.BKIMG is &amp;apos;背景图片&amp;apos; ;
+ comment on column LAYHDR.ALIGN is &amp;apos;水平对齐&amp;apos; ;
+ comment on column LAYHDR.VALIGN is &amp;apos;背景颜色&amp;apos; ;
+ comment on column LAYHDR.CELLSPACE is &amp;apos;窗体间空隙&amp;apos; ;
+ comment on column LAYHDR.CELLPADDING is &amp;apos;窗体内空隙&amp;apos; ;
+ comment on column LAYHDR.OBJPADDING is &amp;apos;列表内空隙&amp;apos; ;
+ comment on column LAYHDR.SHOWHEADIMG is &amp;apos;显示标题图片&amp;apos; ;
+ comment on column LAYHDR.SHOWTOOLBAR is &amp;apos;显示工具栏&amp;apos; ;
+ comment on column LAYHDR.RELOADTIME is &amp;apos;定时刷新时间&amp;apos; ;
+ comment on column LAYHDR.FIXROWHEIGHT is &amp;apos;自适应行高已不用&amp;apos; ;
+ comment on column LAYHDR.ONHTMLID is &amp;apos;页面前HTML&amp;apos; ;
+ comment on column LAYHDR.POSTHTMLID is &amp;apos;页面后HTML&amp;apos; ;
+ comment on column LAYHDR.CRTDAT is &amp;apos;&amp;apos; ;
+ comment on column LAYHDR.ZXGGUID is &amp;apos;主设计界面ZXG的GUID&amp;apos; ;
+ comment on column LAYHDR.SXGGUID is &amp;apos;主设计界面SXG的GUID&amp;apos; ;
+
+</DATDSC><C4 >CREATEHDRTABLE</C4><C5 >CREATEHDRTABLE</C5><C6 >CREATEHDRTABLE</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="1" ><ID >GetLAYOBJ</ID><NAME ></NAME><DATDSC >select logoimg img,
+id||&amp;apos;-&amp;apos;||name||&amp;apos;~&amp;apos;||note name,
+id,
+NVL(title,name) title,
+deforg ,
+logoimg,guid
+from layobj
+where deforg=&amp;apos;[%thisdeforg]&amp;apos; and cls=&amp;apos;[%clsid]&amp;apos; order by id </DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >GetLAYOBJ</C7><C8 >GetLAYOBJ</C8><C9 >GetLAYOBJ</C9><C10 ></C10></ROW>
+<ROW num="2" ><ID >GetList</ID><NAME ></NAME><DATDSC >select * from (
+select &amp;apos;obj_0&amp;apos; id,&amp;apos;组件-公共&amp;apos; name from dual
+union all
+select &amp;apos;obj_&amp;apos;||id id ,&amp;apos;组件-&amp;apos;||name name from v_layobj_class where deforg=&amp;apos;[%thisdeforg]&amp;apos;
+union all
+select &amp;apos;pag_&amp;apos;||id id,&amp;apos;页面-&amp;apos;||name name from v_layhdr_class where deforg=&amp;apos;[%thisdeforg]&amp;apos;
+) order by id
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >GetList</C7><C8 >GetList</C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="3" ><ID >GetLAYHDR</ID><NAME ></NAME><DATDSC >select logoimg img,
+id||&amp;apos;-&amp;apos;||name||&amp;apos;~&amp;apos;||note name,
+id,
+NVL(title,name) title,
+deforg ,
+logoimg,guid
+from layhdr
+where deforg=&amp;apos;[%thisdeforg]&amp;apos; and cls=&amp;apos;[%clsid]&amp;apos; order by id 
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >GetLAYHDR</C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="4" ><ID >GetOBJGUID</ID><NAME ></NAME><DATDSC >select guid from LAYOBJ where id=&amp;apos;[%id]&amp;apos; and deforg=&amp;apos;[%deforg]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >GetOBJGUID</C10></ROW>
+<ROW num="5" ><ID >GetPAGGUID</ID><NAME ></NAME><DATDSC >select guid from LAYHDR where id=&amp;apos;[%id]&amp;apos; and deforg=&amp;apos;[%deforg]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

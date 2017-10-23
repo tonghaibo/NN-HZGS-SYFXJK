@@ -1,0 +1,793 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >temporgusrrol</MWID><NAME >用户管理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >temporgusrrol.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >1,3,2</ID><CELLID >ID</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="1" ><ID >1,3,4</ID><CELLID >NAME</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="2" ><ID >1,3,6</ID><CELLID >ORG</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="3" ><ID >1,4,2</ID><CELLID >POSTNOTE</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="4" ><ID >1,4,6</ID><CELLID >DEPTID</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="5" ><ID >1,5,2</ID><CELLID >MOBILE</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="6" ><ID >1,5,4</ID><CELLID >TEL</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="7" ><ID >1,5,6</ID><CELLID >EMAIL</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="8" ><ID >1,6,2</ID><CELLID >MAINURL</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="9" ><ID >1,6,7</ID><CELLID >USEFLG</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >btnDelete</ID><NAME >删除</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><C10 >btnDelete</C10><C11 ></C11></ROW>
+<ROW num="1" ><ID >btnSave</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 >btnSave</C10><C11 >btnSave</C11></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheetTree = 0;
+var sheetProcess  = 1;
+var sheetAction  = 2;
+var sheetWorkflw  = 3;
+var sheetWorkflwSrc = 4;
+var CURMWID =&amp;quot;&amp;quot;;//	当前操作的svg图的名字
+var CURSYTID = &amp;quot;&amp;quot;;
+var CURMWNAM=&amp;quot;&amp;quot;;
+var CURMWTYP=&amp;quot;&amp;quot;;
+var CURFILENAME =&amp;quot;&amp;quot;;
+var ZXGFILE1=&amp;quot;&amp;quot;;
+var ZXGFILE2=&amp;quot;&amp;quot;;
+var ZXGFILE3=&amp;quot;&amp;quot;;
+//重新载入zxg后定义的单元格ID没有了，所以用原始的方法处理
+var usr_row=new Array(3,3,3,4,4,4,5,5,6,6,1);
+var usr_col=new Array(2,4,6,2,4,6,2,6,2,7,5);
+var usr_colnam=new Array(&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;,&amp;quot;ORG&amp;quot;,&amp;quot;POST&amp;quot;,&amp;quot;POSTNOTE&amp;quot;,&amp;quot;DEPTID&amp;quot;,&amp;quot;EMAIL&amp;quot;,&amp;quot;MOBILE&amp;quot;,&amp;quot;MAINURL&amp;quot;,&amp;quot;USEFLG&amp;quot;,&amp;quot;GUID&amp;quot;);
+
+var orglist = -1;
+var desktoplist = -1;
+var userpostlist = -1;
+var deptlist = -1;
+
+function _thisOnpost_loaddata()
+{
+
+
+	try {CURMWID =mwid ;} catch( e ) {}
+	try {CURSYTID =selsytid;} catch( e ) {}
+
+	// 显示分页栏
+	_this.ShowTabBar(0);
+	
+        var sheet = 0 ;
+        _this.SetSheetName(0,&amp;quot;流程图对象&amp;quot;);
+
+	if (G_ACCID==&amp;quot;0&amp;quot;){//列出所有的组织
+		_sql.querytods(&amp;quot;QueryORG&amp;quot;,&amp;quot;where= id&amp;lt;&amp;gt;&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot; );	
+	}
+	else 
+		_sql.querytods(&amp;quot;QueryORG&amp;quot;,&amp;quot;where= ( REFID=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; OR ID=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; ) and id&amp;lt;&amp;gt;&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot; );	
+	//SELECT * FROM ORG WHERE where REFID=&amp;apos;FRACAS&amp;apos; OR ID=&amp;apos;FRACAS&amp;apos;  order by id
+	
+	var mdxml=&amp;quot;&amp;lt;?xml version =  &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;组织构架&amp;gt;&amp;quot;;
+	mdxml+=&amp;quot;&amp;lt;组织：&amp;quot;+G_ORGNAM +&amp;quot; imageid=\&amp;quot;0\&amp;quot; orgid=\&amp;quot;&amp;quot;+G_ORGID +&amp;quot;\&amp;quot; flag=\&amp;quot;org\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	if (myorgid == G_ORGID ) {
+		mdxml+= invokeOSFunc(&amp;quot;GetOrgList&amp;quot;,&amp;quot;thisorgid=&amp;quot;+G_ORGID +&amp;quot;&amp;thisid=&amp;quot; ) ;     
+	}
+	mdxml+=&amp;quot;&amp;lt;/组织：&amp;quot;+G_ORGNAM +&amp;quot;&amp;gt;&amp;quot;;
+	
+	for ( var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++ ){
+		var myorgid = _this.XMLDS_GetString(i,&amp;quot;ID&amp;quot;);
+		var myorgnam = _this.XMLDS_GetString(i,&amp;quot;NAME&amp;quot;);
+		mdxml+=&amp;quot;&amp;lt;公司：&amp;quot;+myorgnam +&amp;quot; imageid=\&amp;quot;0\&amp;quot; orgid=\&amp;quot;&amp;quot;+myorgid +&amp;quot;\&amp;quot; flag=\&amp;quot;org\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+//		if (myorgid == G_ORGID ) {
+//			mdxml+= invokeOSFunc(&amp;quot;GetOrgList&amp;quot;,&amp;quot;thisorgid=&amp;quot;+myorgid +&amp;quot;&amp;thisid=&amp;quot; ) ;     
+//		}
+		mdxml+=&amp;quot;&amp;lt;/公司：&amp;quot;+myorgnam +&amp;quot;&amp;gt;&amp;quot;;
+	}	
+	mdxml+=&amp;quot;&amp;lt;/组织构架&amp;gt;&amp;quot;;
+	
+	_this.SetToTreeCtrl(&amp;quot;tree_0&amp;quot;,sheetTree ,-1,-1,mdxml );
+	//treexml = invokeOSFunc(&amp;quot;GetOrgList&amp;quot;,&amp;quot;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;thisid=&amp;quot; ) ;     
+        //_this.SetToTreeCtrl(&amp;quot;tree_0&amp;quot;,sheetTree ,-1,-1,&amp;quot;&amp;lt;?xml version =  &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;组织构架&amp;gt;&amp;lt;&amp;quot;+G_ORGNAM+&amp;quot;&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/&amp;quot;+G_ORGNAM+&amp;quot;&amp;gt;&amp;lt;&amp;quot;+G_ORGNAM+&amp;quot;&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/&amp;quot;+G_ORGNAM+&amp;quot;&amp;gt;&amp;lt;组织构架&amp;gt;&amp;quot;);
+        
+	_this.SplitSheet(0,&amp;quot;H&amp;quot;,&amp;quot;30%&amp;quot;);
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;160&amp;quot;);	
+	_this.SetCellBkColor(1,-1,-1,255,255,255);
+	_this.SetCellBkColor(2,-1,-1,255,255,255);
+	_this.SetCellBkColor(3,-1,-1,255,255,255);	
+	_this.SetCurrentSheet(sheetProcess);
+
+	ZXGFILE1=_this.SaveTempZXGFile(1);//SaveZXGFileToTempDir(1);
+	ZXGFILE2=_this.SaveTempZXGFile(2);//SaveZXGFileToTempDir(1);
+	ZXGFILE3=_this.SaveTempZXGFile(3);//SaveZXGFileToTempDir(1);
+	//_this.SetAttribe(&amp;quot;SHEET_2&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX );
+	
+	// 基础数据维护界面：设置列的属性
+	
+	orglist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ORG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	userpostlist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_USERPOST&amp;where=refid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	desktoplist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_DESKTOP&amp;where=refid like &amp;apos;&amp;quot;+G_ORGID+&amp;quot;%&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	deptlist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ORGDEPT&amp;where=org like &amp;apos;&amp;quot;+G_ORGID+&amp;quot;%&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	
+	refreshusr ( G_ORGID,&amp;quot;&amp;quot;,&amp;quot;&amp;quot; );
+	
+	_this.SetColVisible(2,2,0);
+	_this.AutoFixScreenWidth();
+}
+
+//================================================================// 
+// 函数：TreeItemDClick
+// 说明：Click tree item
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/15/06 16:02:13
+// 修改日志：
+//================================================================// 
+var SEQNUM=0;
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      var ret = &amp;quot;&amp;quot;;
+      var itemid = tagid;      // 标签
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+      var nextlevel_itemid = _this.XMLCTL_GetItem(id,hItem,2);
+      if ( id==&amp;quot;tree_0&amp;quot; ) {
+            var thisorgid =getXmlAttribute(attribe,&amp;quot;orgid&amp;quot;);
+            var thisdeptid =getXmlAttribute(attribe,&amp;quot;deptid&amp;quot;);
+            var flag = getXmlAttribute(attribe,&amp;quot;flag&amp;quot;);
+            var thisusrid = getXmlAttribute(attribe,&amp;quot;usrid&amp;quot;);
+	    if ( flag ==&amp;quot;modifydept&amp;quot; ) {
+	    	//修改部门
+	    	openWindow(&amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?flag=DEPT&amp;grdid=UpdateLOC&amp;grdtyp=M&amp;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;title=Organzie&amp;quot;);
+	    }
+	    else if ( flag==&amp;quot;org&amp;quot; ) {
+	    	 md_xml=invokeOSFunc(&amp;quot;GetOrgList&amp;quot;,&amp;quot;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;thisid=&amp;quot; ) ;
+	    	 if ( md_xml == &amp;quot;&amp;quot; || md_xml == undefined  ) alert ( &amp;quot;该节点下面没有数据&amp;quot; );
+                       else _this.XMLCTL_Append(id,md_xml,hItem,2);
+
+	    }
+            else if ( flag == &amp;quot;dept&amp;quot;) {
+          
+		    if ( nextlevel_itemid.length== 0 ) {
+                        var md_xml = &amp;quot;&amp;quot;;
+                        try {
+				
+                        	md_xml = invokeOSFunc(&amp;quot;GetOrgList&amp;quot;,&amp;quot;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;thisid=&amp;quot;+thisdeptid ) ;  
+                        	
+                        	if ( md_xml == &amp;quot;&amp;quot; || md_xml == undefined  ) alert ( &amp;quot;该节点下面没有数据&amp;quot; );
+                        	else _this.XMLCTL_Append(id,md_xml,hItem,2);
+                        }
+                        catch ( e ) {
+                        	alert ( e );
+                        }
+                        
+                  }
+            }
+            
+            if ( flag == &amp;quot;usr&amp;quot;) {
+                         refreshusr ( thisorgid,thisdeptid ,thisusrid );
+			 if ( thisusrid ==&amp;quot;&amp;quot;){
+			 	//记录hItem
+			 	_this.SetCellText(1,1,4,&amp;quot;&amp;quot;+hItem);// _this.XMLCTL_Append(id,md_xml,hItem,2);
+			 }
+            }
+	}
+}
+
+function refreshusr ( thisorgid,thisdeptid,thisusrid )
+{
+	_this.LoadZXGFile(ZXGFILE1,-1,1);
+//	_this.SetToButton(&amp;quot;COM_SAVEUSR&amp;quot;,1,1,7,&amp;quot;保存&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_this.SetToButton(&amp;quot;虚拟主机&amp;quot;,1,7,4,&amp;quot;虚拟主机&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_this.SetToButton(&amp;quot;UKEY认证&amp;quot;,1,7,5,&amp;quot;UKEY认证&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_this.SetToButton(&amp;quot;重置密码&amp;quot;,1,7,6,&amp;quot;重置密码&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_this.SetToButton(&amp;quot;分配认证码&amp;quot;,1,7,7,&amp;quot;分配认证码&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_this.SetToButton(&amp;quot;进入账套首页&amp;quot;,1,6,4,&amp;quot;进入账套首页&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_sql.querytods(&amp;quot;USR&amp;quot;,&amp;quot;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;thisusrid=&amp;quot;+thisusrid);
+	if (_this.XMLDS_GetRowCount()&amp;gt;0){
+		for (i=0;i&amp;lt;usr_row.length;i++){
+			_this.SetCellText(1,usr_row[i],usr_col[i],_this.XMLDS_GetString(0,usr_colnam[i]));
+		}
+		
+//		_this.SetCellText(1,3,4,_this.XMLDS_GetString(0,&amp;quot;NAME&amp;quot;));
+//		_this.SetCellText(1,3,6,_this.XMLDS_GetString(0,&amp;quot;ORG&amp;quot;));
+//		_this.SetCellText(1,4,6,_this.XMLDS_GetString(0,&amp;quot;DEPTID&amp;quot;));
+		
+		_this.SetCellText(1,1,1,&amp;quot;修改用户资料&amp;quot;);
+		
+		_this.SetToBoolBox(1,6,7);
+		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,3,6,orglist);
+ 		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,6,2,desktoplist);
+ 		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,4,2,userpostlist);
+ 		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,4,6,deptlist);
+	}
+	else {
+		_this.SetCellText(1,3,6,thisorgid);
+		_this.SetCellText(1,4,6,thisdeptid);		
+		_this.SetCellText(1,6,7,&amp;quot;1&amp;quot;);
+		_this.SetCellText(1,1,1,&amp;quot;新增用户资料&amp;quot;);
+		_this.SetToBoolBox(1,6,7);
+		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,3,6,orglist);
+ 		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,6,2,desktoplist);
+ 		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,4,2,userpostlist);
+ 		_this.SetToComboBox(&amp;quot;&amp;quot;, 1,4,6,deptlist);
+	}
+	
+	_this.LoadZXGFile(ZXGFILE2,-1,2);
+	var rolMenu = &amp;quot;&amp;lt;ITEM name=\&amp;quot;全局角色\&amp;quot; id=\&amp;quot;UpdateROLSCOPE\&amp;quot; /&amp;gt;&amp;lt;ITEM name=\&amp;quot;组织角色\&amp;quot; id=\&amp;quot;UpdateROL\&amp;quot; /&amp;gt;&amp;quot;;
+	_this.SetToButton(&amp;quot;&amp;quot;,2,1,7,&amp;quot;修改角色&amp;quot;,&amp;quot;&amp;quot;,rolMenu ,3,-1,-1);
+//	_this.SetToButton(&amp;quot;COM_SAVEUSRROL&amp;quot;,2,1,6,&amp;quot;保存&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	
+	_this.SetMainCellRange(2,4,1,8,7);
+	_this.SetXmlDS(2,4,1,8,7,_sql.query(&amp;quot;USRROL&amp;quot;,&amp;quot;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;thisusrid=&amp;quot;+thisusrid ) );
+	_this.SetFixedRow(2,4);
+	_this.SetFixedCol(2,2);
+	_this.SetColVisible(2,2,0);
+	
+	//s = _this.SetAttribe(&amp;quot;SHEET_2&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX);
+	
+	for( var r=3;r&amp;lt;_this.GetRowCount(2)-1;r++){
+		if( _this.GetCellText(2,r,1)!=&amp;quot;&amp;quot;) _this.SetToBoolBox(2,r,1);
+	}
+	
+	_this.AutoFixScreenWidth();
+	_this.SetRedraw(1);
+}
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; ,  loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1  ) ;
+            return ret;
+
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet==1 &amp;&amp; row==6 &amp;&amp; col==1 ) {
+//		alert ( &amp;quot;提示：这是维护登录首页的入口，请在新弹出窗口[引用]列，录入组织号&amp;quot;+G_ORGID+&amp;quot;,类型录入DESKTOP&amp;quot; );
+//		openWindow( &amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?flag=PARAM&amp;grdid=PARAMDBEDIT&amp;grdtyp=M&amp;where= and typ=&amp;apos;DESKTOP&amp;apos;  and refid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;sytid=x&amp;title=DESKTOP&amp;quot; );
+		
+		openWindow( &amp;quot;show.sp?grdid=DESKTOPED&amp;grdtyp=R&amp;typ=DESKTOP&amp;refid=&amp;quot;+G_ORGID+&amp;quot;&amp;sytid=x&amp;quot; );
+	}
+	if ( sheet==1 &amp;&amp; row==4 &amp;&amp; col==1 ) {
+		alert ( &amp;quot;提示：这是维护岗位的入口，请在新弹出窗口【引用】输入 &amp;quot;+G_ORGID+&amp;quot;,【类型】输入 USERPOST&amp;quot; );
+		openWindow( &amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?flag=PARAM&amp;grdid=PARAMDBEDIT&amp;grdtyp=M&amp;where= and typ=&amp;apos;USERPOST&amp;apos; and refid=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; &amp;sytid=x&amp;title=USERPOST&amp;quot; );
+	}
+	else if ( _this.GetCellText(sheet,row,col) == &amp;quot;模块权限&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=UpdateROLMOD&amp;thisrolguid=&amp;quot;+_this.GetCellText(sheet,row,2)+&amp;quot;&amp;thismodid=&amp;MODNAM=&amp;modtyp=&amp;loaddata=1&amp;quot;);
+	}
+	else if ( _this.GetCellText(sheet,row,col) == &amp;quot;菜单权限&amp;quot; ) {
+		openWindow(&amp;quot;show.sp?grdid=UpdateROLSUBSYT&amp;thisrolguid=&amp;quot;+_this.GetCellText(sheet,row,2));
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if( id==&amp;quot;COM_SAVEUSR&amp;quot;){
+		var xml= &amp;quot;&amp;lt;ROWSET&amp;gt;&amp;lt;ROW&amp;gt;&amp;quot;;
+		for (i=0;i&amp;lt;usr_row.length;i++){
+			var colname=
+			xml+=&amp;quot;&amp;lt;&amp;quot;+usr_colnam[i]+&amp;quot;&amp;gt;&amp;quot;+_this.GetCellText(1,usr_row[i],usr_col[i])+&amp;quot;&amp;lt;/&amp;quot;+usr_colnam[i]+&amp;quot;&amp;gt;&amp;quot;;
+		}
+		xml+=&amp;quot;&amp;lt;/ROW&amp;gt;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+			//POST方式调用网络OS函数
+		var param = new Object();
+		param.xmlstr = xml;
+		try {
+			msg = invokeOSFuncExt(&amp;quot;saveusr&amp;quot;,param);
+			//alert(&amp;quot;徐海军\n&amp;quot;+msg);
+			if ( msg.length==32 ){
+			 	
+			 	var mdxml= &amp;quot;&amp;lt;&amp;quot;+_this.GetCellText(1,3,4)+&amp;quot; imageid=\&amp;quot;1\&amp;quot; deptid=\&amp;quot;&amp;quot;+_this.GetCellText(1,4,6)+&amp;quot;\&amp;quot; orgid=\&amp;quot;&amp;quot;+_this.GetCellText(1,3,6)+&amp;quot;\&amp;quot; usrid=\&amp;quot;&amp;quot;+_this.GetCellText(1,3,2)+&amp;quot;\&amp;quot; flag=\&amp;quot;usr\&amp;quot; &amp;gt;&amp;lt;/&amp;quot;+_this.GetCellText(1,3,4)+&amp;quot;&amp;gt;&amp;quot;;  
+			 	_this.SetCellText(1,1,5,msg);
+			 	_this.XMLCTL_Append(&amp;quot;tree_0&amp;quot;,mdxml,1*_this.GetCellText(1,1,4),1);
+			 	alert (&amp;quot;新增成功&amp;quot;);
+			 }
+			else 
+				alert ( msg );
+		}
+		catch (e) {
+			alert ( e );
+		}
+
+	}  
+	if( id==&amp;quot;COM_SAVEUSRROL&amp;quot;){
+		
+		var param = new Object();
+		param.thisaccid=G_ACCID;
+		if( G_ACCID==&amp;quot;0&amp;quot;){
+			param.thisaccid=prompt ( &amp;quot;权限的分配如果在中间件开发工具进入，需要录入分配权限的帐套号&amp;quot; ,&amp;quot;&amp;quot;);
+			if ( param.thisaccid==undefined ) return ;
+		}
+		param.xmlstr = _this.GetXml(2,_this.GetMainCellRangeRow1(2),_this.GetMainCellRangeCol1(2)
+			,_this.GetMainCellRangeRow2(2),_this.GetMainCellRangeCol1(2)+2 );
+//		alert ( &amp;quot;abc\n&amp;quot;+param.xmlstr);
+		param.usrguid = _this.GetCellText(1,1,5);
+		if ( param.usrguid ==&amp;quot;&amp;quot; ) {
+			alert ( &amp;quot;用户资料先保存，然后再分配权限&amp;quot; );
+			return;
+		}
+
+		try {
+			msg = invokeOSFuncExt(&amp;quot;saveusrrol&amp;quot;,param);
+			alert ( msg );
+		}
+		catch (e) {
+			alert ( e );
+		}
+
+	}  
+	else if ( id==&amp;quot;UKEY认证&amp;quot; ){
+		openWindow( &amp;quot;show.sp?grdid=USRINIT&amp;thisuserid=&amp;quot;+_this.GetCellText(1,3,2)+&amp;quot;&amp;usrorgid=&amp;quot;+_this.GetCellText(1,3,6) );
+	}	
+	
+	else if ( id==&amp;quot;分配认证码&amp;quot; ){
+		openWindow( &amp;quot;show.sp?grdid=USRACC&amp;usrid=&amp;quot;+_this.GetCellText(1,3,2)+&amp;quot;&amp;usrorgid=&amp;quot;+_this.GetCellText(1,3,6) );
+	}
+			
+	else if ( id==&amp;quot;重置密码&amp;quot; ){
+		_sql.run(&amp;quot;initPWD&amp;quot;,&amp;quot;ORG=&amp;quot;+_this.GetCellText(1,3,6)+&amp;quot;&amp;USR=&amp;quot;+_this.GetCellText(1,3,2));
+		alert(&amp;quot;重置密码成功！\n当前用户新密码：0&amp;quot;);
+	}
+	else if ( id==&amp;quot;虚拟主机&amp;quot; ){
+		openWindow( &amp;quot;show.sp?grdid=vapp_usr&amp;usrid=&amp;quot;+_this.GetCellText(1,3,2)+&amp;quot;&amp;usrorgid=&amp;quot;+_this.GetCellText(1,3,6) );
+	}
+	else if ( id==&amp;quot;进入账套首页&amp;quot; ) {
+		openWindow( &amp;quot;show.sp?grdid=accmainurl&amp;usrid=&amp;quot;+_this.GetCellText(1,3,2)+&amp;quot;&amp;usrorgid=&amp;quot;+_this.GetCellText(1,3,6) );
+	
+		
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( sheet==2&amp;&amp; row==3&amp;&amp;col==1){
+		var checkid=_this.GetCellText(2,3,1);
+
+			for( var r=4;r&amp;lt;_this.GetRowCount(2)-1;r++){
+			if( _this.GetCellText(2,r,1)!=&amp;quot;&amp;quot;) 
+				_this.SetCellText(2,r,1,checkid);		
+			}
+	}  
+	if ( sheet==0&amp;&amp; row==-1&amp;&amp;col==-1){
+		//imageid=&amp;quot;1&amp;quot; deptid=&amp;quot;X11&amp;quot; orgid=&amp;quot;XLSGRID&amp;quot; usrid=&amp;quot;011&amp;quot; flag=&amp;quot;usr&amp;quot;  
+		//imageid=&amp;quot;0&amp;quot; deptid=&amp;quot;X12&amp;quot; orgid=&amp;quot;XLSGRID&amp;quot; flag=&amp;quot;dept&amp;quot; 
+		var flag1=getXmlAttribute(oldvalue,&amp;quot;flag&amp;quot;);
+		var flag2=getXmlAttribute(newvalue,&amp;quot;flag&amp;quot;);
+		var deptid2= getXmlAttribute(newvalue,&amp;quot;deptid&amp;quot;);
+		var usrid=getXmlAttribute(oldvalue,&amp;quot;usrid&amp;quot;);
+		var thisorgid=getXmlAttribute(oldvalue,&amp;quot;orgid&amp;quot;);
+		if(flag1==&amp;quot;usr&amp;quot;&amp;&amp; flag2==&amp;quot;dept&amp;quot;) {	//说明是修改所属部门
+			//update usr set deptid=&amp;apos;[%deptid]&amp;apos; where id=&amp;apos;[%usrid]&amp;apos; and org=&amp;apos;[%thisorgid]&amp;apos;
+			_sql.run(&amp;quot;CHGDEPT&amp;quot;,&amp;quot;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;usrid=&amp;quot;+usrid+&amp;quot;&amp;deptid=&amp;quot;+deptid2 );
+		}
+		else if ( flag1==&amp;quot;usr&amp;quot;&amp;&amp; flag2==&amp;quot;usr&amp;quot;) {// 其他修改，比如右键菜单打开窗口来编辑属性
+			//......
+		}
+	}
+	
+}
+
+//删除
+function btnDelete()
+{
+	if (!confirm(&amp;quot;删除该用户，是否确认？\r\n注：该用户权限也将一并删除，不可恢复。&amp;quot;)) return;
+	try {
+		var usrguid = _this.GetCellText(1,1,5);
+		var ret = invokeOSFunc(&amp;quot;deleteusr&amp;quot;,&amp;quot;usrguid=&amp;quot;+usrguid);
+		alert(ret);
+		window.location.reload(true);
+	}
+	catch (e) {
+		alert(e);
+	}
+}
+
+//保存
+function btnSave()
+{
+	var bSave = 0;
+	var xml= &amp;quot;&amp;lt;ROWSET&amp;gt;&amp;lt;ROW&amp;gt;&amp;quot;;
+	for (i=0;i&amp;lt;usr_row.length;i++){
+		//var colname=
+		var str = _this.GetCellText(1,usr_row[i],usr_col[i]);
+
+		if(usr_row[i]==6 &amp;&amp; usr_col[i]==2){	//替代地址中的URL
+			str = str.replace(/&amp;/g, &amp;quot;~amp;&amp;quot; );
+			str = str.replace(/~/g,&amp;quot;&amp;&amp;quot; );
+		}
+
+		xml+=&amp;quot;&amp;lt;&amp;quot;+usr_colnam[i]+&amp;quot;&amp;gt;&amp;quot;+str+&amp;quot;&amp;lt;/&amp;quot;+usr_colnam[i]+&amp;quot;&amp;gt;&amp;quot;;
+	}
+	xml+=&amp;quot;&amp;lt;/ROW&amp;gt;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+
+	var param = new Object();
+	param.xmlstr = xml;
+//	alert(xml);
+	try {
+		msg = invokeOSFuncExt(&amp;quot;saveusr&amp;quot;,param);
+		
+		if ( msg.length==32 ){
+		 	
+		 	var mdxml= &amp;quot;&amp;lt;&amp;quot;+_this.GetCellText(1,3,4)+&amp;quot; imageid=\&amp;quot;1\&amp;quot; deptid=\&amp;quot;&amp;quot;+_this.GetCellText(1,4,6)+&amp;quot;\&amp;quot; orgid=\&amp;quot;&amp;quot;+_this.GetCellText(1,3,6)+&amp;quot;\&amp;quot; usrid=\&amp;quot;&amp;quot;+_this.GetCellText(1,3,2)+&amp;quot;\&amp;quot; flag=\&amp;quot;usr\&amp;quot; &amp;gt;&amp;lt;/&amp;quot;+_this.GetCellText(1,3,4)+&amp;quot;&amp;gt;&amp;quot;;  
+		 	_this.SetCellText(1,1,5,msg);
+		 	_this.XMLCTL_Append(&amp;quot;tree_0&amp;quot;,mdxml,1*_this.GetCellText(1,1,4),1);
+		 	//alert (&amp;quot;新增成功&amp;quot;);
+		 	bSave ++;
+		 }
+		else {
+			//alert ( msg );
+			bSave ++;
+		}
+	}
+	catch (e) {
+		alert ( e );
+	}
+
+	
+	var param = new Object();
+	param.thisaccid=G_ACCID;
+	if( G_ACCID==&amp;quot;0&amp;quot;){
+		param.thisaccid=prompt ( &amp;quot;权限的分配如果在中间件开发工具进入，需要录入分配权限的帐套号&amp;quot; ,&amp;quot;&amp;quot;);
+		if ( param.thisaccid==undefined ) return ;
+	}
+	param.xmlstr = _this.GetXml(2,_this.GetMainCellRangeRow1(2),_this.GetMainCellRangeCol1(2),_this.GetMainCellRangeRow2(2),_this.GetMainCellRangeCol1(2)+2 );
+	param.usrguid = _this.GetCellText(1,1,5);
+	var str = _this.GetCellText(2,4,3);
+	if ( str!=&amp;quot;&amp;quot; ) {	
+		if ( param.usrguid ==&amp;quot;&amp;quot; ) {
+			alert ( &amp;quot;用户资料先保存，然后再分配权限&amp;quot; );
+			return;
+		}
+	
+		try {
+			msg = invokeOSFuncExt(&amp;quot;saveusrrol&amp;quot;,param);
+			//alert ( msg );
+			bSave ++;
+		}
+		catch (e) {
+			alert ( e );
+		}
+	}
+	if (bSave &amp;gt;= 1) {
+		alert(&amp;quot;保存用户信息成功！&amp;quot;);
+	}
+
+}
+
+//父窗口刷新控件
+function lchref()
+{
+	desktoplist =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_DESKTOP&amp;where= refid like &amp;apos;&amp;quot;+G_ORGID+&amp;quot;%&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;, 1,6,2,desktoplist);
+}
+
+//点击菜单项
+function _thisOnMenuItemSelect(sheetAction,row,col,menuitemid)
+{
+	if (menuitemid == &amp;quot;UpdateROLSCOPE&amp;quot;) {
+		openWindow(&amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?flag=&amp;grdid=UpdateROLSCOPE&amp;quot;);
+	}else if (menuitemid == &amp;quot;UpdateROL&amp;quot;) {
+		openWindow(&amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?flag=&amp;grdid=UpdateROL&amp;grdtyp=M&amp;title=ROL&amp;thisorgid=&amp;quot;+_this.GetCellText(1,3,6));
+	}	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+//查询某个org下的节点
+//传入参数 thisorgid， thisid
+function GetOrgList()
+{
+        var xml = &amp;quot;&amp;quot;;
+        var sytds = null;
+        var sql = &amp;quot;select a.id, name from loc a where org =&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; &amp;quot;;
+        if ( thisid == &amp;quot;&amp;quot; ) sql += &amp;quot; and refid is null &amp;quot;;
+        else if ( thisid==&amp;quot;all&amp;quot; ) sql += &amp;quot; and 1&amp;lt;0 &amp;quot;;//不分部门
+
+        else sql += &amp;quot; and refid=&amp;apos;&amp;quot;+thisid+&amp;quot;&amp;apos;&amp;quot;;
+	
+        sql+=&amp;quot; order by a.id &amp;quot;;
+	
+        try {	
+	        sytds=pubpack.EADbTool.QuerySQL(sql);
+	}catch ( e ){
+		
+		pubpack.EADbTool.ExcecutSQL(&amp;quot;alter table loc add refid varchar2(20) &amp;quot;);
+	        sytds=pubpack.EADbTool.QuerySQL(sql);
+
+	}
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              
+              var name = sytds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+              xml+=&amp;quot;&amp;lt;&amp;quot;+name +&amp;quot; imageid=\&amp;quot;0\&amp;quot; deptid=\&amp;quot;&amp;quot;+sytds.getStringAt(i,&amp;quot;id&amp;quot;)+&amp;quot;\&amp;quot; orgid=\&amp;quot;&amp;quot;+thisorgid+&amp;quot;\&amp;quot; flag=\&amp;quot;dept\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+              
+              xml+=&amp;quot;&amp;lt;/&amp;quot;+name +&amp;quot;&amp;gt;&amp;quot;;
+        }  
+        if ( thisid == &amp;quot;&amp;quot; ) { 
+              xml+=&amp;quot;&amp;lt;不分部门所有用户 imageid=\&amp;quot;0\&amp;quot; deptid=\&amp;quot;all\&amp;quot; orgid=\&amp;quot;&amp;quot;+thisorgid+&amp;quot;\&amp;quot; flag=\&amp;quot;dept\&amp;quot; &amp;gt;&amp;lt;/不分部门所有用户&amp;gt;&amp;quot;;      
+              xml+=&amp;quot;&amp;lt;部门信息维护 imageid=\&amp;quot;1\&amp;quot;  orgid=\&amp;quot;&amp;quot;+thisorgid+&amp;quot;\&amp;quot; flag=\&amp;quot;modifydept\&amp;quot; &amp;gt;&amp;lt;/部门信息维护&amp;gt;&amp;quot;;      
+	}
+	
+	if (sytds.getRowCount()==0){//说明没有部门了，需要查询
+		
+        	sql =&amp;quot;select id,name from usr where org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; &amp;quot;;
+        	if  ( thisid==&amp;quot;all&amp;quot; ) sql += &amp;quot; &amp;quot;;//不分部门
+        	else	sql += &amp;quot; and deptid=&amp;apos;&amp;quot;+thisid+&amp;quot;&amp;apos; &amp;quot; ;
+		
+        	sytds=pubpack.EADbTool.QuerySQL(sql+&amp;quot; order by id &amp;quot; );
+    	
+		
+		for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+	              var id = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+
+	              var name = sytds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+	              xml+=&amp;quot;&amp;lt;&amp;quot;+name+&amp;quot;(&amp;quot;+id+&amp;quot;)&amp;quot; +&amp;quot; imageid=\&amp;quot;1\&amp;quot; deptid=\&amp;quot;&amp;quot;+thisid+&amp;quot;\&amp;quot; orgid=\&amp;quot;&amp;quot;+thisorgid+&amp;quot;\&amp;quot; usrid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; flag=\&amp;quot;usr\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	              
+	              xml+=&amp;quot;&amp;lt;/&amp;quot;+name+&amp;quot;(&amp;quot;+id+&amp;quot;)&amp;quot; +&amp;quot;&amp;gt;&amp;quot;;
+	        }    
+	        //if ( sytds.getRowCount() &amp;gt;0){
+		        xml+=&amp;quot;&amp;lt;新增用户 imageid=\&amp;quot;1\&amp;quot; deptid=\&amp;quot;&amp;quot;+thisid+&amp;quot;\&amp;quot; orgid=\&amp;quot;&amp;quot;+thisorgid+&amp;quot;\&amp;quot; usrid=\&amp;quot;\&amp;quot; flag=\&amp;quot;usr\&amp;quot; &amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+	                xml+=&amp;quot;&amp;lt;/新增用户&amp;gt;&amp;quot;;
+		//}
+        
+        } 
+        return xml;
+}
+// 得到某一个数据流图
+function loadDataflwGraph()
+{
+
+  var path = pub.EAOption.dynaDataRoot+ pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + filename;
+ 
+    return pub.EAFunc.readFile(path);
+}
+
+// 得到单据列表
+function GetItemList()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var ds = pubpack.EADbTool.QuerySQL(&amp;quot;select a.PCH,b.id,b.name from fracas_pcitem a,v_fracas_item b where a.jc=&amp;apos;&amp;quot;+jc+&amp;quot;&amp;apos; and a.xh=&amp;apos;&amp;quot;+xh+&amp;quot;&amp;apos; and a.itmid=b.id and b.refid=&amp;apos;&amp;quot;+itemclass+&amp;quot;&amp;apos; order by a.itmid &amp;quot;);
+
+	
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var pch =ds.getStringAt(i,&amp;quot;PCH&amp;quot;);
+		xml+=&amp;quot;&amp;lt;&amp;quot;+id + &amp;quot; name=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; itmid=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; pch =\&amp;quot;&amp;quot;+pch +&amp;quot;\&amp;quot; xh=\&amp;quot;&amp;quot;+xh +&amp;quot;\&amp;quot;  jc=\&amp;quot;&amp;quot;+jc +&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+
+	}
+	return xml;
+}
+
+// 得到某一个工作流process
+function loadWorkflw()
+{
+  var path = pub.EAOption.dynaDataRoot+ pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + mwid+&amp;quot;.&amp;quot;+type;
+  try
+  {
+    return pub.EAFunc.readFile(path);
+  }
+  catch(e)
+  {
+  	return &amp;quot;&amp;quot;;
+  }
+}
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function saveusr()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		try {
+		  pub.EADbTool.ExcecutSQL(&amp;quot;create view V_DESKTOP as select * from param where typ=&amp;apos;DESKTOP&amp;apos;&amp;quot;);
+		}
+		catch ( e ){}
+		try {
+		  pub.EADbTool.ExcecutSQL(&amp;quot;create view V_ORGDEPT as select * from loc where useflg=&amp;apos;1&amp;apos; and loctyp in ( &amp;apos;0&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;2&amp;apos;)&amp;quot;);
+		}
+		catch ( e ){}
+
+		
+		
+		try {
+		  pub.EADbTool.ExcecutSQL(&amp;quot;create view V_USERPOST as select * from param where typ=&amp;apos;USERPOST&amp;apos;&amp;quot;);
+		}
+		catch ( e ){}
+	
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		
+		if(ds.getRowCount()==1){
+			var guid = ds.getStringAt(0,&amp;quot;GUID&amp;quot;);
+	
+			if ( guid==&amp;quot;&amp;quot;) {//新增
+				var sql =&amp;quot;&amp;quot;;
+				var collist1=&amp;quot;&amp;quot;;
+				var collist2=&amp;quot;&amp;quot;;
+				guid=db.GetSQL(&amp;quot;select sys_guid() from dual&amp;quot; );
+				for (var c=0;c&amp;lt;ds.getColumnCount();c++){
+					if ( ds.getColumnName(c)!=&amp;quot;GUID&amp;quot; ){
+						if(c!=0) {collist1+=&amp;quot;,&amp;quot;;collist2+=&amp;quot;,&amp;quot;;}
+						collist1+=ds.getColumnName(c);
+						collist2+=&amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(0,c)+&amp;quot;&amp;apos;&amp;quot;;
+					}
+					
+				}
+				sql= &amp;quot;insert into usr(guid,&amp;quot;+collist1+&amp;quot;) values(&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;quot;+collist2+&amp;quot;)&amp;quot;;
+				try{
+					db.ExcecutSQL(sql);
+				}
+				catch ( e ){
+					if ( 1*db.GetSQL(&amp;quot;select count(*) from usr where org=&amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;ORG&amp;quot;)+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;apos; &amp;quot; ) &amp;gt;= 1 ) {
+						throw new pubpack.EAException ( &amp;quot;该编码重复，请分配另外一个编码&amp;quot; );
+					
+					}
+					
+					try {
+						db.ExcecutSQL(&amp;quot;alter table usr add email varchar2(256)&amp;quot;);
+					
+						db.ExcecutSQL(sql);
+					}catch ( e1 ){
+						throw new pubpack.EAException ( &amp;quot;操作失败&amp;quot; +e.toString() );
+
+					}
+
+				}
+				msg+=guid;
+			
+			}
+			else{//保存
+				var sql =&amp;quot;&amp;quot;;
+				var collist1=&amp;quot;&amp;quot;;
+				var collist2=&amp;quot;&amp;quot;;
+				for (var c=0;c&amp;lt;ds.getColumnCount();c++){
+					if ( ds.getColumnName(c)!=&amp;quot;GUID&amp;quot; ){
+						if(c!=0) {collist1+=&amp;quot;,&amp;quot;;collist2+=&amp;quot;,&amp;quot;;}
+						collist1+=ds.getColumnName(c)+&amp;quot;=&amp;apos;&amp;quot;+ds.getStringAt(0,c)+&amp;quot;&amp;apos;&amp;quot;;
+					}
+					
+				}
+				sql= &amp;quot;update usr set &amp;quot;+collist1+&amp;quot; where guid=&amp;apos;&amp;quot;+ds.getStringAt(0,&amp;quot;guid&amp;quot;)+&amp;quot;&amp;apos;&amp;quot;;
+				try{
+					db.ExcecutSQL(sql);
+				}
+				catch ( e ){
+					db.ExcecutSQL(&amp;quot;alter table usr add email varchar2(256)&amp;quot;);
+					db.ExcecutSQL(sql);
+
+				}
+//				throw new pubpack.EAException	(&amp;quot;xhj\n&amp;quot;+ds.GetXml());
+				msg+=&amp;quot;保存成功&amp;quot;;			
+			}
+			
+			db.Commit();
+		}
+			
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+function saveusrrol()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		db.ExcecutSQL(&amp;quot;delete from usrrol where usr =&amp;apos;&amp;quot;+usrguid+&amp;quot;&amp;apos;&amp;quot;);
+		
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++){
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var checkid = ds.getStringAt(i,&amp;quot;CHECKID&amp;quot;);
+			if ( checkid==&amp;quot;1&amp;quot;)
+				db.ExcecutSQL(&amp;quot;insert into usrrol(usr,rol,acc) values(&amp;apos;&amp;quot;+usrguid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos;) &amp;quot;);
+		}
+		db.Commit();
+		
+		msg=&amp;quot;操作成功&amp;quot;;	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+
+
+function deleteusr()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	
+		db.ExcecutSQL(&amp;quot;delete from usrrol where usr =&amp;apos;&amp;quot;+usrguid+&amp;quot;&amp;apos;&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from usr where guid =&amp;apos;&amp;quot;+usrguid+&amp;quot;&amp;apos;&amp;quot;);
+
+		db.Commit();
+		
+		msg=&amp;quot;操作成功&amp;quot;;	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >USR</ID><NAME ></NAME><DATDSC >select * from usr where org=&amp;apos;[%thisorgid]&amp;apos; and id=&amp;apos;[%thisusrid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 >USR</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >USR</C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="1" ><ID >USRROL</ID><NAME ></NAME><DATDSC >select case when a.rol is null then &amp;apos;0&amp;apos; else &amp;apos;1&amp;apos; end  checkid,
+       b.guid,b.id,b.name,b.note,&amp;apos;模块权限&amp;apos; action,&amp;apos;菜单权限&amp;apos; action2
+  from (select b.rol from usr a, usrrol b
+         where a.guid=b.usr and a.id=&amp;apos;[%thisusrid]&amp;apos; and a.org=&amp;apos;[%thisorgid]&amp;apos;
+        ) a, rol b
+ where a.rol(+)=b.guid 
+ --and decode(nvl(b.org,&amp;apos;&amp;apos;),&amp;apos;&amp;apos;,&amp;apos;[%thisorgid]&amp;apos;,b.org)=&amp;apos;[%thisorgid]&amp;apos;
+ and nvl(b.org,&amp;apos;%&amp;apos;)=decode(&amp;apos;[%thisorgid]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;%&amp;apos;,&amp;apos;[%thisorgid]&amp;apos;)
+ order by b.acc,b.id</DATDSC><C4 >USRROL</C4><C5 ></C5><C6 >USRROL</C6><C7 >USRROL</C7><C8 >USRROL</C8><C9 >USRROL</C9><C10 >USRROL</C10><C11 >USRROL</C11><C12 >USRROL</C12><C13 >USRROL</C13><C14 >USRROL</C14><C15 >USRROL</C15></ROW>
+<ROW num="2" ><ID >QueryORG</ID><NAME ></NAME><DATDSC >SELECT * FROM ORG WHERE [%where]
+order by id</DATDSC><C4 ></C4><C5 >QueryORG</C5><C6 >QueryORG</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >QueryORG</C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="3" ><ID >CHGDEPT</ID><NAME ></NAME><DATDSC >update usr set deptid=&amp;apos;[%deptid]&amp;apos; where id=&amp;apos;[%usrid]&amp;apos; and org=&amp;apos;[%thisorgid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >CHGDEPT</C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="4" ><ID >initPWD</ID><NAME ></NAME><DATDSC >update usr set passwd=&amp;apos;0&amp;apos; where org=&amp;apos;[%ORG]&amp;apos; and id=&amp;apos;[%USR]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >initPWD</C12><C13 ></C13><C14 ></C14><C15 ></C15></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

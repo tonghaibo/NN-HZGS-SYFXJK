@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >B</MWTYP><MWID >KIT</MWID><NAME >渠道商品维护</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >KIT.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG >5,1,7,7</DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,7</ID><NAME >单据日期</NAME><VALFLD >DAT</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16><C17 ></C17><C18 >0,3,7</C18><C19 >0,3,5</C19><C20 >0,3,7</C20><CELLID ></CELLID></ROW>
+<ROW num="1" ><ID >0,8,7</ID><NAME >审核人</NAME><VALFLD >CHKUSR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16><C17 ></C17><C18 >0,8,7</C18><C19 >0,8,5</C19><C20 ></C20><CELLID ></CELLID></ROW>
+<ROW num="2" ><ID >0,8,2</ID><NAME >录入人</NAME><VALFLD >CRTUSR</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><CELLID ></CELLID></ROW>
+<ROW num="3" ><ID >0,3,2</ID><NAME >渠道编号</NAME><VALFLD >CORPID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID >V_KA</LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD >CORPNAM</FLD><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><CELLID >KAID</CELLID></ROW>
+<ROW num="4" ><ID >0,3,4</ID><NAME >单据编号</NAME><VALFLD >BILID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><CELLID ></CELLID></ROW>
+</ROWSET>
+</grdcelds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,3</ID><NAME >品种编号</NAME><VALFLD >ITMID</VALFLD><NOTNULL >1</NOTNULL><COLTYP >SELECTBOX</COLTYP><LISTID >V_ITEM</LISTID><LABEL >name</LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 >0,1</C12><C13 >0,1</C13><C14 ></C14><C15 >0,2</C15><C16 ></C16><C17 >0,3</C17><C18 >0,3</C18></ROW>
+<ROW num="1" ><ID >0,5</ID><NAME >价格</NAME><VALFLD >PRICE</VALFLD><NOTNULL >1</NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 >0,5</C13><C14 >0,5</C14><C15 ></C15><C16 >0,3</C16><C17 >0,5</C17><C18 ></C18></ROW>
+<ROW num="2" ><ID >0,1</ID><NAME >渠道编号</NAME><VALFLD >ITEMPC</VALFLD><NOTNULL >1</NOTNULL><COLTYP >SELECTBOX</COLTYP><LISTID >V_KA</LISTID><LABEL >name</LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 >0,1</C14><C15 >0,1</C15><C16 ></C16><C17 >0,1</C17><C18 >0,1</C18></ROW>
+<ROW num="3" ><ID >0,6</ID><NAME >规格</NAME><VALFLD >ITMSPC</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 >0,6</C14><C15 ></C15><C16 >0,4</C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="4" ><ID >0,7</ID><NAME >备注</NAME><VALFLD >REFNAM2</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 >0,7</C14><C15 ></C15><C16 >0,5</C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="5" ><ID >0,4</ID><NAME >品种名称</NAME><VALFLD >ITMNAM</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="6" ><ID >0,2</ID><NAME >渠道名称</NAME><VALFLD >REFID1</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+</ROWSET>
+</grdcolds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >IMP</ID><NAME >批量从Excel导入数据</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 >IMP</C7></ROW>
+<ROW num="1" ><ID >SetToAll</ID><NAME >设置渠道一致</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//批量导入数据
+function IMP()
+{
+  
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellText(sheet, 3, 7, G_LOGDAT);
+}
+
+//SelectBox控件修改单元格内容
+function _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where)
+{
+	if (row &amp;gt; 4 &amp;&amp; row &amp;lt; _this.GetRowCount(sheet) - 2) {
+		if (col == 1) {
+			var itemid = _this.GetCellText(sheet, row, 3);
+			if (itemid != &amp;quot;&amp;quot;) {
+				_sql.querytods(&amp;quot;SELCORPITEM&amp;quot;, &amp;quot;itemid=&amp;quot; + itemid + &amp;quot;&amp;kaid=&amp;quot; + newvalue);
+				var price = _this.XMLDS_GetString(0, &amp;quot;price&amp;quot;);
+				var spec = _this.XMLDS_GetString(0, &amp;quot;spec&amp;quot;);
+				var note = _this.XMLDS_GetString(0, &amp;quot;note&amp;quot;);
+				_this.SetCellText(sheet, row, 5, price);
+				_this.SetCellText(sheet, row, 6, spec);
+				_this.SetCellText(sheet, row, 7, note);
+			}
+		} else if (col == 3) {
+			var kaid = _this.GetCellText(sheet, row, 1);
+			if (kaid != &amp;quot;&amp;quot;) {
+				_sql.querytods(&amp;quot;SELCORPITEM&amp;quot;, &amp;quot;itemid=&amp;quot; + newvalue + &amp;quot;&amp;kaid=&amp;quot; + kaid);
+				var price = _this.XMLDS_GetString(0, &amp;quot;price&amp;quot;);
+				var spec = _this.XMLDS_GetString(0, &amp;quot;spec&amp;quot;);
+				var note = _this.XMLDS_GetString(0, &amp;quot;note&amp;quot;);
+				_this.SetCellText(sheet, row, 5, price);
+				_this.SetCellText(sheet, row, 6, spec);
+				_this.SetCellText(sheet, row, 7, note);
+			} else {
+				_sql.querytods(&amp;quot;SELITEM&amp;quot;, &amp;quot;itemid=&amp;quot; + newvalue);
+				var price = _this.XMLDS_GetString(0, &amp;quot;price&amp;quot;);
+				var spec = _this.XMLDS_GetString(0, &amp;quot;spec&amp;quot;);
+				_this.SetCellText(sheet, row, 5, price);
+				_this.SetCellText(sheet, row, 6, spec);
+			}
+		}
+	}
+	if(row==3&amp;&amp;col==2){
+//		alert(&amp;quot;xx&amp;quot;);
+		var row1= _this.GetMainCellRangeRow1(sheet);
+		var row2= _this.GetMainCellRangeRow2(sheet);
+//		alert(row1);
+		var v_id = _this.GetCellText(sheet,row,col);
+//		var v_name = _this.GetCellText(sheet,5,2);
+		_sql.querytods(&amp;quot;GetVndName&amp;quot;,&amp;quot;ID=&amp;quot;+v_id);
+		var v_name =  _this.XMLDS_GetString(0, &amp;quot;name&amp;quot;);
+
+		_this.GetCellText(sheet,5,2);
+		for(var r=row1;r&amp;lt;=row2;r++){
+			_this.SetCellText(sheet,r,1,v_id);
+			_this.SetCellText(sheet,r,2,v_name);
+		}
+	}
+}
+
+//设置渠道一致
+function SetToAll()
+{
+ 	      var sheet = 0;
+		var row1= _this.GetMainCellRangeRow1(sheet);
+		var row2= _this.GetMainCellRangeRow2(sheet);
+//		alert(row1);
+		var v_id = _this.GetCellText(sheet,5,1);
+		var v_name = _this.GetCellText(sheet,5,2);
+//		_sql.querytods(&amp;quot;GetVndName&amp;quot;,&amp;quot;ID=&amp;quot;+v_id);
+//		var v_name =  _this.XMLDS_GetString(0, &amp;quot;name&amp;quot;);
+
+		_this.GetCellText(sheet,5,2);
+		for(var r=row1;r&amp;lt;=row2;r++){
+			_this.SetCellText(sheet,r,1,v_id);
+			_this.SetCellText(sheet,r,2,v_name);
+		}
+}
+
+//保存单据数据后
+function _thisOnaftersave(success)
+{
+
+  	var bilid = &amp;quot;&amp;quot;;
+  	var RETVAL  =&amp;quot;&amp;quot;;
+	if((&amp;quot;true&amp;quot;==_this.XMLDS_GetString(0,&amp;quot;_ServerMsg_&amp;quot;))&amp;&amp;(&amp;quot;1&amp;quot; == _this.XMLDS_GetString(0,&amp;quot;CODE&amp;quot;)))
+	{ 
+		RETVAL = _this.XMLDS_GetString(0,&amp;quot;RETVAL&amp;quot;);
+		bilid = RETVAL.split(&amp;quot;,&amp;quot;)[0];
+		alert(bilid );
+		_sql.querytods(&amp;quot;sel&amp;quot;,&amp;quot;bilid=&amp;quot;+bilid+&amp;quot;&amp;biltyp=&amp;quot;+G_GRDID);
+		alert(_this.XMLDS_GetRowCount());
+		alert(bilid);
+  	  	
+  	}
+  	return success ;
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+//单据审核前
+function fos_beforecheck(eaContext)
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var xmlhdr = new pubpack.EAXmlDS(eaContext.getXmlhdr());
+		var xmldtl = new pubpack.EAXmlDS(eaContext.getXmldtl());
+		var crtusr = xmlhdr.getStringAt(0, &amp;quot;CRTUSR&amp;quot;);
+		var crtdat = xmlhdr.getStringAt(0, &amp;quot;DAT&amp;quot;);
+		for (var i = 0; i &amp;lt; xmldtl.getRowCount(); i ++) {
+			var kaid = xmldtl.getStringAt(i, &amp;quot;ITEMPC&amp;quot;);
+			var itemid = xmldtl.getStringAt(i, &amp;quot;ITMID&amp;quot;);
+			if (kaid != &amp;quot;&amp;quot; &amp;&amp; itemid != &amp;quot;&amp;quot;) {
+				sql = &amp;quot;select count(*) count from corpitem where CORP=(select guid from v_ka where id=&amp;apos;&amp;quot;+ kaid
+					+&amp;quot;&amp;apos;) and item=(select guid from v_item where id=&amp;apos;&amp;quot;+ itemid +&amp;quot;&amp;apos;)&amp;quot;;
+				var ds = db.QuerySQL(sql);
+				var price = xmldtl.getStringAt(i, &amp;quot;PRICE&amp;quot;);
+				var note = xmldtl.getStringAt(i, &amp;quot;REFNAM2&amp;quot;);
+				if (ds.getStringAt(0, &amp;quot;count&amp;quot;)*1 &amp;gt; 0) {
+					sql = &amp;quot;update corpitem set price=&amp;quot;+ price +&amp;quot;,note=&amp;apos;&amp;quot;+ note +&amp;quot;&amp;apos;&amp;quot;
+						+&amp;quot; where CORP=(select guid from v_ka where id=&amp;apos;&amp;quot;+ kaid
+						+&amp;quot;&amp;apos;) and item=(select guid from v_item where id=&amp;apos;&amp;quot;+ itemid +&amp;quot;&amp;apos;)&amp;quot;;
+//						throw new Exception(sql);
+				} else {
+					sql = &amp;quot;insert into corpitem(item,CORP,price,note,crtusr,crtdat) values((select guid from v_item where id=&amp;apos;&amp;quot;+ itemid
+						+&amp;quot;&amp;apos;),(select guid from v_ka where id=&amp;apos;&amp;quot;+ kaid +&amp;quot;&amp;apos;),&amp;quot;+ price +&amp;quot;,&amp;apos;&amp;quot;+ note +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ crtusr +&amp;quot;&amp;apos;,to_date(&amp;apos;&amp;quot;+ crtdat +&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;))&amp;quot;;
+				}
+//				throw new Exception(sql);
+				db.ExcecutSQL(sql);
+			} else {
+				throw new pubpack.EAException ( &amp;quot;商品、渠道不可为空！！！&amp;quot; );
+			}
+		}
+		db.Commit();
+	} catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	} finally {
+		if (db!=null) db.Close();
+	}
+	
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SELCORPITEM</ID><NAME ></NAME><DATDSC >select nvl(a.price, b.price) price,b.spec,a.note
+from(select item,price,note from corpitem
+      where item = (select guid from v_item where id=&amp;apos;[%itemid]&amp;apos;)
+        and CORP = (select guid from v_ka where id=&amp;apos;[%kaid]&amp;apos;)
+     ) a,
+    (select guid,price,spec from v_item where id = &amp;apos;[%itemid]&amp;apos;) b
+where a.item(+) = b.guid</DATDSC><C4 >SELCORPITEM</C4><C5 >SELCORPITEM</C5><C6 >SELCORPITEM</C6><C7 >SELCORPITEM</C7></ROW>
+<ROW num="1" ><ID >SELITEM</ID><NAME ></NAME><DATDSC >select price,spec from v_item where id=&amp;apos;[%itemid]&amp;apos;</DATDSC><C4 ></C4><C5 >SELITEM</C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="2" ><ID >GetVndName</ID><NAME ></NAME><DATDSC >select name from v_ka where id = &amp;apos;[%ID]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="3" ><ID >sel</ID><NAME ></NAME><DATDSC >select * from bilhdr where bilid = &amp;apos;[%bilid]&amp;apos; and biltyp = &amp;apos;[%biltyp]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >1渠道编号</CORPID><CORPNAM >1渠道名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >1单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >1品种名称</ITMNAM><ITEMPC >1渠道编号</ITEMPC><ITMSPC >1规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >1价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >1渠道名称</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >1备注</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

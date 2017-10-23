@@ -1,0 +1,894 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >flowOAMain</MWID><NAME >工作流定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >flowOAMain.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >x</syt><WIDTHMOD >1</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >save</C10><C11 >save</C11><C12 >save</C12></ROW>
+<ROW num="1" ><ID >freshWorkflwFromTable</ID><NAME >从表格更新图</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >saveas</C10><C11 >saveas</C11><C12 ></C12></ROW>
+<ROW num="2" ><ID >updatefromsrc</ID><NAME >从代码刷新图</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >updatefromsrc</C10><C11 ></C11><C12 ></C12></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheetTree = 0;
+var sheetProcess  = 1;
+var sheetAction  = 2;
+var sheetWorkflw  = 3;
+var sheetWorkflwSrc = 4;
+var CURMWID =&amp;quot;&amp;quot;;//	当前操作的svg图的名字
+var CURSYTID = &amp;quot;&amp;quot;;
+var CURMWNAM=&amp;quot;&amp;quot;;
+var CURMWTYP=&amp;quot;&amp;quot;;
+var CURFILENAME =&amp;quot;&amp;quot;;
+//mwid=&amp;selsytid=
+function _thisOnpost_loaddata()
+{
+	try {CURMWID =mwid ;} catch( e ) {}
+	try {CURSYTID =selsytid;} catch( e ) {}
+	_this.SetDesignMode(1);
+  	// 显示工具栏
+	_this.Showtoolbar(1);
+	// 显示分页栏
+	_this.ShowTabBar(1);
+        var sheet = 0 ;
+        _this.SetSheetName(0,&amp;quot;流程图对象&amp;quot;);
+        treexml = invokeOSFunc(&amp;quot;GetSytList&amp;quot;,&amp;quot;&amp;quot; ) ;       
+        _this.SetToTreeCtrl(&amp;quot;tree_0&amp;quot;,sheetTree ,-1,-1,&amp;quot;&amp;lt;?xml version =  &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;流程对象&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/流程对象&amp;gt;&amp;quot;);
+
+        _this.SetSheetName(sheetProcess,&amp;quot;工作流-过程&amp;quot;);
+	
+	_this.SetSheetName(sheetAction,&amp;quot;工作流-动作&amp;quot;);
+	
+	//sheetAction  = _this.AddSheet(&amp;quot;代码编辑&amp;quot;);
+	
+	_this.SetSheetName(sheetWorkflw  ,&amp;quot;工作流-图&amp;quot;);
+	
+	
+	_this.SetToSVGForm(&amp;quot;flow_1&amp;quot;,sheetWorkflw  ,-1,-1 ,&amp;quot;&amp;quot;);
+	_this.SetAttribe(&amp;quot;flow_1&amp;quot;,&amp;quot;DCLICKOPENPROPWND&amp;quot;,&amp;quot;1&amp;quot;);	// 双击打开属性窗口
+
+	_this.SetToCodeEditor(&amp;quot;&amp;quot;,sheetWorkflwSrc,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetSheetName(sheetWorkflwSrc,&amp;quot;流程图代码&amp;quot; );
+	
+		for(var i=6;i&amp;lt;_this.GetRowCount(sheetAction);i++){
+		_this.SetToBoolBox(sheetAction,i,12);
+//		_this.SetCellText(sheetAction,i,12,&amp;quot;&amp;quot;);
+	}
+	
+	
+	if ( CURMWID  == &amp;quot;&amp;quot; ) {
+		
+		_this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;180&amp;quot;);
+		alert ( &amp;quot;新增状态，请先选择中间件&amp;quot; );
+		_this.SetCellText(1,1,1,&amp;quot;请先选择中间件&amp;quot; );//工作流-过程Process
+		_this.SetCurrentSheet(sheetProcess);
+		_this.SetCellText(sheetProcess,6,1,&amp;quot;0&amp;quot;);
+		_this.SetCellText(sheetProcess,6,2,&amp;quot;开始&amp;quot;);
+		var xmlmenu = &amp;quot;[%left]item name=[%quot]添加下一个状态[%quot] id=[%quot]type_0[%quot]/[%right]&amp;quot;
+				+&amp;quot;[%left]item name=[%quot]添加并发状态[%quot] id=[%quot]bingf_0[%quot]/[%right]&amp;quot;;
+		var svg=&amp;quot;&amp;quot;;
+		svg=addbg(15,33,180,42,&amp;quot;0&amp;quot;,&amp;quot;0&amp;quot;,&amp;quot;开始&amp;quot;);
+		svg+=&amp;quot;&amp;lt;rect id=\&amp;quot;process_0\&amp;quot; processid=\&amp;quot;0\&amp;quot; x=\&amp;quot;68\&amp;quot; y=\&amp;quot;123\&amp;quot; xmlmenu=\&amp;quot;&amp;quot;+xmlmenu+&amp;quot;\&amp;quot; width=\&amp;quot;52\&amp;quot; height=\&amp;quot;49\&amp;quot; round=\&amp;quot;100\&amp;quot; stroke=\&amp;quot;#ffffff\&amp;quot; fill=\&amp;quot;#808080\&amp;quot; fillto=\&amp;quot;\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot; font-color=\&amp;quot;#FFFFFF\&amp;quot;&amp;gt;开始&amp;lt;/rect&amp;gt;&amp;quot;;
+		//svg+=&amp;quot;&amp;lt;text id=\&amp;quot;text_1\&amp;quot; x=\&amp;quot;64\&amp;quot; y=\&amp;quot;44\&amp;quot; width=\&amp;quot;102\&amp;quot; height=\&amp;quot;26\&amp;quot; font-size=\&amp;quot;14\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;角色（user）&amp;lt;/text&amp;gt;&amp;quot;;
+		_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);
+	}
+	else {
+		_this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;0&amp;quot;);
+		LoadWorkflw();
+		RefreshStatList();
+		_this.SetCellText(1,1,1,CURSYTID +&amp;quot;_&amp;quot;+CURMWID  +&amp;quot;-状态Process&amp;quot; );//工作流-过程Process
+
+	}
+       
+	_this.SplitSheet(&amp;quot;1,2&amp;quot;,&amp;quot;V&amp;quot;,&amp;quot;40%&amp;quot;);
+
+
+
+//	_this.SetColVisible(sheetAction,8,0);
+//	_this.SetColVisible(sheetAction,10,0);
+
+}
+// 
+function addbg(x,y,w,h,processid,rolid,rolnam)
+{
+	var svg=&amp;quot;&amp;quot;;
+	svg+=&amp;quot;&amp;lt;rect id=\&amp;quot;rectbg2_&amp;quot;+processid+&amp;quot;\&amp;quot; rolid=\&amp;quot;&amp;quot;+rolid+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+x+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(y+h)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+w+&amp;quot;\&amp;quot; height=\&amp;quot;450\&amp;quot; round=\&amp;quot;\&amp;quot; stroke=\&amp;quot;#808040\&amp;quot; fill=\&amp;quot;#DBDBDB\&amp;quot; fillto=\&amp;quot;#FFFFFF\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;2\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; 属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/rect&amp;gt;&amp;quot;;
+	svg+=&amp;quot;&amp;lt;rect id=\&amp;quot;rectbg1_&amp;quot;+processid+&amp;quot;\&amp;quot; rolid=\&amp;quot;&amp;quot;+rolid+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+x+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+w+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+h+&amp;quot;\&amp;quot; round=\&amp;quot;\&amp;quot; stroke=\&amp;quot;#808040\&amp;quot; fill=\&amp;quot;#E3F7BB\&amp;quot; fillto=\&amp;quot;\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+rolnam+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;
+	return svg;
+}
+function getprrow()
+{
+	for(var i=6;i&amp;lt;_this.GetRowCount(sheetProcess  );i++){
+		if(_this.GetCellText(sheetProcess,i,1)==&amp;quot;&amp;quot;){
+			return i;
+		}
+	}
+}
+function getacrow()
+{
+	for(var i=6;i&amp;lt;_this.GetRowCount(sheetAction);i++){
+		if(_this.GetCellText(sheetAction,i,1)==&amp;quot;&amp;quot;){
+			return i;
+		}
+	}
+}
+//点击菜单项
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	var myid = &amp;quot;&amp;quot;;
+	try{
+		var cnt=Getstatid();
+		var a=menuitemid.split(&amp;quot;_&amp;quot;);
+		_sql.querytods(&amp;quot;main_dat&amp;quot;);
+		var dat=new Number(_this.XMLDS_GetString(0,&amp;quot;dat&amp;quot;));//连接线编码如rect_193814的&amp;quot;193814&amp;quot;
+		myid  = a[1];
+		var xy=Getxy(&amp;quot;process_&amp;quot;+myid  ).split(&amp;quot;-&amp;quot;);
+		var x=new Number(xy[0])+200;
+		if(a[1]==&amp;quot;1&amp;quot;) x=x-42;
+		var y=xy[1];
+		var svg=&amp;quot;&amp;quot;;
+	}catch(ee){}
+	if(a[0]==&amp;quot;type&amp;quot;){
+		var obj=new Object();
+		obj.tp=1;
+		obj.prid=cnt;
+		obj.acid=a[1]+&amp;quot;&amp;quot;+cnt;
+		var str=window.showModalDialog(&amp;quot;show.sp?grdid=flow_process&amp;quot;,obj,&amp;quot;dialogwidth:450pt;dialogheight:220pt&amp;quot;);
+		if(typeof str!=&amp;quot;undefined&amp;quot;)
+		{
+			setcell(str,1);
+			var bg=Getxy(&amp;quot;rectbg1_&amp;quot;+myid).split(&amp;quot;-&amp;quot;);
+			var bgx=new Number(bg[0])+180;
+			var bgy=new Number(bg[1]);
+			svg=addbg(bgx,bgy,180,42,cnt,str.mbusr,str.mbusr);//权限的泳道
+			var xmlmenu = &amp;quot;[%left]item name=[%quot]添加下一个状态[%quot] id=[%quot]type_&amp;quot;+str.prid+&amp;quot;[%quot]/[%right]&amp;quot;
+					+&amp;quot;[%left]item name=[%quot]添加下一个动作[%quot] id=[%quot]action_&amp;quot;+str.prid+&amp;quot;[%quot]/[%right]&amp;quot;
+					+&amp;quot;[%left]item name=[%quot]添加并发状态[%quot] id=[%quot]bingf_&amp;quot;+str.prid+&amp;quot;[%quot]/[%right]&amp;quot;;
+	
+			svg+=&amp;quot;&amp;lt;rect id=\&amp;quot;process_&amp;quot;+str.prid+&amp;quot;\&amp;quot; xmlmenu=\&amp;quot;&amp;quot;+xmlmenu+&amp;quot;\&amp;quot; processid=\&amp;quot;&amp;quot;+str.prid+&amp;quot;\&amp;quot;  x=\&amp;quot;&amp;quot;+(bgx+35)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+(bgy+90)+&amp;quot;\&amp;quot; width=\&amp;quot;126\&amp;quot; height=\&amp;quot;49\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; fill=\&amp;quot;#CDCDCD\&amp;quot; fillto=\&amp;quot;FEFEFE\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+str.prname+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;
+			if(a.length==3)
+				svg=svg+&amp;quot;&amp;lt;connector id=\&amp;quot;action_&amp;quot;+str.acid+&amp;quot;\&amp;quot; actionid=\&amp;quot;&amp;quot;+str.acid+&amp;quot;\&amp;quot; mwid=\&amp;quot;&amp;quot;+str.grid+&amp;quot;\&amp;quot; from=\&amp;quot;process_&amp;quot;+a[1]+&amp;quot;_bf\&amp;quot; to=\&amp;quot;process_&amp;quot;+str.prid+&amp;quot;\&amp;quot; fromcp=\&amp;quot;22\&amp;quot; tocp=\&amp;quot;22\&amp;quot; type=\&amp;quot;208\&amp;quot;  &amp;gt;&amp;quot;+str.acname+&amp;quot;&amp;lt;/connector&amp;gt;&amp;quot;;
+			else
+				svg=svg+&amp;quot;&amp;lt;connector id=\&amp;quot;action_&amp;quot;+str.acid+&amp;quot;\&amp;quot; actionid=\&amp;quot;&amp;quot;+str.acid+&amp;quot;\&amp;quot; mwid=\&amp;quot;&amp;quot;+str.grid+&amp;quot;\&amp;quot;  from=\&amp;quot;process_&amp;quot;+a[1]+&amp;quot;\&amp;quot; to=\&amp;quot;process_&amp;quot;+str.prid+&amp;quot;\&amp;quot; fromcp=\&amp;quot;22\&amp;quot; tocp=\&amp;quot;22\&amp;quot; type=\&amp;quot;208\&amp;quot;  &amp;gt;&amp;quot;+str.acname+&amp;quot;&amp;lt;/connector&amp;gt;&amp;quot;;
+			//svg+=&amp;quot;&amp;lt;text id=\&amp;quot;text_&amp;quot;+dat+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(bgx+35)+&amp;quot;\&amp;quot; y=\&amp;quot;44\&amp;quot; width=\&amp;quot;102\&amp;quot; height=\&amp;quot;26\&amp;quot; font-size=\&amp;quot;14\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+str.mbusr+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+		}
+		
+	}
+	if(a[0]==&amp;quot;action&amp;quot;){
+		var obj=new Object();
+		obj.tp=2;
+		obj.str=Gettyp(&amp;quot;process_&amp;quot;+a[1]);
+		var rt=window.showModalDialog(&amp;quot;show.sp?grdid=flow_action&amp;quot;,obj,&amp;quot;dialogwidth:450pt;dialogheight:200pt&amp;quot;);
+		if(typeof rt!=&amp;quot;undefined&amp;quot;){
+			obj.acid=a[1]+&amp;quot;&amp;quot;+rt.id.split(&amp;quot;_&amp;quot;)[1];
+			var str=window.showModalDialog(&amp;quot;show.sp?grdid=flow_process&amp;quot;,obj,&amp;quot;dialogwidth:650pt;dialogheight:400pt&amp;quot;);
+			if(typeof str!=&amp;quot;undefined&amp;quot;){
+				setcell(str,2);
+				var dz=rt.id.split(&amp;quot;_&amp;quot;)[1];
+				if(a.length==3)
+				svg=svg+&amp;quot;&amp;lt;connector id=\&amp;quot;connector_&amp;quot;+dat+&amp;quot;\&amp;quot; from=\&amp;quot;rect_&amp;quot;+a[1]+&amp;quot;_bf\&amp;quot; to=\&amp;quot;&amp;quot;+rt.id+&amp;quot;\&amp;quot; fromcp=\&amp;quot;32\&amp;quot; tocp=\&amp;quot;12\&amp;quot; type=\&amp;quot;208\&amp;quot;  &amp;gt;&amp;quot;+str.acname+&amp;quot;&amp;lt;/connector&amp;gt;;&amp;quot;
+				else
+				svg=svg+&amp;quot;&amp;lt;connector id=\&amp;quot;connector_&amp;quot;+dat+&amp;quot;\&amp;quot; from=\&amp;quot;rect_&amp;quot;+a[1]+&amp;quot;\&amp;quot; to=\&amp;quot;&amp;quot;+rt.id+&amp;quot;\&amp;quot; fromcp=\&amp;quot;23\&amp;quot; tocp=\&amp;quot;23\&amp;quot; type=\&amp;quot;208\&amp;quot;  &amp;gt;&amp;quot;+str.acname+&amp;quot;&amp;lt;/connector&amp;gt;;&amp;quot;
+			}
+		}
+	}
+	if(a[0]==&amp;quot;bingf&amp;quot;){
+	
+		var obj=new Object();
+		obj.tp=1;
+		obj.prid=cnt;
+		obj.acid=a[1]+&amp;quot;&amp;quot;+cnt;
+		var max=Getifbf();
+		if(max==&amp;quot;0&amp;quot;){
+			var str=window.showModalDialog(&amp;quot;show.sp?grdid=flow_process&amp;quot;,obj,&amp;quot;dialogwidth:450pt;dialogheight:220pt&amp;quot;);
+			if(typeof str!=&amp;quot;undefined&amp;quot;)
+			{
+				setcell(str,1);
+				var bg=Getxy(&amp;quot;rectbg1_&amp;quot;+a[1]).split(&amp;quot;-&amp;quot;);
+				var bgx=new Number(bg[0])+180;
+				var bgy=new Number(bg[1]);
+				svg=addbg(bgx,bgy,180,42,cnt,str.mbusr,str.mbusr);
+				var xmlmenu = &amp;quot;[%left]item name=[%quot]添加下一个状态[%quot] id=[%quot]type_&amp;quot;+cnt+&amp;quot;_bf[%quot]/[%right]&amp;quot;;
+				svg+=&amp;quot;&amp;lt;rect id=\&amp;quot;rect_&amp;quot;+cnt+&amp;quot;_bf\&amp;quot; xmlmenu=\&amp;quot;&amp;quot;+xmlmenu+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(bgx+35)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+y+&amp;quot;\&amp;quot; width=\&amp;quot;126\&amp;quot; height=\&amp;quot;49\&amp;quot; round=\&amp;quot;15\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; fill=\&amp;quot;#FFFFCC\&amp;quot; fillto=\&amp;quot;\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+str.prname+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;
+				svg=svg+&amp;quot;&amp;lt;connector id=\&amp;quot;connector_&amp;quot;+dat+&amp;quot;\&amp;quot; from=\&amp;quot;rect_&amp;quot;+a[1]+&amp;quot;\&amp;quot; to=\&amp;quot;rect_&amp;quot;+cnt+&amp;quot;_bf\&amp;quot; fromcp=\&amp;quot;22\&amp;quot; tocp=\&amp;quot;22\&amp;quot; type=\&amp;quot;208\&amp;quot;  &amp;gt;&amp;quot;+str.acname+&amp;quot;&amp;lt;/connector&amp;gt;;&amp;quot;		
+				svg+=&amp;quot;&amp;lt;text id=\&amp;quot;text_1\&amp;quot; x=\&amp;quot;&amp;quot;+(bgx+35)+&amp;quot;\&amp;quot; y=\&amp;quot;44\&amp;quot; width=\&amp;quot;102\&amp;quot; height=\&amp;quot;26\&amp;quot; font-size=\&amp;quot;14\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+str.mbusr+&amp;quot;&amp;lt;/text&amp;gt;&amp;quot;;
+			}
+		}
+		else{
+			var bf=Getxy(&amp;quot;rect_&amp;quot;+max+&amp;quot;_bf&amp;quot;).split(&amp;quot;-&amp;quot;);
+			var bfx=new Number(bf[0]);
+			var bfy=new Number(bf[1])+100;
+			var str=window.showModalDialog(&amp;quot;show.sp?grdid=flow_process&amp;quot;,obj,&amp;quot;dialogwidth:450pt;dialogheight:220pt&amp;quot;);
+			if(typeof str!=&amp;quot;undefined&amp;quot;)
+			{
+				setcell(str,1);
+				var xmlmenu = &amp;quot;[%left]item name=[%quot]添加下一个状态[%quot] id=[%quot]type_&amp;quot;+cnt+&amp;quot;_bf[%quot]/[%right]&amp;quot;
+						+&amp;quot;[%left]item name=[%quot]添加下一个动作[%quot] id=[%quot]action_&amp;quot;+cnt+&amp;quot;_bf[%quot]/[%right]&amp;quot;;
+
+				svg+=&amp;quot;&amp;lt;rect id=\&amp;quot;rect_&amp;quot;+cnt+&amp;quot;_bf\&amp;quot; xmlmenu=\&amp;quot;&amp;quot;+xmlmenu+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+(bfx)+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+bfy+&amp;quot;\&amp;quot; width=\&amp;quot;126\&amp;quot; height=\&amp;quot;49\&amp;quot; round=\&amp;quot;15\&amp;quot; stroke=\&amp;quot;#000000\&amp;quot; fill=\&amp;quot;#FFFFCC\&amp;quot; fillto=\&amp;quot;\&amp;quot; opacity=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot; stroke-dash=\&amp;quot;1\&amp;quot;  属性=\&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+str.prname+&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;
+				svg+=&amp;quot;&amp;lt;connector id=\&amp;quot;connector_&amp;quot;+dat+&amp;quot;\&amp;quot; from=\&amp;quot;rect_&amp;quot;+a[1]+&amp;quot;\&amp;quot; to=\&amp;quot;rect_&amp;quot;+cnt+&amp;quot;_bf\&amp;quot; fromcp=\&amp;quot;32\&amp;quot; tocp=\&amp;quot;12\&amp;quot; type=\&amp;quot;208\&amp;quot;  &amp;gt;&amp;quot;+str.acname+&amp;quot;&amp;lt;/connector&amp;gt;;&amp;quot;		
+			}
+
+		}
+
+	}
+	_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);
+}
+
+//获取是否初始化并发
+function Getifbf(){
+	 var xml=_this.SVGFORM_GetObjectList(&amp;quot;flow_1&amp;quot;,0);
+	_this.XMLDS_Parse(xml);
+	var max=0;
+	for ( var i=0;i&amp;lt; _this.XMLDS_GetRowCount();i++){
+		var id  = _this.XMLDS_GetString(i,&amp;quot;O_ID&amp;quot;);
+		var len=id.split(&amp;quot;_&amp;quot;);
+		if(len.length==3&amp;&amp;len[1]&amp;gt;max){
+			max=len[1];
+		}
+	}
+	return max;
+
+}
+function getactionid(statid,endname){
+	 var xml=_this.SVGFORM_GetObjectList(&amp;quot;flow_1&amp;quot;,0);
+	 var statname=&amp;quot;&amp;quot;;
+	 var ret1=&amp;quot;&amp;quot;;
+	 var ret2=&amp;quot;&amp;quot;;
+	_this.XMLDS_Parse(xml);
+	for ( var i=0;i&amp;lt; _this.XMLDS_GetRowCount()/2;i++){
+		var id  = _this.XMLDS_GetString(i,&amp;quot;O_ID&amp;quot;);
+		var value = _this.XMLDS_GetString(i,&amp;quot;O_VALUE&amp;quot;);
+		if(id==statid){
+			statname=value;
+			break;
+		}
+	}
+	for(var i=6;i&amp;lt;_this.GetRowCount(sheetProcess);i++){
+		if(_this.GetCellText(sheetProcess,i,2)==statname){
+			ret1=_this.GetCellText(sheetProcess,i,1);
+		}
+		if(_this.GetCellText(sheetProcess,i,2)==endname){
+			ret2=_this.GetCellText(sheetProcess,i,1);
+		}
+		
+	}
+	return ret1+ret2;
+}
+//给过程，动作sheet付值
+function setcell(str,a){
+	if(a==1){
+		var prow=getprrow();
+		_this.SetCellText(sheetProcess,prow,1,str.prid);
+		_this.SetCellText(sheetProcess,prow,2,str.prname);
+		_this.SetCellText(sheetProcess,prow,6,str.mbusrxs);
+		RefreshStatList();
+	}
+	var arow=getacrow();
+	_this.SetCellText(sheetAction,arow,1,str.acid);
+	_this.SetCellText(sheetAction,arow,2,str.acname);
+	_this.SetCellText(sheetAction,arow,6,str.condition);
+	_this.SetCellText(sheetAction,arow,7,str.grid);
+	_this.SetCellText(sheetAction,arow,4,str.acid.substring(0,1));
+	_this.SetCellText(sheetAction,arow,5,str.acid.substring(1,2));
+}
+//获取状态
+function Gettyp(scid)
+{
+	var cnt=0;
+	 var xml=_this.SVGFORM_GetObjectList(&amp;quot;flow_1&amp;quot;,0);
+	var ret=new Array();
+	_this.XMLDS_Parse(xml);
+	for ( var i=0;i&amp;lt; _this.XMLDS_GetRowCount()/2;i++){
+		var id  = _this.XMLDS_GetString(i,&amp;quot;O_ID&amp;quot;);
+		var value = _this.XMLDS_GetString(i,&amp;quot;O_VALUE&amp;quot;);
+		var _id=id.split(&amp;quot;_&amp;quot;)[0];
+		if(_id==&amp;quot;process&amp;quot;&amp;&amp;scid!=id)
+		{
+			ret[cnt]=id+&amp;quot;-&amp;quot;+value;
+			cnt++;
+		}
+	}
+	return ret;
+}
+//获取状态编号
+function Getstatid(){
+	
+	var cnt=0;
+	 var xml=_this.SVGFORM_GetObjectList(&amp;quot;flow_1&amp;quot;,0);
+	_this.XMLDS_Parse(xml);
+	for ( var i=0;i&amp;lt; _this.XMLDS_GetRowCount();i++){
+		var id  = _this.XMLDS_GetString(i,&amp;quot;O_ID&amp;quot;);
+		var _id=id.split(&amp;quot;_&amp;quot;)[0];
+		var _cnt=id.split(&amp;quot;_&amp;quot;)[1];
+		
+		if(_id==&amp;quot;process&amp;quot;){
+			if(new Number(_cnt)&amp;gt;cnt){
+				cnt=_cnt;
+			}
+		}
+	}
+	return (new Number(cnt)+1);
+
+}
+//获取上个图源的坐标
+function Getxy(scid)
+{
+	
+	 var xml=_this.SVGFORM_GetObjectList(&amp;quot;flow_1&amp;quot;,0);
+	
+	_this.XMLDS_Parse(xml);
+	for ( var i=0;i&amp;lt; _this.XMLDS_GetRowCount();i++){
+		var id  = _this.XMLDS_GetString(i,&amp;quot;O_ID&amp;quot;);
+		if(scid==id)
+		{
+			var left=_this.XMLDS_GetString(i,&amp;quot;O_LEFT&amp;quot;);
+			var top=_this.XMLDS_GetString(i,&amp;quot;O_TOP&amp;quot;);
+			return left+&amp;quot;-&amp;quot;+top;
+		}
+	}
+}
+//================================================================// 
+// 函数：TreeItemDClick
+// 说明：Click tree item
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/15/06 16:02:13
+// 修改日志：
+//================================================================// 
+var SEQNUM=0;
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+
+      var ret = &amp;quot;&amp;quot;;
+      var itemid = tagid;      // 标签
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+      var nextlevel_itemid = _this.XMLCTL_GetItem(id,hItem,2);
+
+      if ( id==&amp;quot;tree_0&amp;quot; ) {
+            var thisselsytid =getXmlAttribute(attribe,&amp;quot;sytflg&amp;quot;);
+            grdtyp =getXmlAttribute(attribe,&amp;quot;grdtyp&amp;quot;);
+            if ( sytid.length&amp;gt;0 &amp;&amp; level == 3) {      // 展开tree节点
+                  
+                  if ( nextlevel_itemid.length== 0 ) {
+                        var md_xml = &amp;quot;&amp;quot;;
+                        try {
+				
+                        	md_xml = invokeOSFunc (&amp;quot;GetGrdList&amp;quot;,&amp;quot;selsytid=&amp;quot; + thisselsytid +&amp;quot;&amp;selgrdtyp=&amp;quot;+grdtyp) ;
+                        	if ( md_xml == &amp;quot;&amp;quot; || md_xml == undefined  ) alert ( &amp;quot;该系统下面没有定义中间件&amp;quot; );
+                        	else _this.XMLCTL_Append(id,md_xml,hItem,2);
+                        }
+                        catch ( e ) {
+                        	alert ( e );
+                        }
+                        
+                  }
+            }
+            else if ( attribe.length &amp;gt; 0 &amp;&amp; level&amp;gt;=4 ) {   
+                	// 打开某个数据流
+                	var thisselsytid =_this.XMLCTL_GetAttribe (id,hItem,&amp;quot;sytflg&amp;quot;);
+                	var bilid  =_this.XMLCTL_GetAttribe (id,hItem,&amp;quot;id&amp;quot;);
+                	CURMWID   = bilid;
+                	CURSYTID=thisselsytid ;
+                	var bilnam  =_this.XMLCTL_GetAttribe (id,hItem,&amp;quot;name&amp;quot;);
+                	var selgrdtyp = _this.XMLCTL_GetAttribe (id,hItem,&amp;quot;selgrdtyp&amp;quot;);
+			if ( selgrdtyp == &amp;quot;B&amp;quot; ) {
+				if ( confirm( &amp;quot;点击【确定】新建一个流程图并载入该中间件的关联流程\n点击【取消】添加该中间件到图上&amp;quot; )== 1 ) {
+					CURMWID = bilid  ;
+					CURMWNAM=bilnam  ;
+					CURMWTYP=selgrdtyp ;
+					LoadWorkflw(bilid,bilnam,selgrdtyp);
+					_this.SetCurrentSheet(sheetWorkflw);
+					_this.SetCellText(1,1,1,CURSYTID +&amp;quot;_&amp;quot;+CURMWID  +&amp;quot;-状态Process&amp;quot; );
+
+				}
+				else {
+					SEQNUM++;
+					var gid = grdtyp +SEQNUM+&amp;quot;:&amp;quot;+this.m_startid ; 	
+					var svg = &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  selgrdtyp=\&amp;quot;&amp;quot;+selgrdtyp +&amp;quot;\&amp;quot;  fill=\&amp;quot;#FFFFCC\&amp;quot; x=\&amp;quot;20\&amp;quot; y=\&amp;quot;20\&amp;quot; width=\&amp;quot;80\&amp;quot;  height=\&amp;quot;40\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;-1\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+bilid  +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+bilid  +bilnam  +&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+					_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);
+					_this.SetCellText(1,1,1,CURSYTID +&amp;quot;_&amp;quot;+CURMWID  +&amp;quot;-状态Process&amp;quot; );
+
+				}
+			}
+			else {
+					SEQNUM++;
+					var gid = grdtyp +SEQNUM+&amp;quot;:&amp;quot;+this.m_startid ; 	
+					var svg = &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  selgrdtyp=\&amp;quot;&amp;quot;+selgrdtyp +&amp;quot;\&amp;quot;  fill=\&amp;quot;#FFFFCC\&amp;quot; x=\&amp;quot;120\&amp;quot; y=\&amp;quot;20\&amp;quot; width=\&amp;quot;80\&amp;quot;  height=\&amp;quot;60\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;-1\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+bilid  +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+bilid  +bilnam  +&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+					//_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);
+					_this.SetCellText(1,1,1,CURSYTID +&amp;quot;_&amp;quot;+CURMWID  +&amp;quot;-&amp;quot;+bilnam  +&amp;quot;-状态Process&amp;quot; );
+			
+			}
+			//_this.SetRedraw(1);
+			
+ 
+            }
+      }      
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; ,  loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1  ) ;
+            return ret;
+
+}
+function save()
+{
+	if ( CURMWID  == &amp;quot;&amp;quot; ) {
+		var ss = prompt( &amp;quot;请输入系统号&amp;quot; ,CURSYTID);
+		if ( ss!=undefined ) CURSYTID= ss;
+		else return;
+		ss = prompt( &amp;quot;请输入中间件编号&amp;quot; ,CURMWID);
+		if ( ss!=undefined ) CURMWID= ss;
+		else return;
+	
+	}
+		_this.SetColName(sheetProcess, 1,&amp;quot;ID&amp;quot;);
+		_this.SetColName(sheetProcess, 2,&amp;quot;NAME&amp;quot;);
+		_this.SetColName(sheetProcess, 3,&amp;quot;NOTE&amp;quot;);
+		_this.SetColName(sheetProcess, 4,&amp;quot;NEXTNAME&amp;quot;);
+		_this.SetColName(sheetProcess, 5,&amp;quot;SUBCLASS&amp;quot;);
+		_this.SetColName(sheetProcess, 6,&amp;quot;TOROL&amp;quot;);
+
+
+	
+		_this.SetColName(sheetAction, 1,&amp;quot;ID&amp;quot;);
+		_this.SetColName(sheetAction, 2,&amp;quot;NAME&amp;quot;);
+		_this.SetColName(sheetAction, 3,&amp;quot;NOTE&amp;quot;);
+
+		_this.SetColName(sheetAction, 4,&amp;quot;SRCID&amp;quot;);
+		_this.SetColName(sheetAction, 5,&amp;quot;DESTID&amp;quot;);
+		_this.SetColName(sheetAction, 6,&amp;quot;WHERE&amp;quot;);
+		_this.SetColName(sheetAction, 7,&amp;quot;ACTMW&amp;quot;);
+		_this.SetColName(sheetAction, 8,&amp;quot;TRKTYP&amp;quot;);
+		_this.SetColName(sheetAction, 9,&amp;quot;TOROL&amp;quot;);
+		_this.SetColName(sheetAction, 10,&amp;quot;TOUSR&amp;quot;);
+		_this.SetColName(sheetAction, 11,&amp;quot;USECOLLIST&amp;quot;);
+		_this.SetColName(sheetAction, 12,&amp;quot;ISMESS&amp;quot;);//是否短信通知
+		_this.SetColName(sheetAction, 13,&amp;quot;CHKNOTECOLUMN&amp;quot;);//领导审批意见字段
+		
+		  //建立一个参数对象
+		  var param = new Object();
+		  param.xmlfile= CURMWID+&amp;quot;.process&amp;quot;;
+		  param.thisgrdid=CURMWID;		
+		  param.typ=&amp;quot;process&amp;quot;;	  
+		  param.selsytid = selsytid;
+		  param.xmlstr = _this.GetXml(sheetProcess,6,1,_this.GetRowCount(sheetProcess)-2,_this.GetColCount(sheetProcess)-1);
+//		  alert ( param.xmlstr );
+		  var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		  
+		  var param = new Object();
+		  param.xmlfile= CURMWID+&amp;quot;.action&amp;quot;;
+		  param.thisgrdid=CURMWID;	
+		  param.typ=&amp;quot;action&amp;quot;;	  
+		  param.selsytid = selsytid;
+		  param.xmlstr = _this.GetXml(sheetAction,6,1,_this.GetRowCount(sheetAction)-2,_this.GetColCount(sheetAction)-1);
+		  
+		  var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		  
+		  var param = new Object();
+		  param.xmlfile= CURMWID+&amp;quot;.workflow&amp;quot;;
+		  param.thisgrdid=CURMWID;
+		  param.typ=&amp;quot;workflow&amp;quot;;	
+		  param.selsytid = selsytid;
+		  param.xmlstr = _this.GetCellText(sheetWorkflw,-1,-1);
+		  var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		  
+		  
+                  alert(msg+&amp;quot;，同时更改.process,.action,.workflow(图)以及sysprocess,sysaction数据库表&amp;quot;);	
+                  
+}            
+
+// 从表格更新图
+function freshWorkflwFromTable(){
+	return;
+	var svgflw = new SVGWORKFLW(sheetProcess,sheetAction,CURMWID);
+	var svg = svgflw.load();
+
+	_this.SetCellText(sheetWorkflw,-1,-1,svg);
+	
+
+
+}
+// 载入某个单据的工作流程基础数据
+function LoadWorkflw(){
+	_this.SetRedraw(0);
+        var param = &amp;quot;selsytid=&amp;quot;+ selsytid +&amp;quot;&amp;mwid=&amp;quot;+CURMWID+&amp;quot;&amp;type=process&amp;quot;;
+        // 由于目前没有数据流单据的对应关系，暂时从 Datflwsrc取数
+	var xml = invokeOSFunc(&amp;quot;loadWorkflw&amp;quot;,param);
+	for ( var i=6;i&amp;lt;_this.GetRowCount(sheetProcess)-2;i++){
+		for ( var j=1;j&amp;lt;_this.GetColCount(sheetProcess)-1;j++) 
+			_this.SetCellText(sheetProcess,i,j,&amp;quot;&amp;quot;);
+	}
+	
+	_this.SetXmlDS(sheetProcess,6,1,_this.GetRowCount(sheetProcess)-2,_this.GetColCount(sheetProcess)-1 ,xml);
+
+        var param = &amp;quot;selsytid=&amp;quot;+ selsytid +&amp;quot;&amp;mwid=&amp;quot;+CURMWID+&amp;quot;&amp;type=action&amp;quot;;
+        // 由于目前没有数据流单据的对应关系，暂时从 Datflwsrc取数
+	var xml = invokeOSFunc(&amp;quot;loadWorkflw&amp;quot;,param);
+	for ( var i=6;i&amp;lt;_this.GetRowCount(sheetAction)-2;i++){
+		for ( var j=1;j&amp;lt;_this.GetColCount(sheetAction)-1;j++) 
+			_this.SetCellText(sheetAction,i,j,&amp;quot;&amp;quot;);
+	}
+	
+	_this.SetXmlDS(sheetAction,6,1,_this.GetRowCount(sheetAction)-2,_this.GetColCount(sheetAction)-1 ,xml);
+	
+	 var param = &amp;quot;selsytid=&amp;quot;+ selsytid +&amp;quot;&amp;mwid=&amp;quot;+CURMWID+&amp;quot;&amp;type=workflow&amp;quot;;
+        // 由于目前没有数据流单据的对应关系，暂时从 Datflwsrc取数
+	var svg = invokeOSFunc(&amp;quot;loadWorkflw&amp;quot;,param);
+	if(svg==&amp;quot;&amp;quot;){
+		freshWorkflwFromTable();
+	}
+	else{
+		_this.SetCellText(sheetWorkflw,-1,-1,svg);
+	}
+	
+	_this.SetRedraw(1);
+
+}
+
+//从代码刷新图
+function updatefromsrc()
+{
+		_this.SetRedraw(0);
+		_this.SetToSVGForm(&amp;quot;flow_1&amp;quot;,sheetWorkflw,-1,-1 ,_this.GetCellText(sheetWorkflwSrc  ,-1,-1));
+		_this.SetAttribe(&amp;quot;flow_1&amp;quot;,&amp;quot;DCLICKOPENPROPWND&amp;quot;,&amp;quot;1&amp;quot;);	// 双击打开属性窗口
+
+		_this.SetRedraw(1);
+  
+}
+
+
+
+function _thisOnSheetShow(sheet,name)
+{
+  	if ( sheet== sheetWorkflwSrc  ){
+            var rows = _this.GetRowCount(0);
+            var cols = _this.GetColCount(0);
+            _this.SetCellText( sheetWorkflwSrc  ,-1,-1, _this.GetCellText(sheetWorkflw,-1,-1) );
+	}
+}
+// 刷新状态列表
+function RefreshStatList()
+{
+       var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SYTROL&amp;where= and thissytid=&amp;apos;&amp;quot;+CURSYTID +&amp;quot;&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        
+	var nListValue = _this.CreateListValue();
+	for(var row = 6;row&amp;lt;_this.GetRowCount(sheetProcess)-2; row++)
+	{
+		var id = _this.GetCellText(sheetProcess,row,1);
+		var name =id+&amp;quot;.&amp;quot;+ _this.GetCellText(sheetProcess,row,2);
+		if ( id!= &amp;quot;&amp;quot; &amp;&amp; name != &amp;quot;&amp;quot; ) 
+			_this.SetListValue(nListValue,id,name);
+	}
+	for(var row = 6;row&amp;lt;_this.GetRowCount(sheetAction)-2; row++)
+	{
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheetAction,row,4,nListValue);
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheetAction,row,5,nListValue);
+		
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheetAction,row,9,listid0 );      //rol
+
+	}
+	for(var row = 6;row&amp;lt;_this.GetRowCount(sheetProcess)-2; row++)
+	{
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheetProcess,row,6,listid0 );
+	}
+
+}
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( sheet == sheetProcess &amp;&amp; (col ==  1 || col == 2 )  ) {
+		RefreshStatList();
+	}
+//	else if (sheet == sheetProcess &amp;&amp; (col ==  4|| col == 5 )  ) {
+//		var name = _this.GetCellText(sheetProcess ,row,2);
+//		var id = _this.GetCellText(sheetProcess ,row,1);
+//		var stat1 = _this.GetCellText(sheetProcess ,row,4);
+//		var stat2 = _this.GetCellText(sheetProcess ,row,5);
+//		var statShow2 = _this.GetCellShowText(sheetProcess ,row,5);
+//
+//
+//		if ( id == &amp;quot;&amp;quot; ) 
+//			_this.SetCellText(sheetProcess ,row,1, stat1 +stat2 );
+//		if ( name  == &amp;quot;&amp;quot; ){
+//			_this.SetCellText(sheetProcess ,row,2, statShow2  );
+//
+//		}
+//
+//	}
+	if(sheet==1&amp;&amp;(col==1||col==2||col==6)&amp;&amp;row&amp;gt;5){
+		var id=&amp;quot;&amp;quot;;
+		var processid=&amp;quot;&amp;quot;;
+		var processnam=&amp;quot;&amp;quot;;
+		var attrname=&amp;quot;&amp;quot;;
+		if(col==1||col==2){
+			id=&amp;quot;process_&amp;quot;+(row-6);
+			processid=_this.GetCellText(1,row,1);
+			processnam=_this.GetCellText(1,row,2);
+			attrname=&amp;quot;processid&amp;quot;;
+		}
+		else if(col==6){
+			id=&amp;quot;rectbg1_&amp;quot;+(row-6);
+			processid=_this.GetCellText(1,row,1);
+			processnam=_this.GetCellShowText(1,row,col);
+			attrname=&amp;quot;rolid&amp;quot;;
+		}
+		upprocess(id,processid,processnam,attrname);
+	}
+	
+	if(sheet==2&amp;&amp;col==2&amp;&amp;row&amp;gt;5){
+		
+		var actionid=_this.GetCellText(2,row,1);
+		var actionnam=_this.GetCellText(2,row,2);
+		var id=&amp;quot;action_&amp;quot;+actionid;
+		var attrname=&amp;quot;actionid&amp;quot;;
+		upprocess(id,actionid,actionnam,attrname);
+	}
+
+}
+//修改SVG    id=图标编号，attrname=属性名称
+function upprocess(id,processid,processnam,attrname){
+
+	_this.XMLCTL_SetAttribe(&amp;quot;flow_1&amp;quot;,id,attrname,processid);
+	_this.XMLCTL_SetValue(&amp;quot;flow_1&amp;quot;,id,processnam);
+}
+
+//下拉列表框选择改变
+function _thisOnListSelChange(id, oldsel, cursel)
+{
+	var sheet = _this.GetCurrentSheet();
+	var row = _this.GetCurrentRow(sheet);
+	var col = _this.GetCurrentCol(sheet ) ;
+	if (sheet == sheetAction&amp;&amp; (col ==  4|| col == 5 )  ) {
+		var name = _this.GetCellText(sheet ,row,2);
+		var id = _this.GetCellText(sheet ,row,1);
+		var note = _this.GetCellText(sheet ,row,3);
+		var stat1 = _this.GetCellText(sheet ,row,4);
+		var stat2 = _this.GetCellText(sheet ,row,5);
+		var statShow2 = _this.GetCellShowText(sheet ,row,5);
+		var statShow1 = _this.GetCellShowText(sheet ,row,4);
+		if ( stat1!=&amp;quot;&amp;quot; &amp;&amp; stat2!=&amp;quot;&amp;quot; ) {
+			if ( id == &amp;quot;&amp;quot; ) 
+				_this.SetCellText(sheet ,row,1, stat1 +stat2 );
+			if ( name  == &amp;quot;&amp;quot; ){
+				_this.SetCellText(sheet ,row,2, statShow2  );
+				
+			}
+//			if ( note  == &amp;quot;&amp;quot; ){
+//				_this.SetCellText(sheet ,row,3, &amp;quot;从[&amp;quot;+statShow1+&amp;quot;]到[&amp;quot;+statShow2+&amp;quot;]&amp;quot;  );
+//			}
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  
+  sb.append(&amp;quot;&amp;lt;script&amp;gt;\n&amp;quot;);
+  var CURMWID =pubpack.EAFunc.NVL(request.getParameter(&amp;quot;mwid&amp;quot;),&amp;quot;&amp;quot;);
+  var selsytid=pubpack.EAFunc.NVL(request.getParameter(&amp;quot;selsytid&amp;quot;),&amp;quot;&amp;quot;);
+  sb.append(&amp;quot;\nvar G_CURSYTID=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar CURMWID =\&amp;quot;&amp;quot;+CURMWID +&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar selsytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+}
+  
+function save()
+{
+  //xmlstr = pub.EAFunc.XmlToStd(xmlstr);
+  xmlstr = XmlToStd(xmlstr);
+  var path = basePath + pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + xmlfile;
+  pub.EAFunc.WriteToFile(path,xmlstr);
+
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		//保存到数据库
+		  if(typ==&amp;quot;process&amp;quot;){
+		  	try {
+			  db.ExcecutSQL(&amp;quot;create table sysprocess ( guid char(32) default sys_guid() primary key,id varchar2(20),name varchar2(256),note varchar2(256),grdid varchar2(256) , sytid varchar2(20),subclass varchar2(20), nextname varchar2(20) )&amp;quot;);
+			}
+			catch ( e ){}
+			try {
+			  db.ExcecutSQL(&amp;quot;create view V_USRROL table sysprocess ( guid char(32) default sys_guid() primary key,id varchar2(20),name varchar2(256),note varchar2(256),grdid varchar2(256) , sytid varchar2(20) )&amp;quot;);
+			}
+			catch ( e ){}
+			try {
+			  db.ExcecutSQL(&amp;quot;create view  v_sytrol as select id,name ,syt thissytid from rol &amp;quot;);
+			}
+			catch ( e ){}
+		
+			try {
+			  db.ExcecutSQL(&amp;quot;alter table sysprocess add NEXTNAME varchar2(256),SUBCLASS varchar2(256)  &amp;quot;);
+			}
+			catch ( e ){}
+			try {
+			  db.ExcecutSQL(&amp;quot;alter table sysprocess add TOROL varchar2(256)  &amp;quot;);
+			}
+			catch ( e ){}			
+		
+		  	try {
+			  db.ExcecutSQL(&amp;quot;delete from  sysprocess where grdid=&amp;apos;&amp;quot;+thisgrdid+&amp;quot;&amp;apos; and sytid=&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos;&amp;quot;);
+			}
+			catch ( e ){}
+			  var ds = new pub.EAXmlDS(xmlstr);
+			  for ( var i=0;i&amp;lt;ds.getRowCount();i++){
+			  	if (ds.getStringAt(i,&amp;quot;ID&amp;quot;)!=&amp;quot;&amp;quot;) 
+			  	db.ExcecutSQL(&amp;quot;insert into sysprocess (id,name,note,grdid,sytid,nextname,subclass,TOROL ) values(&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;NAME&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;NOTE&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thisgrdid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;NEXTNAME&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;SUBCLASS&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;TOROL&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;);
+			  
+			  }
+		  }
+		  if(typ==&amp;quot;action&amp;quot;){
+		  	try {
+			  db.ExcecutSQL(&amp;quot;create table sysaction ( guid char(32) default sys_guid() primary key,grdid varchar2(256) , sytid varchar2(20) ,id varchar2(20),name varchar2(256),note varchar2(256),srcid varchar2(20),DESTID varchar2(20),WFWHERE varchar2(256),ACTMW varchar2(20),TRKTYP varchar2(20),TOROL varchar2(20),TOUSR varchar2(20),USECOLLIST varchar2(256),ISMESS varchar2(2) ,CHKNOTECOLUMN varchar2(100))&amp;quot;);
+			}
+			catch ( e ){}
+			try {
+			  db.ExcecutSQL(&amp;quot;delete from  sysaction where grdid=&amp;apos;&amp;quot;+thisgrdid+&amp;quot;&amp;apos; and sytid=&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos;&amp;quot;);
+			}
+			catch ( e ){}
+			  var ds = new pub.EAXmlDS(xmlstr);
+			  for ( var i=0;i&amp;lt;ds.getRowCount();i++){
+			  	if (ds.getStringAt(i,&amp;quot;ID&amp;quot;)!=&amp;quot;&amp;quot;) 
+			  	db.ExcecutSQL(&amp;quot;insert into sysaction (id,name,note,grdid,sytid,SRCID,DESTID,WFWHERE,ACTMW,TRKTYP,TOROL,TOUSR,USECOLLIST ,ISMESS,CHKNOTECOLUMN) values(&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;NAME&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;NOTE&amp;quot;)+&amp;quot;&amp;apos;, &amp;quot;+
+			  		&amp;quot;&amp;apos;&amp;quot;+thisgrdid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+selsytid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;SRCID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;DESTID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;WHERE&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;ACTMW&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;TRKTYP&amp;quot;)+&amp;quot;&amp;apos;,&amp;quot;+
+				  	&amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;TOROL&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;TOUSR&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;USECOLLIST&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;ISMESS&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringDef(i,&amp;quot;CHKNOTECOLUMN&amp;quot;,&amp;quot;&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;);
+			  
+			  }
+		  }		
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+
+
+  	  
+  //if(typ==&amp;quot;action&amp;quot;)
+  //	  pub.EADbTool.ExcecutSQL(&amp;quot;create table sysaction ( guid char(32) default sys_guid() primary key,id varchar2(20),name varchar2(256),note varchar2(256),grdid varchar2(256) , sytid varchar2(20) &amp;quot;);
+  
+
+  return &amp;quot;保存成功!&amp;quot;;
+}
+ 
+function delBilDef()
+{
+  var path = basePath + pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + sytid + &amp;quot;/&amp;quot; + xmlfile;
+  var f = new java.io.File(path);
+  var ok = f.delete();
+  if(ok)
+    return &amp;quot;删除成功！&amp;quot; ;
+  else
+    return &amp;quot;删除失败，可能文件正在使用。&amp;quot;;
+}
+
+
+//================================================================// 
+// 函数：GetSytList
+// 说明：得到所有的系统名称
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/14/06 11:58:50
+// 修改日志：
+//================================================================// 
+function GetSytList()
+{
+//&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;;
+//        xml+=&amp;quot;&amp;lt;中间件对象&amp;gt;&amp;quot;;
+        var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EASYTXmlDB.getSytDS();
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+              xml+=&amp;quot;&amp;lt;&amp;quot;+selsytid+&amp;quot; imageid=\&amp;quot;0\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+              //xml+=&amp;quot;&amp;lt;流程图 selgrdtyp=\&amp;quot;S\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;单据中间件 selgrdtyp=\&amp;quot;B\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;报表中间件 selgrdtyp=\&amp;quot;R\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;查询中间件 selgrdtyp=\&amp;quot;Q\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;表单中间件 selgrdtyp=\&amp;quot;F\&amp;quot; imageid=\&amp;quot;0\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;自定义中间件 selgrdtyp=\&amp;quot;M\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+	
+              xml+=&amp;quot;&amp;lt;/&amp;quot;+selsytid+&amp;quot;&amp;gt;&amp;quot;;
+        }    
+ //       xml+=&amp;quot;&amp;lt;/中间件对象&amp;gt;&amp;quot;;
+        return xml;
+}
+
+// 得到某一个数据流图
+function loadDataflwGraph()
+{
+
+  var path = pub.EAOption.dynaDataRoot+ pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + filename;
+ 
+    return pub.EAFunc.readFile(path);
+}
+
+// 得到单据列表
+function GetGrdList()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var ds = xmldbpack.EAGRDXmlDB.getSytWMList(selsytid,selgrdtyp);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;MWID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+
+		xml+=&amp;quot;&amp;lt;&amp;quot;+id + &amp;quot; name=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; selgrdtyp=\&amp;quot;&amp;quot;+grdtyp+&amp;quot;\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+
+	}
+	return xml;
+}
+
+// 得到某一个工作流process
+function loadWorkflw()
+{
+  var path = pub.EAOption.dynaDataRoot+ pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + mwid+&amp;quot;.&amp;quot;+type;
+  try
+  {
+    return pub.EAFunc.readFile(path);
+  }
+  catch(e)
+  {
+  	return &amp;quot;&amp;quot;;
+  }
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main_dat</ID><NAME ></NAME><DATDSC >select to_char(sysdate, &amp;apos;MMDDHHMISS&amp;apos;) dat from dual</DATDSC><C4 >GRDDSCDS_0</C4><C5 >main_dat</C5><C6 >main_dat</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

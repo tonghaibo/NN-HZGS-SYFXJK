@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FX0213</MWID><NAME >大量顶额开具发票</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FX0213.zxg</FILE><SCENE ></SCENE><FIXED >5,1</FIXED><CATTYP >风险特征库</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >DAT1</C13><C14 ></C14><C15 >DAT1</C15></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >DAT2</C13><C14 ></C14><C15 ></C15></ROW>
+<ROW num="2" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD >4</DISPORD><SQLWHE >id=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7) or sjid=substr(&amp;apos;[%SYS_DEPTID]&amp;apos;,1,7)</SQLWHE><DEFVAL >[%SYS_DEPTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >ZGSWJG</C13><C14 ></C14><C15 >ZGSWJG</C15></ROW>
+<ROW num="3" ><ID >DEBL</ID><NAME >顶额比例</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >输入格式：0.9 表示90%</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >DEBL</C13><C14 >DEBL</C14><C15 ></C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,5,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >27</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,1</C20><C21 >0,4,1</C21><C22 >0,5,1</C22></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SetCellText(0,2,3,DAT1+&amp;quot; 至 &amp;quot;+DAT2);
+	_this.SetToBoolBox(0,3,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+		}
+	}
+	
+	var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+	if (chkrol &amp;gt; 0) {
+
+	}else{
+		_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+	}
+	
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 3 &amp;&amp; col == 0) {
+		for(var r=5;r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+			if (_this.GetCellText(0,r,1) != &amp;quot;&amp;quot;) {
+				_this.SetCellText(sheet,r,0,newvalue);
+			}
+		}
+
+	}  
+}
+
+
+//生成核实任务
+function genTasks()
+{	
+	var param = new Object();	
+	
+	var xmlds = getXmlStr(0,5,0,_this.GetMainCellRangeRow2(0),27);
+	param.xmlstr = xmlds;	
+	param.usrids = G_USRID;
+	param.usrnams = G_USRNAM;
+	param.accids = G_ACCID;
+	param.orgs = G_ORGID;
+	param.syts = G_SYTID;
+	param.typ = &amp;quot;1&amp;quot;;     //决策二包任务
+	param.subtyp = &amp;quot;01&amp;quot;; //发票类 
+	param.yymm1 = DAT1;
+	param.yymm2 = DAT2;
+	param.swjg_dm = G_DEPTID;
+	param.toswjg = &amp;quot;&amp;quot;;
+	param.tousr=&amp;quot;&amp;quot;;
+	
+	var retobj = window.showModalDialog(&amp;quot;show.sp?grdid=RWParam&amp;typ=&amp;quot;+param.typ+&amp;quot;&amp;subtyp=&amp;quot;+param.subtyp,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	try {
+	//if (retobj != &amp;quot;undefined&amp;quot; &amp;&amp; retobj != null) {		
+		param.enddat = retobj.enddat;
+		param.note = retobj.note;
+		param.typ = retobj.typ;
+		param.subtyp = retobj.subtyp;
+		var msg = invokeOSFuncExt(&amp;quot;TAXFXJK.PUBTRK.createTask&amp;quot;,param);
+		alert(msg);
+	//}
+	} catch (e) { }
+	
+}
+
+
+function getXmlStr(sheet,row1,col1,row2,col2)
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var i = 0;
+	for (var r=row1;r&amp;lt;=row2;r++) {
+		if (_this.GetCellText(sheet,r,0) == &amp;quot;1&amp;quot;) {
+			xmlstr += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(++i)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+			var nsrsbh = _this.GetCellText(sheet,r,2);
+			var nsrmc = _this.GetCellText(sheet,r,3);
+			var fplx = _this.GetCellText(sheet,r,4);
+			var kpzfs = _this.GetCellText(sheet,r,5);
+			var fxdj = &amp;quot;高&amp;quot;;//_this.GetCellText(sheet,r,5);
+			var cyje = &amp;quot;&amp;quot;;
+			var note = &amp;quot;大量顶额开具发票（发票类型：&amp;quot;+fplx+&amp;quot;，开票总份数：&amp;quot;+kpzfs+&amp;quot;，单份发票最高开票限额：&amp;quot;+_this.GetCellText(sheet,r,22);+&amp;quot;）&amp;quot;;
+
+			xmlstr += &amp;quot;&amp;lt;NSRSBH&amp;gt;&amp;quot;+nsrsbh+&amp;quot;&amp;lt;/NSRSBH&amp;gt;\n&amp;quot;; //纳税人识别号
+			xmlstr += &amp;quot;&amp;lt;NSRMC&amp;gt;&amp;quot;+nsrmc+&amp;quot;&amp;lt;/NSRMC&amp;gt;\n&amp;quot;;	   //纳税人名称
+			xmlstr += &amp;quot;&amp;lt;NOTE&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/NOTE&amp;gt;\n&amp;quot;;       //说明
+			xmlstr += &amp;quot;&amp;lt;FXDJ&amp;gt;&amp;quot;+fxdj+&amp;quot;&amp;lt;/FXDJ&amp;gt;\n&amp;quot;;       //风险等级
+			xmlstr += &amp;quot;&amp;lt;CYJE&amp;gt;&amp;quot;+cyje+&amp;quot;&amp;lt;/CYJE&amp;gt;\n&amp;quot;;       //差异金额
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >
+---风险点：大量顶额开具发票
+select rownum,xfsbh nsrsbh,xfmc nsrmc,
+       pz,kpzfs,
+       xedm_8,xedm_8_bl, 
+       xedm_1,xedm_1_bl,
+       xedm_2,xedm_2_bl,
+       xedm_3,xedm_3_bl,
+       xedm_4,xedm_4_bl,
+       xedm_5,xedm_5_bl,
+       xedm_6,xedm_6_bl,
+       xedm_7,xedm_7_bl,
+       kpxe.dffpzgkpxemc,
+       (select zclx.djzclxmc from DM_DJ_DJZCLX zclx where dj.djzclx_dm=zclx.djzclx_dm) djzclx,
+       (select hymc from DM_GY_HY hy where dj.hy_dm=hy.hy_dm) hymc,
+       (select nsrztmc from DM_GY_NSRZT zt where dj.nsrzt_dm=zt.nsrzt_dm) nsrztmc,
+       (select name from v_swjg where substr(dj.zgswskfj_dm,1,7)=id) zgswjg,
+       (select swjgmc from DM_GY_SWJG swjg where dj.zgswskfj_dm=swjg.swjg_dm) zgswskfj
+from(
+select djxh,xfsbh,xfmc,&amp;apos;专用发票&amp;apos;pz,sum(zzs) kpzfs,
+       sum(xedm_7) xedm_7,round(sum(xedm_7)/sum(zzs),4)*100 xedm_7_bl,
+       sum(xedm_6) xedm_6,round(sum(xedm_6)/sum(zzs),4)*100 xedm_6_bl,
+       sum(xedm_5) xedm_5,round(sum(xedm_5)/sum(zzs),4)*100 xedm_5_bl,
+       sum(xedm_4) xedm_4,round(sum(xedm_4)/sum(zzs),4)*100 xedm_4_bl,
+       sum(xedm_3) xedm_3,round(sum(xedm_3)/sum(zzs),4)*100 xedm_3_bl,
+       sum(xedm_2) xedm_2,round(sum(xedm_2)/sum(zzs),4)*100 xedm_2_bl,
+       sum(xedm_1) xedm_1,round(sum(xedm_1)/sum(zzs),4)*100 xedm_1_bl,
+       sum(xedm_8) xedm_8,round(sum(xedm_8)/sum(zzs),4)*100 xedm_8_bl       
+from (       
+  select b.djxh,a.xfsbh,xfmc,fpdm,fphm,a.je,a.je*&amp;apos;[%DEBL]&amp;apos; blje,count(1) zzs,
+         sum(case when (a.je&amp;lt;100 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*100) then 1 else 0 end) xedm_7, 
+         sum(case when (a.je&amp;lt;1000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*1000) then 1 else 0 end) xedm_6, 
+         sum(case when (a.je&amp;lt;10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*10000) then 1 else 0 end) xedm_5, 
+         sum(case when (a.je&amp;lt;10*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*10*10000) then 1 else 0 end) xedm_4, 
+         sum(case when (a.je&amp;lt;100*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*100*10000) then 1 else 0 end) xedm_3, 
+         sum(case when (a.je&amp;lt;1000*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*1000*10000) then 1 else 0 end) xedm_2, 
+         sum(case when (a.je&amp;lt;10000*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*10000*10000) then 1 else 0 end) xedm_1, 
+         sum(case when (a.je&amp;lt;100000*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*100000*10000) then 1 else 0 end) xedm_8       
+  from DZDZ.DZDZ_FPXX_zzsfp@dzdz a,tax_company b
+  where a.xfsbh=b.id 
+    and a.xf_dsswjg_dm like &amp;apos;14511%&amp;apos;
+    and a.kprq&amp;gt;= date &amp;apos;[%DAT1]&amp;apos;
+    and a.kprq&amp;lt;= date &amp;apos;[%DAT2]&amp;apos;
+    and a.ZFBZ!=&amp;apos;Y&amp;apos;
+  group by b.djxh,a.xfsbh,xfmc,fpdm,fphm,a.je
+) group by djxh,xfsbh,xfmc  
+  
+union all
+
+select djxh,xfsbh,xfmc,&amp;apos;普通发票&amp;apos;pz,sum(ptfp) kpzfs,
+       sum(xedm_7) xedm_7,round(sum(xedm_7)/sum(ptfp),4)*100 xedm_7_bl,
+       sum(xedm_6) xedm_6,round(sum(xedm_6)/sum(ptfp),4)*100 xedm_6_bl,
+       sum(xedm_5) xedm_5,round(sum(xedm_5)/sum(ptfp),4)*100 xedm_5_bl,
+       sum(xedm_4) xedm_4,round(sum(xedm_4)/sum(ptfp),4)*100 xedm_4_bl,
+       sum(xedm_3) xedm_3,round(sum(xedm_3)/sum(ptfp),4)*100 xedm_3_bl,
+       sum(xedm_2) xedm_2,round(sum(xedm_2)/sum(ptfp),4)*100 xedm_2_bl,
+       sum(xedm_1) xedm_1,round(sum(xedm_1)/sum(ptfp),4)*100 xedm_1_bl,
+       sum(xedm_8) xedm_8,round(sum(xedm_8)/sum(ptfp),4)*100 xedm_8_bl       
+from (       
+  select b.djxh,a.xfsbh,xfmc,fpdm,fphm,a.je,a.je*&amp;apos;[%DEBL]&amp;apos; blje,count(1) ptfp,
+         sum(case when (a.je&amp;lt;100 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*100) then 1 else 0 end) xedm_7, 
+         sum(case when (a.je&amp;lt;1000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*1000) then 1 else 0 end) xedm_6, 
+         sum(case when (a.je&amp;lt;10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*10000) then 1 else 0 end) xedm_5, 
+         sum(case when (a.je&amp;lt;10*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*10*10000) then 1 else 0 end) xedm_4, 
+         sum(case when (a.je&amp;lt;100*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*100*10000) then 1 else 0 end) xedm_3, 
+         sum(case when (a.je&amp;lt;1000*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*1000*10000) then 1 else 0 end) xedm_2, 
+         sum(case when (a.je&amp;lt;10000*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*10000*10000) then 1 else 0 end) xedm_1, 
+         sum(case when (a.je&amp;lt;100000*10000 and a.je&amp;gt;&amp;apos;[%DEBL]&amp;apos;*100000*10000) then 1 else 0 end) xedm_8         
+  from DZDZ.DZDZ_FPXX_ptfp@dzdz a,tax_company b
+  where a.xfsbh=b.id 
+    and a.xf_dsswjg_dm like &amp;apos;14511%&amp;apos;
+    and a.kprq&amp;gt;= date &amp;apos;[%DAT1]&amp;apos;
+    and a.kprq&amp;lt;= date &amp;apos;[%DAT2]&amp;apos;
+    and a.ZFBZ!=&amp;apos;Y&amp;apos;
+  group by b.djxh,a.xfsbh,xfmc,fpdm,fphm,a.je
+) group by djxh,xfsbh,xfmc  
+)T,DJ_NSRXX dj ,(select djxh,wm_concat(distinct dffpzgkpxemc) dffpzgkpxemc 
+from(
+SELECT NVL(NSR.SHXYDM, NSR.NSRSBH) NSRSBH,
+       nsr.djxh,
+       NSR.NSRMC,
+       HD.DFFPZGKPXE,
+       (select dffpzgkpxemc from DM_FP_DFFPZGKPXE xe where HD.DFFPZGKPXE_DM=xe.DFFPZGKPXE_DM )dffpzgkpxemc
+  FROM FP_PZHDXX HD, DJ_NSRXX NSR
+ WHERE HD.DJXH = NSR.DJXH
+   AND HD.LRRQ &amp;gt;= TO_DATE(&amp;apos;2015-01-01&amp;apos;, &amp;apos;yyyy-mm-dd&amp;apos;)
+   AND HD.LRRQ &amp;lt; TO_DATE(&amp;apos;[%DAT2]&amp;apos;, &amp;apos;yyyy-mm-dd&amp;apos;) + 1
+   AND NSR.ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;
+   and dffpzgkpxe&amp;gt;100
+) group by djxh) kpxe
+where t.djxh=dj.djxh(+)
+    and t.djxh=kpxe.djxh(+)
+    and kpxe.dffpzgkpxemc is not null 
+    and dj.djzclx_dm not like &amp;apos;5%&amp;apos; 
+    and (substr(dj.zgswskfj_dm,1,7) in(&amp;apos;[%ZGSWJG]&amp;apos;)
+     or substr(dj.zgswskfj_dm,1,7) in (select swjg.id from V_SWJG swjg 
+           start with swjg.id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior swjg.id=swjg.sjid))
+--order by xfsbh,xfmc   
+
+
+--select * from DM_DJ_DJZCLX
+
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

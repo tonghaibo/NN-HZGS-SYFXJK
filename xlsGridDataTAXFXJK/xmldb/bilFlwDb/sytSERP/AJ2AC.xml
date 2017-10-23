@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="报损溢汇总" ID="AJ2AC">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESTCLS name="待生成的目标单据">AC</DESTCLS>
+				<ValFld name="目标单据的字段">qty</ValFld>
+				<MappedMode name="单据映射关系。0:(默认)多对一映射；1:一对一映射"></MappedMode>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总">1</Filter>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生" comment="可用对象:eaContext,usrinf,srcdtl(源单据明细),bilhdr(目标单据的单据头),bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)">//
+  var checked=eaContext.getAttribute("_checked");
+  if(checked==null)
+  {
+    eaContext.setAttribute("_checked","");
+    var c = flwstads.getRowCount();
+    var oldid=flwstads.getStringAt(0,"SRCSUBTYP");
+    for(var i=1;i&amp;lt;c;i++)
+    {
+      var id=flwstads.getStringAt(i,"SRCSUBTYP");
+      if(id!=oldid)
+        throw new Exception("您选择了不同损益类型的单据，不能合并在一张发票中，请重新选择。");
+    }
+  }				
+				//</OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生">//
+  //可用对象:eaContext,usrinf,srchdr,bilhdr(目标单据的单据头),bildtl(目标单据的明细)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+  bilhdr.setValueAt(0,"SUBTYP",srchdr.getStringAt(0,"SUBTYP"));
+  //end of func</OnConvert>
+				<OnDelete name="删除目标单据时发生" comment="可用对象:eaContext,_EADB"></OnDelete>
+				<DESC name="数据流描述"></DESC>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+			</ROW>
+		</ROWSET>
+	</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">AJ</SRCCLS>
+				<ConvertMod name="单据转换模式:0=(默认)明细转换;1=整单转换;2=仅转换单据头"></ConvertMod>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">qty</ValFld>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。" comment="可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)"></OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生" comment="可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息">//
+        var pub = new JavaPackage("com.xlsgrid.net.pub");
+        if(sta==0)
+        {
+        var hdr = ds;
+        var typ=hdr.getStringAt(0,"SUBTYP");
+        var typname = "报损";
+        if(typ=="2")
+          typname = "报溢";
+        return pub.EAFunc.format("损益类型:%s 仓库:%s %s 单位:%s %s\r\n%s",
+          [
+          typname,
+          hdr.getStringDef(0,"LOCID",""),hdr.getStringDef(0,"LOCNAM",""),
+          hdr.getStringDef(0,"CORPID",""),hdr.getStringDef(0,"CORPNAM",""),
+          hdr.getStringDef(0,"NOTE","")]);
+        }
+        else return "";
+				//</OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生" comment="可用对象:eaContext,_EADB"></OnUnCkeck>
+			</ROW>
+		</ROWSET>
+	</srcBil>
+</dataFlow>

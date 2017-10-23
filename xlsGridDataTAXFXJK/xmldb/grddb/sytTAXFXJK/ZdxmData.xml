@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ZdxmData</MWID><NAME >重点项目数据采集</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ZdxmData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >数据采集</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,3,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,5,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,7,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,9,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,11,3);
+
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,13,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,15,3);
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,sheet,17,3);
+	_this.ShowTabBar(1);
+
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+   	if(id == &amp;quot;导入&amp;quot;) {
+		if(!confirm(&amp;quot;确定导入文件？&amp;quot;)) return ;
+		
+		var filepath = &amp;quot;&amp;quot;;
+		var typ = &amp;quot;&amp;quot;;
+		
+		for (var i=3;i&amp;lt;=5;i=i+2) {
+			if (i == 3) { typ = 1; filepath =_this.GetCellText(sheet,3,3); } 	//发改委项目
+			else if (i == 5) { typ = 2; filepath =_this.GetCellText(sheet,5,3); }	//公共资源交易平台
+			
+			if (filepath != &amp;quot;&amp;quot;) {
+				if (typ == 1 || typ == 2) {
+					if (typ == 1) _this.SetCellText(sheet,7,2,&amp;quot;正在导入发改委项目数据...&amp;quot;+filepath);
+					else if (typ == 2) _this.SetCellText(sheet,7,2,&amp;quot;正在导入公共资源交易平台数据...&amp;quot;+filepath);
+					
+					var filename = upLoadFile2Server(filepath);
+					var param = new Object();
+					param.thisorgid = G_ORGID;
+					param.filename = &amp;quot;/u/filestore&amp;quot;+filename;
+					param.typ = typ;
+					var msg = invokeOSFuncExt(&amp;quot;importXM&amp;quot;,param);
+					alert(msg);
+					_this.SetCellText(sheet,7,2,msg);
+				}
+				_this.SetCellText(sheet,i,3,&amp;quot;&amp;quot;);
+			}
+			
+		}
+	}
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xlsdb = new JavaPackage ( &amp;quot;com.xlsgrid.net.xlsdb&amp;quot; );
+
+
+//项目信息导入
+function importXM()
+{
+	var db = null ;
+	var ds = null ;
+	var ps = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+
+	try {		
+		db = new pub.EADatabase();
+		//filename = &amp;quot;/u/filestore/u/filestore/u/filestoreupload/pgtmp/guiyuan.xls&amp;quot;;
+		if (typ == 2) { //公共交易平台项目数据
+			//加载xmlDS
+			var excelgrid = new xlsdb.excelgrid();	
+			for (var sheet = 0;sheet &amp;lt;= 4;sheet++) {
+				var xmlds = excelgrid.GetXmlDS(filename,sheet);	
+				if (xmlds.getColumnCount() &amp;gt; 3) {
+					var table =  db.GetSQL(&amp;quot;select &amp;apos;PG_&amp;apos;||TAX_NEXTVAL.nextval from dual&amp;quot;);
+					var params = &amp;quot;&amp;quot;;
+					var columns = &amp;quot;&amp;quot;;
+	
+					//创建临时表		
+					sql = &amp;quot;create table &amp;quot;+table+&amp;quot; (&amp;quot;;
+					for (var col = 0;col &amp;lt; xmlds.getColumnCount();col ++) {
+						if (col &amp;gt; 0) sql += &amp;quot;,&amp;quot;;
+						sql += &amp;quot;CO&amp;quot;+col+&amp;quot; varchar2(500) \n&amp;quot;;
+						if (columns != &amp;quot;&amp;quot;) columns += &amp;quot;,&amp;quot;;
+						columns += &amp;quot;CO&amp;quot;+col;
+						if (params != &amp;quot;&amp;quot;) params += &amp;quot;,&amp;quot;;
+						params += &amp;quot;?&amp;quot;;
+					}
+					sql += &amp;quot;) &amp;quot;;
+					db.ExcecutSQL(sql);
+					
+					//导入临时表
+					//最后一列日期类型的 导入后变成了数字，如何转成日期？
+					//to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;) co5
+					var updatesql = &amp;quot;insert into &amp;quot;+table+&amp;quot; (&amp;quot;+columns +&amp;quot;) values (&amp;quot;+params+&amp;quot;)&amp;quot;;
+					ps = db.GetConn().prepareStatement(updatesql);
+					
+					var rowcount = xmlds.getRowCount();
+					for(var rows=0;rows&amp;lt;rowcount;rows++) {
+						for(var cols=0;cols&amp;lt;xmlds.getColumnCount();cols++) {
+							var colname=xmlds.getColumnName(cols);
+							var colstr=xmlds.getStringAt(rows,colname);
+							ps.setString(cols+1,colstr);
+						}
+						ps.addBatch();
+					}
+					ps.executeBatch();
+	
+					//写入正式目标表 
+					var drlx = &amp;quot;其他&amp;quot;;
+					if (sheet == 0) drlx = &amp;quot;工程建设类&amp;quot;;
+					else if (sheet == 1) drlx = &amp;quot;政府采购类&amp;quot;;
+					else if (sheet == 2) drlx = &amp;quot;国有土地使用权和矿业权出让&amp;quot;;
+					else if (sheet == 3) drlx = &amp;quot;其它公共资源交易&amp;quot;;
+					else if (sheet == 4) drlx = &amp;quot;其他&amp;quot;;
+					
+					sql = &amp;quot;select substr(co0,0,4) yy from &amp;quot;+table+&amp;quot; where co1 is null&amp;quot;;
+					var yyyy = db.GetSQL(sql);
+					sql = &amp;quot;insert into TAX_ZDXM_JYPTXM(DRLX,TJYF,XMQY,XMMC,CGDW,JYJE,ZBDWMC)
+						select &amp;apos;&amp;quot;+drlx+&amp;quot;&amp;apos; drlx,&amp;apos;&amp;quot;+yyyy+&amp;quot;&amp;apos;||to_char(to_number(co0),&amp;apos;FM00&amp;apos;) tjyf,co1 xmqy,co2 xmmc,co3 cgdw,co4 jyje,co5 zbdwmc
+						from &amp;quot;+table+&amp;quot; a 	
+						where co1 is not null 
+						  and not (co2=&amp;apos;项目名称&amp;apos; or co3=&amp;apos;采购单位&amp;apos; or co5=&amp;apos;中标单位&amp;apos;)
+						  and not exists (select 1 from TAX_ZDXM_JYPTXM b where &amp;apos;&amp;quot;+yyyy+&amp;quot;&amp;apos;||to_char(to_number(co0),&amp;apos;FM00&amp;apos;)=b.tjyf 
+						  and co2=b.xmmc and co3=b.cgdw and co5=b.zbdwmc)&amp;quot;;
+					ret += db.ExcecutSQL(sql);
+					
+					//自动匹配写入对照表
+					sql = &amp;quot;insert into tax_zdxm_jyptwbbyxm_dzb
+						select sys_guid(),jyptxmuuid,djxh,bydjuuid,sysdate from (
+						select distinct a.jyptxmuuid,b.djxh,b.bydjuuid
+						from TAX_ZDXM_JYPTXM a,(
+						select bydjuuid,djxh,wcjyhwmc from dj_wbnsrjydbydj_hwxx
+						union all
+						select bydjuuid,djxh,wcjylwmc from dj_wbnsrjydbydj_lwxx
+						) b
+						where a.xmmc=b.wcjyhwmc
+						  and (a.jyptxmuuid,b.djxh,b.bydjuuid) not in (select jyptxmuuid,djxh,bydjuuid from tax_zdxm_jyptwbbyxm_dzb)
+						)&amp;quot;;
+					db.ExcecutSQL(sql);
+						
+					//drop临时表
+		  			sql = &amp;quot;drop table &amp;quot; + table;
+		 			db.ExcecutSQL(sql);
+	
+				}
+			}
+		}
+		else if (typ == 1) { //发改委项目数据
+			var excelgrid = new xlsdb.excelgrid();	
+			var table =  db.GetSQL(&amp;quot;select &amp;apos;PG_&amp;apos;||TAX_NEXTVAL.nextval from dual&amp;quot;);
+				
+			var xmlds = excelgrid.GetXmlDS(filename,0);	
+			if (xmlds.getColumnCount() &amp;gt; 3) {
+				var params = &amp;quot;&amp;quot;;
+				var columns = &amp;quot;&amp;quot;;
+
+				//创建临时表		
+				sql = &amp;quot;create table &amp;quot;+table+&amp;quot; (&amp;quot;;
+				for (var col = 0;col &amp;lt; xmlds.getColumnCount();col ++) {
+					if (col &amp;gt; 0) sql += &amp;quot;,&amp;quot;;
+					sql += &amp;quot;CO&amp;quot;+col+&amp;quot; varchar2(500) \n&amp;quot;;
+					if (columns != &amp;quot;&amp;quot;) columns += &amp;quot;,&amp;quot;;
+					columns += &amp;quot;CO&amp;quot;+col;
+					if (params != &amp;quot;&amp;quot;) params += &amp;quot;,&amp;quot;;
+					params += &amp;quot;?&amp;quot;;
+				}
+				sql += &amp;quot;) &amp;quot;;
+				db.ExcecutSQL(sql);
+				
+				//导入临时表
+				//最后一列日期类型的 导入后变成了数字，如何转成日期？
+				//to_char(to_date(&amp;apos;19000101&amp;apos;,&amp;apos;yyyymmdd&amp;apos;)+to_number(co5),&amp;apos;yyyy-mm&amp;apos;) co5
+				var updatesql = &amp;quot;insert into &amp;quot;+table+&amp;quot; (&amp;quot;+columns +&amp;quot;) values (&amp;quot;+params+&amp;quot;)&amp;quot;;
+				ps = db.GetConn().prepareStatement(updatesql);
+				
+				var rowcount = xmlds.getRowCount();
+				for(var rows=0;rows&amp;lt;rowcount;rows++) {
+					for(var cols=0;cols&amp;lt;xmlds.getColumnCount();cols++) {
+						var colname=xmlds.getColumnName(cols);
+						var colstr=xmlds.getStringAt(rows,colname);
+						ps.setString(cols+1,colstr);
+					}
+					ps.addBatch();
+				}
+				ps.executeBatch();
+			}
+			
+			sql = &amp;quot;delete from &amp;quot;+table+&amp;quot; where co0=&amp;apos;项目代码&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;insert into tax_zdxm_fgwxm(xmdm,xmmc,zyjsnrgm,ztzje,xmssdw,xmzrdw,qqgzjzqk,jhkgsj)
+				select co0,co1,co2,co3,co4,co5,co6,co7 
+				from &amp;quot;+table+&amp;quot;
+				where co0 not in (select xmdm from tax_zdxm_fgwxm)&amp;quot;;
+			ret += db.ExcecutSQL(sql);
+			
+			//drop临时表
+  			sql = &amp;quot;drop table &amp;quot; + table;
+ 			db.ExcecutSQL(sql);
+
+			
+		}
+			
+		db.Commit();
+		return &amp;quot;导入成功，记录数&amp;quot;+ret;
+
+	}
+	catch(e) {
+		if(db != null) db.Rollback();
+		return e.toString();
+		throw new Exception(e);
+	}
+	finally {
+		if(db != null) db.Close();
+		//文件导入成功后删除
+		var file = new java.io.File(filename);   
+         	if(file.exists()){   
+         		file.delete();
+         	}
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

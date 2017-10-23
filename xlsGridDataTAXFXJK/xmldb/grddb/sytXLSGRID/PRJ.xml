@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >PRJ</MWID><NAME >项目</NAME><NOTE ></NOTE><FILE >PRJ.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS >xlsgrid/js/dbhelper.js,xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >prjlvl</ID><NAME >项目岗位权限</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >Rebuild</ID><NAME >重建项目绑定关系</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var rowno = &amp;quot;&amp;quot;;//鼠标单击行，当前的行号
+function _thisOnpost_loaddata(sheet)
+{
+       order = &amp;quot; order by ID&amp;quot;;   
+       setButton();          //设置中间件按钮 
+        var  fields =  
+            &amp;quot;GUID,GUID,sys_guid();&amp;quot;+
+            &amp;quot;SYT,系统编号 ;&amp;quot;+
+             &amp;quot;ID,编号,,.+;&amp;quot;+	
+            &amp;quot;NAME,名称,,.+;&amp;quot;+
+            &amp;quot;NOTE,详细说明,,.+;&amp;quot;+ 
+            &amp;quot;PRJTYP,项目类型,,.+;&amp;quot;+  
+            &amp;quot;USRID,负责人,,.+;&amp;quot;+
+            &amp;quot;PRJSTA,状态,,.+;&amp;quot;+
+            &amp;quot;STRDAT,开始日期,,.+;&amp;quot;+
+            &amp;quot;ENDDAT,结束日期,,.+;&amp;quot;+
+            &amp;quot;CRTUSR,创建人&amp;quot;;
+            
+      _dbhelper.InitSQL(&amp;quot;prj&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false);       
+      _dbhelper.Load(1,1,2,2);
+      setDate();
+
+}
+
+function setDate()
+{
+      var row1 = _this.GetMainCellRangeRow1(0);
+      var row2 = _this.GetMainCellRangeRow2(0);
+      var strdat = &amp;quot;&amp;quot;;
+      var enddat = &amp;quot;&amp;quot;;
+      for(var row=row1;row&amp;lt;=row2;row++)
+      {
+            var guid = _this.GetCellText(sheet,row,1); 
+            QuerySQLDS(&amp;quot;select strdat,enddat from prj where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;);
+            var count = _this.XMLDS_GetRowCount(); 
+            for ( var i=0;i&amp;lt;count;i++ )
+            {
+                  strdat =  _this.XMLDS_GetString(i,&amp;quot;strdat&amp;quot;);
+                  enddat =  _this.XMLDS_GetString(i,&amp;quot;enddat&amp;quot;);
+                  _this.SetToDateBox(&amp;quot;&amp;quot;,0,row,10,strdat);
+                  _this.SetToDateBox(&amp;quot;&amp;quot;,0,row,11,enddat);
+            }
+            _this.SetToComboBox(&amp;quot;&amp;quot;,sheet,i,7,setListCombox(&amp;quot;v_prjtyp&amp;quot;));
+            
+      }
+}
+//================================================================// 
+// 函数：getStrDate
+// 说明：得到当前日期
+// 参数：
+// 返回：日期
+// 样例：
+// 作者：
+// 创建日期：02/07/07 11:18:32
+// 修改日志：
+//================================================================// 
+function getStrDate()
+{
+      return new Date().getYear+&amp;quot;-&amp;quot;+(new Date().getmonth+1)+&amp;quot;-&amp;quot;+new Date().getDate();
+     
+}
+
+
+
+//================================================================// 
+// 函数：prjusr
+// 说明：项目参与人员
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/07/07 11:19:18
+// 修改日志：
+//================================================================// 
+function prjusr()
+{
+       prjFunc(&amp;quot;PRJUSR&amp;quot;,&amp;quot;项目人员&amp;quot;);
+}
+
+//================================================================// 
+// 函数：prjlvl
+// 说明：项目人员岗位
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：02/07/07 11:19:39
+// 修改日志：
+//================================================================// 
+function prjlvl()
+{
+       prjFunc(&amp;quot;PRJLVL&amp;quot;,&amp;quot;项目岗位&amp;quot;);
+}
+
+//================================================================//  
+// 函数：thisOnMouseLClick 
+// 说明：鼠标单击行，得到行号 
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：02/07/07 11:26:22 
+// 修改日志： 
+//================================================================//  
+function _thisOnMouseLClick(sheet,row,col)
+{
+      var r1 = _this.GetMainCellRangeRow1(sheet);
+      var r2 = _this.GetMainCellRangeRow2(sheet);
+      if ( row&amp;gt;=r1 &amp;&amp; row&amp;lt;=r2 )
+      {
+            if ( _this.SetRowSelected(sheet,row,0) == 0) //被选中
+            {
+                  rowno = row;
+            }
+      }
+}
+
+//================================================================//  
+// 函数：prjFunc 
+// 说明：
+// 参数：grd:中间件编号，str:页面名 
+// 返回： 
+// 样例：
+// 作者： 
+// 创建日期：03/01/07 09:48:43  
+// 修改日志： 
+//================================================================//  
+function prjFunc(grd,str)
+{
+      if ( rowno == &amp;quot;&amp;quot; || rowno.length == 0 )
+      {
+            alert (&amp;quot;未选中项目！&amp;quot;);
+            return ;
+      }
+      else
+      {
+            var prjguid = _this.GetCellText(sheet,rowno,1);//选中的项目的guid 
+            QuerySQLDS(&amp;quot;select guid from usr where id=&amp;apos;&amp;quot;+G_USRID+&amp;quot;&amp;apos;&amp;quot;);
+            var usrguid = _this.XMLDS_GetString(0,&amp;quot;guid&amp;quot;);
+            var url = &amp;quot;jsp/pages/dbEdit.jsp?grdid=&amp;quot;+grd+&amp;quot;&amp;prj=&amp;quot;+prjguid;
+            window.open(homeurl+&amp;quot;xlsgrid/&amp;quot;+url,str,&amp;quot;WIDTH=750,HEIGHT=500,left=0,top=0,toolbar=no,menu=no,location=no,menubar=no,status=yes&amp;quot;);
+      }
+}
+
+//undefined
+function Rebuild()
+{
+	if ( confirm( &amp;quot;重建项目绑定关系,将会清空所有的项目绑定人员的资料，是否继续？&amp;quot; ) == 1 ) {
+		_sql.run(&amp;quot;Rebuild1&amp;quot;,&amp;quot;&amp;quot;);
+		_sql.run(&amp;quot;Rebuild2&amp;quot;,&amp;quot;&amp;quot;);
+		alert ( &amp;quot;操作成功&amp;quot; );
+	
+	
+	} 
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Rebuild1</ID><NAME ></NAME><DATDSC >delete from PRJUSR 
+</DATDSC><C4 >Rebuild1</C4></ROW>
+<ROW num="1" ><ID >Rebuild2</ID><NAME ></NAME><DATDSC >insert into prjusr(prj,usr) 
+select * from (
+select  prj.guid prjguid,usr.guid usrguid from prj,usr 
+where usr.org=&amp;apos;XLSGRID&amp;apos;
+) where (prjguid,usrguid) not in ( select prj,usr from prjusr )</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CheckImport_SC</MWID><NAME >石材数据导入检查</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CheckImport_SC.zxg</FILE><SCENE ></SCENE><FIXED >2,0</FIXED><CATTYP >导入检查</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >选择年份</NAME><NOTNULL >0</NOTNULL><KEYVAL >V_YYYY</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >DAT1</C13><C14 >DAT1</C14><C15 >DAT1</C15></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >8</NROW><NCOL >13</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,1,1</C20><C21 >0,2,1</C21></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{   
+    var yyyy = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0];
+    try {
+	    if (DAT1 != &amp;quot;&amp;quot;) {
+	    	yyyy = DAT1;
+	    }
+    } catch (e) {
+    
+    }
+    
+    _this.SetCellText(sheet,0,0,yyyy+&amp;quot;年石材数据导入检查&amp;quot;);
+    for(var row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++) {
+    	if (_this.GetCellText(0,row,0) != &amp;quot;&amp;quot;) {
+	        for(var col=_this.GetMainCellRangeCol1(sheet);col&amp;lt;=_this.GetMainCellRangeCol2(sheet);col++) {
+	            var cellval = _this.GetCellText(sheet,row,col);
+	            if(cellval &amp;gt; 0) {
+	               _this.SetCellText(sheet,row,col,&amp;quot;√&amp;quot;);
+	               _this.SetCellColor(sheet,row,col,0,72,255);
+	               
+	            }
+	            else if (cellval == 0) {
+	               _this.SetCellText(sheet,row,col,&amp;quot;╳&amp;quot;); 
+	               _this.SetCellColor(sheet,row,col,255,0,0);
+	            }
+	        }
+        }
+        else {
+        	_this.SetRowVisible(0,row,-1);
+        }
+    }
+    
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >
+select name,
+       max(decode(substr(yymm,6,2),&amp;apos;01&amp;apos;,cnt,0)) yf_1,
+       max(decode(substr(yymm,6,2),&amp;apos;02&amp;apos;,cnt,0)) yf_2,
+       max(decode(substr(yymm,6,2),&amp;apos;03&amp;apos;,cnt,0)) yf_3,
+       max(decode(substr(yymm,6,2),&amp;apos;04&amp;apos;,cnt,0)) yf_4,
+       max(decode(substr(yymm,6,2),&amp;apos;05&amp;apos;,cnt,0)) yf_5,
+       max(decode(substr(yymm,6,2),&amp;apos;06&amp;apos;,cnt,0)) yf_6,
+       max(decode(substr(yymm,6,2),&amp;apos;07&amp;apos;,cnt,0)) yf_7,
+       max(decode(substr(yymm,6,2),&amp;apos;08&amp;apos;,cnt,0)) yf_8,
+       max(decode(substr(yymm,6,2),&amp;apos;09&amp;apos;,cnt,0)) yf_9,
+       max(decode(substr(yymm,6,2),&amp;apos;10&amp;apos;,cnt,0)) yf_10,
+       max(decode(substr(yymm,6,2),&amp;apos;11&amp;apos;,cnt,0)) yf_11,
+       max(decode(substr(yymm,6,2),&amp;apos;12&amp;apos;,cnt,0)) yf_12  
+from (  
+  select t2.name,t1.yymm,count(t1.djxh) cnt
+  from tax_stonedata t1,(
+    select a.*,b.djxh
+    from (
+      select distinct b.id,b.name,a.gxhhydm
+      from tax_stone_hy a,V_TAX_STONE_HY b
+      where a.hydm(+)=b.id
+    ) a,DJ_DJHGLGL b
+    where a.gxhhydm=b.lb_dm
+  ) t2 
+  where substr(t1.yymm,0,4)=&amp;apos;[%DAT1]&amp;apos;
+    and t1.djxh(+)=t2.djxh
+  group by t2.name,t1.yymm
+) t
+group by name
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

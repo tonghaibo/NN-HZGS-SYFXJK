@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ITEMDBEDIT</MWID><NAME >商品数据维护</NAME><NOTE ></NOTE><FILE >ITEMDBEDIT.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+order = &amp;quot; order by ID&amp;quot;;
+       setButton();
+       _this.AddToolbarButton(&amp;quot;udf_com_movefromdfxd&amp;quot;,&amp;quot;从外系统更新&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1,120);
+       // 构造3个 SQL
+       // 查询商品数据表记录
+       selectSQL = &amp;quot;select &amp;quot;+
+            &amp;quot;GUID &amp;quot;+
+            &amp;quot;,ID       as \&amp;quot;商品编码＊\&amp;quot; &amp;quot;+
+            &amp;quot;,NAME     as \&amp;quot;商品名称＊\&amp;quot; &amp;quot;+
+            &amp;quot;,NOTE     as 说明 &amp;quot;+
+            &amp;quot;,REFID   as \&amp;quot;分类编码＊\&amp;quot; &amp;quot;+
+            &amp;quot;,CODE     as 商品条码 &amp;quot;+
+            &amp;quot;,UNIT     as \&amp;quot;单位＊\&amp;quot; &amp;quot;+
+            &amp;quot;,SPEC     as 规格 &amp;quot;+
+            &amp;quot;,WIDTH     as \&amp;quot;宽(mm)\&amp;quot; &amp;quot;+
+            &amp;quot;,HEIGHT    as \&amp;quot;高(mm)\&amp;quot; &amp;quot;+
+            &amp;quot;,DEPTH      as \&amp;quot;深(mm)\&amp;quot; &amp;quot;+
+            &amp;quot;,SMLUNT   as \&amp;quot;小计量单位＊\&amp;quot; &amp;quot;+
+            &amp;quot;,UNTNUM   as \&amp;quot;大小单位转换比例＊\&amp;quot; &amp;quot;+
+            &amp;quot;,TONNUM   as \&amp;quot;转换为标准单位比例＊\&amp;quot; &amp;quot;+
+            &amp;quot;,PROARE   as 产地 &amp;quot;+
+            &amp;quot;,BASCAT1  as \&amp;quot;大类＊\&amp;quot; &amp;quot;+
+            &amp;quot;,BASCAT2  as 中类 &amp;quot;+
+            &amp;quot;,BASCAL3  as 小类 &amp;quot;+
+            &amp;quot;,BASCAL4  as 最小分类 &amp;quot;+
+            &amp;quot;,EXTCAL5  as 进货厂家 &amp;quot;+
+            &amp;quot;,EXTCAL4  as 材料工艺 &amp;quot;+
+            &amp;quot;,EXTCAL3  as 品牌 &amp;quot;+
+            &amp;quot;,EXTCAL2  as 大小尺寸 &amp;quot;+
+            &amp;quot;,EXTCAL1  as 颜色 &amp;quot;+
+            &amp;quot;,ITMTYP   as 同类商品编号 &amp;quot;+
+            &amp;quot;,USEFLG   as \&amp;quot;是否使用标志＊\&amp;quot; &amp;quot;+
+            &amp;quot; from ITEM&amp;quot;;
+       //新增商品数据表记录
+       insertSQL = &amp;quot;INSERT INTO ITEM &amp;quot;+
+            &amp;quot;( GUID,ID,NAME,NOTE,REFID,CODE,UNIT,SPEC,WIDTH,HEIGHT,DEPTH,SMLUNT,UNTNUM,TONNUM,PROARE,BASCAT1,BASCAT2,BASCAL3,BASCAL4,EXTCAL5,EXTCAL4,EXTCAL3,EXTCAL2,EXTCAL1  &amp;quot;+
+            &amp;quot;,ITMTYP &amp;quot;+
+            &amp;quot;,USEFLG) values( sys_guid(),?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) &amp;quot;;
+       // 修改商品数据表记录
+       updateSQL = &amp;quot;UPDATE ITEM SET ID=?,NAME=?,NOTE=?,REFID=?,CODE=?,UNIT=?,SPEC=?,WIDTH=?,HEIGHT=?,DEPTH=?,SMLUNT=?,UNTNUM=?,TONNUM=?,PROARE=?,&amp;quot;+
+                  &amp;quot;BASCAT1=?,BASCAT2=?,BASCAL3=?,BASCAL4=?,EXTCAL5=?,EXTCAL4=?,EXTCAL3=?,EXTCAL2=?,EXTCAL1=?,&amp;quot;+
+                  &amp;quot;ITMTYP=?, &amp;quot;+
+                  //CRTUSR=?,CRTDAT=?,
+                  &amp;quot;USEFLG=? where guid=?&amp;quot;;
+       //删除供应商数据表记录
+       deleteSQL = &amp;quot;delete ITEM where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);       
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+        var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ENDFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_USEFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ITMTYP&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        var listid3 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_BASCAT&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        var listid4 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_BASCAT2&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        var listid5 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_BASCAT3&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        var listid6 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_ITEMCLASS&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+
+
+
+
+
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+             {
+//                  var loc = 7;
+//                  var str = _this.GetCellText(sheet,row,loc);
+//                  _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,loc,listid0);
+//                  _this.SetCellText(sheet,row,loc,str);
+//                  loc = 6;
+//                  str = _this.GetCellText(sheet,row,loc);                  
+//                  _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,loc,listid6);
+//                  _this.SetCellText(sheet,row,loc,str);
+                   loc = 26;
+                  str = _this.GetCellText(sheet,row,loc);                  
+                  _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,loc,listid2);
+                  _this.SetCellText(sheet,row,loc,str);
+                  loc=27;
+                  str = _this.GetCellText(sheet,row,loc);
+                  _this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,loc,listid1);
+                  _this.SetCellText(sheet,row,loc,str);
+                  loc = 17;
+                  str = _this.GetCellText(sheet,row,loc);
+                  _this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,loc,listid3);
+                  _this.SetCellText(sheet,row,loc,str);
+                  loc = 18;
+                  str = _this.GetCellText(sheet,row,loc);
+                  _this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,loc,listid4);
+                  _this.SetCellText(sheet,row,loc,str);
+                  loc = 19;
+                  str = _this.GetCellText(sheet,row,loc);
+                  _this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,loc,listid5);
+                  _this.SetCellText(sheet,row,loc,str);
+                  
+             }
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+
+}
+function com_movefromdfxd()
+{
+      try {
+            ret = invokeOSFunc(&amp;quot;MoveFromDfxd&amp;quot;,&amp;quot;&amp;quot;) ;       
+            alert ( ret );
+      }
+      catch ( e ) {
+            alert ( e );
+      }      
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+//================================================================// 
+// 函数：MoveFromDfxd
+// 说明：从外系统（数据库连接名DFXD）更新数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/21/06 23:11:13
+// 修改日志：
+//================================================================// 
+function MoveFromDfxd()
+{
+      var db = null;
+      var msg = &amp;quot;&amp;quot;;
+      var sql = &amp;quot;insert into item ( id,refid,name,endflg,unit,spec,smlunt,untnum,tonnum,itmtyp,bascat1 )&amp;quot; +
+            &amp;quot;select id,refid,name,endflg,unit,spec,smlunt,untnum,tonnum,itmtyp,decode(substr(id,5,1),&amp;apos;1&amp;apos;,&amp;apos;1 大包装糖&amp;apos;,&amp;apos;2 小包装糖&amp;apos;) &amp;quot;+
+            &amp;quot; from item@dfxd where &amp;quot; +
+            &amp;quot; id not in ( select id from item ) and id like &amp;apos;00%&amp;apos;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();
+            var ret = db.ExcecutSQL(sql);
+            db.Commit();
+            msg=&amp;quot;操作成功,成功插入了&amp;quot; +ret +&amp;quot;条记录&amp;quot; ;
+      }
+      catch ( ee ) {
+            if( db!=null) db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return msg;
+      
+
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

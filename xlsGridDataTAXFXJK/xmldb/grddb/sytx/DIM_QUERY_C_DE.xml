@@ -1,0 +1,384 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >DIM_QUERY_C_DE</MWID><NAME >多维度报表查询条件</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DIM_QUERY_C_DE.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >TOPICID</ID><NAME >主题id</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >TOPICID</C13><C14 >TOPICID</C14><C15 >TOPICID</C15><C16 >TOPICID</C16><C17 >TOPICID</C17><C18 ></C18></ROW>
+<ROW num="1" ><ID >SYTID</ID><NAME >系统号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_SYTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >SYTID</C14><C15 >SYTID</C15><C16 >SYTID</C16><C17 >SYTID</C17><C18 >SYTID</C18></ROW>
+<ROW num="2" ><ID >FORMGUID</ID><NAME >主题guid</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >10</NROW><NCOL >9</NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW >0</HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 >0,2,1</C17><C18 ></C18><C19 ></C19><C20 >0,2,1</C20><C21 >0,2,1</C21></ROW>
+<ROW num="1" ><ID >0,1,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:TITLE,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW >0</HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 >0,1,1</C17><C18 ></C18><C19 ></C19><C20 >0,1,1</C20><C21 >0,1,1</C21></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var tag = new JavaPackage(&amp;quot;com.xlsgrid.net.tag&amp;quot;);
+var xmldsform = new tag.XmlDSForm();
+var EAfunc = new pubpack.EAFunc();
+//作为.sp服务时的入口	
+//预定义变量：request,response
+function Response()
+{
+	var db = null;
+      var ret= &amp;quot;&amp;quot;;
+      var sql = &amp;quot;&amp;quot;;
+      var _sql = &amp;quot;&amp;quot;;
+      var ds = null;
+      var _ds = null;
+      var GHtml = &amp;quot;&amp;quot;;
+
+      var ret= &amp;quot;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            var toolbarhtml = &amp;quot;&amp;quot;;
+            /*
+            _sql = &amp;quot;select seq,id,name,note,vdim from 
+            	    (
+		            select 0 seq,id,name,NOTE,decode(instr(vdim,&amp;apos;,&amp;apos;),0,vdim,substr(vdim,0,instr(vdim,&amp;apos;,&amp;apos;)-1)) vdim 
+		            	from dim_topic where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos; and id = &amp;apos;&amp;quot;+TOPICID+&amp;quot;&amp;apos; and sytid = &amp;apos;&amp;quot;+SYTID+&amp;quot;&amp;apos; 
+	            	    union all
+	            	    select rownum seq,id,name,NOTE,vdim
+	            	      from 
+	            	      (
+	            	    		select id,name,NOTE,decode(instr(vdim,&amp;apos;,&amp;apos;),0,vdim,substr(vdim,0,instr(vdim,&amp;apos;,&amp;apos;)-1)) vdim from dim_topic where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos; and id &amp;lt;&amp;gt; &amp;apos;&amp;quot;+TOPICID+&amp;quot;&amp;apos; and sytid = &amp;apos;&amp;quot;+SYTID+&amp;quot;&amp;apos; 
+	            	    		order by id
+	            	      )
+	            )
+	            order by seq
+             	   &amp;quot;;
+            */
+            _sql = &amp;quot;select rownum seq, a.* from (select rownum seq,id,name,vdim from dim_topic where refmod =&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos; and sytid = &amp;apos;&amp;quot;+SYTID+&amp;quot;&amp;apos; and refid is null order by lvl,id ) a&amp;quot;;
+            _ds = db.QuerySQL(_sql);
+            var firsttopic = &amp;quot;&amp;quot;;
+            for(var r = 0;r &amp;lt; _ds.getRowCount();r ++)
+            {	//有多少个主题
+            	    var topic = _ds.getStringAt(r,&amp;quot;ID&amp;quot;);
+            	    var vdim = _ds.getStringAt(r,&amp;quot;vdim&amp;quot;);
+            	    var name = _ds.getStringAt(r,&amp;quot;name&amp;quot;);
+            	    var bkimg = &amp;quot;background=&amp;apos;xlsgrid/images/xlsgrid/tab.bg.off.grid.gif&amp;apos;&amp;quot;;
+            	   
+            	    if ( r == 0 ) {
+            	    	bkimg = &amp;quot;background=&amp;apos;xlsgrid/images/xlsgrid/tab.bg.on.grid.gif&amp;apos;&amp;quot;;firsttopic  = topic ; 
+            	    }
+
+            	    	
+	            toolbarhtml+=&amp;quot;&amp;lt;td width=&amp;apos;150&amp;apos; id=&amp;apos;page&amp;quot;+(r+1)+&amp;quot;&amp;apos; bgcolor=&amp;apos;#336699&amp;apos; height=&amp;apos;31&amp;apos; align=&amp;apos;center&amp;apos; &amp;quot;+bkimg +&amp;quot; style=\&amp;quot;border-right: 1px solid #808080; border-top: 1px solid #808080; border-bottom: 1px solid #808080\&amp;quot;&amp;gt;&amp;lt;p align=&amp;apos;center&amp;apos;&amp;gt;
+			&amp;lt;a href=&amp;apos;javascript:show_right(&amp;quot;+(r+1)+&amp;quot;,\&amp;quot;&amp;quot;+topic +&amp;quot;\&amp;quot;);&amp;apos;&amp;gt;	&amp;lt;font color=&amp;apos;#333333&amp;apos;&amp;gt;&amp;quot;+name+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;　&amp;lt;/td&amp;gt;\r&amp;quot;;
+							              
+		
+	   }
+	   toolbarhtml+=&amp;quot;&amp;lt;td  height=&amp;apos;31&amp;apos; bgcolor=&amp;apos;#EEEEEE&amp;apos; align=&amp;apos;center&amp;apos;  style=&amp;apos;border-bottom: 1px solid #808080&amp;apos;&amp;gt;&amp;lt;p align=&amp;apos;left&amp;apos;&amp;gt;
+			&amp;nbsp;&amp;lt;div id=&amp;apos;pathtip&amp;apos;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;\r&amp;quot;; //
+
+	   // 生成查询条件
+	   sql = &amp;quot;select id ,name ,refmod ,control ,keyval ,defval ,wher ,seq 
+            	   from
+            		   (
+            		select id id,name,refmod ,control ,keyval,defval,wher,seq
+			 from dim_dim
+			where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;
+			  and NVL(control,&amp;apos; &amp;apos;) &amp;lt;&amp;gt; &amp;apos;DATEBOX&amp;apos; 
+			union all
+			select &amp;apos;STA&amp;apos;||id id,&amp;apos;开始&amp;apos;||name name,refmod ,control ,keyval ,&amp;apos;&amp;apos; defval,&amp;apos;&amp;apos; wher,0 seq 
+			 from dim_dim
+			where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;
+			  and control = &amp;apos;DATEBOX&amp;apos; 
+			union all
+			select &amp;apos;END&amp;apos;||id id,&amp;apos;截止&amp;apos;||name name, refmod,control, keyval,&amp;apos;&amp;apos; defval,&amp;apos;&amp;apos; wher,1 seq			
+		        from dim_dim
+			where refmod=&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;
+			  and control = &amp;apos;DATEBOX&amp;apos; 
+		 )
+	         order by seq&amp;quot;;
+
+		    ds = db.QuerySQL(sql);
+	            ret += &amp;quot;&amp;lt;table border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+
+				&amp;lt;tr&amp;gt;
+					&amp;lt;td height=30 align = &amp;apos;left&amp;apos;  background=\&amp;quot;xlsgrid/images/xlsgrid/tab.bg.on.grid.gif\&amp;quot; style=\&amp;quot;font-size:14px\&amp;quot;  style=\&amp;quot;border-top:1px solid #80B7E0;cursor:pointer;\&amp;quot; \&amp;quot;&amp;gt; 
+					&amp;lt;table cellspacing=0 cellpadding=0 border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot;&amp;gt;	&amp;lt;tr&amp;gt;		&amp;lt;td width=\&amp;quot;24\&amp;quot; align=center&amp;gt;&amp;lt;img src=&amp;apos;xlsgrid/images/toolbar/search.gif&amp;apos; border=0&amp;gt;&amp;lt;/td&amp;gt;		&amp;lt;td align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;2px\&amp;quot; color = \&amp;quot;#000080\&amp;quot;&amp;gt;组合查询条件&amp;lt;/font&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;	&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+					&amp;lt;/td&amp;gt;
+				&amp;lt;/tr&amp;gt;
+				&amp;lt;tr &amp;quot;;
+		    ret += &amp;quot;&amp;gt;&amp;lt;td valign=top&amp;gt;&amp;quot;;
+	            ret +=&amp;quot;&amp;lt;form name = f1 method=&amp;apos;post&amp;apos; action=&amp;apos;show.sp?grdid=BIMain&amp;apos; Target=&amp;apos;_blank&amp;apos;&amp;gt; \n&amp;quot;;
+	            var resetstr = &amp;quot;&amp;quot;;
+	            for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+	            	resetstr+= &amp;quot;try{document.all(&amp;apos;&amp;quot;+ds.getStringAt(i,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;apos;).value=&amp;apos;&amp;apos;;}catch(e){}&amp;quot;;
+	            }
+	            GHtml = xmldsform.HtmlForm(request,ds,&amp;quot;NAME&amp;quot;,&amp;quot;ID&amp;quot;,&amp;quot;KEYVAL&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;Y&amp;quot;,&amp;quot;Y&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;WHER&amp;quot;,&amp;quot;CONTROL&amp;quot;,&amp;quot;0&amp;quot;,&amp;quot;50&amp;quot;);
+	            ret += GHtml;
+	            ret += &amp;quot;&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;sytid&amp;apos; name = &amp;apos;sytid&amp;apos; value = &amp;quot;+SYTID+&amp;quot;&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;row&amp;apos; name = &amp;apos;row&amp;apos; value =1&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;topic&amp;apos; name = &amp;apos;topic&amp;apos; value = &amp;apos;&amp;apos;&amp;gt;
+	            		    	&amp;lt;input type = &amp;apos;hidden&amp;apos; id = &amp;apos;FORMGUID&amp;apos; name = &amp;apos;FORMGUID&amp;apos; value = &amp;quot;+FORMGUID+&amp;quot;&amp;gt;
+	            		    	     				
+	            		    	&amp;lt;table width=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; cellspacing=&amp;apos;1&amp;apos; &amp;gt;
+		            		&amp;lt;tr&amp;gt;
+	            		    &amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;
+	            		    &amp;lt;td align = &amp;apos;center&amp;apos;&amp;gt;&amp;lt;input type = &amp;apos;submit&amp;apos; value = &amp;apos; 查 询 &amp;apos; &amp;gt;&amp;nbsp;&amp;lt;input type = &amp;apos;button&amp;apos; value = &amp;apos; 重 置 &amp;apos; onclick=&amp;apos;javascript:f_reset();&amp;apos; &amp;gt;&amp;lt;/td&amp;gt;
+	            		   
+	            		&amp;lt;/tr&amp;gt;
+	            	    &amp;lt;/table&amp;gt;
+	            	 &amp;lt;/form&amp;gt;
+	            	 &amp;lt;/td&amp;gt;
+	            	 &amp;lt;/tr&amp;gt;&amp;quot;;
+	        
+	   ret += &amp;quot;&amp;lt;/table&amp;gt; &amp;quot;;	
+
+	  
+	  var lefthtml = ret; ret= &amp;quot;&amp;quot;;
+	
+	    ret=&amp;quot;	&amp;lt;html&amp;gt;
+	    			&amp;lt;LINK rel=stylesheet type=text/css HREF=&amp;apos;xlsgrid/css/main.css&amp;apos;&amp;gt;
+	    			&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;
+	    			&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/images/flash/FusionCharts.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt;
+				&amp;lt;head&amp;gt;
+				&amp;lt;meta http-equiv=&amp;apos;Content-Type&amp;apos; content=&amp;apos;text/html; charset=gb2312&amp;apos;&amp;gt;
+				
+				&amp;lt;STYLE&amp;gt;
+    						.navPoint {
+						COLOR: #225f98; CURSOR: hand; FONT-FAMILY: &amp;apos;Webdings&amp;apos;; FONT-SIZE: 9pt
+						}
+				&amp;lt;/STYLE&amp;gt;
+				&amp;lt;script&amp;gt;
+					function switchLBar()
+					{
+						if (LPoint.innerText==3)
+						{
+							LPoint.innerText=4;
+							leftTd.style.display =&amp;apos;none&amp;apos;; 
+    							leftTd.style.width = 10;
+						}
+						else
+						{
+							LPoint.innerText=3;
+							leftTd.style.display=&amp;apos;&amp;apos;; 
+   							leftTd.style.width = 220;
+						}
+					}
+					function switchRBar()
+					{
+						if (RPoint.innerText==4)
+						{
+							RPoint.innerText=3;
+							rightTd.style.display =&amp;apos;none&amp;apos;; 
+    							rightTd.style.width = 10;
+						}
+						else
+						{
+							RPoint.innerText=4;
+							rightTd.style.display=&amp;apos;&amp;apos;; 
+   							rightTd.style.width = 400;
+						}
+					}
+
+					function switchLangBar(){
+					        if (document.all(&amp;apos;w_langbar&amp;apos;).style.display!=&amp;apos;none&amp;apos;){
+					          document.all(&amp;apos;w_langbar&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+					          langtext.innerHTML = &amp;apos;&amp;nbsp;动态新闻&amp;gt;&amp;gt; &amp;nbsp&amp;apos;;
+					        }
+					        else{
+					          document.all(&amp;apos;w_langbar&amp;apos;).style.display=&amp;apos;&amp;apos;;
+					          langtext.innerHTML = &amp;apos;&amp;lt;&amp;lt;&amp;nbsp;&amp;apos;;
+					
+					        }
+					      }
+					      function hideLangBar(){
+					        if (document.all(&amp;apos;w_langbar&amp;apos;).style.display!=&amp;apos;none&amp;apos;){
+					          switchLangBar();
+					        }
+					      }
+					      function showLangBar(){
+					        if (document.all(&amp;apos;w_langbar&amp;apos;).style.display==&amp;apos;none&amp;apos;){
+					          switchLangBar();
+					        }
+					      }
+					      function switchScrollTextBar(){
+					
+					        if (document.all(&amp;apos;w_scrolltextbar&amp;apos;).style.display!=&amp;apos;none&amp;apos;){
+					        
+					          document.all(&amp;apos;w_scrolltextbar&amp;apos;).style.display=&amp;apos;none&amp;apos;;
+					          scrolltext.innerHTML = &amp;apos;&amp;nbsp;动态通知&amp;gt;&amp;gt; &amp;nbsp&amp;apos;;
+					        }
+					        else{
+					       
+					          document.all(&amp;apos;w_scrolltextbar&amp;apos;).style.display=&amp;apos;&amp;apos;;
+					          scrolltext.innerHTML = &amp;apos;&amp;lt;&amp;lt;&amp;nbsp;&amp;apos;;
+					
+					        }
+					      }
+					      function hideScrollTextBar(){
+					        if (document.all(&amp;apos;w_scrolltextbar&amp;apos;).style.display!=&amp;apos;none&amp;apos;){
+					          switchLangBar();
+					        }
+					      }
+					      function showScrollTextBar(){
+					        if (document.all(&amp;apos;w_scrolltextbar&amp;apos;).style.display==&amp;apos;none&amp;apos;){
+					          switchLangBar();
+					        }
+					      }
+					      
+					      function SetToolbar(url){
+					        _toolbar.location=url;
+					      }
+					      
+					      
+					      var curPage = 1; 
+					       // 切换页面的触发事件
+					    function show_right(rnPage,topic){
+					      nPage=rnPage;
+					      document.all(&amp;apos;page&amp;apos;+curPage).background=&amp;apos;xlsgrid/images/xlsgrid/tab.bg.off.grid.gif&amp;apos;;
+					      document.all(&amp;apos;page&amp;apos;+nPage).background=&amp;apos;xlsgrid/images/xlsgrid/tab.bg.on.grid.gif&amp;apos;;
+					    
+
+					      document.all.f1.topic.value=topic;
+					      document.all.f1.row.value=rnPage;
+
+					      f1.submit();
+					     
+					      document.all(&amp;apos;page&amp;apos;+curPage).style.borderBottomStyle =&amp;apos;solid&amp;apos;;
+					      document.all(&amp;apos;page&amp;apos;+nPage).style.borderBottomStyle =&amp;apos;none&amp;apos;;
+					      curPage = nPage;
+					    }	
+					    var G_FIRSTTOPIC = &amp;apos;&amp;quot;+firsttopic +&amp;quot;&amp;apos;;
+					    //修改查询条件的值
+					    function f_chgvalue(paramid, val ) {
+					    	try{document.all(paramid).value = val;}catch ( e ) {alert ( e ) ;}
+					    }	
+					    function f_submit( ){
+					    	 f1.submit();
+
+					    }	
+					    function f_reset()
+					    {
+					    	&amp;quot;+resetstr+&amp;quot;
+					    
+					    }
+//					    var g_chart1 = new FusionCharts(&amp;apos;xlsgrid/images/flash/MSColumn3D.swf&amp;apos;, &amp;apos;ChartId1&amp;apos;, &amp;apos;400&amp;apos;, &amp;apos;300&amp;apos;);
+//					    var g_chart2 = new FusionCharts(&amp;apos;xlsgrid/images/flash/Pie3D.swf&amp;apos;, &amp;apos;ChartId2&amp;apos;, &amp;apos;400&amp;apos;, &amp;apos;300&amp;apos;);
+										   //chart1.setDataURL(&amp;apos;xlsgrid/images/flash/MSColumn3D.xml&amp;apos;);		   
+										
+										   //chart2.setDataURL(&amp;apos;xlsgrid/images/flash/Pie3D.xml&amp;apos;);		   
+										   //chart2.render(&amp;apos;chartdiv2&amp;apos;);
+										
+					    //更新分析图1
+					    var chartxml = &amp;apos;&amp;apos;:
+					    function f_updatechart1(xml){
+					    	    var chart1 = new FusionCharts(&amp;apos;xlsgrid/images/flash/MSColumn3D.swf&amp;apos;, &amp;apos;ChartId1&amp;apos;, &amp;apos;400&amp;apos;, &amp;apos;300&amp;apos;); 
+					            chart1.setDataXML(xml);
+					            
+					            chart1.render(&amp;apos;chartdiv1&amp;apos;);
+					            chartxml  = xml;
+					    }
+					    //更新分析图1
+					    function f_updatechart2(xml){
+					    	    //var chart2 = new FusionCharts(&amp;apos;xlsgrid/images/flash/Pie3D.swf&amp;apos;, &amp;apos;ChartId2&amp;apos;, &amp;apos;400&amp;apos;, &amp;apos;300&amp;apos;); 
+					            //chart2.setDataXML(xml);
+					            //chart2.render(&amp;apos;chartdiv2&amp;apos;);
+					    }
+					    function f_showpath(tip){
+					    	document.all(&amp;apos;pathtip&amp;apos;).innerHTML= tip;
+					    
+					    }
+					    function f_chgchart()
+					    {
+					    	var swf = document.all(&amp;apos;chgchart&amp;apos;).value;
+					    	alert ( swf );
+					    	var chart1 = new FusionCharts(&amp;apos;xlsgrid/images/flash/&amp;apos;+swf+&amp;apos;.swf&amp;apos;, &amp;apos;ChartId1&amp;apos;, &amp;apos;500&amp;apos;, &amp;apos;300&amp;apos;); 
+					            chart1.setDataXML(chartxml  );
+					            
+					            chart1.render(&amp;apos;chartdiv1&amp;apos;);
+					    }
+
+				&amp;lt;/script&amp;gt;
+				&amp;lt;/head&amp;gt; 
+				&amp;lt;body  topmargin=&amp;apos;0&amp;apos; leftmargin=&amp;apos;0&amp;apos; scroll=no onload=&amp;apos;javascript:show_right(1,G_FIRSTTOPIC );&amp;apos;&amp;gt;
+					&amp;lt;table border=&amp;apos;0&amp;apos; width=&amp;apos;100%&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+						&amp;lt;tr&amp;gt;
+							&amp;lt;td id=leftTd width=220 background=xlsgrid/images/tree_bg.jpg&amp;gt;
+			       					 
+			       					 &amp;quot;+lefthtml +&amp;quot;		  
+							&amp;lt;/td&amp;gt;
+			    				&amp;lt;TD  class=navPoint id=LPoint bgColor=#F3FCF6 onclick=switchLBar() style=&amp;apos;border:1px solid #CCCCCC;WIDTH: 3pt;vertical-align: middle;&amp;apos;&amp;gt;
+			      					3
+			    				&amp;lt;/TD&amp;gt;
+							&amp;lt;td&amp;gt;
+								&amp;lt;table border=&amp;apos;0&amp;apos;  width=&amp;apos;100%&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; height=&amp;apos;100%&amp;apos;&amp;gt;
+								&amp;lt;tr height=25&amp;gt;
+								&amp;lt;td bgcolor=&amp;apos;#CEDFF2&amp;apos; background=xlsgrid/images/xlsgrid/tab.bg.grid.png&amp;gt;
+								   &amp;lt;table border=&amp;apos;0&amp;apos;  cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; height=&amp;apos;100%&amp;apos; width=&amp;apos;100%&amp;apos;&amp;gt;
+								   &amp;lt;tr&amp;gt;&amp;quot;+toolbarhtml+&amp;quot;
+							            &amp;lt;/tr&amp;gt;
+								  &amp;lt;/table&amp;gt;
+								&amp;lt;/td&amp;gt;
+								&amp;lt;/tr&amp;gt;
+
+								&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+									&amp;lt;table width=100% height=100% border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; &amp;gt;
+									&amp;lt;tr&amp;gt;&amp;lt;td &amp;gt;
+					        			&amp;lt;IFRAME name=&amp;apos;_right&amp;apos; id=&amp;apos;_right&amp;apos; frameBorder=0 width=&amp;apos;100%&amp;apos; height=&amp;apos;100%&amp;apos; border=&amp;apos;0&amp;apos;
+					        				scrolling=&amp;apos;yes&amp;apos; style=&amp;apos;border: 0px solid #808080&amp;apos; &amp;gt;
+					        			&amp;lt;/IFRAME&amp;gt;	
+					        			&amp;lt;/td&amp;gt;
+					        			&amp;lt;TD  class=navPoint id=RPoint bgColor=#EEEEEE onclick=switchRBar() style=&amp;apos;border-right: 1px solid #CCCCCC; border-left: 1px solid #CCCCCC; WIDTH: 3pt;vertical-align: middle;&amp;apos;&amp;gt;
+						      					4
+						    				&amp;lt;/TD&amp;gt;
+
+					        			&amp;lt;td id=rightTd width=400&amp;gt;
+					        				&amp;lt;table width=100% height=100% border=&amp;apos;0&amp;apos; cellspacing=&amp;apos;0&amp;apos; cellpadding=&amp;apos;0&amp;apos; &amp;gt;
+					        				&amp;lt;tr&amp;gt;&amp;lt;td height=30%&amp;gt;
+					        				&amp;lt;p align=center&amp;gt;选择分析图类型&amp;lt;/p&amp;gt;
+					        				&amp;lt;p align=center&amp;gt;&amp;lt;select id=chgchart size=&amp;apos;1&amp;apos; name=&amp;apos;chgchart&amp;apos; onchange=&amp;apos;f_chgchart();&amp;apos; style=&amp;apos;border: 1px solid #808080&amp;apos;&amp;gt;
+					        				&amp;lt;option value=&amp;apos;Pie&amp;apos;&amp;gt;饼图&amp;lt;/option&amp;gt;
+					        				&amp;lt;/select&amp;gt;
+					        				&amp;lt;/p&amp;gt;
+					        				&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+
+					        				&amp;lt;tr&amp;gt;&amp;lt;td height=70% valign=top&amp;gt;
+
+					        				&amp;lt;div id=&amp;apos;chartdiv1&amp;apos; align=&amp;apos;center&amp;apos;&amp;gt; 对比图 &amp;lt;/div&amp;gt;
+								      		
+										&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+										
+					        			&amp;lt;/td&amp;gt;
+				        			
+				        			&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+
+				        			&amp;lt;/table&amp;gt;		  
+							&amp;lt;/td&amp;gt;
+						&amp;lt;/tr&amp;gt;
+					&amp;lt;/table&amp;gt;
+				&amp;lt;/body&amp;gt;
+			&amp;lt;/html&amp;gt;
+	&amp;quot;;
+
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

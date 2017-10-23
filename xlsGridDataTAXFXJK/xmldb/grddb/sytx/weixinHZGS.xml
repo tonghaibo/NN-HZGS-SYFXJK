@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >weixinHZGS</MWID><NAME >贺州国税微信</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >weixinHZGS.zxg</FILE><SCENE ></SCENE><FIXED >1,0</FIXED><CATTYP >微信</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var _token = &amp;quot;&amp;quot;;
+var _appid = &amp;quot;&amp;quot;;
+var _appsecret = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_token = token;
+	_appid = appid;
+	_appsecret = appsecret;
+	
+	var ret = invokeOSFunc(&amp;quot;getUserInfo&amp;quot;,&amp;quot;token=&amp;quot;+_token+&amp;quot;&amp;appid=&amp;quot;+_appid+&amp;quot;&amp;secret=&amp;quot;+_appsecret);
+	_this.SetMainCellRange(sheet,1,0,9,9);
+	_this.SetXmlDS(sheet,1,0,9,9,ret);
+	
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	
+	setTimeout(setHeadImage,1000);
+	
+}
+
+function setHeadImage(sheet)
+{
+	for (var r=1;r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+		var url = _this.GetCellText(sheet,r,2);
+		var sex = _this.GetCellText(sheet,r,4);
+		sex = sex==&amp;quot;1&amp;quot;?&amp;quot;男&amp;quot;:&amp;quot;女&amp;quot;;
+		var img = _this.LoadImage(url);
+		_this.SetToImage(&amp;quot;&amp;quot;,sheet,r,2,img);
+		_this.SetCellShowText(sheet,r,4,sex);
+	}
+	_this.SetRedraw(1);
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var resp = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin.message.resp&amp;quot;);
+var weixin = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin&amp;quot;);
+
+/**
+ * 微信的接口消息响应处理中间件
+ * @author Harry
+ * @date 2013-10-11
+*/
+
+
+//响应微信服务器的业务逻辑处理方法
+//function doPost()
+function coreService(request,response)
+{
+	//防止中文乱码
+	response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+	
+	var respMessage = null;
+	var textMessage = null;
+	var db = null;
+	
+	try {
+		// xml请求解析
+		var requestMap = weixin.MessageUtil.parseXml(request);	
+		// 发送方帐号（open_id）
+		var fromUserName = requestMap.get(&amp;quot;FromUserName&amp;quot;);
+		// 公众帐号
+		var toUserName = requestMap.get(&amp;quot;ToUserName&amp;quot;);
+		// 消息类型
+		var msgType = requestMap.get(&amp;quot;MsgType&amp;quot;);
+		// 文本消息内容
+		var content = requestMap.get(&amp;quot;Content&amp;quot;);
+		
+		request.getSession().setAttribute(&amp;quot;WEIXIN_FROMUSERNAME&amp;quot;,fromUserName);
+
+		// 回复文本消息
+		textMessage = new resp.TextMessage();
+		textMessage.setToUserName(fromUserName);
+		textMessage.setFromUserName(toUserName);
+		var dt = new java.util.Date();
+		textMessage.setCreateTime(dt.getTime());
+		textMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+		textMessage.setFuncFlag(0);
+		
+		// 创建图文消息  
+		var newsMessage = new resp.NewsMessage();  
+		newsMessage.setToUserName(fromUserName);  
+		newsMessage.setFromUserName(toUserName);  
+		newsMessage.setCreateTime(dt.getTime());  
+		newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+		newsMessage.setFuncFlag(0);  
+		
+		if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_EVENT)) {
+			// 事件类型
+			var eventType = requestMap.get(&amp;quot;Event&amp;quot;);
+			// 订阅
+			if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
+				textMessage.setContent(&amp;quot;您好！感谢关注贺州国税官方微信，这里为您提供相关的在线服务。&amp;quot;);
+				respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+				return respMessage;
+			}
+			// 取消订阅
+			else if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
+				// TODO 取消订阅后用户再收不到公众号发送的消息，因此不需要回复消息
+			}
+			// 自定义菜单点击事件
+			else if (eventType.equals(weixin.MessageUtil.EVENT_TYPE_CLICK)) {             
+
+				// 事件KEY值，与创建自定义菜单时指定的KEY值对应  
+		                var eventKey = requestMap.get(&amp;quot;EventKey&amp;quot;);  
+		  		// 通知公告
+		                if (eventKey.equals(&amp;quot;11&amp;quot;)) {  
+					//textMessage.setContent(&amp;quot;通知公告菜单项被点击！&amp;quot;);
+					return notifyMessage(respMessage,newsMessage);
+				} 
+				// 热点咨询
+				else if (eventKey.equals(&amp;quot;12&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;热点咨询，请回复标题前的数字编号查看详情。\n&amp;quot;
+					+&amp;quot;【01】无营业执照的纳税人是否需要办理税务登记？\n&amp;quot;
+					+&amp;quot;【02】遗失税务登记证件怎么办？\n&amp;quot;
+					+&amp;quot;【03】办理税务登记证的单位和个人怎样办理发票领购簿？\n&amp;quot;
+					+&amp;quot;【04】取得发票领购簿的单位和个人怎样购买发票？\n&amp;quot;
+					+&amp;quot;【05】个体工商户没达到增值税起征点，可以领购发票吗？\n&amp;quot;
+					+&amp;quot;【06】目前，纳税人可以采用哪些电子申报方式办理纳税申报？\n&amp;quot;
+					+&amp;quot;【07】如何开通网上申报？\n&amp;quot;);
+				} 
+				// 办税指南
+				else if (eventKey.equals(&amp;quot;21&amp;quot;)) {  
+					//textMessage.setContent(&amp;quot;办税指南菜单项被点击！&amp;quot;);
+					return doTaxGuide(respMessage,newsMessage);
+				} 
+				// 办税地图 
+				else if (eventKey.equals(&amp;quot;22&amp;quot;)) {  //行程计划-签到
+					textMessage.setContent(&amp;quot;想找办税厅地址？请点击对话框下方的“+”发送你的“位置”，我会帮您找到的。&amp;quot;);
+					
+				} 
+				// 投诉建议
+				else if (eventKey.equals(&amp;quot;23&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;投诉建议菜单项被点击！&amp;quot;);
+				} 
+				// 发票真伪查询
+				else if (eventKey.equals(&amp;quot;31&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;发票真伪查询菜单项被点击！&amp;quot;);  
+				} 
+				// 车辆购置税信息查询
+				else if (eventKey.equals(&amp;quot;32&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;车辆购置税信息查询菜单项被点击！&amp;quot;);  
+				} 
+				// 购买发票预约
+				else if (eventKey.equals(&amp;quot;33&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;购买发票预约&amp;quot;);  
+				}
+				// 大厅排队情况
+				else if (eventKey.equals(&amp;quot;34&amp;quot;)) {  
+					textMessage.setContent(&amp;quot;【查询时间：2014-04-14 09:23】\n办税服务厅当前等待人数 5 人，请稍候...&amp;quot;);  
+				}
+				
+  				respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+				return respMessage;
+			}
+		}
+		// 发送地理位置信息
+		else if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_LOCATION)) { 
+			var lx = requestMap.get(&amp;quot;Location_X&amp;quot;);
+			var ly = requestMap.get(&amp;quot;Location_Y&amp;quot;);
+			var lb = requestMap.get(&amp;quot;Label&amp;quot;);
+
+//			textMessage.setContent(&amp;quot;你发来了地理位置信息！[&amp;quot;+lx+&amp;quot;,&amp;quot;+ly+&amp;quot;]&amp;quot;+lb);
+//			respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+//			return respMessage;
+			
+			// 创建图文消息  
+	                var newsMessage = new resp.NewsMessage();  
+	                newsMessage.setToUserName(fromUserName);  
+	                newsMessage.setFromUserName(toUserName);  
+	                newsMessage.setCreateTime(dt.getTime());  
+	                newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+	                newsMessage.setFuncFlag(0);  
+
+			var articleList = new java.util.ArrayList(); 
+			var article = new resp.Article();  
+                    	article.setTitle(&amp;quot;办税服务厅地图&amp;quot;);  
+                    	article.setDescription(lb);  
+                    	article.setPicUrl(&amp;quot;http://hz.gxgs.gov.cn/picture/0/130106092532484.gif&amp;quot;);  
+                    	article.setUrl(&amp;quot;http://www.xlsgrid.net/xlsgrid/ROOT_0/hztaxMap.sp?usrid=xlsgrid&amp;userpwd=0&amp;lx=&amp;quot;+lx+&amp;quot;&amp;ly=&amp;quot;+ly+&amp;quot;&amp;lb=&amp;quot;+java.net.URLEncoder.encode(lb,&amp;quot;gbk&amp;quot;));  
+                    	articleList.add(article);  
+                    	// 设置图文消息个数  
+                    	newsMessage.setArticleCount(articleList.size());  
+                    	// 设置图文消息包含的图文集合  
+                    	newsMessage.setArticles(articleList);  
+                   	// 将图文消息对象转换成xml字符串  
+                   	respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage); 
+			return respMessage;
+
+		}
+		
+	}
+	catch (Exception e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+	textMessage.setContent(&amp;quot;非常抱歉，我正在成长过程中，您的问题可能已经超出了我的知识范围，请多多关照，Thank you！&amp;quot;);
+	respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+	return respMessage;
+	
+}
+
+
+//取得TOKEN
+function getToken(appid,secret)
+{
+	var url=&amp;quot;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=&amp;quot;+appid+&amp;quot;&amp;secret=&amp;quot;+secret;
+	var httpcall = new webget.HttpCall();
+	var token = httpcall.Get(url,&amp;quot;UTF-8&amp;quot;);	
+	var jsobj = json.JSONObject.fromObject(token); 
+	token = jsobj.getString(&amp;quot;access_token&amp;quot;);
+	return token;
+}
+
+//获取关注用户信息
+function getUserInfo()
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var token = getToken(appid,secret);	
+	var url = &amp;quot;https://api.weixin.qq.com/cgi-bin/user/get?access_token=&amp;quot;+token;
+	var httpcall = new webget.HttpCall();
+	var userInfos = httpcall.Get(url,&amp;quot;UTF-8&amp;quot;);
+	//return userInfos;
+	var jsobj = json.JSONObject.fromObject(userInfos); 
+	var total = jsobj.getString(&amp;quot;total&amp;quot;);
+	var count = jsobj.getString(&amp;quot;count&amp;quot;);
+	var data = jsobj.getString(&amp;quot;data&amp;quot;);
+	//return data;
+	jsobj = json.JSONObject.fromObject(data);
+	//return jsobj.getString(&amp;quot;openid&amp;quot;);
+	var arr = jsobj.getJSONArray(&amp;quot;openid&amp;quot;);
+	for (var i=0;i&amp;lt;arr.size();i++) {
+		var openid = arr.getString(i);
+		url = &amp;quot;https://api.weixin.qq.com/cgi-bin/user/info?access_token=&amp;quot;+token+&amp;quot;&amp;openid=&amp;quot;+openid+&amp;quot;&amp;lang=zh_CN&amp;quot;;
+		var infos = httpcall.Get(url,&amp;quot;UTF-8&amp;quot;);
+		var jsoinfo = json.JSONObject.fromObject(infos);
+		var nickname = jsoinfo.getString(&amp;quot;nickname&amp;quot;); 			//昵称
+		var sex = jsoinfo.getString(&amp;quot;sex&amp;quot;);				//性别
+		var city = jsoinfo.getString(&amp;quot;city&amp;quot;);				//所在城市
+		var country = jsoinfo.getString(&amp;quot;country&amp;quot;);			//所在国家
+		var province = jsoinfo.getString(&amp;quot;province&amp;quot;);			//所在省份
+		var language = jsoinfo.getString(&amp;quot;language&amp;quot;);			//用户的语言
+		var headimgurl = jsoinfo.getString(&amp;quot;headimgurl&amp;quot;);		//用户头像
+		var subscribe_time = jsoinfo.getString(&amp;quot;subscribe_time&amp;quot;);	//关注时间
+		var dateFormat = new java.text.SimpleDateFormat(&amp;quot;yyyy-MM-dd&amp;quot;);  
+		var date = new java.util.Date();
+		date.setTime(java.lang.Long.parseLong(subscribe_time)*1000);
+		subscribe_time = dateFormat.format(date);
+       
+		
+		xmlstr += &amp;quot;&amp;lt;ROW num=&amp;apos;&amp;quot;+(i+1)+&amp;quot;&amp;apos;&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;序号&amp;gt;&amp;quot;+(i+1)+&amp;quot;&amp;lt;/序号&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;用户标识&amp;gt;&amp;quot;+openid+&amp;quot;&amp;lt;/用户标识&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;用户头像&amp;gt;&amp;quot;+headimgurl+&amp;quot;&amp;lt;/用户头像&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;昵称&amp;gt;&amp;quot;+nickname+&amp;quot;&amp;lt;/昵称&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;性别&amp;gt;&amp;quot;+sex+&amp;quot;&amp;lt;/性别&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;所在城市&amp;gt;&amp;quot;+city+&amp;quot;&amp;lt;/所在城市&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;所在国家&amp;gt;&amp;quot;+country+&amp;quot;&amp;lt;/所在国家&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;所在省份&amp;gt;&amp;quot;+province+&amp;quot;&amp;lt;/所在省份&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;用户的语言&amp;gt;&amp;quot;+language+&amp;quot;&amp;lt;/用户的语言&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;\t&amp;lt;关注时间&amp;gt;&amp;quot;+subscribe_time+&amp;quot;&amp;lt;/关注时间&amp;gt;\n&amp;quot;;
+		xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+	}
+	
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}
+
+// 通知公告
+function notifyMessage(respMessage,newsMessage)
+{  
+	var articleList = new java.util.ArrayList();  
+	
+	var article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;国家税务总局关于实施《税收票证管理办法》若干问题的公告&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://img1.cache.netease.com/catchpic/F/F3/F3FFD07F25948BCED092492CD782BCB0.jpg&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2013/12/24/art_102131_242057.html&amp;quot;);  
+	articleList.add(article1);
+	
+	article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;税收票证管理办法&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://www.html5cn.org/data/attachment/portal/201404/03/132634u44dyw6yw44hduch.png&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2013/12/24/art_102131_242055.html&amp;quot;);  
+	articleList.add(article1);
+	
+	article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;贺州市国家税务局关于印发《贺州市国家税务局税务行政审批保留事项操作规范》和《贺州市国家税务局税务行政审批下放事项操作规范》的通知&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://www.html5cn.org/data/attachment/portal/201404/03/132634u44dyw6yw44hduch.png&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2012/9/17/art_102131_176380.html&amp;quot;);  
+	articleList.add(article1);
+
+	newsMessage.setArticleCount(articleList.size());  
+	newsMessage.setArticles(articleList);  
+	respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage); 
+
+	return respMessage;            
+}
+
+// 办税指南
+function doTaxGuide(respMessage,newsMessage)
+{
+	var articleList = new java.util.ArrayList();  
+	
+	var article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;办税指南&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://img1.cache.netease.com/catchpic/8/81/81C43116A06DEC6ADF38DB0C9A022548.jpg&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2013/12/24/art_102131_242057.html&amp;quot;);  
+	articleList.add(article1);
+	
+	article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;税务登记&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://www.html5cn.org/data/attachment/portal/201404/03/132634u44dyw6yw44hduch.png&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2013/12/24/art_102131_242055.html&amp;quot;);  
+	articleList.add(article1);
+	
+	article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;申报征收&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://www.html5cn.org/data/attachment/portal/201404/03/132634u44dyw6yw44hduch.png&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2012/9/17/art_102131_176380.html&amp;quot;);  
+	articleList.add(article1);
+
+	article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;核准认定&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://www.html5cn.org/data/attachment/portal/201404/03/132634u44dyw6yw44hduch.png&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2012/9/17/art_102131_176380.html&amp;quot;);  
+	articleList.add(article1);
+
+	article1 = new resp.Article();  
+	article1.setTitle(&amp;quot;税收优惠&amp;quot;);  
+	article1.setDescription(&amp;quot;&amp;quot;);  
+	// 将图片置为空  
+	article1.setPicUrl(&amp;quot;http://www.html5cn.org/data/attachment/portal/201404/03/132634u44dyw6yw44hduch.png&amp;quot;);  
+	article1.setUrl(&amp;quot;http://hz.gxgs.gov.cn/art/2012/9/17/art_102131_176380.html&amp;quot;);  
+	articleList.add(article1);
+
+	newsMessage.setArticleCount(articleList.size());  
+	newsMessage.setArticles(articleList);  
+	respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage); 
+
+	return respMessage;            
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

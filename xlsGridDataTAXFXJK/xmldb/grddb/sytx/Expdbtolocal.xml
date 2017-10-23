@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>Expdbtolocal</MWID><NAME>导出数据库到本地</NAME><NOTE></NOTE><NOACCNAME></NOACCNAME><FILE>Expdbtolocal.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><MANUNIT></MANUNIT><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>Start</ID><NAME>开始导出</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>
+//undefined
+function Start()
+{
+	var sheet = 0 ;
+	
+	//建立一个参数对象
+	var param = new Object();
+	//添加一个参数,参数名=xmlstr ,参数值=_this.GetText(&amp;quot;tree_1&amp;quot;)的结果
+	param.xml = _this.GetXml(sheet,_this.GetMainCellRangeRow1(sheet),_this.GetMainCellRangeCol1(sheet),
+		_this.GetMainCellRangeRow2(sheet),_this.GetMainCellRangeCol2(sheet) ) 
+	param.dat = _this.GetCellText(0,1,2);
+	param.fileurl = _this.GetCellText(0,1,4);
+	if ( param.dat== &amp;quot;&amp;quot; ) { alert ( &amp;quot;提示，您的日期没有选择&amp;quot; ); return ; }
+	try {
+		var ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		if ( ret.length &amp;gt; 0 ) 
+			window.open( &amp;quot;downloadFile.sp?filename=&amp;quot;+ret );
+
+	}
+	catch (e) {
+		alert ( e );
+	}
+  
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetMainCellRange(0,3,1,_this.GetRowCount(0)-2, _this.GetColCount(0)-2 );
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX);	   
+	_this.SetColName(0,1,&amp;quot;TABLENAME&amp;quot;);
+	_this.SetColName(0,3,&amp;quot;WHERE&amp;quot;);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,0,1,2,&amp;quot;&amp;quot;);
+	//alert ( &amp;quot;abc&amp;quot; );	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+
+// JS传入的参数（yymm）可以直接使用
+function save()
+{
+      var db = null;
+      var ds = null;
+      var msg= &amp;quot;&amp;quot;;
+      try {
+            	db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		ds = new pubpack.EAXmlDS(xml);
+		
+		for ( var i=0;i&amp;lt;ds.getRowCount();i++){
+			var selflg = ds.getStringAt(i,&amp;quot;SELECTFLAG&amp;quot; );
+			if ( selflg == &amp;quot;1&amp;quot; ) {
+				var table_name = ds.getStringAt(i,&amp;quot;TABLENAME&amp;quot; );
+				var where = ds.getStringAt(i,&amp;quot;WHERE&amp;quot; );
+				if ( where.length() &amp;gt; 0 ) {
+					where = pubpack.EAFunc.Replace(where,&amp;quot;[%DAT]&amp;quot;,dat );
+				}
+				var colds = db.QuerySQL(&amp;quot;select COLUMN_NAME,DATA_TYPE from USER_TAB_COLUMNS where table_name=UPPER(&amp;apos;&amp;quot;+table_name+&amp;quot;&amp;apos;)&amp;quot; ); 
+				var collist= &amp;quot;&amp;quot;;
+				var colheadlist = &amp;quot;&amp;quot;;
+				for ( var j=0;j&amp;lt;colds .getRowCount();j++){
+					var colnam=colds.getStringAt(j,&amp;quot;COLUMN_NAME&amp;quot;);
+					var dattyp=colds.getStringAt(j,&amp;quot;DATA_TYPE&amp;quot;);
+					if ( j&amp;gt;0) colheadlist += &amp;quot;,&amp;quot;;
+					colheadlist +=colnam;
+					if ( j&amp;gt;0) collist+= &amp;quot;||&amp;apos;,&amp;apos;||&amp;quot;;
+					if ( dattyp== &amp;quot;DATE&amp;quot; ) 
+						collist+=&amp;quot;DECODE(&amp;quot;+colnam+&amp;quot;,NULL,&amp;apos;&amp;apos;,&amp;apos;TO_DATE(&amp;apos;&amp;apos;&amp;apos;||&amp;quot;+&amp;quot;to_char(&amp;quot;+colnam+&amp;quot;,&amp;apos;YYYY-MM-DD hh24:mi:ss&amp;apos;)&amp;quot;+&amp;quot;||&amp;apos;&amp;apos;&amp;apos;,&amp;apos;&amp;apos;YYYY-MM-DD hh24:mi:ss&amp;apos;&amp;apos;)&amp;apos;)&amp;quot;;
+					else collist+=&amp;quot;&amp;apos;&amp;apos;&amp;apos;&amp;apos;||&amp;quot;+colnam+&amp;quot;||&amp;apos;&amp;apos;&amp;apos;&amp;apos;&amp;quot;;
+				}
+				msg += &amp;quot;delete from &amp;quot;+table_name ;
+				if ( where.length() &amp;gt; 0 ) {
+					msg += &amp;quot; WHERE &amp;quot; + where;
+				}	
+				msg += &amp;quot;\r&amp;quot;;			
+				msg += &amp;quot;insert into &amp;quot;+table_name +&amp;quot;(&amp;quot;+colheadlist +&amp;quot;) \r&amp;quot;;
+				var sql = &amp;quot;SELECT &amp;quot;+collist+&amp;quot; str FROM &amp;quot;+table_name ;
+				if ( where.length() &amp;gt; 0 ) {
+					sql += &amp;quot; WHERE &amp;quot; + where;
+				}
+				var datds = db.QuerySQL(sql);
+				for ( var k = 0 ;k&amp;lt;datds.getRowCount();k++){
+					msg += datds.getStringAt( k,&amp;quot;str&amp;quot; )+&amp;quot;\n\r&amp;quot;;
+				}
+			}			
+		}
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      //var usrinfo = web.EASession.GetLoginInfo(request);
+      //var homeurl = usrinfo.getHomeURL();
+      if ( fileurl  == &amp;quot;&amp;quot; ) 
+      	fileurl = &amp;quot;/tmp/&amp;quot;+dat+&amp;quot;.bak&amp;quot;;
+
+      pubpack.EAFunc.WriteToFileEx(fileurl,msg,false);
+      return fileurl ;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

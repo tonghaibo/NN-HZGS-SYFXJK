@@ -1,0 +1,346 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CHART007</MWID><NAME >矿产品分析</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHART007.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >经济税收分析</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >filter</ID><NAME >统计条件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >lastYear</C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var cur_yyyy = G_LOGDAT.substring(0,4);
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	var ym1 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-01&amp;quot;;
+	//var ym2 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-12&amp;quot;;	
+	var ym2 = G_LOGDAT.substring(0,7);
+	loadData(ym1,ym2);
+
+
+}
+
+
+//加载电力数据
+function loadData(ym1,ym2)
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedCol(0,0);
+	_this.SetFixedRow(0,3);
+	
+	var title = ym1.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;年&amp;quot; + ym1.split(&amp;quot;-&amp;quot;)[1] + &amp;quot;月至&amp;quot; + ym2.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;年&amp;quot; + ym2.split(&amp;quot;-&amp;quot;)[1] + &amp;quot;月&amp;quot;;
+	_this.SetCellText(0,0,0,_this.GetCellText(0,0,0)+&amp;quot;（&amp;quot;+title+&amp;quot;）&amp;quot;);
+	$(&amp;apos;#container&amp;apos;).html(&amp;quot;&amp;lt;div style=\&amp;quot;text-align:center;heigth=100%\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;正在生成，请稍候...&amp;lt;/div&amp;gt;&amp;quot;);
+	
+	//加载数据
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+	_this.SetMainCellRange(0,3,0,4,5);
+	_this.SetXmlDS(0,3,0,4,5,xml);	
+	_this.RefreshFormula();
+	_this.AutoFixScreenWidth();
+		
+	setChart(ym1,ym2);
+	
+}
+
+//生成分析图
+function setChart(ym1,ym2) 
+{
+	var yymmlist = getData(0);
+	var yldata = getData(1);
+	var yddata = getData(2);
+	var yydata = getData(3);
+	var xsdata = getData(4);
+	var sbdata = getData(5);
+
+	$(&amp;apos;#container&amp;apos;).highcharts({
+		        chart: {
+		            zoomType: &amp;apos;xy&amp;apos;
+		        },
+		        title: {
+		            text:&amp;apos;矿产品分析（&amp;apos;+ym1.split(&amp;quot;-&amp;quot;)[0]+&amp;apos;年&amp;apos;+ym1.split(&amp;quot;-&amp;quot;)[1]+&amp;apos;月至&amp;apos;+ym2.split(&amp;quot;-&amp;quot;)[0]+&amp;apos;年&amp;apos;+ym2.split(&amp;quot;-&amp;quot;)[1]+&amp;apos;月）&amp;apos;
+		        },
+		        subtitle: {
+		            text: &amp;apos;&amp;apos;
+		        },
+		        xAxis: [{
+		            categories: yymmlist,
+		            crosshair: true
+		        }],
+		        yAxis: [{
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        },
+		        {
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        },
+		        {
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        },
+		        {
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        },{
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        }],
+		        tooltip: {		            
+		            /*headerFormat:&amp;apos;&amp;lt;span style=&amp;quot;font-size:10px&amp;quot;&amp;gt;{point.key}&amp;lt;/span&amp;gt;&amp;lt;table&amp;gt;&amp;apos;,
+		            pointFormat:&amp;apos;&amp;lt;tr&amp;gt;&amp;lt;td style=&amp;quot;color:{series.color};padding:0&amp;quot;&amp;gt;{series.name}&amp;lt;/td&amp;gt;&amp;apos;
+		            	+ &amp;apos;&amp;lt;td style=&amp;quot;padding:0&amp;quot;&amp;gt;&amp;lt;b&amp;gt;{point.y}&amp;lt;/b&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;apos;,
+		            footerFormat:&amp;apos;&amp;apos;,
+		            useHTML:true,*/
+		            shared: true
+		        },
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.1,
+		                borderWidth: 0
+		            }
+		        },		
+		        series: [{
+		            name: &amp;apos;申报&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+		            yAxis: 0,
+		            data: sbdata
+		        }, {
+		            name: &amp;apos;用料&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+			    yAxis: 1,
+		            data: yldata,
+			    dataLabels: {
+			       enabled: false,
+		               align: &amp;apos;center&amp;apos;
+			    }
+		        },{
+		            name: &amp;apos;用油&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+			    yAxis: 2,
+		            data: yydata,
+			    dataLabels: {
+			       enabled: false,
+		               align: &amp;apos;center&amp;apos;
+			    }
+		        },{
+		            name: &amp;apos;销售&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+			    yAxis: 3,
+		            data: xsdata,
+			    dataLabels: {
+			       enabled: false,
+		               align: &amp;apos;center&amp;apos;
+			    }
+		        },{
+		            name: &amp;apos;用电&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+			    yAxis: 4,
+		            data: yddata,
+			    dataLabels: {
+			       enabled: false,
+		               align: &amp;apos;center&amp;apos;
+			    }
+		        }],
+			exporting: {
+		                enabled: true
+		        }	
+		    });
+
+}
+
+//上月数据,本月数据,上年同期数据
+function getData(col)
+{
+	var data = new Array();
+	for(var i = _this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++) {
+		var val = 1*_this.GetCellText(0,i,col);
+		if (val == &amp;quot;&amp;quot;) val = 0;
+		data.push(val);
+	}
+	return data;
+}
+
+
+function filter()
+{
+	var ym1 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-01&amp;quot;;
+	var ym2 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-12&amp;quot;;
+	var ret = window.showModalDialog(&amp;quot;show.sp?grdid=SELECTYM12&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:300px;dialogHeight:220px&amp;quot;);
+	if (ret != &amp;quot;&amp;quot; &amp;&amp; ret != undefined) {	
+		ym1 = ret.split(&amp;quot;,&amp;quot;)[0];
+		ym2 = ret.split(&amp;quot;,&amp;quot;)[1];
+		loadData(ym1,ym2);
+
+	}
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts-3d.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	//sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/exporting.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+
+	//窗口上下分割，上面显示图表，下面显示中间件数据
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;50%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;quot;); //上面窗口高度占的比例
+	sb.append(&amp;quot;&amp;lt;td width=100% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top; id=&amp;apos;td_chart&amp;apos;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;div id=&amp;apos;container&amp;apos; style=\&amp;quot;height=100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);	
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select replace(id,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;) mm,
+  round(zlhj,2) yl,       /*吨*/
+  round(eleqty/10000) yd,      /*万度*/
+  round(yyje/10000,2) yyje,     /*万元*/ 
+  round(somny/10000,2) xxje, /*万元*/
+  round(taxmny/10000,2) sbje   /*万元*/
+from v_yyyy_mm ym, ( 
+--用料  
+select a.yymm,sum(a.zlhj) zlhj
+from tax_stonedata a,DJ_DJHGLGL b 
+where a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+  and a.djxh=b.djxh 
+group by yymm
+) yl, (
+--用电
+select a.yymm,sum(eleqty) eleqty 
+from tax_eledata a,tax_cmpammno b,DJ_DJHGLGL c
+where a.usrid=b.ammno
+  and b.djxh=to_char(c.djxh)
+  and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+group by a.yymm
+) yd, (
+--用油
+select to_char(to_date(kpyf,&amp;apos;yyyymm&amp;apos;),&amp;apos;yyyy-mm&amp;apos;) yymm,sum(yyje) yyje 
+from (
+  select b.kpyf,sum(nvl(b.je,0)) yyje
+  from DZDZ_FPXX_PTFP a,DZDZ_HWXX_PTFP b
+  where a.fpdm=b.fpdm and a.fphm=b.fphm
+    and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and a.xfsbh in ( /*销方是石油制品批发行业的*/
+      select id nsrsbh from tax_company a,DJ_DJHGLGL b
+      where hy_dm=&amp;apos;5162&amp;apos; and a.djxh=b.djxh
+      union 
+      select nvl(shxydm,nsrsbh) nsrsbh from dj_nsrxx a,DJ_DJHGLGL b 
+      where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        and a.djxh=b.djxh
+      )
+  group by b.kpyf
+
+  union all
+
+  select b.kpyf,sum(nvl(b.je,0)) je
+  from DZDZ_FPXX_ZZSFP a,DZDZ_HWXX_ZZSFP b
+  where a.fpdm=b.fpdm and a.fphm=b.fphm
+    and a.kpyf&amp;gt;=replace(&amp;apos;[%YM1]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and a.kpyf&amp;lt;=replace(&amp;apos;[%YM2]&amp;apos;,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)
+    and a.xfsbh in ( /*销方是石油制品批发行业的*/
+      select nsrsbh from dj_nsrxx a,DJ_DJHGLGL b where hy_dm=&amp;apos;5162&amp;apos; and a.djxh=b.djxh
+      union 
+      select shxydm from dj_nsrxx a,DJ_DJHGLGL b where hy_dm=&amp;apos;5162&amp;apos; and shxydm is not null
+        and a.djxh=b.djxh
+      )
+  group by b.kpyf
+) group by kpyf
+) yy, (
+--申报
+select yymm,sum(somny) somny,sum(taxmny) taxmny 
+from tax_taxdata a,DJ_DJHGLGL b
+where a.djxh=b.djxh
+  and a.yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and a.yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos; 
+group by yymm
+) sb
+where ym.id=yl.yymm(+)
+  and ym.id=yd.yymm(+)
+  and ym.id=yy.yymm(+)
+  and ym.id=sb.yymm(+)
+  and ym.id&amp;gt;=&amp;apos;[%YM1]&amp;apos; and ym.id&amp;lt;=&amp;apos;[%YM2]&amp;apos; 
+order by ym.id</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >MAIN</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

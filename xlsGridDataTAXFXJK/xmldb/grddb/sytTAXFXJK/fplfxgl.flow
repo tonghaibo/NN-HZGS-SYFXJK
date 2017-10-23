@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1" background="xlsgrid/images/xmidwarebk.jpg">
+ <rect id="rect_2611" x="48" y="128" width="56" height="28" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >事前监控</rect>
+ <polygon id="trapezoid_2612" points="31,32 53,95 98,95 122,32 31,32" changeto="trapezoid" stroke="#000000" fill="#BBE0E3" fillto="" opacity="1" stroke-dash="1" stroke-dash="1" >实名办税指纹
+采集系统</polygon>
+ <polygon  id="polygon_2613" points="204,32 226,95 271,95 295,32 204,32 204,32" changeto="trapezoid" stroke="#000000" fill="#BBE0E3" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">金税三期
+业务系统</polygon>
+ <connector id="connector_208_2614" from="trapezoid_2612" to="rect_2611" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_2615" from="trapezoid_2612" to="polygon_2613" fromcp="32" tocp="12" type="208"   stroke-dash="3">
+ </connector>
+ <polygon  id="polygon_2616" points="380,32 402,95 447,95 471,32 380,32 380,32 380,32" changeto="trapezoid" stroke="#000000" fill="#BBE0E3" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">发票类风险
+特殊库</polygon>
+ <connector id="connector_208_2617" from="polygon_2613" to="polygon_2616" fromcp="32" tocp="12" type="208"   stroke-dash="3">
+ </connector>
+ <rect  id="rect_2618" x="221" y="128" width="56" height="28" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">事中监控</rect>
+ <rect  id="rect_2619" x="397" y="128" width="56" height="28" round="" stroke="#000000" fill="#FFFFCC" fillto="" opacity="1" stroke-dash="1" stroke-dash="1">事后监控</rect>
+ <connector id="connector_208_2620" from="polygon_2613" to="rect_2618" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_2621" from="polygon_2616" to="rect_2619" fromcp="23" tocp="21" type="208"  >
+ </connector>
+</svg>

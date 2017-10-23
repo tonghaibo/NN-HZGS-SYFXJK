@@ -1,0 +1,408 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CHART001</MWID><NAME >GDP与税收收入分析比对</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHART001.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >经济税收分析</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >genData</ID><NAME >生成统计数据</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >lastYear</C10><C11 ></C11><C12 >genData</C12></ROW>
+<ROW num="1" ><ID >filter</ID><NAME >统计条件</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 >GRDBTNDS_1</C12></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+var ym1 = &amp;quot;&amp;quot;;
+var ym2 = &amp;quot;&amp;quot;;
+	
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.AutoFixScreenWidth();
+	
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	ym1 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-01&amp;quot;;
+	ym2 =  G_LOGDAT.substring(0,7);	
+	loadData(ym1,ym2);
+
+}
+
+
+//加载电力数据
+function loadData(ym1,ym2)
+{
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetFixedCol(0,0);
+	_this.SetFixedRow(0,3);
+	
+	var title = ym1.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;年&amp;quot; + ym1.split(&amp;quot;-&amp;quot;)[1] + &amp;quot;月至&amp;quot; + ym2.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;年&amp;quot; + ym2.split(&amp;quot;-&amp;quot;)[1] + &amp;quot;月&amp;quot;;
+	_this.SetCellText(0,0,0,_this.GetCellText(0,0,0)+&amp;quot;（&amp;quot;+title+&amp;quot;）&amp;quot;);
+	$(&amp;apos;#chart1&amp;apos;).html(&amp;quot;&amp;lt;div style=\&amp;quot;text-align:center;heigth=100%\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;正在生成，请稍候...&amp;lt;/div&amp;gt;&amp;quot;);
+	$(&amp;apos;#chart2&amp;apos;).html(&amp;quot;&amp;lt;div style=\&amp;quot;text-align:center;heigth=100%\&amp;quot;&amp;gt;&amp;lt;br&amp;gt;&amp;lt;br&amp;gt;正在生成，请稍候...&amp;lt;/div&amp;gt;&amp;quot;);
+	
+	//加载数据
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+	_this.SetMainCellRange(0,3,0,4,3);
+	_this.SetXmlDS(0,3,0,4,3,xml);	
+	_this.RefreshFormula();
+	_this.AutoFixScreenWidth();
+	
+	//计算比例
+	var sumje = _this.GetCellText(0,_this.GetMainCellRangeRow2(0)+1,1);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var sjje = 1.0 * _this.GetCellText(0,r,1);
+		_this.SetCellText(0,r,2,(sjje/sumje*100).toFixed(2));
+	}
+		
+	setChart(ym1,ym2);
+	
+}
+
+//生成分析图
+function setChart(ym1,ym2) 
+{
+
+	var bldata = getBLData();
+	
+	var hylist = getData(0);
+	var taxdata = getData(1);
+	var gdp = getData(3);
+
+	$(&amp;apos;#chart2&amp;apos;).highcharts({
+		        chart: {
+		            zoomType: &amp;apos;xy&amp;apos;
+		        },
+		        title: {
+		            text:&amp;apos;税收收入分析（&amp;apos;+ym1.split(&amp;quot;-&amp;quot;)[0]+&amp;apos;年&amp;apos;+ym1.split(&amp;quot;-&amp;quot;)[1]+&amp;apos;月至&amp;apos;+ym2.split(&amp;quot;-&amp;quot;)[0]+&amp;apos;年&amp;apos;+ym2.split(&amp;quot;-&amp;quot;)[1]+&amp;apos;月）&amp;apos;
+		        },
+		        subtitle: {
+		            text: &amp;apos;&amp;apos;
+		        },
+		        plotOptions: {
+		            pie: {
+		                allowPointSelect: true,
+		                cursor: &amp;apos;pointer&amp;apos;,
+		                events: {
+		                    click: function(event) {
+		                    	//alert(&amp;apos;x=&amp;apos;+event.point.x+&amp;apos; y=&amp;apos;+event.point.y+&amp;apos;data=&amp;apos;+this.data[event.point.x].name);
+		                    	var hy = this.data[event.point.x].name;		                    	
+		                    	setChart1(ym1,ym2,hy);
+		                    }
+		                }
+		            }
+		        },		
+		        series: [{
+		            name: &amp;apos;行业税收占比&amp;apos;,
+		            type: &amp;apos;pie&amp;apos;,
+			    data: bldata    
+		        }],
+			exporting: {
+		                enabled: true
+		        }	
+		    });
+		    
+	setChart1(ym1,ym2,hylist[0]);
+
+}
+
+function setChart1(ym1,ym2,hy)
+{
+//	alert(&amp;quot;HY=&amp;quot;+hy+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+//	return;
+	_sql.querytods(&amp;quot;HYDATA&amp;quot;,&amp;quot;HY=&amp;quot;+hy+&amp;quot;&amp;YM1=&amp;quot;+ym1+&amp;quot;&amp;YM2=&amp;quot;+ym2);
+	var ymlist = new Array();
+	var taxdata = new Array();
+	var gdpdata = new Array();
+
+	var cy123 = 1;
+//	if (hy == &amp;quot;第一产业&amp;quot;) cy123 = 1;
+//	if (hy == &amp;quot;第二产业&amp;quot;) cy123 = 2;
+//	if (hy == &amp;quot;第三产业&amp;quot;) cy123 = 3;
+	cy123 = hy.substring(0,1);
+	
+	for (var i=0;i&amp;lt;_this.XMLDS_GetRowCount();i++) {
+		var yymm = _this.XMLDS_GetString(i,&amp;quot;YYMM&amp;quot;);
+		var taxmny = 1.0*_this.XMLDS_GetString(i,&amp;quot;TAXMNY_&amp;quot;+cy123);
+		var gdp = 1.0*_this.XMLDS_GetString(i,&amp;quot;GDP_&amp;quot;+cy123);
+		ymlist.push(yymm);
+		taxdata.push(taxmny);
+		gdpdata.push(gdp);
+	}
+//	alert(ymlist );
+//	alert(taxdata);
+	
+	$(&amp;apos;#chart1&amp;apos;).highcharts({
+		        chart: {
+		            zoomType: &amp;apos;xy&amp;apos;
+		        },
+		        title: {
+		            text:hy
+		        },
+		        subtitle: {
+		            text: &amp;apos;&amp;apos;
+		        },
+		        xAxis: [{
+		            categories: ymlist,
+		            crosshair: true
+		        }],
+		        yAxis: [{
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        },{
+		            title: {
+		                text: &amp;apos;&amp;apos;
+		            },
+			    plotLines:[{
+			    	value:0,
+			    	width:1,
+			    	color:&amp;apos;#808080&amp;apos;
+			    }],
+			    labels: {
+			    	enabled:false
+			    }
+		        }],
+		        plotOptions: {
+		            column: {
+		                pointPadding: 0.1,
+		                borderWidth: 0
+		            }
+		        },		
+		        series: [{
+		            name: &amp;apos;税收收入（万元）&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+		            yAxis: 0,
+		            data: taxdata
+		        }, {
+		            name: &amp;apos;GDP（百万元）&amp;apos;,
+		            type: &amp;apos;line&amp;apos;,
+		            yAxis: 1,
+		            data: gdpdata
+			}],
+			exporting: {
+		                enabled: true
+		        }	
+		    });	
+}
+
+//上月数据,本月数据,上年同期数据
+function getData(col)
+{
+	var data = new Array();
+	for(var i = _this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++) {
+		var val = _this.GetCellText(0,i,col);
+		if (col != 0) val = 1.0*val;
+		if (val == &amp;quot;&amp;quot;) val = 0;
+		data.push(val);
+	}
+	return data;
+}
+
+function getBLData()
+{
+	var data = new Array();
+	for(var i = _this.GetMainCellRangeRow1(0);i&amp;lt;=_this.GetMainCellRangeRow2(0);i++) {
+		var hy = _this.GetCellText(0,i,0);
+		var bl = 1.0*_this.GetCellText(0,i,2);
+		var rowdata = new Array();
+		rowdata.push(hy);
+		rowdata.push(bl);
+		
+		data.push(rowdata);
+	}
+	return data;
+}
+
+function filter()
+{
+	ym1 = G_LOGDAT.split(&amp;quot;-&amp;quot;)[0] + &amp;quot;-01&amp;quot;;
+	ym2 =  G_LOGDAT.substring(0,7);
+	var ret = window.showModalDialog(&amp;quot;show.sp?grdid=SELECTYM12&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:300px;dialogHeight:220px&amp;quot;);
+	if (ret != &amp;quot;&amp;quot; &amp;&amp; ret != undefined) {	
+		ym1 = ret.split(&amp;quot;,&amp;quot;)[0];
+		ym2 = ret.split(&amp;quot;,&amp;quot;)[1];
+		loadData(ym1,ym2);
+	}
+}
+
+
+//生成统计数据
+function genData()
+{
+
+	var ret = window.showModalDialog(&amp;quot;show.sp?grdid=SELECTYM12&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:300px;dialogHeight:220px&amp;quot;);
+	if (ret != &amp;quot;&amp;quot; &amp;&amp; ret != undefined) {	
+		ym1 = ret.split(&amp;quot;,&amp;quot;)[0];
+		ym2 = ret.split(&amp;quot;,&amp;quot;)[1];
+		if (!confirm(&amp;quot;生成&amp;quot;+ym1+&amp;quot;至&amp;quot;+ym2+&amp;quot;之间的统计数据，是否继续？&amp;quot;)) return;
+		//var ret = _this.invokeOSFunc(&amp;quot;genData&amp;quot;,&amp;quot;ym1=&amp;quot;+ym1+&amp;quot;&amp;ym2=&amp;quot;+ym2);
+		var ret = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);	
+		alert(ret);
+	}
+
+}
+
+function runWaitingTask()
+{
+	try {
+		var ret = _this.invokeOSFunc(&amp;quot;genData&amp;quot;,&amp;quot;ym1=&amp;quot;+ym1+&amp;quot;&amp;ym2=&amp;quot;+ym2);
+		return ret;
+	}catch(e) { alert(e.toString()); }
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+var servletPack = new JavaPackage(&amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/jquery-1.7.2.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts-3d.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/highcharts.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+	//sb.append(&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/js/exporting.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;\n&amp;quot;); 
+
+	//窗口上下分割，上面显示图表，下面显示中间件数据
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td bgcolor=\&amp;quot;#EFEFEF\&amp;quot; align=center valign=middle&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td  style=\&amp;quot;border: 1px solid #EEEEEE\&amp;quot;&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;table id=\&amp;quot;dataTable\&amp;quot; border=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;tr&amp;gt;&amp;quot;); //上面窗口高度占的比例
+	sb.append(&amp;quot;&amp;lt;td&amp;gt;&amp;lt;span style=&amp;apos;color:red&amp;apos;&amp;gt;【注：分析前请先生成数据】&amp;lt;/span&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td align=right&amp;gt;&amp;lt;button type=&amp;apos;button&amp;apos; onclick=&amp;apos;genData()&amp;apos;&amp;gt;生成数据&amp;lt;/button&amp;gt;&amp;nbsp;&amp;nbsp;&amp;lt;button type=&amp;apos;button&amp;apos; onclick=&amp;apos;filter()&amp;apos;&amp;gt;统计条件&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=50% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top;&amp;gt;&amp;lt;div id=&amp;apos;chart1&amp;apos; style=\&amp;quot;height=100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+	sb.append(&amp;quot;&amp;lt;td width=50% height=100% style=\&amp;quot;border:solid 1px gray\&amp;quot; valign=top;&amp;gt;&amp;lt;div id=&amp;apos;chart2&amp;apos; style=\&amp;quot;height=100%\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+	
+
+}
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);	
+	sb.append(&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+
+//生成统计分析数据
+function genData()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var mwsql = new servletPack.MWSQL();
+		
+		//清除数据
+		var sql = &amp;quot;delete from TAX_FX_CHART001 where yymm&amp;gt;=&amp;apos;&amp;quot;+ym1+&amp;quot;&amp;apos; and yymm&amp;lt;=&amp;apos;&amp;quot;+ym2+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		try { sql = mwsql.GetQuerySQL(request,db,&amp;quot;TAXFXJK&amp;quot;,&amp;quot;CHART001&amp;quot;,&amp;quot;CREATEDS&amp;quot;); } catch (e1) { }				
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%YM1]&amp;quot;,ym1);
+		sql = pub.EAFunc.Replace(sql,&amp;quot;[%YM2]&amp;quot;,ym2);
+		
+		var mysql = &amp;quot;insert into TAX_FX_CHART001(cy123,cy123mc,yymm,taxmny,gdp) select * from (&amp;quot;+sql+&amp;quot;)&amp;quot;;
+		db.ExcecutSQL(mysql);
+		
+		//更新GDP
+		mysql = &amp;quot;update tax_fx_chart001 a set gdp=(select ljzl from tax_tjjdata b 
+		       where replace(a.yymm,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;)=b.yymm
+		         and a.cy123=to_number(b.zbbh)-1      
+		       )&amp;quot;;
+		db.ExcecutSQL(mysql);
+		
+		//更新1月份的GDP，用2月份的来更新（GDP是按季度发布）
+		mysql = &amp;quot;update tax_fx_chart001 a set gdp=(select ljzl from tax_tjjdata b 
+			       where substr(a.yymm,0,4)=substr(b.yymm,0,4)
+			         and substr(b.yymm,-2)=&amp;apos;02&amp;apos;
+			         and a.cy123=to_number(b.zbbh)-1  
+			       )
+			where substr(yymm,-2)=&amp;apos;01&amp;apos;&amp;quot;;
+		db.ExcecutSQL(mysql);
+		
+		db.Commit();
+		return &amp;quot;生成统计分析数据完成!&amp;quot;;
+		
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select cy123||&amp;apos;.&amp;apos;||cy123mc hymc,
+	sum(taxmny) taxmny,
+	&amp;apos;&amp;apos; bl,
+	sum(gdp) gdp 
+from (
+select cy123,cy123mc,yymm,
+	nvl(sum(taxmny),0)/10000 taxmny,	
+	sum(case substr(yymm,-2) 
+        when &amp;apos;03&amp;apos; then gdp
+        when &amp;apos;06&amp;apos; then gdp
+        when &amp;apos;09&amp;apos; then gdp
+        when &amp;apos;12&amp;apos; then gdp
+        else 0 end) gdp        
+from tax_fx_chart001
+where yymm&amp;gt;= &amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;= &amp;apos;[%YM2]&amp;apos;
+group by cy123,cy123mc,yymm
+order by yymm,cy123
+) group by cy123,cy123mc
+order by cy123,cy123mc
+
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11></ROW>
+<ROW num="1" ><ID >HYDATA</ID><NAME ></NAME><DATDSC >select yymm,sum(taxmny_1) taxmny_1,
+       sum(taxmny_2) taxmny_2,
+       sum(taxmny_3) taxmny_3,
+       sum(gdp_1) gdp_1,
+       sum(gdp_2) gdp_2,
+       sum(gdp_3) gdp_3 
+from (
+select cy123,replace(yymm,&amp;apos;-&amp;apos;,&amp;apos;&amp;apos;) yymm,
+       round(sum(decode(cy123,&amp;apos;1&amp;apos;,taxmny,0))/10000,2) taxmny_1,
+       round(sum(decode(cy123,&amp;apos;2&amp;apos;,taxmny,0))/10000,2) taxmny_2,
+       round(sum(decode(cy123,&amp;apos;3&amp;apos;,taxmny,0))/10000,2) taxmny_3,
+       round(max(decode(cy123,&amp;apos;1&amp;apos;,gdp,0))/100,2) gdp_1,
+       round(max(decode(cy123,&amp;apos;2&amp;apos;,gdp,0))/100,2) gdp_2,
+       round(max(decode(cy123,&amp;apos;3&amp;apos;,gdp,0))/100,2) gdp_3
+from tax_fx_chart001
+where yymm&amp;gt;= &amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;= &amp;apos;[%YM2]&amp;apos;
+group by cy123,yymm
+order by yymm
+) group by yymm
+order by yymm</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >HYDATA</C8><C9 >HYDATA</C9><C10 >HYDATA</C10><C11 ></C11></ROW>
+<ROW num="2" ><ID >CREATEDS</ID><NAME ></NAME><DATDSC >select hy.cy123,hy.cy123mc,yymm,nvl(sum(taxmny),0) taxmny,0 gdp
+from tax_taxdata tax,dj_nsrxx dj,tax_dm_gy_hy hy
+where  tax.djxh=dj.djxh
+  and dj.hy_dm=hy.hy_dm
+  and tax.yymm&amp;gt;= &amp;apos;[%YM1]&amp;apos;
+  and tax.yymm&amp;lt;= &amp;apos;[%YM2]&amp;apos;
+group by hy.cy123,hy.cy123mc,yymm</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>selurl</MWID><NAME>选择URL路径</NAME><NOTE></NOTE><NOACCNAME></NOACCNAME><FILE>selurl.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><MANUNIT></MANUNIT><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID>OK</ID><NAME>确定</NAME><TIP></TIP><BTNORD></BTNORD><IMG></IMG><IMGMOUSE></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellBkColor(0,-1,-1,255,255,255);
+//	_this.SplitSheet(0,&amp;quot;V&amp;quot;,135);  
+	_this.SetFixedRow(1,1);
+	_this.SetFixedCol(1,0);
+	_this.LoadScene(0,10);	
+	var listSubsytType = _this.CreateListValue();
+	_this.SetListValue(listSubsytType ,&amp;quot;entry.sp&amp;quot;,&amp;quot;进入某个中间件&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;show.sp&amp;quot;,&amp;quot;显示某个中间件&amp;quot;);
+	_this.SetListValue(listSubsytType ,&amp;quot;classshow.sp&amp;quot;,&amp;quot;分类显示某个中间件&amp;quot;);
+	_this.SetToComboBox(&amp;quot;COM_URLTYPE&amp;quot;,0,3,3,listSubsytType );	
+	
+	var list1 = _this.CreateListValue();
+	_this.SetListValue(list1 ,&amp;quot;ACTIVEX&amp;quot;,&amp;quot;浏览器控件&amp;quot;);
+	_this.SetListValue(list1 ,&amp;quot;HTML&amp;quot;,&amp;quot;PC浏览器&amp;quot;);
+	_this.SetListValue(list1 ,&amp;quot;PDA&amp;quot;,&amp;quot;PDA手机&amp;quot;);
+	_this.SetListValue(list1 ,&amp;quot;WAP&amp;quot;,&amp;quot;WAP手机&amp;quot;);
+	_this.SetToComboBox(&amp;quot;COM_CLIENTTYPE&amp;quot;,0,5,5,list1 );
+
+	_this.LoadScene(1,5);
+	_this.SetRowVisible(0,7,0);// 先不做中间件查询
+	_this.SetRowVisible(0,8,0);
+
+	url = url.replace( &amp;quot;[URL_AND]&amp;quot;,&amp;quot;&amp;&amp;quot;);
+	url = url.replace( &amp;quot;[URL_DOL]&amp;quot;,&amp;quot;?&amp;quot;);
+	_this.SetCellText(0,1,3,url);
+
+}
+
+//下拉列表框选择改变
+function _thisOnListSelChange(id, oldsel, cursel)
+{
+	if ( id == &amp;quot;COM_URLTYPE&amp;quot; ) {
+		var cellstr = _this.GetText(id);
+		if ( cellstr==&amp;quot;show.sp&amp;quot; ) {
+			if ( confirm(&amp;quot;直接打开中间件的显示界面，\n如果grdid=11,22 表示可以选择打开多个中间件，是否继续？&amp;quot;) == 1 ) genurl();
+		}
+		else if ( cellstr==&amp;quot;entry.sp&amp;quot; ) {		
+			if ( confirm(&amp;quot;中间件的入口，对于单据中间件，这里是选择单据的列表，对于报表中间件，进入查询条件的界面，其他中间件和“显示中间件“一样\n如果grdid=11,22 表示可以选择打开多个中间件，是否继续？&amp;quot;) == 1 ) genurl();
+		}
+		else if ( cellstr==&amp;quot;classshow.sp&amp;quot; ) {		
+			if ( confirm(&amp;quot;分类检索一个中间件，界面的特点在于把一般查询条件列在最上面，把分类查询条件列在左边，中间件的显示界面在右下，是否继续？&amp;quot;) == 1 ) genurl();
+		}
+	}
+	else if ( id==&amp;quot;COM_CLIENTTYPE&amp;quot; )
+		genurl();
+		
+}
+
+function genurl()
+{
+	var url = _this.GetCellText(0,1,3 );
+	
+	url = _this.GetCellText(0,3,12)+_this.GetText( &amp;quot;COM_URLTYPE&amp;quot; ) +&amp;quot;?grdid=&amp;quot;;
+	if (_this.GetText(&amp;quot;COM_CLIENTTYPE&amp;quot;) != &amp;quot;&amp;quot; ) {
+		url = url+ &amp;quot;&amp;clienttype=&amp;quot;+ _this.GetText(&amp;quot;COM_CLIENTTYPE&amp;quot;);
+	}
+	_this.SetCellText(0,1,3,url );
+
+}
+
+//undefined
+function OK()
+{
+  	window.returnValue=_this.GetCellText(0,1,3);
+  	window.close();
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

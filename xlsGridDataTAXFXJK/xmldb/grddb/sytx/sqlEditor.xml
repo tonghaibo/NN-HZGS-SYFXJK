@@ -1,0 +1,417 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >sqlEditor</MWID><NAME >数据源编辑器</NAME><NOTE ></NOTE><FILE >sqlEditor.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var nSeq = 0 ;
+var sheetTree = 0 ;
+var sheetSQL = 1;
+var sheetResult = 2;
+var SQLID = &amp;quot;SQLINTPUT&amp;quot;
+var SQLRunning = &amp;quot;&amp;quot;;      // 正在运行的SQL
+var page = 1;
+var nrow= 20;
+var rowcount = 0;
+var G_SQLID=&amp;apos;&amp;apos;;
+var G_DSNAME=&amp;quot;&amp;quot;;
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：载入数据
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/10/05 23:45:15
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+        _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSNAME);
+       //_this.ShowTabBar(1);
+       _this.SetSheetName(0,&amp;quot;数据库对象&amp;quot;);
+
+//       if ( treexml == null ) 
+//             alert ( &amp;quot;无法载入表对象&amp;quot; );
+//       else
+//         _this.SetToTreeCtrl(&amp;quot;Tree_1&amp;quot;,sheetTree ,-1,-1,treexml);
+
+       sheetSQL  = _this.AddSheet(&amp;quot;SQL查询&amp;quot;);
+       _this.SetToCodeEditor(SQLID,sheetSQL,-1,-1 ,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+       //sheetResult = _this.AddSheet(&amp;quot;查询结果&amp;quot;);
+
+       //_this.SetCellBkColor(sheetResult,-1,-1,255,255,255);//211,219,250
+
+       //_this.SetCurrentSheet(sheetResult);
+       _this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;25%&amp;quot;);
+       
+       
+       //_this.AddToolbarButton(&amp;quot;com_execute&amp;quot;,&amp;quot;F7执行单个SQL&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,105);
+       try {       
+             _this.SetText(SQLID,sql);
+       }
+       catch ( e ) {//alert(&amp;quot;sql参数不存在&amp;quot; );
+       }
+
+       _this.SetCellLock(sheetTree,-1,-1, 1);
+       init();
+}
+
+
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+      var collist = &amp;quot;&amp;quot;;
+      var action = getXmlAttribute(attribe,&amp;quot;action&amp;quot;);
+      var conn  = getXmlAttribute(attribe,&amp;quot;conn&amp;quot;);
+     if(conn!=null) G_DSID=conn;
+     _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSID);
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+       if ( level == 3 ) {
+			var param = new Object();
+			param.tagid = tagid;
+			param.dsid =  G_DSID;
+			param.sqlid =  G_SQLID;
+            xml = invokeOSFuncExt(&amp;quot;GetTableTree&amp;quot;,param) ;
+            _this.XMLCTL_Append(id,xml,hItem,2);
+      }
+      else
+      {
+        var url=&amp;quot;show.sp?grdid=sqlwiza&amp;tbl=&amp;quot;+tagid+&amp;quot;&amp;dsid=&amp;quot;+G_DSID;
+        var sql = window.showModalDialog(url,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=600px;dialogWidth=800px;unadorned=1;resizable=1;&amp;quot;);
+        if(sql!=null)
+        _this.SetText(SQLID,_this.GetText(SQLID)+sql);
+      } 
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            if(loc&amp;lt;0) return null;
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; , loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1 ) ;
+            return ret;
+}
+//点击树状控件项目
+function _thisOnTreeItemClick(id, hItem, tagid, attribe, value)
+{
+  var conn  = getXmlAttribute(attribe,&amp;quot;conn&amp;quot;);
+  if(conn!=null) G_DSID=conn;
+  _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSID);
+}
+
+function _thisOnTreeFolderClick(id,hItem,itemid,attribe,value)
+{
+  var conn  = getXmlAttribute(attribe,&amp;quot;conn&amp;quot;);
+  if(conn!=null) G_DSID=conn;
+  _this.SetToolbarString(&amp;quot;当前数据源: &amp;quot;+G_DSID);
+}
+
+
+///////////////////////////////////////////////////////
+function addOption(selectobj,nodeBefore,value,caption)
+{
+   var oNewNode = document.createElement(&amp;quot;Option&amp;quot;);
+   //debugger
+   //if(!!nodeBefore)
+     selectobj.insertBefore(oNewNode,nodeBefore);
+   //else
+   // selectobj.appendChild(oNewNode);
+   oNewNode.innerText=caption;
+   oNewNode.value = value;
+   return oNewNode;
+}
+
+var curSqlIdx = -1;
+function saveCurSql()
+{
+    if(curSqlIdx != -1)
+    {
+      var keyval = ocx.XMLDS_GetString(curSqlIdx,&amp;apos;ID&amp;apos;);
+      var script = _this.GetCellText(sheetSQL,-1,-1);
+      parentwin.saveScript(secidx,-1,keyval,fieldname,script);
+    }
+    canunload = true;
+}
+
+function saveAll()
+{
+    if(curSqlIdx != -1)
+    {
+      saveCurSql();saveCurSql()
+      parentwin.onToolBarBtn_save();
+    }
+    canunload = true;
+}
+
+function closeMe()
+{
+window.close();
+}
+
+function AddNewSqlDs()
+{
+  var id = sqlid.value;
+  var name = sqlname.value;
+  if(!!id)
+    alert(id+&amp;apos;-&amp;apos;+name);
+  
+}
+
+function sqllist_onchange()
+{
+  var idx = sqllist.selectedIndex;
+  var dsrow = parseInt(sqllist.options[idx].value);
+  if(dsrow&amp;gt;=0)
+  {
+    saveCurSql();
+    curSqlIdx = dsrow;
+    //newspan.style.display = &amp;quot;none&amp;quot;;
+    ShowSqlDs(idx, dsrow);
+  }
+  else
+  {
+    curSqlIdx = -1;
+    _this.SetCellText(sheetSQL,-1,-1,&amp;apos;&amp;apos;);
+    //newspan.style.display = &amp;quot;&amp;quot;;
+  }
+  _this.ReDraw();
+}
+
+function ShowSqlDs(selectIdx, dsrow)
+{
+  var sql = ocx.XMLDS_GetString(dsrow,fieldname);
+  _this.SetCellText(sheetSQL,-1,-1,sql);
+  canunload = true;
+}
+
+var ocx;
+var parentwin;
+var lastOption;
+function init()
+{
+  parentwin=window.dialogArguments[0];//window.opener;
+  var idx  =window.dialogArguments[1];
+  secidx   =window.dialogArguments[2];
+  fieldname=window.dialogArguments[3];
+  //lastOption = addOption(sqllist,null,&amp;apos;-1&amp;apos;,&amp;apos;新增数据源&amp;apos;);
+  lastOption = addOption(sqllist,null,&amp;apos;-1&amp;apos;,&amp;apos; &amp;apos;);
+  //lastOption = null;
+  ocx = parentwin.inspector;
+  var rows = ocx.XMLDS_GetRowCount()-1;
+  //for(var i=0;i&amp;lt;rows;i++)
+  for(var i=rows;i&amp;gt;=0;i--)
+  {
+    var caption = ocx.XMLDS_GetString(i,&amp;quot;ID&amp;quot;) + &amp;quot;-&amp;quot; + ocx.XMLDS_GetString(i,&amp;quot;Name&amp;quot;);
+    lastOption = addOption(sqllist,lastOption,i,caption);
+  }
+  
+  //debugger
+  var webapproot = parentwin.webapproot;
+
+  if(idx&amp;gt;=0)
+    window.setTimeout(&amp;quot;sqllist.selectedIndex = &amp;quot;+idx+&amp;quot;;sqllist_onchange()&amp;quot;,50);
+  
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+var TABLETAG = &amp;quot;TABLE表格对象&amp;quot;;
+var VIEWTAG = &amp;quot;VIEW视图对象&amp;quot;;
+var VIEWCODETAG = &amp;quot;VIEW视图代码&amp;quot;;
+var sqlid=&amp;quot;&amp;quot;;
+function getdatabase(sqlid,dsid)
+{
+  if(dsid==&amp;quot;&amp;quot;) dsid=null;
+  var db = new pub.EADatabase(dsid);
+  return db;
+}
+
+//================================================================// 
+// 函数：GetTableTree
+// 说明：得到数据的TABLE和TREE的列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/11/05 14:48:21
+// 修改日志：
+//================================================================// 
+function GetTableTree()
+{
+   var db = getdatabase(sqlid,dsid);
+        var xml = &amp;quot;&amp;quot;;
+        var sql = &amp;quot;&amp;quot;;
+        if( tagid==TABLETAG) 
+        {
+              if(db.getDBTYP()==&amp;quot;mssql&amp;quot;)
+              	sql = &amp;quot;select top 10000 TABLE_NAME,&amp;apos;&amp;apos; note,&amp;apos;&amp;apos; comments from INFORMATION_SCHEMA.TABLES where TABLE_TYPE=&amp;apos;BASE TABLE&amp;apos; order by TABLE_NAME&amp;quot;;
+              else
+                sql = &amp;quot;select a.table_name,a.typ,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note,substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)) comments from &amp;quot;+
+                  &amp;quot;( select TABLE_NAME,&amp;apos;TABLE&amp;apos; TYP from user_tables ) &amp;quot;+
+                  &amp;quot;a,user_tab_comments b &amp;quot;+
+                  &amp;quot;where a.TABLE_NAME=b.table_name(+) &amp;quot;+
+                  &amp;quot;order by a.TYP,a.TABLE_NAME  &amp;quot;;
+              var ds = db.QuerySQL(sql);  
+              var cnt = ds.getRowCount();
+              for( var i=0;i&amp;lt; cnt; i ++ ) {
+                    var sTableName = ds.getStringAt(i,&amp;quot;table_name&amp;quot;);
+                    var sNote = ds.getStringAt(i,&amp;quot;note&amp;quot;);
+                    var sComment = ds.getStringAt(i,&amp;quot;comments&amp;quot;);
+                    xml+=&amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;+sTableName +\&amp;quot; name=\&amp;quot;&amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              }
+        }
+        else if ( tagid==VIEWTAG || tagid== VIEWCODETAG  ) {
+              if(db.getDBTYP()==&amp;quot;mssql&amp;quot;)
+              	sql = &amp;quot;select top 10000 TABLE_NAME,&amp;apos;&amp;apos; note,&amp;apos;&amp;apos; comments from INFORMATION_SCHEMA.TABLES where TABLE_TYPE=&amp;apos;VIEW&amp;apos; order by TABLE_NAME&amp;quot;;
+              else
+                sql = &amp;quot;select a.table_name,a.typ,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note,substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)) comments  from &amp;quot;+
+                  &amp;quot;( select VIEW_NAME TABLE_NAME,&amp;apos;VIEW&amp;apos; TYP from USER_VIEWS ) &amp;quot;+
+                  &amp;quot;a,user_tab_comments b &amp;quot;+
+                  &amp;quot;where a.TABLE_NAME=b.table_name(+) &amp;quot;+
+                  &amp;quot;order by a.TYP,a.TABLE_NAME  &amp;quot;;
+              var ds1 = db.QuerySQL(sql);        
+              var cnt = ds1.getRowCount();
+              for( var i=0;i&amp;lt; cnt; i ++ ) {
+                    var sTableName = ds1.getStringAt(i,&amp;quot;table_name&amp;quot;);
+                    var sNote = ds1.getStringAt(i,&amp;quot;note&amp;quot;);
+                    var sComment = ds1.getStringAt(i,&amp;quot;comments&amp;quot;);
+                    if ( tagid==VIEWTAG )
+                          xml+=&amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;&amp;quot;+sTableName +&amp;quot;\&amp;quot; name=\&amp;quot;&amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+                    else 
+                          xml += &amp;quot;&amp;lt;&amp;quot;+sTableName +&amp;quot; conn=\&amp;quot;&amp;quot;+dsid+&amp;quot;\&amp;quot; ID=\&amp;quot;&amp;quot;+sTableName +&amp;quot;\&amp;quot; action=\&amp;quot;VIEWCODE\&amp;quot; name=\&amp;quot;&amp;quot;+sNote +&amp;quot;\&amp;quot; comment=\&amp;quot;&amp;quot;+sComment +&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              }
+        }    
+        return xml;
+}
+
+
+//================================================================// 
+// 函数：GetColumnList
+// 说明：得到某个表格的字段列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/12/05 14:04:33
+// 修改日志：
+//================================================================// 
+function GetColumnList()
+{
+   var db = getdatabase(sqlid,dsid);
+        var sql = &amp;quot;select a.table_name,a.column_name,decode( INSTR(b.COMMENTS,&amp;apos;~&amp;apos;),0,b.COMMENTS,substr(b.COMMENTS,1,INSTR(COMMENTS,&amp;apos;~&amp;apos;)-1)) note,&amp;quot;+
+            &amp;quot;substr(b.COMMENTS,INSTR(COMMENTS,&amp;apos;~&amp;apos;)+1,length(b.comments)) comments from &amp;quot;+
+            &amp;quot;( select TABLE_NAME,COLUMN_NAME,COLUMN_ID from user_tab_columns) a,user_col_comments b &amp;quot;+
+            &amp;quot;where a.TABLE_NAME=b.table_name(+) and a.COLUMN_NAME=b.COLUMN_NAME(+) and a.TABLE_NAME=&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos; order by a.COLUMN_ID&amp;quot;;
+        if(db.getDBTYP()==&amp;quot;mssql&amp;quot;)
+          sql = &amp;quot;select top 300 TABLE_NAME,COLUMN_NAME,&amp;apos;&amp;apos;note,&amp;apos;&amp;apos;comments from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos; order by ORDINAL_POSITION&amp;quot;;
+        var ds = db.QuerySQL(sql);        
+        var ret = &amp;quot;&amp;quot;;
+        for( var i=0;i&amp;lt; ds.getRowCount(); i ++ ) {
+              var sTableName = ds.getStringAt(i,&amp;quot;table_name&amp;quot;);
+              var sColumnName = ds.getStringAt(i,&amp;quot;column_name&amp;quot;);
+              var sNote = ds.getStringAt(i,&amp;quot;note&amp;quot;);
+              var sComment = ds.getStringAt(i,&amp;quot;comments&amp;quot;);
+              if ( i!=0 ) ret +=&amp;quot;,\t&amp;quot;;
+              ret+= sColumnName ;
+              if ( sNote.length() &amp;gt;16 ) sNote = sNote.substring(0,16);
+              if ( sNote.length() &amp;gt; 0 ) ret+= &amp;quot; AS \&amp;quot;&amp;quot; + sNote +&amp;quot;\&amp;quot;&amp;quot; ;
+              ret +=&amp;quot;\n&amp;quot; ;
+        }
+        return ret;
+}
+//================================================================// 
+// 函数：GetViewCode
+// 说明：得到视图的代码
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/02/06 15:57:54
+// 修改日志：
+//================================================================// 
+function GetViewCode()
+{
+   var db = getdatabase(sqlid,dsid);
+        var sql = &amp;quot;select TEXT from user_views where view_name=&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;&amp;quot;;
+        if(db.getDBTYP()==&amp;quot;mssql&amp;quot;)
+          sql = &amp;quot;select VIEW_DEFINITION TEXT from INFORMATION_SCHEMA.VIEWS where TABLE_NAME=&amp;apos;&amp;quot;+tablename+&amp;quot;&amp;apos;&amp;quot;;
+        var ds = db.QuerySQL(sql);        
+        if ( ds.getRowCount()&amp;gt; 0 ) 
+              return ds.getStringAt(0,&amp;quot;TEXT&amp;quot;);
+        else return &amp;quot;&amp;quot;;
+}
+
+//在Head区引用额外脚本
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  var sql = &amp;quot;select ID,NAME from v_dblist&amp;quot;;
+  var ds;
+  try{
+    ds = pub.EADbTool.QuerySQL(sql);
+  }catch(e){ ds = new pub.EAXmlDS();}
+  //var ds= new pub.EAXmlDS();
+  ds.AddNullRow(-1);
+  ds.setValueAt(0,&amp;quot;id&amp;quot;,&amp;quot;&amp;quot;);
+  ds.setValueAt(0,&amp;quot;name&amp;quot;,&amp;quot;默认连接&amp;quot;);
+  var c=ds.getRowCount();
+  sb.append(&amp;quot;&amp;lt;script&amp;gt;\nvar treexml=\&amp;quot;&amp;lt;数据库&amp;gt;&amp;quot;);
+  for(var i=0;i&amp;lt;c;i++)
+  {
+    var connid=ds.getStringAt(i,&amp;quot;id&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;);sb.append(ds.getStringAt(i,&amp;quot;name&amp;quot;));sb.append(&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;+TABLETAG +&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;/&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;&amp;quot;+VIEWTAG+&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;/&amp;gt;&amp;quot;);
+    //sb.append(&amp;quot;&amp;lt;&amp;quot;+VIEWCODETAG+&amp;quot; conn=\\\&amp;quot;&amp;quot;+connid+&amp;quot;\\\&amp;quot;/&amp;gt;&amp;quot;);
+    sb.append(&amp;quot;&amp;lt;/&amp;quot;);sb.append(ds.getStringAt(i,&amp;quot;name&amp;quot;));sb.append(&amp;quot;&amp;gt;&amp;quot;);
+  }
+  sb.append(&amp;quot;&amp;lt;/数据库&amp;gt;\&amp;quot;;\n&amp;quot;);
+  sb.append(&amp;quot;\nvar G_DSID=\&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar G_DSNAME=\&amp;quot;默认连接\&amp;quot;;&amp;quot;);
+  var sqlid=pub.EAFunc.DateToStr(new java.util.Date(),&amp;quot;MMddHHmmssSSS&amp;quot;);
+  sb.append(&amp;quot;\nvar G_SQLID=\&amp;quot;&amp;quot;+sqlid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+}
+
+
+//页面BODY处理完毕后事件
+//sb里面是body元素及前面的head内容
+//bodysb里面是body的innerHTML
+function afterBodyHtml(mwobj,request,sb,bodysb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var bodysb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  sb.append(
+&amp;quot;&amp;lt;table height=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;\n&amp;quot; +
+&amp;quot;&amp;lt;tr&amp;gt;&amp;lt;td height=20 width=\&amp;quot;100%\&amp;quot; colspan=\&amp;quot;3\&amp;quot;&amp;gt;\n&amp;quot; + 
+&amp;quot;SQL数据源:&amp;lt;select id=sqllist  style=\&amp;quot;WIDTH: 180px\&amp;quot; onchange=\&amp;quot;return sqllist_onchange()\&amp;quot;&amp;gt;&amp;lt;/select&amp;gt;\n&amp;quot; + 
+&amp;quot;&amp;lt;button onclick=&amp;apos;saveCurSql();&amp;apos;&amp;gt;保存&amp;lt;/button&amp;gt;\n&amp;quot; + 
+&amp;quot;&amp;lt;button onclick=&amp;apos;saveAll();&amp;apos;&amp;gt;保存到服务器&amp;lt;/button&amp;gt;\n&amp;quot; + 
+&amp;quot;&amp;lt;button onclick=&amp;apos;closeMe();&amp;apos;&amp;gt;关闭&amp;lt;/button&amp;gt;\n&amp;quot; + 
+&amp;quot;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;TD id=leftTd&amp;gt;&amp;lt;/TD&amp;gt;\n&amp;quot; + 
+&amp;quot;&amp;lt;TD&amp;gt;&amp;lt;/TD&amp;gt;\n&amp;quot; + 
+&amp;quot;&amp;lt;td width=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;quot;);
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

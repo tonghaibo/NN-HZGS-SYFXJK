@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>SYSMODDBEDIT</MWID><NAME>系统模块数据维护</NAME><NOTE></NOTE><FILE>SYSMODDBEDIT.zxg</FILE><FIXED></FIXED><CATTYP>02</CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+order = &amp;quot; order by id&amp;quot;;
+       setButton();
+       // 构造3个 SQL
+       // 查询用户数据表记录
+       selectSQL = &amp;quot;select GUID,ID as 编号,REFID as 分类,NAME as 名称,ACTION as 动作,NOTE as 备注,&amp;quot;+
+                   &amp;quot;MODTYP as 模块类型,GRDID as 中间件编号,SORTID as 排序号,SYT as 系统编号 &amp;quot;+
+                   &amp;quot;from SYSMOD &amp;quot;;
+       //新增用户数据表记录
+       insertSQL = &amp;quot;INSERT INTO SYSMOD ( GUID,ID,REFID,NAME,ACTION,NOTE,MODTYP,GRDID,SORTID,SYT&amp;quot;+
+                   &amp;quot; ) values( sys_guid(),?,?,?,?,?,?,?,?,? )&amp;quot;;
+       // 修改用户数据表记录
+       updateSQL = &amp;quot;UPDATE SYSMOD SET ID=?,REFID=?,NAME=?,ACTION=?,NOTE=?, &amp;quot;+
+                   &amp;quot;MODTYP=?,GRDID=?,SORTID=?,SYT=?  &amp;quot;+
+                   &amp;quot;where guid=?&amp;quot;;
+       //删除用户数据表记录
+       deleteSQL = &amp;quot;delete SYSMOD where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       
+
+       
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+function f_dbeditpostloaddata(){
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       var modtyp = _this.CreateListValue();
+       _this.SetListValue(modtyp,&amp;quot;0&amp;quot;,&amp;quot;分类&amp;quot;);
+       _this.SetListValue(modtyp,&amp;quot;1&amp;quot;,&amp;quot;页面权限&amp;quot;);
+       _this.SetListValue(modtyp,&amp;quot;2&amp;quot;,&amp;quot;单据权限&amp;quot;);
+       _this.SetListValue(modtyp,&amp;quot;3&amp;quot;,&amp;quot;脚本权限&amp;quot;);
+       _this.SetColWidth(0,4,100);
+       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SYSMODCLASS&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+       {
+          _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,4,listid1);
+          _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,8,modtyp);
+       }
+
+       
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

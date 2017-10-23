@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >QueryTimerTask</MWID><NAME >查询计划任务运行状态</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >QueryTimerTask.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >DELETE</ID><NAME >清空日志</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var curselsytid = &amp;quot;&amp;quot;;
+var curlogfilename = &amp;quot;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	    var sParam =&amp;quot;&amp;quot;;
+            try {
+                  var xml = invokeOSFunc(&amp;quot;Query&amp;quot;,sParam) ;       
+                  _this.SetXmlDS(0,1,1,2,2,xml);
+                  for (var col=4;col&amp;lt;=11;col++ ) 
+                  	_this.SetColVisible(0,col,0);
+
+                  _this.SetColVisible(0,14,0);
+                  _this.SetColVisible(0,15,0);
+                  _this.SetColVisible(0,16,0);
+
+			
+            }
+            catch ( e ) {
+                  alert ( e );
+            }	  
+	    _this.LoadScene(0,4);
+	    _this.SetToCodeEditor(&amp;quot;&amp;quot;,2,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	    _this.ShowTabBar(1);
+}
+// 打开log列表
+function f_querylog(row)
+{
+
+
+	var selsytid  = _this.GetCellText(0,row,3);
+	var name = _this.GetCellText(0,row,1);
+
+	    var sParam =&amp;quot;selsytid=&amp;quot;+selsytid +&amp;quot;&amp;name=&amp;quot;+name;
+            try {
+            	  
+                  var xml = invokeOSFunc(&amp;quot;QueryLogList&amp;quot;,sParam) ;       
+                  _this.SetRowCount(1,3);
+                  _this.SetXmlDS(1,1,1,2,4,xml);
+		  _this.LoadScene(1,4);
+		  _this.SetCurrentSheet(1);	
+            }
+            catch ( e ) {
+                  alert ( e );
+            }	
+}
+
+function f_querytext(row)
+{
+
+	var selsytid  = _this.GetCellText(1,row,3);
+
+	    var sParam =&amp;quot;selsytid=&amp;quot;+selsytid +&amp;quot;&amp;filename=&amp;quot;+_this.GetCellText(1,row,2);
+            try {
+                  var str = invokeOSFunc(&amp;quot;QueryLogText&amp;quot;,sParam) ;   
+                  curselsytid =   selsytid ;
+                  curlogfilename =   _this.GetCellText(1,row,2);
+                  _this.SetCellText(2,-1,-1,str);
+		  
+		  _this.SetCurrentSheet(2);	
+            }
+            catch ( e ) {
+                  alert ( e );
+            }	
+}
+//鼠标双击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if ( sheet == 0 ) f_querylog(row);
+	else if ( sheet == 1 ) f_querytext(row);
+
+}
+
+
+//清空
+function DELETE()
+{
+
+	if ( curselsytid  == &amp;quot;&amp;quot; || curlogfilename == &amp;quot;&amp;quot; ) {
+		alert ( &amp;quot;请打开日志文件再清空&amp;quot; );
+		return ;
+	}
+	if ( confirm( &amp;quot;是否清空系统&amp;quot;+curselsytid +&amp;quot;的日志文件&amp;quot;+ curlogfilename)==1 ){
+	    var sParam =&amp;quot;selsytid=&amp;quot;+curselsytid +&amp;quot;&amp;filename=&amp;quot;+curlogfilename;
+            try {
+                  var str = invokeOSFunc(&amp;quot;DeleteLog&amp;quot;,sParam) ;       
+		  alert ( str );	
+		  if ( str == &amp;quot;操作成功&amp;quot; ) 
+		  	_this.SetCellText(2,-1,-1,&amp;quot;&amp;quot;);
+            }
+            catch ( e ) {
+                  alert ( e );
+            }	
+        }  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var timepack = new JavaPackage ( &amp;quot;com.xlsgrid.net.time&amp;quot; );
+function Query()
+{
+      	return timepack.EARunTimerTask.GetTaskXml();	
+}
+
+
+
+// selsytid name 
+function QueryLogList()
+{
+        var xml = &amp;quot;&amp;quot;;
+	var ds = new pub.EAXmlDS();
+	var num = 0;
+		var fileurl= pub.EAOption.dynaDataRoot+selsytid+&amp;quot;/log&amp;quot;;
+		//throw new pub.EAException(fileurl);         
+		var folds = (new java.io.File(fileurl)).listFiles();//name+&amp;quot;.*.log&amp;quot;
+		
+
+		if ( folds != null ) {
+			folds=pub.EAFunc.sort(folds);
+			var c = folds.length();
+			for(var i=0;i&amp;lt;c;i++) {
+				var f=folds[i];
+				if(!f.isDirectory() ) {
+					var filename = f.getName();
+					
+	            			var index = filename.indexOf(&amp;quot;.log&amp;quot;);	
+					if ( index &amp;gt;=0  ) {
+						var row= ds.AddRow(ds.getRowCount()-1);
+						num++;
+						ds.setValueAt(row,&amp;quot;SEQID&amp;quot;,num);
+						ds.setValueAt(row,&amp;quot;文件名&amp;quot;,filename);
+						ds.setValueAt(row,&amp;quot;系统&amp;quot;,selsytid );
+						ds.setValueAt(row,&amp;quot;操作&amp;quot;,&amp;quot;查看&amp;quot;);
+					}	
+				}
+			}
+		}
+        return ds.GetXml();
+
+}
+function QueryLogText()
+{
+        var xml = &amp;quot;&amp;quot;;
+	var ds = new pub.EAXmlDS();
+	var num = 0;
+	var fileurl= pub.EAOption.dynaDataRoot+selsytid+&amp;quot;/log/&amp;quot;+filename;
+	return pub.EAFunc.readFile(fileurl);
+
+
+}
+function DeleteLog()
+{
+        var xml = &amp;quot;&amp;quot;;
+	var ds = new pub.EAXmlDS();
+	var num = 0;
+	var fileurl= pub.EAOption.dynaDataRoot+selsytid+&amp;quot;/log/&amp;quot;+filename;
+	pub.EAFunc.WriteToFile(fileurl,&amp;quot;&amp;quot;);
+
+	return &amp;quot;操作成功&amp;quot;;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

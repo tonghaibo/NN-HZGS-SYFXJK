@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >vapp_usr</MWID><NAME >虚拟桌面用户登录信息</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >vapp_usr.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToButton(&amp;quot;分配&amp;quot;,0,8,2,&amp;quot;分配&amp;quot;,&amp;quot;&amp;quot;, &amp;quot;&amp;quot;, 3,-1,-1 );
+	_this.SetCellText(0,3,2,&amp;quot;192.168.0.254&amp;quot;);
+	_this.SetCellText(0,5,2,&amp;quot;0&amp;quot;);
+	 _this.SetCellText(0,2,2,usrid);
+//	 var id =_this.GetCellText(0,2,2);
+//	if(id.substr(4,1)==&amp;quot;0&amp;quot;){
+//		if(id.substr(5,1)==&amp;quot;0&amp;quot;){
+//			_this.SetCellText(0,4,2,id.substr(6,1));
+//		}else{
+//			_this.SetCellText(0,4,2,id.substr(5,2));
+//		}
+//	}else{
+//		_this.SetCellText(0,4,2,usrid);
+//	}
+//	var usridlist  =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_EDU_VAPPHOST&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+// 	_this.SetToComboBox(&amp;quot;&amp;quot;, 0,4,2,usridlist  );
+	_this.SetCellText(0,4,2,usrid);
+
+}
+
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if( id==&amp;quot;分配&amp;quot;){
+		var param = new Object();
+//		param.xmlstr = xml;
+		 var id =_this.GetCellText(0,2,2);
+		if(id.substr(4,1)==&amp;quot;0&amp;quot;){
+			if(id.substr(5,1)==&amp;quot;0&amp;quot;){
+				param.usrid1= id.substr(6,1);
+			}else{
+				param.usrid1= id.substr(5,2);
+			}
+		}else{
+			param.usrid1= id.substr(4,3);	
+		}
+		param.hostip= _this.GetCellText(0,3,2);
+	//	param.usrid= _this.GetCellText(0,7,2);
+		param.userpwd= _this.GetCellText(0,5,2);
+		param.usrid= _this.GetCellText(0,2,2);
+		param.useflg= _this.GetCellText(0,6,2);
+		try {
+			msg = invokeOSFuncExt(&amp;quot;savehost&amp;quot;,param);
+			alert(msg);
+		}catch (e) {
+			alert ( e );
+		}
+	}
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+var langpack = new JavaPackage(&amp;quot;java.lang&amp;quot;);
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function savehost()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var sql= &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		//sql = &amp;quot;update usr set hostip=&amp;apos;&amp;quot;+hostip+&amp;quot;&amp;apos;,usrid=&amp;apos;&amp;quot;+usrid1+&amp;quot;&amp;apos;,userpwd=&amp;apos;&amp;quot;+userpwd+&amp;quot;&amp;apos; where id = &amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+		sql =&amp;quot;delete from vapp_user where usrguid=(select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;insert into vapp_user(usrguid,hostip,usrid,userpwd,useflg) 
+				select guid,&amp;apos;&amp;quot;+hostip+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+userpwd+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+useflg+&amp;quot;&amp;apos;  from usr 
+				where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;&amp;quot;;
+		//				throw new Exception(sql);
+	
+		exec( &amp;quot;net user &amp;quot;+usrid+&amp;quot; /delete &amp;quot;);
+		exec( &amp;quot;net user &amp;quot;+usrid+&amp;quot; 0 /add &amp;quot;);
+		exec( &amp;quot;net localgroup \&amp;quot;Remote Desktop Users\&amp;quot; &amp;quot;+usrid+&amp;quot; /add &amp;quot;);
+//		exec( pubpack.AppStartListener.approot +&amp;quot;cmd/netuser &amp;quot;+usrid+&amp;quot; /pwnexp:y &amp;quot;);
+		db.ExcecutSQL(sql);
+				
+	}catch ( e){
+		throw new pubpack.EAException ( &amp;quot;操作失败&amp;quot; +e.toString() );
+
+	}
+	db.Commit();
+	return(&amp;quot;更新成功&amp;quot;);		
+}
+//执行一条命令行
+function exec( command ) {
+	var proc = langpack.Runtime.getRuntime().exec(command);
+	return proc.waitFor();
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

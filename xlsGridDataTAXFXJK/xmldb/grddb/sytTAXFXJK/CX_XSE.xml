@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CX_XSE</MWID><NAME >增值税申报销售额</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CX_XSE.zxg</FILE><SCENE ></SCENE><FIXED >3,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YM1</ID><NAME >税款所属期起</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >dat1</C13><C14 ></C14><C15 ></C15><C16 >dat1</C16><C17 ></C17><C18 >YM1</C18></ROW>
+<ROW num="1" ><ID >YM2</ID><NAME >税款所属期止</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >=&amp;quot;/</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >YM2</C18></ROW>
+<ROW num="2" ><ID >MINJE</ID><NAME >销售额(大于)</NAME><NOTNULL >0</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >单位：万元</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >JinE_1</C16><C17 ></C17><C18 >MINJE</C18></ROW>
+<ROW num="3" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_DEPTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >ssswjg</C17><C18 >ZGSWJG</C18></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >8</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,2,1</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SetCellText(0,1,3,YM1+&amp;quot;至&amp;quot;+YM2);
+
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN2</ID><NAME ></NAME><DATDSC >
+SELECT rownum, (select swjgjc from DM_GY_SWJG b where a.zgswskfj_dm=b.swjg_dm) zgswjg_dm,
+to_char(a.djxh) djxh,
+A.NSRSBH,
+A.NSRMC,
+A.NSRZT_DM,
+T4.XSE FROM (
+SELECT * FROM(
+SELECT TO_CHAR(T2.DJXH) DJXH,SUM(T2.JSYJ) AS XSE FROM (
+SELECT T1.* FROM (
+SELECT T.*,row_number() over (partition by djxh,PZXH order by djxh,PZXH,GZLX_DM_1 desc ,JSYJ desc ) rn
+FROM SB_SBXX  T 
+WHERE (ZGSWSKFJ_DM LIKE &amp;apos;14511%&amp;apos; OR SJGSDQ LIKE &amp;apos;14511%&amp;apos;) 
+AND ( SKSSQQ BETWEEN DATE &amp;apos;[%dat1] &amp;apos;AND DATE &amp;apos;[%dat2]&amp;apos; )
+AND ZSXM_DM=&amp;apos;10101&amp;apos;
+AND ZFBZ_1=&amp;apos;N&amp;apos;
+) T1  WHERE rn=1 
+)T2 GROUP BY DJXH
+ORDER BY DJXH
+)T3 WHERE XSE&amp;gt;2000*10000 )T4,(select djxh,
+       nsrsbh,
+       nsrmc,
+       nsrzt_dm,
+       zgswskfj_dm
+from dj_nsrxx where zgswskfj_dm=&amp;apos;[%zgswjg]&amp;apos; or zgswskfj_dm in (select swjg_dm from DM_GY_SWJG start with swjg_dm=&amp;apos;[%zgswjg]&amp;apos; connect by prior swjg_dm=sjswjg_dm)
+ ) A
+WHERE T4.DJXH=A.DJXH</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16></ROW>
+<ROW num="1" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select nvl(dj.shxydm,dj.nsrsbh) nsrsbh,dj.nsrmc,
+       (select name from v_tax_nsr_zt2 where id=trim(dj.nsrzt_dm)) nsrzt,
+       t1.somny,t1.ytaxman,
+       (select name from v_swjg where id=substr(dj.zgswj_dm,0,7)) swjg,
+       (select swjgjc from dm_gy_swjg where swjg_dm=dj.zgswskfj_dm) swskfj
+from (
+select sum(somny) somny,b.ytaxman,b.swjg_dm,b.djxh
+from tax_taxdata a,tax_company b
+where a.id=b.id
+  and yymm&amp;gt;=&amp;apos;[%YM1]&amp;apos; and yymm&amp;lt;=&amp;apos;[%YM2]&amp;apos;
+group by b.ytaxman,b.swjg_dm,b.djxh
+having sum(somny)&amp;gt;decode(&amp;apos;[%MINJE]&amp;apos;,&amp;apos;&amp;apos;,0,&amp;apos;[%MINJE]&amp;apos;)*10000
+) t1,dj_nsrxx dj
+where t1.djxh=dj.djxh
+  and substr(dj.zgswj_dm,0,7) in (select id from v_swjg where id=&amp;apos;[%ZGSWJG]&amp;apos; or sjid=&amp;apos;[%ZGSWJG]&amp;apos;)
+order by dj.zgswj_dm,somny desc
+) t</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

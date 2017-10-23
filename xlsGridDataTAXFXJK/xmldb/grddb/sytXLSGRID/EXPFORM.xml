@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>R</MWTYP><MWID>EXPFORM</MWID><NAME>导出表格</NAME><NOTE></NOTE><FILE>EXPFORM.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0; 
+
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：如果出现StringIndexOfException （数组越界）的时候，肯定是显示数据出问题了 
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/12/07 17:30:19
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+           _this.SetMainCellRange(sheet,3,1,12,6); 
+          _this.SetCellBkColor(sheet,-1,-1,255,255,255);
+          _this.SetCellText(sheet,1,1,&amp;quot;&amp;quot;); 
+          var id = trkid; 
+          var param = new Object();  
+          try 
+          {
+                 param.id = id; 
+                 ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param) ;  
+          }
+          catch (e){alert( e);} 
+          try 
+          { 
+                _this.SetXmlDS(sheet,3,1,12,6,ret);    
+          }       
+          catch (e)
+          {
+                alert (e );
+           }  
+           var r1 = _this.GetMainCellRangeRow1(sheet); 
+           var r2 = _this.GetMainCellRangeRow2(sheet); 
+           for (var i=r1;i&amp;lt;=r2;i++)
+           {
+                 
+                 _this.SetCellWrapText(sheet,i,6,1);                   
+           }
+           _this.AutoFixRowHeight(sheet); 
+          
+
+      
+    
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; );
+function save()
+{
+   var db = null;
+   var ds = null;
+   var ret = &amp;quot;&amp;quot;;
+    var tid = pubpack.EAFunc.SQLIN( id ); 
+    var sql  = &amp;quot; select rownum rid,t.* from (select distinct project,proorg,prousr,prodat,note &amp;quot;+  
+                &amp;quot; from trkhdr &amp;quot;+
+                &amp;quot; where id in (&amp;quot;+tid+&amp;quot;) order by prodat desc) t &amp;quot;;
+     try 
+    {  
+         db = new pubpack.EADatabase();
+         ds = db.QuerySQL(sql);
+         ret = ds.GetXml();
+         return ret;
+      
+   }
+    catch(e)
+      {
+            throw e;
+      }
+      finally
+      {
+            db.Close(); 
+      }       
+
+   
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID>DETAIL</ID><NAME></NAME><DATDSC>select project,id,title,note ,prio,crtdat,crtusr,stat,dtlusr  ,show from trkhdr 
+where id in (trkid)
+</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

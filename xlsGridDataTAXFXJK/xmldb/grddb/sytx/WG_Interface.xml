@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_Interface</MWID><NAME >订单处理接口</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_Interface.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var util = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var map = new util.HashMap();
+
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+//	var db = new pubpack.EADatabase();
+	var acc = &amp;quot;&amp;quot;;		//帐套号
+	var dat = &amp;quot;&amp;quot;;		//抓取日期
+	var kaid = &amp;quot;&amp;quot;;		//渠道编号
+	var userid =&amp;quot;&amp;quot;;		//用户名
+	var passwd = &amp;quot;&amp;quot;;	//密码	
+	var deptid = &amp;quot;&amp;quot;;	//部门编号
+	var code = &amp;quot;&amp;quot;;		//验证码
+	var rock_password = &amp;quot;&amp;quot;; //针对世纪联华有密码锁  kaid = &amp;quot;0010&amp;quot;
+	var date = &amp;quot;&amp;quot;;//针对世纪联华有抓单日期  kaid = &amp;quot;0010&amp;quot;
+	//获取的渠道、帐套信息，分发给相应的OS处理
+	try { acc = request.getParameter(&amp;quot;ACC&amp;quot;); } catch( e ) { acc = &amp;quot;&amp;quot;; }
+	try { dat = request.getParameter(&amp;quot;CALLDAT&amp;quot;); } catch( e ) { dat = &amp;quot;&amp;quot;; }
+	try { kaid = request.getParameter(&amp;quot;KAID&amp;quot;); } catch( e ) { kaid = &amp;quot;&amp;quot;; }
+	try { userid = request.getParameter(&amp;quot;USERID&amp;quot;); } catch( e ) { userid = &amp;quot;&amp;quot;; }
+	try { passwd = request.getParameter(&amp;quot;PASSWD&amp;quot;); } catch( e ) { passwd = &amp;quot;&amp;quot;; }
+	try { deptid = request.getParameter(&amp;quot;DEPTID&amp;quot;); } catch( e ) { deptid = &amp;quot;&amp;quot;; }
+	try { code = request.getParameter(&amp;quot;CODE&amp;quot;);} catch( e ) { code = &amp;quot;&amp;quot;; }
+//	pubpack.EAFunc.Log(&amp;quot;acc=&amp;quot;+acc);
+	if (kaid == &amp;quot;0010&amp;quot;) {
+		try { rock_password = request.getParameter(&amp;quot;ROCK_PASSWORD&amp;quot;); } catch( e ) { rock_password = &amp;quot;&amp;quot;; }
+		try { date = request.getParameter(&amp;quot;DATE&amp;quot;); } catch( e ) { date = &amp;quot;&amp;quot;; }
+	}
+	
+	setOS();
+	
+	if (kaid == &amp;quot;0010&amp;quot;) {
+		return getOS(kaid).getOrderStr(acc,dat,kaid,userid,passwd,deptid,code,rock_password,date);
+	} else {
+		return getOS(kaid).getOrderStr(acc,dat,kaid,userid,passwd,deptid,code);
+	}
+}
+
+function setOS()
+{
+	map.put(&amp;quot;0001&amp;quot;,new x_WG_RtMart());
+	map.put(&amp;quot;0004&amp;quot;,new x_WG_GMS());
+	map.put(&amp;quot;0005&amp;quot;,new x_WG_Currefour());
+	map.put(&amp;quot;00071&amp;quot;,new x_WG_TescoTmp());
+	map.put(&amp;quot;0007&amp;quot;,new x_WG_TescoBak());
+	map.put(&amp;quot;0010&amp;quot;,new x_WG_CenturyMart());
+	map.put(&amp;quot;0012&amp;quot;,new x_WG_WalMartbak());
+	map.put(&amp;quot;0015&amp;quot;,new x_WG_EkChor());
+	map.put(&amp;quot;0016&amp;quot;,new x_WG_Emart());
+}
+
+function getOS(kaid)
+{
+	if (map.containsKey(kaid)) return map.get(kaid);
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >XML2DB</MWID><NAME >Import DATA FROM XML</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >XML2DB.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >IMP</ID><NAME >导入</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//导入
+function IMP()
+{
+	// 参数
+	//	dbname : 数据库的别名,如ISOGRAPH
+	//      dbtype:  数据库的类型,如ORACLE/SQLSERVER/ACCESS
+	//	dbxml:数据库结构定义的XML，该XML需要包括的字段是 TABLEID，COLID，COLTYP，COLLEN， 
+	//      。。。 每个TABLE的XML，这些TABLE需要出现在dbxml的TABLEID中
+	// 返回：
+	//	操作结果说明
+	var dbname = _this.GetCellText(0,1,2); 
+	var dbtype = _this.GetCellText(0,1,4); 
+	var dbxml= _this.GetCellText(0,2,2); 
+	_this.OpenHttpRequest(&amp;quot;XML2DB.sp&amp;quot;,&amp;quot;POST&amp;quot; );
+	_this.AddHttpRequestParam(&amp;quot;dbname&amp;quot;,dbname,0);
+	_this.AddHttpRequestParam(&amp;quot;dbtype&amp;quot;,dbtype ,0);
+	_this.AddHttpRequestParam(&amp;quot;dbxml&amp;quot;,dbxml,0);
+	if ( _this.GetCellText(0,4,2)!=&amp;quot;&amp;quot; ) 
+		_this.AddHttpRequestParam(_this.GetCellText(0,4,2),_this.GetCellText(0,5,2),0);
+	if ( _this.GetCellText(0,7,2)!=&amp;quot;&amp;quot; ) 
+		_this.AddHttpRequestParam(_this.GetCellText(0,7,2),_this.GetCellText(0,8,2),0);
+	if ( _this.GetCellText(0,10,2)!=&amp;quot;&amp;quot; ) 
+		_this.AddHttpRequestParam(_this.GetCellText(0,10,2),_this.GetCellText(0,11,2),0);
+
+
+
+	var ret = _this.SendHttpRequest();
+	_this.CloseHttpRequest();
+	alert ( ret );
+
+
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var xml = &amp;quot;&amp;lt;?xml version=\&amp;quot;1.0\&amp;quot; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; \r\n&amp;quot;+
+		&amp;quot;&amp;lt;ROWSET&amp;gt; \r\n&amp;quot;+
+		&amp;quot;   &amp;lt;ROW&amp;gt; \r\n&amp;quot;+
+		&amp;quot;       &amp;lt;TABLEID&amp;gt; &amp;lt;/TABLEID&amp;gt;&amp;lt;COLID&amp;gt; &amp;lt;/COLID&amp;gt;&amp;lt;COLTYP&amp;gt; &amp;lt;/COLTYP&amp;gt;&amp;lt;COLLEN&amp;gt; &amp;lt;/COLLEN&amp;gt;\r\n&amp;quot;+
+		&amp;quot;   &amp;lt;/ROW&amp;gt;\r\n&amp;quot;+				
+		&amp;quot;&amp;lt;/ROWSET&amp;gt;  &amp;quot;;
+	_this.SetCellText(0,2,2,xml);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+// 参数
+//	dbname : 数据库的别名,如ISOGRAPH
+//      dbtype:  数据库的类型,如ORACLE/SQLSERVER/ACCESS
+//	dbxml:数据库结构定义的XML，该XML需要包括的字段是 TABLEID，COLID，COLTYP，COLLEN， 
+//      。。。 每个TABLE的XML，这些TABLE需要出现在dbxml的TABLEID中
+// 返回：
+//	操作结果说明
+function Response()
+{
+      var dbname =pubpack.EAFunc.NVL( request.getParameter(&amp;quot;dbname&amp;quot;),&amp;quot;&amp;quot; );
+      var dbtype =pubpack.EAFunc.NVL( request.getParameter(&amp;quot;dbtype&amp;quot;),&amp;quot;ORACLE&amp;quot; );
+      var dbxml =pubpack.EAFunc.NVL( request.getParameter(&amp;quot;dbxml&amp;quot;),&amp;quot;&amp;quot; );
+
+      if ( dbxml == &amp;quot;&amp;quot; ) return &amp;quot;参数dbxml必须&amp;quot;;
+      var db = null;
+      var ret= &amp;quot;&amp;quot;;
+      var tablename=&amp;quot;&amp;quot;;
+      try {
+      		
+            db = new pubpack.EADatabase(dbname);	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+	
+            var tabds = new pubpack.EAXmlDS(dbxml);
+            var oldtablename = &amp;quot;&amp;quot;;
+            var createsql = &amp;quot;&amp;quot;;
+            var collistsql = &amp;quot;&amp;quot;;
+            var inscollist = &amp;quot;&amp;quot;;
+            var inscoltyplist = &amp;quot;&amp;quot;;
+            //创建表结构
+            var tablelist= &amp;quot;&amp;quot;;
+            for ( var i=0;i&amp;lt;tabds.getRowCount();i++) {
+            	tablename = tabds.getStringAt(i,&amp;quot;TABLEID&amp;quot;);
+            	var colid = tabds.getStringAt(i,&amp;quot;COLID&amp;quot;);
+            	var coltyp = tabds.getStringAt(i,&amp;quot;COLTYP&amp;quot;);
+            	var collen = tabds.getStringAt(i,&amp;quot;COLLEN&amp;quot;);
+
+            	if ( tablename!=oldtablename&amp;&amp; oldtablename!= &amp;quot;&amp;quot;){
+ 
+            			createsql = &amp;quot;create table &amp;quot; + oldtablename + &amp;quot;(&amp;quot; + collistsql + &amp;quot;)&amp;quot;;
+            			try {db.ExcecutSQL(&amp;quot;drop table &amp;quot; + oldtablename );}catch( e ) {}
+            			db.ExcecutSQL(createsql);
+            			if ( tablelist!= &amp;quot;&amp;quot; ) tablelist+=&amp;quot;,&amp;quot;;
+            			tablelist+=oldtablename ;
+            			collistsql = &amp;quot;&amp;quot;;
+            			
+            			inscollist +=&amp;quot;～&amp;quot;;//分割
+            			inscoltyplist +=&amp;quot;～&amp;quot;;
+            			
+            	}
+            	if ( collistsql !=&amp;quot;&amp;quot; ) {collistsql += &amp;quot;,&amp;quot;;inscollist +=&amp;quot;,&amp;quot;; inscoltyplist +=&amp;quot;,&amp;quot;;}
+		collistsql += colid +&amp;quot; &amp;quot;+coltyp ;
+		if ( collen!=&amp;quot;&amp;quot; ) collistsql +=&amp;quot;(&amp;quot;+collen +&amp;quot;)&amp;quot;;          
+		inscollist += colid ;  
+		inscoltyplist += coltyp;   
+            	oldtablename=tablename ;
+            }
+
+            if ( oldtablename!= &amp;quot;&amp;quot; ) {
+		createsql = &amp;quot;create table &amp;quot; + oldtablename+ &amp;quot;(&amp;quot; + collistsql + &amp;quot;)&amp;quot;;
+		try {db.ExcecutSQL(&amp;quot;drop table &amp;quot; + oldtablename);}catch( e ) {}
+		db.ExcecutSQL(createsql);
+            	if ( tablelist!= &amp;quot;&amp;quot; ) tablelist+=&amp;quot;,&amp;quot;;
+            	tablelist+=oldtablename ;
+		
+            }
+	   
+            var stablelist = tablelist.split(&amp;quot;,&amp;quot;);
+            var sinscollist = inscollist.split(&amp;quot;～&amp;quot;);
+            var sinscoltyplist  = inscoltyplist.split(&amp;quot;～&amp;quot;);
+
+            var nCount = 0;
+            for ( var t=0;t&amp;lt;stablelist.length();t++) {
+            	var xml =pubpack.EAFunc.NVL( request.getParameter(stablelist [t]),&amp;quot;&amp;quot; );
+		if ( xml == &amp;quot;&amp;quot; ) throw new Exception ( &amp;quot;参数&amp;quot;+ stablelist [t] + &amp;quot;没有传入&amp;quot; );
+            	var ds = new pubpack.EAXmlDS(xml);
+            	
+            	for ( var i=0;i&amp;lt;ds.getRowCount();i++ ) {
+            		var sql = &amp;quot;insert into &amp;quot; + stablelist[t]+ &amp;quot;( &amp;quot; +sinscollist [t] + &amp;quot; ) values( &amp;quot; ;  
+            		var ss = sinscollist[t] .split( &amp;quot;,&amp;quot; );// 得到每个列	
+            		var ss_coltyp = sinscoltyplist[t].split( &amp;quot;,&amp;quot; );// 得到每个列	
+            		for ( var c= 0;c&amp;lt;ss.length() ;c++ ) {
+            			if ( c!= 0 ) sql += &amp;quot;,&amp;quot;;
+            			try {
+            				if ( ss_coltyp[c]==&amp;quot;FLOAT&amp;quot; || ss_coltyp[c]==&amp;quot;INT&amp;quot; || ss_coltyp[c]==&amp;quot;NUMBER&amp;quot; ) {
+            					if(ds.getStringAt(i,ss[c])==&amp;quot;&amp;quot;)
+            						 sql += &amp;quot;null&amp;quot;;
+            					else sql +=ds.getStringAt(i,ss[c]); 
+            				}
+					else 
+		            			sql += &amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(i,ss[c])+&amp;quot;&amp;apos;&amp;quot;; 
+	            		}
+	            		catch ( e ) {
+	            			throw new pubpack.EAException ( stablelist[t]+&amp;quot;的字段&amp;quot;+ss[c]+&amp;quot;在参数&amp;quot; +stablelist[t]+&amp;quot;描述的XML中不存在&amp;quot;  );
+	            		}
+            		
+            		}
+            		sql += &amp;quot; )&amp;quot;;
+            		pubpack.EAFunc.Log( sql);
+
+            		nCount += db.ExcecutSQL(sql);
+            	}
+            	
+
+            }
+            
+            return &amp;quot;导入&amp;quot;+stablelist.length()+&amp;quot;个表共&amp;quot;+nCount +&amp;quot;笔记录&amp;quot;;
+	
+      }
+      catch ( ee ) {
+            db.Rollback();
+            ret = ee.toString();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,303 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>TRKTYP</MWID><NAME>自定义事务类型</NAME><NOTE></NOTE><FILE>TRKTYP.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><EXTJS>xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS></JAVACLS><syt>XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0; 
+//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 14:22:36
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet) 
+{ 
+        // _this.SetCellBkColor(0,-1,-1,255,255,255); 
+        // _this.SetToButton(&amp;quot;udf_okbtn&amp;quot;,sheet,20,2,&amp;quot;确定&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1); 
+         //_this.SetToButton(&amp;quot;udf_cancelbtn&amp;quot;,sheet,20,4,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);  
+         setFinkey(); 
+        setTrsflg();
+//         setSendto();
+//         setEnd();
+//         setRetflg();
+//         setToptyp();
+
+} 
+//================================================================// 
+// 函数：setFinkey
+// 说明：查找关键字~如OA,SA,SD,BUG, 这样，我们可以查找OA的分类
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:33:49
+// 修改日志：
+//================================================================// 
+function setFinkey()
+{
+
+      // _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,8,2,setListCombox(&amp;quot;v_finkey&amp;quot;));
+       var show_listid  = _this.CreateListValue();
+        QuerySQLDS(&amp;quot;select id,name from v_finkey&amp;quot;); 
+        var cs = _this.XMLDS_GetRowCount(); 
+        var show_name = &amp;quot;&amp;quot;; 
+        var show_id = &amp;quot;&amp;quot;; 
+        if ( cs &amp;gt; 0 )
+        {  
+              for (var i=0;i&amp;lt;cs ;i++)
+              {
+                    show_id = _this.XMLDS_GetString(i,&amp;quot;id&amp;quot;);
+                    show_name = _this.XMLDS_GetString(i,&amp;quot;name&amp;quot;);
+                    _this.SetListValue(show_listid,show_id,show_name);
+              }
+
+        }
+        _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,8,2,show_listid); 
+        
+}
+//================================================================// 
+// 函数：setTrsflg
+// 说明：是否可以将事务转发其他人处理~0 可转发其他人=1 不能转发
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:07
+// 修改日志：
+//================================================================// 
+function setTrsflg()
+{
+     // _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,10,2,setListCombox(&amp;quot;v_trsflg&amp;quot;));
+            var show_listid  = _this.CreateListValue();
+        QuerySQLDS(&amp;quot;select id,name from v_trsflg&amp;quot;); 
+        var cs = _this.XMLDS_GetRowCount(); 
+        var show_name = &amp;quot;&amp;quot;; 
+        var show_id = &amp;quot;&amp;quot;; 
+        if ( cs &amp;gt; 0 )
+        {  
+              for (var i=0;i&amp;lt;cs ;i++)
+              {
+                    show_id = _this.XMLDS_GetString(i,&amp;quot;id&amp;quot;);
+                    show_name = _this.XMLDS_GetString(i,&amp;quot;name&amp;quot;);
+                    _this.SetListValue(show_listid,show_id,show_name);
+              }
+
+        }
+        _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,10,2,show_listid); 
+
+}
+
+//================================================================// 
+// 函数：setSendto
+// 说明：发送给目标人的方式~=0 可以发送给任何人1个 =1 发送给任何人多个 =2 只能发送给自己 =3 发送给某个组织的所有人
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:22
+// 修改日志：
+//================================================================// 
+//function setSendto()
+//{
+//      _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,12,2,setListCombox(&amp;quot;v_sendto&amp;quot;));
+//
+//}
+//================================================================// 
+// 函数：setEnd
+// 说明：结束事务标志~=0 一定要创建事务者结束事务 =1 不用结束事务 =2 可以不结束事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:39
+// 修改日志：
+//================================================================// 
+//function setEnd()
+//{
+//      _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,14,2,setListCombox(&amp;quot;v_end&amp;quot;));
+//
+//}
+//================================================================// 
+// 函数：setRetflg
+// 说明：回复事务标志~=0 一定要回复事务 =1 不用回复事务 =2 可以不回复事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:34:55
+// 修改日志：
+//================================================================// 
+//function setRetflg()
+//{
+//      _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,16,2,setListCombox(&amp;quot;v_retflg&amp;quot;));
+//
+//}
+//================================================================// 
+// 函数：setToptyp
+// 说明：TOPTYP	标题的自动格式~=0 录入的文本 =1 标题是录入的一个日期 =2 标题是录入日期所在的周 =3 标题是录入的日期的所在月份 =4 标题是录入日期所在年	
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 15:35:06
+// 修改日志：
+//================================================================// 
+//function setToptyp()
+//{
+//      _this.SetTocomboBox(&amp;quot;&amp;quot;,sheet,18,2,setListCombox(&amp;quot;v_toptyp&amp;quot;));
+//
+//}
+
+//================================================================//  
+// 函数：save
+// 说明：保存
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 16:22:18
+// 修改日志：
+//================================================================//  
+//function save()
+//{
+//      var name = _this.GetCellText(sheet,4,2);
+//      var note = _this.GetCellText(sheet,6,2);
+//      var finkey = _this.GetCellText(sheet,8,2);
+//      var trsflg = _this.GetCellText(sheet,10,2);
+//      var sendto = _this.GetCellText(sheet,12,2);
+//      var endflg = _this.GetCellText(sheet,14,2);
+//      var retflg = _this.GetCellText(sheet,16,2);
+//      var toptyp = _this.GetCellText(sheet,18,2);
+//      var param = new Object();
+//      param.name = name;
+//      param.note = note;
+//      param.finkey = finkey;
+//      param.trsflg = trsflg;
+//      param.sendto = sendto;
+//      param.endflg = endflg;
+//      param.retflg = retflg;
+//      param.toptyp = toptyp;
+//      param.crtusr = G_USRID;
+//      try 
+//      {
+//            ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param) ; 
+//            alert ( &amp;quot;已定义&amp;quot;+ret+&amp;quot;条事务类型&amp;quot;); 
+//      }
+//      catch(e)
+//      {
+//             alert (e);
+//      }
+//
+//      
+//}
+//================================================================// 
+// 函数：reset
+// 说明：清空
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 16:37:39
+// 修改日志：
+//================================================================// 
+//function reset()
+//{
+//      for (var i=4;i&amp;lt;=18;i+=2)
+//      {
+//            _this.SetCellText(sheet,i,2,&amp;quot;&amp;quot;);
+//      }
+//}
+
+//================================================================// 
+// 函数：_thisOnButtonCtrlClick
+// 说明：点击自定义按钮
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/29/06 16:40:13
+// 修改日志：
+//================================================================// 
+//function _thisOnButtonCtrlClick(id,sheet,row,col)  
+//{
+//       if (id == &amp;quot;udf_cancelbtn&amp;quot;)    //取消
+//        { 
+//              reset();    
+//              window.close();          
+//        } 
+//        if ( id == &amp;quot;udf_okbtn&amp;quot;)        //保存
+//        {
+//              save();
+//              window.close();
+//        }
+//
+//}
+//function _thisOnpost_loaddata(sheet)
+//{
+//        order = &amp;quot; order by ID&amp;quot;;   
+//        setButton();          //设置中间件按钮 
+//        var  fields =  
+//            &amp;quot;GUID,GUID,sys_guid();&amp;quot;+
+//             &amp;quot;ID,ID,,.+;&amp;quot;+	
+//            &amp;quot;NAME,名称,,.+;&amp;quot;+
+//            &amp;quot;NOTE,说明,,.+;&amp;quot;+ 
+//            &amp;quot;FINKEY,查找关键字,,.+;&amp;quot;+  
+//            &amp;quot;TRSFLG,事务处理方式,,.+;&amp;quot;+ 
+//            &amp;quot;SENDTO,发送方式,,.+;&amp;quot;+
+//            &amp;quot;ENDFLG,结束事务标志,,.+;&amp;quot;+
+//            &amp;quot;RETFLG,回复事务标志,,.+;&amp;quot;+
+//            &amp;quot;CRTDAT,创建日期,,.+;&amp;quot;+ 
+//            &amp;quot;CRTUSR,创建人&amp;quot;;
+//            
+//      _dbhelper.InitSQL(&amp;quot;trktyp&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false);       
+//      _dbhelper.Load(1,1,2,2);
+//      //setDate();
+//}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+function save() 
+{
+      var ret = 0;
+      var db = null;
+      var ds = null;
+      var sql = &amp;quot;&amp;quot;;
+      try
+      {
+            db = new pubpack.EADatabase();
+            var sql1 =  &amp;quot;SELECT trk_seq.nextval FROM DUAL&amp;quot; ; 
+            var trk_id = db.GetSQL(sql1);
+            sql = &amp;quot;insert into trktyp(id,name,note,finkey,trsflg,sendto,endflg,retflg,toptyp,crtusr ) &amp;quot;+
+                  &amp;quot;values(&amp;apos;&amp;quot;+trk_id+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+finkey+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+trsflg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+sendto+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+endflg+&amp;quot;&amp;apos;,&amp;quot;+
+                  &amp;quot;&amp;apos;&amp;quot;+retflg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+toptyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusr +&amp;quot;&amp;apos;)&amp;quot;; 
+            ret = db.ExcecutSQL(sql);
+            return ret ;      
+      }
+      catch(e)
+      {
+            throw e;
+      }
+      finally
+      {
+            db.Close(); 
+      }       
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

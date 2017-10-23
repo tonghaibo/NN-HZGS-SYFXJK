@@ -1,0 +1,305 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_Sandpay</MWID><NAME >魏康</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_Sandpay.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;getOrderStr&amp;quot;,&amp;quot;&amp;quot;);
+	//_this.SaveTextFile( &amp;quot;d:/Aquarius.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var HClient = new JavaPackage(&amp;quot;org.apache.commons.httpclient&amp;quot;);
+var method = new JavaPackage(&amp;quot;org.apache.commons.httpclient.methods&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+
+
+function getOrderStr() 
+{
+	var acc = &amp;quot;&amp;quot;;
+	var dat = &amp;quot;&amp;quot;;
+	var kaid = &amp;quot;&amp;quot;;
+	var userid = &amp;quot;&amp;quot;;
+	var passwd = &amp;quot;&amp;quot;;
+	var deptid = &amp;quot;&amp;quot;;
+	var code =&amp;quot;utf-8&amp;quot;;//读取网页返回数据的编码
+	var ret = &amp;quot;&amp;quot;; //保存网页返回来的数据
+	var inf = &amp;quot;&amp;quot;; //保存是否成功的记录log 
+	try{ 
+		var db = new pubpack.EADatabase();
+		var httpcall = new webget.HttpCall();
+		var httpclient = new HClient.HttpClient();
+		//登录罗森的供应商入口
+		ret = httpcall.Post(&amp;quot;http://www.sandpay.com.cn/website/shopservice/login.do&amp;quot;,&amp;quot;goto=login&amp;imageField.y=16&amp;imageField.x=34&amp;map(loginId)=888888854110355&amp;map(loginPwd)=54110355&amp;&amp;quot;);
+		//返回要抓取网页数据的HTML文档
+		ret = httpcall.Get(&amp;quot;http://www.sandpay.com.cn/website/shopservice/balance.do?map(beginDay)=2010-07-01&amp;map(endDay)=2010-08-01&amp;currentPage=1&amp;init=true&amp;goto=shopbalance&amp;quot;,code);
+		
+		//解析html字符串
+		var HtmlParser = new x_WG_HtmlParser();
+		var nodelist = HtmlParser.parserHtml(ret,code);
+		
+		//得到过滤要处理的标签后的nodelist对象
+		nodelist = HtmlParser.filterHtml(nodelist,&amp;quot;tr&amp;quot;);
+
+		var form = null;
+		var formAttr = &amp;quot;&amp;quot;;
+		var formlist = null;
+		
+		var tdlists = null;
+		
+		var tmp = &amp;quot;&amp;quot;;
+		//只处理tr中包含&amp;lt;td&amp;gt;&amp;lt;/td&amp;gt;的部分
+		for (var i = 0;i&amp;lt;nodelist.size();i++)
+		{
+			form = nodelist.elementAt(i);	
+			//tr中获取所有&amp;lt;td&amp;gt;标签 
+			tdlists = form.getChildren();
+			var tdlist = HtmlParser.filterHtml(tdlists,&amp;quot;td&amp;quot;);
+			if(tdlist.elementAt(1)!=null&amp;&amp;tdlist.elementAt(1).getFirstChild()!=null){
+				var link = HtmlParser.filterHtml(tdlist,&amp;quot;A&amp;quot;);//获取td下所有的&amp;lt;a&amp;gt;&amp;lt;/a&amp;gt;
+				if(link!=null){
+					link = link.elementAt(1);
+					if(link!=null){
+						var downlink = &amp;quot;http://www.sandpay.com.cn/website/shopservice/&amp;quot;+link.getAttribute(&amp;quot;href&amp;quot;);
+						tmp += downlink  +&amp;quot;|&amp;quot;;
+						ret = httpcall.Post(downlink,&amp;quot;&amp;quot;);
+						//保存=为文件
+						pub.EAFunc.WriteToFile(&amp;quot;d:/EDIDownloads/sand/&amp;quot;+link.getStringText(),ret);
+						
+						var msg = imp2DB(ret);//把订单写入数据库
+						if (msg != &amp;quot;ok&amp;quot;) {
+							if (inf != &amp;quot;&amp;quot;) inf += &amp;quot;\n&amp;quot;;
+							inf += dat+&amp;quot;：\n&amp;quot;+ msg;
+						}
+						//下载文件并同时保存下来
+						//HtmlParser.downloadFile(downlink,&amp;quot;d:/EDIDownloads/sand/&amp;quot;+link.getStringText());
+					}
+				}
+			}
+			
+
+		}	
+		throw new Exception(inf+&amp;quot;||&amp;quot;+tmp); 
+				
+	}catch(e){
+		throw new Exception(e);
+	}
+	finally
+	{
+		if(db != null)
+			db.Close();
+	}	
+}
+
+//导入到数据库
+function imp2DB(txt)
+{
+	var db = null;
+	var sr = new java.io.StringReader(txt);
+	var br = new java.io.BufferedReader(sr);
+	var sql = &amp;quot;&amp;quot;;
+	var rw = 0;
+//	try {
+		var line = &amp;quot;&amp;quot;;
+		var rows = 0;
+		var k = 0;
+		var seqid = 0;
+		var arrHdr = new Array(23);	//保存表头信息数组，下标按表字段顺序排
+		var pc_success_no = 0;		//批次累计成功笔数记数
+		var isExist = false;		//是否已导入标志
+
+		db = new pub.EADatabase();
+		
+		var guid = db.GetSQL(&amp;quot;select sys_guid() guid from dual&amp;quot;);	//保存抓下来的订单表头GUID
+		arrHdr[0] = guid;
+		var tmp = &amp;quot;&amp;quot;;
+		while( (line = br.readLine()) != null) { 
+			var str = line;
+			//记录消费记录(表体)
+			var arrDTL = new Array(11);
+			var p = 0;//详细记录的数组arrDTL序号 
+			if (line.length() &amp;lt; 1||line.indexOf(&amp;quot;----------------------------------------------&amp;quot;)&amp;gt;-1){//如果行为空则跳过不读取
+				continue; 
+			}else if(line.indexOf(&amp;quot;交易明细单&amp;quot;)&amp;gt;-1){//读取表头的数据
+				//获取交易明细单  
+				//读取位置6-25的字符 
+				arrHdr[1]=&amp;quot;&amp;quot;;
+				for(var i=6;i&amp;lt;25;i++){
+					arrHdr[1]+=line.charAt(i);
+				}
+				//throw new Exception(&amp;quot;arrHdr[1]=&amp;quot;+arrHdr[1]);
+				continue;
+			}else if(line.indexOf(&amp;quot;商户号&amp;quot;)&amp;gt;-1&amp;&amp;line.indexOf(&amp;quot;结算周期&amp;quot;)&amp;gt;-1){ 
+				//获取商户号和 
+				arrHdr[2]=&amp;quot;&amp;quot;; 
+				for(var i=4;i&amp;lt;19;i++){
+					arrHdr[2]+=line.charAt(i);
+				}
+				//结算周期 
+				arrHdr[3]=&amp;quot;&amp;quot;;
+				for(var i=51;i&amp;lt;76;i++){
+					arrHdr[3]+=line.charAt(i);
+				}
+				throw new Exception(&amp;quot;arrHdr[3]=&amp;quot;+arrHdr[3]);
+			}else if(str.length()&amp;gt;=120){ 
+				arrDTL[0]=&amp;quot;&amp;quot;;//初始化为空否则在+=时会有undifined 
+				for(var i = 0;i&amp;lt;str.length();i++){
+					if(str.charAt(i)!=&amp;quot; &amp;quot;){//字符不是空格,写入数组
+						arrDTL[p]+=str.charAt(i)+&amp;quot;&amp;quot;;
+					}else if(i!=0&amp;&amp;str.charAt(i*1-1)!=&amp;quot; &amp;quot;){//字符是空格,且空格后下一个字符不是空格则写入的数组+1
+						p++;
+						arrDTL[p]=&amp;quot;&amp;quot;;//初始化为空否则在+=时会有undifined
+					}
+				}
+				tmp += arrDTL[8]+&amp;quot;|&amp;quot;;
+			}else{
+				throw new Exception(&amp;quot;格式有变动,代码可能需要改动&amp;quot;);
+			}
+
+			
+			
+
+		}
+		throw new Exception(&amp;quot;tmp=&amp;quot;+tmp );
+		
+		//文本内容有些比较特殊
+		//ZL_103310054110522_20100607.txt
+		//ZL_103310054110522_20100531.txt
+
+//		while( (line = br.readLine()) != null) {
+//			rows ++; k++; rw ++;
+//			line = formatStr(line);			
+//			rows = rows % 67;						
+//			if (rows == 0) {												
+//				rows ++;
+//				continue;
+//			}									
+//			
+//			if (line.length() &amp;lt; 1) continue;	//文件第一行是空行，一张单子共66行，可能会有一个文件有多张单子 如ZL_103310054110522_20100517.txt
+//			
+//			if (rows == 1) {
+//				continue;
+//			}
+//			else if (rows == 2) {
+//				arrHdr[1] = line;	//标题行
+//			}
+//			else if (rows == 3) {
+//				arrHdr[5] = line;	//银联清算日期
+//				arrHdr[5] = arrHdr[5].substring(arrHdr[5].indexOf(&amp;quot;:&amp;quot;)+1);
+//			}
+//			else if (rows == 4) {				
+//				arrHdr[2] = line.substring(line.indexOf(&amp;quot;行号:&amp;quot;)+3,line.indexOf(&amp;quot;商户号:&amp;quot;));		//行号
+//				arrHdr[3] = line.substring(line.indexOf(&amp;quot;商户号:&amp;quot;)+4,line.indexOf(&amp;quot;商户名称:&amp;quot;));	//商户号
+//				arrHdr[4] = line.substring(line.indexOf(&amp;quot;商户名称:&amp;quot;)+5,line.indexOf(&amp;quot;打印日期:&amp;quot;));	//商户名称
+//				arrHdr[6] = line.substring(line.indexOf(&amp;quot;打印日期:&amp;quot;)+5);				//打印日期
+//			}
+//			//跳过分割线行和头说明行
+//			else if (rows == 5) {
+//				//检查看是否已导入，如果已经导入过则忽略
+//				//判定条件：商户号+银联清算日期
+//				sql = &amp;quot;select * from NK_95599_HDR where shopno=&amp;apos;%s&amp;apos; and bankdat=&amp;apos;%s&amp;apos; and printdat=&amp;apos;s%&amp;apos;&amp;quot;.format([arrHdr[3],arrHdr[5],arrHdr[6]]);
+//				var cnt = db.GetSQLRowCount(sql);
+//				if (cnt &amp;gt; 0) {
+//					isExist = true;
+//				}	
+//				else {
+//					isExist = false;
+//				}	
+//						
+//				continue;
+//			}
+//			else if (rows == 6 || rows == 7) {
+//				continue;
+//			}
+//			else {
+//				if (line.substring(0,1) == &amp;quot;─&amp;quot;) {
+//					continue;
+//				}
+//				if (line.indexOf(&amp;quot;批次累计成功笔数│&amp;quot;) &amp;gt; -1) {
+//					pc_success_no ++;
+//					if (pc_success_no == 1) {
+//						arrHdr[7] = line.substring(line.indexOf(&amp;quot;批次累计成功笔数│&amp;quot;)+9,line.indexOf(&amp;quot;│批次累计成功金额│&amp;quot;));
+//						arrHdr[8] = line.substring(line.indexOf(&amp;quot;批次累计成功金额│&amp;quot;)+9,line.length()-1);
+//					}
+//					else {
+//						arrHdr[9] = line.substring(line.indexOf(&amp;quot;批次累计成功笔数│&amp;quot;)+9,line.indexOf(&amp;quot;│批次累计成功金额│&amp;quot;));
+//						arrHdr[10] = line.substring(line.indexOf(&amp;quot;批次累计成功金额│&amp;quot;)+9,line.length()-1);
+//					}
+//				}
+//				else if (line.indexOf(&amp;quot;终端累计成功笔数│&amp;quot;) &amp;gt; -1) {
+//					arrHdr[11] = line.substring(line.indexOf(&amp;quot;终端累计成功笔数│&amp;quot;)+9,line.indexOf(&amp;quot;│终端累计成功金额│&amp;quot;));
+//					arrHdr[12] = line.substring(line.indexOf(&amp;quot;终端累计成功金额│&amp;quot;)+9,line.length()-1);
+//				}
+//				else if (line.indexOf(&amp;quot;商户累计成功笔数│&amp;quot;) &amp;gt; -1) {
+//					arrHdr[13] = line.substring(line.indexOf(&amp;quot;商户累计成功笔数│&amp;quot;)+9,line.indexOf(&amp;quot;│商户累计成功金额│&amp;quot;));
+//					arrHdr[14] = line.substring(line.indexOf(&amp;quot;商户累计成功金额│&amp;quot;)+9,line.indexOf(&amp;quot;│商户回扣率│&amp;quot;));
+//					arrHdr[15] = line.substring(line.indexOf(&amp;quot;商户回扣率│&amp;quot;)+6,line.indexOf(&amp;quot;％&amp;quot;));	//去掉百分号
+//					arrHdr[16] = line.substring(line.indexOf(&amp;quot;商户扣率(2)│&amp;quot;)+8,line.length()-2);		//去掉百分号
+//				}
+//				else if (line.indexOf(&amp;quot;│发生额│&amp;quot;) &amp;gt; -1) {
+//					arrHdr[17] = line.substring(line.indexOf(&amp;quot;│发生额│&amp;quot;)+5,line.indexOf(&amp;quot;│回扣费│&amp;quot;));
+//					arrHdr[18] = line.substring(line.indexOf(&amp;quot;│回扣费│&amp;quot;)+5,line.indexOf(&amp;quot;│调帐笔数│&amp;quot;));
+//					arrHdr[19] = line.substring(line.indexOf(&amp;quot;│调帐笔数│&amp;quot;)+6,line.indexOf(&amp;quot;│调帐金额│&amp;quot;));
+//					arrHdr[20] = line.substring(line.indexOf(&amp;quot;│调帐金额│&amp;quot;)+6,line.indexOf(&amp;quot;│划帐金额│&amp;quot;));
+//					arrHdr[21] = line.substring(line.indexOf(&amp;quot;│划帐金额│&amp;quot;)+6,line.indexOf(&amp;quot;│划账金额(2)│&amp;quot;));
+//					arrHdr[22] = line.substring(line.indexOf(&amp;quot;│划账金额(2)│&amp;quot;)+9,line.length()-1);
+//					
+//					//不存在则写入
+//					if (!isExist) {					
+//						//写入表头NK_95599_HDR
+//						sql = &amp;quot;insert into NK_95599_HDR select &amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,
+//								&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos; from dual&amp;quot;
+//							.format([arrHdr[0],arrHdr[1],arrHdr[2],arrHdr[3],arrHdr[4],arrHdr[5],arrHdr[6],arrHdr[7],
+//								arrHdr[8],arrHdr[9],arrHdr[10],arrHdr[11],arrHdr[12],arrHdr[13],arrHdr[14],arrHdr[15],
+//								arrHdr[16],arrHdr[17],arrHdr[18],arrHdr[19],arrHdr[20],arrHdr[21],arrHdr[22]]);
+//						db.ExcecutSQL(sql);
+//						
+//						guid = db.GetSQL(&amp;quot;select sys_guid() guid from dual&amp;quot;);	//表头GUID
+//						arrHdr[0] = guid;
+//						seqid = 0;
+//						pc_success_no = 0;
+//					}
+//	
+//				}
+//				//下面拆分明细行记录
+//				else {
+//					seqid ++;
+//					setDetail(db,guid,line,seqid,arrHdr[5],arrHdr[6]);
+//				}			
+//			}
+//		}
+		
+					
+		//db.Commit();
+		return &amp;quot;ok&amp;quot;;
+//	}
+//	catch ( e ) {
+//		if (db != null) db.Rollback();
+//		return &amp;quot;出错行号：&amp;quot;+rw+e.toString();
+//	}
+//	finally {
+//		if( sr != null) sr.close();
+//		if( br != null) br.close();
+//		if (db != null) db.Close();
+//	}
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,297 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >JIAXFX</MWID><NAME >驾校风险识别</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >JIAXFX.zxg</FILE><SCENE ></SCENE><FIXED >2,2</FIXED><CATTYP >风险识别</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >lycpEdit</ID><NAME >驾校收费参数维护</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >GRDBTNDS_1</C10><C11 >lycpEdit</C11><C12 >lycpEdit</C12><C13 >lycpEdit</C13><C14 >lycpEdit</C14><C15 >lycpEdit</C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >lycpEdit</C22></ROW>
+<ROW num="1" ><ID >NSRPP</ID><NAME >纳税人匹配</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 >NSRPP</C21><C22 ></C22></ROW>
+<ROW num="2" ><ID >JXSJCX</ID><NAME >驾校数据查询</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >JXSJCX</C18><C19 ></C19><C20 >JXSJCX</C20><C21 ></C21><C22 ></C22></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT1</ID><NAME >起始日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YM1</C13><C14 ></C14><C15 >YM1</C15><C16 >YM1</C16><C17 >YM1</C17><C18 ></C18></ROW>
+<ROW num="1" ><ID >DAT2</ID><NAME >截止日期</NAME><NOTNULL >1</NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GRDPAMDS_1</C13><C14 ></C14><C15 >YM2</C15><C16 ></C16><C17 >YM2</C17><C18 ></C18></ROW>
+<ROW num="2" ><ID >ZGSWJG</ID><NAME >主管税务机关</NAME><NOTNULL >1</NOTNULL><KEYVAL >V_SWJG</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >ZGSWJG</C17><C18 >ZGSWJG</C18></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var bfrist = true;
+var bl1 = 0;
+var bl2 = 0;
+var bl3 = 0;
+var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.AutoFixScreenWidth();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;50&amp;quot;);
+	
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,2,G_LOGDAT);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,4,G_LOGDAT);
+	//税务机关
+	var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;where=sjid=&amp;quot;+G_DEPTID+&amp;quot; or id=&amp;quot;+G_DEPTID),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,6,swjgList);
+	_this.SetCellText(1,1,6,G_DEPTID);
+	
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	_sql.querytods(&amp;quot;FXDJBL&amp;quot;,&amp;quot;&amp;quot;); //在循环外查询出等级比例
+	bl1 = _this.XMLDS_GetString(0,&amp;quot;BL&amp;quot;); //高
+	bl2 = _this.XMLDS_GetString(1,&amp;quot;BL&amp;quot;); //中
+	bl3 = _this.XMLDS_GetString(2,&amp;quot;BL&amp;quot;); //低
+
+	//添加生成核实任务按钮
+	if (bfrist == true) {
+		bfrist = false;
+		var chkrol = invokeOSFunc(&amp;quot;GXHZTAX.DesktopLayout.checkGenTask2&amp;quot;,&amp;quot;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID);
+		if (chkrol &amp;gt; 0) {
+	
+		}else{
+			_this.AddToolbarButton(&amp;quot;udf_genTasks&amp;quot;,&amp;quot;生成核实任务&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,0,100);
+		}
+	}
+
+}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		loadData();
+	}
+}
+
+
+//等待时执行的任务
+function runWaitingTask()
+{
+	var dat1 = _this.GetCellText(1,1,2);
+	var dat2 = _this.GetCellText(1,1,4);
+	var zgswjg = _this.GetCellText(1,1,6);	
+	var xml =  _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;DAT1=&amp;quot;+dat1+&amp;quot;&amp;DAT2=&amp;quot;+dat2+&amp;quot;&amp;ZGSWJG=&amp;quot;+zgswjg);
+	return xml;
+}
+
+//加载主数据
+function loadData()
+{	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,2);
+	_this.SetFixedCol(0,1);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	var dat1 = _this.GetCellText(1,1,2);
+	var dat2 = _this.GetCellText(1,1,4);
+	var swjg = _this.GetCellText(1,1,6);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,2,dat1);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,4,dat2);
+	
+	if (dat1 == &amp;quot;&amp;quot; || dat2 == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择日期范围！&amp;quot;); return; }
+	if (swjg == &amp;quot;&amp;quot;) { alert(&amp;quot;请选择税务机构！&amp;quot;); return; }
+	
+	var xml = showModalDialog(&amp;quot;show.sp?grdid=Waiting&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=200px;dialogHeight=80px&amp;quot;);
+	_this.SetMainCellRange(0,2,1,_this.GetRowCount(0)-1,_this.GetColCount(0)-1);
+	_this.SetXmlDS(0,2,1,_this.GetRowCount(0)-1,_this.GetColCount(0)-1,xml);
+
+	_this.SetToBoolBox(0,1,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+
+		if (_this.GetCellText(0,r,3) != &amp;quot;&amp;quot;) {
+			//预警等级
+			var cssomny = _this.GetCellText(0,r,6);
+			var sbmny = _this.GetCellText(0,r,7); 
+			var cz = (cssomny - sbmny).toFixed(2);			
+			var bl = (cz / cssomny).toFixed(2);
+			_this.SetCellText(0,r,8,cz);
+			_this.SetCellText(0,r,9,bl);
+		        if (bl &amp;gt; 0) {
+			        if (bl &amp;gt;= bl1) { _this.SetCellText(0,r,10,&amp;quot;高&amp;quot;); _this.SetCellColor(0,r,10,255,0,0); }
+			        else if (bl &amp;gt;= bl2) { _this.SetCellText(0,r,10,&amp;quot;中&amp;quot;); _this.SetCellColor(0,r,10,230,165,25); }
+			        else if (bl &amp;gt;= bl3) { _this.SetCellText(0,r,10,&amp;quot;低&amp;quot;); _this.SetCellColor(0,r,10,220,220,110); }
+		        }
+		}
+		else {
+			_this.SetRowVisible(0,r,-1);
+		}
+        }
+	//_this.AutoFixColWidth(0,400);
+	_this.AutoFixScreenWidth();
+	
+}
+
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 1 &amp;&amp; col == 0) {
+		for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+			if (_this.GetCellText(0,r,3) != &amp;quot;&amp;quot;) {
+				_this.SetCellText(0,r,0,newvalue);
+			}
+		}
+	}
+}
+
+function lycpEdit()
+{
+	//window.open(&amp;quot;xlsgrid/jsp/pages/dbEdit.jsp?grdid=LYCPZL&amp;quot;);
+	//window.open(&amp;quot;show.sp?grdid=JXSFCSWHB&amp;quot;);
+	showModalDialog(&amp;quot;show.sp?grdid=JXSFCSWHB&amp;loaddata=1&amp;pagesize=100&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth=1024px;dialogHeight=800px&amp;quot;);
+}
+
+
+function getXmlStr(sheet,row1,col1,row2,col2)
+{
+	var xmlstr = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var i = 0;
+	for (var r=row1;r&amp;lt;=row2;r++) {
+		if (_this.GetCellText(sheet,r,0) == &amp;quot;1&amp;quot;) {
+			xmlstr += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(++i)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+			var nsrsbh = _this.GetCellText(sheet,r,3);
+			var nsrmc = _this.GetCellText(sheet,r,4);
+			var fxdj = _this.GetCellText(sheet,r,10);
+			var csxsje = 1.0*_this.GetCellText(sheet,r,6); //测算销售金额
+			var sbje = 1.0*_this.GetCellText(sheet,r,7); //申报金额
+			var cyje = 1.0*_this.GetCellText(sheet,r,8); //差异金额
+			var note = &amp;quot;测算收入金额：&amp;quot;+csxsje+&amp;quot;，申报金额：&amp;quot;+sbje+&amp;quot;，差异金额：&amp;quot;+cyje.toFixed(2);
+			
+			xmlstr += &amp;quot;&amp;lt;NSRSBH&amp;gt;&amp;quot;+nsrsbh+&amp;quot;&amp;lt;/NSRSBH&amp;gt;\n&amp;quot;; //纳税人识别号
+			xmlstr += &amp;quot;&amp;lt;NSRMC&amp;gt;&amp;quot;+nsrmc+&amp;quot;&amp;lt;/NSRMC&amp;gt;\n&amp;quot;;	   //纳税人名称
+			xmlstr += &amp;quot;&amp;lt;NOTE&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/NOTE&amp;gt;\n&amp;quot;;       //说明
+			xmlstr += &amp;quot;&amp;lt;FXDJ&amp;gt;&amp;quot;+fxdj+&amp;quot;&amp;lt;/FXDJ&amp;gt;\n&amp;quot;;       //风险等级
+			xmlstr += &amp;quot;&amp;lt;CYJE&amp;gt;&amp;quot;+cyje+&amp;quot;&amp;lt;/CYJE&amp;gt;\n&amp;quot;;       //差异金额
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	return xmlstr;
+}
+
+
+//生成核实任务
+function genTasks()
+{
+	var param = new Object();	
+	
+	var xmlds = getXmlStr(0,2,2,_this.GetMainCellRangeRow2(0),24);
+	param.xmlstr = xmlds;	
+	param.usrids = G_USRID;
+	param.usrnams = G_USRNAM;
+	param.accids = G_ACCID;
+	param.orgs = G_ORGID;
+	param.syts = G_SYTID;
+	param.typ = &amp;quot;2&amp;quot;;     //决策二包任务
+	param.subtyp = &amp;quot;05&amp;quot;; // 
+//	param.yymm1 = document.getElementById(&amp;apos;DAT1&amp;apos;).value; //获取DAT1
+//	param.yymm2 = document.getElementById(&amp;apos;DAT2&amp;apos;).value;
+	param.yymm1 = _this.GetCellText(1,1,2);
+	param.yymm2 = _this.GetCellText(1,1,4);
+	param.swjg_dm = G_DEPTID;
+	param.toswjg = &amp;quot;&amp;quot;;
+	param.tousr=&amp;quot;&amp;quot;;
+	var retobj = window.showModalDialog(&amp;quot;show.sp?grdid=RWParam&amp;typ=&amp;quot;+param.typ+&amp;quot;&amp;subtyp=&amp;quot;+param.subtyp,&amp;quot;&amp;quot;,&amp;quot;dialogHeight=300px;dialogWidth=420px;toolbar=no;menubar=no;scrollbars=no;resizable=no;location=no;status=no&amp;quot;);
+	try {
+	//if (retobj != &amp;quot;undefined&amp;quot; &amp;&amp; retobj != null) {		
+		param.enddat = retobj.enddat;
+		param.note = retobj.note;
+		param.typ = retobj.typ;
+		param.subtyp = retobj.subtyp;
+		var msg = invokeOSFuncExt(&amp;quot;TAXFXJK.PUBTRK.createTask&amp;quot;,param);//系统号.中间件编号.服务端方法 --打开“核实任务公共组件 ”中间件
+		alert(msg);
+	//}	
+	} catch (e) { }
+}
+
+//纳税人匹配
+function NSRPP()
+{
+	window.open(&amp;quot;show.sp?grdid=JIAXIAO_NSRPP&amp;quot;);
+}
+
+//驾校数据查询
+function JXSJCX()
+{
+	window.open(&amp;quot;show.sp?grdid=Jxsjcx&amp;pagesize=100&amp;quot;);
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--驾校风险识别
+select rownum, dual.* from (
+select jxsr.jiaxmc,jxsr.nsrsbh,jxsr.nsrmc,jxsr.zslrs,jxsr.jszsr,
+   nvl(sb.jsyj,0) jsyj,(jxsr.jszsr-nvl(sb.jsyj,0))srsbcy,
+   round((jxsr.jszsr-nvl(sb.jsyj,0))/jxsr.jszsr,4)czzb,&amp;apos;&amp;apos;yjdj,
+  (select nsrztmc from  DM_GY_NSRZT zt where t1.nsrzt_dm=zt.nsrzt_dm) nsrzt, 
+  (select swryxm from DM_GY_SWRY swry where swry.swry_dm=t1.SSGLY_DM)ssgly,
+  (select name from v_swjg sw where sw.id=substr(t1.zgswskfj_dm,1,7))zgswjg,
+  (select swjgmc from DM_GY_SWJG jg where t1.zgswskfj_dm=jg.swjg_dm)zgswskfj,
+  (select hymc from DM_GY_HY hy where t1.hy_dm=hy.hy_dm and hy.yxbz=&amp;apos;Y&amp;apos;)hy,
+  (select djzclxmc from DM_DJ_DJZCLX zclx where zclx.djzclx_dm=t1.djzclx_dm) djzclx,
+  tax.shxydm,tax.djxh
+from 
+(--计算驾校收入
+select jiaxmc,nsrsbh,nsrmc,sum(slrs)zslrs,sum(sr)jszsr
+from(
+select jx.jiaxmc,jx.diqlx,jx.jiazlx,jx.lingqlx,jx.sfcsdm,jx.slrs,sf.baomf,dzb.nsrsbh,dzb.nsrmc,(jx.slrs*sf.baomf)sr
+from TAX_JIAXDATA jx,TAX_JIAXSFCSB sf,TAX_JXMC_NSRSBH_DZB dzb
+where jx.sfcsdm=sf.sfcsdm(+)
+and jx.jiaxmc=dzb.jiaxmc(+)
+and sjssyf&amp;gt;=to_char(date&amp;apos;[%DAT1]&amp;apos;,&amp;apos;yyyymm&amp;apos;) 
+and sjssyf&amp;lt;=to_char(date&amp;apos;[%DAT2]&amp;apos;,&amp;apos;yyyymm&amp;apos;)
+) group by jiaxmc,nsrsbh,nsrmc ) jxsr,
+tax_company tax,
+(--申报数据
+select to_char(djxh)djxh,sum(jsyj) as jsyj
+  from (SELECT SBXX.DJXH,
+               SBXX.JSYJ
+          FROM SB_SBXX SBXX
+         WHERE sbxx.gzlx_dm_1 in (&amp;apos;1&amp;apos;, &amp;apos;5&amp;apos;)
+           AND SBXX.ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;
+           AND SBXX.SKSSQQ &amp;gt;= date &amp;apos;[%DAT1]&amp;apos;
+           AND SBXX.SKSSQZ &amp;lt;=date &amp;apos;[%DAT2]&amp;apos; 
+           AND SBXX.ZSXM_DM IN (&amp;apos;10101&amp;apos;)
+           AND SBXX.ZFBZ_1 = &amp;apos;N&amp;apos;
+           ) group by djxh )sb,
+(--关联税务登记信息
+SELECT * FROM(
+SELECT djxh,NSRSBH,NSRMC,NSRZT_DM,zgswskfj_dm,hy_dm,djzclx_dm,ssgly_dm,shxydm,
+ROW_NUMBER()OVER (PARTITION BY NSRSBH,NSRMC ORDER BY DJRQ DESC ) RN
+FROM
+(
+select djxh,nvl(shxydm,nsrsbh) nsrsbh,shxydm,NSRMC,djrq,jdxz_dm,YXBZ,NSRZT_DM,zgswskfj_dm,hy_dm,djzclx_dm,ssgly_dm
+ from dj_nsrxx 
+ where zgswskfj_dm like &amp;apos;14511%&amp;apos;
+ and yxbz=&amp;apos;Y&amp;apos;
+))WHERE RN=1 
+)t1
+where jxsr.nsrsbh=tax.id(+)
+and tax.djxh=sb.djxh(+)
+and tax.djxh=t1.djxh(+)
+AND substr(t1.zgswskfj_dm,1,7) in (select id from v_swjg start with id=&amp;apos;[%ZGSWJG]&amp;apos; connect by prior id=sjid)
+order by srsbcy desc )dual 
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 ></C8><C9 >MAIN</C9></ROW>
+<ROW num="1" ><ID >FXDJBL</ID><NAME >风险等级预警</NAME><DATDSC >select * from TAX_CS_FXYJJB order by bl desc</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >FXDJBL</C7><C8 >FXDJBL</C8><C9 ></C9></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

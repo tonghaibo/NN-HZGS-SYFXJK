@@ -1,0 +1,473 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >ANYJOBRun</MWID><NAME >后台分析作业执行</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ANYJOBRun.zxg</FILE><SCENE ></SCENE><FIXED >1,2</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >1</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >COMACDC</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >TYP</ID><NAME >分类</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SCM_ANYTYP</KEYVAL><INPCTL >list</INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >TYP</C13><C14 ></C14><C15 >TYP</C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="1" ><ID >crtusr</ID><NAME >创建人</NAME><NOTNULL ></NOTNULL><KEYVAL >V_USR</KEYVAL><INPCTL >list</INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >crtusr</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="2" ><ID >DAT1</ID><NAME >创建开始日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="3" ><ID >DAT2</ID><NAME >创建截至日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="4" ><ID >ANYSTAT</ID><NAME >状态</NAME><NOTNULL ></NOTNULL><KEYVAL >V_SCM_ANYSTAT</KEYVAL><INPCTL >list</INPCTL><DISPORD >7</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="5" ><ID >TITLE</ID><NAME >标题</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >13</INPCTL><DISPORD >8</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="6" ><ID >JOBID</ID><NAME >作业编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL >13</INPCTL><DISPORD >8</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >JOBID</C14><C15 ></C15><C16 >JOBID</C16><C17 >JOBID</C17></ROW>
+<ROW num="7" ><ID >STYP</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >13</NROW><NCOL >14</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//数据加载完毕
+var loadend = 0;
+function _thisOnpost_loaddata(sheet)
+{
+  _this.SetColVisible(sheet,12,-1);
+  _this.SetColVisible(sheet,13,-1);
+  _this.SetColVisible(sheet,9,-1);
+  var jobid = &amp;quot;&amp;quot;;
+//  try{
+  	jobid = document.all(&amp;apos;JOBID&amp;apos;).value;
+//  }
+//  catch{
+//  
+//  }
+  if( jobid != &amp;quot;&amp;quot; &amp;&amp; STYP == &amp;quot;1&amp;quot;&amp;&amp; loadend ==0 ){
+  	loadend  = 1;
+	_sql.querytods(&amp;quot;QueryRunOSTimer&amp;quot;,&amp;quot;jobid=SCMANY&amp;quot;+jobid );
+	if( 1*_this.XMLDS_GetStringAt(0,0)&amp;gt;0 ){
+		//有一个作业正在运行，打开进度框
+		window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=SCMANY&amp;quot;+jobid+&amp;quot;&amp;usrid=&amp;quot;+G_USRID,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+	}
+	else {
+		_sql.querytods(&amp;quot;QueryRunOSTimerExist&amp;quot;,&amp;quot;jobid=SCMANY&amp;quot;+jobid );
+		if( 1*_this.XMLDS_GetStringAt(0,0)&amp;gt;0 ){
+			if( confirm( &amp;quot;该进程已经执行过，是否重新执行?&amp;quot; ) == 1 ){
+				_sql.run(&amp;quot;DeleteQueryRunOSTimer&amp;quot;,&amp;quot;jobid=SCMANY&amp;quot;+jobid );
+			}
+			else {
+				window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=SCMANY&amp;quot;+jobid,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+				return ;
+			}
+		}
+		
+		// 通过Get的方式调用服务端的一个函数
+		var sParam =&amp;quot;jobid=&amp;quot;+jobid+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;jobnam=&amp;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;thisaccid=&amp;quot;+G_ACCID+&amp;quot;&amp;thissytid=&amp;quot;+G_SYTID;
+		try {
+			ret = invokeOSFunc(&amp;quot;genbatch&amp;quot;,sParam) ;    
+			if ( ret!=&amp;quot;&amp;quot; ) {
+				window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+ ret ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+			}   
+		}
+		catch ( e ) {
+				alert ( e );
+		}
+	}
+  }
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	var str = _this.GetCellText(sheet,row,col) ;
+	var typ = _this.GetCellText(sheet,row,13);
+	var jobid = _this.GetCellText(sheet,row,0);
+	if ( str == &amp;quot;生成报告&amp;quot; || str == &amp;quot;重新生成&amp;quot; ){
+		_sql.querytods(&amp;quot;QueryRunOSTimer&amp;quot;,&amp;quot;jobid=SCMANY&amp;quot;+jobid );
+		if( 1*_this.XMLDS_GetStringAt(0,0)&amp;gt;0 ){
+			//有一个作业正在运行，打开进度框
+			window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=SCMANY&amp;quot;+jobid,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+		}
+		else {
+			_sql.querytods(&amp;quot;QueryRunOSTimerExist&amp;quot;,&amp;quot;jobid=SCMANY&amp;quot;+jobid );
+			if( 1*_this.XMLDS_GetStringAt(0,0)&amp;gt;0 ){
+				if( confirm( &amp;quot;该进程已经执行过，是否重新执行?&amp;quot; ) == 1 ){
+					_sql.run(&amp;quot;DeleteQueryRunOSTimer&amp;quot;,&amp;quot;jobid=SCMANY&amp;quot;+jobid );
+				}
+				else {
+					window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=SCMANY&amp;quot;+jobid,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+					return ;
+				}
+			}
+			// 通过Get的方式调用服务端的一个函数
+			var sParam =&amp;quot;jobid=&amp;quot;+jobid+&amp;quot;&amp;thisorgid=&amp;quot;+G_ORGID+&amp;quot;&amp;jobnam=&amp;quot;+_this.GetCellText(0,row,1 )+&amp;quot;&amp;usrid=&amp;quot;+G_USRID;
+			try {
+				ret = invokeOSFunc(&amp;quot;genbatch&amp;quot;,sParam) ;    
+				if ( ret!=&amp;quot;&amp;quot; ) {
+					window.showModalDialog(&amp;quot;show.sp?grdid=RunOSTimer&amp;jobseqid=&amp;quot;+ ret ,&amp;quot;&amp;quot;,&amp;quot;dialogwidth:600pt;dialogheight:500pt;help:yes;resizable:yes;&amp;quot; );
+				}   
+			}
+			catch ( e ) {
+				alert ( e );
+			}
+		}
+	} 
+	else if ( str == &amp;quot;明细查询&amp;quot; || ( row&amp;gt;=_this.GetMainCellRangeRow1(0) &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(0)) ){
+
+		if( typ == &amp;quot;2&amp;quot; ){ 
+			var url = &amp;quot;Layout.sp?id=RSPLLayout&amp;jobid=&amp;quot;+_this.GetCellText(sheet,row,0);
+			openWindow( url );
+
+		}
+		else if( typ == &amp;quot;4&amp;quot; ){ 
+			var url = &amp;quot;Layout.sp?id=INVLayout1&amp;jobid=&amp;quot;+_this.GetCellText(sheet,row,0);
+			openWindow( url );
+
+		}
+		else if( typ == &amp;quot;5&amp;quot; ){ 
+			var url = &amp;quot;Layout.sp?id=INVLayout2&amp;jobid=&amp;quot;+_this.GetCellText(sheet,row,0);
+			openWindow( url );
+
+		}
+		else if( typ == &amp;quot;4&amp;quot; ){ 
+//			var url = &amp;quot;show.sp?grdid=SCM_JOB_INVANY&amp;datacc=3ASCM&amp;guid=&amp;quot;+_this.GetCellText(0,row,12)+&amp;quot;&amp;accid=3ASCM&amp;&amp;quot;;//
+			var url = &amp;quot;show.sp?grdid=POsuggest&amp;datacc=3ASCM&amp;jobid=&amp;quot;+_this.GetCellText(sheet,row,0)+&amp;quot;&amp;accid=3ASCM&amp;&amp;quot;;
+			openWindow( url );
+		}else{		
+			var url = &amp;quot;Layout.sp?id=JobQuery&amp;jobid=&amp;quot;+_this.GetCellText(sheet,row,0);
+			openWindow( url );
+		}	
+	} 
+	
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var timepack = new JavaPackage( &amp;quot;com.xlsgrid.net.time&amp;quot; );
+var rs = new JavaPackage ( &amp;quot;com.xlsgrid.net.servlet&amp;quot; );
+// 客户端param传入的参数可以直接使用
+// 传入 jobid :thisorgid
+function genbatch()
+{
+	var db = null;
+	var jobseqid  = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		jobseqid = &amp;quot;SCMANY&amp;quot;+jobid;
+		
+		var tim = new timepack.EARunOSTimer(); 
+		tim.init(   jobseqid , jobnam,   &amp;quot;A3SCM&amp;quot;,  &amp;quot;SCM_AnyJOBList&amp;quot;,  &amp;quot;gen&amp;quot;, &amp;quot;jobid=&amp;quot;+jobid+&amp;quot;&amp;thisorgid=&amp;quot;+thisorgid+&amp;quot;&amp;jobseqid=&amp;quot;+jobseqid +&amp;quot;&amp;thisaccid=&amp;quot;+thisaccid+&amp;quot;&amp;thissytid=&amp;quot;+thissytid);
+	}
+	catch ( ee ) {
+		
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return jobseqid  ;// 返回后台分配的作业编号
+
+}
+// 通知外部当前的运行情况
+function notify(jobseqid,percent,note,stat)
+{
+	var db = null;
+	if ( percent &amp;lt; 0 ) return &amp;quot;&amp;quot;;
+	try{
+		db = new pubpack.EADatabase();
+		note = pubpack.EAFunc.Replace( note, &amp;quot;&amp;apos;&amp;quot;,&amp;quot;‘&amp;quot; );
+		if(note==&amp;quot;&amp;quot;){
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+		}
+		else {
+			db.ExcecutSQL(&amp;quot;update RunOSTimer set percent=&amp;quot;+(percent) +&amp;quot;,percentnote=&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;,stat=&amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos; where id=&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;&amp;quot;);
+			db.ExcecutSQL(&amp;quot;insert into RunOSTimerDTL(id,name ) values(&amp;apos;&amp;quot;+jobseqid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos;)&amp;quot; );
+		}
+		db.Commit();
+	}
+	catch ( e ) {
+		//pubpack.EAFunc.Log( e.toString() );
+		db.Rollback();
+		return &amp;quot;ERROR&amp;quot; ;
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot;OK&amp;quot;;
+}
+function gen () 
+{
+	var db = null;
+
+	var msg= &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	var itemds= null;
+	var jobds = null;
+	var jobguid = &amp;quot;&amp;quot;;
+	var num = 0;
+	var usrid = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		jobds = db.QuerySQL(&amp;quot;select * from SCM_ANYJOB where jobid=&amp;apos;&amp;quot;+jobid + &amp;quot;&amp;apos; &amp;quot;);
+		if ( jobds.getRowCount()==0 ) 
+			throw new pubpack.EAException ( &amp;quot;该jobid(&amp;quot;+jobid+&amp;quot;)不存在&amp;quot; );
+		jobguid = jobds.getStringAt(0,&amp;quot;GUID&amp;quot;);
+		var REQMOD = jobds.getStringAt(0,&amp;quot;REQMOD&amp;quot;);// 预测模型
+		var PRODIS= jobds.getStringAt(0,&amp;quot;PRODIS&amp;quot;);// 概率方法
+		var WORKDAY= jobds.getStringAt(0,&amp;quot;WORKDAY&amp;quot;);// 工作时间
+		var bzsp = jobds.getStringAt(0,&amp;quot;BZSP&amp;quot;);//保障水平 ==========================
+		var locid = jobds.getStringAt(0,&amp;quot;LOCID&amp;quot;);//仓库 ==========================	
+		var strdat =  jobds.getStringAt(0,&amp;quot;STRDAT&amp;quot;);//预测开始日期
+		var enddat = jobds.getStringAt(0,&amp;quot;ENDDAT&amp;quot;);//预测截至日期
+		var anytyp = jobds.getStringAt(0,&amp;quot;ANYTYP&amp;quot;);//预测截至日期
+		var xhid = jobds.getStringAt(0,&amp;quot;XHID&amp;quot;);//
+		var ssDzsp = bzsp.split(&amp;quot;,&amp;quot;);
+		if ( bzsp.indexOf( &amp;quot;-&amp;quot; )&amp;gt;=0 ){
+			var ss = bzsp.split(&amp;quot;-&amp;quot;);
+			var start = 0.8;
+			var end = 1.0;
+			if ( ss.length() == 2 ){
+				if( ss[0]==&amp;quot;&amp;quot;) ss[0]=&amp;quot;0.99&amp;quot;;
+				start = 1.0*ss[0];
+				end = 1.0*ss[1];
+			}
+			else if ( ss.length() == 1 ) {
+				start = 1.0*ss[0];
+			}	
+			// from start to end 
+			var sss =&amp;quot;&amp;quot;;
+			for ( var n = start*100;n&amp;lt;=end*100;n++ ) {
+				if ( n != start*100 ) sss+=&amp;quot;,&amp;quot;;
+				sss+=&amp;quot;&amp;quot;+n/100; 
+			}
+			ssDzsp = sss.split(&amp;quot;,&amp;quot;);
+		}
+		var bzsj = jobds.getStringAt(0,&amp;quot;BZSJ&amp;quot;);//保障天数 ==========================
+		var ssDzsj = bzsj.split(&amp;quot;,&amp;quot;);
+		var bzmny = jobds.getStringAt(0,&amp;quot;MAXMNY&amp;quot;);//金额 ==========================
+		var ssMny = bzmny .split(&amp;quot;,&amp;quot;);
+		itemds = db.QuerySQL(&amp;quot;select * from SCM_ANYJOB_REQLIST where jobid=&amp;apos;&amp;quot;+jobid + &amp;quot;&amp;apos; order by itmid&amp;quot;);
+		if ( itemds.getRowCount()==0 ) 
+			throw new pubpack.EAException ( &amp;quot;该jobid还没有导入需求清单&amp;quot; );
+			
+		db.ExcecutSQL(&amp;quot;delete from  SCM_ANYJOB_RUNJOG where jobid= &amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;&amp;quot; );
+		db.ExcecutSQL(&amp;quot;delete from  SCM_ANYJOB_INVCOSTSUM where jobid= &amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;&amp;quot; );
+		db.ExcecutSQL(&amp;quot;delete from  SCM_ANYJOB_INVCOST where jobid= &amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;&amp;quot; );
+			
+		var subjobid = 0;
+		
+		if (ssDzsp.length()==0 &amp;&amp; ssDzsp[0]==&amp;quot;&amp;quot; ){// 计算保障水平
+
+		}
+		else if (ssDzsj.length()==0 &amp;&amp; ssDzsj[0]==&amp;quot;&amp;quot; ){// 计算保障天数
+		
+		}
+		else {//if (ssMny.length()==0 &amp;&amp; ssMny[0]==&amp;quot;&amp;quot; ){// 计算金额
+			
+			
+			var percent = 100.0/(1.00*ssDzsp.length()*ssDzsj.length());
+			
+//			locds = db.QuerySQL(&amp;quot;select * from v_loc where id=&amp;apos;&amp;quot;+locid + &amp;quot;&amp;apos; order by id&amp;quot;);
+			
+			for( var j = 0;j&amp;lt;ssDzsp.length();j++) {
+				for( var k = 0;k&amp;lt;ssDzsj.length();k++) {
+					//通知外面执行到哪里了
+					if(notify(jobseqid,(percent*(subjobid )),&amp;quot;正在计算：保障率&amp;quot;+ssDzsp[j]+&amp;quot;,保障天数&amp;quot;+ssDzsj[k],&amp;quot;run&amp;quot;)==&amp;quot;ERROR&amp;quot; ) throw new Exception ( &amp;quot;进程已经中断&amp;quot; );
+					
+					//pubpack.EAFunc.Log(&amp;quot;保障率&amp;quot;+ssDzsp[j]+&amp;quot;,保障天数&amp;quot;+ssDzsj[k]);
+	
+				
+					subjobid ++;
+					sql =&amp;quot;insert into SCM_ANYJOB_INVCOSTSUM(jobid,subjobid,MAXMNY,BZSP,BZSJ,formguid,org,locid,strdat,enddat,crtusr,invtyp,xhid) 
+							values(&amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+subjobid+&amp;quot;&amp;apos;,0,&amp;apos;&amp;quot;+ssDzsp[j]+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ssDzsj[k]+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+jobguid+&amp;quot;&amp;apos;,
+							&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;,to_date(&amp;apos;&amp;quot;+strdat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),to_date(&amp;apos;&amp;quot;+enddat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;),
+							decode(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;xlsgrid&amp;apos;),&amp;apos;&amp;quot;+anytyp+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+xhid+&amp;quot;&amp;apos;) &amp;quot;;// 							
+					
+					db.ExcecutSQL(sql );
+					
+					//log( db,jobid,&amp;quot;　&amp;lt;B&amp;gt;&amp;lt;p align=center&amp;gt;&amp;lt;font size=3&amp;gt;&amp;quot;+subjobid +&amp;quot;. 条件：保障水平=&amp;quot;+ssDzsp[j]+&amp;quot;保障天数=&amp;quot;+ssDzsj[k]+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;&amp;lt;/B&amp;gt;&amp;quot; );
+					
+					var itemcount = itemds.getRowCount();
+					var subpercent = percent/itemcount ;
+					for( var i=0;i&amp;lt;itemcount ;i++ ) {
+						var itmid = itemds.getStringAt(i,&amp;quot;ITMID&amp;quot; );
+						var itmnam = itemds.getStringAt(i,&amp;quot;ITMNAM&amp;quot; );
+						var qty = itemds.getStringAt(i,&amp;quot;QTY&amp;quot; );
+						//throw new Exception ( &amp;quot;subpercent  =&amp;quot;+subpercent +&amp;quot;,&amp;quot;+(1*percent*(subjobid )+1.0*subpercent *i ));
+						if(i%(itemcount /20)==0 )  
+							notify(jobseqid,(1*percent*(subjobid-1 )+1.0*subpercent *i ),&amp;quot;&amp;quot;,&amp;quot;run&amp;quot;);//名称为空表示只要更新进度
+
+						//log( db,jobid,&amp;quot;　&amp;lt;B&amp;gt;&amp;quot;+(i+1)+&amp;quot;)&amp;quot;+itmnam+&amp;quot;(&amp;quot;+itmid+&amp;quot;)　需求量&amp;quot;+qty+&amp;quot;&amp;lt;/B&amp;gt;&amp;quot;  );
+						try {
+							calOneItem(db,jobid,subjobid,jobguid ,REQMOD,PRODIS,WORKDAY,thisorgid,itmid,itmnam ,qty ,ssDzsp[j],ssDzsj[k]);
+						}
+						catch ( eee ) {
+							notify(jobseqid,100,eee.toString(),&amp;quot;error&amp;quot;);
+						}
+						num++;
+					}					
+				}
+			}
+		} 
+		db.ExcecutSQL(&amp;quot;update SCM_ANYJOB_INVCOSTSUM a set acc=&amp;apos;&amp;quot;+thisaccid+&amp;quot;&amp;apos; , syt=&amp;apos;&amp;quot;+thissytid+&amp;quot;&amp;apos; ,mny = ( select sum(mny) from SCM_ANYJOB_INVCOST b where a.jobid=b.jobid and a.subjobid=b.subjobid ) where jobid=&amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;&amp;quot; );
+
+		db.ExcecutSQL(&amp;quot;update SCM_ANYJOB a set anystat=&amp;apos;2&amp;apos;  where jobid=&amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;&amp;quot; );
+
+		db.ExcecutSQL(&amp;quot;update scm_anyjob_invcost a set formguid=(select guid from SCM_ANYJOB_INVCOSTSUM b where a.jobid=b.jobid and a.subjobid=b.subjobid ) where jobid=&amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;&amp;quot;);
+
+		if (notify(jobseqid,100,&amp;quot;操作完成&amp;quot;,&amp;quot;end&amp;quot;)==&amp;quot;ERROR&amp;quot;) throw new Exception ( &amp;quot;进程已经中断&amp;quot; );
+		
+		db.Commit();
+		msg=&amp;quot;操作成功&amp;quot;;	
+		
+	}
+	catch ( ee ) {
+		pubpack.EAFunc.Log( ee.toString() );
+		//通知外面执行到哪里了
+		notify(jobseqid,100,ee.toString(),&amp;quot;error&amp;quot;);
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+
+	}
+	return msg;
+}
+// 计算某个品种需求量
+// percent:开始进度的百分比，用于在子进程里面细化
+function calOneItem( db,jobid,subjobid,jobguid , REQMOD,PRODIS,WORKDAY,thisorgid,itmid,itmnam , qty ,bzdj, bzsj ) 
+{
+	var r= 0.0;
+	var r1 ;
+	if( qty == &amp;quot;&amp;quot; ) return ;
+	
+	var itemds = db.QuerySQL(&amp;quot;select * from fracas_item where id=&amp;apos;&amp;quot;+itmid + &amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; &amp;quot; );
+	if ( REQMOD==&amp;quot;0&amp;quot;) {// 可靠性参数
+		var MTBUR = itemds.getStringAt(0,&amp;quot;MTBUR&amp;quot;);//MTBUR	平均不定期更换时间_小时
+		var MSPT = itemds.getStringAt(0,&amp;quot;MSPT&amp;quot;);//MSPT	平均零件修理时间
+		if (!(MTBUR ==&amp;quot;&amp;quot;||MSPT ==&amp;quot;&amp;quot;)) {
+			if( qty == &amp;quot;&amp;quot; ) qty = &amp;quot;0&amp;quot;;
+			r= 0.0;
+			if (itemds.getStringAt(0,&amp;quot;ITMCLASS&amp;quot; ) ==&amp;quot;P&amp;quot;) { //消耗件不需要计算MSPT
+				r = ((1.0*qty * WORKDAY)/(1.0*MTBUR ) );// * (1.0*MSPT /365)
+				r = pubpack.EAFunc.Round(r,2);
+				log( db,jobid,subjobid,itmid,&amp;quot;　　计算 λ=&amp;quot;+qty+&amp;quot;*&amp;quot;+WORKDAY+&amp;quot;/(&amp;quot;+MTBUR+&amp;quot;) =&amp;quot;+r+&amp;quot;，(其中：MTBUR=&amp;quot;+MTBUR+&amp;quot;,消耗件不需要计算MSPT) &amp;quot;  );				
+			}
+			else {
+				r = ((1.0*qty * WORKDAY)/(1.0*MTBUR ) ) * (1.0*MSPT /365);
+				r = pubpack.EAFunc.Round(r,2);
+				log( db,jobid,subjobid,itmid,&amp;quot;　　计算 λ=&amp;quot;+qty+&amp;quot;*&amp;quot;+WORKDAY+&amp;quot;*&amp;quot;+MSPT+&amp;quot;/(&amp;quot;+MTBUR+&amp;quot;*365) =&amp;quot;+r+&amp;quot;，(其中：MTBUR=&amp;quot;+MTBUR+&amp;quot;,MSPT=&amp;quot;+MSPT +&amp;quot;) &amp;quot;  );
+			}
+		}
+		else {log( db,jobid,subjobid,itmid,&amp;quot;　　出错，可靠性参数缺失，MTBUR=&amp;quot;+MTBUR+&amp;quot;,MSPT=&amp;quot;+MSPT  );return ;}	
+	}
+	else if(REQMOD==&amp;quot;1&amp;quot;||REQMOD==&amp;quot;2&amp;quot;||REQMOD==&amp;quot;3&amp;quot;) {// 根据历史来加权统计
+		var invmovds = db.QuerySQL(&amp;quot;select to_char(dat,&amp;apos;YYYY&amp;apos;) yyyy,sum(qty) qty from V_SCM_INVMOV where itmid=&amp;apos;&amp;quot; + itmid + &amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+thisorgid+&amp;quot;&amp;apos; group by to_char(dat,&amp;apos;YYYY&amp;apos;)&amp;quot; );
+		// 先求平均值
+		var invmsg = &amp;quot;&amp;quot;;
+		var sum= 0.0; var avg= 0.0;
+		var tmp1 = 0.0;var phxs =0.7;//指数平滑法的值
+		for ( var ii = 0;ii&amp;lt;invmovds.getRowCount();ii++ ) {
+			sum+=1.0*invmovds.getStringAt(ii,&amp;quot;qty&amp;quot;);
+			invmsg += invmovds.getStringAt(ii,&amp;quot;yyyy&amp;quot;)+&amp;quot;年 &amp;quot;+ invmovds.getStringAt(ii,&amp;quot;qty&amp;quot;) +&amp;quot;　&amp;quot;;
+			// 平滑常数0.3，
+			if ( ii==0 ) tmp1 =  1.0*invmovds.getStringAt(ii,&amp;quot;qty&amp;quot;);
+			else tmp1=phxs *invmovds.getStringAt(ii,&amp;quot;qty&amp;quot;)+(1-phxs )*tmp1;
+			
+		}
+		r = sum/invmovds;
+		invmsg += &amp;quot;平均值 &amp;quot;+ r  ;
+		if (REQMOD==&amp;quot;2&amp;quot;) {//平均增长率
+			//平均增长率＝[（年末总额/n年前年末利润总额)∧n －1]×100% ，即 g=（Yn/Yo）开n次方-1 预估n年后的值=当年年度*增长率∧3
+			var gx = (1.0*invmovds.getStringAt(invmovds.getRowCount()-1,&amp;quot;qty&amp;quot;))/(1.0* invmovds.getStringAt(0,&amp;quot;qty&amp;quot;)	);
+			for ( var i=1;i&amp;lt;invmovds.getRowCount()-1;i++ ) 
+				gx = gx*gx;
+			g = gx-1;
+			r = 1.0*invmovds.getStringAt(invmovds.getRowCount()-1,&amp;quot;qty&amp;quot;)*g;
+			invmsg += &amp;quot;平均增长率&amp;quot;+g+&amp;quot;,预计需求值=&amp;quot;+r;
+		}
+		else if (REQMOD==&amp;quot;3&amp;quot;) {//指数平滑法 St=ayt+(1-a)St-1  a--平滑常数，其取值范围为[0,1]； 
+			r = tmp1;
+			invmsg += &amp;quot;指数平滑法，取平滑系数&amp;quot;+phxs +&amp;quot;,预计需求值=&amp;quot;+r;		
+		}		
+	}	
+	else{	// 使用自定义算法来扩展
+		var osfunc = db.GetSQL( &amp;quot;select OSFUNC from SCM_AnalyzerFunc where id=&amp;apos;&amp;quot;+REQMOD+&amp;quot;&amp;apos; &amp;quot;);
+		var s = new rs.RunScript();
+		var eaScripter = new pubpack.EAScript(null);
+		if(REQMOD == &amp;quot;9&amp;quot;){
+			
+			var ss = new Array(thisorgid,db,itmid,jobid,subjobid,bzsj,bzdj);	//第一个参数改为orgid
+			r1 = eaScripter.CallClassFunc(&amp;quot;A3SCM_Analyzer&amp;quot;,osfunc,ss).castToString();	
+			r = 1.0 * r1;
+			//r = s.ExecMwOsEx(&amp;quot;A3SCM&amp;quot;,&amp;quot;Analyzer&amp;quot;,osfunc,ss)*1.0;	
+		}
+		else{
+			var ss = new Array(thisorgid,db,itmid,jobid,subjobid,bzsj,bzdj);			//第一个参数改为orgid
+			//r = 1.0*  .castToString()
+			eaScripter.CallClassFunc(&amp;quot;A3SCM_Analyzer&amp;quot;,osfunc,ss);	
+//			throw new Exception(eaScripter.CallClassFunc(&amp;quot;A3SCM_Analyzer&amp;quot;,osfunc,ss));
+		}		
+	}
+	var invqty = 0.0; 
+	if ( r != 0.0 ) {
+		var str = &amp;quot;&amp;quot; + r1;
+		var strl = 0;
+		var strpow = 1;
+		if(r &amp;gt; 100 ) { 
+			strl = str.length()-4;
+			var mathpack = new JavaPackage(&amp;quot;java.lang&amp;quot;);    	 	
+	    	 	strpow = mathpack.Math.pow(100,strl);
+	    	 	r = r/strpow;    
+    	 	}	 		 
+		var qsql =&amp;quot;select max(qty) from  Poisson where E = &amp;quot;+r+&amp;quot; and  P &amp;gt;= (1 - 1 * nvl( &amp;apos;&amp;quot;+bzdj+&amp;quot;&amp;apos; , 0)) &amp;quot;;
+		try { invqty  = 1.0*db.GetSQL(qsql); }	catch ( e ) { }
+		invqty = invqty * strpow;
+		log( db,jobid,subjobid,itmid,&amp;quot;根据可靠性参数公式计算出E=&amp;quot;+r+&amp;quot;,在保障水平=&amp;quot;+bzdj+&amp;quot;的情况下查泊松分布，得到需求量=&amp;quot;+invqty);
+	}
+	//if( invqty&amp;gt;0 ) {
+		var price = itemds.getStringAt(0,&amp;quot;PRICE&amp;quot;);
+		if ( price==&amp;quot;&amp;quot; ) price = 0;
+		var sql = &amp;quot;insert into SCM_ANYJOB_INVCOST(jobid,subjobid,itmid,itmnam,qty,price,mny,cost,formguid,sotype) 
+			values(&amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+subjobid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+itmnam+&amp;quot;&amp;apos;,&amp;quot;+invqty +&amp;quot;,&amp;quot;+price +&amp;quot;,&amp;quot;+invqty *price +&amp;quot;,0,&amp;apos;&amp;quot;+jobguid+&amp;quot;&amp;apos;,&amp;apos;1&amp;apos; )	&amp;quot;;// 		
+		db.ExcecutSQL(sql );
+	//}	
+}
+// 插入到日志表
+function log(db,jobid,subjobid,itmid,str )
+{
+	db.ExcecutSQL(&amp;quot;insert into SCM_ANYJOB_RUNJOG(jobid,seqid,LOGSTR,subjobid,itemid) values( &amp;apos;&amp;quot;+jobid+&amp;quot;&amp;apos; ,seq_scm_anyjob_seqid.nextval,&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+subjobid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;)&amp;quot; );
+	
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select JOBID,TITLE,NOTE,to_char(a.crtdat,&amp;apos;YYYY-MM-DD HH24:MI&amp;apos;) 
+,a.crtusr,
+(select name from V_SCM_ANYTYP b where a.anytyp=b.id) ,
+(select name from V_SCM_ANYSTAT c where a.anystat=c.id) ,BZSP,BZSJ,MAXMNY,
+decode(ANYSTAT,&amp;apos;1&amp;apos;,&amp;apos;生成报告&amp;apos;,&amp;apos;重新生成&amp;apos;) action1,&amp;apos;查询报告&amp;apos; action2,
+guid,anytyp
+ from SCM_ANYJOB a
+where anystat&amp;lt;&amp;gt;&amp;apos;0&amp;apos;
+and to_char(a.jobid) like &amp;apos;[%JOBID]%&amp;apos;
+and to_char(a.CRTDAT,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;gt;=&amp;apos;[%DAT1]&amp;apos;
+and to_char(a.CRTDAT,&amp;apos;YYYY-MM-DD&amp;apos;)&amp;lt;=&amp;apos;[%DAT2]&amp;apos;
+and a.anystat like &amp;apos;[%ANYSTAT]%&amp;apos;
+and a.anytyp like &amp;apos;[%TYP]%&amp;apos;
+and NVL(title,&amp;apos; &amp;apos;) like &amp;apos;[%TITLE]%&amp;apos;
+and org=&amp;apos;[%SYS_ORGID]&amp;apos;
+order by jobid
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11></ROW>
+<ROW num="1" ><ID >QueryRunOSTimer</ID><NAME ></NAME><DATDSC >select count(*) from RunOSTimer
+where stat=&amp;apos;run&amp;apos; and id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 >QueryRunOSTimer</C11></ROW>
+<ROW num="2" ><ID >QueryRunOSTimerExist</ID><NAME ></NAME><DATDSC >select count(*) from RunOSTimer
+where (stat=&amp;apos;end&amp;apos; or stat=&amp;apos;error&amp;apos;) and id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11></ROW>
+<ROW num="3" ><ID >DeleteQueryRunOSTimer</ID><NAME ></NAME><DATDSC >delete from RunOSTimer where  id=&amp;apos;[%jobid]&amp;apos;;
+delete from RunOSTimerDTL where  id=&amp;apos;[%jobid]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

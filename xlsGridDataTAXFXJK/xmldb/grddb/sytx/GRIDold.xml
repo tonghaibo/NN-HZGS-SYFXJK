@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >GRIDold</MWID><NAME >老的文档设计</NAME><FILE >GRIDold.zxg</FILE><syt >x</syt><WIDTHMOD >1</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><FUNCJS ></FUNCJS><NAME >保存</NAME><IMG ></IMG><IMGMOUSE ></IMGMOUSE><TIP ></TIP></ROW>
+<ROW num="1" ><ID >SumRTF</ID><FUNCJS ></FUNCJS><NAME >汇总文档</NAME><IMG ></IMG><IMGMOUSE ></IMGMOUSE><TIP ></TIP></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+function _thisOnpost_loaddata(){
+
+        _this.SetToRichEdit(&amp;quot;cell_0_3_2&amp;quot;,0,3,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_0_5_2&amp;quot;,0,5,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_1_2_2&amp;quot;,1,2,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_1_4_2&amp;quot;,1,4,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_2_3_2&amp;quot;,2,3,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_2_5_2&amp;quot;,2,5,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_3_2_2&amp;quot;,3,2,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_3_4_2&amp;quot;,3,4,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_4_2_2&amp;quot;,4,2,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_4_4_2&amp;quot;,4,4,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_4_6_2&amp;quot;,4,6,2,&amp;quot;&amp;quot;);  
+        _this.SetToRichEdit(&amp;quot;cell_5_2_2&amp;quot;,5,2,2,&amp;quot;&amp;quot;);
+        _this.SetToRichEdit(&amp;quot;cell_5_4_2&amp;quot;,5,4,2,&amp;quot;&amp;quot;);  
+        _this.SetToRichEdit(&amp;quot;cell_5_6_2&amp;quot;,5,6,2,&amp;quot;&amp;quot;);
+        
+         _this.SetSheetName(6,&amp;quot;汇总文档预览&amp;quot; );
+        _this.SetToRichEdit(&amp;quot;rtf_full&amp;quot;,6,-1,-1,&amp;quot;&amp;quot;);
+  
+        //var url = homeurl+&amp;quot;/data/xmldb/grddb/syt&amp;quot;+ssytid+&amp;quot;/&amp;quot;+sgrdid+&amp;quot;.dxml&amp;quot;;
+        var xml = _this.invokeOSFunc(&amp;quot;loadDocument&amp;quot;,&amp;quot;ssytid=&amp;quot;+ssytid+&amp;quot;&amp;sgrdid=&amp;quot;+sgrdid);
+        //alert(xml);
+        _this.XMLDS_Parse(xml);
+	if(_this.XMLDS_GetRowCount()==1){
+	        //_this.SetToRichEdit(&amp;quot;cell_0_3_2&amp;quot;,0,3,2,_this.XMLDS_GetStringAt(0, 0));
+	        //_this.SetToRichEdit(&amp;quot;cell_0_5_2&amp;quot;,0,5,2,_this.XMLDS_GetStngAt(0, 1));
+	        //_this.SetToRichEdit(&amp;quot;cell_1_2_2&amp;quot;,1,2,2,_this.XMLDS_GetStringAt(0, 2));
+	        //_this.SetToRichEdit(&amp;quot;cell_1_4_2&amp;quot;,1,4,2,_this.XMLDS_GetStringAt(0, 3));
+	        //_this.SetToRichEdit(&amp;quot;cell_2_3_2&amp;quot;,2,3,2,_this.XMLDS_GetStringAt(0, 4));
+	        //_this.SetToRichEdit(&amp;quot;cell_2_5_2&amp;quot;,2,5,2,_this.XMLDS_GetStringAt(0, 5));
+	        //_this.SetToRichEdit(&amp;quot;cell_3_2_2&amp;quot;,3,2,2,_this.XMLDS_GetStringAt(0, 6));
+	        //_this.SetToRichEdit(&amp;quot;cell_3_4_2&amp;quot;,3,4,2,_this.XMLDS_GetStringAt(0, 7));
+	        //_this.SetToRichEdit(&amp;quot;cell_4_2_2&amp;quot;,4,2,2,_this.XMLDS_GetStringAt(0, 8));
+	        //_this.SetToRichEdit(&amp;quot;cell_4_4_2&amp;quot;,4,4,2,_this.XMLDS_GetStringAt(0, 9));
+	        //_this.SetToRichEdit(&amp;quot;cell_4_6_2&amp;quot;,4,6,2,_this.XMLDS_GetStringAt(0,10));  
+	        //_this.SetToRichEdit(&amp;quot;cell_5_2_2&amp;quot;,5,2,2,_this.XMLDS_GetStringAt(0,11));
+	        //_this.SetToRichEdit(&amp;quot;cell_5_4_2&amp;quot;,5,4,2,_this.XMLDS_GetStringAt(0,12));  
+	        //_this.SetToRichEdit(&amp;quot;cell_5_6_2&amp;quot;,5,6,2,_this.XMLDS_GetStringAt(0,13));	
+
+	        _this.SetCellText(0,3,2,_this.XMLDS_GetStringAt(0, 0));
+	        _this.SetCellText(0,5,2,_this.XMLDS_GetStringAt(0, 1));
+	        _this.SetCellText(1,2,2,_this.XMLDS_GetStringAt(0, 2));
+	        _this.SetCellText(1,4,2,_this.XMLDS_GetStringAt(0, 3));
+	        _this.SetCellText(2,3,2,_this.XMLDS_GetStringAt(0, 4));
+	        _this.SetCellText(2,5,2,_this.XMLDS_GetStringAt(0, 5));
+	        _this.SetCellText(3,2,2,_this.XMLDS_GetStringAt(0, 6));
+	        _this.SetCellText(3,4,2,_this.XMLDS_GetStringAt(0, 7));
+	        _this.SetCellText(4,2,2,_this.XMLDS_GetStringAt(0, 8));
+	        _this.SetCellText(4,4,2,_this.XMLDS_GetStringAt(0, 9));
+	        _this.SetCellText(4,6,2,_this.XMLDS_GetStringAt(0,10));  
+	        _this.SetCellText(5,2,2,_this.XMLDS_GetStringAt(0,11));
+	        _this.SetCellText(5,4,2,_this.XMLDS_GetStringAt(0,12));  
+	        _this.SetCellText(5,6,2,_this.XMLDS_GetStringAt(0,13));	
+	        	        
+	}        
+        _this.ShowTabBar(1);
+        	
+        //alert(url);
+        try{
+        //_this.LoadZXGFile(url,-1,0);
+        }catch(e){}
+        /*
+        var vtitle=&amp;quot;中间件设计定义：&amp;quot;;
+	switch(sgrdtyp){
+	      case &amp;quot;B&amp;quot;:
+	      vtitle += &amp;quot;单据&amp;quot;;
+	      break;
+	      case &amp;quot;R&amp;quot;:
+    	      vtitle += &amp;quot;报表&amp;quot;;
+    	      break;
+	      case &amp;quot;Q&amp;quot;:
+    	      vtitle += &amp;quot;查询&amp;quot;;
+    	      break;
+	      case &amp;quot;F&amp;quot;:
+    	      vtitle += &amp;quot;表单&amp;quot;;
+    	      break;
+	      case &amp;quot;M&amp;quot;:
+    	      vtitle += &amp;quot;mini中间件&amp;quot;;
+    	      break;    	      
+	}
+        _this.SetCellText(0,0,1,vtitle);
+        */
+}
+
+function save(){
+  var myurl= homeurl+&amp;quot;xlsweb?action=EAGridAction&amp;quot;;
+  _this.OpenHttpRequest(myurl,&amp;quot;POST&amp;quot;);
+  _this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;SAVE&amp;quot;,0);
+  _this.AddHttpRequestParam(&amp;quot;sgrdid&amp;quot;,sgrdid,0);  // 被定义的中间件的ID
+  _this.AddHttpRequestParam(&amp;quot;sgrdtyp&amp;quot;,sgrdtyp,0);  // 被定义的中间件的typ  
+  _this.AddHttpRequestParam(&amp;quot;accid&amp;quot;,accid,0);
+  _this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,sytid,0);
+  _this.AddHttpRequestParam(&amp;quot;ssytid&amp;quot;,ssytid,0);
+  _this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,grdid,0);
+  _this.AddHttpRequestParam(&amp;quot;grdtyp&amp;quot;,grdtyp,0);
+  
+  // set xmlds as data
+  var xmlds = _this.XMLDS_CREATE();
+  
+  _this.XMLDS_AddColumn(-1,&amp;quot;cell_0_3_2&amp;quot;);
+  _this.XMLDS_AddColumn( 0,&amp;quot;cell_0_5_2&amp;quot;);
+  _this.XMLDS_AddColumn( 1,&amp;quot;cell_1_2_2&amp;quot;);
+  _this.XMLDS_AddColumn( 2,&amp;quot;cell_1_4_2&amp;quot;);
+  _this.XMLDS_AddColumn( 3,&amp;quot;cell_2_3_2&amp;quot;);
+  _this.XMLDS_AddColumn( 4,&amp;quot;cell_2_5_2&amp;quot;);
+  _this.XMLDS_AddColumn( 5,&amp;quot;cell_3_2_2&amp;quot;);
+  _this.XMLDS_AddColumn( 6,&amp;quot;cell_3_4_2&amp;quot;);
+  _this.XMLDS_AddColumn( 7,&amp;quot;cell_4_2_2&amp;quot;);
+  _this.XMLDS_AddColumn( 8,&amp;quot;cell_4_4_2&amp;quot;);
+  _this.XMLDS_AddColumn( 9,&amp;quot;cell_4_6_2&amp;quot;);  
+  _this.XMLDS_AddColumn(10,&amp;quot;cell_5_2_2&amp;quot;);
+  _this.XMLDS_AddColumn(11,&amp;quot;cell_5_4_2&amp;quot;);  
+  _this.XMLDS_AddColumn(12,&amp;quot;cell_5_6_2&amp;quot;);
+  _this.XMLDS_AddRow(-1,&amp;quot;&amp;quot;);
+          
+  _this.XMLDS_SetStringAt(0, 0,_this.GetCellText(0,3,2));
+  _this.XMLDS_SetStringAt(0, 1,_this.GetCellText(0,5,2));
+  _this.XMLDS_SetStringAt(0, 2,_this.GetCellText(1,2,2));
+  _this.XMLDS_SetStringAt(0, 3,_this.GetCellText(1,4,2));
+  _this.XMLDS_SetStringAt(0, 4,_this.GetCellText(2,3,2));
+  _this.XMLDS_SetStringAt(0, 5,_this.GetCellText(2,5,2));
+  _this.XMLDS_SetStringAt(0, 6,_this.GetCellText(3,2,2));
+  _this.XMLDS_SetStringAt(0, 7,_this.GetCellText(3,4,2));
+  _this.XMLDS_SetStringAt(0, 8,_this.GetCellText(4,2,2));
+  _this.XMLDS_SetStringAt(0, 9,_this.GetCellText(4,4,2));
+  _this.XMLDS_SetStringAt(0,10,_this.GetCellText(4,6,2));  
+  _this.XMLDS_SetStringAt(0,11,_this.GetCellText(5,2,2));
+  _this.XMLDS_SetStringAt(0,12,_this.GetCellText(5,4,2));  
+  _this.XMLDS_SetStringAt(0,13,_this.GetCellText(5,6,2));
+  //alert(_this.XMLDS_GetColumnCount());
+   _this.AddHttpRequestParam(&amp;quot;richxml&amp;quot;,_this.XMLDS_GetXml(),0);
+    
+  //--
+  try{     
+  //_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,_this.SaveTempZXGFile(-1),1);
+  }catch(E){
+  	alert(E)
+  }
+  var ret = _this.SendHttpRequest();
+  // XMLDS_Parse to show msg
+  _this.XMLDS_Reset();
+  _this.XMLDS_Parse(ret);
+  alert(_this.XMLDS_GetString(0,&amp;quot;TOPIC&amp;quot;));
+}
+//汇总文档
+function SumRTF()
+{
+	var rtfstr = &amp;quot;&amp;quot;;
+	rtfstr+=_this.GetCellText(0,3,2);
+	rtfstr+=_this.GetCellText(0,5,2);
+	rtfstr+=_this.GetCellText(1,2,2);
+	rtfstr+=_this.GetCellText(1,4,2);
+	rtfstr+=_this.GetCellText(2,3,2);
+	rtfstr+=_this.GetCellText(2,5,2);
+	rtfstr+=_this.GetCellText(3,2,2);
+	rtfstr+=_this.GetCellText(3,4,2);
+	rtfstr+=_this.GetCellText(4,2,2);
+	rtfstr+=_this.GetCellText(4,4,2);
+	rtfstr+=_this.GetCellText(4,6,2);
+	rtfstr+=_this.GetCellText(5,2,2);
+	rtfstr+=_this.GetCellText(5,4,2);
+	rtfstr+=_this.GetCellText(5,6,2);
+	alert ( rtfstr );
+	_this.SetCellText(6,-1,-1,rtfstr );
+	_this.SetCurrentSheet(6);
+	
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var xmldb = new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var eapub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+function loadDocument()
+{
+  var filepath = eapub.EAOption.dynaDataRoot+eapub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot;+ssytid+&amp;quot;/&amp;quot;;
+  var fname = filepath+sgrdid+&amp;quot;.dxml&amp;quot;;
+  try
+  {
+  return eapub.EAFunc.readFile(fname);
+  }
+  catch(e)
+  {
+  }
+}
+
+function fos_beforesave(eaContext){
+      try{
+           // var dsxml = eaContext.getXmlhdr();
+           // System.out.println(dsxml+&amp;quot;niujian&amp;quot;);
+      }catch(e){
+            throw e;
+      }
+}
+
+function fos_aftersave(eaContext){
+      try{
+	var sgrdid= eaContext.getAttribute(&amp;quot;sgrdid&amp;quot;);
+   	var accid = eaContext.getAttribute(&amp;quot;accid&amp;quot;);
+   	var ssytid = eaContext.getAttribute(&amp;quot;ssytid&amp;quot;);
+   	var richxml = eaContext.getAttribute(&amp;quot;richxml&amp;quot;);
+   	var sytid = (new xmldb.EAACCXmlDB(accid)).getSytid();
+   	//System.out.println(&amp;quot;sgrdid:&amp;quot;+sgrdid+&amp;quot; accid:&amp;quot;+accid+&amp;quot; ssytid:&amp;quot;+sytid);
+   	//System.out.println(&amp;quot;richxml&amp;quot;+richxml);
+   	var filepath = eapub.EAOption.dynaDataRoot+eapub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot;+ssytid+&amp;quot;/&amp;quot;;
+   	var fname = sgrdid+&amp;quot;.dxml&amp;quot;;
+   	
+   	
+   	eapub.EAFunc.WriteToFile(filepath+fname,richxml);
+   	//var upload = new eapub.EAUpload();
+   	//upload.setFolderstore(filepath);
+   	//upload.store(eaContext.getAttribute(eaContext.MREQUEST),fname);
+   	//System.out.println(&amp;quot;中间件&amp;quot;+sgrdid);
+   	return &amp;quot;中间件&amp;quot;+sgrdid;
+   }catch(e){
+         //System.out.println(e.toString());
+         //throw e;
+         return e.toString();
+   }      
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

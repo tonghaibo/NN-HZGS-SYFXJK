@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >SJJCPZ</MWID><NAME >数据采集配置信息</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SJJCPZ.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var GUID = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.ShowToolBar(0);
+	_this.SetToBoolBox(0,11,2);
+	_this.SetToBoolBox(0,11,4);
+	try { GUID = guid; } catch (e) { }
+	
+	if (GUID != &amp;quot;&amp;quot;) {
+		_sql.querytods(&amp;quot;INFO&amp;quot;,&amp;quot;GUID=&amp;quot;+GUID);
+		_this.SetCellText(0,3,2,_this.XMLDS_GetString(0,&amp;quot;DBLINK&amp;quot;));
+		_this.SetCellText(0,3,4,_this.XMLDS_GetString(0,&amp;quot;DBLINK_NAME&amp;quot;));
+		_this.SetCellText(0,5,2,_this.XMLDS_GetString(0,&amp;quot;OWNER&amp;quot;));
+		_this.SetCellText(0,5,4,_this.XMLDS_GetString(0,&amp;quot;OWNER_NOTE&amp;quot;));
+		_this.SetCellText(0,7,2,_this.XMLDS_GetString(0,&amp;quot;TABLE_NAME&amp;quot;));
+		_this.SetCellText(0,9,2,_this.XMLDS_GetString(0,&amp;quot;TABLE_COMMON&amp;quot;));
+		_this.SetCellText(0,11,2,_this.XMLDS_GetString(0,&amp;quot;TBBZ&amp;quot;));
+		_this.SetCellText(0,11,4,_this.XMLDS_GetString(0,&amp;quot;ZLBZ&amp;quot;));
+		_this.SetCellText(0,14,1,_this.XMLDS_GetString(0,&amp;quot;WHERESTR&amp;quot;));
+	}
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;保存&amp;quot;) {
+		var dblink = _this.GetCellText(0,3,2);
+		var dblink_name = _this.GetCellText(0,3,4);
+		var owner = _this.GetCellText(0,5,2); 
+		var owner_note = _this.GetCellText(0,5,4); 
+		var table_name = _this.GetCellText(0,7,2); 
+		var table_note = _this.GetCellText(0,9,2); 
+		var tbbz = _this.GetCellText(0,11,2); 
+		var zlbz = _this.GetCellText(0,11,4);
+		var wherestr = _this.GetCellText(0,14,1);
+				
+		if (dblink == &amp;quot;&amp;quot; || dblink_name == &amp;quot;&amp;quot; || owner == &amp;quot;&amp;quot; || table_name == &amp;quot;&amp;quot; || table_note == &amp;quot;&amp;quot;) {
+			alert(&amp;quot;录入数据项不能为空！&amp;quot;);
+			return ;
+		}
+
+		var param = new Object();
+		param.dblink = dblink;
+		param.dblink_name = dblink_name;
+		param.owner = owner;
+		param.owner_note = owner_note;
+		param.table_name = table_name;
+		param.table_note = table_note;
+		param.tbbz = tbbz;
+		param.guid = GUID;
+		param.zlbz = zlbz;
+		param.wherestr = wherestr;
+		
+		var ret = _this.invokeOSFuncExt(&amp;quot;Save&amp;quot;,param);
+		if (ret != &amp;quot;ok&amp;quot;) {
+			alert(&amp;quot;保存失败：&amp;quot;+ret);
+		}
+		else {
+			window.returnValue = ret; 
+			window.close();  
+		}
+	}
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function Save()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		wherestr = pub.EAFunc.Replace(wherestr,&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;apos;&amp;quot;);
+		if (guid == &amp;quot;&amp;quot;) {
+			//新增状态下 判断同步的表名称是否存在，不允许表名相同
+			sql = &amp;quot;select * from tax_jssjtbb where upper(table_name)=upper(&amp;apos;&amp;quot;+table_name+&amp;quot;&amp;apos;)&amp;quot;;
+			var cnt = db.GetSQLRowCount(sql);
+			if (cnt &amp;gt; 0) {
+				return &amp;quot;该表名（&amp;quot;+table_name+&amp;quot;）已存在，不能重复配置！&amp;quot;;
+			}
+			
+			sql = &amp;quot;insert into tax_jssjtbb(guid,owner,owner_note,table_name,table_common,tbbz,dblink,dblink_name,zlbz,wherestr)
+				values(sys_guid(),&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;
+				.format([owner,owner_note,table_name,table_note,tbbz,dblink,dblink_name,zlbz,wherestr]);
+			db.ExcecutSQL(sql);
+		}
+		else {
+			sql = &amp;quot;update tax_jssjtbb set owner=&amp;apos;%s&amp;apos;,owner_note=&amp;apos;%s&amp;apos;,table_name=&amp;apos;%s&amp;apos;,
+				table_common=&amp;apos;%s&amp;apos;,tbbz=&amp;apos;%s&amp;apos;,dblink=&amp;apos;%s&amp;apos;,dblink_name=&amp;apos;%s&amp;apos;,zlbz=&amp;apos;%s&amp;apos;,wherestr=&amp;apos;%s&amp;apos;
+				where guid=&amp;apos;%s&amp;apos;&amp;quot;
+				.format([owner,owner_note,table_name,table_note,tbbz,dblink,dblink_name,zlbz,wherestr,guid]);
+			db.ExcecutSQL(sql);
+		}
+		
+		db.Commit();
+		
+		return &amp;quot;ok&amp;quot;;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		//throw new Exception(e.toString());
+		return e.toString();
+	}	
+	finally {
+		if (db != null) db.Close();
+	}
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >INFO</ID><NAME ></NAME><DATDSC >select * from tax_jssjtbb where guid=&amp;apos;[%GUID]&amp;apos;</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

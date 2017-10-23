@@ -1,0 +1,256 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >flwpub</MWID><NAME >数据流处理类</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >flwpub.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+// 设置为不可修改的多行打勾选择模式
+//_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX );
+// 在_thisOnMouseLClick(sheet,row,col)判断当col==0 时调用f_refreshsum(col1,col2)
+// 
+// 求合计
+// 把第col1列的值赋予col2列
+function f_refreshsum(col1,col2)	
+{
+	for ( var row=_this.GetMainCellRangeRow1(0);row&amp;lt;=_this.GetMainCellRangeRow2(0);row ++ ) {
+
+			var qty = _this.GetCellText(0,row,col2);
+			var b = _this.GetRowSelected(0,row);//选中
+
+			if( b == &amp;quot;1&amp;quot; ) {	// 全选
+				if (qty ==&amp;quot;&amp;quot; || 1.0*qty==0 ) 
+					_this.SetCellText(0,row,col2,_this.GetCellText(0,row,col1) );
+			}
+			else {
+				_this.SetCellText(0,row,col2,&amp;quot;&amp;quot; );
+
+			}
+	}
+	_this.RefreshFormula();
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var grd= new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+var utilpack = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+// 客户端param传入的参数可以直接使用
+// 返回  生成的明细数量
+// 要求： xmlstr需要存在ITMID SRCBILTYP SRCBIL, QTY字段
+// 多对多，支持部分数量核销 Gen121
+function GenN2N(db,flw,acc,xmlstr)
+{
+	return GenN2NClose(db,flw,acc,xmlstr,false);
+}
+// 多对多接口，并且支持强行结束数据流
+// bClose=true 强行结束
+function GenN2NClose(db,flw,acc,xmlstr,bClose)
+{
+	return GenN2NClose0(db,flw,flw,acc,xmlstr,bClose);
+
+}	
+// 支持来源数据流和目标数据流不一致
+function GenN2NClose0(db,srcflw,destflw,acc,xmlstr,bClose)
+{
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;		
+// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		ds = new pubpack.EAXmlDS(xmlstr);				
+		var seq = db.GetSQL(&amp;quot;select HF001SEQ.nextval from dual&amp;quot;);
+		sql = &amp;quot; create table SELBFPUB_&amp;quot;+seq+&amp;quot; as SELECT acc,SRCBILTYP,SRCBIL,SRCBILDAT,SRCBILSEQ,VALLEFT,0 val2Convert,guid FROM DATFLWSTA where rownum&amp;lt;1 \n&amp;quot;;
+		db.ExcecutSQL(sql);		
+//		throw new Exception(xmlstr);
+		for(var row=0;row&amp;lt; ds.getRowCount();row++){			
+			var qty = ds.getStringAt(row,&amp;quot;QTY&amp;quot;);
+			var srcseq = ds.getStringAt(row,&amp;quot;SRCBILSEQ&amp;quot;);
+			var selflg = ds.getStringDef(row,&amp;quot;SELECTFLAG&amp;quot;, &amp;quot;1&amp;quot; );	// 如果不存SELECTFLAG当作已选择
+			if ( selflg == &amp;quot;1&amp;quot; ) {
+				if(qty==null ||qty==&amp;quot;&amp;quot;){
+					qty=0;
+				}
+				else{
+					qty = qty*1.0;				
+				}	
+				sql = &amp;quot; insert into SELBFPUB_&amp;quot;+seq+&amp;quot; \n&amp;quot;+
+				      &amp;quot; SELECT acc,SRCBILTYP,SRCBIL,SRCBILDAT,SRCBILSEQ,VALLEFT,&amp;quot;+qty+&amp;quot; val2convert,guid \n&amp;quot;+
+				      &amp;quot; from datflwsta where flw=&amp;apos;&amp;quot;+srcflw+&amp;quot;&amp;apos; \n&amp;quot;+ 
+				      &amp;quot; AND SRCBILTYP =&amp;apos;&amp;quot;+ ds.getStringAt(row,&amp;quot;SRCBILTYP&amp;quot;)+&amp;quot;&amp;apos; AND ACC=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; \n&amp;quot;+
+				      &amp;quot; and srcbil = &amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;SRCBIL&amp;quot;)+&amp;quot;&amp;apos; AND nvl(REFID3,&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+ ds.getStringAt(row,&amp;quot;ITMID&amp;quot;)+&amp;quot;%&amp;apos;\n&amp;quot;+
+				      &amp;quot; and srcbilseq = &amp;apos;&amp;quot;+srcseq+&amp;quot;&amp;apos;\n&amp;quot;;
+//				      throw new Exception(sql);			      
+				db.ExcecutSQL(sql);	
+			}
+		} 
+		
+		sql = &amp;quot; select &amp;apos;1&amp;apos; SELECTFLG,A.*,B.val2Convert val2Convert FROM DATFLWSTA A,SELBFPUB_&amp;quot;+seq+&amp;quot; B \n&amp;quot;+
+		      &amp;quot; where a.srcbil = b.srcbil and a.srcbiltyp = b.srcbiltyp and a.acc = b.acc \n&amp;quot;+	      
+		      &amp;quot; AND A.SRCBILSEQ = B.SRCBILSEQ and a.flw=&amp;apos;&amp;quot;+srcflw+&amp;quot;&amp;apos; and a.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;\n&amp;quot;+		      
+		      &amp;quot; and a.valleft&amp;lt;&amp;gt;0  ORDER BY A.SRCBILTYP DESC \n&amp;quot;;    
+//		      throw new Exception(sql); 
+		var xmlds = db.QuerySQL(sql); 	
+		var retbil = &amp;quot;&amp;quot;;		
+		if( xmlds.getRowCount()&amp;gt;0){     		
+			var xml = xmlds.GetXml();
+			try{			
+				retbil = grd.EABilflw.ExecBilFlw(db,request,destflw,xml);								
+			}catch(e){
+				throw new Exception(&amp;quot;执行数据异常!&amp;quot;+e.toString());
+			}	
+		}
+		
+		if ( bClose == true ) {
+			db.ExcecutSQL(&amp;quot;update datflwsta set endflg=&amp;apos;1&amp;apos; where guid  in ( select guid from SELBFPUB_&amp;quot;+seq+&amp;quot; )&amp;quot; );
+		
+		}
+		
+		sql = &amp;quot;drop table SELBFPUB_&amp;quot;+seq+&amp;quot;\n&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		return retbil ;//xmlds.getRowCount();
+}
+//支持批量转换从多个来源单据相对转换多个目标
+//要求： xmlstr需要存在ITMID SRCBILTYP SRCBIL, QTY字段
+function GenN2M(db,flw,acc,xmlstr)
+{
+	return GenN2M(db,flw,acc,xmlstr,&amp;quot;&amp;quot;,false);
+}	
+// bCheck : =1 生成目标单据的时候进行审核
+function GenN2M(db,flw,acc,xmlstr,usrid,bCheck)
+{
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+		ds = new pubpack.EAXmlDS(xmlstr);
+//		throw new Exception(usrid);	
+		var seq = db.GetSQL(&amp;quot;select HF001SEQ.nextval from dual&amp;quot;);
+//		throw new Exception(seq);	
+		sql = &amp;quot; create table SELBFPUB_&amp;quot;+seq+&amp;quot; as SELECT acc,SRCBILTYP,SRCBIL,SRCBILDAT,SRCBILSEQ,VALLEFT,0 val2Convert,guid FROM DATFLWSTA where rownum&amp;lt;1 \n&amp;quot;;
+		db.ExcecutSQL(sql);	
+		for(var row=0;row&amp;lt; ds.getRowCount();row++){			
+			var qty = ds.getStringAt(row,&amp;quot;QTY&amp;quot;);
+			var selflg = ds.getStringDef(row,&amp;quot;SELECTFLAG&amp;quot;, &amp;quot;1&amp;quot; );	// 如果不存SELECTFLAG当作已选择
+			
+			if ( selflg == &amp;quot;1&amp;quot; ) {
+				if(qty==null ||qty==&amp;quot;&amp;quot;){
+					qty=0;
+				}
+				else{
+					qty = qty*1.0;				
+				}	
+				sql = &amp;quot; insert into SELBFPUB_&amp;quot;+seq+&amp;quot; \n&amp;quot;+
+				      &amp;quot; SELECT acc,SRCBILTYP,SRCBIL,SRCBILDAT,SRCBILSEQ,VALLEFT,&amp;quot;+qty+&amp;quot; val2convert,guid \n&amp;quot;+
+				      &amp;quot; from datflwsta where flw=&amp;apos;&amp;quot;+flw+&amp;quot;&amp;apos; \n&amp;quot;+ 
+				      &amp;quot; AND SRCBILTYP =&amp;apos;&amp;quot;+ ds.getStringAt(row,&amp;quot;SRCBILTYP&amp;quot;)+&amp;quot;&amp;apos; AND ACC=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; \n&amp;quot;+
+				      &amp;quot; and srcbil = &amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;SRCBIL&amp;quot;)+&amp;quot;&amp;apos; AND REFID3=&amp;apos;&amp;quot;+ ds.getStringAt(row,&amp;quot;ITMID&amp;quot;)+&amp;quot;&amp;apos;\n&amp;quot;;
+//				   throw new Exception(sql);  
+				db.ExcecutSQL(sql);
+			}
+		}
+		
+		sql = &amp;quot; select distinct SRCBIL from SELBFPUB_&amp;quot;+seq+&amp;quot; \n&amp;quot;;
+
+		var bilds = db.QuerySQL(sql);
+		var bils = &amp;quot;&amp;quot;;
+		for(var c=0;c&amp;lt;bilds.getRowCount();c++){
+			var srcbil = bilds.getStringAt(c,&amp;quot;SRCBIL&amp;quot;);
+			sql = &amp;quot; select &amp;apos;1&amp;apos; SELECTFLG,A.*,B.val2Convert val2Convert FROM DATFLWSTA A,SELBFPUB_&amp;quot;+seq+&amp;quot; B \n&amp;quot;+
+			      &amp;quot; where a.srcbil = b.srcbil and a.srcbiltyp = b.srcbiltyp and a.acc = b.acc \n&amp;quot;+	      
+			      &amp;quot; AND A.SRCBILSEQ = B.SRCBILSEQ and a.flw=&amp;apos;&amp;quot;+flw+&amp;quot;&amp;apos; and a.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;\n&amp;quot;+		      
+			      &amp;quot; and a.valleft&amp;lt;&amp;gt;0  and a.srcbil=&amp;apos;&amp;quot;+srcbil+&amp;quot;&amp;apos;\n&amp;quot;; 
+			
+			var xmlds = db.QuerySQL(sql);      		
+			var xml = xmlds.GetXml();
+			var retbillist = grd.EABilflw.ExecBilFlw(db,request,flw,xml);
+			
+			var DESTBil = retbillist.split(&amp;quot;,&amp;quot;)[1];
+			var DESTBiltyp = retbillist.split(&amp;quot;,&amp;quot;)[0];
+			
+			if( bCheck == true ) {	// 生成的单据同时审核
+				var billgrd = new grd.EABillGrid();// var grd= new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);  
+				try{
+				
+					billgrd.CheckOneBill(db,acc,DESTBiltyp ,DESTBil,usrid);
+	
+				}catch(ex){
+//					throw new pubpack.EAException(ex);
+
+						 db.ExcecutSQL(&amp;quot; delete from bilhdr where biltyp=&amp;apos;&amp;quot;+DESTBiltyp+&amp;quot;&amp;apos; and bilid=&amp;apos;&amp;quot;+DESTBil+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;&amp;quot;);										
+				
+						 db.ExcecutSQL(&amp;quot; delete from bildtl where biltyp=&amp;apos;&amp;quot;+DESTBiltyp+&amp;quot;&amp;apos; and bilid=&amp;apos;&amp;quot;+DESTBil+&amp;quot;&amp;apos; and acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;&amp;quot;);										
+//						db.Commite();
+						throw new pubpack.EAException(ex);
+				}
+			}
+			bils+=DESTBil+&amp;quot;,&amp;quot;;	   
+			   				 
+		}
+	 	sql = &amp;quot;drop table SELBFPUB_&amp;quot;+seq+&amp;quot;\n&amp;quot;;
+		db.ExcecutSQL(sql);
+//		db.Commit();
+//		throw new Exception(bils);
+		return bils ;//xmlds.getRowCount();
+}
+////////////////////
+//支持批量转换从多个来源单据相对转换多个目标,但是只转换单据头
+//要求： xmlstr需要存在SRCBILTYP SRCBIL,QTY字段
+function GenN2NHead(db,flw,acc,xmlstr)
+{
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+		ds = new pubpack.EAXmlDS(xmlstr);				
+		var seq = db.GetSQL(&amp;quot;select HF001SEQ.nextval from dual&amp;quot;);
+		sql = &amp;quot; create table SELBFPUB_&amp;quot;+seq+&amp;quot; as SELECT acc,SRCBILTYP,SRCBIL,VALLEFT,0 val2Convert FROM DATFLWSTA where rownum&amp;lt;1 \n&amp;quot;;
+//		throw new Exception(sql);
+		db.ExcecutSQL(sql);		
+		for(var row=0;row&amp;lt; ds.getRowCount();row++){			
+			var qty = ds.getStringAt(row,&amp;quot;QTY&amp;quot;);
+			var selflg = ds.getStringDef(row,&amp;quot;SELECTFLAG&amp;quot;, &amp;quot;1&amp;quot; );	// 如果不存SELECTFLAG当作已选择
+			if ( selflg == &amp;quot;1&amp;quot; ) {
+				if(qty==null ||qty==&amp;quot;&amp;quot;){
+					qty=0;
+				}
+				else{
+					qty = qty*1.0;				
+				}	
+				sql = &amp;quot; insert into SELBFPUB_&amp;quot;+seq+&amp;quot; \n&amp;quot;+
+				      &amp;quot; SELECT acc,SRCBILTYP,SRCBIL,SRCBILDAT,SRCBILSEQ,VALLEFT,&amp;quot;+qty+&amp;quot; val2convert,guid \n&amp;quot;+
+				      &amp;quot; from datflwsta where flw=&amp;apos;&amp;quot;+flw+&amp;quot;&amp;apos; \n&amp;quot;+ 
+				      &amp;quot; AND SRCBILTYP =&amp;apos;&amp;quot;+ ds.getStringAt(row,&amp;quot;SRCBILTYP&amp;quot;)+&amp;quot;&amp;apos; AND ACC=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; \n&amp;quot;+
+				      &amp;quot; and srcbil = &amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;SRCBIL&amp;quot;)+&amp;quot;&amp;apos;\n&amp;quot;;
+//				      throw new Exception(sql);
+				db.ExcecutSQL(sql);	
+			}
+		}
+		sql = &amp;quot; select distinct SRCBIL from SELBFPUB_&amp;quot;+seq+&amp;quot; \n&amp;quot;;
+		var bilds = db.QuerySQL(sql);
+		var bils = &amp;quot;&amp;quot;;
+		for(var c=0;c&amp;lt;bilds.getRowCount();c++){
+			var srcbil = bilds.getStringAt(c,&amp;quot;SRCBIL&amp;quot;);
+			sql = &amp;quot; select &amp;apos;1&amp;apos; SELECTFLG,A.*,B.val2Convert val2Convert FROM DATFLWSTA A,SELBFPUB_&amp;quot;+seq+&amp;quot; B \n&amp;quot;+
+			      &amp;quot; where a.srcbil = b.srcbil and a.srcbiltyp = b.srcbiltyp and a.acc = b.acc \n&amp;quot;+	      
+			      &amp;quot; AND A.SRCBILSEQ = B.SRCBILSEQ and a.flw=&amp;apos;&amp;quot;+flw+&amp;quot;&amp;apos; and a.acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;\n&amp;quot;+		      
+			      &amp;quot; and a.valleft&amp;lt;&amp;gt;0  and a.srcbil=&amp;apos;&amp;quot;+srcbil+&amp;quot;&amp;apos;\n&amp;quot;; 
+//			      throw new Exception(sql);
+			var xmlds = db.QuerySQL(sql);      		
+			var xml = xmlds.GetXml();
+//			throw new Exception(&amp;quot;@@@@@&amp;quot;+xml);
+			var DESTBil = grd.EABilflw.ExecBilFlw(db,request,flw,xml).split(&amp;quot;,&amp;quot;)[1];
+			bils+=DESTBil+&amp;quot;,&amp;quot;;	
+//			throw new Exception(bils);		      				 
+		}
+	 	sql = &amp;quot;drop table SELBFPUB_&amp;quot;+seq+&amp;quot;\n&amp;quot;;
+		db.ExcecutSQL(sql);
+		db.Commit();
+		return bils ;//xmlds.getRowCount();
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

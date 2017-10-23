@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_28" x="597" y="34" width="183" height="36" stroke="#000000" fill="#E1E1E1" stroke-width="" font-family="" font-size="" url=""   fillto="#F8F8F8" font-color="" 属性="">财务核算</rect>
+ <rect id="rect_29" x="597" y="70" width="183" height="409" stroke="#000000" fill="#ffffff" stroke-width="" font-family="" font-size="" url=""   属性="">
+ </rect>
+ <rect id="rect_30" x="20" y="310" width="290" height="169" stroke="#000000" fill="#ffffff" stroke-width="" font-family="" font-size="" url=""  >
+ </rect>
+ <rect id="rect_31" x="310" y="310" width="287" height="169" stroke="#000000" fill="#ffffff" stroke-width="" font-family="" font-size="" url=""  >
+ </rect>
+ <rect id="rect_32" x="780" y="70" width="193" height="409" stroke="#000000" fill="#ffffff" stroke-width="" font-family="" font-size="" url=""  >
+ </rect>
+ <rect id="rect_33" x="780" y="34" width="193" height="36" stroke="#000000" fill="#E1E1E1" stroke-width="" font-family="" font-size="" url=""   fillto="#F8F8F8" 属性="">分析数据中心</rect>
+ <line id="line_34" x1="20" y1="60" x2="20" y2="280" >
+ </line>
+ <rect id="WMS" x="20" y="34" width="577" height="36" stroke="#000000" fill="#E1E1E1" stroke-width="" font-family="" font-size="" url=""   fillto="#F8F8F8">供应链</rect>
+ <rect id="TMS" x="310" y="280" width="287" height="30" stroke="#000000" fill="#E1E1E1" stroke-width="" font-family="" font-size="" url=""   fillto="#F8F8F8">派车和运输系统</rect>
+ <rect id="rect_3" x="20" y="280" width="290" height="30" stroke="#000000" fill="#E1E1E1" stroke-width="" font-family="" font-size="" url=""   fillto="#F8F8F8">WMS第三方物流</rect>
+ <rect id="SALE销售" x="378" y="150" width="84" height="35" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url="show.sp?grdid=SX"  >SALE销售</rect>
+ <rect id="Plan计划和控制" x="180" y="151" width="93" height="32" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >PLAN计划系统</rect>
+ <rect id="3a" x="270" y="80" width="100" height="24" stroke="#000000" fill="#80ff00" stroke-width="" font-family="" font-size="" url=""  >移动手机报单</rect>
+ <rect id="手机报单" x="470" y="80" width="100" height="24" stroke="#000000" fill="#80ff00" stroke-width="" font-family="" font-size="" url=""  >互联网录入定单</rect>
+ <rect id="mobile" x="370" y="80" width="100" height="24" stroke="#000000" fill="#80ff00" stroke-width="" font-family="" font-size="" url=""  >ＰＯＳ收银</rect>
+ <polygon id="userinput_1" points="50,128 50,160 114,160 114,120 50,128 50,128" changeto="userinput" stroke="#000000" fill="#DDDDDD" stroke-width="" font-family="" font-size="" url=""  >供应商</polygon>
+ <polygon id="polygon_2" points="510,208 510,240 574,240 574,200 510,208 510,208 510,208 510,208" changeto="userinput" stroke="#000000" fill="#DDDDDD" stroke-width="" font-family="" font-size="" url="" x="10" y="10"  >客户</polygon>
+ <connector id="connector_3" from="3a" to="SALE销售" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_4" from="mobile" to="SALE销售" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_5" from="手机报单" to="SALE销售" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <text id="销售计划" x="295" y="147" width="67" height="18"  >销售计划</text>
+ <connector id="connector_8" from="Plan计划和控制" to="userinput_1" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <text id="采购计划" x="130" y="118" width="74" height="26"  >采购计划</text>
+ <rect id="rect_12" x="180" y="180" width="93" height="32" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >CTRL控制系统</rect>
+ <connector id="connector_1" from="polygon_2" to="SALE销售" fromcp="21" tocp="32" type="208"  >
+ </connector>
+ <text id="要货计划" x="495" y="165" width="65" height="21"  >要货计划</text>
+ <connector id="connector_7" from="SALE销售" to="Plan计划和控制" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <polygon id="库存" points="142,263 165,276 189,263 165,250 142,263" changeto="rhombus" stroke="#000000" fill="#CCFFCC" >库存</polygon>
+ <connector id="connector_9" from="库存" to="rect_12" fromcp="21" tocp="12" type="208"  >
+ </connector>
+ <polygon id="送货单" points="318,262 342,277 366,262 342,247 318,262 318,262" changeto="rhombus" stroke="#000000" fill="#CCFFCC" >送货单</polygon>
+ <polygon id="进货单" points="50,261 72,276 95,261 72,246 50,261" changeto="rhombus" stroke="#000000" fill="#CCFFCC" >进货单</polygon>
+ <rect id="abc" x="161" y="160" width="14" height="11" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >
+ </rect>
+ <connector id="connector_16" from="SALE销售" to="送货单" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <text id="销售控制" x="281" y="201" width="70" height="20"  >销售控制</text>
+ <rect id="仓库平面布局" x="180" y="440" width="79" height="27" stroke="#000000" fill="#FFFFCC" >仓库平面布局</rect>
+ <rect id="ＲＦ移动设备" x="120" y="379" width="80" height="27" stroke="#000000" fill="#FFFFCC" >ＲＦ移动设备</rect>
+ <rect id="货架管理" x="120" y="330" width="82" height="26" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >数据接口</rect>
+ <rect id="作业流程定义" x="60" y="441" width="83" height="27" stroke="#000000" fill="#FFFFCC" >作业流程定义</rect>
+ <rect id="GIS地图派车" x="320" y="380" width="100" height="26" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >ＧＩＳ地图派车</rect>
+ <rect id="多路线机制" x="400" y="330" width="104" height="26" stroke="#000000" fill="#FFFFCC" >多路线机制</rect>
+ <rect id="拖放派车" x="420" y="380" width="80" height="26" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >拖放派车</rect>
+ <rect id="策略派车" x="500" y="380" width="80" height="26" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >策略派车</rect>
+ <polygon id="派车单" points="301,427 324,444 347,427 324,410 301,427 301,427 301,427" changeto="rhombus" stroke="#000000" fill="#CCFFCC" >派车单</polygon>
+ <connector id="connector_1" from="派车单" to="货架管理" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <rect id="运输成本分析" x="409" y="428" width="83" height="25" stroke="#000000" fill="#FFFFCC" >运输成本分析</rect>
+ <rect id="AR应收帐款" x="645" y="88" width="87" height="26" stroke="#000000" fill="#FFFFCC" >AR应收帐款</rect>
+ <rect id="AP应付帐款" x="646" y="144" width="86" height="25" stroke="#000000" fill="#FFFFCC" >AP应付帐款</rect>
+ <rect id="GL凭证处理" x="689" y="244" width="83" height="27" stroke="#000000" fill="#FFFFCC" >GL凭证处理</rect>
+ <rect id="rect_10" x="650" y="390" width="83" height="27" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >结转成本</rect>
+ <polygon id="金税系统" points="622,315 622,352 675,352 675,306 622,315 622,315" changeto="userinput" stroke="#000000" fill="#DDDDDD" >金税系统</polygon>
+ <polygon id="现有财务软件" points="704,315 704,352 755,352 755,306 704,315 704,315" changeto="userinput" stroke="#000000" fill="#DDDDDD" >现有财务软件</polygon>
+ <connector id="connector_16" from="GL凭证处理" to="金税系统" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_17" from="GL凭证处理" to="现有财务软件" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <rect id="KPI指标" x="829" y="87" width="88" height="26" stroke="#000000" fill="#FFFFCC"  属性="">KPI指标</rect>
+ <rect id="维度分析" x="831" y="146" width="86" height="26" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >多维分析工具</rect>
+ <polygon id="内部流转单据" points="98,370 95,370 94,374 98,370 98,334 52,334 52,374 94,374" changeto="page" stroke="#000000" fill="#FFFFCC" >内部流转单据</polygon>
+ <text id="硕格现代物流协同信息平台" x="20" y="5" width="406" height="30" stroke-width="" font-family="华文中宋" font-size="22" url="" font-color="#800040"  >硕格现代物流协同信息平台</text>
+ <rect id="硕格中间件" x="20" y="479" width="59" height="48" stroke="#000000" fill="#95ffff" >硕格中间件</rect>
+ <rect id="dee" x="78" y="479" width="895" height="48" stroke="#000000" fill="#ffffff" stroke-width="" font-family="" font-size="" url=""  >
+ </rect>
+ <rect id="业务流程设计" x="165" y="489" width="92" height="24" stroke="#000000" fill="#FFFFCC" >业务流程设计</rect>
+ <rect id="工作流程设计" x="270" y="488" width="93" height="25" stroke="#000000" fill="#FFFFCC" >工作流程设计</rect>
+ <rect id="事务流程" x="371" y="490" width="98" height="23" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >事务跟踪</rect>
+ <rect id="单据中间件" x="480" y="490" width="83" height="23" stroke="#000000" fill="#FFFFCC" >单据中间件</rect>
+ <rect id="报表中间件" x="580" y="490" width="77" height="23" stroke="#000000" fill="#FFFFCC" >报表中间件</rect>
+ <rect id="开发平台" x="670" y="489" width="99" height="25" stroke="#000000" fill="#FFFFCC" stroke-width="" font-family="" font-size="" url=""  >可视化开发平台</rect>
+ <text id="基于浏览器" x="783" y="496" width="94" height="19"  >基于浏览器</text>
+ <polygon id="接口" points="614,244 604,270 636,270 647,244 614,244 614,244" changeto="parallelogram" stroke="#000000" fill="#00FF99" >接口</polygon>
+ <polygon id="自定义数据采集" points="854,205 843,215 843,257 902,257 902,205 854,205" changeto="card" stroke="#000000" fill="#FFFFCC" >自定义数据采集</polygon>
+ <connector id="connector_39" from="接口" to="GL凭证处理" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <polygon id="移动商务数据查询" points="832,293 853,340 895,340 917,293 832,293" changeto="trapezoid" stroke="#000000" fill="#BBE0E3" stroke-width="" font-family="" font-size="" url=""  >移动商务
+数据查询</polygon>
+ <polygon id="PDA" points="815,370 807,377 807,408 851,408 851,370 815,370" changeto="card" stroke="#000000" fill="#FFFFCC" >PDA</polygon>
+ <polygon id="WAP" points="908,370 900,378 900,411 944,411 944,370 908,370 908,370" changeto="card" stroke="#000000" fill="#FFFFCC" >WAP</polygon>
+ <connector id="connector_7" from="移动商务数据查询" to="PDA" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_8" from="移动商务数据查询" to="WAP" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <polygon id="所有业务数据进入财务" points="641,195 641,235 652,235 640,246 663,235 708,235 708,195 641,195 641,195 641,195" changeto="downnote" stroke="#000000" fill="#FFFFFF" stroke-width="" font-family="" font-size="" url=""  >　业务和财务衔接　　　</polygon>
+</svg>

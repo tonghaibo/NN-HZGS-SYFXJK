@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>R</MWTYP><MWID>M_TRKDTL</MWID><NAME>移动商务-事务处理过程</NAME><NOTE></NOTE><NOACCNAME></NOACCNAME><FILE>M_TRKDTL.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><MANUNIT></MANUNIT><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+   _this.SetCellBkColor(0,-1,-1,255,255,255); 
+   doSheet2(sheet);
+}
+
+function doSheet2(sheet)
+{ 
+      for (var i=2;i&amp;lt;=6;i++)
+      {
+            _this.SetRowVisible(sheet,i,-1);   //隐藏重复的行
+      }
+      //var url = homeurl + &amp;quot;xlsgrid/jsp/resource/&amp;quot;;
+       
+       var startrow = 2;//原始行
+       var corprow = 5;//所复制行数
+       var row = startrow;
+       var secondcrtusr = &amp;quot;&amp;quot;;//下一个用户名       
+       var sql =  &amp;quot; select b.crtusr ,to_char(b.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) crtdat,b.pro_note,b.title,b.filepath,b.imagepath, &amp;quot; +
+                  &amp;quot; b.filenote,b.tousr from trkdtl b where  &amp;quot;+
+                  &amp;quot; b.result=&amp;apos;1&amp;apos; and  b.id=&amp;apos;&amp;quot;+trkid+&amp;quot;&amp;apos;&amp;quot; +
+                //  &amp;quot; and b.tousr like &amp;apos;%&amp;quot;+G_USRID+&amp;quot;&amp;apos;   &amp;quot;+   
+                //  &amp;quot; and b.crtusr like &amp;apos;%&amp;quot;+user+&amp;quot;&amp;apos;&amp;quot; +
+                  &amp;quot; order by b.crtdat desc &amp;quot; ; 
+        QuerySQLDS(sql); 
+        count = _this.XMLDS_GetRowCount(); 
+        _this.SetCellText(1,1,5,&amp;quot;共有&amp;quot;+count +&amp;quot;笔处理记录，请点击处理事务按钮&amp;quot;);
+        
+        var crtusr = &amp;quot;&amp;quot;;
+        var crtdat = &amp;quot;&amp;quot;;
+        var pro_note = &amp;quot;&amp;quot;; 
+        var title = &amp;quot;&amp;quot;;
+        var filenote =&amp;quot;&amp;quot;;
+        var filepath = &amp;quot;&amp;quot;;
+        var tousr = &amp;quot;&amp;quot;;
+        if ( count &amp;gt; 0 )
+        {
+              for ( var i=0;i&amp;lt;count ;i++)
+              {
+                    crtusr = _this.XMLDS_GetString(i,&amp;quot;crtusr&amp;quot;);
+                    crtdat = _this.XMLDS_GetString(i,&amp;quot;crtdat&amp;quot;);
+                    pro_note  = _this.XMLDS_GetString(i,&amp;quot;pro_note&amp;quot;); 
+                    title = _this.XMLDS_GetString(i,&amp;quot;title&amp;quot;);
+                    filenote = _this.XMLDS_GetString(i,&amp;quot;filenote&amp;quot;);
+                    filepath = _this.XMLDS_GetString(i,&amp;quot;filepath&amp;quot;);
+                    tousr = _this.XMLDS_GetString(i,&amp;quot;tousr&amp;quot;);
+                    imagepath = _this.XMLDS_GetString(i,&amp;quot;imagepath&amp;quot;);
+                    
+                    var index=filenote.lastIndexOf(&amp;quot;\\&amp;quot;,filenote.length)
+                    var fp = filenote.substring(index+1,filenote.length);
+                    
+                    if ( filepath != &amp;quot;&amp;quot; || filepath.length &amp;gt; 0 )
+                    {
+                          ff += filepath+&amp;quot;~&amp;quot;;  //filepath会是若干个值 
+                    }                    
+                    if ( imagepath != &amp;quot;&amp;quot; || imagepath.length &amp;gt; 0 )
+                    {
+                          fimage += imagepath + &amp;quot;~&amp;quot;;
+                    }
+                    if ( crtusr != secondcrtusr )
+                    {
+                          for ( var j =0;j&amp;lt;corprow;j++)
+                          {
+                                _this.AppendRowAndCopy(1,row +corprow +j-1,startrow+j);//开始复制
+                                var s1 = _this.GetCellText(1,startrow +j,2);  //标题 
+                                _this.SetCellText(1,row +corprow +j,2,s1); 
+                                var s2 = _this.GetCellText(1,startrow +j+1,2);//处理摘要
+                                _this.SetCellText(1,row +corprow +j+1,2,s2);                                
+                                var s3 = _this.GetCellText(1,startrow+3 +j-1+1,2);//附件描述 
+                                _this.SetCellText(1,row +corprow +j+1+2-1+1,2,s2)
+                                var s4 = _this.GetCellText(1,startrow+3 +j-1,2);//转发给
+                                 _this.SetCellText(1,row +corprow +j+2,2,s4)                                
+                          }
+                          row  += corprow ;                           
+                          _this.SetCellLock(1,startrow+i*5+6-1,3,1);//锁定单元格     
+                          //_this.SetToRichEdit(sheet,startrow+i*5+6-1+1+1-1,3,pro_note);               
+                          _this.SetCellText(sheet,startrow+i*5+6-1+1+1-1,3,pro_note); /// 
+                          var temp = _this.GetCellText(sheet,startrow+i*5+6-1+1+1-1,3);
+                         // _this.SetCellWrapText(sheet,startrow+i*5+6-1+1+1-1,3,1);
+                //        //   _this.LoadToCodeEditor(&amp;quot;&amp;quot;,sheet,startrow+i*5+6-1+1+1-1,3,url+&amp;quot;empty.txt&amp;quot;,&amp;quot;&amp;quot;,url+&amp;quot;empty.txt&amp;quot;);
+                            _this.SetCellText(sheet,startrow+i*5+6-1+1+1-1,3,temp); /// 
+                          _this.SetCellWrapText(sheet,startrow+i*5+6-1,3,1);   //处理摘要单元格支持换行
+                          _this.SetCellText(sheet,startrow+i*5+5-1+1,2,i+1+&amp;quot;.&amp;quot;+title);//
+                          _this.SetCellText(sheet,startrow+i*5+5-1+1 ,5,crtusr+&amp;quot;-处理于：&amp;quot;+crtdat); 
+                          _this.SetCellText(sheet,startrow+i*5+6-1+1+1,3,tousr);
+                          if ( filepath != &amp;quot;&amp;quot; || filepath.length &amp;gt; 0 )  //附件
+                          {
+                                _this.SetCellShowText(sheet,startrow+i*5+8-1-1+1+1,3,fp);
+                                _this.SetCellText(sheet,startrow+i*5+8-1-1+1+1,3,filepath);
+                                
+                          }
+                          if ( imagepath != &amp;quot;&amp;quot; || imagepath.length &amp;gt; 0 )//贴图
+                          {
+//                                _this.SetCellText(sheet,startrow+i*5+8-1-1+1+1,5,imagepath);
+//                                _this.SetCellShowText(sheet,startrow+i*5+8-1-1+1+1,5,&amp;quot;查看贴图&amp;quot;);
+                                  _this.SetCellText(sheet,startrow+i*5+8-1-1+1+1,5,&amp;quot;查看贴图&amp;quot;);
+                          }
+                                           
+                    }
+                    crtusr = secondcrtusr; 
+              }
+        }
+               _this.AutoFixRowHeight(sheet);
+}
+ </GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

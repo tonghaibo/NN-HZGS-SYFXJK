@@ -1,0 +1,445 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WSMain</MWID><NAME >web调用拓扑图</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WSMain.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >save</C10></ROW>
+<ROW num="1" ><ID >saveas</ID><NAME >另存为</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >saveas</C10></ROW>
+<ROW num="2" ><ID >updatefromsrc</ID><NAME >从代码刷新图</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >updatefromsrc</C10></ROW>
+<ROW num="3" ><ID >testrun</ID><NAME >试运行</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >testrun</C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheetTree = 0;
+var sheetDatflw= 1 ;
+var sheetDatflwSrc = 2;
+
+function _thisOnpost_loaddata()
+{
+	
+  	// 显示工具栏
+	_this.Showtoolbar(1);
+	// 显示分页栏
+	_this.ShowTabBar(1);
+        var sheet = 0 ;
+        _this.SetSheetName(0,&amp;quot;流程图对象&amp;quot;);
+       // treexml = invokeOSFunc(&amp;quot;GetSytList&amp;quot;,&amp;quot;&amp;quot; ) ;       
+       // _this.SetToTreeCtrl(&amp;quot;tree_0&amp;quot;,sheetTree ,-1,-1,&amp;quot;&amp;lt;?xml version =  &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;流程对象&amp;gt;&amp;quot;+treexml+&amp;quot;&amp;lt;/流程对象&amp;gt;&amp;quot;);
+
+        _this.SetSheetName(sheetDatflw,&amp;quot;业务流-图&amp;quot;);
+        _this.SetDesignMode(1);
+        
+	if(xmlfile==&amp;quot;&amp;quot;) {
+		xmlfile=&amp;quot;&amp;quot;;
+		_this.SetToSVGForm(&amp;quot;flow_1&amp;quot;,sheetDatflw,-1,-1 ,&amp;quot;&amp;quot;);
+	}
+	else {
+		var param = &amp;quot;selsytid=&amp;quot;+ selsytid+&amp;quot;&amp;filename=&amp;quot;+ xmlfile;
+		var xml = invokeOSFunc(&amp;quot;loadDataflwGraph&amp;quot;,param);
+		_this.SetToSVGForm(&amp;quot;flow_1&amp;quot;,sheetDatflw,-1,-1 ,xml);
+	}
+	_this.SetAttribe(&amp;quot;flow_1&amp;quot;,&amp;quot;DCLICKOPENPROPWND&amp;quot;,&amp;quot;1&amp;quot;);	// 双击打开属性窗口
+	
+
+	_this.SetSheetName(sheetDatflw,&amp;quot;图&amp;quot;+xmlfile);
+        
+        
+	
+	_this.SetToCodeEditor(&amp;quot;&amp;quot;,sheetDatflwSrc,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	_this.SetSheetName(sheetDatflwSrc,&amp;quot;代码&amp;quot; );
+	
+	_this.SplitSheet(sheetTree,&amp;quot;H&amp;quot;,&amp;quot;210&amp;quot;);
+	_this.SetCurrentSheet(sheetDatflw);
+
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+      	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);  
+      	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,&amp;quot;DRAGANDDROP&amp;quot;,&amp;quot;true&amp;quot;);
+      	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);  
+	
+	var xml = _sql.query(&amp;quot;WSOBJ&amp;quot;,&amp;quot;selsytid=&amp;quot;+selsytid);
+
+	_this.SetXmlDS(0,1,0,15,2,xml);
+	_this.SetColWidth(0,2,1);
+
+}
+
+//================================================================// 
+// 函数：TreeItemDClick
+// 说明：Click tree item
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/15/06 16:02:13
+// 修改日志：
+//================================================================// 
+var SEQNUM=0;
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+
+      var ret = &amp;quot;&amp;quot;;
+      var itemid = tagid;      // 标签
+      var level = _this.XMLCTL_GetLevel(id,hItem);
+      var nextlevel_itemid = _this.XMLCTL_GetItem(id,hItem,2);
+
+      if ( id==&amp;quot;tree_0&amp;quot; ) {
+            var thisselsytid =getXmlAttribute(attribe,&amp;quot;sytflg&amp;quot;);
+            grdtyp =getXmlAttribute(attribe,&amp;quot;grdtyp&amp;quot;);
+
+            if ( sytid.length&amp;gt;0 &amp;&amp; level == 3) {      // 展开tree节点
+                  
+                  if ( nextlevel_itemid.length== 0 ) {
+                        var md_xml = &amp;quot;&amp;quot;;
+                        try {
+				
+                        	md_xml = invokeOSFunc (&amp;quot;GetGrdList&amp;quot;,&amp;quot;selsytid=&amp;quot; + thisselsytid +&amp;quot;&amp;selgrdtyp=&amp;quot;+grdtyp) ;
+                        	if ( md_xml == &amp;quot;&amp;quot; || md_xml == undefined  ) alert ( &amp;quot;该系统下面没有定义中间件&amp;quot; );
+                        	else _this.XMLCTL_Append(id,md_xml,hItem,2);
+                        }
+                        catch ( e ) {
+                        	alert ( e );
+                        }
+                        
+                  }
+            }
+            else if ( attribe.length &amp;gt; 0 &amp;&amp; level&amp;gt;=4 ) {   
+                	// 打开某个数据流
+                	var thisselsytid =_this.XMLCTL_GetAttribe (id,hItem,&amp;quot;sytflg&amp;quot;);
+                	var bilid  =_this.XMLCTL_GetAttribe (id,hItem,&amp;quot;id&amp;quot;);
+                	var bilnam  =_this.XMLCTL_GetAttribe (id,hItem,&amp;quot;name&amp;quot;);
+                	var selgrdtyp = _this.XMLCTL_GetAttribe (id,hItem,&amp;quot;selgrdtyp&amp;quot;);
+			if ( selgrdtyp == &amp;quot;B&amp;quot; ) {
+				if ( confirm( &amp;quot;点击【确定】新建一个流程图并载入该中间件的关联流程\n点击【取消】添加该中间件到图上&amp;quot; )== 1 ) {
+					CURMWID = bilid  ;
+					CURMWNAM=bilnam  ;
+					CURMWTYP=selgrdtyp ;
+					loadDatflw(bilid,bilnam,selgrdtyp);
+					LoadWorkflw(bilid,bilnam,selgrdtyp);
+					_this.SetCurrentSheet(sheetDatflw);
+				}
+				else {
+					SEQNUM++;
+					var gid = grdtyp +SEQNUM+&amp;quot;:&amp;quot;+this.m_startid ; 	
+					var svg = &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  selgrdtyp=\&amp;quot;&amp;quot;+selgrdtyp +&amp;quot;\&amp;quot;  fill=\&amp;quot;#FFFFCC\&amp;quot; x=\&amp;quot;20\&amp;quot; y=\&amp;quot;20\&amp;quot; width=\&amp;quot;80\&amp;quot;  height=\&amp;quot;40\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;-1\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+bilid  +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+bilid  +bilnam  +&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+					_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);
+				}
+			}
+			else {
+					SEQNUM++;
+					var gid = grdtyp +SEQNUM+&amp;quot;:&amp;quot;+this.m_startid ; 	
+					var svg = &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  selgrdtyp=\&amp;quot;&amp;quot;+selgrdtyp +&amp;quot;\&amp;quot;  fill=\&amp;quot;#FFFFCC\&amp;quot; x=\&amp;quot;120\&amp;quot; y=\&amp;quot;20\&amp;quot; width=\&amp;quot;80\&amp;quot;  height=\&amp;quot;60\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;-1\&amp;quot; url=\&amp;quot;entry.sp?grdid=&amp;quot;+bilid  +&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+bilid  +bilnam  +&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+					_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);
+			
+			}
+			//_this.SetRedraw(1);
+			
+ 
+            }
+      }      
+}
+
+//================================================================// 
+// 函数：getXmlAttribute
+// 说明：返回XML节点字符串的某个属性值
+// 参数：attribe 参数字符串，如 ID=&amp;quot;101&amp;quot; NAME=&amp;quot;scott&amp;quot;  
+//       attribename 参数名称 如 ID
+// 返回：如 101
+// 样例：
+// 作者：
+// 创建日期：03/11/06 21:18:02
+// 修改日志：
+//================================================================// 
+function getXmlAttribute(attribe,attribename)
+{
+
+            var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+            var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot; ,  loc+attribename.length+2);
+            var ret = attribe.substring( loc+attribename.length+2,loc1  ) ;
+            return ret;
+
+}
+function save()
+{
+		//建立一个参数对象
+		  var param = new Object();
+		  if ( selsytid == &amp;quot;&amp;quot; ) {
+		  	var fileid= prompt( &amp;quot;请输入要保存的流程图所在系统编号&amp;quot;,selsytid   );
+		  	if ( fileid==undefined) return;
+		  	selsytid = fileid;
+		  }
+
+		  if ( CURFILENAME == &amp;quot;&amp;quot; ) {
+		  	var fileid= prompt( &amp;quot;请输入要保存的流程图编号&amp;quot; ,&amp;quot;&amp;quot;);
+		  	if ( fileid==undefined) return;
+		  	CURFILENAME = fileid+&amp;quot;.&amp;quot; +fileext;
+		  }
+		  
+		  param.xmlfile=CURFILENAME ;
+		  param.selsytid = selsytid;
+		  param.xmlstr = _this.GetText(&amp;quot;flow_1&amp;quot;);
+		  
+		  var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+                  alert(msg);
+
+}            
+
+
+//另存为
+function saveas()
+{
+	if ( CURFILENAME != &amp;quot;&amp;quot; ) {
+		  //建立一个参数对象
+		  var param = new Object();
+	  	var fileid= prompt( &amp;quot;请输入要保存的流程图所在系统编号&amp;quot;,selsytid  );
+	  	if ( fileid==undefined) return;
+	  	selsytid = fileid;
+
+	  	var fileid= prompt( &amp;quot;请输入要保存的流程图编号&amp;quot;,&amp;quot;&amp;quot;  );
+	  	if ( fileid==undefined) return;
+	  	CURFILENAME = fileid+&amp;quot;.&amp;quot;+fileext;
+		  param.xmlfile=CURFILENAME ;
+
+		  param.selsytid = selsytid;
+		  param.xmlstr = _this.GetText(&amp;quot;flow_1&amp;quot;);
+		  var msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+                  alert(msg);
+	      }	
+  
+}
+
+//从代码刷新图
+function updatefromsrc()
+{
+		_this.SetRedraw(0);
+		_this.SetToSVGForm(&amp;quot;flow_1&amp;quot;,sheetDatflw,-1,-1 ,_this.GetCellText(sheetDatflwSrc  ,-1,-1));
+		_this.SetAttribe(&amp;quot;flow_1&amp;quot;,&amp;quot;DCLICKOPENPROPWND&amp;quot;,&amp;quot;1&amp;quot;);	// 双击打开属性窗口
+
+		_this.SetRedraw(1);
+  
+}
+
+//试运行
+function testrun()
+{
+	window.open( &amp;quot;flow.jsp?flowid=&amp;quot;+CURFILENAME +&amp;quot;&amp;syt=&amp;quot;+selsytid  );
+  
+}
+
+function _thisOnSheetShow(sheet,name)
+{
+  	if ( sheet== sheetDatflwSrc  ){
+            var rows = _this.GetRowCount(0);
+            var cols = _this.GetColCount(0);
+            _this.SetCellText( sheetDatflwSrc  ,-1,-1, _this.GetCellText(sheetDatflw,-1,-1) );
+	}
+}
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet == 0 ) {
+		var guid = _this.GetCellText(sheet,row,2);
+		if ( guid != &amp;quot;&amp;quot; ) {
+			openWindow( &amp;quot;show.sp?grdid=WS&amp;guid=&amp;quot;+guid );
+
+		}
+		
+	}
+	//AddObject(sheet,row,col);
+}
+
+function AddObject(sheet,row,col)
+{
+	if ( sheet == 0 ) {
+		var guid = _this.GetCellText(sheet,row,2);
+		var formid = _this.GetCellText(sheet,row,0);
+		var formname = _this.GetCellText(sheet,row,1);
+		
+		if ( guid != &amp;quot;&amp;quot; ) {
+			SEQNUM++;
+			var gid = grdtyp +SEQNUM ; 	
+			var svg = &amp;quot;&amp;lt;rect id=\&amp;quot;&amp;quot;+gid+&amp;quot;\&amp;quot;  formguid=\&amp;quot;&amp;quot;+guid +&amp;quot;\&amp;quot;  fill=\&amp;quot;#DDDDDD\&amp;quot; fillto=\&amp;quot;#FFFFFF\&amp;quot; round=\&amp;quot;2\&amp;quot; x=\&amp;quot;120\&amp;quot; y=\&amp;quot;20\&amp;quot; width=\&amp;quot;140\&amp;quot;  height=\&amp;quot;60\&amp;quot; selectflag=\&amp;quot;mouseclick\&amp;quot;  menuid=\&amp;quot;-1\&amp;quot; url=\&amp;quot;show.sp?grdid=WSTest&amp;wsid=&amp;quot;+formid+&amp;quot;&amp;thissytid=&amp;quot;+selsytid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;+formid +&amp;quot;\r\n&amp;quot;+formname  +&amp;quot;&amp;lt;/rect&amp;gt;&amp;quot;;				 						
+			_this.SVGFORM_AppendXml(&amp;quot;flow_1&amp;quot;,svg,&amp;quot;&amp;quot;);  
+		}
+	}
+}
+
+var G_DROPSHEET=-1;
+var G_DROPROW=-1;
+var G_DROPCOL=-1;
+
+//数据加载完毕
+//================================================================//  
+// 函数：_thisOnBeginDrag
+// 说明：开始拖动
+//================)_================================================// 
+function _thisOnBeginDrag(id)  
+{ 
+	window.status = &amp;quot;开始拖动&amp;quot;+id ;
+	var idsplit= id.split(&amp;quot;_&amp;quot; );
+	G_DROPSHEET = idsplit[1];
+	G_DROPROW = idsplit[2];
+	G_DROPCOL = idsplit[3];   
+   
+}
+//================================================================// 
+// 函数：_thisOnEndDrop
+// 说明：
+// 参数：拖动到终点,id为目标点编号
+//================================================================// 
+function _thisOnEndDrop(id,text)  
+{ 
+	if ( G_DROPSHEET==0 ) {
+		AddObject(G_DROPSHEET,G_DROPROW, G_DROPCOL );
+		
+	
+	}
+	window.status = &amp;quot;结束拖动&amp;quot;+id +&amp;quot;,srcsheet=&amp;quot;+G_DROPSHEET;
+}
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if ( id == &amp;quot;新增&amp;quot; ) {
+		openWindow( &amp;quot;show.sp?grdid=WS&amp;quot; );
+	
+	}  
+	else if ( id == &amp;quot;查询&amp;quot; ) {
+		openWindow( &amp;quot;entry.sp?grdid=WS&amp;quot; );
+
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+  function  XmlToStd(xml)
+  {
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;amp;quot;&amp;quot;, &amp;quot;\&amp;quot;&amp;quot; );
+      xml = pub.EAFunc.Replace(xml, &amp;quot;&amp;&amp;quot;+&amp;quot;apos;&amp;quot;, &amp;quot;&amp;apos;&amp;quot;  );
+    return xml;
+  }
+
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+//var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+  
+  sb.append(&amp;quot;&amp;lt;script&amp;gt;\n&amp;quot;);
+  var xmlfile=pubpack.EAFunc.NVL(request.getParameter(&amp;quot;xmlfile&amp;quot;),&amp;quot;&amp;quot;);
+  var selsytid=pubpack.EAFunc.NVL(request.getParameter(&amp;quot;selsytid&amp;quot;),&amp;quot;&amp;quot;);
+  var fileext=pubpack.EAFunc.NVL(request.getParameter(&amp;quot;fileext&amp;quot;),&amp;quot;&amp;quot;);
+
+
+  sb.append(&amp;quot;\nvar CURFILENAME =\&amp;quot;&amp;quot;+xmlfile+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar G_CURSYTID=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar xmlfile=\&amp;quot;&amp;quot;+xmlfile+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar selsytid=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;;&amp;quot;);
+  sb.append(&amp;quot;\nvar fileext=\&amp;quot;&amp;quot;+fileext+&amp;quot;\&amp;quot;;&amp;quot;);
+
+
+  
+  sb.append(&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;);
+}
+  
+function save()
+{
+  //xmlstr = pub.EAFunc.XmlToStd(xmlstr);
+  xmlstr = XmlToStd(xmlstr);
+  var path = basePath + pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + xmlfile;
+  pub.EAFunc.WriteToFile(path,xmlstr);
+
+  return &amp;quot;保存成功!&amp;quot;;
+}
+ 
+function delBilDef()
+{
+  var path = basePath + pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + sytid + &amp;quot;/&amp;quot; + xmlfile;
+  var f = new java.io.File(path);
+  var ok = f.delete();
+  if(ok)
+    return &amp;quot;删除成功！&amp;quot; ;
+  else
+    return &amp;quot;删除失败，可能文件正在使用。&amp;quot;;
+}
+
+
+//================================================================// 
+// 函数：GetSytList
+// 说明：得到所有的系统名称
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：03/14/06 11:58:50
+// 修改日志：
+//================================================================// 
+function GetSytList()
+{
+//&amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;?&amp;gt;&amp;quot;;
+//        xml+=&amp;quot;&amp;lt;中间件对象&amp;gt;&amp;quot;;
+        var xml = &amp;quot;&amp;quot;;
+        var sytds = xmldbpack.EASYTXmlDB.getSytDS();
+        for( var i=0;i&amp;lt; sytds.getRowCount(); i ++ ) {
+              var selsytid = sytds.getStringAt(i,&amp;quot;ID&amp;quot;);
+              xml+=&amp;quot;&amp;lt;&amp;quot;+selsytid+&amp;quot; imageid=\&amp;quot;0\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;      // sytflg说明该节点是一个系统
+              //xml+=&amp;quot;&amp;lt;流程图 selgrdtyp=\&amp;quot;S\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;单据中间件 selgrdtyp=\&amp;quot;B\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;报表中间件 selgrdtyp=\&amp;quot;R\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;查询中间件 selgrdtyp=\&amp;quot;Q\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;表单中间件 selgrdtyp=\&amp;quot;F\&amp;quot; imageid=\&amp;quot;0\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+              xml+=&amp;quot;&amp;lt;自定义中间件 selgrdtyp=\&amp;quot;M\&amp;quot; imageid=\&amp;quot;0\&amp;quot;  sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot;/&amp;gt;&amp;quot;;
+	
+              xml+=&amp;quot;&amp;lt;/&amp;quot;+selsytid+&amp;quot;&amp;gt;&amp;quot;;
+        }    
+ //       xml+=&amp;quot;&amp;lt;/中间件对象&amp;gt;&amp;quot;;
+        return xml;
+}
+
+// 得到某一个数据流图
+function loadDataflwGraph()
+{
+
+  var path = pub.EAOption.dynaDataRoot+ pub.EAOption.get(&amp;quot;xmldb.file.grddb&amp;quot;)+&amp;quot;/syt&amp;quot; + selsytid + &amp;quot;/&amp;quot; + filename;
+ 
+    return pub.EAFunc.readFile(path);
+}
+
+// 得到单据列表
+function GetGrdList()
+{
+	var xml = &amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;GBK&amp;apos;&amp;gt;&amp;quot;;
+	var ds = xmldbpack.EAGRDXmlDB.getSytWMList(selsytid,selgrdtyp);
+	if ( ds == null ) return &amp;quot;&amp;quot;;
+	for ( var i=0;i&amp;lt;ds.getRowCount() ; i ++ ) {
+		var id =ds.getStringAt(i,&amp;quot;MWID&amp;quot;);
+		var name = ds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+
+		xml+=&amp;quot;&amp;lt;&amp;quot;+id + &amp;quot; name=\&amp;quot;&amp;quot;+name+&amp;quot;\&amp;quot; id=\&amp;quot;&amp;quot;+id+&amp;quot;\&amp;quot; selgrdtyp=\&amp;quot;&amp;quot;+grdtyp+&amp;quot;\&amp;quot; sytflg=\&amp;quot;&amp;quot;+selsytid+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+
+	}
+	return xml;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >WSOBJ</ID><NAME ></NAME><DATDSC >select id,name,guid from WS where sytid=&amp;apos;[%selsytid]&amp;apos; order by id</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ACCITM</MWID><NAME ></NAME><NOTE ></NOTE><FILE >ACCITM.zxg</FILE><FIXED ></FIXED><CATTYP >02</CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >x</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+
+	// 通过Get的方式调用服务端的一个函数
+	var sParam =&amp;quot;yymm=200601&amp;quot;;
+	try {
+		ret = invokeOSFunc(&amp;quot;Run&amp;quot;,sParam) ;       
+		alert ( ret );
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+
+       setButton();
+       // 构造3个 SQL
+       // 查询用户数据表记录
+       selectSQL = &amp;quot;select GUID,ID as 科目编号,NAME as 科目名称,NOTE as 备注,DEFWAY as 默认借贷方向, &amp;quot;+
+                   &amp;quot;ENDFLG as 末级标志,REFID as 上级科目编号 &amp;quot;+
+                   &amp;quot;from ACCITM &amp;quot;;
+       //新增用户数据表记录
+       insertSQL = &amp;quot;INSERT INTO ACCITM ( GUID,ID,NAME,NOTE,DEFWAY,ENDFLG,REFID &amp;quot;+
+                   &amp;quot; ) values( sys_guid(),?,?,?,?,?,? )&amp;quot;;
+       // 修改用户数据表记录
+       updateSQL = &amp;quot;UPDATE ACCITM SET ID=?,NAME=?,NOTE=?,DEFWAY=?, &amp;quot;+
+                   &amp;quot;ENDFLG=?,REFID =? &amp;quot;+
+                   &amp;quot;where guid=?&amp;quot;;
+       //删除用户数据表记录
+       deleteSQL = &amp;quot;delete ACCITM where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       
+
+       
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+function f_dbeditpostloaddata(){
+
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// Possion
+function Run()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var num = 0;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		//db.ExcecutSQL(&amp;quot;delete from Poisson&amp;quot; );
+
+		for ( var ee=1;ee&amp;lt;=1000;ee++ ) {
+			var e = (1.0*ee)/10;
+			
+			for ( var qty=201;qty &amp;lt;= 300;qty++) {
+				var p = pubpack.EAMath.Poisson(qty,e );
+				num++;
+				//if ( p!=null ) 
+				try{
+				db.ExcecutSQL(&amp;quot;insert into Poisson(E,P,QTY) values( &amp;quot;+e+&amp;quot;,&amp;quot;+p+&amp;quot;,&amp;quot;+qty +&amp;quot;)&amp;quot; );
+				}catch( eee ) {}
+			}
+		}
+
+
+		db.Commit();	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot;成功插入&amp;quot;+num+&amp;quot;笔记录&amp;quot;;
+}
+
+// Possion
+function Run1()
+{
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var num = 0;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		//db.ExcecutSQL(&amp;quot;delete from Poisson&amp;quot; );
+
+		for ( var ee=1;ee&amp;lt;=1000;ee++ ) {
+			var e = (1.0*ee)/10;
+			
+			for ( var qty=201;qty &amp;lt;= 300;qty++) {
+				var p = pubpack.EAMath.Poisson(qty,e );
+				num++;
+				//if ( p!=null ) 
+				try{
+				db.ExcecutSQL(&amp;quot;insert into Poisson(E,P,QTY) values( &amp;quot;+e+&amp;quot;,&amp;quot;+p+&amp;quot;,&amp;quot;+qty +&amp;quot;)&amp;quot; );
+				}catch( eee ) {}
+			}
+		}
+
+
+		db.Commit();	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return &amp;quot;成功插入&amp;quot;+num+&amp;quot;笔记录&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

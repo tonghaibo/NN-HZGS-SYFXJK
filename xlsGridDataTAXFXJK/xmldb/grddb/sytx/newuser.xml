@@ -1,0 +1,221 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >newuser</MWID><NAME >3abill新用户注册</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >newuser.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 //
+function newsave(){
+	var msg = &amp;quot;&amp;quot;;
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ps1 = null;
+	//先判断输入的字符是否符合一般格式.如果不符合,返回错误
+	
+	try
+	{
+		
+		db = new pubpack.EADatabase();
+		//查询当前id是否已经被使用了
+		sql = &amp;quot;select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;3ABill&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount()&amp;gt;0){
+			//已经生成有过这个用户了返回
+			throw new Exception(&amp;quot;此用户名已被注册&amp;quot;);
+		}
+		//useflag=2表示未激活的用户
+		sql = &amp;quot;insert into usr (org,id,passwd,post,crtdat,USEFLG,mainurl,name)values(?,?,?,?,sysdate,&amp;apos;1&amp;apos;,&amp;apos;../../../ROOT_3ABill/Layout.sp?id=Billmain&amp;apos;,&amp;apos;&amp;quot;+usrname+&amp;quot;&amp;apos;)&amp;quot;;
+		ps1 = db.prepareStatement(sql);
+		
+		ps1.setString(1,&amp;quot;3ABill&amp;quot;);
+		ps1.setString(2,usrid);
+                ps1.setString(3,password);
+                ps1.setString(4,email);
+                
+                
+
+		//throw new Exception(&amp;quot;sql&amp;quot;);
+		//sql = sql.replace(&amp;quot;usr&amp;quot;,&amp;quot;abc&amp;quot;);
+		
+		var ret = ps1.executeUpdate();
+		//读取新增的用户的id.并且读取guid,作为激活的确认码
+		sql=&amp;quot;select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;3ABill&amp;apos;&amp;quot;;
+		var guid = &amp;quot;&amp;quot;;
+		ds = db.QuerySQL(sql);
+		var url = &amp;quot;&amp;quot;;
+		if(ds.getRowCount()&amp;gt;0){
+			//获取guid
+			guid=ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+			//添加用户详细信息
+			sql = &amp;quot;insert into hr_usr(id,name,mobile,phone,email,adds,FILE_PLACE,PREF,NATIONAL,TYPE,INITADDS)values(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+mobile+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+tel+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+email+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ads+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+comname+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+province+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+city+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+business+&amp;quot;&amp;apos;)&amp;quot;;
+                	db.ExcecutSQL(sql);
+                	//throw new Exception(sql);
+			//throw new Exception(password+&amp;quot;|&amp;quot;+passwordconfirm+&amp;quot;|&amp;quot;+usrid+&amp;quot;|&amp;quot;+email);
+			//添加了用户后发送一个guid连接给用户输入的email.进行激活确认
+			//throw new Exception(&amp;quot;开始发邮件&amp;quot;);new EAMail(&amp;quot;smtp.163.com&amp;quot;,&amp;quot;25&amp;quot;,&amp;quot;foolraty@163.com&amp;quot;,&amp;quot;foolraty&amp;quot;,&amp;quot;foolraty&amp;quot;);
+			var eaMail= new pubpack.EAMail();
+			url=&amp;quot;http://3abill.com/xlsgrid/Layout.sp?id=Usraction&amp;org=3ABill&amp;guid=&amp;quot;+guid+&amp;quot;&amp;quot;;
+			//var i=eaMail.sendMail(email,&amp;quot;3ABill激活邮件&amp;quot;,&amp;quot;&amp;lt;html&amp;gt;&amp;lt;body&amp;gt;请点击激活:&amp;lt;a href=&amp;apos;&amp;quot;+url+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+url+&amp;quot;&amp;lt;/a&amp;gt;&amp;lt;/body&amp;gt;&amp;lt;/html&amp;gt;&amp;quot;);
+			//throw new Exception(&amp;quot;发邮件完了&amp;quot;);
+			
+		}else{
+			//找不到已经添加的用户,新增用户错误
+			throw new Exception(&amp;quot;新增用户出错&amp;quot; +ret);
+		}
+		
+		msg = &amp;quot;注册用户成功&amp;quot;+url;	
+		db.Commit();	
+			
+	}
+	catch(e)
+	{
+		if( db!= null ) db.Rollback();
+		throw e;
+	}
+	finally
+	{
+		db.Close(); 
+		//db=null;
+	}       
+
+
+	
+	
+	return msg;
+}
+//激活的方法
+function useraction(){
+	//查询对应guid...有这个帐号的话.且未激活则激活,否则返回说明已经激活
+	var sql=&amp;quot;&amp;quot;;
+	var GUID = &amp;quot;&amp;quot;;
+	var db = null;
+	try{
+		GUID=guid;
+	}catch(e){
+		GUID=&amp;quot;&amp;quot;;
+	}
+	
+	sql = &amp;quot;select useflg from usr where guid=&amp;apos;&amp;quot;+GUID+&amp;quot;&amp;apos;&amp;quot;;
+	
+	try
+	{
+		db = new pubpack.EADatabase();
+		var ds = db.QuerySQL(sql);
+		var USEFLG = &amp;quot;&amp;quot;;//ds.getStringAt(0,&amp;quot;useflg&amp;quot;);
+		if(ds.getRowCount()&amp;gt;0){
+			var USEFLG = ds.getStringAt(0,&amp;quot;USEFLG&amp;quot;);
+			if(USEFLG == &amp;quot;2&amp;quot;){
+				//更新状态为激活状态
+				sql = &amp;quot;update usr set USEFLG=&amp;apos;1&amp;apos; where guid=&amp;apos;&amp;quot;+GUID+&amp;quot;&amp;apos;&amp;quot;;
+				db.ExcecutSQL(sql);
+				db.Commit();
+			}else if(USEFLG == &amp;quot;1&amp;quot;){
+				//返回已经激活过
+				throw new Exception(&amp;quot;该帐号已经为激活状态&amp;quot;);
+			}else{
+				//返回该帐号无效
+				throw new Exception(&amp;quot;该帐号无效&amp;quot;);
+			}
+		}else{
+			//返回无效的注册链接
+			throw new Exception(&amp;quot;无效的注册链接&amp;quot;);
+		}
+			
+	}
+	catch(e)
+	{
+		if( db!= null ) db.Rollback();
+		throw e;
+	}
+	finally
+	{
+		db.Close(); 
+		//db=null;
+	}     
+	
+	throw new Exception(&amp;quot;注册成功&amp;quot;);
+	
+}
+
+function newusersave(){
+	var msg = &amp;quot;&amp;quot;;
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ps1 = null;
+	var org = &amp;quot;&amp;quot;;
+	//先判断输入的字符是否符合一般格式.如果不符合,返回错误
+	
+	try
+	{
+		
+		db = new pubpack.EADatabase();
+		//查询当前id是否已经被使用了
+		sql = &amp;quot;select guid from usr where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and org=&amp;apos;3ABill&amp;apos;and USEFLG=&amp;apos;1&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount()&amp;gt;0){
+			//已经生成有过这个用户了返回
+			throw new Exception(&amp;quot;此用户名已被注册&amp;quot;);
+		}
+		var usr = web.EASession.GetLoginInfo(request);//获取当前用户信息,在第一步的时候读取
+		var curusrid = usr.getUsrid();
+		
+		sql = &amp;quot;select org from usr where id=&amp;apos;&amp;quot;+curusrid+&amp;quot;&amp;apos;&amp;quot;;
+		var ds = db.QuerySQL(sql);
+		if(ds.getRowCount()&amp;gt;0){
+			//已经生成有过这个用户了返回
+			org = ds.getStringAt(0,&amp;quot;org&amp;quot;);
+		}else{
+			throw new Exception(&amp;quot;读取当前用户出错&amp;quot;);
+		}
+		
+		//useflag=2表示未激活的用户
+		sql = &amp;quot;insert into usr (org,id,passwd,post,crtdat,USEFLG,mainurl,name)values(?,?,?,?,sysdate,&amp;apos;1&amp;apos;,&amp;apos;../../../ROOT_3ABill/Layout.sp?id=Billmain&amp;apos;,&amp;apos;&amp;quot;+usrname+&amp;quot;&amp;apos;)&amp;quot;;
+		ps1 = db.prepareStatement(sql);
+		
+		ps1.setString(1,&amp;quot;3ABill&amp;quot;);
+		ps1.setString(2,usrid);
+                ps1.setString(3,passwd);
+                ps1.setString(4,&amp;quot;&amp;quot;);
+                
+                
+
+		
+		//sql = sql.replace(&amp;quot;usr&amp;quot;,&amp;quot;abc&amp;quot;); 
+		
+		var ret = ps1.executeUpdate();
+		//throw new Exception(sql); 
+		
+		db.Commit();		
+	}
+	catch(e)
+	{
+		if( db!= null ) db.Rollback();
+		throw e;
+	}
+	finally
+	{
+		db.Close(); 
+		//db=null;
+	}       
+
+
+	throw new Exception(&amp;quot;添加成功&amp;quot;);	
+	
+	return msg;
+
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

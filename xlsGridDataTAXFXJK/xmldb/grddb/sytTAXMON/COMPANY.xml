@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >COMPANY</MWID><NAME >纳税企业维护</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >COMPANY.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >0</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/dbhelper.js,xlsgrid/js/TAXMON/PG_ImpXlsPub.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >ImpXls</ID><NAME >导入</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >0</IMGMOUSE><C10 >ImpXls</C10><C11 >ImpXls</C11><C12 >ImpXls</C12><C13 >ImpXls</C13><C14 >ImpXls</C14></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+var sheet = 0 ;
+
+function _thisOnpost_loaddata(sheet)
+{
+	//行业代码	纳税人识别号	纳税人名称	法定代表人	供电部门	电表号	一般纳税人标志	企业类型	税管员	纳税人状态	所属乡镇	生产经营地址
+       setButton();
+       var fields = &amp;quot;GUID,GUID,sys_guid();&amp;quot;+
+            &amp;quot;HYCODE,行业代码,,,1;&amp;quot;+
+            &amp;quot;TYPCLSID,所属行业,,,1;&amp;quot;+
+	    &amp;quot;ID,纳税人识别号,,.+,1;&amp;quot;+
+            &amp;quot;NAME,纳税人名称,,,1;&amp;quot;+
+	    &amp;quot;PWDEPT,供电部门,,,1;&amp;quot;+	    
+	    &amp;quot;AMMNO,电表号,,,1;&amp;quot;+
+	    &amp;quot;lawman,法定代表人,,,1;&amp;quot;+
+	    &amp;quot;ytaxman,一般纳税人标志,,,1;&amp;quot;+
+	    &amp;quot;typ,企业类型,,,1;&amp;quot;+
+	    &amp;quot;taxman,税管员,,,1;&amp;quot;+
+	    &amp;quot;stat,纳税人状态,,,1;&amp;quot;+
+	    &amp;quot;towns,所属乡镇,,,1;&amp;quot;+
+	    &amp;quot;addr,生产经营地址,,,1;&amp;quot;;	    
+            
+      var where = &amp;quot;&amp;quot;;	
+      var orderby = &amp;quot;ID&amp;quot;;	// 字段的列表
+      // 参数1：基表的名称
+      // 参数2：字段列表 格式是通过;分隔不同的字段，每个分隔中使用,来分隔不同的字段属性
+      //            字段属性： ID,NAME,默认值,正则表达式,是否列入查询的字段(=1是)
+      // 参数3：主键
+      // 参数4：显示空行标志 =true表示如果结果集为空，隐藏开头的两个空行,强制用户点击“新增”，以保证填入默认值
+      // 参数5：查询的表名称，在某些情况下，查询的表名称和基表名称不一样，默认=&amp;quot;&amp;quot;表示查询表名称采用基表名称
+      // 参数6：where条件，是不带where的子句如&amp;quot;ID like &amp;apos;01%&amp;apos;&amp;quot;
+      // 参数7：orederby，是不带order by的子句如&amp;quot;ID,REFID&amp;quot;, 
+
+      _dbhelper.InitSQL(&amp;quot;tax_company&amp;quot;,fields,&amp;quot;GUID&amp;quot;,false,&amp;quot;tax_company&amp;quot;,where,orderby);
+      _dbhelper.InitColumnList(fields );
+      _dbhelper.Load(1,1,2,2);	
+      
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+}
+
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata()
+{
+	var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_TOWNS&amp;quot;),&amp;quot;NAME&amp;quot;,&amp;quot;NAME&amp;quot;);
+	var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_TAXMAN&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	var listid3 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_HYCLASS&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	var listid4 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_YTAXMAN&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	
+	for (row = _this.GetMainCellRangeRow1(sheet); row &amp;lt;= _this.GetMainCellRangeRow2(sheet); row ++) {
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,4,listid3);
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,10,listid4);
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,12,listid2);
+		_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,row,14,listid1);
+	}
+}
+
+function f_dbeditafternewrow(sheet,row)
+{
+	
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue)
+{
+	
+}
+
+//导入
+function ImpXls()
+{
+	try {
+		var tabnam = impXls2TempDB();
+//		alert(tabnam);
+		if (tabnam != &amp;quot;&amp;quot; &amp;&amp; tabnam != null) {
+			var param = new Object();
+			param.tabnam = tabnam;
+			msg = invokeOSFuncExt(&amp;quot;insert&amp;quot;,param);
+			alert(msg);
+			window.location.reload(true);
+		}
+	}
+	catch ( e ) {
+		alert( e );
+	}
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+//添加额外html
+//afterBodyHtml事件后触发，已过时，建议用afterBodyHtml事件进行处理
+function addBottomHtml(mwobj,request,sb,usrinfo)
+//var mwobj=grd.EAMidWareBase();var request=javax.servlet.http.HttpServletRequest();var sb = new java.lang.StringBuffer();var usrinfo = new web.EAUserinfo();
+{
+	sb.append(&amp;quot;&amp;lt;input type=&amp;apos;file&amp;apos; id=&amp;apos;fileInput&amp;apos;/&amp;gt;&amp;quot;);
+}
+
+//co0 行业代码	
+//co1 纳税人识别号	
+//co2 纳税人名称	
+//co3 法定代表人	
+//co4 供电部门	
+//co5 电表号	
+//co6 一般纳税人标志	
+//co7 企业类型	
+//co8 税管员	
+//co9 纳税人状态	
+//co10 所属乡镇	
+//co11 生产经营地址	
+function insert()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ds = null;
+	var table = tabnam;
+	try
+	{
+		db = new pubpack.EADatabase();	
+		sql = &amp;quot;select * from user_tables where table_name = upper(&amp;apos;&amp;quot;+table+&amp;quot;&amp;apos;)&amp;quot;;
+		ds = db.QuerySQL(sql);
+		if (ds.getRowCount() &amp;gt; 0)
+		{
+			sql = &amp;quot;update &amp;quot;+table+&amp;quot; set co6=decode(co6,&amp;apos;Y&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;是&amp;apos;,&amp;apos;1&amp;apos;,&amp;apos;0&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+			
+			sql = &amp;quot;update tax_company a set (name,hycode,pwdept,typ,taxman,towns,lawman,addr,ytaxman,stat)=
+		        (select trim(co2),replace(replace(trim(co0),&amp;apos;--&amp;apos;,&amp;apos;_&amp;apos;),&amp;apos; &amp;apos;,&amp;apos;&amp;apos;),trim(co4),trim(co7),trim(co8),trim(co10),trim(co3),trim(co11),co6,trim(co9) from &amp;quot;+table+&amp;quot; b
+		          where a.id=trim(b.co1) and nvl(a.ammno,&amp;apos;A&amp;apos;)=nvl(trim(b.co5),&amp;apos;A&amp;apos;) and nvl(a.pwdept,&amp;apos;A&amp;apos;)=nvl(trim(b.co4),&amp;apos;A&amp;apos;))
+		        where (id,nvl(ammno,&amp;apos;A&amp;apos;),nvl(pwdept,&amp;apos;A&amp;apos;)) in (select co1,nvl(trim(co5),&amp;apos;A&amp;apos;),nvl(co4,&amp;apos;A&amp;apos;) from &amp;quot;+table+&amp;quot;)&amp;quot;;
+			var count1 = db.ExcecutSQL(sql);
+		
+	          	sql = &amp;quot;insert into tax_company (ID,NAME,HYCODE,PWDEPT,AMMNO,TYP,TAXMAN,TOWNS,LAWMAN,ADDR,YTAXMAN,STAT)
+			select co1,co2,hycode,co4,co5,co7,co8,co10,co3,co11,co6,co9 from (
+			select co1,co2,replace(replace(trim(co0),&amp;apos;--&amp;apos;,&amp;apos;_&amp;apos;),&amp;apos; &amp;apos;,&amp;apos;&amp;apos;) hycode,co4,decode(instr(co5,&amp;apos;.&amp;apos;),0,co5,to_number(co5)) co5,co7,co8,co10,co3,co11,co6,co9 from &amp;quot;+table+&amp;quot; a 
+			where co1 !=&amp;apos;纳税人识别号&amp;apos;) a
+			where not exists (select 1 from tax_company where tax_company.ID=a.co1 and nvl(tax_company.ammno,&amp;apos;1&amp;apos;)=nvl(a.co5,&amp;apos;1&amp;apos;) )&amp;quot;;
+	          	var count2 = db.ExcecutSQL(sql);
+	          	
+	            	//修改typclsid字段
+	            	sql = &amp;quot;update tax_company a set typclsid =nvl((select max( b.id)  from tax_compclass b 
+         			where  substr(replace(a.hycode,&amp;apos;-&amp;apos;,&amp;apos;_&amp;apos;),instr(replace(a.hycode,&amp;apos;-&amp;apos;,&amp;apos;_&amp;apos;),replace(b.hycode,&amp;apos;nsrbm_&amp;apos;,&amp;apos;&amp;apos;),1,1),length(replace(b.hycode,&amp;apos;nsrbm_&amp;apos;,&amp;apos;&amp;apos;))) = replace(b.hycode,&amp;apos;nsrbm_&amp;apos;,&amp;apos;&amp;apos;)),&amp;apos;&amp;apos;)         			     
+	        		where exists (select 1 from tax_company a,tax_compclass b   where  
+    				substr(replace(a.hycode,&amp;apos;-&amp;apos;,&amp;apos;_&amp;apos;),instr(replace(a.hycode,&amp;apos;-&amp;apos;,&amp;apos;_&amp;apos;),replace(b.hycode,&amp;apos;nsrbm_&amp;apos;,&amp;apos;&amp;apos;),1,1),length(replace(b.hycode,&amp;apos;nsrbm_&amp;apos;,&amp;apos;&amp;apos;)))= replace(b.hycode,&amp;apos;nsrbm_&amp;apos;,&amp;apos;&amp;apos;) )
+    				and to_char(crtdat,&amp;apos;yyyymmdd&amp;apos;)=to_char(sysdate,&amp;apos;yyyymmdd&amp;apos;)&amp;quot;;
+	            	db.ExcecutSQL(sql);
+	            	
+	            	db.Commit();
+			return &amp;quot;更新记录&amp;quot;+count1+&amp;quot;笔，插入记录&amp;quot;+count2+&amp;quot;笔&amp;quot;;
+		}
+		else
+			return &amp;quot;无数据可以导入的！&amp;quot;;
+	}
+	catch ( e )
+	{
+		if(db != null) db.Rollback();
+		throw new Exception(e);
+	}
+	finally
+	{
+		sql = &amp;quot;select * from user_tables where table_name = upper(&amp;apos;&amp;quot;+table+&amp;quot;&amp;apos;)&amp;quot;;
+		ds = pub.EADbTool.QuerySQL(sql);
+		if (ds.getRowCount() &amp;gt; 0)
+		{
+			sql = &amp;quot;drop table &amp;quot;+ table;
+			pub.EADbTool.ExcecutSQL(sql);
+		}
+		if(db != null) db.Close();
+	}	
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

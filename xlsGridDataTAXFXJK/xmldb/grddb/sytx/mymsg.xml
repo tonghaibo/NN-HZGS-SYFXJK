@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >mymsg</MWID><NAME >云窗口消息系统</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >mymsg.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD >1</HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main2</DSKEY><NROW >10</NROW><NCOL >6</NCOL><PAGES >1</PAGES><PAGESIZE >9</PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,1,1</C20><C21 >0,1,0</C21><C22 >0,1,0</C22><C23 >0,1,0</C23><C24 >0,1,0</C24><C25 >0,1,0</C25><C26 >0,1,0</C26><C27 >0,1,0</C27><C28 >0,1,0</C28><C29 >0,1,0</C29></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	
+
+	_this.ShowToolBar(0);	
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );
+	_this.SetColVisible(0,2,-1);
+	_this.SetColVisible(0,3,-1);
+	_this.SetColVisible(0,4,-1);
+	_this.SetColVisible(0,5,-1);
+	_this.SetFixedRow(0,1);
+	
+	for(var r=1;r&amp;lt;=_this.GetRowCount(0);r++){
+		if(_this.GetCellText(0,r,0)==&amp;quot;2&amp;quot;){
+
+			//_this.SetCellText(0,r,0,&amp;quot;[%IMAGE imgid=\&amp;quot;16\&amp;quot;  imgfilltyp=\&amp;quot;5\&amp;quot; value=\&amp;quot;一般事务\&amp;quot; ]&amp;quot; );
+		}
+		if(_this.GetCellText(0,r,3)!=&amp;quot;已读&amp;quot;){
+			_this.SetCellColor(0,r,2,255,0,0);
+		}
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	var url=_this.GetCellText(sheet,row,2);
+	if(url!=&amp;quot;&amp;quot;){
+		_this.SetCellColor(0,row,2,0,255,0);
+		window.parent.parent.parent.j_openWindow(10,10,1000,-1,url,&amp;quot;MYMSG&amp;quot;,&amp;quot;我的消息&amp;quot;);
+		if(_this.GetCellText(sheet,row,5)==&amp;quot;&amp;quot;){
+			invokeOSFunc(&amp;quot;upwfmsg&amp;quot;,&amp;quot;guid=&amp;quot;+_this.GetCellText(sheet,row,4));
+		}
+	}
+	
+//	f_openWindow(50,50,600,500,url,&amp;apos;resource://icon_tools&amp;apos;,&amp;apos;&amp;apos;+Math.random(),&amp;apos;消息通知&amp;apos;);
+}
+
+function f_cloudwindowopen(url,title,param){
+	try{
+		j_openWindow(-1,-1,-1,-1,url,guid,caption); return 1;
+	}
+	catch(e){
+		try{
+			window.parent.j_openWindow(-1,-1,-1,-1,url,guid,caption);return 1;
+		}
+		catch(e){
+			try{
+				window.parent.parent.j_openWindow(-1,-1,-1,-1,url,guid,caption);return 1;
+			}
+			catch(e){
+				try{
+					window.parent.parent.parent.j_openWindow(-1,-1,-1,-1,url,guid,caption);return 1;
+				}
+				catch(e){return 0;}
+			}
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var code = request.getParameter(&amp;quot;CODE&amp;quot;);
+      var db = null;
+      var ret= &amp;quot;10&amp;quot;;
+      var sql = &amp;quot;&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            	// OS 中如何得到登录的信息
+		var usr=web.EASession.GetLoginInfo(request);
+		var  orgid=usr.getOrgid();
+		var accid=usr.getAccid();
+		var usrid=usr.getUsrid();
+            sql=&amp;quot;select count(*) from (select a.title from  
+		      trkhdr a,v_usr c ,trktyp e,v_usr cc,trkdtl d,oalog o
+		      where 
+		        a.dtlusr=c.id  and a.AIMORG=c.orgid and a.crtusr=cc.id  and a.AIMORG=cc.orgid 
+      			and a.show =e.id
+      			and o.bilid=a.guid
+      			and o.usrid=c.id
+			and c.id=lower(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;)   
+			and c.orgid=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;
+			and a.guid = d.trkguid(+)
+			and a.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; /* 0￡oD??¨￡?1￡o′|àí?D￡?2￡oò?′|àí￡?3￡o′|àííê￡?4￡o?′′|àí */
+			and a.show not in (&amp;apos;4&amp;apos;)
+			and nvl(d.dtltyp,&amp;apos;1&amp;apos;) &amp;lt;&amp;gt;&amp;apos;2&amp;apos;/*不包含评论*/
+			and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;,&amp;apos;13&amp;apos;) 
+			and a.crtdat&amp;lt;=sysdate
+			and a.crtdat&amp;gt;=add_months(sysdate,-3) 
+			and o.action not in(&amp;apos;结束&amp;apos;)
+			group by a.title,cc.name,a.crtdat,a.note,a.guid,a.id ,o.action
+			union all
+			select title from wfmsg where tousrid=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; and endflg=&amp;apos;0&amp;apos; and org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;
+			union all
+			select title from wfmsg where torolid in (select c.id rolid from usr a,usrrol b,rol c where a.guid=b.usr and b.rol=c.guid and a.org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; and a.id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;) and endflg=&amp;apos;0&amp;apos; and org=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos; 
+			)&amp;quot;;
+	    
+            ret = db.GetSQL(sql);
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+
+
+function upwfmsg(){
+
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();
+		sql=&amp;quot;update wfmsg set ENDFLG=1 where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return true ;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >--select to_char(crtdat,&amp;apos;YYMMDD HH24:MI&amp;apos;) ,crtusr,title from msg 
+--where tousr=&amp;apos;[%SYS_USRID]&amp;apos; and sysdate-crtdat&amp;lt;NVL(RESDAT,0) order by crtdat desc 
+select 1,1,1 from dual
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 >main</C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >main</C22><C23 ></C23><C24 >main</C24></ROW>
+<ROW num="1" ><ID >main2</ID><NAME >我的代办事项</NAME><DATDSC >select * from(select e.name type,cc.name||&amp;apos; &amp;apos;||to_char(a.crtdat,&amp;apos;yyyy/mm/dd hh24:mi&amp;apos;)||chr(10)||a.title
+ name,&amp;apos;Layout.sp?id=trkquery&amp;trkguid=&amp;apos;||a.guid url,o.action，a.guid,cc.name tousrnam from  
+      trkhdr a,v_usr c ,trktyp e,v_usr cc,trkdtl d,oalog o
+      where 
+      a.dtlusr=c.id  and a.AIMORG=c.orgid and a.crtusr=cc.id  and a.AIMORG=cc.orgid 
+      and a.show =e.id
+      and o.bilid=a.guid
+      and o.usrid=c.id
+and c.id=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   
+and c.orgid=&amp;apos;[%SYS_ORGID]&amp;apos;
+and a.guid = d.trkguid(+)
+and a.stat&amp;lt;&amp;gt;&amp;apos;3&amp;apos; /* 0￡oD??¨￡?1￡o′|àí?D￡?2￡oò?′|àí￡?3￡o′|àííê￡?4￡o?′′|àí */
+and a.show not in (&amp;apos;4&amp;apos;)
+and nvl(d.dtltyp,&amp;apos;1&amp;apos;) &amp;lt;&amp;gt;&amp;apos;2&amp;apos;/*不包含评论*/
+and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;,&amp;apos;13&amp;apos;)
+and a.crtdat&amp;lt;=sysdate
+and a.crtdat&amp;gt;=add_months(sysdate,-3) 
+and o.action not in(&amp;apos;结束&amp;apos;)
+group by a.title,cc.name,a.crtdat,a.note,a.guid,a.id,o.action ,e.name
+order by nvl(max(d.crtdat),a.crtdat) desc)
+union all
+			select MWNAME type,FROMUSRNAM||&amp;apos; &amp;apos;||to_char(CRTDAT,&amp;apos;yyyy/mm/dd hh24:mi&amp;apos;)||chr(10)||TITLE name,URL,ACTIONID,guid,tousrnam from wfmsg where tousrid=&amp;apos;[%SYS_USRID]&amp;apos; and endflg=&amp;apos;0&amp;apos; and org=&amp;apos;[%SYS_ORGID]&amp;apos;
+
+union all
+select MWNAME type,FROMUSRNAM||&amp;apos; &amp;apos;||to_char(CRTDAT,&amp;apos;yyyy/mm/dd hh24:mi&amp;apos;)||chr(10)||TITLE name,URL,ACTIONID action,guid,tousrnam from wfmsg 
+where torolid in (select c.id rolid from usr a,usrrol b,rol c where a.guid=b.usr and b.rol=c.guid and a.org=&amp;apos;[%SYS_ORGID]&amp;apos; and a.id=&amp;apos;[%SYS_USRID]&amp;apos;) and tousrid is null and endflg=&amp;apos;0&amp;apos; and org=&amp;apos;[%SYS_ORGID]&amp;apos;
+ 
+</DATDSC><C4 >main2</C4><C5 >main2</C5><C6 >main2</C6><C7 >main2</C7><C8 >main2</C8><C9 >main2</C9><C10 >main2</C10><C11 >main2</C11><C12 ></C12><C13 >main2</C13><C14 >main2</C14><C15 >main2</C15><C16 >main2</C16><C17 >main2</C17><C18 >main2</C18><C19 >main2</C19><C20 >main2</C20><C21 >main2</C21><C22 ></C22><C23 >main2</C23><C24 >main2</C24></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

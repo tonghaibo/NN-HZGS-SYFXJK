@@ -1,0 +1,220 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>TRKHDR</MWID><NAME>新增事务</NAME><NOTE></NOTE><FILE>TRKHDR.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>var sheet = 0; 
+//================================================================// 
+// 函数：save
+// 说明：保存事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：10/31/06 13:36:50
+// 修改日志：
+//================================================================// 
+function save()   
+{ 
+        var ret = 0;   
+        var project = _this.GetCellText(sheet,1,2);
+        var dtlusr = _this.GetCellText(sheet,13,2);  
+        var title = _this.GetCellText(sheet,3,2);  
+        var retitle = _this.GetCellText(sheet,5,2);
+        var note = _this.GetCellText(sheet,9,1);  
+        var stat = _this.GetCellText(sheet,11,2);//事务状态
+        var prio = _this.GetCellText(sheet,7,2);  //优先级
+        var crtusrorg = &amp;quot;G_ORG&amp;quot;;
+        if ( project == &amp;quot;&amp;quot; || project.length == 0)
+        {
+              alert (&amp;quot;输入项目名称&amp;quot;);
+              return ;
+        }
+        if( dtlusr == &amp;quot;&amp;quot; || dtlusr.length == 0)  
+        {  
+            alter (&amp;quot;必须输入分配人&amp;quot;); 
+            return ; 
+        } 
+        if ( title == &amp;quot;&amp;quot; || title.length == 0 ) 
+        { 
+             alert (&amp;quot;输入主题&amp;quot;); 
+             return ; 
+        } 
+        if ( retitle == &amp;quot;&amp;quot; || retitle.length == 0 ) 
+        { 
+             alert (&amp;quot;输入子标题&amp;quot;); 
+             return ; 
+        }
+         var param = new Object(); 
+         param.project = project;
+         param.note = note;; 
+         param.title = title; 
+         param.retitle = retitle;
+         param.dtlusr = dtlusr;  
+         param.crtusr = G_USRID; 
+         param.stat = stat;
+         param.prio= prio;
+         param.crtusrorg = crtusrorg;
+         param.dtlusr = G_USRID;
+         param.dtlusrorg = &amp;quot;G_ORG&amp;quot;;
+         try 
+         {
+               ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param) ; 
+               alert ( &amp;quot;已录入&amp;quot;+ret+&amp;quot;条事务&amp;quot;); 
+               reset();       //调用重置，刷新表格
+         }
+         catch(e)
+         {
+               alert (e);
+         }
+}
+//================================================================//  
+// 函数：reset 
+// 说明：清空 ,或是刷新表格之用
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：10/31/06 16:28:58 
+// 修改日志： 
+//================================================================//  
+function reset()
+{
+         _this.SetCellText(sheet,1,2,&amp;quot;&amp;quot;);
+         _this.SetCellText(sheet,13,2,&amp;quot;&amp;quot;); 
+         _this.SetCellText(sheet,3,2,&amp;quot;&amp;quot;); 
+         _this.SetCellText(sheet,9,1,&amp;quot;&amp;quot;);
+         _this.SetCellText(sheet,5,2,&amp;quot;&amp;quot;);
+         _this.SetCellText(sheet,7,2,1);
+         _this.SetCellText(sheet,11,2,1);
+}
+
+
+//================================================================//  
+// 函数：thisOnpost_loaddata 
+// 说明： 设置值
+// 参数： 
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：10/31/06 13:50:35 
+// 修改日志： 
+//================================================================//  
+function _thisOnpost_loaddata(sheet)
+{
+        _this.SetToButton(&amp;quot;udf_okbtn&amp;quot;,sheet,19,2,&amp;quot;保存&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1); 
+        _this.SetToButton(&amp;quot;udf_cancelbtn&amp;quot;,sheet,19,4,&amp;quot;取消&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1); 
+        var pario_listid = _this.CreateListValue();  //创建键值
+        QuerySQLDS(&amp;quot;select id,value from trk_param where typ=&amp;apos;prio&amp;apos;&amp;quot;);
+        var count = _this.XMLDS_GetRowCount();
+        var id = &amp;quot;&amp;quot;;
+        var value = &amp;quot;&amp;quot;;
+        if(count &amp;gt; 0)
+        {
+              for (var i=0;i&amp;lt;count ;i++)
+              {
+                    id = _this.XMLDS_GetString(i,&amp;quot;id&amp;quot;);
+                    value = _this.XMLDS_GetString(i,&amp;quot;value&amp;quot;);
+                    _this.SetListValue(pario_listid,id,value);
+              }
+        }
+        _this.SetTocomboBox(&amp;quot;trk_prio&amp;quot;,sheet,7,2,pario_listid);//设置优先级的下拉列表
+        _this.SetCellText(sheet,7,2,1);  //默认是低，此处要放键值对的键，而不能放值
+        var stat_listid = _this.CreateListValue();  //创建键值
+        QuerySQLDS(&amp;quot;select id,value from trk_param where typ=&amp;apos;stat&amp;apos;&amp;quot;);
+        count = _this.XMLDS_GetRowCount();
+        if( count &amp;gt; 0 )
+        {
+              for (var i=0;i&amp;lt;count ;i++)
+              {
+                    id = _this.XMLDS_GetString(i,&amp;quot;id&amp;quot;);
+                    value = _this.XMLDS_GetString(i,&amp;quot;value&amp;quot;);
+                    _this.SetListValue(stat_listid,id,value);
+              }
+
+        }
+        _this.SetTocomboBox(&amp;quot;trk_stat&amp;quot;,sheet,11,2,stat_listid);//设置优先级的下拉列表
+        _this.SetCellText(sheet,11,2,1);
+        _this.SetCellBkColor(0,-1,-1,255,255,255);
+        _this.SetToRichEdit(&amp;quot;&amp;quot;,0,9,1,&amp;quot;&amp;quot;);
+        _this.SetToFileSelectBox(&amp;quot;&amp;quot;,0,15,2);
+}
+
+//================================================================//  
+// 函数：thisOnButtonCtrlClick 
+// 说明：点击按钮触发事件  
+// 参数：
+// 返回：  
+// 样例： 
+// 作者：   
+// 创建日期：10/31/06 13:49:37  
+// 修改日志：
+//================================================================//  
+function _thisOnButtonCtrlClick(id,sheet,row,col)  
+{
+        if (id == &amp;quot;udf_cancelbtn&amp;quot;)    //取消
+        { 
+              reset();              
+        } 
+        if ( id == &amp;quot;udf_okbtn&amp;quot;)        //保存
+        { 
+              save(); 
+        } 
+ 
+} 
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+function save() 
+{
+      var ret = 0;
+      var db = null;
+      var ds = null;
+      var sql = &amp;quot;&amp;quot;;
+                  
+     // var sql1 = &amp;quot;insert into trkdtl(trkguid) select guid from trkhdr where project=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;&amp;quot;;有待解决     
+      try
+      {
+            db = new pubpack.EADatabase();
+          //  sql = &amp;quot;SELECT SYS_GUID() FROM DUAL&amp;quot; ;
+           // var guid = db.GetSQL( sql);
+            sql = &amp;quot;insert into trkhdr(id,title,retitle,note,prio,crtusrorg,crtusr,stat, &amp;quot; +
+                  &amp;quot; dtlusr,dtlusrorg,project) values (seq.nextval,&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+retitle+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos; ,&amp;quot; +
+                  &amp;quot; &amp;apos;&amp;quot;+prio+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusrorg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos;, &amp;quot;+
+                  &amp;quot; &amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+dtlusr+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+dtlusrorg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;)&amp;quot;;
+            ret = db.ExcecutSQL(sql);
+//            sql = &amp;quot;insert into trkdtl(guid,id,title,retitle,note,prio,crtusrorg,crtusr,stat, &amp;quot; +
+//                  &amp;quot; dtlusr,dtlusrorg,project) values (&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;,seq.nextval,&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+retitle+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+note+&amp;quot;&amp;apos; ,&amp;quot; +
+//                  &amp;quot; &amp;apos;&amp;quot;+prio+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusrorg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos;, &amp;quot;+
+//                  &amp;quot; &amp;apos;&amp;quot;+stat+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+dtlusr+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+dtlusrorg+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;)&amp;quot;;
+//            ret = db.ExcecutSQL(sql);
+            return ret ;
+      }
+      catch(e)
+      {
+            throw e;
+      }
+      finally
+      {
+            db.Close(); 
+      }       
+
+
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

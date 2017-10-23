@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >framelayout</MWID><NAME >分框显示页面</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >framelayout.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+//用于显示左右2个frame的页面，传入参数
+//	lefturl,leftgrdid,righturl,rightgrdid
+//	如果leftgrdid存在，那么使用show.sp?grdid=leftgrdid来替代lefturl，对于right也是一样
+function Response()
+{
+      var ret = &amp;quot;&amp;quot;;
+      
+      var leftgrdid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftgrdid&amp;quot;),&amp;quot;&amp;quot;);
+      var lefturl = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;lefturl&amp;quot;),&amp;quot;show.sp?grdid=&amp;quot;+leftgrdid );
+      var rightgrdid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightgrdid&amp;quot;),&amp;quot;&amp;quot;);
+      var righturl = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;righturl&amp;quot;),&amp;quot;&amp;quot; );
+      
+      var rightgrdid2 = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightgrdid2&amp;quot;),&amp;quot;&amp;quot;);
+      var righturl2 = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;righturl2&amp;quot;),&amp;quot;&amp;quot; );
+      if (rightgrdid2!=&amp;quot;&amp;quot; &amp;&amp; righturl2==&amp;quot;&amp;quot;)righturl2= &amp;quot;show.sp?grdid=&amp;quot;+rightgrdid2;
+      var rightflowid2 = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightflowid2&amp;quot;),&amp;quot;&amp;quot;);
+      var rightflowsytid2 = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightflowsyt2&amp;quot;),&amp;quot;&amp;quot;);
+      if ( rightflowid2 !=&amp;quot;&amp;quot; ) {
+      		righturl2 = &amp;quot;flow.jsp?flowid=&amp;quot;+rightflowid2 ;
+      		if (rightflowsytid2 !=&amp;quot;&amp;quot; ) righturl2 += &amp;quot;&amp;syt=&amp;quot;+rightflowsytid2 ;
+      }
+      
+      if (rightgrdid!=&amp;quot;&amp;quot; &amp;&amp; righturl==&amp;quot;&amp;quot;)righturl= &amp;quot;show.sp?grdid=&amp;quot;+rightgrdid;
+      var rightflowid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightflowid&amp;quot;),&amp;quot;&amp;quot;);
+      var rightflowsytid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightflowsyt&amp;quot;),&amp;quot;&amp;quot;);
+      if ( rightflowid !=&amp;quot;&amp;quot; ) {
+      		righturl = &amp;quot;flow.jsp?flowid=&amp;quot;+rightflowid ;
+      		if (rightflowsytid !=&amp;quot;&amp;quot; ) righturl += &amp;quot;&amp;syt=&amp;quot;+rightflowsytid ;
+      }
+      var leftflowid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftflowid&amp;quot;),&amp;quot;&amp;quot;);
+      var leftflowsytid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftflowsyt&amp;quot;),&amp;quot;&amp;quot;);
+      if ( leftflowid !=&amp;quot;&amp;quot; ) {
+      		lefturl = &amp;quot;flow.jsp?flowid=&amp;quot;+leftflowid ;
+      		if (leftflowsytid !=&amp;quot;&amp;quot; ) lefturl += &amp;quot;&amp;syt=&amp;quot;+leftflowsytid ;
+      }
+      var leftlayoutid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftlayoutid&amp;quot;),&amp;quot;&amp;quot;);
+      var leftlayoutorgid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;leftlayoutorg&amp;quot;),&amp;quot;&amp;quot;);
+      if ( leftlayoutid !=&amp;quot;&amp;quot; ) {
+      		lefturl = &amp;quot;Layout.sp?id=&amp;quot;+leftlayoutid  ;
+      		if (leftlayoutorgid  !=&amp;quot;&amp;quot; ) lefturl += &amp;quot;&amp;org=&amp;quot;+leftlayoutorgid  ;
+      }
+      var rightlayoutid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightlayoutid&amp;quot;),&amp;quot;&amp;quot;);
+      var rightlayoutorgid = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightlayoutorg&amp;quot;),&amp;quot;&amp;quot;);
+      if ( rightlayoutid !=&amp;quot;&amp;quot; ) {
+      		righturl = &amp;quot;Layout.sp?id=&amp;quot;+rightlayoutid  ;
+      		if (rightlayoutorgid  !=&amp;quot;&amp;quot; ) righturl += &amp;quot;&amp;org=&amp;quot;+rightlayoutorgid  ;
+      }
+      
+      
+      var rightlayoutid2 = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightlayoutid2&amp;quot;),&amp;quot;&amp;quot;);
+      var rightlayoutorgid2 = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;rightlayoutorg2&amp;quot;),&amp;quot;&amp;quot;);
+      if ( rightlayoutid2 !=&amp;quot;&amp;quot; ) {
+      		righturl2 = &amp;quot;Layout.sp?id=&amp;quot;+rightlayoutid2  ;
+      		if (rightlayoutorgid2  !=&amp;quot;&amp;quot; ) righturl2 += &amp;quot;&amp;org=&amp;quot;+rightlayoutorgid2  ;
+      }
+	
+
+      var title = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;title&amp;quot;),&amp;quot;XMIDWARE&amp;quot; );
+      var width = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;width&amp;quot;),&amp;quot;280&amp;quot; );
+      var paramlist = pubpack.EAFunc.GetRequestQueryString(request);
+      if (lefturl!=&amp;quot;&amp;quot;&amp;&amp;paramlist!=&amp;quot;&amp;quot; ) {
+  	lefturl+=&amp;quot;&amp;&amp;quot;+paramlist;
+      }
+      if (righturl!=&amp;quot;&amp;quot;&amp;&amp;paramlist!=&amp;quot;&amp;quot; ) {
+  	righturl+=&amp;quot;&amp;&amp;quot;+paramlist;
+      }
+	 if (righturl2!=&amp;quot;&amp;quot;&amp;&amp;paramlist!=&amp;quot;&amp;quot; ) {
+  	righturl2+=&amp;quot;&amp;&amp;quot;+paramlist;
+      }
+	//flow.jsp&amp;flowid=
+//return righturl;
+	
+	ret+=&amp;quot;
+&amp;lt;html&amp;gt; &amp;lt;head&amp;gt;  &amp;lt;meta http-equiv=\&amp;quot;Content-Type\&amp;quot; content=\&amp;quot;text/html; charset=GBK\&amp;quot;&amp;gt;  &amp;lt;title&amp;gt;&amp;quot;+title+&amp;quot;&amp;lt;/title&amp;gt;  &amp;lt;/head&amp;gt;
+&amp;lt;script language = \&amp;quot;javascript\&amp;quot;&amp;gt;
+var num = 0;
+function showInfo(str)
+{
+	try{
+		for(var i = 0;i &amp;lt;  num ;i ++)
+			document.getElementById(\&amp;quot;topic\&amp;quot;+i).style.display = &amp;apos;none&amp;apos;;
+		document.getElementById(str).style.display = &amp;apos;block&amp;apos;;
+	}
+	catch ( e ) {}
+}
+var bShowLeftWin= true;
+function switchLBar(){
+	if (bShowLeftWin==true){
+		bShowLeftWin=false;
+		leftTd.style.display =\&amp;quot;none\&amp;quot;; 
+    		midTd.style.width = 8;
+	}
+	else{
+		bShowLeftWin=true;
+
+		leftTd.style.display =\&amp;quot;\&amp;quot;; 
+    		midTd.style.width = 8;
+	}
+}
+&amp;lt;/script&amp;gt;
+&amp;lt;LINK rel=stylesheet type=text/css HREF=\&amp;quot;xlsgrid/css/main.css\&amp;quot;&amp;gt; 
+&amp;lt;script language=&amp;apos;javascript&amp;apos; src=&amp;apos;xlsgrid/js/main.js&amp;apos; &amp;gt;&amp;lt;/Script&amp;gt; 
+&amp;lt;body style=\&amp;quot;background-color: #FFFFFF\&amp;quot; onload=\&amp;quot;showInfo(&amp;apos;topic0&amp;apos;);\&amp;quot;&amp;gt;
+&amp;lt;table border=\&amp;quot;1\&amp;quot; bordercolorlight=\&amp;quot;#4791C5\&amp;quot; bordercolordark=\&amp;quot;#4791C5\&amp;quot; style=\&amp;quot;border-collapse: collapse\&amp;quot; width=\&amp;quot;100%\&amp;quot; cellspacing=\&amp;quot;0\&amp;quot; cellpadding=\&amp;quot;0\&amp;quot; height=\&amp;quot;100%\&amp;quot; id=\&amp;quot;table1\&amp;quot;&amp;gt;
+	&amp;lt;tr&amp;gt;
+		&amp;lt;td width=&amp;quot;+width +&amp;quot; valign=top id=\&amp;quot;leftTd\&amp;quot; valign=top&amp;gt;
+		 &amp;lt;iframe id=\&amp;quot;left\&amp;quot; name=\&amp;quot;left\&amp;quot; height=100% width=100% src=&amp;apos;&amp;quot;+lefturl+&amp;quot;&amp;apos; frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;
+		&amp;lt;/td&amp;gt;
+		&amp;lt;td valign=middle width=\&amp;quot;8\&amp;quot;  background=\&amp;quot;xlsgrid/images/bbk2.jpg\&amp;quot; style=\&amp;quot;cursor:pointer;\&amp;quot; onclick=\&amp;quot;switchLBar()\&amp;quot;  id=\&amp;quot;midTd\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;/td&amp;gt;
+		&amp;lt;td valign=top&amp;gt;
+			 &amp;lt;iframe id=\&amp;quot;right\&amp;quot; name=\&amp;quot;right\&amp;quot; height=100% width=100% src=&amp;apos;&amp;quot;+righturl+&amp;quot;&amp;apos; frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;
+		&amp;lt;/td&amp;gt;
+	&amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+              	
+	
+	&amp;quot;;
+      return ret ;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

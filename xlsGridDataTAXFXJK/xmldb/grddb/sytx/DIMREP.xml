@@ -1,0 +1,261 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >DIMREP</MWID><NAME >多维度报表显示</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DIMREP.zxg</FILE><SCENE >1</SCENE><FIXED >2,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >A3MobileREP</syt><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD >0</HEIGHTMOD></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >topic</ID><NAME >主题号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >topic</C13><C14 >topic</C14><C15 >topic</C15><C16 >topic</C16><C17 ></C17></ROW>
+<ROW num="1" ><ID >sytid</ID><NAME >系统号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_SYTID]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >sytid</C13><C14 ></C14><C15 >sytid</C15><C16 >sytid</C16><C17 ></C17></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >3</NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW >1</HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 >0,2,0</C17><C18 >0,1,0</C18></ROW>
+<ROW num="1" ><ID >0,0,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:TITLE,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 ></C17><C18 ></C18></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var web = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+var grd = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+
+//替换SQL参数
+function replaceParam(mwobj,request,sql)
+{
+	var topic = pub.EAFunc.NVL(request.getParameter(&amp;quot;topic&amp;quot;),&amp;quot;&amp;quot;);
+	var sytid = pub.EAFunc.NVL(request.getParameter(&amp;quot;sytid&amp;quot;),&amp;quot;&amp;quot;);
+	var usr = web.EASession.GetLoginInfo(request);
+
+	if (sytid == &amp;quot;&amp;quot; || sytid == null){
+		sytid = usr.getSytid();
+	}
+	if (topic == &amp;quot;&amp;quot; || topic == null){
+		throw new pub.EAException(&amp;quot;需要传入一个主题号参数&amp;quot;);
+	}
+
+	var db = null;
+	var dim = &amp;quot;&amp;quot;;
+	var target = &amp;quot;&amp;quot;;
+	var isCross = false;
+
+	try {
+		db = new pub.EADatabase();
+		isCross = isCrossReport(db,sytid,topic);
+		if (!isCross) {
+			sql = &amp;quot;select &amp;quot; 
+				+ getVdim(db,sytid,topic) + &amp;quot;,&amp;quot;
+				+ getTarget(db,sytid,topic,true) 
+				+ &amp;quot;\n from &amp;quot;
+				+ getSourceName(db,sytid,topic)
+				+ &amp;quot;\n where &amp;quot;
+				+ getSearchParam(db,sytid,topic,request)
+				+ &amp;quot;\n group by &amp;quot;
+				+ getVdim(db,sytid,topic)
+				+ &amp;quot;\n order by &amp;quot;
+				+ getVdim(db,sytid,topic);
+		}
+		else {
+			sql = &amp;quot;select &amp;quot; 
+				+ getVdim(db,sytid,topic) + &amp;quot;,&amp;quot; 
+				+ colDate2Char(db,sytid,topic,getTarget(db,sytid,topic,false)) 
+				+ &amp;quot;\n from &amp;quot;
+				+ getSourceName(db,sytid,topic)
+				+ &amp;quot;\n where &amp;quot;
+				+ getSearchParam(db,sytid,topic,request);
+			var r_HCols = getVdim(db,sytid,topic);		//交叉行字段	
+			var r_VCols = getCrossCol(db,sytid,topic);	//交叉列字段
+			var r_VCol = getCrossTarget(db,sytid,topic);	//交叉值字段
+			var colsql = getColSQL(db,sytid,topic,r_VCols);	//交叉列字段SQL
+			var orderby = &amp;quot;&amp;quot;;				//行排序字段
+			sql = pub.EASqlFunc.GetSql2CrossTableSQL(db,sql,colsql,r_HCols,r_VCols,r_VCol,orderby);
+		}
+//		throw new Exception(sql);
+		return sql;
+	}
+	catch(e){
+		db.Rollback();
+		throw new pub.EAException(e.toString());
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//取得模型数据分析源
+function getSourceName(db,sytid,topic)
+{
+	var sql = &amp;quot;select sourceds from dim_model where guid=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;)&amp;quot;.format([sytid,topic]);
+	return db.GetSQL(sql);
+}
+
+//取得维度
+function getDimesion(db,sytid,topic)
+{
+	var sql = &amp;quot;select id from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) order by seq&amp;quot;.format([sytid,topic]);
+	var dimxmlds = db.GetXMLSQL(sql);
+	var dim = &amp;quot;&amp;quot;;
+	for (var i=0;i&amp;lt;dimxmlds.getRowCount();i++){
+		if (i == 0) {
+			dim = dimxmlds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		}
+		else {
+			dim += &amp;quot;,&amp;quot;+dimxmlds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		}
+	}
+	return dim;
+}
+
+//垂直方向维度
+function getVdim(db,sytid,topic)
+{
+	var sql = &amp;quot;select vdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	var vdim = db.GetSQL(sql);
+	
+	return vdim;
+}
+
+//日期类型的转为字符型 select dat,itmid from -&amp;gt; select to_char(dat,&amp;apos;yyyy-mm-dd&amp;apos;) dat,itmid from 
+function colDate2Char(db,sytid,topic,cols)
+{
+	var retdim = &amp;quot;&amp;quot;;
+	var arrcols = cols.split(&amp;quot;,&amp;quot;);
+	var incols = pub.EAFunc.SQLIN(cols);
+	var sql = &amp;quot;select * from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) and id in (%s)&amp;quot;.format([sytid,topic,incols]);
+	var ds = db.GetXMLSQL(sql);
+	var colid = ds.getStringAt(0,&amp;quot;ID&amp;quot;);
+	var coltyp = ds.getStringAt(0,&amp;quot;DATATYP&amp;quot;);
+		
+	for (var i=0;i&amp;lt;arrcols.length();i++) {
+		if (retdim != &amp;quot;&amp;quot;) retdim += &amp;quot;,&amp;quot;;
+		if (colid == arrcols[i] &amp;&amp; coltyp == &amp;quot;DATE&amp;quot;) {
+			retdim += &amp;quot;to_char(&amp;quot;+arrcols[i]+&amp;quot;,&amp;apos;yyyy-mm-dd&amp;apos;) &amp;quot;+arrcols[i];
+		}
+		else {
+			retdim += arrcols[i];
+		}
+	}
+	return retdim;
+}
+
+//取得目标值
+function getTarget(db,sytid,topic,sumflg)
+{
+	var sql = &amp;quot;select hdim from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic]);
+	if (!sumflg) {
+		return db.GetSQL(sql);
+	}
+	else {
+		var hdim = db.GetSQL(sql);
+		var arr_tar = hdim.split(&amp;quot;,&amp;quot;);
+		var sumtar = &amp;quot;&amp;quot;;
+		for (var i=0;i&amp;lt;arr_tar.length();i++) {
+			if (i == 0) {
+				sumtar = &amp;quot;sum(&amp;quot; + arr_tar[i] + &amp;quot;) &amp;quot; + arr_tar[i];
+			}
+			else {
+				sumtar += &amp;quot;,sum(&amp;quot; + arr_tar[i] + &amp;quot;) &amp;quot; + arr_tar[i];
+			}
+		}
+		return sumtar;
+	}
+}
+
+//查询条件
+function getSearchParam(db,sytid,topic,request)
+{
+	request.setCharacterEncoding(&amp;quot;UTF-8&amp;quot;); 
+	var sql = &amp;quot;select * from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) order by seq&amp;quot;.format([sytid,topic]);
+	var dimxmlds = db.GetXMLSQL(sql);
+	var where = &amp;quot; 1=1 &amp;quot;;
+
+	for (var i=0;i&amp;lt;dimxmlds.getRowCount();i++){
+		var id = dimxmlds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		var name = dimxmlds.getStringAt(i,&amp;quot;NAME&amp;quot;);
+		var datatyp = dimxmlds.getStringAt(i,&amp;quot;DATATYP&amp;quot;);
+		var val = pub.EAFunc.NVL(request.getParameter(id),&amp;quot;&amp;quot;);
+		var dat1 = &amp;quot;&amp;quot;;
+		var dat2 = &amp;quot;&amp;quot;;
+		
+		if (datatyp == &amp;quot;DATE&amp;quot;) {
+			dat1 = pub.EAFunc.NVL(request.getParameter(id+&amp;quot;1&amp;quot;),&amp;quot;&amp;quot;);
+			dat2 = pub.EAFunc.NVL(request.getParameter(id+&amp;quot;2&amp;quot;),&amp;quot;&amp;quot;);
+			where += &amp;quot; and &amp;quot; + id + &amp;quot;&amp;gt;=to_date(decode(&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;1900-01-01&amp;apos;,&amp;apos;&amp;quot;+dat1+&amp;quot;&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;) \n&amp;quot;
+				+ &amp;quot; and &amp;quot; + id + &amp;quot;&amp;lt;=to_date(decode(&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;2900-01-01&amp;apos;,&amp;apos;&amp;quot;+dat2+&amp;quot;&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;) \n&amp;quot;;
+		}
+		else {
+			where += &amp;quot; and nvl(&amp;quot;+id+&amp;quot;,&amp;apos; &amp;apos;) like &amp;apos;&amp;quot;+val+&amp;quot;%&amp;apos; \n&amp;quot;;
+		}
+	}
+	return where;
+}
+
+//是否交叉
+function isCrossReport(db,sytid,topic)
+{
+	var sql = &amp;quot;select a.hdim,b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	var rowcnt = db.GetSQLRowCount(sql);
+	if (rowcnt &amp;gt; 0) return true;
+	return false;
+}
+
+//取得交叉列字段
+function getCrossCol(db,sytid,topic)
+{
+	var sql = &amp;quot;select b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	return db.GetSQL(sql);
+}
+
+//交叉值字段
+function getCrossTarget(db,sytid,topic)
+{
+	var sql = &amp;quot;select a.hdim,b.id from dim_topic a,dim_dim b where a.refmod=b.refmod and a.id=&amp;apos;%s&amp;apos; and a.sytid=&amp;apos;%s&amp;apos; and a.hdim like &amp;apos;%&amp;apos;||b.id||&amp;apos;%&amp;apos;&amp;quot;.format([topic,sytid]);
+	var ds = db.GetXMLSQL(sql);
+	var hdim = ds.getStringAt(0,&amp;quot;HDIM&amp;quot;);
+	var vdim = ds.getStringAt(0,&amp;quot;ID&amp;quot;);
+	var arr_hdim = hdim.split(&amp;quot;,&amp;quot;);
+	var r_VCol = &amp;quot;&amp;quot;;
+	for (var i=0;i&amp;lt;arr_hdim.length();i++) {
+		if (arr_hdim[i] != vdim) {
+			return arr_hdim[i];
+		}
+	}
+	return &amp;quot;&amp;quot;;
+}
+
+//交叉列字段SQL
+function getColSQL(db,sytid,topic,vcol)
+{
+	var sql = &amp;quot;select keyval,wher from dim_dim where refmod=(select refmod from dim_topic where sytid=&amp;apos;%s&amp;apos; and id=&amp;apos;%s&amp;apos;) and id=&amp;apos;%s&amp;apos;&amp;quot;.format([sytid,topic,vcol]);
+	var ds = db.GetXMLSQL(sql);
+	var view_name = ds.getStringAt(0,&amp;quot;KEYVAL&amp;quot;);
+	var where = ds.getStringAt(0,&amp;quot;WHER&amp;quot;);
+	if (view_name == &amp;quot;&amp;quot;) {
+		return &amp;quot;&amp;quot;;
+	}
+	else {
+		if (where != &amp;quot;&amp;quot;) where = &amp;quot; and &amp;quot; + where;
+		sql = &amp;quot;select name from &amp;quot; + view_name + &amp;quot; where 1&amp;gt;0 &amp;quot; + where;
+		return sql;
+	}
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select * from dual</DATDSC><C4 >MAIN</C4><C5 ></C5><C6 ></C6><C7 ></C7></ROW>
+<ROW num="1" ><ID >TITLE</ID><NAME ></NAME><DATDSC >select &amp;apos;※ &amp;apos;||name from dim_topic
+where sytid=&amp;apos;[%SYS_SYTID]&amp;apos; and id=&amp;apos;[%topic]&amp;apos;</DATDSC><C4 ></C4><C5 >TITLE</C5><C6 >TITLE</C6><C7 >TITLE</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

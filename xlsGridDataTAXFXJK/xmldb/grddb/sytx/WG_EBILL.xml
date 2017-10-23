@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_EBILL</MWID><NAME >电子订单入口</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_EBILL.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var pageno = 1;
+var pagesize = 17;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	//设置页面显示背景色为白色
+  	_this.SetCellBkColor(sheet,-1,-1,255,255,255);
+  	//设置第17列不显示
+  	_this.SetColVisible(sheet,17,-1);
+  	//设置单元格为复选框控件，为默认值为选择
+	_this.SetToBoolBox(0,3,3);  
+	_this.SetCellText(sheet,3,3,1);
+	_this.SetToBoolBox(0,3,5);
+ 	_this.SetCellText(sheet,3,5,1);	
+ 	//设置单元格为日期控件
+	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,3,14,&amp;quot;&amp;quot;);  
+	_this.SetToDateBox(&amp;quot;&amp;quot;,sheet,3,16,&amp;quot;&amp;quot;);  
+	//设置单元格为下列列表控件
+	var listid = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_EBDATE&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+        _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,3,11,listid);		
+        //设置显示页面的主数据区域
+        _this.SetMainCellRange(sheet,6,1,22,17);  	
+        //初始显示数据
+        setMainData(sheet,pageno,pagesize,&amp;quot;Main&amp;quot;,17);
+}
+function getSelectParams(sheet)
+{
+	var params = new Object();
+	params.stat1 = _this.GetCellText(sheet,3,3);//已处理参数
+	params.stat2 = _this.GetCellText(sheet,3,5);//未处理参数
+	params.dattype = _this.GetCellText(sheet,3,11);//选择查询的日期类型（订单日期/到货日期）
+	params.stadat = _this.GetCellText(sheet,3,14);//开始日期查询参数
+	params.enddat = _this.GetCellText(sheet,3,15);//结束日期查询参数
+	params.context = _this.GetCellText(sheet,3,19);//模糊查询参数
+	
+}
+
+//向指定的页面设置主数据
+function setMainData(sheet,pageno,pagesize,sqltitle,row)
+{
+	var params = getSelectParams();
+	params.pageno = pageno;
+	params.pagesize = pagesize;
+	params.sqltitle = sqltitle;
+	var xml = invokeOSFuncExt(&amp;quot;getPaginationXML&amp;quot;,param);	
+	refreshSheet(sheet,row);
+	
+	_this.XMLDS_Parse(xml);
+	_this.SetMainCellRangeAppendAuto(0,1);	
+	for (var r = 0;r &amp;lt; _this.XMLDS_GetRowCount();r++)
+	{
+		_this.SetCellText(sheet,r+6,1,_this.XMLDS_GetString(r,&amp;quot;ORDID&amp;quot;));
+		_this.SetCellText(sheet,r+6,5,_this.XMLDS_GetString(r,&amp;quot;ECORPID&amp;quot;));
+		_this.SetCellText(sheet,r+6,7,_this.XMLDS_GetString(r,&amp;quot;ECORPNAM&amp;quot;));
+		_this.SetCellText(sheet,r+6,11,_this.XMLDS_GetString(r,&amp;quot;STAT&amp;quot;));
+		_this.SetCellText(sheet,r+6,13,_this.XMLDS_GetString(r,&amp;quot;DAT&amp;quot;));
+		_this.SetCellText(sheet,r+6,15,_this.XMLDS_GetString(r,&amp;quot;ARRDAT&amp;quot;));										
+		_this.SetCellText(sheet,r+6,16,_this.XMLDS_GetString(r,&amp;quot;BILID&amp;quot;));
+		if (_this.XMLDS_GetString(r,&amp;quot;STAT&amp;quot;) == &amp;quot;已处理&amp;quot;)		
+		{
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,r+6,18,&amp;quot;查看明细&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1);
+		}
+		if (_this.XMLDS_GetString(r,&amp;quot;STAT&amp;quot;) == &amp;quot;未处理&amp;quot;)
+		{
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,r+6,18,&amp;quot;查看明细&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,1,1);
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,r+6,20,&amp;quot;操作&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,0,1);
+			_this.SetToButton(&amp;quot;G_SELECT&amp;quot;,sheet,r+6,21,&amp;quot;终止&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,0,2,1);								
+		}
+	}
+	
+}
+
+
+//刷新主数据区的记录
+function refreshSheet(sheet,row)
+{
+	var r1 = _this.GetMainCellRangeRow1(sheet); 
+	var r2 = _this.GetMainCellRangeRow2(sheet);
+	var c1 = _this.GetMainCellRangeCol1(sheet);
+	var c2 = _this.GetMainCellRangeCol2(sheet);
+	if ( r2-row&amp;gt; 0 )
+	{
+		for ( var j=r2;j&amp;gt;row;j-- )
+		{
+			_this.DeleteRow(sheet,j);
+		}
+	}
+	for ( var i=r1;i&amp;lt;=row;i++) {　
+		for ( var j=c1;j&amp;lt;=c2;j++ ) {
+			if (j&amp;lt;row){
+				_this.SetCellText(sheet,i,j,&amp;quot;&amp;quot;);
+				_this.SetCellColor(sheet,i,1,0,0,0);
+			}
+			else if (j&amp;gt;=row){
+				_this.SetToStandardCell(sheet,i,j);
+			}
+		}
+	}
+}
+
+
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >function getPaginationXML()
+{
+   var runsql = getSelSQL(sqltitle);
+   var db=new pubpack.EADatabase();
+   var xmlID = db.GetXMLSQL(runsql,pageno,pagesize).GetXml();
+   var xmlds = new pubpack.EAXmlDS(xmlID);
+   xmlds.removeColumn(&amp;quot;num&amp;quot;);
+   xmlds.removeColumn(&amp;quot;RID_&amp;quot;);
+   var xml = xmlds.GetXml();
+   return xml;	
+}
+
+function getSelSQL(sqltitle)
+{
+	var sql = &amp;quot;&amp;quot;;
+	if (sqltitle.equals(&amp;quot;Main&amp;quot;))		
+		sql = &amp;quot;select ordid,ecorpid,ecorpnam,decode(nvl(stat,&amp;apos;0&amp;apos;),&amp;apos;1&amp;apos;,&amp;apos;已处理&amp;apos;,&amp;apos;未处理&amp;apos;) stat,dat,arrdat,bilid order by dat,ecorpid,ordid&amp;quot;;
+	return sql;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SHSEQ</ID><NAME ></NAME><DATDSC >select id,crtusr,to_char(crtdat,&amp;apos;yyyy-mm-dd&amp;apos;) crtdat,
+decode(stat,0,&amp;apos;已生成&amp;apos;,1,&amp;apos;已试算&amp;apos;,2,&amp;apos;未试算&amp;apos;) state,NOTE FROM wms_shdiv_seq
+order by stat,crtdat desc</DATDSC><C4 >SHSEQ</C4><C5 >SHSEQ</C5><C6 >SHSEQ</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >SHSEQ</C10></ROW>
+<ROW num="1" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select d.id 商品编号,c.name 商品名称,d.spec 批次,d.unassigned 未分配数量,&amp;apos;双击查看&amp;apos; aa,to_char(c.qty) 库存,decode(c.qty,0,&amp;apos;&amp;apos;,&amp;apos;双击查看&amp;apos;) bb
+  from (select b.id, b.name, b.spec, nvl(sum(a.qty),0) qty
+          from wms_itmslt a, wms_item b
+         where a.item(+) = b.guid
+         group by b.id, b.name, b.spec) c,
+       (SELECT A.ITMID id, A.ITMNAM, A.SPEC, SUM(A.QTY) unassigned
+          FROM WMS_SHDIV_SHINFO a
+        where a.shseq = &amp;apos;[%G_SEQU]&amp;apos;
+         GROUP BY A.ITMID, A.ITMNAM, A.SPEC order by id) d
+ where c.id = d.id 
+ order by c.id</DATDSC><C4 ></C4><C5 ></C5><C6 >MAIN</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >MAIN</C10></ROW>
+<ROW num="2" ><ID >SHDIV</ID><NAME ></NAME><DATDSC >declare 
+ret varchar2(255);
+begin 
+      ret :=WMS_SHDIV.doit(&amp;apos;[%param]&amp;apos;) ;
+end;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >SHDIV</C7><C8 >SHDIV</C8><C9 ></C9><C10 >SHDIV</C10></ROW>
+<ROW num="3" ><ID >TRIAL</ID><NAME ></NAME><DATDSC >select SEQID,BILID,ITMID,ITMNAM,SPEC,SRCSLTID,ACTION,
+AIMSLTID,QTY,NOTE
+from wms_shdiv_trial WHERE SHSEQ = &amp;apos;[%param]&amp;apos;
+order by seqid</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 >TRIAL</C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="4" ><ID >LOG</ID><NAME ></NAME><DATDSC >select txt from wms_shdiv_log where shseq=&amp;apos;[%param]&amp;apos; 
+and txt is not null 
+order by crtdat</DATDSC><C4 ></C4><C5 ></C5><C6 >LOG</C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="5" ><ID >MODI_SEQ_STAT</ID><NAME ></NAME><DATDSC >update wms_shdiv_seq set stat = [%stat] where id=&amp;apos;[%shseq]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="6" ><ID >UPDATESTAT</ID><NAME ></NAME><DATDSC >UPDATE BILHDR SET REFID6=&amp;apos;1&amp;apos; WHERE BILTYP=&amp;apos;ST&amp;apos; and acc=&amp;apos;[%param]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 >UPDATESTAT</C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="7" ><ID >UNIT</ID><NAME ></NAME><DATDSC >select untnum,smlunt,unit from wms_item where guid in (
+	select item from wms_shdiv_shinfo where itmid=&amp;apos;[%param]&amp;apos;
+)
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="8" ><ID >LINE</ID><NAME ></NAME><DATDSC >
+select to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;) sysdat,bh.dat,bh.corpid,
+bh.refnam2,bh.refnam1,b.id from bilhdr bh,v_wms_sttyp b 
+where bh.refid1 = b.id
+and bh.biltyp=&amp;apos;ST&amp;apos;
+and bh.bilid=&amp;apos;[%param]&amp;apos;
+AND bh.ACC=&amp;apos;[%param1]&amp;apos;
+</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >LINE</C9><C10 ></C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

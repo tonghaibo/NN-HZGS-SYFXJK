@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >apiupdate</MWID><NAME >新增修改一个API的内容</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >apiupdate.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >GUID</ID><NAME >GUID</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >GUID</C13><C14 >GUID</C14><C15 >GUID</C15><C16 >GUID</C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >3,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main3</DSKEY><NROW >3</NROW><NCOL >4</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 >3,4,1</C17><C18 >3,4,1</C18><C19 >3,4,1</C19><C20 ></C20></ROW>
+<ROW num="1" ><ID >1,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main2</DSKEY><NROW >3</NROW><NCOL >2</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 >2,4,1</C17><C18 ></C18><C19 >1,4,1</C19><C20 ></C20></ROW>
+<ROW num="2" ><ID >1,-1,-1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 ></C16><C17 ></C17><C18 ></C18><C19 >3,4,1</C19><C20 >0,4,1</C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var action = &amp;quot;&amp;quot;;
+var typ = &amp;quot;&amp;quot;;
+var newguid = &amp;quot;&amp;quot;;
+var ids = &amp;quot;&amp;quot;;
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{	
+	if ( id == &amp;quot;新增收藏&amp;quot; ) 
+	{	
+		action = &amp;quot;add&amp;quot;;		
+		_this.SetCurrentSheet(1);		
+	}
+	else if(id == &amp;quot;覆盖现有收藏&amp;quot;){		
+		action = &amp;quot;over&amp;quot; ;
+		_this.SetCurrentSheet(3);
+	}
+	else if ( id == &amp;quot;保存&amp;quot; ) {
+		if ( action == &amp;quot;over&amp;quot; &amp;&amp; newguid == &amp;quot;&amp;quot; ){
+			alert (&amp;quot;未选择名称&amp;quot;);
+			return ;
+		}
+		save();
+	}
+	else{		
+		_this.SetCurrentSheet(2);
+	}
+}
+
+function save(){	 
+	var param = new Object();
+	param.note = _this.GetCellText(0,4,1);
+	param.guid = GUID;
+	param.newguid = newguid;  
+	param.action = action ;
+	param.ids = ids;
+	param.typ  = typ;
+	param.name = _this.GetCellText(2,3,2);
+	ret = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);	
+	alert (&amp;quot;成功保存了&amp;quot;+ret+&amp;quot;笔记录&amp;quot;);
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( sheet == 1 &amp;&amp; row &amp;gt;=4 ) {
+		ids = _this.GetCellText(sheet,row,1 );
+		typ = _this.GetCellText(sheet,row,1);		
+		if ( action == &amp;quot;add&amp;quot; ) 
+			_this.SetCurrentSheet(2);
+		else 
+			_this.SetCurrentSheet(3);		
+	  }	
+	else if ( sheet == 3 &amp;&amp; row &amp;gt;=4 ) {
+		newguid = _this.GetCellText(sheet,row,2);
+		var name = _this.GetCellText(sheet,row,1);
+		if ( confirm( &amp;quot;覆盖【&amp;quot;+name+&amp;quot;】,是否继续？&amp;quot; ) == 1 ) {
+			save();		
+		}	
+	}	
+}
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{	
+  	// 调用中间件定义的数据源SQL进行查询
+  	_sql.querytods(&amp;quot;MAIN&amp;quot;,&amp;quot;GUID=&amp;quot;+GUID );
+  	if ( _this.XMLDS_GetRowCount()&amp;gt; 0 ) 
+  		_this.SetCellText(0,4,1,_this.XMLDS_GetStringAt(0,0) );  	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+function save()
+{
+	var db = null;	
+	var sql = &amp;quot;&amp;quot;;
+	var ret=0; 
+	try
+	{
+		db = new pubpack.EADatabase();
+		if ( action  == &amp;quot;over&amp;quot; )			
+			sql = &amp;quot;update funclist set note=(select note from funclist where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos; ) where guid=&amp;apos;&amp;quot;+newguid+&amp;quot;&amp;apos;&amp;quot;;     //覆盖
+		else 
+			sql = &amp;quot;update funclist set id=&amp;apos;&amp;quot;+ids+&amp;quot;&amp;apos;,class=&amp;apos;&amp;quot;+typ+&amp;quot;&amp;apos;,function=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,name=&amp;apos;&amp;quot;+name+&amp;quot;&amp;apos;,lang=&amp;apos;CODE&amp;apos; where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot; ;   //新增
+                 ret += db.ExcecutSQL(sql);		
+		db.Commit(); 		
+	}
+	catch(e)
+	{
+	    if (db!=null) 
+	    db.Rollback();
+            throw e;
+	}
+	finally
+	{
+	    if (db!=null)
+            db.Close(); 
+	}
+	return ret;
+	
+	///
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >--select replace(replace (replace(note,&amp;apos;\n&amp;apos;,&amp;apos;\\n&amp;apos;),&amp;apos;\r&amp;apos;,&amp;apos;\\r&amp;apos;),&amp;apos;&amp;quot;&amp;apos;,&amp;apos;\&amp;quot;&amp;apos;) from funclist where guid=&amp;apos;[%GUID]&amp;apos;
+select note from funclist where guid=&amp;apos;[%GUID]&amp;apos;
+
+</DATDSC><C4 >MAIN</C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 >MAIN</C9><C10 ></C10></ROW>
+<ROW num="1" ><ID >main2</ID><NAME ></NAME><DATDSC >select id,name from param where typ=&amp;apos;INSCODETYPE&amp;apos; order by id </DATDSC><C4 ></C4><C5 >main2</C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10></ROW>
+<ROW num="2" ><ID >main3</ID><NAME ></NAME><DATDSC >select name,guid,function,class from funclist where lang=&amp;apos;CODE&amp;apos;
+order by class,name</DATDSC><C4 ></C4><C5 >main3</C5><C6 >main3</C6><C7 >main3</C7><C8 >main3</C8><C9 ></C9><C10 >main3</C10></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

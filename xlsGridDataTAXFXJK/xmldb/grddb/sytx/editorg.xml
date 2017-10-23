@@ -1,0 +1,223 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >editorg</MWID><NAME >编辑组织的页面属性</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >editorg.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >确定</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >save</C10></ROW>
+<ROW num="1" ><ID >editsysback</ID><NAME >修改公共背景图</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10></ROW>
+<ROW num="2" ><ID >editorgback</ID><NAME >修改本组织背景图</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >/*
+  &amp;quot;LOGINSWF&amp;quot;   //登录页面使用的flash文件，如果设置为空表示不使用flash登录页面，如果=default表示使用系统默认的SWF文件
+  &amp;quot;LOGINICON&amp;quot;  //登录页面的ICON图标文件，格式*.png
+  &amp;quot;LOGINTITLE&amp;quot; //登录页面的标题，字符
+  &amp;quot;LOGINSCROLLIMG1&amp;quot; //登录页面的滚动效果图片1，用于软件宣传，格式是透明的PNG文件
+  &amp;quot;LOGINSCROLLIMG2&amp;quot; //登录页面的滚动效果图片2，用于软件宣传，格式是透明的PNG文件
+  &amp;quot;LOGINSCROLLIMG3&amp;quot; //登录页面的滚动效果图片3，用于软件宣传，格式是透明的PNG文件
+  &amp;quot;LOGINHOMEURL&amp;quot; //登录页面的主页按钮的URL
+  &amp;quot;LOGINHELPURL&amp;quot; //登录页面的软件帮助按钮的URL
+  &amp;quot;LOGINSETUPURL&amp;quot; //登录页面的初始化安装按钮的URL，为空表示从XMIDWARE.com网站下载
+  &amp;quot;DESKTOPTITLEIMG&amp;quot; //我的桌面的软件标题图片
+  &amp;quot;DESKTOPTITLEBKIMG&amp;quot; //我的桌面的软件标题背景图片，如果为空，使用系统的默认标题背景（浅浅的白色格子）
+*/
+
+
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellText(0,4,3,thisorgid);
+	 SetVal(&amp;quot;DESKTOP&amp;quot;,DESKTOP);  		
+	 SetVal(&amp;quot;J2MEDESKTOP&amp;quot;,J2MEDESKTOP);  
+	 SetVal(&amp;quot;LOGINSWF&amp;quot;,LOGINSWF);   //登录页面使用的flash文件，如果设置为空表示不使用flash登录页面，如果=default表示使用系统默认的SWF文件
+	 SetVal( &amp;quot;LOGINICON&amp;quot;,LOGINICON);  //登录页面的ICON图标文件，格式*.png
+	  SetVal(&amp;quot;LOGINTITLE&amp;quot;,LOGINTITLE); //登录页面的标题，字符
+	  SetVal(&amp;quot;LOGINSCROLLIMG1&amp;quot;,LOGINSCROLLIMG1); //登录页面的滚动效果图片1，用于软件宣传，格式是透明的PNG文件
+	  SetVal(&amp;quot;LOGINSCROLLIMG2&amp;quot;,LOGINSCROLLIMG2);//登录页面的滚动效果图片2，用于软件宣传，格式是透明的PNG文件
+	  SetVal(&amp;quot;LOGINSCROLLIMG3&amp;quot;,LOGINSCROLLIMG3); //登录页面的滚动效果图片3，用于软件宣传，格式是透明的PNG文件
+	  SetVal(&amp;quot;LOGINHOMEURL&amp;quot;,LOGINHOMEURL); //登录页面的主页按钮的URL
+	  SetVal(&amp;quot;LOGINHELPURL&amp;quot;,LOGINHELPURL); //登录页面的软件帮助按钮的URL
+	  SetVal(&amp;quot;LOGINSETUPURL&amp;quot;,LOGINSETUPURL);//登录页面的初始化安装按钮的URL，为空表示从XMIDWARE.com网站下载
+	  SetVal(&amp;quot;DESKTOPTITLEIMG&amp;quot;,DESKTOPTITLEIMG); //我的桌面的软件标题图片
+	  SetVal(&amp;quot;DESKTOPTITLEBKIMG&amp;quot;,DESKTOPTITLEBKIMG); //我的桌面的软件标题背景图片，如果为空，使用系统的默认标题背景（浅浅的白色格子）
+	  
+	  for ( var i=6;i&amp;lt;_this.GetRowCount(0);i++ ) {
+	  	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,0,i,4 );
+	  }
+	  //_this.ShowToolBar(0);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if ( id == &amp;quot;确定&amp;quot; ) {
+		save();
+	}
+ 
+
+}
+
+
+function GetVal(colnam)
+{
+	for ( var i=0;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( _this.GetCellText(0,i,1) == colnam ) {
+			var str = _this.GetCellText(0,i,3 );
+			
+	  		str = ReplaceString(str, &amp;quot;&amp;&amp;quot;, &amp;quot;＆&amp;quot;);
+	  		str = ReplaceString(str, &amp;quot;?&amp;quot;, &amp;quot;？&amp;quot;);
+	  		str = ReplaceString(str, &amp;quot;=&amp;quot;, &amp;quot;＝&amp;quot;);
+
+	  		return str;
+
+		}
+	}
+}
+function SetVal(colnam,str)
+{
+	for ( var i=0;i&amp;lt;_this.GetRowCount(0);i++ ) {
+		if ( _this.GetCellText(0,i,1) == colnam ) {
+			
+			str = ReplaceString(str, &amp;quot;＆&amp;quot;, &amp;quot;&amp;&amp;quot;);
+		    	str = ReplaceString(str, &amp;quot;？&amp;quot;, &amp;quot;?&amp;quot;);
+		    	str = ReplaceString(str, &amp;quot;＝&amp;quot;, &amp;quot;=&amp;quot;);
+
+
+			_this.SetCellText(0,i,3,str);
+		}
+	}
+}
+//字符串全程替代
+function ReplaceString( str, srcstr, deststr ) 
+{
+  if(srcstr==&amp;quot;?&amp;quot;) 
+    return str.replace(/\?/g, deststr); 
+  //第二个参数中的 g 表示全部匹配,i表示忽略大小写
+  var regS = new RegExp(srcstr,&amp;quot;g&amp;quot;);
+  return str.replace(regS,deststr);
+
+}
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( sheet == 0 &amp;&amp; col == 4 ) {
+		var ss = newvalue.split(&amp;quot;\\&amp;quot;);
+		_this.SetCellText(sheet,row, col-1, &amp;quot;org/&amp;quot;+thisorgid+&amp;quot;/&amp;quot;+ss[ss.length-1] );
+	
+	}
+	
+}
+
+//保存
+function save()
+{
+		var bUpload = false;
+		var copyfile = 0;
+		for ( var i=6;i&amp;lt;_this.GetRowCount(0);i++ ) {
+			var objurl = _this.GetCellText(0,i,4);
+			if ( objurl!= &amp;quot;&amp;quot; ) {
+		             	var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+				_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+				_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,objurl ,1);//本地文件的路径
+				_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,&amp;quot;org/&amp;quot;+thisorgid+&amp;quot;/&amp;quot; ,0);	//远程保存的目录
+				var ss = objurl .split(&amp;quot;\\&amp;quot;);
+				_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,ss[ss.length-1],0);//注意这里只能是文件名，用于远程保存的文件名
+				_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+				var ret=_this.SendHttpRequest(); 
+				_this.CloseHttpRequest();
+				var loc1 = ret.indexOf( &amp;quot;&amp;lt;TOPIC&amp;quot; );
+				var loc2 = ret.indexOf( &amp;quot;&amp;lt;/TOPIC&amp;quot; );
+				var str = ret.substring(loc1+7,loc2);
+				copyfile = 1;
+				alert(invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+thisorgid+&amp;quot;&amp;filename=&amp;quot;+ss[ss.length-1])) ; 
+			}
+	          }
+	          if( copyfile == 1 ) alert(invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+thisorgid+&amp;quot;&amp;filename=&amp;quot;+ss[ss.length-1])) ; 
+
+	          
+	
+		var returnval =
+		  	&amp;quot;LOGINSWF=&amp;quot;+GetVal(&amp;quot;LOGINSWF&amp;quot;)
+		    	+&amp;quot;&amp;LOGINICON=&amp;quot;+GetVal(&amp;quot;LOGINICON&amp;quot;)
+		    	+&amp;quot;&amp;DESKTOP=&amp;quot;+GetVal(&amp;quot;DESKTOP&amp;quot;)
+		    	+&amp;quot;&amp;J2MEDESKTOP=&amp;quot;+GetVal(&amp;quot;J2MEDESKTOP&amp;quot;)
+		    	+&amp;quot;&amp;LOGINTITLE=&amp;quot;+GetVal(&amp;quot;LOGINTITLE&amp;quot;)
+		    	+&amp;quot;&amp;LOGINSCROLLIMG1=&amp;quot;+GetVal(&amp;quot;LOGINSCROLLIMG1&amp;quot;)
+		    	+&amp;quot;&amp;LOGINSCROLLIMG2=&amp;quot;+GetVal(&amp;quot;LOGINSCROLLIMG2&amp;quot;)
+		    	+&amp;quot;&amp;LOGINSCROLLIMG3=&amp;quot;+GetVal(&amp;quot;LOGINSCROLLIMG3&amp;quot;)
+		    	+&amp;quot;&amp;LOGINHOMEURL=&amp;quot;+GetVal(&amp;quot;LOGINHOMEURL&amp;quot;)
+		    	+&amp;quot;&amp;LOGINHELPURL=&amp;quot;+GetVal(&amp;quot;LOGINHELPURL&amp;quot;)
+		    	+&amp;quot;&amp;LOGINSETUPURL=&amp;quot;+GetVal(&amp;quot;LOGINSETUPURL&amp;quot;)
+		    	+&amp;quot;&amp;DESKTOPTITLEIMG=&amp;quot;+GetVal(&amp;quot;DESKTOPTITLEIMG&amp;quot;)
+		    	+&amp;quot;&amp;DESKTOPTITLEBKIMG=&amp;quot;+GetVal(&amp;quot;DESKTOPTITLEBKIMG&amp;quot;);
+		
+		
+		
+		window.returnValue = returnval ;
+		window.close();
+
+}
+
+//修改公共背景图
+function editsysback()
+{
+	openWindow(&amp;quot;show.sp?grdid=SYSURLED&amp;grdtyp=Q&amp;sytid=x&amp;loaddata=1&amp;menu=Background&amp;myorgid=XLSGRID&amp;quot;);
+}
+
+//修改本组织背景图
+function editorgback()
+{
+	openWindow(&amp;quot;show.sp?grdid=SYSURLED&amp;grdtyp=Q&amp;sytid=x&amp;loaddata=1&amp;menu=Background&amp;quot;);
+
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if( ((row &amp;gt;=6&amp;&amp;row&amp;lt;=13)||row==17) &amp;&amp; col ==3) {
+		var url = _this.GetCellText(sheet,row,col);
+		if ( url!=&amp;quot;default&amp;quot; ) {
+			openWindow( url);
+		}
+	
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack= new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+var xmldb= new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var xmldbpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot; );
+var iopack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var utilpack = new JavaPackage ( &amp;quot;java.util&amp;quot;);
+var basePath = pubpack.EAOption.dynaDataRoot;
+
+
+// 复制xlsGridData到web
+// 参数 deforg  sysurlid 
+function copytoweb()
+{
+	var srcpath = basePath +&amp;quot;org/&amp;quot;+ deforg  ;//+ &amp;quot;/&amp;quot; +filename
+	var destpath = pubpack.EAOption.approot+&amp;quot;/org/&amp;quot;+ deforg  ;//+ &amp;quot;/&amp;quot;+filename
+
+	pubpack.EAFunc.copyDirectiory(srcpath,destpath,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+	return &amp;quot;服务端：文件已从&amp;quot;+ srcpath +&amp;quot;同步到&amp;quot;+destpath ;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

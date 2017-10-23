@@ -1,0 +1,432 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >LHTML3</MWID><NAME >新布局的OS解释扩展</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >LHTML3.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var a=invokeOSFunc(&amp;quot;getsxgdhtml&amp;quot;);
+	_this.SetCellText(0,0,0,a);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);
+
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);
+
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+//WNDMOD 的类型（不断扩展中）
+//	_this.SetListValue(list1,&amp;quot;HTML&amp;quot;,&amp;quot;HTML&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;OS&amp;quot;,&amp;quot;OS脚本&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;MW&amp;quot;,&amp;quot;中间件界面&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FRAME&amp;quot;,&amp;quot;内部FRAME&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;FRAMEGROUP&amp;quot;,&amp;quot;分页FRAME组&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;SCROLLIMAGE&amp;quot;,&amp;quot;滚动图片&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOOLBAR&amp;quot;,&amp;quot;系统默认工具栏&amp;quot;);		
+//	_this.SetListValue(list1,&amp;quot;MENU&amp;quot;,&amp;quot;菜单栏&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;FLASH&amp;quot;,&amp;quot;视频演示&amp;quot;);	
+//	_this.SetListValue(list1,&amp;quot;表格&amp;quot;,&amp;quot;表格(标准)&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;空白表格&amp;quot;,&amp;quot;空白表格&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;MENU&amp;quot;,&amp;quot;菜单栏&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;TOPMENU&amp;quot;,&amp;quot;顶层分页菜单&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;WEIXINBO&amp;quot;,&amp;quot;微信微博&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;SCROLLIMG&amp;quot;,&amp;quot;左右滚动图片&amp;quot;);
+//	_this.SetListValue(list1,&amp;quot;LOGINSEARCH&amp;quot;,&amp;quot;登录和搜索&amp;quot;);
+//
+//WNDMOD 窗口风格, DSMOD 数据来源 ,WHEREBY 条件, SORTBY 排序,SQLTXT  SQL语句, LAYCOL 分列数 ,LAYROW 分行数,PAGEROW 每页行记录数, OSMWID OS中间件, OSFUNC OS函数,OSPARAM OS函数的参数,IFRAMEURL IFRAME的URL,IFSCROLLBAR 是否显示滚动条,HTMLGUID,MOREURL,OPENLAYID HTML
+function GetBody(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	if(WNDMOD==&amp;quot;WEIXINBO&amp;quot;) return _GetWEIXINBO(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+	if(WNDMOD==&amp;quot;SCROLLIMG&amp;quot;) return _GetSCROLLIMG(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+//	if(WNDMOD==&amp;quot;SX_SCROLLIMG&amp;quot;) return _GetSX_SCROLLIMG(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+	if(WNDMOD==&amp;quot;W8ITEM&amp;quot;) return _GetW8ITEM(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+	
+	return &amp;quot;&amp;quot;;
+}
+function test(){
+	return &amp;quot;xxx&amp;quot;;
+}
+// 微信微博
+function _GetWEIXINBO(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	return  db.getBlob2String(&amp;quot;select bdata from formblob where guid=&amp;apos;&amp;quot;+HTMLGUID+&amp;quot;&amp;apos; for update&amp;quot;,&amp;quot;bdata&amp;quot;);
+}
+// 左右滚动图片
+function _GetSCROLLIMG(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	return  gethtml(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID);
+}
+// W8风格商品显示
+function _GetW8ITEM(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	
+	var html = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;select * from LSYSURL where icon is not null&amp;quot;;
+	var db = null;
+	var width=120;
+	var height=120;
+
+	db = new pubpack.EADatabase();
+	
+	//表格标题
+	var title = &amp;quot;商品&amp;quot;;
+	
+	var itemds = db.QuerySQL(sql);
+	
+	var count = itemds.getRowCount();
+	
+	if(LAYROW==&amp;quot;&amp;quot; ) LAYROW=2;
+	var trows = LAYROW;
+	
+	if(LAYCOL==&amp;quot;&amp;quot;) LAYCOL =db.GetSQL(&amp;quot;select ceil(&amp;quot;+count+&amp;quot; / &amp;quot;+trows+&amp;quot;) cols from dual&amp;quot;);
+	var tcols = LAYCOL;
+	
+	var tablewidth = 60+60*2+width*tcols;
+
+	var tableheight = 60+height*trows;
+	
+//	html=&amp;quot;&amp;lt;div style=&amp;apos;overflow-x: auto; overflow-y: auto;width:500px; height=300px;&amp;apos;&amp;gt;&amp;quot;;
+	
+	html += &amp;quot;&amp;lt;table id=\&amp;quot;XMIDWARE_MENU_TABLE\&amp;quot; class=\&amp;quot;XMIDWARE_MENU_TABLE\&amp;quot; border=\&amp;quot;0\&amp;quot; cellpadding=0 cellspacing=0 width=\&amp;quot;&amp;quot;+tablewidth+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+tableheight+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+	
+	html += &amp;quot;&amp;lt;TR height=\&amp;quot;60\&amp;quot;&amp;gt;\n
+				&amp;lt;td width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;&amp;gt;&amp;lt;img border=0 src=\&amp;quot;http://xmidware.com/null.jpg\&amp;quot; width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td  colspan=\&amp;quot;&amp;quot;+tcols+&amp;quot;\&amp;quot; align=\&amp;quot;left\&amp;quot;&amp;gt;&amp;lt;font size=\&amp;quot;5\&amp;quot; color=\&amp;quot;#000000\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;XMIDWARE_MENU_SHEETNAME\&amp;quot; &amp;gt;&amp;nbsp;&amp;quot;+title+&amp;quot; &amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;&amp;gt;&amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;http://xmidware.com/null.jpg\&amp;quot; width=\&amp;quot;60\&amp;quot; height=\&amp;quot;60\&amp;quot;/&amp;gt;&amp;lt;/td&amp;gt;
+			&amp;lt;/TR&amp;gt;\n&amp;quot;;
+	
+	
+	var matds = getMatrix(trows,tcols);
+	
+	for (var r=0;r&amp;lt;trows;r++) {
+		html += &amp;quot;&amp;lt;TR height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot;&amp;gt;\n&amp;lt;td width=\&amp;quot;60\&amp;quot; height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img border=0 src=\&amp;quot;http://xmidware.com/null.jpg\&amp;quot; width=\&amp;quot;60\&amp;quot; height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+		for (var c=0;c&amp;lt;tcols;c++) {
+			var idx = 1 * matds.getStringAt(r,c);
+			if (idx &amp;lt; count) {
+				var id= itemds.getStringAt(idx,&amp;quot;id&amp;quot;);
+				var icon= itemds.getStringAt(idx,&amp;quot;ICON&amp;quot;);
+				var title = itemds.getStringAt(idx,&amp;quot;REFID&amp;quot;);
+				
+				var note= itemds.getStringAt(idx,&amp;quot;name&amp;quot;);
+			
+				var price =&amp;quot;&amp;quot;;
+				var hrefurl =itemds.getStringAt(idx,&amp;quot;url&amp;quot;);
+				
+				html += gethdTableCellHtml(width,height,icon,&amp;quot;&amp;quot;,price,hrefurl,&amp;quot;&amp;quot;);//宽
+				html += &amp;quot;\n&amp;quot;;
+				
+			}
+		}
+		html += &amp;quot;&amp;lt;/TR&amp;gt;\n&amp;quot;;
+
+	}
+	html += &amp;quot;&amp;lt;/TABLE&amp;gt;\n\n&amp;quot;;
+		
+	return html;
+}
+
+//按列排列数组
+function getMatrix(rows,cols)
+{
+	if (rows == 0) rows = 1;
+	if (cols == 0) cols = 1;
+	
+	var ds = new pubpack.EAXmlDS();
+	for (var c=0;c&amp;lt;cols;c++) {
+		ds.addColumn(c,&amp;quot;COL&amp;quot;+c);
+	}
+	for (var r=0;r&amp;lt;rows;r++) {
+		ds.AddNullRow(-1);
+	}
+	
+	var num = 0;
+	for (var c=0;c&amp;lt;cols;c++) { 
+		for (var r=0;r&amp;lt;rows;r++) {
+			ds.setValueAt(r,c,num++);
+		}
+	}
+	
+	return ds;
+}
+
+//取得活动商品表格中一个显示单元格的TD内容
+function gethdTableCellHtml(width,height,icon,title,price,hrefurl,note)
+{
+	var html = &amp;quot;&amp;lt;TD class=\&amp;quot;XMIDWARE_MENU_CELL_TD\&amp;quot; height=\&amp;quot;&amp;quot;+height+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+width+&amp;quot;\&amp;quot; &amp;gt;
+			&amp;lt;a href=\&amp;quot;&amp;quot;+hrefurl+&amp;quot;\&amp;quot; target=\&amp;quot;\&amp;quot; style=\&amp;quot;TEXT-DECORATION: none;\&amp;quot;&amp;gt; 
+				&amp;lt;div class=\&amp;quot;XMIDWARE_MENU_CELL_TD_PDIV\&amp;quot; height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;100%\&amp;quot; style=\&amp;quot;position:relative;\&amp;quot;&amp;gt;
+					&amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;&amp;quot;+icon+&amp;quot;\&amp;quot;  height=\&amp;quot;&amp;quot;+(height-20)+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+(width-20)+&amp;quot;\&amp;quot;/&amp;gt;
+					&amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;http://www.xmidware.com/null.jpg\&amp;quot;  height=\&amp;quot;&amp;quot;+(height-10)+&amp;quot;\&amp;quot; width=\&amp;quot;10\&amp;quot;/&amp;gt;&amp;lt;BR&amp;gt;
+					&amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;http://www.xmidware.com/null.jpg\&amp;quot;  height=\&amp;quot;10\&amp;quot; width=\&amp;quot;&amp;quot;+(width-10)+&amp;quot;\&amp;quot;/&amp;gt;	
+					&amp;lt;div class=\&amp;quot;XMIDWARE_MENU_CELL_TD_BKDIV\&amp;quot; style=\&amp;quot;width: &amp;quot;+(width-20)+&amp;quot;px; height: &amp;quot;+(0.3*height-10)+&amp;quot;px; filter:alpha(Opacity=50);-moz-opacity:0.5;opacity: 0.5;z-index:100; position:absolute; left:0px; top:&amp;quot;+(0.7*height)+&amp;quot;px; background-color:#000000\&amp;quot;  &amp;gt;&amp;lt;/div&amp;gt;
+					&amp;lt;div class=\&amp;quot;XMIDWARE_MENU_CELL_TD_TCITLEDIV\&amp;quot; align=\&amp;quot;left\&amp;quot; valign=\&amp;quot;top\&amp;quot; style=\&amp;quot; width: &amp;quot;+(width-10)+&amp;quot;px; height: &amp;quot;+(0.3*height)+&amp;quot;px; float:left;z-index:100; position:absolute; left:0px; top:&amp;quot;+(0.7*height)+&amp;quot;px;padding:5px 5px 5px 5px; \&amp;quot;  &amp;gt;
+						&amp;lt;font color=\&amp;quot;#ffffff\&amp;quot; size=4&amp;gt;&amp;quot;+title+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;
+						&amp;lt;font color=\&amp;quot;#ffffff\&amp;quot; size=4&amp;gt;&amp;quot;+price+&amp;quot;&amp;lt;/font&amp;gt;&amp;lt;br&amp;gt;
+						&amp;lt;font color=\&amp;quot;red\&amp;quot;  style=\&amp;quot;float:right; position:absolute; right:20px; \&amp;quot; size=5&amp;gt;&amp;quot;+note+&amp;quot;&amp;lt;/font&amp;gt;
+					&amp;lt;/div&amp;gt; 
+				&amp;lt;/div&amp;gt;
+			&amp;lt;/a&amp;gt;
+		   &amp;lt;/TD&amp;gt;&amp;quot;;
+	return html;
+}
+
+// 上下滚动图片
+//function _GetSX_SCROLLIMG(db,request,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,PAGEROW ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+//{
+//	return  getsxgdhtml();
+//}
+
+function gethtml(db,request,deforg,WNDMOD,DSMOD,WHEREBY,SORTBY,SQLTXT ,LAYCOL ,LAYROW,MOREURL ,OSMWID,OSFUNC,OSPARAM,IFRAMEURL,IFSCROLLBAR,HTMLGUID,MOREURL,OPENLAYID)
+{
+	return &amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;lt;table width=&amp;apos;100%&amp;apos;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;&amp;lt;div class=\&amp;quot;imgdiv\&amp;quot;&amp;gt;&amp;lt;div class=\&amp;quot;imageRotation\&amp;quot; id=\&amp;quot;imageRotation\&amp;quot;&amp;gt;&amp;quot;+
+		    &amp;quot;&amp;lt;div class=\&amp;quot;imageBox\&amp;quot;&amp;gt;&amp;quot;;
+	html=html;  
+	
+	if(LAYCOL ==&amp;quot;&amp;quot;)LAYCOL =&amp;quot;1&amp;quot;;
+	var sql = &amp;quot;select * from ( select * from LSYSURL where org=&amp;apos;&amp;quot;+deforg+&amp;quot;&amp;apos; and REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos; and icon is not null &amp;quot;  ;
+	if(WHEREBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; AND &amp;quot; +WHEREBY;
+	if(SORTBY!=&amp;quot;&amp;quot; ) sql+= &amp;quot; &amp;quot;+SORTBY;
+	else sql+= &amp;quot; order by crtdat desc &amp;quot;;
+	if(LAYCOL !=&amp;quot;&amp;quot;&amp;&amp; LAYROW!=&amp;quot;&amp;quot; ) sql+=&amp;quot;) where  rownum&amp;lt;&amp;quot;+LAYCOL+&amp;quot;*&amp;quot;+LAYROW;
+	
+	  
+	var xml=db.QuerySQL(sql);
+	var spn=&amp;quot;&amp;quot;;
+	var cnt=xml.getRowCount();
+	if(cnt&amp;gt;5) cnt=5;
+	for(var i=0;i&amp;lt;cnt;i++){
+		html+= &amp;quot;&amp;lt;a href=&amp;apos;&amp;quot;+xml.getStringAt(i,&amp;quot;url&amp;quot;)+&amp;quot;&amp;layhdrguid=&amp;quot;+xml.getStringAt(i,&amp;quot;GUID&amp;quot;)+&amp;quot;&amp;apos; &amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		if(i==0)
+			spn+=&amp;quot;&amp;lt;span class=\&amp;quot;active\&amp;quot; rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+		else
+			spn+=&amp;quot;&amp;lt;span  rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon2&amp;quot;)+&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+	}
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+ &amp;quot;&amp;lt;div class=\&amp;quot;icoBox\&amp;quot;&amp;gt;&amp;quot;+spn+ &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;;
+	
+//	html+=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;http://www.itxueyuan.org/uploads/javascript/jquery.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;&amp;quot;;
+	
+	var css=&amp;quot;&amp;lt;style type=\&amp;quot;text/css\&amp;quot;&amp;gt;&amp;quot;+
+		&amp;quot;	.imgdiv{&amp;quot;+
+		&amp;quot;            width:100%;&amp;quot;+
+		&amp;quot;            height:350px;&amp;quot;+
+//		&amp;quot;            border:1px solid #BBBBBB;&amp;quot;+
+		&amp;quot;            position:relative;&amp;quot;+
+		&amp;quot;		clear:both;&amp;quot;+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;        .imageRotation{&amp;quot;+
+		&amp;quot;            overflow:hidden;  /*--超出容器的所有元素都不可见--*/&amp;quot;+
+//		&amp;quot;            position:relative;&amp;quot;+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;        .imageBox{&amp;quot;+
+		&amp;quot;            position: relative;&amp;quot;+
+		&amp;quot;            overflow:hidden;&amp;quot;+
+		&amp;quot;            float:left;&amp;quot;+
+
+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;        .imageBox img {&amp;quot;+
+		&amp;quot;            display:block;&amp;quot;+
+		&amp;quot;            float:left;&amp;quot;+
+		&amp;quot;            border:none;&amp;quot;+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;        .icoBox{&amp;quot;+
+		&amp;quot;            position:absolute;  /*--固定定位--*/&amp;quot;+
+		&amp;quot;            top:5px;&amp;quot;+
+//		&amp;quot;            width:70px;&amp;quot;+
+		&amp;quot;            text-align:center;&amp;quot;+
+		&amp;quot;           line-height:40px;&amp;quot;+
+		&amp;quot;            float:left;&amp;quot;+
+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;        .icoBox span{&amp;quot;+
+		&amp;quot;            display:block;&amp;quot;+
+		&amp;quot;            height:40px;&amp;quot;+
+		&amp;quot;            width:60px;&amp;quot;+
+
+		&amp;quot;            margin-top:4px;&amp;quot;+
+		&amp;quot;            margin-left:0px;&amp;quot;+
+		&amp;quot;            margin-right:0px;&amp;quot;+
+		&amp;quot;            cursor:pointer;&amp;quot;+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;        .icoBox span.active {&amp;quot;+
+		&amp;quot;            background-position:0px -12px;&amp;quot;+
+		&amp;quot;            cursor:default;&amp;quot;+
+		&amp;quot;        }&amp;quot;+
+		&amp;quot;    &amp;lt;/style&amp;gt;&amp;quot;;
+	var jvaspt=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;&amp;quot;+
+//			&amp;quot;	window.onresize=function(){&amp;quot;+
+//			&amp;quot;	        var dvwid=$(\&amp;quot;.imgdiv\&amp;quot;).width();&amp;quot;+
+//			&amp;quot;	        var dvhid=$(\&amp;quot;.imgdiv\&amp;quot;).height();&amp;quot;+
+//			&amp;quot;	        var img2w=dvwid/6;&amp;quot;+
+//			&amp;quot;	        var img2h=dvhid/10;&amp;quot;+
+//			&amp;quot;	        $(\&amp;quot;.imageRotation\&amp;quot;).width(dvwid-(img2w+10));&amp;quot;+
+//			&amp;quot;	        $(\&amp;quot;.imageRotation\&amp;quot;).height(dvhid);&amp;quot;+
+//			&amp;quot;	        $(\&amp;quot;.icoBox\&amp;quot;).css({&amp;apos;left&amp;apos;:(dvwid-(img2w-10))});&amp;quot;+
+//			&amp;quot;	        $(\&amp;quot;.imageBox img\&amp;quot;).width(dvwid-(img2w+10));&amp;quot;+
+//			&amp;quot;	        $(\&amp;quot;.imageBox img\&amp;quot;).height(dvhid);&amp;quot;+
+//			&amp;quot;	    }&amp;quot;+
+			
+			
+			&amp;quot;    $(document).ready(function() {&amp;quot;+
+			&amp;quot;       $(\&amp;quot;.imageRotation\&amp;quot;).each(function(){&amp;quot;+
+			
+			&amp;quot;		var dvwid=$(&amp;apos;.imgdiv&amp;apos;).width();&amp;quot;+
+			&amp;quot;                var dvhid=$(&amp;apos;.imgdiv&amp;apos;).height();&amp;quot;+
+			
+			&amp;quot;		var img2w=dvwid/6;&amp;quot;+
+			&amp;quot;                var img2h=dvhid/10;&amp;quot;+
+			
+			&amp;quot;                $(&amp;apos;.imageRotation&amp;apos;).width(dvwid);&amp;quot;+
+			&amp;quot;                $(&amp;apos;.imageRotation&amp;apos;).height(dvhid);&amp;quot;+
+			&amp;quot;                $(&amp;apos;.icoBox&amp;apos;).css({&amp;apos;right&amp;apos;:0});&amp;quot;+
+			&amp;quot;                $(&amp;apos;.imageBox img&amp;apos;).width(dvwid);&amp;quot;+
+			&amp;quot;                $(&amp;apos;.imageBox img&amp;apos;).height(dvhid);&amp;quot;+
+			
+			&amp;quot;                $(&amp;apos;.icoBox span&amp;apos;).height(dvhid/6);&amp;quot;+
+			&amp;quot;                $(&amp;apos;.icoBox span&amp;apos;).width(dvwid/10);&amp;quot;+
+			&amp;quot;                $(&amp;apos;.icoBox span img&amp;apos;).height(dvhid/6);&amp;quot;+
+			&amp;quot;                $(&amp;apos;.icoBox span img&amp;apos;).width(dvwid/10);&amp;quot;+
+			&amp;quot;           var imageRotation = this, &amp;quot;+
+			&amp;quot;                    imageBox = $(imageRotation).children(\&amp;quot;.imageBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                   icoBox = $(imageRotation).children(\&amp;quot;.icoBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                    icoArr = $(icoBox).children(), &amp;quot;+
+			&amp;quot;                    imageWidth =  $(\&amp;quot;.imageBox img\&amp;quot;).width(),  &amp;quot;+
+			&amp;quot;                    imageNum = $(imageBox).children().size(),  &amp;quot;+
+			&amp;quot;                    imageReelWidth = imageWidth*imageNum,  &amp;quot;+
+			&amp;quot;                    activeID = parseInt($($(icoBox).children(\&amp;quot;.active\&amp;quot;)[0]).attr(\&amp;quot;rel\&amp;quot;)), &amp;quot;+
+			&amp;quot;                    nextID = 0, &amp;quot;+
+			&amp;quot;                    setIntervalID,  &amp;quot;+
+			&amp;quot;                    intervalTime = 4000,  &amp;quot;+
+			&amp;quot;                    speed =500;  &amp;quot;+
+			
+
+			&amp;quot;            $(imageBox).css({&amp;apos;width&amp;apos; : imageReelWidth + \&amp;quot;px\&amp;quot;});&amp;quot;+
+			
+	
+			&amp;quot;            var rotate=function(clickID){&amp;quot;+
+			&amp;quot;                if(clickID){ nextID = clickID; }&amp;quot;+
+			&amp;quot;                else{ nextID=activeID&amp;lt;=3 ? activeID+1 : 1; }&amp;quot;+
+			
+			&amp;quot;                $(icoArr[activeID-1]).removeClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(imageBox).animate({left:\&amp;quot;-\&amp;quot;+(nextID-1)* $(\&amp;quot;.imageBox img\&amp;quot;).width()+\&amp;quot;px\&amp;quot;} , speed);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;3px solid red&amp;apos;});&amp;quot;+
+			&amp;quot;                $(icoArr[activeID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;0px solid red&amp;apos;});&amp;quot;+
+			&amp;quot;                activeID = nextID;&amp;quot;+
+			&amp;quot;            };&amp;quot;+
+			&amp;quot;            setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			
+			&amp;quot;            $(imageBox).hover(&amp;quot;+
+			&amp;quot;                    function(){ clearInterval(setIntervalID); },&amp;quot;+
+			&amp;quot;                    function(){ setIntervalID=setInterval(rotate,intervalTime); }&amp;quot;+
+			&amp;quot;            );&amp;quot;+
+			
+			&amp;quot;            $(icoArr).click(function(){&amp;quot;+
+			&amp;quot;                clearInterval(setIntervalID);&amp;quot;+
+			&amp;quot;                var clickID = parseInt($(this).attr(\&amp;quot;rel\&amp;quot;));&amp;quot;+
+			&amp;quot;                rotate(clickID);&amp;quot;+
+			&amp;quot;                setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			&amp;quot;            });&amp;quot;+
+			 &amp;quot;       });&amp;quot;+
+			&amp;quot;    });&amp;quot;+
+			&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;;
+	html+=jvaspt;
+//	throw new Exception(html);
+	return css+html;
+}
+//滚动
+function getsxgdhtml(db,DSMOD){
+	
+	var onload=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;window.onload=function(){$(\&amp;quot;.imageBox img\&amp;quot;).width($(\&amp;quot;.imageRotation\&amp;quot;).width());$(\&amp;quot;.imageBox img\&amp;quot;).height($(\&amp;quot;.imageRotation\&amp;quot;).height());}&amp;lt;/script&amp;gt;&amp;quot;;
+		
+
+	var html=&amp;quot;&amp;lt;div class=\&amp;quot;imageRotation\&amp;quot; id=\&amp;quot;imageRotation\&amp;quot;&amp;gt;&amp;quot;+
+		    &amp;quot;&amp;lt;div class=\&amp;quot;imageBox\&amp;quot;&amp;gt;&amp;quot;;
+	html=ond+html;    
+	var xml=db.QuerySQL(&amp;quot;select icon,icon2,url from LSYSURL where REFID=&amp;apos;&amp;quot;+DSMOD+&amp;quot;&amp;apos;&amp;quot;);
+	var spn=&amp;quot;&amp;quot;;
+	for(var i=0;i&amp;lt;xml.getRowCount();i++){
+		html+= &amp;quot;&amp;lt;img src=&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;&amp;gt;&amp;quot;;
+		if(i==0)
+			spn+=&amp;quot;&amp;lt;span class=\&amp;quot;active\&amp;quot; rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;http://dev.sss-shanghai.org/aca/ROOT_HIS/&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+		else
+			spn+=&amp;quot;&amp;lt;span  rel=\&amp;quot;&amp;quot;+(i+1)+&amp;quot;\&amp;quot;&amp;gt;&amp;lt;img src=\&amp;quot;http://dev.sss-shanghai.org/aca/ROOT_HIS/&amp;quot;+xml.getStringAt(i,&amp;quot;icon&amp;quot;)+&amp;quot;\&amp;quot;/&amp;gt;&amp;lt;/span&amp;gt;&amp;quot;;
+	}
+	html+=&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+ &amp;quot;&amp;lt;div class=\&amp;quot;icoBox\&amp;quot;&amp;gt;&amp;quot;+spn+ &amp;quot;&amp;lt;/div&amp;gt;&amp;quot;+&amp;quot;&amp;lt;/div&amp;gt;&amp;quot;;
+	
+	var jvaspt=&amp;quot;&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot;&amp;gt;&amp;quot;+
+			&amp;quot;    $(document).ready(function() {&amp;quot;+
+			&amp;quot;       $(\&amp;quot;.imageRotation\&amp;quot;).each(function(){&amp;quot;+
+			&amp;quot;           var imageRotation = this, &amp;quot;+
+			&amp;quot;                    imageBox = $(imageRotation).children(\&amp;quot;.imageBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                   icoBox = $(imageRotation).children(\&amp;quot;.icoBox\&amp;quot;)[0],  &amp;quot;+
+			&amp;quot;                    icoArr = $(icoBox).children(), &amp;quot;+
+			&amp;quot;                    imageWidth = $(imageBox).width(),  &amp;quot;+
+			&amp;quot;                    imageNum = $(imageBox).children().size(),  &amp;quot;+
+			&amp;quot;                    imageReelWidth = imageWidth*imageNum,  &amp;quot;+
+			&amp;quot;                    activeID = parseInt($($(icoBox).children(\&amp;quot;.active\&amp;quot;)[0]).attr(\&amp;quot;rel\&amp;quot;)), &amp;quot;+
+			&amp;quot;                    nextID = 0, &amp;quot;+
+			&amp;quot;                    setIntervalID,  &amp;quot;+
+			&amp;quot;                    intervalTime = 4000,  &amp;quot;+
+			&amp;quot;                    speed =500;  &amp;quot;+
+			
+
+			&amp;quot;            $(imageBox).css({&amp;apos;width&amp;apos; : imageReelWidth + \&amp;quot;px\&amp;quot;});&amp;quot;+
+			
+	
+			&amp;quot;            var rotate=function(clickID){&amp;quot;+
+			&amp;quot;                if(clickID){ nextID = clickID; }&amp;quot;+
+			&amp;quot;                else{ nextID=activeID&amp;lt;=3 ? activeID+1 : 1; }&amp;quot;+
+			
+			&amp;quot;                $(icoArr[activeID-1]).removeClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;);&amp;quot;+
+			&amp;quot;                $(imageBox).animate({left:\&amp;quot;-\&amp;quot;+(nextID-1)*imageWidth+\&amp;quot;px\&amp;quot;} , speed);&amp;quot;+
+			&amp;quot;                $(icoArr[nextID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;3px solid #eee&amp;apos;});&amp;quot;+
+			&amp;quot;                $(icoArr[activeID-1]).addClass(\&amp;quot;active\&amp;quot;).css({&amp;apos;border&amp;apos;:&amp;apos;0px solid #eee&amp;apos;});&amp;quot;+
+			&amp;quot;                activeID = nextID;&amp;quot;+
+			&amp;quot;            };&amp;quot;+
+			&amp;quot;            setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			
+			&amp;quot;            $(imageBox).hover(&amp;quot;+
+			&amp;quot;                    function(){ clearInterval(setIntervalID); },&amp;quot;+
+			&amp;quot;                    function(){ setIntervalID=setInterval(rotate,intervalTime); }&amp;quot;+
+			&amp;quot;            );&amp;quot;+
+			
+			&amp;quot;            $(icoArr).click(function(){&amp;quot;+
+			&amp;quot;                clearInterval(setIntervalID);&amp;quot;+
+			&amp;quot;                var clickID = parseInt($(this).attr(\&amp;quot;rel\&amp;quot;));&amp;quot;+
+			&amp;quot;                rotate(clickID);&amp;quot;+
+			&amp;quot;                setIntervalID=setInterval(rotate,intervalTime);&amp;quot;+
+			&amp;quot;            });&amp;quot;+
+			 &amp;quot;       });&amp;quot;+
+			&amp;quot;    });&amp;quot;+
+			&amp;quot;&amp;lt;/script&amp;gt;&amp;quot;;
+   return html+jvaspt;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

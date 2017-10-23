@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="销售发票转结算单" ID="SI2FS">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESC name="数据流描述"></DESC>
+				<SrcHdrFlds name="源单据头的转换">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,SUMMNY,CRTUSR,CRTUSRNAM,REFNAM4,REFID6,REFNAM6</SrcHdrFlds>
+				<DestHdrFlds name="目标单据的对应转换字段">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2,REFNAM4,REFID6,REFNAM6</DestHdrFlds>
+				<DESTCLS name="待生成的目标单据">FS</DESTCLS>
+				<ValFld name="目标单据的字段">REFNAM1</ValFld>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生" comment="可用对象:eaContext,usrinf,srcdtl(源单据明细),bilhdr(目标单据的单据头),bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)">
+
+					bilhdr.setValueAt(0,"REFID6",srchdr.getStringAt(0,"REFID6"));
+				</OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生"  >//
+  //可用对象:eaContext,usrinf,bilhdr(目标单据的单据头),bildtl(目标单据的明细)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+  var sql= "";
+  var firstcorp = flwstads.getStringAt(0,"REFID2");
+  var db = eaContext.getEADatabase();  
+  var acc = eaContext.getAccid();
+  var firstka = db.GetSQL(" select refid from corp where id=&amp;apos;"+firstcorp+"&amp;apos;");  
+  var kanam =  db.GetSQL(" select name from v_ka where id=&amp;apos;"+firstka+"&amp;apos;");
+  var nextcorp = "";
+  var nextka = ""; 
+  for(var r=1;r&amp;lt;flwstads.getRowCount();r++){
+  	nextcorp = flwstads.getStringAt(r,"REFID2");  	
+  	nextka = db.GetSQL(" select nvl(refid,id) from corp where id=&amp;apos;"+nextcorp+"&amp;apos;");  
+  	if(!firstka.equals(nextka)){
+  		throw new Exception("【生成结算错误！不同的渠道不能生成一张结算单，请确认！】");
+  	}
+  }
+  
+  var 尾差金额 = 0.0;  
+  var mny = 0.0;  
+  var summny = 0.0;  
+  var sumbil = "";
+  var srcid = "";
+  for(var row=0;row&amp;lt;flwstads.getRowCount();row++){  
+  	var bilid = flwstads.getStringAt(row,"SRCBIL");  	  	
+  	mny = flwstads.getStringAt(row,"val2Convert");  	
+  	summny = summny+mny;
+  	sumbil = sumbil+bilid+",";
+  	sql = "select nvl(REFNAM4,0) FROM BILHDR WHERE BILID=&amp;apos;"+bilid+"&amp;apos; and biltyp=&amp;apos;SI&amp;apos; and acc=&amp;apos;"+acc+"&amp;apos;\n";  	
+  	尾差金额 += db.GetSQL(sql)*1.0;  		
+  }
+  bilhdr.setValueAt(0,"REFNAM1",summny);	
+  sumbil = sumbil.substring(0,sumbil.length()-1);	
+  bilhdr.setValueAt(0,"NOTE","从发票："+sumbil+"生成");
+
+  var r = -1;
+  var kmds = "";
+  var itmid = "";
+  var itmnam = "";
+  
+  kmds = db.QuerySQL("select id,name from accitm where id = (select accitmid from accitmbind where typ=&amp;apos;SIA&amp;apos; and id=&amp;apos;01&amp;apos; and rownum=1)");
+  itmid = kmds.getStringAt(0,"ID");
+  itmnam = kmds.getStringAt(0,"NAME");
+  r = bildtl.AddNullRow(-1);
+  bildtl.setValueAt(r,"ITMID",itmid);
+  bildtl.setValueAt(r,"ITMNAM",itmnam);
+  bildtl.setValueAt(r,"TAXMNY",summny-尾差金额);
+
+  if (尾差金额 != 0){
+  	kmds = db.QuerySQL("select id,name from accitm where id = (select accitmid from accitmbind where typ=&amp;apos;SIA&amp;apos; and id=&amp;apos;02&amp;apos; and rownum=1)");
+	itmid = kmds.getStringAt(0,"ID");
+	itmnam = kmds.getStringAt(0,"NAME");
+	
+  	r = bildtl.AddNullRow(r);
+  	bildtl.setValueAt(r,"ITMID",itmid);
+  	bildtl.setValueAt(r,"ITMNAM",itmnam);
+  	bildtl.setValueAt(r,"TAXMNY",尾差金额);
+  }
+  
+  bilhdr.setValueAt(0,"CORPID",firstka);  
+  bilhdr.setValueAt(0,"CORPNAM",kanam);
+  //结算单明细记录来源销售发票号，在生成凭证时区分发票
+  var sibilid = flwstads.getStringAt(0,"SRCBIL");
+  for(var row=0;row&amp;lt;bildtl.getRowCount();row++){  	
+  	bildtl.setValueAt(row,"REFID1",sibilid);
+  }
+  
+//  var sql = "select nvl(a.id,b.id) id,nvl(a.name,b.name) name from v_ka a,corp b where a.id(+) = b.refid and b.id=&amp;apos;"+bilhdr.getStringAt(0,"CORPID")+"&amp;apos;\n";      
+//  var xmlds = db.QuerySQL(sql);
+//  if(xmlds.getRowCount()&amp;gt;0){
+//  	bilhdr.setValueAt(0,"CORPID",xmlds.getStringAt(0,"id"));
+//  	bilhdr.setValueAt(0,"CORPNAM",xmlds.getStringAt(0,"name"));
+//  }
+  //end of func</OnConvert>
+				<OnDelete name="删除目标单据时发生" comment="可用对象:eaContext,_EADB"></OnDelete>
+				<MappedMode name="单据映射关系。0:(默认)多对一映射；1:一对一映射">0</MappedMode>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总"></Filter>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+</ROW>
+</ROWSET>
+</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">SI</SRCCLS>
+				<ConvertMod name="单据转换模式:0=(默认)明细转换;1=整单转换;2=仅转换单据头">2</ConvertMod>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">SUMMNY</ValFld>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。" comment="可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)"></OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生" comment="可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息"></OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生" comment="可用对象:eaContext,_EADB"></OnUnCkeck>
+</ROW>
+</ROWSET>
+</srcBil>
+</dataFlow>

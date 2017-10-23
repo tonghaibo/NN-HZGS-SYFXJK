@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >httpcallpaser</MWID><NAME >httpcallpaser</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >httpcallpaser.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var Httpclient = new JavaPackage(&amp;quot;org.apache.commons.httpclient&amp;quot;);
+var parser = new JavaPackage(&amp;quot;org.cyberneko.html.parsers&amp;quot;);
+var DOMFragmentparser = new parser.DOMFragmentParser();
+var htmldocument = new JavaPackage(&amp;quot;org.apache.html.dom&amp;quot;);
+var HTMLDocumentimpl = new htmldocument.HTMLDocumentImpl();
+var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var sax = new JavaPackage(&amp;quot;org.xml.sax&amp;quot;);
+
+function PostAndParse(url, paramlist,code)  
+  {
+
+    var sb = new StringBuffer();
+    var ssa = &amp;quot;&amp;quot;;
+    //org.apache.commons.httpclient.methods.PostMethod postMethod= new org.apache.commons.httpclient.methods.PostMethod(url);
+    var postMethod= new webget.GBKPostMethod(url,code);
+    try {
+       sb.append(url + &amp;quot;?&amp;quot;);
+       //从sParam替代变量
+        var ss = paramlist.split(&amp;quot;&amp;&amp;quot;);
+//        throw new Exception(ss);
+        for ( var i=0;i&amp;lt;ss.length();i++ ) 
+        {
+	          var loc = ss[i].indexOf(&amp;quot;=&amp;quot;);
+	          loc = 1.0*loc;
+	          var sssid = &amp;quot;&amp;quot;;
+	          var sssvalue = &amp;quot;&amp;quot;;
+	          if (loc&amp;gt;0 ) {
+	            sssid = ss[i].substring(0,loc);
+	            if(ss[i].split(&amp;quot;=&amp;quot;).length() &amp;gt; 1 )
+	           	 sssvalue = ss[i].substring(loc+1);
+	          }
+          	 postMethod.addParameter(sssid,sssvalue);
+               throw new Exception(sssid +&amp;quot;,&amp;quot;+sssvalue );
+          }
+       
+	var httpclient = new Httpclient.HttpClient();
+        httpclient.executeMethod(postMethod);
+       //org.apache.xerces.dom.
+       var node = HTMLDocumentimpl.createDocumentFragment();
+       throw new Exception(node);
+       var inputs = postMethod.getResponseBodyAsStream();
+         var isr=null;
+         if ( code.length()&amp;gt;0 ) 
+          isr=new java.io.InputStreamReader(inputs,code);
+         else 
+          isr=new InputStreamReader(inputs);
+         var source=new sax.InputSource(isr);
+         DOMFragmentparser.parse(source,node);
+         throw new Exception(node);
+       return node;
+    }
+    catch(e)
+    {
+    	throw new Exception(e);
+    }
+    finally {
+//      if (postMethod!=null &amp;&amp; postMethod.getURI()!=null )
+//        m_url =postMethod.getURI().getURI();
+//      if(postMethod!=null)postMethod.releaseConnection();
+    }
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

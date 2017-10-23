@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >CHIS_CHARDTL</MWID><NAME >app聊天界面</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CHIS_CHARDTL.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+ //药品配伍禁忌查询
+function getShow(){
+	var css=&amp;quot;&amp;quot;;
+	var html=&amp;quot;&amp;quot;;
+	var script=&amp;quot;&amp;quot;;
+	
+html=&amp;quot;	
+&amp;lt;!DOCTYPE HTML&amp;gt;
+
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+	&amp;lt;title&amp;gt;响应式测试2 - by smwell.com - haibao&amp;lt;/title&amp;gt;
+	&amp;lt;meta charset=\&amp;quot;GB2312\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0,minimum-scale=1,maximum-scale=1,user-scalable=yes\&amp;quot;&amp;gt;
+    &amp;lt;link href=\&amp;quot;http://libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;&amp;gt;
+    &amp;lt;script src=\&amp;quot;http://libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/css/style.css\&amp;quot;&amp;gt;
+    &amp;lt;/head&amp;gt;
+&amp;lt;body  style=\&amp;quot;width:100%\&amp;quot;&amp;gt;
+&amp;lt;div data-role=\&amp;quot;page\&amp;quot;&amp;gt;
+	&amp;lt;div class=\&amp;quot;header linear-g\&amp;quot;&amp;gt;
+        &amp;lt;a href=\&amp;quot;#panel-left\&amp;quot; data-iconpos=\&amp;quot;notext\&amp;quot; class=\&amp;quot;glyphicon glyphicon-th-large col-xs-2 text-right\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+        &amp;lt;a class=\&amp;quot;text-center col-xs-8\&amp;quot;&amp;gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;smwell.com&amp;lt;/a&amp;gt;
+        &amp;lt;a href=\&amp;quot;#panel-right\&amp;quot; data-iconpos=\&amp;quot;notext\&amp;quot; class=\&amp;quot;glyphicon glyphicon-user col-xs-2 text-left\&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
+    	&amp;lt;/div&amp;gt;
+
+    	 &amp;lt;div data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;left\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;list-group shortcut_menu dn linear-g\&amp;quot; id=\&amp;quot;panel-left\&amp;quot;&amp;gt;
+    	 
+        &amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;list-group-item\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-home\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;菜单1&amp;lt;/a&amp;gt;
+        &amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;list-group-item\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-edit\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;菜单2&amp;lt;/a&amp;gt;
+        &amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;list-group-item\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-list\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;菜单3&amp;lt;/a&amp;gt;
+        &amp;lt;a href=\&amp;quot;#\&amp;quot; class=\&amp;quot;list-group-item\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-list-alt\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;菜单4&amp;lt;/a&amp;gt;
+    &amp;lt;/div&amp;gt;
+    
+    &amp;lt;div data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;right\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;user_box text-center dn linear-g\&amp;quot; id=\&amp;quot;panel-right\&amp;quot;&amp;gt;
+        &amp;lt;div class=\&amp;quot;u_info\&amp;quot;&amp;gt;
+            &amp;lt;img class=\&amp;quot;avatar\&amp;quot; src=\&amp;quot;images/avatar-2.png\&amp;quot; alt=\&amp;quot;头像\&amp;quot;&amp;gt;
+            &amp;lt;span class=\&amp;quot;username\&amp;quot;&amp;gt;李医生&amp;lt;/span&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;ul class=\&amp;quot;user_menu\&amp;quot;&amp;gt;
+          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-cog\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;基本设置&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-lock\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;修改密码&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-picture\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;上传头像&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+          &amp;lt;li class=\&amp;quot;menu\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-off\&amp;quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;nbsp;安全退出&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+    &amp;lt;/div&amp;gt;	
+    	
+    	
+    	
+    	
+    	
+    &amp;lt;div data-role=\&amp;quot;content\&amp;quot; class=\&amp;quot;container\&amp;quot; role=\&amp;quot;main\&amp;quot; id=\&amp;quot;mainchart\&amp;quot;&amp;gt;
+        &amp;lt;ul class=\&amp;quot;content-reply-box mg10\&amp;quot; id=\&amp;quot;mainul\&amp;quot;&amp;gt;
+            &amp;lt;li class=\&amp;quot;odd\&amp;quot;&amp;gt;
+                &amp;lt;a class=\&amp;quot;user\&amp;quot; href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;img class=\&amp;quot;img-responsive avatar_\&amp;quot; src=\&amp;quot;EAFormBlob.sp?guid=10BF8EF172C7687DE050007F010044C3\&amp;quot; alt=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;user-name\&amp;quot;&amp;gt;张先生&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+                &amp;lt;div class=\&amp;quot;reply-content-box\&amp;quot;&amp;gt;
+                	&amp;lt;span class=\&amp;quot;reply-time\&amp;quot;&amp;gt;2015-2-8 17:14:0&amp;lt;/span&amp;gt;
+                    &amp;lt;div class=\&amp;quot;reply-content pr\&amp;quot; align=\&amp;quot;left\&amp;quot;&amp;gt;
+                    	&amp;lt;span class=\&amp;quot;arrow\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;/span&amp;gt;
+                    	您好，我想预约复诊
+                    &amp;lt;/div&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/li&amp;gt;
+            &amp;lt;li class=\&amp;quot;even\&amp;quot;&amp;gt;
+                &amp;lt;a class=\&amp;quot;user\&amp;quot; href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;img class=\&amp;quot;img-responsive avatar_\&amp;quot; src=\&amp;quot;EAFormBlob.sp?guid=10BF8EF172C7687DE050007F010044C3\&amp;quot; alt=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;user-name\&amp;quot;&amp;gt;李医生&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;
+                &amp;lt;div class=\&amp;quot;reply-content-box\&amp;quot;&amp;gt;
+                	&amp;lt;span class=\&amp;quot;reply-time\&amp;quot;&amp;gt;2015-2-8 17:14:10&amp;lt;/span&amp;gt;
+                    &amp;lt;div class=\&amp;quot;reply-content pr\&amp;quot; align=\&amp;quot;right\&amp;quot;&amp;gt;
+                    	&amp;lt;span class=\&amp;quot;arrow\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;/span&amp;gt;
+                    	几点？
+                    &amp;lt;/div&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/li&amp;gt;
+        
+
+             &amp;lt;/ul&amp;gt;  		
+	&amp;lt;br&amp;gt;
+	&amp;lt;br&amp;gt;
+        
+        &amp;lt;ul class=\&amp;quot;operating row text-center linear-g\&amp;quot;&amp;gt;
+        	&amp;lt;li class=\&amp;quot;col-xs-4\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-tags\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;标签&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        	&amp;lt;li class=\&amp;quot;col-xs-4\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-comment\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;回复&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        	&amp;lt;li class=\&amp;quot;col-xs-4\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-heart\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;nbsp;喜欢&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+        &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&amp;quot;;
+var script=&amp;quot;&amp;lt;script&amp;gt;
+function genpro(){
+	var strtxt=document.getElementById(&amp;apos;textstr&amp;apos;).value;
+	var d = new Date();
+	var tim=d.getFullYear()+&amp;apos;-&amp;apos;+d.getMonth()+&amp;apos;-&amp;apos;+d.getDate()+&amp;apos; &amp;apos;+d.getHours()+&amp;apos;:&amp;apos;+d.getMinutes()+&amp;apos;:&amp;apos;+d.getSeconds();
+	var str=&amp;apos;&amp;lt;li class=\&amp;quot;even\&amp;quot;&amp;gt;&amp;apos;;
+	str=str+&amp;apos;&amp;lt;a class=\&amp;quot;user\&amp;quot; href=\&amp;quot;#\&amp;quot;&amp;gt;&amp;lt;img class=\&amp;quot;img-responsive avatar_\&amp;quot; src=\&amp;quot;EAFormBlob.sp?guid=10BF8EF172C7687DE050007F010044C3\&amp;quot; alt=\&amp;quot;\&amp;quot;&amp;gt;&amp;lt;span class=\&amp;quot;user-name\&amp;quot;&amp;gt;灞波儿奔&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt;&amp;apos;;
+	str=str+&amp;apos;&amp;lt;div class=\&amp;quot;reply-content-box\&amp;quot; align=\&amp;quot;right\&amp;quot;&amp;gt;&amp;apos;;
+	str=str+&amp;apos;&amp;lt;span class=\&amp;quot;reply-time\&amp;quot;&amp;gt;&amp;apos;+tim+&amp;apos;&amp;lt;/span&amp;gt;&amp;apos;;
+	str=str+&amp;apos;&amp;lt;div class=\&amp;quot;reply-content pr\&amp;quot;&amp;gt;&amp;apos;;
+	str=str+&amp;apos;&amp;lt;span class=\&amp;quot;arrow\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;apos;;
+	str=str+strtxt;
+	str=str+&amp;apos; &amp;lt;/div&amp;gt;&amp;apos;;
+	str=str+&amp;apos;  &amp;lt;/div&amp;gt;&amp;apos;;
+	str=str+&amp;apos;    &amp;lt;/li&amp;gt;&amp;apos;;
+	document.getElementById(\&amp;apos;mainul\&amp;apos;).innerHTML=document.getElementById(\&amp;apos;mainul\&amp;apos;).innerHTML+str;
+	document.getElementById(&amp;apos;textstr&amp;apos;).value=&amp;apos;&amp;apos;;
+	window.scrollTo(0,9999);
+}
+var SubmitOrHidden = function(evt){   
+	 evt = window.event || evt;    
+	if(evt.keyCode==13){
+	  	genpro(); 
+	 }
+}               
+window.document.onkeydown=SubmitOrHidden;//当有键按下时执行函数
+	$(function(){
+//		/* 
+//		** 不同页面切换转场效果
+//		** $.mobile.changePage (&amp;apos;/test.html&amp;apos;, &amp;apos;slide/pop/fade/slideup/slidedown/flip/none&amp;apos;, false, false);
+//		*/
+		$(&amp;apos;.list-group-item,.menu a&amp;apos;).click(function(){
+			$.mobile.changePage($(this).attr(&amp;apos;href&amp;apos;), {
+				transition : &amp;apos;flip&amp;apos;, //转场效果
+				reverse : true       //默认为false,设置为true时将导致一个反方向的转场
+			});	
+		});
+	});
+&amp;lt;/script&amp;gt;
+&amp;quot;;
+return css+html+script;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

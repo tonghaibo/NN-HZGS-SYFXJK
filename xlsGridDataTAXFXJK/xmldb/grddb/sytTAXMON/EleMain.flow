@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="roundrect_115512" x="23" y="14" width="913" height="434" round="3" stroke="#000000" fill="#FFFFFF" fillto="#EEEEEE" >
+ </rect>
+ <connector id="connector_208_233921" from="rect_233917" to="rect_233918" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_265016" from="rect_233918" to="rhombus_265015" fromcp="23" tocp="21" type="208"  >
+ </connector>
+ <connector id="connector_208_360518" from="rect_233916" to="rhombus_265015" fromcp="12" tocp="32" type="208"  >
+ </connector>
+ <connector id="connector_108_190022" from="1号货柜" to="rect_190016" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_190023" from="1号货柜" to="rect_190019" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_190031" from="rect_190026" to="rect_190026" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_490416" from="rect_74827" to="rect_190026" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_490432" from="rect_190018" to="rect_490421" fromcp="23" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_108_171716" from="rect_190021" to="rect_490427" fromcp="23" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_108_244618" from="rect_224317" to="rect_244617" fromcp="22" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_244619" from="rect_244616" to="rect_224321" fromcp="11" tocp="22" type="108"  >
+ </connector>
+ <connector id="connector_188_244623" from="rect_224316" to="rect_224320" fromcp="22" tocp="22" type="188"  >
+ </connector>
+ <connector id="connector_108_351011" from="rect_190027" to="rect_111825" fromcp="23" tocp="21" type="108"  >
+ </connector>
+ <line id="line_450518" x1="37" y1="52" x2="924" y2="52"  fill="#0000FF" stroke-width="1" stroke="#000000">
+ </line>
+ <text id="text_450519" x="38" y="27" width="264" height="22"   stroke-width="" font-family="" font-size="14" font-color="#000000">【电力数据接口】</text>
+ <connector id="connector_108_553310" from="polygon_222318" to="polygon_512018" fromcp="12" tocp="32" type="108"  >
+ </connector>
+ <connector id="connector_108_144510" from="rect_301520" to="rect_301520" fromcp="21" tocp="21" type="108"  >
+ </connector>
+ <connector id="connector_108_561212" from="polygon_222318" to="polygon_202418" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <rect  id="rect_535510" x="301" y="156" width="83" height="34" stroke="#000000" fill="#B3D9FF" url="show.sp?grdid=EleData" round="15" fillto="#FFFFFF" 属性="">数据导入</rect>
+ <polygon id="card_41612" points="124,99 104,104 104,128 208,128 208,99 124,99" changeto="card" stroke="#000000" fill="#ECECFF" fillto="#FFFFFF"  属性="">桂东电力公司</polygon>
+ <polygon  id="polygon_41613" points="124,139 104,144 104,168 208,168 208,139 124,139 124,139" changeto="card" stroke="#000000" fill="#ECECFF" fillto="#FFFFFF" 属性="">桂源电力公司</polygon>
+ <polygon  id="polygon_581912" points="124,179 104,184 104,208 208,208 208,179 124,179 124,179 124,179" changeto="card" stroke="#000000" fill="#ECECFF" fillto="#FFFFFF" 属性="">平桂电力公司</polygon>
+ <polygon  id="polygon_581913" points="124,219 104,224 104,248 208,248 208,219 124,219 124,219 124,219 124,219" changeto="card" stroke="#000000" fill="#ECECFF" fillto="#FFFFFF" 属性="">钟山电力公司</polygon>
+ <rect id="roundrect_581914" x="444" y="156" width="97" height="35" round="15" stroke="#000000" fill="#FFFFFF" fillto="#FFFFFF"  url="entry.sp?grdid=EleDetail">用电量情况表</rect>
+ <connector id="connector_208_581920" from="rect_535510" to="roundrect_581914" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_108_581921" from="card_41612" to="rect_535510" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_581922" from="polygon_41613" to="rect_535510" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_581923" from="polygon_581912" to="rect_535510" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <connector id="connector_108_581924" from="polygon_581913" to="rect_535510" fromcp="32" tocp="12" type="108"  >
+ </connector>
+ <polygon id="userhand_225922" points="613,142 638,204 689,204 715,142 613,142" changeto="userhand" stroke="#000000" fill="#DDDDDD" fillto=""  url="flow.jsp?flowid=ThanMain.flow&syt=TAXMON">比对系统</polygon>
+ <connector id="connector_208_225923" from="roundrect_581914" to="userhand_225922" fromcp="32" tocp="12" type="208"  >
+ </connector>
+</svg>

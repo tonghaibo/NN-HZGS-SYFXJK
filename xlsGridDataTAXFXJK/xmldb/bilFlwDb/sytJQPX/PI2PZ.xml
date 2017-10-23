@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="GBK"?>
+<dataFlow name="模板" ID="temp">
+	<BilFlw name="生成目标定义">
+		<ROWSET>
+			<ROW name="记录">
+				<DESC name="数据流描述"></DESC>
+				<DESTCLS name="待生成的目标单据">PZ</DESTCLS>
+				<ValFld name="目标单据的字段">TAXMNY</ValFld>
+				<Filter name="数据过滤模式。0:(默认)不处理；1:对itemid相同的明细做分组汇总"></Filter>
+				<MappedMode name="单据映射关系。0:(默认)多源单据对一目标单据映射；1:一对一映射"></MappedMode>
+				<WriteBack name="修改目标单据时，是否回写数据流状态。0:不回写;1(默认):回写"></WriteBack>
+				<SrcHdrFlds name="源单据头的转换">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</SrcHdrFlds>
+				<DestHdrFlds name="目标单据的对应转换字段">SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,NOTE,REFID1,REFNAM1,REFID2,REFNAM2</DestHdrFlds>
+				<OnConvertDtl name="datflwsta表中的一行记录转换到目标单据的xmlds中后发生">//
+  //可用对象:eaContext,usrinf,srchdr,srcdtl(源单据明细),bilhdr(目标单据的单据头)
+  //      bildtl(目标单据的明细),dtlrowno(当前的目标明细行号)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+  //      flwstaidx(当前状态行)
+      	var flw = "";
+  	var srctyp ="";
+  	for(var r=0;r&amp;lt;flwstads.getRowCount();r++){
+  		flw = flwstads.getStringAt(r,"FLW");
+  		srctyp = flwstads.getStringAt(r,"SRCBILTYP");
+  		if(flw=="PIPZ_1123012PZ" &amp;&amp; srctyp=="PZ"){
+  			flwstads.DeleteRow(r);
+  		}
+  	}
+  //end of func</OnConvertDtl>
+				<OnConvert name="所有来源转换到目标单据后，保存到数据库前发生"  >//
+  //可用对象:eaContext,usrinf,srchdr,bilhdr(目标单据的单据头),bildtl(目标单据的明细)
+  //      flwstads(用户选择的数据流状态，包含字段：SRCBILTYP, SRCBIL, SRCBILSEQ,VALLEFT,val2Convert, MEMO1,MEMO2,GUID)
+var pubpack = new JavaPackage("com.xlsgrid.net.pub");
+
+var db = new pubpack.EADatabase();
+var srcbils = "";
+var PIBil = "";
+var PZBil = "";
+var PNmny = 0.0;
+var PNBils = "";
+var PNSUMmny = 0.0;
+var PISUMmny = 0.0;
+var G_JFJE = 0.0;
+var G_DFJE = 0.0;
+var accid = eaContext.getAccid();
+var corpid = srchdr.getStringAt(0,"CORPID");
+var k = 0;
+var PImny = new Array();
+var PIbilids = new Array();
+
+for (var row = 0; row &amp;lt; flwstads.getRowCount(); row++)
+{
+    var srcbiltyp = flwstads.getStringAt(row, "SRCBILTYP");
+    if (srcbiltyp.equals("PI"))
+    {
+        PIBil = flwstads.getStringAt(row, "SRCBIL");        
+        var pos = srcbils.indexOf(PIBil);
+        if (pos == -1){
+	        srcbils = srcbils + "&amp;apos;" + PIBil + "&amp;apos;,";
+        	PImny[k] = 1.00 * flwstads.getStringAt(row, "val2Convert");
+	        PISUMmny += PImny[k];
+        	PIbilids[k] = flwstads.getStringAt(row,"SRCBIL");        
+        	k ++;	
+        }
+        else{
+	        PImny[k-1] += 1.00 * flwstads.getStringAt(row, "val2Convert");
+		PISUMmny += 1.00 * flwstads.getStringAt(row, "val2Convert"); 
+	}       	                
+    }
+    else if (srcbiltyp.equals("PZ"))
+    {
+        PZBil = flwstads.getStringAt(row, "SRCBIL");     
+        var pos = srcbils.indexOf(PZBil);
+        if (pos == -1){
+        	srcbils = srcbils + "&amp;apos;" + PZBil + "&amp;apos;,";
+        	PNBils = PNBils + "&amp;apos;" + PZBil + "&amp;apos;,";
+        	PNmny = 1.00 * flwstads.getStringAt(row, "val2Convert");
+        	PNSUMmny += PNmny;
+        }    
+        else {
+        	PNmny += 1.00 * flwstads.getStringAt(row, "val2Convert");
+        	PNSUMmny += PNmny;
+        }    
+    }
+
+}
+
+//throw new Exception("PImny="+PImny.toString() + " PIbilids=" +PIbilids +" PISUMmny ="+PISUMmny +" PNSUMmny ="+PNSUMmny );
+
+srcbils = srcbils.substring(0, srcbils.length() - 1);
+if (PNBils.length() &amp;gt; 0)
+    PNBils = PNBils.substring(0, PNBils.length() - 1);
+
+//清空目标明细XMLDS		
+bildtl.clearDS();
+var sql = "";
+//检查是否有未定义科目的商品大类
+sql = "select distinct h.bilid,a.itmid from bilhdr h,bildtl a,accitmbind b
+	where h.bilid=a.bilid and h.biltyp=a.biltyp and h.acc=a.acc
+	and a.biltyp=&amp;apos;PI&amp;apos; and a.acc=&amp;apos;"+accid+"&amp;apos; and h.corpid=&amp;apos;"+corpid+"&amp;apos;
+	and substr(a.itmid,0,2)=b.id(+) and b.typ=&amp;apos;PIA&amp;apos;
+	and a.bilid in ("+srcbils+")
+	and b.accitmid is null";
+var chkDs = db.QuerySQL(sql);	
+if (chkDs.getRowCount() &amp;gt; 0){
+    var rowcnt = chkDs.getRowCount();
+    var str = "";
+    //取得BILID,ITMID
+    for (var i=0;i&amp;lt;rowcnt;i++){
+        str += chkDs.getStringAt(i,"BILID") + " - " + chkDs.getStringAt(i,"ITMID") + "\n";
+    }
+    throw new Exception("还有未定义对应财务科目的商品大类，请检查！\n发票号 - 商品编号\n" + str);
+}
+
+//PI采购发票   mny-价税合计；notaxmny-不含税金额；
+//凭证生成业务描述：在收到发票的时候，可以使用预付款去抵消（如果不使用预付款，那么全部用应付账款做冲抵）
+//借方：库存商品，按商品大类来区分库存商品二级科目
+//	所选择的发票的所有商品按大类汇总生成库存商品二级科目的借方数
+//贷方：有2种方式
+//1）	预付款冲抵：如果生成 预付款科目
+//2）	应付账款科目：
+//贷方要按发票核算，即一个发票对应一个凭证的行。备注要写明发票号码
+
+//生成借方库存商品
+	sql = "select c.accitmid accitmid,
+          	d.name name,
+          	c.note||&amp;apos; 发票号：&amp;apos;||a.bilid note,
+          	sum(a.notaxmny) jfje,
+          	0 dfje,
+          	a.bilid
+          from bilhdr h,bildtl a,accitmbind c,accitm d
+          where a.biltyp=&amp;apos;PI&amp;apos; and a.acc=&amp;apos;"+accid+"&amp;apos;
+          and h.bilid=a.bilid and h.biltyp=a.biltyp and h.acc=a.acc
+          and h.corpid=&amp;apos;"+corpid+"&amp;apos;
+          and substr(a.itmid,0,2)=c.id and c.typ=&amp;apos;PIA&amp;apos;
+          and c.accitmid=d.id
+          and a.bilid in ("+srcbils+")
+          group by c.accitmid,d.name,a.bilid,c.note";
+//throw new Exception("Error:"+sql);
+var tmpDs = db.QuerySQL(sql);
+var r = 0;
+if (tmpDs.getRowCount()&amp;lt;=0) throw new Exception("没有数据可生成！请检查财务库存商品对应科目定义。");
+
+bilhdr.setValueAt(0, "REFID1",PIbilids.length()); //附件张数
+bilhdr.setValueAt(0, "DAT",srchdr.getStringAt(0,"DAT") );  //凭证日期为发票的日期
+
+for (var i = 0; i &amp;lt; tmpDs.getRowCount(); i++){
+    var kmid = tmpDs.getStringAt(i,"ACCITMID");  //科目编号
+    var kmname = tmpDs.getStringAt(i,"NAME");     //科目名称
+    var note = tmpDs.getStringAt(i,"NOTE");       //摘要
+    var jfje = tmpDs.getStringAt(i,"JFJE");       //借方金额
+    var dfje = tmpDs.getStringAt(i,"DFJE");       //贷方金额
+    var pibilid = tmpDs.getStringAt(i,"BILID");       //发票号
+    G_JFJE += jfje;
+    r = bildtl.AddNullRow(i - 1);
+    bildtl.setValueAt(r, "ITMID", kmid);
+    bildtl.setValueAt(r, "ITMNAM", kmname);
+    bildtl.setValueAt(r, "REFNAM1", note);
+    bildtl.setValueAt(r, "TAXMNY", jfje);
+    bildtl.setValueAt(r, "MNY", dfje);
+    bildtl.setValueAt(r, "REFID4",pibilid);	//排序用
+}
+var kmid1 = "";
+var kmname1 = "";
+var kmid2 = "";
+var kmname2 = "";
+try{
+    var mysql = "select a.accitmid,b.name accitmnam from accitmbind a,accitm b where a.accitmid=b.id and a.id=&amp;apos;01&amp;apos; and a.typ=&amp;apos;PIB&amp;apos;";
+    var accitmDS = db.QuerySQL(mysql);
+    //预付款科目
+    kmid1 = accitmDS.getStringAt(0,"ACCITMID");
+    kmname1 = accitmDS.getStringAt(0,"ACCITMNAM");
+    //应付款科目
+    mysql = "select a.accitmid,b.name accitmnam from accitmbind a,accitm b where a.accitmid=b.id and a.id=&amp;apos;02&amp;apos; and a.typ=&amp;apos;PIB&amp;apos;";
+    accitmDS = db.QuerySQL(mysql);
+    kmid2 = accitmDS.getStringAt(0,"ACCITMID");
+    kmname2 = accitmDS.getStringAt(0,"ACCITMNAM");
+}
+catch(ex){
+    throw new Exception("获取预付款应付款科目出错，可能是还没有定义该科目！");
+}
+
+var tmprow = 0;		//预付款产生尾差时补平的行
+
+if (PISUMmny * 1.0 &amp;lt; PNSUMmny * 1.0){
+    throw new Exception("生成凭证出错，预付款金额[" + PNSUMmny + "]超过发票的总金额[" + PISUMmny + "]！");
+}
+else if (PISUMmny * 1.0 == PNSUMmny * 1.0){
+    r = bildtl.AddNullRow(r);
+    bildtl.setValueAt(r, "ITMID", kmid1);
+    bildtl.setValueAt(r, "ITMNAM", kmname1);
+    bildtl.setValueAt(r, "MNY", PISUMmny);  //贷方金额
+    G_DFJE += PISUMmny;
+}
+else if (1.00 * PISUMmny &amp;gt; 1.00 * PNSUMmny){
+    //一个发票对应一个凭证的行
+    for (var i=0;i&amp;lt;PIbilids.length();i++){
+      var bpmny = 0;
+      var yfmny = 0;
+      var note = "发票号：" + PIbilids[i];
+      
+      //用预付款冲抵
+      bpmny = pubpack.EAFunc.Round((PImny[i]/PISUMmny) * PNSUMmny,2);
+      yfmny = PImny[i] - bpmny;      
+      if (PNSUMmny &amp;gt; 0 &amp;&amp; bpmny &amp;gt; 0){
+	r = bildtl.AddNullRow(r);
+	tmprow = r;
+	bildtl.setValueAt(r, "ITMID", kmid1);
+	bildtl.setValueAt(r, "ITMNAM", kmname1);
+	bildtl.setValueAt(r, "REFNAM1", note);
+	bildtl.setValueAt(r, "MNY", bpmny);
+	bildtl.setValueAt(r, "REFID4", PIbilids[i]); //排序用
+	G_DFJE += bpmny;
+      }
+      //预付款不足额生成应付款
+      if (yfmny &amp;gt; 0){
+        r = bildtl.AddNullRow(r);
+        bildtl.setValueAt(r, "ITMID", kmid2);
+        bildtl.setValueAt(r, "ITMNAM", kmname2);
+        bildtl.setValueAt(r, "REFNAM1", note);
+        bildtl.setValueAt(r, "MNY", yfmny);
+        bildtl.setValueAt(r, "REFID4", PIbilids[i]); //排序用
+        G_DFJE += yfmny;
+      }
+    }
+}
+
+//补平尾差数
+var wcmny = pubpack.EAFunc.formatDouble(G_JFJE - G_DFJE,2);
+if (wcmny == 0.01){
+    bildtl.setValueAt(tmprow, "MNY", bildtl.getStringAt(tmprow,"MNY")*1.0 + 0.01);
+    G_DFJE += 0.01;
+}
+else if (wcmny == -0.01){
+    bildtl.setValueAt(tmprow, "MNY", bildtl.getStringAt(tmprow,"MNY")*1.0 - 0.01);
+    G_DFJE -= 0.01;
+}
+
+//检查借贷平衡
+if (G_JFJE - G_DFJE != 0){ 
+    throw new Exception("生成凭证借方贷方金额不平，不能生成！借方："+G_JFJE+"贷方："+G_DFJE);
+}
+//设置凭证的子类型
+bilhdr.setValueAt(0, "SUBTYP", "PI");
+bildtl.sort("REFID4");		//按发票号排序
+for (var i = 0; i &amp;lt; bildtl.getRowCount(); i++){
+    bildtl.setValueAt(i,"SUBTYP","PI");
+    //bildtl.setValueAt(i,"REFID4","");
+}
+
+
+  //end of func</OnConvert>
+				<OnDelete name="删除目标单据时发生">//
+  //可用对象:eaContext,_EADB
+  
+  //end of func</OnDelete>
+				<REFID1 NAME="扩展字段REFID1用途">LOCID</REFID1>
+				<REFNAM1 NAME="扩展字段REFNAM1用途">LOCNAM</REFNAM1>
+				<REFID2 NAME="扩展字段REFID2用途">CORPID</REFID2>
+				<REFNAM2 NAME="扩展字段REFNAM2用途">CORPNAM</REFNAM2>
+</ROW>
+</ROWSET>
+</BilFlw>
+	<srcBil name="来源单据信息">
+		<ROWSET>
+			<ROW name="记录">
+				<SRCCLS name="可转换的单据">PI</SRCCLS>
+				<ValFld name="待转换的字段：如果模式＝2，则该字段是单据头字段">NOTAXMNY</ValFld>
+				<ConvertTimes name="数据流可转换的次数：0=(默认)不限制;1=转换一次后关闭(设置endflg＝2)"  ></ConvertTimes>
+				<ValueMod name="数据转换模式:0=(默认)不限制;1=限制大于0;2=限制不大于剩余可转数;3=模式1和2的组合"></ValueMod>
+				<ConvertMod name="单据转换模式:0=明细转换;1=(默认)整单转换;2=仅转换单据头;3=表头部分勾选"></ConvertMod>
+				<where name="datflwsta表的过滤条件"></where>
+				<OnBeforeGenSta name="开始构造datsta前发生，用于单据预处理。">//
+  //可用对象:eaContext,_EADB,bilhdr,bildtl(单据数据集)
+  //如果把bilhdr的BILID或bildtl的ITMID清空，则跳过该单据或明细
+  
+  //end of func</OnBeforeGenSta>
+				<OnGenStaMemo name="构造bilfwsta的备注信息时发生">//
+  //可用对象:sta(0:单据头;1:明细),ds(单据数据集),row(当前行号);
+  //返回MEMO1或MEMO2,如果返回空字符,用默认的说明信息
+  //如果把ds的BILID或ITMID清空，则跳过该单据或明细
+  //如果要保存额外信息到  datflwsta 中,请当sta=0时设置ds的字段,后台处理时回自动保存到
+  //对应的 datflwsta 字段中:
+  //  LOCID  --  REFID1      LOCNAM  --  REFNAM1
+  //  CORPID --  REFID2      CORPNAM --  REFNAM2
+  //  SUBTYP --  SRCSUBTYP
+  
+  //end of func</OnGenStaMemo>
+				<OnUnCkeck name="单据取消审核时发生">//
+  //可用对象:eaContext,_EADB(EADatabase)
+  
+  //end of func</OnUnCkeck>
+</ROW>
+</ROWSET>
+</srcBil>
+</dataFlow>

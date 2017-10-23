@@ -1,0 +1,924 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >IMP_TaxData</MWID><NAME >税务数据导入</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >IMP_TaxData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >数据采集</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >newRow</ID><NAME >新增</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >4</IMG><IMGMOUSE >4</IMGMOUSE><C10 >save</C10><C11 >newRow</C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 >newRow</C15><C16 >newRow</C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="1" ><ID >delRow</ID><NAME >删除</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >2</IMG><IMGMOUSE >2</IMGMOUSE><C10 >runTB</C10><C11 >deleRow</C11><C12 >deleteRow</C12><C13 >deleteRow</C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 >delRow</C17><C18 ></C18></ROW>
+<ROW num="2" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >5</IMG><IMGMOUSE >5</IMGMOUSE><C10 ></C10><C11 >GRDBTNDS_2</C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="3" ><ID >runTB</ID><NAME >采集</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 >GRDBTNDS_3</C11><C12 ></C12><C13 ></C13><C14 >runTB</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+<ROW num="4" ><ID >runTB2HXK</ID><NAME >同步到核心库</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 >runTB2HXK</C16><C17 ></C17><C18 >runTB2HXK</C18></ROW>
+<ROW num="5" ><ID >CKTBQK</ID><NAME >查看同步数据情况</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;8%&amp;quot;);
+	_this.SetToolbarString(&amp;quot;说明：税务数据同步程序在后台每天定时执行，也可以在本模块下手动执行同步操作。&amp;quot;);
+	
+	initParamSheet(sheet);
+	
+	_this.AutoFixScreenWidth();
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	
+	loadData();
+	
+}
+
+function initParamSheet(sheet)
+{
+	var dblinkList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_JSSJSOURCE&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetListValue(dblinkList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,2,dblinkList);
+	_this.SetCellText(1,1,2,&amp;quot;%&amp;quot;);
+	
+	var ownerList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_JSSJUSER&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetListValue(ownerList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,ownerList);
+	_this.SetCellText(1,1,4,&amp;quot;%&amp;quot;);
+	
+	var tbbzList = _this.CreateListValue();
+	_this.SetListValue(tbbzList,&amp;quot;1&amp;quot;,&amp;quot;是&amp;quot;);
+	_this.SetListValue(tbbzList,&amp;quot;0&amp;quot;,&amp;quot;否&amp;quot;);
+	_this.SetListValue(tbbzList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,7,tbbzList);
+	_this.SetCellText(1,1,7,&amp;quot;1&amp;quot;);
+}
+
+function loadData()
+{
+	var dblink = _this.GetCellText(1,1,2);
+	var owner = _this.GetCellText(1,1,4);
+	var tbbz = _this.GetCellText(1,1,7);
+	var skey = _this.GetCellText(1,1,9);
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+	_this.SetFixedRow(0,1);
+	_this.SetColVisible(0,1,-1);
+	_this.SetColVisible(0,2,-1);
+	_this.SetColVisible(0,_this.GetColCount(0)-1,-1);
+	
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetMainCellRange(0,1,2,5,_this.GetColCount(0)-1);
+	
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;DBLINK=&amp;quot;+escape(dblink)+&amp;quot;&amp;OWNER=&amp;quot;+escape(owner)+&amp;quot;&amp;TBBZ=&amp;quot;+escape(tbbz)+&amp;quot;&amp;SKEY=&amp;quot;+skey);
+	_this.SetXmlDS(0,1,2,5,_this.GetColCount(0)-1,xml);
+	//设置勾选列
+	_this.SetToBoolBox(0,0,0);
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,3) != &amp;quot;&amp;quot;) {
+			_this.SetToBoolBox(0,r,0);
+			_this.SetToBoolBox(0,r,8);	
+			_this.SetToBoolBox(0,r,9);	
+			
+			//当天没有同步的标注
+			if (_this.GetCellText(0,r,_this.GetColCount(0)-1) != &amp;quot;0&amp;quot; &amp;&amp; _this.GetCellText(0,r,8) == &amp;quot;1&amp;quot;) {
+				for (var c=0;c&amp;lt;_this.GetColCount(0);c++) {
+					_this.SetCellColor(0,r,c,255,0,0);
+				}
+			}
+		}
+	}
+	//_this.AutoFixColWidth(0,600);
+	_this.AutoFixScreenWidth();
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0) {
+		if (col == 8) _this.SetCellText(sheet,row,1,&amp;quot;*&amp;quot;); //修改标志
+		if (row == 0 &amp;&amp; col == 0) {
+			for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+				_this.SetCellText(0,r,0,newvalue);
+			}
+		}
+	}
+	else if (sheet == 1) {
+		if (row == 1 &amp;&amp; col == 2) {
+			var ownerList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_JSSJUSER&amp;where=dblink=&amp;apos;&amp;quot;+escape(newvalue)+&amp;quot;&amp;apos;&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+			_this.SetListValue(ownerList,&amp;quot;%&amp;quot;,&amp;quot;全部&amp;quot;);
+			_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,4,ownerList);
+			_this.SetCellText(1,1,4,&amp;quot;%&amp;quot;);
+		}
+	}
+}
+
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;查询&amp;quot;) {
+		loadData();
+	}
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == 0 &amp;&amp; row &amp;gt;= _this.GetMainCellRangeRow1(0) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(0)) {
+		var guid = _this.GetCellText(sheet,row,2);
+		var ret = window.showModalDialog(&amp;quot;show.sp?grdid=SJJCPZ&amp;guid=&amp;quot;+guid,window,&amp;quot;scroll:no;status:no;dialogWidth:600px;dialoHeight:300px&amp;quot;);
+		if (ret == &amp;quot;ok&amp;quot;) {
+			//initParamSheet(sheet);
+			loadData();
+		}
+	}
+}
+
+//新增
+function newRow() 
+{
+	var chk = _this.invokeOSFunc(&amp;quot;New&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk != &amp;quot;1&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+	
+	var ret = window.showModalDialog(&amp;quot;show.sp?grdid=SJJCPZ&amp;guid=&amp;quot;,window,&amp;quot;scroll:no;status:no;dialogWidth:600px;dialoHeight:300px&amp;quot;);
+	if (ret == &amp;quot;ok&amp;quot;) {
+		loadData();
+	}
+}
+
+//删除
+function delRow()
+{
+	//权限控制
+	var chk = _this.invokeOSFunc(&amp;quot;Delete&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+
+	if (!confirm(&amp;quot;删除选中记录，是否继续？&amp;quot;)) return;
+	
+	var param = new Object();
+	var xmlstr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\n&amp;lt;ROWSET&amp;gt;\n&amp;quot;;
+	var cnt = 0;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var flag = _this.GetCellText(0,r,0);
+		if (flag == &amp;quot;1&amp;quot;) {
+			cnt ++;
+			xmlstr += &amp;quot;&amp;lt;ROW&amp;gt;&amp;lt;GUID&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/GUID&amp;gt;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	if (cnt == 0) {
+		alert(&amp;quot;没有选中记录！&amp;quot;);
+		return;
+	}
+	
+	try {
+		param.xmlstr = xmlstr;
+		var ret = _this.invokeOSFuncExt(&amp;quot;Delete&amp;quot;,param);
+		alert(ret);
+		loadData();
+	}
+	catch (e) {
+		alert(&amp;quot;删除失败:&amp;quot;+e.toString());
+	}
+
+}
+
+//保存
+function save()
+{
+	//权限控制
+	var chk = _this.invokeOSFunc(&amp;quot;Save&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+
+	
+	var param = new Object();
+	var xmlstr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\n&amp;lt;ROWSET&amp;gt;\n&amp;quot;;
+	var cnt = 0;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var flag = _this.GetCellText(0,r,1);
+		if (flag == &amp;quot;*&amp;quot;) {
+			cnt ++;
+			xmlstr += &amp;quot;&amp;lt;ROW&amp;gt;&amp;lt;GUID&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/GUID&amp;gt;&amp;lt;TBBZ&amp;gt;&amp;quot;+_this.GetCellText(0,r,8)+&amp;quot;&amp;lt;/TBBZ&amp;gt;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	if (cnt == 0) {
+		alert(&amp;quot;没有修改记录！&amp;quot;);
+		return;
+	}
+	
+	try {
+		param.xmlstr = xmlstr;
+		var ret = _this.invokeOSFuncExt(&amp;quot;Save&amp;quot;,param);
+		alert(ret);
+	}
+	catch (e) {
+		alert(&amp;quot;保存失败:&amp;quot;+e.toString());
+	}
+}
+
+//同步
+function runTB()
+{
+	
+	//权限控制
+	var chk = _this.invokeOSFunc(&amp;quot;RunTB&amp;quot;,&amp;quot;&amp;quot;);
+	if (chk == &amp;quot;&amp;quot;) {
+		alert(&amp;quot;对不起，你没有该操作权限！&amp;quot;);
+		return;
+	}
+
+	
+	var param = new Object();
+	var xmlstr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\n&amp;lt;ROWSET&amp;gt;\n&amp;quot;;
+	var cnt = 0;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var flag = _this.GetCellText(0,r,0);
+		if (flag == &amp;quot;1&amp;quot;) {
+			cnt ++;
+			xmlstr += &amp;quot;&amp;lt;ROW&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;GUID&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/GUID&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;TBBZ&amp;gt;&amp;quot;+_this.GetCellText(0,r,8)+&amp;quot;&amp;lt;/TBBZ&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;DBLINK&amp;gt;&amp;quot;+_this.GetCellText(0,r,4)+&amp;quot;&amp;lt;/DBLINK&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;OWNER&amp;gt;&amp;quot;+_this.GetCellText(0,r,5)+&amp;quot;&amp;lt;/OWNER&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;TABLE_NAME&amp;gt;&amp;quot;+_this.GetCellText(0,r,6)+&amp;quot;&amp;lt;/TABLE_NAME&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+
+	if (cnt == 0) {
+		alert(&amp;quot;没有选择同步的表记录！&amp;quot;);
+		return;
+	}
+	if (!confirm(&amp;quot;同步选中的数据表，是否继续？&amp;quot;)) return;
+	
+	try {
+		param.xmlstr = xmlstr;
+		var ret = _this.invokeOSFuncExt(&amp;quot;RunTB&amp;quot;,param);
+		alert(ret);
+		loadData();
+	}
+	catch (e) {
+		alert(&amp;quot;同步出错:&amp;quot;+e.toString());
+	}
+	
+}
+
+//同步到核心库
+function runTB2HXK()
+{
+	var param = new Object();
+	var xmlstr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\n&amp;lt;ROWSET&amp;gt;\n&amp;quot;;
+	var cnt = 0;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		var flag = _this.GetCellText(0,r,0);
+		if (flag == &amp;quot;1&amp;quot;) {
+			cnt ++;
+			xmlstr += &amp;quot;&amp;lt;ROW&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;GUID&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/GUID&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;TBBZ&amp;gt;&amp;quot;+_this.GetCellText(0,r,8)+&amp;quot;&amp;lt;/TBBZ&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;DBLINK&amp;gt;&amp;quot;+_this.GetCellText(0,r,4)+&amp;quot;&amp;lt;/DBLINK&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;OWNER&amp;gt;&amp;quot;+_this.GetCellText(0,r,5)+&amp;quot;&amp;lt;/OWNER&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;TABLE_NAME&amp;gt;&amp;quot;+_this.GetCellText(0,r,6)+&amp;quot;&amp;lt;/TABLE_NAME&amp;gt;\n&amp;quot;;
+			xmlstr += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+		}
+	}
+	xmlstr += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+
+	if (cnt == 0) {
+		alert(&amp;quot;没有选择同步的表记录！&amp;quot;);
+		return;
+	}
+	if (!confirm(&amp;quot;同步所选数据表到核心库，是否继续？&amp;quot;)) return;
+	
+	try {
+		param.xmlstr = xmlstr;
+		var ret = _this.invokeOSFuncExt(&amp;quot;RunToHXK&amp;quot;,param);
+		alert(ret);
+		loadData();
+	}
+	catch (e) {
+		alert(&amp;quot;同步出错:&amp;quot;+e.toString());
+	}
+
+	
+}
+
+//查看
+function CKTBQK()
+{
+	window.open(&amp;quot;show.sp?grdid=SJCJ_QK&amp;quot;);
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+/***************************************************************************************
+//DBLINK的创建语句
+--金税三期查询机
+create database link JS3Q
+  connect to hzcx identified by &amp;quot;hzgs#1234&amp;quot;
+  using &amp;apos;(DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 87.12.74.12)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = gxsthxcx)
+    )
+  )&amp;apos;;
+  
+--ctais查询机
+create database link CTAIS
+  connect to hzcx identified by &amp;quot;hzgs#1234&amp;quot;
+  using &amp;apos;(DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 87.16.16.4)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVICE_NAME = ctais)
+    )
+  )&amp;apos;;    
+  
+--电子抵账查询
+create database link DZDZ
+  connect to dzdzcx_hz identified by &amp;quot;dzdz#hz69&amp;quot;
+  using &amp;apos;(DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 87.16.19.34)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = dzdz)
+    )
+  )&amp;apos;;  
+
+--数据仓库
+create database link GXDW
+  connect to hzgs identified by &amp;quot;hzgs6286&amp;quot;
+  using &amp;apos;(DESCRIPTION =
+    (ADDRESS_LIST =
+      (ADDRESS = (PROTOCOL = TCP)(HOST = 87.16.17.161)(PORT = 1521))
+    )
+    (CONNECT_DATA =
+      (SID = gxdw)
+    )
+  )&amp;apos;; 
+*/
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+
+//保存标志为同步的表信息
+function Save()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		
+		var ds = new pub.EAXmlDS(xmlstr);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var tbbz = ds.getStringAt(i,&amp;quot;TBBZ&amp;quot;);
+			var sql = &amp;quot;update tax_jssjtbb set tbbz=&amp;apos;&amp;quot;+tbbz+&amp;quot;&amp;apos; where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		db.Commit();
+		return &amp;quot;保存成功！更新记录数&amp;quot;+ds.getRowCount();
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//删除表信息
+function Delete()
+{	
+	
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		
+		var ds = new pub.EAXmlDS(xmlstr);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var sql = &amp;quot;delete from tax_jssjtbb where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		db.Commit();
+		return &amp;quot;删除成功！记录数&amp;quot;+ds.getRowCount();
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+//执行同步表的操作
+function RunTB()
+{
+	var CJK_OWNER = &amp;quot;CJ_FXJK&amp;quot;; //风险监控平台采集数据库用户
+	var db = null;					
+	var tb_note = &amp;quot;成功&amp;quot;; //采集结果说明
+				
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		var ds = null;
+		
+		//如果不是界面传入同步的参数，那么就是后台任务执行的
+		if (xmlstr == &amp;quot;&amp;quot;) {
+			sql = &amp;quot;select * from tax_jssjtbb where tbbz=&amp;apos;1&amp;apos; order by tbxh,owner,table_name&amp;quot;;
+			ds = db.QuerySQL(sql);
+		}
+		else {
+			ds = new pub.EAXmlDS(xmlstr);
+		}
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			tb_note = &amp;quot;成功&amp;quot;; //采集结果说明
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var tbbz = ds.getStringAt(i,&amp;quot;TBBZ&amp;quot;);
+			var dblink = ds.getStringAt(i,&amp;quot;DBLINK&amp;quot;);
+			var owner = ds.getStringAt(i,&amp;quot;OWNER&amp;quot;);
+			var table_name = ds.getStringAt(i,&amp;quot;TABLE_NAME&amp;quot;);
+			var sourceTable = owner + &amp;quot;.&amp;quot; + table_name + &amp;quot;@&amp;quot; + dblink;
+			var tabds = db.QuerySQL(&amp;quot;select * from tax_jssjtbb where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;);
+			var zlbz = tabds.getStringAt(0,&amp;quot;ZLBZ&amp;quot;);
+			var zlwherestr = tabds.getStringAt(0,&amp;quot;WHERESTR&amp;quot;);
+			
+			var start_time = db.GetSQL(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) from dual&amp;quot;); //同步开始时间
+			var tb_jls = 0; //同步记录数
+				
+			if (tbbz == &amp;quot;1&amp;quot;) {
+				try {
+					try { sql = &amp;quot;alter table &amp;quot; + CJK_OWNER + &amp;quot;.&amp;quot; + table_name + &amp;quot; nologging&amp;quot;;
+					  db.ExcecutSQL(sql);
+					} catch(e) {}
+					
+					//检查采集库里是否已经建有表
+					var chktab = checkTableExists(db,CJK_OWNER,table_name);
+					//如果表存在，则删除记录后再插入
+					if (chktab == 1 &amp;&amp; zlbz != &amp;quot;1&amp;quot;) {
+						sql = &amp;quot;drop table &amp;quot; + CJK_OWNER + &amp;quot;.&amp;quot; + table_name;
+						db.ExcecutSQL(sql);
+						
+						sql = &amp;quot;create table &amp;quot; + CJK_OWNER + &amp;quot;.&amp;quot; + table_name + &amp;quot; as select * from &amp;quot; + sourceTable + &amp;quot; where 1&amp;gt;2&amp;quot;;
+						db.ExcecutSQL(sql);
+
+					}				
+										
+					//从金税三期数据库同步数据
+					if (chktab != &amp;quot;1&amp;quot;) {
+						sql = &amp;quot;create table &amp;quot; + CJK_OWNER + &amp;quot;.&amp;quot; + table_name + &amp;quot; as select * from &amp;quot; + sourceTable + &amp;quot; where 1&amp;gt;2&amp;quot;;
+						db.ExcecutSQL(sql);
+					}
+					
+					//抓取数据的过滤条件（只抓贺州的数据）
+					var wherestr = &amp;quot;&amp;quot;; 
+					var filterstr = &amp;quot;&amp;quot;;
+					var chktabcols = checkTableHasColumn(db,CJK_OWNER,table_name,&amp;quot;SJGSDQ&amp;quot;); //SJGSDQ数据归属地区
+					if (chktabcols == 1) {
+//						chktabcols = checkTableHasColumn(db,CJK_OWNER,table_name,&amp;quot;DJXH&amp;quot;); //DJXH纳税人登记序号
+//						if (chktabcols == 1) {
+//							if (filterstr == &amp;quot;&amp;quot;) filterstr += &amp;quot; ( SJGSDQ like &amp;apos;14511%&amp;apos; or djxh in (select djxh from hx_dj.dj_nsrxx@js3q where zgswj_dm like &amp;apos;14511%&amp;apos;) ) &amp;quot;;
+//							else filterstr += &amp;quot; or ( SJGSDQ like &amp;apos;14511%&amp;apos; or djxh in (select djxh from hx_dj.dj_nsrxx@js3q where zgswj_dm like &amp;apos;14511%&amp;apos;) ) &amp;quot;;
+//						}
+//						else {
+							if (filterstr == &amp;quot;&amp;quot;) filterstr += &amp;quot; SJGSDQ like &amp;apos;14511%&amp;apos;&amp;quot;;
+							else filterstr += &amp;quot; or SJGSDQ like &amp;apos;14511%&amp;apos;&amp;quot;;
+//						}
+					}
+					chktabcols = checkTableHasColumn(db,CJK_OWNER,table_name,&amp;quot;ZGSWSKFJ_DM&amp;quot;); //ZGSWSKFJ_DM主管税务所科分局
+					if (chktabcols == 1) {
+						if (filterstr == &amp;quot;&amp;quot;) filterstr += &amp;quot; ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;;
+						else filterstr += &amp;quot; or ZGSWSKFJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;;
+					}
+					chktabcols = checkTableHasColumn(db,CJK_OWNER,table_name,&amp;quot;ZGSWJ_DM&amp;quot;); //ZGSWJ_DM 主管税务机构
+					if (chktabcols == 1) {
+						if (filterstr == &amp;quot;&amp;quot;) filterstr += &amp;quot; ZGSWJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;;
+						else filterstr += &amp;quot; or ZGSWJ_DM like &amp;apos;14511%&amp;apos;&amp;quot;;
+					}
+					
+					if (filterstr != &amp;quot;&amp;quot;) {
+						wherestr = &amp;quot; and ( &amp;quot; + filterstr + &amp;quot; ) &amp;quot;;
+					}
+					////////
+					
+					sql = &amp;quot;insert into &amp;quot;+ CJK_OWNER + &amp;quot;.&amp;quot; + table_name + &amp;quot; select * from &amp;quot; + sourceTable;
+					if (wherestr != &amp;quot;&amp;quot;) sql += &amp;quot; where 1=1 &amp;quot; + wherestr;
+					//增量同步模式下的条件
+					if (zlbz == &amp;quot;1&amp;quot;) {
+						if (wherestr != &amp;quot;&amp;quot;) sql += &amp;quot; and ( &amp;quot; + zlwherestr + &amp;quot; )&amp;quot;;
+						else sql += &amp;quot; where ( &amp;quot; + zlwherestr + &amp;quot; )&amp;quot;;
+
+						//先删除再同步
+						var delsql = &amp;quot;delete from &amp;quot; + CJK_OWNER + &amp;quot;.&amp;quot; + table_name + &amp;quot; where 1=1 &amp;quot; + wherestr + &amp;quot; and (&amp;quot;+zlwherestr+&amp;quot;)&amp;quot;;
+						db.ExcecutSQL(delsql);
+
+					}
+					
+					//throw new Exception(sql);
+					tb_jls = db.ExcecutSQL(sql);
+					
+				} catch (e) {
+					tb_note = pub.EAFunc.Replace(e.toString(),&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;apos;&amp;quot;);
+					pub.EAFunc.Log(&amp;quot;采集:table_name=&amp;quot;+table_name+&amp;quot; 出错=&amp;quot;+e.toString());						
+				}
+				finally {
+					try {sql = &amp;quot;alter table &amp;quot; + CJK_OWNER + &amp;quot;.&amp;quot; + table_name + &amp;quot; logging&amp;quot;;
+					db.ExcecutSQL(sql);
+					} catch(e) {}
+				}
+				
+				//写同步日志
+				sql = &amp;quot;insert into tax_jssjtb_log(guid,dblink,owner,table_name,tb_start_time,tb_end_time,tb_jls,tb_note)
+				  values(sys_guid(),&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,to_date(&amp;apos;%s&amp;apos;,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;),sysdate,&amp;apos;%s&amp;apos;,substr(&amp;apos;%s&amp;apos;,0,1000))&amp;quot;
+				  .format([dblink,owner,table_name,start_time,&amp;quot;&amp;quot;+tb_jls,tb_note]);
+				pub.EADbTool.ExcecutSQL(sql);
+				
+				//每同步一个表进行一次事务提交
+				db.Commit();
+				db = new pub.EADatabase();
+		
+			}
+		}
+		
+		db.Commit();
+		
+		//后台程序自动同步到核心库
+		var hxret = &amp;quot;&amp;quot;;
+		if (xmlstr == &amp;quot;&amp;quot;) {
+			hxret = &amp;quot;  &amp;gt;&amp;gt;&amp;gt;&amp;quot; + RunToHXK();
+		}
+		if (tb_note == &amp;quot;成功&amp;quot;) {
+			return &amp;quot;数据采集成功！更新记录数&amp;quot;+ds.getRowCount() + hxret;
+		}
+		return &amp;quot;数据采集失败：&amp;quot;+tb_note;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//检查用户数据库里表是否存在
+function checkTableExists(db,owner,table_name)
+{
+	try {
+		var sql = &amp;quot;select count(*) from dba_tables where owner=upper(&amp;apos;&amp;quot;+owner+&amp;quot;&amp;apos;) and table_name=upper(&amp;apos;&amp;quot;+table_name+&amp;quot;&amp;apos;)&amp;quot;;
+		var cnt = db.GetSQL(sql);
+		if (cnt &amp;gt; 0) return 1;
+	}
+	catch (e) {
+		return 0;
+	}
+	return 0;
+}
+
+//检查表中是否含有某列
+function checkTableHasColumn(db,owner,table_name,col_name)
+{
+	try {
+		var sql = &amp;quot;select count(*) from dba_tab_columns where owner=upper(&amp;apos;&amp;quot;+owner+&amp;quot;&amp;apos;) and table_name=upper(&amp;apos;&amp;quot;+table_name+&amp;quot;&amp;apos;) and column_name=upper(&amp;apos;&amp;quot;+col_name+&amp;quot;&amp;apos;)&amp;quot;;
+		var cnt = db.GetSQL(sql);
+		if (cnt &amp;gt; 0) return 1;
+	}
+	catch (e) {
+		return 0;
+	}
+	return 0;
+}
+
+//执行同步到核心库的操作
+function RunToHXK()
+{
+	var CJK_OWNER = &amp;quot;CJ_FXJK&amp;quot;; //风险监控平台采集数据库用户
+	var db = null;
+	var tbxmlstr  = &amp;quot;&amp;quot;;
+	try { tbxmlstr = xmlstr; } catch (e) { }
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		var ds = null;
+		
+		//如果不是界面传入同步的参数，那么就是后台任务执行的
+		if (tbxmlstr == &amp;quot;&amp;quot;) {
+			sql = &amp;quot;select a.* from tax_jssjtbb a,tax_jssjtb_log b
+				where a.tbbz=&amp;apos;1&amp;apos; 
+				  and a.owner=b.owner
+				  and a.table_name=b.table_name
+				  and a.dblink=b.dblink
+				  and to_char(tb_end_time,&amp;apos;yyyymmdd&amp;apos;)=to_char(sysdate,&amp;apos;yyyymmdd&amp;apos;)
+				  and tb_note=&amp;apos;成功&amp;apos;
+				order by a.tbxh,a.owner,a.table_name&amp;quot;;
+			ds = db.QuerySQL(sql);
+		}
+		else {
+			ds = new pub.EAXmlDS(tbxmlstr);
+		}
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var guid = ds.getStringAt(i,&amp;quot;GUID&amp;quot;);
+			var tbbz = ds.getStringAt(i,&amp;quot;TBBZ&amp;quot;);
+			var dblink = ds.getStringAt(i,&amp;quot;DBLINK&amp;quot;);
+			var owner = ds.getStringAt(i,&amp;quot;OWNER&amp;quot;);
+			var table_name = ds.getStringAt(i,&amp;quot;TABLE_NAME&amp;quot;);
+			var sourceTable = CJK_OWNER + &amp;quot;.&amp;quot; + table_name;
+			var tabds = db.QuerySQL(&amp;quot;select * from tax_jssjtbb where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;);
+			var zlbz = tabds.getStringAt(0,&amp;quot;ZLBZ&amp;quot;);
+			var zlwherestr = tabds.getStringAt(0,&amp;quot;WHERESTR&amp;quot;);
+			
+			if (tbbz == &amp;quot;1&amp;quot;) {
+				//检查采集库里是否已经建有表
+				var chktab = checkTableExists(db,&amp;quot;HX_FXJK&amp;quot;,table_name);
+				//如果表存在，则删除记录后再插入
+				var tabrows = 0;				
+				var tb_note2 = &amp;quot;&amp;quot;; //同步结果说明				
+				if (chktab == 1) {
+					sql = &amp;quot;select count(*) from &amp;quot; + sourceTable;
+					tabrows = db.GetSQL(sql);	
+					tb_note2 = &amp;quot;成功[&amp;quot;+tabrows+&amp;quot;]&amp;quot;;				
+					if (tabrows &amp;gt; 0) {
+						var start_time = db.GetSQL(&amp;quot;select to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) from dual&amp;quot;); //同步开始时间
+						try {
+							sql = &amp;quot;alter table &amp;quot; + table_name + &amp;quot; nologging&amp;quot;;
+							db.ExcecutSQL(sql);
+							
+							//从采集数据库同步数据到核心库
+							if (zlbz != &amp;quot;1&amp;quot;) { //全增量模式
+//								sql = &amp;quot;drop table &amp;quot; + table_name;
+//								db.ExcecutSQL(sql);
+//								sql = &amp;quot;create table &amp;quot; + table_name + &amp;quot; as select * from &amp;quot; + sourceTable;
+//								db.ExcecutSQL(sql);
+								
+								sql = &amp;quot;truncate table &amp;quot; + table_name;
+								db.ExcecutSQL(sql);
+								sql = &amp;quot;insert into &amp;quot; + table_name + &amp;quot; select * from &amp;quot; + sourceTable;
+								db.ExcecutSQL(sql);
+
+							}
+							else if (zlbz == &amp;quot;1&amp;quot;) { //增量模式
+								//先删除再同步
+								var delsql = &amp;quot;delete from &amp;quot; + table_name + &amp;quot; where (&amp;quot;+zlwherestr+&amp;quot;)&amp;quot;;
+								db.ExcecutSQL(delsql);
+								sql = &amp;quot;insert into &amp;quot; + table_name + &amp;quot; select * from &amp;quot; + sourceTable + &amp;quot; where (&amp;quot;+zlwherestr+&amp;quot;)&amp;quot;;
+								db.ExcecutSQL(sql);	
+								tabrows = db.GetSQL(&amp;quot;select count(1) from &amp;quot; + table_name + &amp;quot; where (&amp;quot;+zlwherestr+&amp;quot;)&amp;quot;);
+								tb_note2 = &amp;quot;成功[&amp;quot;+tabrows+&amp;quot;]&amp;quot;;								
+							}
+						} catch (e) {
+							tb_note2 = pub.EAFunc.Replace(e.toString(),&amp;quot;&amp;apos;&amp;quot;,&amp;quot;&amp;apos;&amp;apos;&amp;quot;);							
+							pub.EAFunc.Log(&amp;quot;同步到核心库:table_name=&amp;quot;+table_name+&amp;quot; 出错=&amp;quot;+e.toString());							
+						}	
+						finally {
+							sql = &amp;quot;alter table &amp;quot; + table_name + &amp;quot; logging&amp;quot;;
+							db.ExcecutSQL(sql);
+						}					
+					}					
+				}
+				else {
+					sql = &amp;quot;create table &amp;quot; + table_name + &amp;quot; as select * from &amp;quot; + sourceTable;
+					db.ExcecutSQL(sql);
+				}		
+				
+				//写同步日志
+				sql = &amp;quot;update tax_jssjtb_log set tb_note2=&amp;apos;&amp;quot;+tb_note2+&amp;quot;&amp;apos;||&amp;apos; &amp;apos;||to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) 
+					where guid=(select guid from (select * from tax_jssjtb_log 
+						where upper(table_name)=upper(&amp;apos;&amp;quot;+table_name+&amp;quot;&amp;apos;) order by tb_end_time desc) where rownum=1)&amp;quot;;
+				pub.EADbTool.ExcecutSQL(sql);		
+								
+			}
+			
+			//每同步一个表进行一次事务提交
+			db.Commit();
+			db = new pub.EADatabase();
+
+		}
+		
+		db.Commit();
+		
+		if (xmlstr == &amp;quot;&amp;quot;) {
+			//同步到核心库后需要特殊处理的
+			updateTaxCompany();
+			genTaxData();
+			updateGbCompclass();
+		}
+		
+		return &amp;quot;同步到核心库成功！&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//纳税人基本信息表的处理
+function updateTaxCompany()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		
+		//2013.11.29
+		//sql = &amp;quot;delete from tax_company&amp;quot;;
+		//db.ExcecutSQL(sql);
+		
+		//更新主管税务机关所科分局、税管员
+		sql = &amp;quot;update /*+ BYPASS_UJVC*/(
+			select a.id,a.name,a.swjg_dm,b.zgswskfj_dm,a.taxman,b.SSGLY_DM
+			from tax_company a,dj_nsrxx b
+			where a.djxh=b.djxh
+			) set swjg_dm=trim(zgswskfj_dm),taxman=trim(SSGLY_DM)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;insert into tax_company (djxh,id,name,typ,taxman,lawman,addr,stat,flag,SWJG_DM,hy_dm)
+			  select djxh,nsrsbh,nsrmc,typ,SSGLY_DM,FDDBRXM,scjydz,nsrzt_dm,flag,swjg_dm,hy_dm from ( 
+			    select t.*,row_number() over (partition by nsrsbh order by nsrsbh) rn from (     
+			    select to_char(a.djxh) djxh,a.nsrsbh,a.nsrmc,a.djzclx_dm typ,trim(SSGLY_DM) SSGLY_DM,FDDBRXM,scjydz,
+			      nsrzt_dm,GDSLX_DM flag,trim(a.zgswskfj_dm) swjg_dm,hy_dm
+			    from dj_nsrxx a,dj_nsrxx_kz b
+			    where a.djxh=b.djxh(+) 
+			    and (a.nsrsbh) not in (select id from tax_company)
+			    ) t
+			  ) where rn=1&amp;quot;;
+		db.ExcecutSQL(sql);
+
+		//国标行业名称
+		sql = &amp;quot;update tax_company a set hy_mc=(select hymc from dm_gy_hy b where a.hy_dm=b.hy_dm)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		try {
+			//行业 明细行业
+			sql = &amp;quot;update tax_company a set (hycode,hymx_dm)=(select qysbh,hymx_dm from dj_nsrxx_kz@taxdb b where a.id=b.nsrsbh)
+				where a.id in (select nsrsbh from dj_nsrxx_kz@taxdb)&amp;quot;;
+			//db.ExcecutSQL(sql);
+			//个性化行业
+			sql = &amp;quot;update tax_company a set typclsid=(select max(id) from tax_compclass b
+			           where nvl(a.hycode,&amp;apos;%&amp;apos;) like &amp;apos;%&amp;apos;||b.hycode||&amp;apos;%&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+		
+		}
+		catch(ee) { }
+		
+		//一般纳税人标志
+		sql = &amp;quot;update tax_company a set ytaxman=0&amp;quot;;
+		db.ExcecutSQL(sql);
+		sql = &amp;quot;update tax_company a set ytaxman=1 where djxh in (select djxh from v_tax_ybnsr_djxx)&amp;quot;;
+		db.ExcecutSQL(sql);			
+
+		db.Commit();
+		return &amp;quot;纳税人基本信息表更新成功！&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+//生成税务数据表 sb_sbxx -&amp;gt; tax_taxdata
+function genTaxData()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;delete from tax_taxdata where yymm&amp;gt;=to_char(sysdate-1,&amp;apos;YYYY-MM&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;insert into tax_taxdata(yymm,id,name,somny,taxmny,sdtaxmny,org,djxh)
+			select yymm,id,name,somny,taxmny,sdtaxmny,org,djxh 
+			from v_tax_taxdata
+			where yymm&amp;gt;=to_char(sysdate-1,&amp;apos;YYYY-MM&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+
+		db.Commit();
+		return &amp;quot;生成税务表数据成功！&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+//国标行业税负表
+function updateGbCompclass()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;select count(*) from tax_gbcompclass where year=to_char(sysdate,&amp;apos;YYYY&amp;apos;)&amp;quot;;
+		if (1*db.GetSQL(sql) &amp;lt;= 0) {
+			sql = &amp;quot;insert into tax_gbcompclass(id,name,tax,avgsale,envload,se_ybnsr,se_xgm,env,year)
+				select id,name,tax,avgsale,envload,se_ybnsr,se_xgm,env,to_char(sysdate,&amp;apos;YYYY&amp;apos;) year
+				from tax_gbcompclass
+				where year=to_char(sysdate,&amp;apos;YYYY&amp;apos;)-1&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+		
+		//只取小类的
+		sql = &amp;quot;insert into tax_gbcompclass(id,name,year)
+			select hy_dm,hymc,to_char(sysdate,&amp;apos;yyyy&amp;apos;) yyyy 
+			from DM_GY_HY where hy_dm not in (select id from tax_gbcompclass where year=to_char(sysdate,&amp;apos;yyyy&amp;apos;))
+			and xlbz=&amp;apos;Y&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		sql = &amp;quot;update tax_gbcompclass a set name=(select hymc from DM_GY_HY b where a.id=b.hy_dm)
+			where a.year=to_char(sysdate,&amp;apos;YYYY&amp;apos;)&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		db.Commit();
+		return &amp;quot;生成国标行业税负表数据成功！&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function New()
+{
+	return 1;
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select guid,rownum,
+       dblink,
+       owner,
+       table_name,
+       table_common,
+       tbbz,
+       zlbz,
+       to_char(tb_start_time,&amp;apos;yyyy/mm/dd hh24:mi:ss&amp;apos;) tb_start_time,
+       tb_jls,
+       tb_hs,
+       tb_note,
+       tb_note2,
+       trunc(tb_start_time)-trunc(sysdate) tberr
+from (       
+select a.guid,a.dblink,a.owner,a.table_name,a.table_common,a.tbbz,a.zlbz,
+  b.tb_start_time,b.tb_end_time,b.tb_jls,
+  ceil(24*60*60*(tb_end_time-b.tb_start_time)) tb_hs,
+  b.tb_note,b.tb_note2
+from tax_jssjtbb a,(
+     select * from (select t.*,row_number() over (partition by dblink,owner,table_name order by dblink,owner,table_name,tb_start_time desc) rn 
+        from tax_jssjtb_log t) where rn=1
+   ) b
+where a.dblink=b.dblink(+) and a.owner=b.owner(+) and a.table_name=b.table_name(+)
+  and a.dblink like &amp;apos;[%DBLINK]%&amp;apos;
+  and a.owner like &amp;apos;[%OWNER]%&amp;apos;
+  and nvl(a.tbbz,&amp;apos;0&amp;apos;) like &amp;apos;[%TBBZ]&amp;apos;
+  and (upper(a.table_name) like upper(&amp;apos;%[%SKEY]%&amp;apos;)
+       or a.table_common like &amp;apos;%[%SKEY]%&amp;apos;
+  )
+order by a.tbxh,a.owner,a.table_name
+) t</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13><C14 >MAIN</C14><C15 >MAIN</C15><C16 >MAIN</C16><C17 >MAIN</C17><C18 >MAIN</C18></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

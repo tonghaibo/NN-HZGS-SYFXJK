@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >PCCHECK_CWJL</MWID><NAME >财务经理审批45</NAME><NOTE ></NOTE><NOACCNAME >1</NOACCNAME><FILE >PCCHECK_CWJL.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >PCCHECK_EXT</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE >1=1</WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >FERP</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,1</ID><CELLID ></CELLID><NAME >财务经理意见</NAME><VALFLD >CWJLNOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="1" ><ID >0,12,2</ID><CELLID ></CELLID><NAME >财务经理编号</NAME><VALFLD >CWJLID</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD >CWJLNAM</FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="2" ><ID >0,13,2</ID><CELLID ></CELLID><NAME >财务经理审批日期</NAME><VALFLD >CWJLDAY</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+</ROWSET>
+</grdcelds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	  _this.SetCellText(sheet,12,2,G_USRID);
+	  _this.SetCellShowText(sheet,12,2,G_USRNAM);
+
+  _sql.querytods(&amp;quot;Date&amp;quot;);
+  _this.SetCellText(sheet,13,2,_this.XMLDS_GetStringAt(0,0));
+   if(actionid==&amp;quot;45&amp;quot; ){
+   	_this.SetCellText(sheet,3,1,&amp;quot;同意&amp;quot;); 
+   	var param = new Object();
+	param.acc = G_ACCID;
+	param.guid = guid;
+   	invokeOSFuncExt(&amp;quot;Gen&amp;quot;,param);
+   }
+   _this.SetCellBkColor(0,-1,-1,255,255,255);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+function Gen()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	try
+	{
+		db = new pubpack.EADatabase();
+		sql=&amp;quot;update bilhdr set refnam6=&amp;apos;&amp;apos; where acc=&amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; and guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;			
+		db.ExcecutSQL(sql);
+		db.Commit();
+	}
+	catch(e)
+	{
+		db.Rollback();
+		throw new pubpack.EAException(e.toString());
+	}
+	finally
+	{
+		if(db != null)
+			db.Close();
+	}
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >SELROLUSR</ID><NAME ></NAME><DATDSC >select ctusr,ctusrnam 
+  from usrrolmodify 
+ where usrid = &amp;apos;[%ROLUSR]&amp;apos;
+   and ROLFLAG = &amp;apos;已授权&amp;apos; 
+   and stat = &amp;apos;2&amp;apos; 
+   and rolid = (select distinct id from param where typ = &amp;apos;ROLDELL&amp;apos; and name = &amp;apos;分管部经理&amp;apos;)</DATDSC><C4 >SELROLUSR</C4></ROW>
+<ROW num="1" ><ID >Date</ID><NAME ></NAME><DATDSC >select to_char(sysdate,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;)  from dual</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >DesignSelectBindValue</MWID><NAME >中间件设计器选择绑定数据项</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >DesignSelectBindValue.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><WIDTHMOD >0</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >table_name</ID><NAME >表名称</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP >如果表名称非空，从数据库中选择</TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >table_name</C13></ROW>
+<ROW num="1" ><ID >connid</ID><NAME >数据库连接ID</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >10</NROW><NCOL >4</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >0,1,0</C16></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetMainCellRange(0,1,0,10,3);
+	_this.SetCellBkColor(0,-1,-1,255,255,255);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW );  
+//	_this.ShowToolBar(0);
+	window.document.body.title = &amp;quot;选择绑定数据项&amp;quot; ;
+	// 如果table_name 非空
+	if ( table_name == &amp;quot;&amp;quot; ) {
+		LoadNotFromDB (0);
+	}
+	_this.SetColVisible(0,0,0);	
+	_this.SetColVisible(0,1,0);
+
+	
+}
+// 从内存结构中取
+function LoadNotFromDB (sheet) 
+{
+　var dat = window.dialogArguments[0];//opener.inspector
+  var secs = window.dialogArguments[1]; 
+  var XmlDsIDs = window.dialogArguments[2]; 
+
+  var row=0;
+  for(var d=secs.length;d&amp;gt;=0;d--)
+  {
+      var xmldsid = XmlDsIDs[secs[d]];
+      dat.XMLDS_SetCurrentDsID( xmldsid );
+      
+      var cols = dat.XMLDS_GetColumnCount();
+      for(var i=cols-1;i&amp;gt;=0;i--)
+      {
+        var txt = dat.XMLDS_GetStringAt(0,i);
+        if(!!txt)
+        {
+          var checked = txt.charAt(0);
+          if(checked==&amp;quot;1&amp;quot;)
+          {
+            if ( row &amp;gt;= 10 ) 
+               _this.AppendRow(sheet,_this.GetRowCount(sheet)-1);
+            txt = txt.substr(1);
+            _this.SetCellText(sheet,row+1,0,xmldsid);
+            _this.SetCellText(sheet,row+1,1,i);
+            _this.SetCellText(sheet,row+1,3,txt);
+            _this.SetCellText(sheet,row+1,2,dat.XMLDS_GetColumnName(i));
+            row ++ ;
+          }
+        }
+      }
+  }
+
+  _this.SetCurrentSheet(sheet);
+
+}
+
+
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if ( row &amp;gt;=1 ) {
+		window.returnValue=_this.GetCellText(sheet,row,2)+&amp;quot;～&amp;quot;+_this.GetCellText(sheet,row,3)
+		window.close();  
+	}
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select &amp;apos;&amp;apos; dsid,&amp;apos;&amp;apos; seqid,a.COLUMN_NAME COLUMN_NAME,b.COMMENTS COMMENTS
+from user_tab_columns a,user_col_comments b
+where a.Table_Name=b.Table_Name(+) and a.column_name=b.column_name(+) 
+and b.table_name=UPPER(&amp;apos;[%table_name]&amp;apos;) ORDER BY a.COLUMN_ID</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

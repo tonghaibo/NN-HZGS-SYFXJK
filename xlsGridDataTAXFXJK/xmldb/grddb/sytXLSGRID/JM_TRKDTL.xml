@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >JM_TRKDTL</MWID><NAME >处理意见</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >JM_TRKDTL.zxg</FILE><SCENE >10</SCENE><FIXED >2,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><CELLID >title</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="1" ><ID >0,4,0</ID><CELLID >pro_note</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+<ROW num="2" ><ID >0,5,0</ID><CELLID >guid</CELLID><NAME ></NAME><VALFLD ></VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY ></IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD></ROW>
+</ROWSET>
+</grdcelds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><ACTTYP >2</ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD >0</BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >save</C10><C11 >save</C11><C12 >save</C12><C13 >save</C13></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >GUID</ID><NAME >事务GUID</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >TRKID</C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN,0,0</DSKEY><NROW ></NROW><NCOL ></NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 ></C17></ROW>
+<ROW num="1" ><ID >0,4,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN,0,1</DSKEY><NROW ></NROW><NCOL ></NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 ></C17></ROW>
+<ROW num="2" ><ID >0,5,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN,0,2</DSKEY><NROW ></NROW><NCOL ></NCOL><URL ></URL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C17 >0,5,0</C17></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var web = new JavaPackage(&amp;quot;com.xlsgrid.net.web&amp;quot;);
+
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var func = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;func&amp;quot;),&amp;quot;&amp;quot;);
+      var data = pubpack.EAFunc.NVL(request.getParameter(&amp;quot;_this&amp;quot;),&amp;quot;&amp;quot;);
+      var usr = web.EASession.GetLoginInfo(request);
+      var usrid = usr.getUsrid();
+      var accid = usr.getAccid();
+      var sytid = usr.getSytid();
+      var orgid = usr.getOrgid();
+      var db = null;
+      var sql = &amp;quot;&amp;quot;;
+      var ret= &amp;quot;&amp;quot;;
+      var out = response.getOutputStream();
+      response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+      try {
+            db = new pubpack.EADatabase();	
+            
+            if (func == &amp;quot;save&amp;quot;){
+		var title = pubpack.EAJ2meUtil.getDataByCellid(data,&amp;quot;title&amp;quot;);
+		var pro_note = pubpack.EAJ2meUtil.getDataByCellid(data,&amp;quot;pro_note&amp;quot;);
+		var guid = pubpack.EAJ2meUtil.getDataByCellid(data,&amp;quot;guid&amp;quot;);
+		//插入事务处理意见表
+		sql = &amp;quot;insert into trkdtl(trkguid,pro_note,tousr,style,crtusrorg,crtusr,result,project,id,title,syt,selforg,acc,aimorg)
+			select guid,&amp;apos;%s&amp;apos;,crtusr,&amp;apos;2&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;1&amp;apos;,project,id,title,syt,&amp;apos;%s&amp;apos;,acc,aimorg 
+			from trkhdr where guid=&amp;apos;%s&amp;apos;&amp;quot;.format([pro_note,orgid,usrid,orgid,guid]);
+//               	ret = data + &amp;quot;###&amp;quot; + sql;
+               	db.ExcecutSQL(sql);
+               	//更新事务状态
+               	sql = &amp;quot;update trkhdr set stat=&amp;apos;2&amp;apos; where guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;&amp;quot;;
+               	db.ExcecutSQL(sql);
+               	ret = &amp;quot;事务处理意见已提交！&amp;quot;;
+		db.Commit();
+            }
+      }
+      catch ( ee ) {
+            db.Rollback();
+            return &amp;quot;保存出错：&amp;quot;+ee.toString();
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      out.println( ret );      
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select a.title,b.pro_note,a.guid 
+from trkhdr a,trkdtl b
+where a.acc=b.acc(+) and a.id=b.id(+) and a.guid=&amp;apos;[%GUID]&amp;apos;
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

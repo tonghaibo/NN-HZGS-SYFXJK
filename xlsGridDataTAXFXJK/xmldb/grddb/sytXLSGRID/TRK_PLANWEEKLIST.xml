@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >TRK_PLANWEEKLIST</MWID><NAME >项目周计划报表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TRK_PLANWEEKLIST.zxg</FILE><SCENE ></SCENE><FIXED >3,2</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >prj</ID><NAME >所属项目</NAME><NOTNULL ></NOTNULL><KEYVAL >V_PRJ</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >prj</C13><C14 >prj</C14></ROW>
+<ROW num="1" ><ID >fromdat</ID><NAME >起始日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DAT</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >fromdat</C14></ROW>
+<ROW num="2" ><ID >todat</ID><NAME >结束日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DAT</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >todat</C14></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME >明细</NAME><DBNAME ></DBNAME><DSKEY >DSC:DETAIL</DSKEY><NROW >3</NROW><NCOL >8</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,3,1</C20><C21 >0,3,1</C21><C22 >0,4,1</C22></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{	
+	var sheep=0;
+	alert(&amp;quot;双击可查看详细&amp;quot;);
+  	_this.SetColVisible(0,9,-1);
+  	sql = &amp;quot;select name from prj where id=&amp;apos;&amp;quot;+prj+&amp;quot;&amp;apos;&amp;quot;;
+      //alert(sql); 
+      try {
+            var dsid = QuerySQLDS(sql,-1,-1,true,true);
+      } catch ( e ) {
+            alert ( e );
+      } 
+      
+      _this.XMLDS_SetCurrentDsID(dsid);//设置当前DS为哪个DS
+      var prjname=_this.XMLDS_GetString(0,&amp;quot;name&amp;quot;);//获取DS中的0行 列名为name的值
+	_this.SetCellText(sheet,1,1,prjname+&amp;quot; 项目计划&amp;quot;)//
+
+      //alert(c5);
+      _this.SetCellText(sheet,2,6,&amp;quot;(&amp;quot;+fromdat+&amp;quot;至&amp;quot;+todat+&amp;quot;)&amp;quot;)//
+}
+
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+  	var srcbilid = _this.GetCellText( sheet,row,9 );//获取隐藏的guid值
+  
+	var url = &amp;quot;ShowXlsGrid.sp?grdid=TRK_PLANWEEK&amp;guid=&amp;quot;+srcbilid;
+	window.open ( url );
+}
+</GRDJSDS_VALUE><C2 >4</C2></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >DETAIL</ID><NAME ></NAME><DATDSC >SELECT
+  max(d.name) 所属项目,
+  max(a.BEGIN_DAT) 起始日期,
+  max(a.END_DAT )结束日期,
+  wm_concat (c.name) 参与人,
+  max(title) 标题,
+  max(a.PRJ_PLAN) 详细说明,
+  max(a.COMMIT) 阶段提交,
+  &amp;apos;&amp;apos; 空余,
+  max(a.guid)
+FROM
+  PLANWEEKHDR a,
+  PLANWEEKDTL b,
+  (select max(id) as id,max(name)as name from v_usr group by name) c ,
+  v_prj d
+where 
+	a.guid=b.FORMGUID and 
+	c.id = b.usr and
+	d.id = a.prj and
+	a.prj like &amp;apos;[%prj]%&amp;apos;and
+	to_char(a.crtdat,&amp;apos;YYYY-MM-DD&amp;apos;) &amp;lt;= &amp;apos;[%todat]&amp;apos; and
+	to_char(a.crtdat,&amp;apos;YYYY-MM-DD&amp;apos;) &amp;gt;= &amp;apos;[%fromdat]&amp;apos;
+group by 
+  a.guid
+order by 
+  max(a.begin_dat)</DATDSC><GRDJSDS >DSC:</GRDJSDS><C5 >DETAIL</C5><C6 >DETAIL</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

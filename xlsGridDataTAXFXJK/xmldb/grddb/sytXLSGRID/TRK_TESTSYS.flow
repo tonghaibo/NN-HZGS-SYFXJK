@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<svg title="SVGform" fill="#FFFFFF" fill-type="1">
+ <rect id="rect_492509" x="13" y="46" width="685" height="426" stroke="#000000" fill="#feffe1" >
+ </rect>
+ <text id="text_492510" x="13" y="17" width="351" height="26"   font-color="#0000ff" font-family="Arial" font-size="15">【标准化作业流程－测试与总结】</text>
+ <rect id="rect_492511" x="88" y="231" width="100" height="50" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_TESTSYSREC&entry=modify&processid=0">实施录入</rect>
+ <rect id="rect_591211" x="259" y="231" width="100" height="50" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_TESTSYSREC&entry=modify&processid=1">客户确认</rect>
+ <rect id="rect_591212" x="433" y="231" width="100" height="50" stroke="#000000" fill="#acacff"  url="entry.sp?grdid=TRK_TESTSYSREC&entry=modify&processid=2">实施完成</rect>
+ <connector id="connector_208_21611" from="rect_492511" to="rect_591211" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <connector id="connector_208_21612" from="rect_591211" to="rect_591212" fromcp="32" tocp="12" type="208"  >
+ </connector>
+ <rect  id="rect_513614" x="436" y="349" width="100" height="50" stroke="#000000" fill="#acacff" url="../ROOT_XLSGRID/SelectGridParameter.sp?isfilldata=true&grdtyp=R&sytid=XLSGRID&grdid=TRK_TESTRECLIST&sytid=XLSGRID">报表</rect>
+</svg>

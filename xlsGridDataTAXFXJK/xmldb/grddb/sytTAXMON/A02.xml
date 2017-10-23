@@ -1,0 +1,140 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >A02</MWID><NAME >税收年度同比分析表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >A02.zxg</FILE><SCENE ></SCENE><FIXED >4,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYYY</ID><NAME >查询年度</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YYYY</KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >YYYY</C13><C14 >YYYY</C14><C15 >YYYY</C15><C16 >YYYY</C16><C17 ></C17></ROW>
+<ROW num="1" ><ID >UNIT</ID><NAME >金额单位</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_MONEYUNIT</KEYVAL><INPCTL >list</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL >10000</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17></ROW>
+<ROW num="2" ><ID >TAXTYP</ID><NAME >税种</NAME><NOTNULL ></NOTNULL><KEYVAL >V_TAX_TAXTYP</KEYVAL><INPCTL >listnotnull</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >TAXTYP</C16><C17 >TAXTYP</C17></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,4,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >2</NROW><NCOL >4</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,4,2</C20></ROW>
+<ROW num="1" ><ID >0,2,4</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%UNIT]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP >COMBOBOX</CTLTYP><DYNCTL ></DYNCTL><LISTID >V_TAX_MONEYUNIT</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20></ROW>
+<ROW num="2" ><ID >0,2,2</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >[%TAXTYP]</DSKEY><NROW ></NROW><NCOL ></NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP >COMBOBOX</CTLTYP><DYNCTL ></DYNCTL><LISTID >V_TAX_TAXTYP</LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 ></C20></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(sheet,&amp;quot;V&amp;quot;,&amp;quot;50%&amp;quot;);
+	_this.SetCellText(sheet,1,1,YYYY+&amp;quot;-&amp;quot;+G_LOGDAT.substring(0,4)+&amp;quot;税收年度同比分析表&amp;quot;);
+	_this.SetCellText(sheet,3,3,YYYY);
+	_this.SetCellText(sheet,3,2,YYYY-1);
+	
+	showChar(1);
+}
+
+function init(sheet)
+{
+	for (var i=2;i&amp;lt;2+12;i++) {
+		var mnystr = _this.GetCellText(sheet,4,i);
+		if (mnystr != &amp;quot;&amp;quot;) {
+			var m = mnystr.split(&amp;quot;_&amp;quot;);
+			_this.SetCellText(sheet,4,i,m[0]);
+			_this.SetCellText(sheet,5,i,m[1]);
+		}
+	}
+	_this.RefreshFormula();
+}
+
+function showChar(sheet) 
+{
+	var xml = getxml();
+	
+	var title = YYYY+&amp;quot;-&amp;quot;+G_LOGDAT.substring(0,4)+&amp;quot;税收同比增长分析表&amp;quot;;
+	var xtitle = &amp;quot;月份&amp;quot;;
+	var ytitle = &amp;quot;金额&amp;quot;;
+	var chart = new SVGChart(&amp;quot;CHART1&amp;quot;,sheet,-1,-1,1,title,xtitle,ytitle,1000,300,xml );
+	chart.m_bShowSeralName = 1;
+
+	chart.load();
+}
+
+function getxml()
+{
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;quot;;
+	var lastyear = YYYY-1 + &amp;quot;年&amp;quot;;
+	var queryyear = YYYY + &amp;quot;年&amp;quot;;
+	for (var r=4;r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		xml += &amp;quot;&amp;lt;ROW num=\&amp;quot;&amp;quot;+(r-3)+&amp;quot;\&amp;quot; name=\&amp;quot;&amp;quot;+_this.GetCellText(0,r,1)+&amp;quot;\&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;&amp;quot;+lastyear+&amp;quot;&amp;gt;&amp;quot;+_this.GetCellText(0,r,2)+&amp;quot;&amp;lt;/&amp;quot;+lastyear+&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;&amp;quot;+queryyear+&amp;quot;&amp;gt;&amp;quot;+_this.GetCellText(0,r,3)+&amp;quot;&amp;lt;/&amp;quot;+queryyear+&amp;quot;&amp;gt;\n&amp;quot;;
+		xml += &amp;quot;&amp;lt;/ROW&amp;gt;\n&amp;quot;;
+	}
+	xml += &amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	return xml;
+
+}
+
+
+//计算增长率
+function cal()
+{
+	var old = 0.0;
+	for(var i = 4;i&amp;lt; _this.GetRowCount(0)-1;i++){
+		var cur = 1.0*_this.GetCellText(0,i,2);
+		if ( _this.GetCellText(0,i,2)==&amp;quot;&amp;quot;||_this.GetCellText(0,i,2)==&amp;quot;0&amp;quot; ) break;
+		if ( old!=0 ) {
+			var val = (cur-old)/old;
+			_this.SetCellText(0,i,3,convertRound(val,2) );
+		}
+		old= cur;
+	}
+}
+
+function convertRound(ADoubleInput,ADotNumber){
+    var tmpValue1=1;
+    var tmpValue2=1;
+    if (ADotNumber&amp;lt;0) return ADoubleInput;
+    if (0==ADoubleInput) return Math.round(ADoubleInput);
+    for (i=0;i&amp;lt;ADotNumber;i++){
+      tmpValue1=tmpValue1*10;
+    }
+    tmpValue2=ADoubleInput*tmpValue1;
+    return Math.round(tmpValue2)/tmpValue1;
+  }
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >/*select yyyy 年份,taxmny 增值税,sdtax 所得税 from (
+select substr(yymm,0,4) yyyy,sum(taxmny)/[%UNIT] taxmny,sum(sdtaxmny)/[%UNIT] sdtax 
+from tax_taxdata
+where substr(yymm,0,4)&amp;gt;=decode(&amp;apos;[%YYYY]&amp;apos;,&amp;apos;&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;),&amp;apos;[%YYYY]&amp;apos;)
+group by substr(yymm,0,4)
+) order by yyyy
+*/
+select substr(b.id,6) mm,mny2,mny1,round(decode(mny2,0,&amp;apos;&amp;apos;,(mny1-mny2)/mny2*100),2) bl 
+from (
+  select substr(yymm,6) mm,sum(decode(&amp;apos;[%TAXTYP]&amp;apos;,&amp;apos;1&amp;apos;,sdtaxmny,&amp;apos;2&amp;apos;,taxmny,0))/[%UNIT] mny1 
+  from tax_taxdata
+  where substr(yymm,0,4)=decode(&amp;apos;[%YYYY]&amp;apos;,&amp;apos;&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;),&amp;apos;[%YYYY]&amp;apos;)
+  group by yymm
+) a1,(
+  select substr(yymm,6) mm,sum(decode(&amp;apos;[%TAXTYP]&amp;apos;,&amp;apos;1&amp;apos;,sdtaxmny,&amp;apos;2&amp;apos;,taxmny,0))/[%UNIT] mny2 
+  from tax_taxdata
+  where substr(yymm,0,4)=decode(&amp;apos;[%YYYY]&amp;apos;-1,&amp;apos;&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;),&amp;apos;[%YYYY]&amp;apos;-1)
+  group by yymm
+) a2,v_yyyy_mm b
+where substr(b.id,6)=a1.mm(+) and substr(b.id,6)=a2.mm(+)
+  and substr(b.id,0,4)=decode(&amp;apos;[%YYYY]&amp;apos;,&amp;apos;&amp;apos;,to_char(sysdate,&amp;apos;yyyy&amp;apos;),&amp;apos;[%YYYY]&amp;apos;)
+order by b.id  </DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

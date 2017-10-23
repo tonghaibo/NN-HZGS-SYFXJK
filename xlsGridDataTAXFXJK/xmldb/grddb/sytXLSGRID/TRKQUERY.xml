@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >TRKQUERY</MWID><NAME >事务查询</NAME><NOTE ></NOTE><FILE >TRKQUERY.zxg</FILE><FIXED >0,0</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><BTNORD >1</BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><ID >newtrk</ID><NAME >新建事务</NAME><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C15 >build</C15></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >PRIO</ID><NAME >优先级</NAME><DATDSC ></DATDSC><KEYVAL >V_PRIO</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG >0</KEYFLG><NOTNULL >0</NOTNULL><C14 ></C14><C15 ></C15><C16 >PRIO</C16></ROW>
+<ROW num="1" ><ID >prj</ID><NAME >项目</NAME><DATDSC ></DATDSC><KEYVAL >V_PRJ</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL >0</NOTNULL><C14 >prj</C14><C15 >prj</C15><C16 >prj</C16></ROW>
+<ROW num="2" ><ID >create</ID><NAME >创建人</NAME><DATDSC ></DATDSC><KEYVAL >V_CREATE</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE >org=&amp;apos;[%SYS_ORGID]&amp;apos;</SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 >create</C16></ROW>
+<ROW num="3" ><ID >title</ID><NAME >主题关键字</NAME><DATDSC ></DATDSC><KEYVAL ></KEYVAL><INPCTL ></INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 >title</C16></ROW>
+<ROW num="4" ><ID >trktyp</ID><NAME >事务类型</NAME><DATDSC ></DATDSC><KEYVAL >V_TRKTYP</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD >6</DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 >trktyp</C16></ROW>
+<ROW num="5" ><ID >trkstat</ID><NAME >状态</NAME><DATDSC ></DATDSC><KEYVAL >V_TRKSTAT</KEYVAL><INPCTL >list</INPCTL><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><DEFVAL ></DEFVAL><DISPORD >9</DISPORD><SQLWHE ></SQLWHE><TIP ></TIP><KEYFLG ></KEYFLG><NOTNULL ></NOTNULL><C14 ></C14><C15 ></C15><C16 ></C16></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MYWORKTABLE</DSKEY><NROW >15</NROW><NCOL >10</NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><HROW ></HROW><C13 ></C13><C14 ></C14><C15 ></C15><C16 >0,2,0</C16></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：_thisOnpost_loaddata
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:17
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{       
+        _this.SetFixedCol(sheet,1);
+        _this.SetFixedRow(sheet,2);
+        _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+        _this.SetCellBkColor(0,-1,-1,255,255,255); 
+        _this.SetColVisible(0,_this.GetColCount(0)-1,0);
+
+}
+
+//================================================================// 
+// 函数： _thisOnMouseLClick
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:12
+// 修改日志：
+//================================================================// 
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if ( row &amp;gt; 0 ) 
+	   	window.location =&amp;quot;Layout.sp?id=trkquery&amp;trkguid=&amp;quot;+_this.GetCellText(sheet,row,_this.GetColCount(0)-1)+&amp;quot;&amp;showhead=n&amp;quot; ;
+}   
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if ( row &amp;gt; 0 ) 
+	   	window.open(&amp;quot;Layout.sp?id=trkquery&amp;trkguid=&amp;quot;+_this.GetCellText(sheet,row,_this.GetColCount(0)-1)+&amp;quot;&amp;showhead=n&amp;quot; );
+}   
+//================================================================// 
+// 函数：build
+// 说明：新建事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:03:26
+// 修改日志：
+//================================================================// 
+function newtrk()
+{
+        var url = &amp;quot;ShowXlsGrid.sp?grdid=ESTYLE&amp;edit=&amp;quot;+&amp;quot;save&amp;quot;+&amp;quot;&amp;dd=&amp;quot;; 
+        window.open( url ,&amp;quot;事务类型&amp;quot;,&amp;quot;WIDTH=765,HEIGHT=515,left=0,top=0,toolbar=no,menu=no,status=yes&amp;quot;);  
+
+
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MYWORKTABLE</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY ></DSKEY><NROW ></NROW><NCOL ></NCOL><ISMAIN ></ISMAIN><ISCROSS ></ISCROSS><HCOLS ></HCOLS><VCOLS ></VCOLS><VALUECOL ></VALUECOL><DATDSC >
+select a.id,
+	a.title  标题,
+	c.name 创建人,
+	to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) 创建时间,
+	e.name 事务类型,
+	p.name 项目名称,
+	ss.name 状态,
+	pp.name 优先级,
+	cc.name 最后处理人,
+	a.guid
+from  
+trkhdr a,v_usr c ,trktyp e,v_usr cc,v_prj p, v_PRIO pp , v_trkstat ss
+where 
+a.SELFORG=c.orgid and a.crtusr=c.id  and a.AIMORG=cc.orgid and a.dtlusr=cc.id
+and a.PRIO = pp.id
+and a.stat=ss.id
+and cc.id=lower(&amp;apos;[%SYS_USRID]&amp;apos;)   
+and cc.orgid=&amp;apos;[%SYS_ORGID]&amp;apos;
+and a.project =p.id
+and a.show =e.id   
+and a.stat like &amp;apos;[%trkstat]%&amp;apos;
+and e.id not in (&amp;apos;4&amp;apos;,&amp;apos;5&amp;apos;,&amp;apos;6&amp;apos;,&amp;apos;7&amp;apos;,&amp;apos;8&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;10&amp;apos;,&amp;apos;16&amp;apos;,&amp;apos;17&amp;apos;) 
+and a.prio like &amp;apos;[%PRIO]%&amp;apos; 
+and a.PROJECT like &amp;apos;[%prj]%&amp;apos;
+and a.crtusr like &amp;apos;[%create]%&amp;apos; 
+and a.title like &amp;apos;%[%title]%&amp;apos; 
+and e.id like &amp;apos;[%trktyp]%&amp;apos;  
+order by to_char(a.crtdat,&amp;apos;yyyy-mm-dd hh24:mi:ss&amp;apos;) desc </DATDSC><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 >MYWORKTABLE</C22><C23 >MYWORKTABLE</C23><C24 >MYWORKTABLE</C24><C25 >MYWORKTABLE</C25></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1闂備礁鎲￠〃鍡椕哄Ο铏规殼濞达綀娅ｇ壕浠嬫煛瀹擃喖鍟埢?</BILID><SUBTYP >0闂佽瀛╃粙鎺楀礉濡ゅ啯鍋栨い鎰剁畱閸???</SUBTYP><CORPID >0闁?????闂備礁鎼ˇ顓㈠磿閸楃偟鏆﹂柣鏂挎啞婵?骞垮劚濞层劌顪冩禒瀣厱??</CORPID><CORPNAM >0闁?????闂備礁鎼ˇ顓㈠磿閸楃偟鏆﹂柣鏂挎啞婵?骞垮劚閹冲繘宕愬畷鍥╃＜??</CORPNAM><LOCID >0濠电偛顕慨鐢稿箰閸濄儴濮抽柣顎板洦鈷戞い鏂挎惈婵倹淇婇顐㈠缂佽鲸鎹囧鍊燁槻濠???</LOCID><LOCNAM >0濠电偛顕慨鐢稿箰閸濄儴濮抽柣顎板洦鈷戞い鏂挎惈婵倹淇婇顐㈠⒋鐎规洏鍎遍濂稿炊??</LOCNAM><DAT >0闂備礁鎲￠〃鍡椕哄Ο铏规殼濞???鐎殿噮鍣ｆ俊鐑芥晜閽樺鍔?</DAT><CRTUSR >1闁荤喐绮庢晶妤?煤閺嶎厼鐭楅柛鈩冾焽椤???</CRTUSR><CRTUSRNAM >0闁荤喐绮庢晶妤?煤閺嶎厼鐭楅柛鈩冾焽椤╂煡鏌涘┑鍡楊伌婵炵》缍侀弻???</CRTUSRNAM><CRTDAT >0闁荤喐绮庢晶妤?煤閺嶎厼鐭楅柛鈩冪☉缁秹鏌曟径娑㈡闁???</CRTDAT><CHKUSR >1闂佽楠搁崢婊堝礈濠靛鍋嬮柧蹇ｅ亞椤???</CHKUSR><CHKUSRNAM >0闂佽楠搁崢婊堝礈濠靛鍋嬮柧蹇ｅ亞椤╂煡鏌涘┑鍡楊伌婵炵》缍侀弻???</CHKUSRNAM><CHKDAT >0闂佽楠搁崢婊堝礈濠靛鍋嬮柟鎯版缁秹鏌曟径娑㈡闁???</CHKDAT><REFID1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???1</REFID1><REFNAM1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???1</REFNAM1><REFID2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???2</REFID2><REFNAM2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???2</REFNAM2><NOTE >0濠电姰鍨煎▔娑樏洪敃鍌氭瀬闁绘劕顕埞宥夋煃閳轰礁鏆曠紒??</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1闂備礁鎼?氼剙霉妞嬪骸鍨濋煫鍥ㄦ⒐閸庣喖鐓崶銊﹀碍濠???</SEQID><ITMID >1闂備礁鎲＄换?闁煎啿鐖奸敐鐐哄箳閺冨倻锛濋梺鍝勮癁閸愩劉鏋?</ITMID><ITMNAM >0闂備礁鎲＄换?闁煎啿鐖奸敐鐐哄箳濡??鐟欙妇?骞垮劚濞???</ITMNAM><ITEMPC >0闂備礁鎲＄换?闁煎啿鐖奸敐鐐哄箳濡??缁犮儵鎮峰▎蹇擃伌闁稿瑪鍥ㄧ厱??</ITEMPC><ITMSPC >0闂佽崵鍠愰悷銉??姘煎弮閹???</ITMSPC><UNIT >0闂佽崵濮崇欢銈囨崲濠靛闂繛宸簻绾??闂佸搫娲﹀銊х矓?</UNIT><SMLUNT >0闂佽绻愮换鎰崲濡ゅ拋鏁囬柟闂寸劍閻撳倿鐓崶銊﹀碍缂??鐎ｎ?????</SMLUNT><UNTNUM >0濠电姰鍨归悥銏ゅ礃閵娧屾Ч濠电偠鎻徊鐣岀矓瀹勬噴褰掑幢濞嗗海鍓ㄩ棅顐㈡处閹稿摜绮堢?ｎ?㈠綊鏁愰崨顖呫垺绻涢崣澶岀煂???</UNTNUM><PRICE >0濠电偛顕繛?闁??闁秵鍋??</PRICE><QTY >0闂備浇妗ㄥ鎺楀础閹惰棄闂??</QTY><TAXTYP >0缂傚倷绀侀鍛瑰畡閭﹀晠闁兼祴鏅濈亸鐢告偣閸ヮ亜鐨???</TAXTYP><NOTAXMNY >0濠电偞鍨堕幐鍝ョ矓閹绢喖绠氶柛顐犲灮閻瑩骞栨潏鍓у矝婵☆値鍏????</NOTAXMNY><TAXMNY >0缂傚倷绀侀鍛存煀閿濆??</TAXMNY><MNY >0濠电偞鍨堕幐鎼侇敄閸涱厾鏆﹂柣鏂垮悑閻撳倿鏌熸潏鎯х槣闁???</MNY><REFID1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???1</REFID1><REFNAM1 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???1</REFNAM1><REFID2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔︽禍鐐差渻娴犲鐓???2</REFID2><REFNAM2 >0闂備礁鎲￠悷銉╁磹??闂佸憡鍔戦崝宥夊磹瀹曞洨纾???2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

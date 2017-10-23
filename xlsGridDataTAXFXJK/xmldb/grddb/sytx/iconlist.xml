@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>iconlist</MWID><NAME>图标导航界面</NAME><NOTE></NOTE><NOACCNAME></NOACCNAME><FILE>iconlist.zxg</FILE><FIXED></FIXED><CATTYP></CATTYP><DTLRNG></DTLRNG><BATINP></BATINP><MANUNIT></MANUNIT><ORDER></ORDER><EXTJS></EXTJS><JAVACLS></JAVACLS><syt>x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>
+function _thisOnpost_loaddata(sheet)
+{
+  maingrid.style.display = &amp;quot;none&amp;quot;;
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+
+function newframewin(sb,title,contentsb)
+{
+sb.append(&amp;quot;&amp;lt;table bgcolor=\&amp;quot;#FFFFFFFF\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot; id=\&amp;quot;table3\&amp;quot; cellspacing=\&amp;quot;5\&amp;quot;&amp;gt;\n&amp;quot;);
+sb.append(&amp;quot;  &amp;lt;tr&amp;gt;&amp;lt;td height=\&amp;quot;142\&amp;quot; bgcolor=\&amp;quot;#d1e2fe\&amp;quot; valign=\&amp;quot;top\&amp;quot; width=\&amp;quot;100%\&amp;quot;&amp;gt;\n&amp;quot;); 
+sb.append(&amp;quot;  &amp;lt;table width=\&amp;quot;100%\&amp;quot; ID=\&amp;quot;Table5\&amp;quot;&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td width=\&amp;quot;31\&amp;quot;&amp;gt;\n&amp;quot;); 
+sb.append(&amp;quot;  &amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;xlsgrid/images/my/bartop.jpg\&amp;quot; width=\&amp;quot;30\&amp;quot; height=\&amp;quot;14\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;\n&amp;quot;); 
+sb.append(&amp;quot;  &amp;lt;td align=\&amp;quot;center\&amp;quot;&amp;gt;&amp;lt;font color=\&amp;quot;#014e82\&amp;quot;&amp;gt;\n&amp;quot;); 
+sb.append(title); 
+sb.append(&amp;quot;  &amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;td width=\&amp;quot;32\&amp;quot; align=\&amp;quot;right\&amp;quot;&amp;gt;\n&amp;quot;); 
+sb.append(&amp;quot;  &amp;lt;img border=\&amp;quot;0\&amp;quot; src=\&amp;quot;xlsgrid/images/my/bartop.jpg\&amp;quot; width=\&amp;quot;30\&amp;quot; height=\&amp;quot;14\&amp;quot;&amp;gt;&amp;lt;/td&amp;gt;\n&amp;quot;); 
+sb.append(&amp;quot;  &amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;div id=\&amp;quot;Div1\&amp;quot; width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;\n&amp;quot;); 
+sb.append(contentsb.toString());
+sb.append(&amp;quot;  &amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;quot;);
+}
+
+var titlecls=&amp;quot;&amp;quot;;
+function newwin(sb,title,contentsb)
+{
+sb.append(&amp;quot;&amp;lt;TABLE height=\&amp;quot;100%\&amp;quot; cellSpacing=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;TBODY&amp;gt;&amp;lt;TR&amp;gt;\n&amp;quot;);
+sb.append(&amp;quot;&amp;lt;TD style=\&amp;quot;BORDER-RIGHT: #3a77ba 1px solid; BORDER-TOP: #3a77ba 1px solid; BORDER-LEFT: #3a77ba &amp;quot;);
+sb.append(&amp;quot;1px solid; BORDER-BOTTOM: #3a77ba 1px solid\&amp;quot; bgColor=\&amp;quot;#ffffff\&amp;quot; height=\&amp;quot;23\&amp;quot;&amp;gt;\n&amp;quot;);
+sb.append(&amp;quot;&amp;lt;TABLE width=\&amp;quot;100%\&amp;quot; height=\&amp;quot;100%\&amp;quot;&amp;gt;&amp;lt;TR&amp;gt;&amp;lt;TD width=154&amp;gt;&amp;nbsp;&amp;quot;);
+sb.append(&amp;quot;&amp;lt;IMG height=\&amp;quot;9\&amp;quot; src=\&amp;quot;xlsgrid/images/my/collapse.gif\&amp;quot; width=\&amp;quot;9\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;span class=\&amp;quot;&amp;quot;+titlecls+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;);
+sb.append(title);
+sb.append(&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/TD&amp;gt;&amp;lt;TD&amp;gt;&amp;lt;IMG height=15 src=\&amp;quot;xlsgrid/images/my/barright.jpg\&amp;quot; width=22 &amp;quot;);
+sb.append(&amp;quot;align=right border=0&amp;gt;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TABLE&amp;gt;&amp;quot;);
+sb.append(&amp;quot;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;\n&amp;quot;);
+sb.append(&amp;quot;&amp;lt;TR&amp;gt;&amp;lt;TD style=\&amp;quot;BORDER-RIGHT: #3a77ba 1px solid; BORDER-LEFT: #3a77ba 1px solid; BORDER-BOTTOM: #3a77ba 1px solid\&amp;quot;&amp;quot;);
+sb.append(&amp;quot;vAlign=\&amp;quot;top\&amp;quot; bgColor=\&amp;quot;#ffffff\&amp;quot;&amp;gt;&amp;lt;FONT color=\&amp;quot;#014e82\&amp;quot;&amp;gt;&amp;quot;);
+sb.append(contentsb.toString());
+sb.append(&amp;quot;&amp;lt;/TD&amp;gt;&amp;lt;/TR&amp;gt;&amp;lt;/TBODY&amp;gt;&amp;lt;/TABLE&amp;gt;&amp;quot;);
+}
+
+function iconHelper(sb)
+{
+sb.append(&amp;quot;&amp;lt;STYLE&amp;gt; .icon { vertical-align: middle; text-align:center; \n&amp;quot;);//
+sb.append(&amp;quot;\tborder:2px solid #ffffff ;width: 100px; height:100px; }body{MARGIN: 0px 0px;OVERFLOW: auto;}&amp;lt;/STYLE&amp;gt;\n&amp;quot;); 
+sb.append(&amp;quot;&amp;lt;script&amp;gt;function mouseover(sender){\n&amp;quot;); 
+sb.append(&amp;quot;  sender.style.border=&amp;apos;2px solid #3a77ba&amp;apos;;\n&amp;quot;); 
+sb.append(&amp;quot;  sender.style.cursor=&amp;apos;hand&amp;apos;;}\n&amp;quot;); 
+sb.append(&amp;quot;function iconclick(ev,newwin,url){\n&amp;quot;); 
+sb.append(&amp;quot;if(newwin==1 || ev.ctrlKey)window.open(url);\n&amp;quot;); 
+sb.append(&amp;quot;else window.location=url;}\n&amp;quot;); 
+sb.append(&amp;quot;function mouseout(sender){\n&amp;quot;); 
+sb.append(&amp;quot;  sender.style.border=&amp;apos;2px solid #ffffff&amp;apos;;}&amp;lt;/script&amp;gt;&amp;quot;);
+}
+
+function newicontable(sb,ds,cols)
+{
+sb.append(&amp;quot;&amp;lt;div style=\&amp;quot;width=100%; height=100% overflow: scroll;\&amp;quot;&amp;gt;&amp;quot;);
+sb.append(&amp;quot;&amp;lt;TABLE&amp;gt;\n&amp;quot;);
+//var ds=new EADS();
+var rc = ds.getRowCount();
+var c=1.0*cols;
+var i=-1;
+for(var k=0;k&amp;lt;rc;k+=c)
+{
+  sb.append(&amp;quot;\n&amp;lt;tr&amp;gt;&amp;quot;);
+  for(var j=0;j&amp;lt;c;j++)
+  {
+     i++;
+     if(i&amp;lt;rc)
+     {
+        var url=ds.getStringAt(i,&amp;quot;url&amp;quot;);
+        if(url==&amp;quot;&amp;quot;)
+          url = &amp;quot;BillEntry.sp?grdid=&amp;quot;+ds.getStringAt(i,&amp;quot;id&amp;quot;);
+        var newwin = 0;
+        if(url.length()&amp;gt;0 &amp;&amp; url.charAt(0)==&amp;quot;@&amp;quot;)
+        {
+          url=url.substring(1);
+          newwin=1;
+        }
+        sb.append(&amp;quot;\n&amp;lt;td&amp;gt;&amp;lt;div onmouseover=\&amp;quot;mouseover(this)\&amp;quot; onmouseout=\&amp;quot;mouseout(this);\&amp;quot; class=\&amp;quot;icon\&amp;quot; &amp;quot;);
+        var iconfile=ds.getStringAt(i,&amp;quot;icon&amp;quot;);
+        if(iconfile==&amp;quot;&amp;quot;)
+          iconfile= &amp;quot;xlsgrid/images/icon/icon3.gif&amp;quot;;
+        sb.append(&amp;quot;onclick=\&amp;quot;iconclick(event,&amp;quot;+newwin+&amp;quot;,&amp;apos;%s&amp;apos;)\&amp;quot;&amp;gt;&amp;quot;.format([url]));
+        sb.append(&amp;quot;&amp;lt;br&amp;gt;&amp;lt;IMG src=\&amp;quot;%s\&amp;quot; border=\&amp;quot;0\&amp;quot;&amp;gt;&amp;lt;BR&amp;gt;&amp;quot;.format([iconfile]));
+        sb.append(ds.getStringAt(i,&amp;quot;name&amp;quot;));
+        sb.append(&amp;quot;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+      }
+      else sb.append(&amp;quot;\n&amp;lt;td&amp;gt;&amp;lt;div class=\&amp;quot;icon\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;);
+  }
+  sb.append(&amp;quot;\n&amp;lt;/tr&amp;gt;&amp;quot;);
+}
+sb.append(&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;);
+}
+
+function getIconDs(request)
+{
+  var flag=pub.EAFunc.getRequestParam(request,&amp;quot;flag&amp;quot;);
+  var file = pub.EAFunc.getRequestParam(request,&amp;quot;file&amp;quot;);
+  if(flag==null &amp;&amp; file==null) 
+  	throw new Exception(&amp;quot;no flag special the source table&amp;quot;);
+  if(file!=null)
+  {
+    //使用实例的中间件目录
+    var root = pub.EAOption.dynaDataRoot;
+    var str = pub.EAFunc.readFile(root+file);
+    return new pub.EAXmlDS(str);
+  }
+  var where=pub.EAFunc.getRequestParam(request,&amp;quot;where&amp;quot;);
+  var sql = &amp;quot;select id,name,icon,url from %s &amp;quot;.format([flag]);
+  if(where!=null &amp;&amp; where !=&amp;quot;&amp;quot;)
+    sql += &amp;quot;where %s&amp;quot;.format([where]);
+  var order=pub.EAFunc.getRequestParam(request,&amp;quot;order&amp;quot;);
+  if(order!=null &amp;&amp; order!=&amp;quot;&amp;quot;)
+    sql += &amp;quot;order by %s&amp;quot;.format([order]);
+  return pub.EADbTool.QuerySQL(sql);
+}
+//flag从param表或从中构造出来的视图名:
+//     id作为识别号，name作为名称，refid作为图标，note作为url;url前加@符号，默认在新窗口打开
+//where是过滤条件
+//title是小标题
+//title0是大标题
+//mode是窗口类型：0是含外框
+//cols是每行的图标数量
+function Response()//request,response)
+{
+  var ds = getIconDs(request);
+  var cols=pub.EAFunc.getRequestParam(request,&amp;quot;cols&amp;quot;);
+  if(cols==null || cols==&amp;quot;&amp;quot;)
+    cols=6;
+  var sb=new java.lang.StringBuffer();
+  iconHelper(sb);
+  var cs = new java.lang.StringBuffer();
+  newicontable(cs,ds,cols);
+  var ws = new java.lang.StringBuffer();
+  var title=pub.EAFunc.getRequestParam(request,&amp;quot;title&amp;quot;);
+  if(title==null) title = &amp;quot;&amp;quot;;
+  newwin(ws,title,cs);
+  var mode = pub.EAFunc.getRequestParam(request,&amp;quot;mode&amp;quot;);
+  var title0=pub.EAFunc.getRequestParam(request,&amp;quot;title0&amp;quot;);
+  if(title0==null) title0= title;
+  if(mode==&amp;quot;0&amp;quot;) 
+   newframewin(sb,title0,ws);  
+  else sb.append(ws);
+  return sb.toString();
+}
+
+function addHeaderHtml(mwobj,request,sb,usrinfo)
+{
+  mwobj.setHtmlView(&amp;quot;y&amp;quot;);
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CRTDAT>0录入日期</CRTDAT><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><CHKDAT>0审核日期</CHKDAT><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITEMPC>0品种批次号</ITEMPC><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><SMLUNT>0小计量单位</SMLUNT><UNTNUM>0大单位转小单位因子</UNTNUM><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><REFID3>0参考编号3</REFID3><REFNAM3>0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

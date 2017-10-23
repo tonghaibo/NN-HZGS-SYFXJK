@@ -1,0 +1,709 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >TRK_SAMODIFY431</MWID><NAME >操作手册提交</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TRK_SAMODIFY431.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS >xlsgrid/js/public.js,xlsgrid/js/x/JSFUNC.djs</EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><syt >XLSGRID</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >trkdtl</ID><NAME >提交</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >trkdtl</C10><C11 >trkdtl</C11><C12 >trkdtl</C12></ROW>
+<ROW num="1" ><ID >stop</ID><NAME >取消</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 >stop</C11><C12 ></C12></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var usr = &amp;quot;&amp;quot; ;
+var sheetText = 1;  //事务正文SHEET 
+var sheetGraph = 1; //事务贴图SHEET 
+//================================================================//  
+// 函数：thisOnpost_loaddata 
+// 说明：设置按钮，设置下拉列表
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/11/06 13:18:27
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet) 
+{     
+  
+//             if ( sheet == 0 ) 
+//             {
+//                     sheetText =_this.AddSheet(&amp;quot;事务正文&amp;quot;);
+//                     sheetGraph=_this.AddSheet(&amp;quot;事务贴图&amp;quot;);
+//                     _this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;31%&amp;quot;);
+//                     _this.SetToCodeEditor(&amp;quot;&amp;quot;,sheetText ,-1,-1,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;); //单元格设置为编辑框
+//                     _this.SetToRichEdit(&amp;quot;&amp;quot;,sheetGraph,-1,-1,&amp;quot;&amp;quot;); //单元格设置为编辑框
+//                     _this.ShowTabBar(1);
+//             } 
+             
+             //测试写死的参数
+            var retflg=&amp;quot;1&amp;quot;
+            var project=&amp;quot;JQFIN&amp;quot;;
+            var trsflg =&amp;quot;0&amp;quot;
+            var num=&amp;quot;1&amp;quot;;
+            var edit=&amp;quot;&amp;quot;
+            
+            
+            
+            
+             window.status = &amp;quot;事务处理&amp;quot;;
+//            _this.SetCellBkColor(sheet,-1,-1,255,255,255); 
+            _this.SetToFileSelectBox(&amp;quot;&amp;quot;,0,7,2);//设置输入框为点选文件
+//            _this.SetRowVisible(sheet,9,-1);
+//            _this.SetRowVisible(sheet,8,-1);
+//            _this.SetToSelectBox(&amp;quot;send&amp;quot;,sheet,5,2,&amp;quot;V_USR&amp;quot;,&amp;quot;&amp;quot;);
+            QuerySQLDS(&amp;quot;select name from v_prj where id=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;&amp;quot;);
+            
+            
+//            var prjname = _this.XMLDS_GetString(0,&amp;quot;name&amp;quot;);
+//            _this.SetCellText(sheet,1,2,prjname); //将传过来的参数设置到单元格内           
+//            var prjid = project; 
+//            var where =&amp;quot;prjid=&amp;apos;&amp;quot;+prjid+&amp;quot;&amp;apos;&amp;quot;;
+//            var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_PRJUSR&amp;where=&amp;quot;+where),&amp;quot;USRID&amp;quot;,&amp;quot;USRNAM&amp;quot;);
+//            _this.SetToComboBox(&amp;quot;&amp;quot;,sheet,5,5,listid0);
+            
+            
+            
+            
+            
+            
+            
+//            if ( retflg == &amp;quot;0&amp;quot; || trsflg == &amp;quot;1&amp;quot;)   //必须回复或是不能转发
+//            {
+//                 _this.SetCellText(sheet,5,2,crtid);
+//                  _this.SetCellLock(sheet,5,2,1); 
+//                  _this.SetCellLock(sheet,5,5,1);
+//            }
+
+
+
+//
+//        var selforg =  &amp;quot;&amp;quot;;   
+//        var aimorg = &amp;quot;&amp;quot;; 
+//        QuerySQLDS(&amp;quot;select aimorg,selforg from trkdtl where id=&amp;apos;&amp;quot;+num+&amp;quot;&amp;apos; and style=&amp;apos;4&amp;apos;&amp;quot;);    
+//        if ( _this.XMLDS_GetRowCount() &amp;gt; 0 )
+//        {
+//        	selforg = _this.XMLDS_GetString(0,&amp;quot;selforg&amp;quot;);
+//        	aimorg = _this.XMLDS_GetString(0,&amp;quot;aimorg&amp;quot;);
+//        }
+//        var orgid = &amp;quot;&amp;quot;;
+//	var orgname = &amp;quot;&amp;quot;;
+//	var list_org = _this.CreateListValue();
+//	QuerySQLDS(&amp;quot;select org orgid,org orgname from (select selforg  org from b_org where selforg=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos; union select aimorg  org from b_org where selforg=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;)&amp;quot;);	
+//	var rt = _this.XMLDS_GetRowCount();
+//	if ( rt &amp;gt; 0 )
+//	{
+//		for ( var i=0;i&amp;lt;rt;i++ )
+//		{
+//			orgid = _this.XMLDS_GetString(i,&amp;quot;orgid&amp;quot;);
+//			orgname = _this.XMLDS_GetString(i,&amp;quot;orgname&amp;quot;);
+//			 _this.SetListValue(list_org,orgid,orgname);
+//		}
+//	}
+//	
+//	_this.SetToComboBox(&amp;quot;&amp;quot;,sheet,1,5,list_org);
+//	if ( aimorg != &amp;quot;&amp;quot; )
+//	_this.SetCellText(sheet,1,5,aimorg);
+//	else
+//	_this.SetCellText(sheet,1,5,G_ORGID);
+//            
+//            
+//            
+//            if ( edit == &amp;quot;modify&amp;quot;)
+//            {
+//                _this.SetCellLock(0,1,2,0);
+//            	loadSheet();
+//            	_this.SetCellLock(0,1,2,1);
+//            }
+//            _this.LoadScene(sheet,10); 
+
+}  
+
+//================================================================//  
+// 函数：thisOnButtonCtrlClick 
+// 说明：单击按钮触发事件 
+// 参数：  
+// 返回： 
+// 样例： 
+// 作者： 
+// 创建日期：11/11/06 13:29:03 
+// 修改日志： 
+//================================================================//  
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+       if ( id == &amp;quot;udf_okbtn&amp;quot; ){  //保存   
+             if ( commit() ){ 
+                  opener.refreshSheet();
+                  parent.close();  //父窗口关闭                  
+             }
+       }
+       if( id == &amp;quot;udf_cancelbtn&amp;quot; ) //取消
+       {
+             reset();
+             window.close();
+       }
+}
+
+//================================================================//  
+// 函数：reset 
+// 说明：重新填息以及刷新表格
+// 参数：
+// 返回： 
+// 样例： 
+// 作者：  
+// 创建日期：11/11/06 13:29:45 
+// 修改日志： 
+//================================================================//  
+function reset()
+{
+//         _this.SetCellText(sheet,9,2,&amp;quot;&amp;quot;); 
+//         _this.SetCellText(sheet,15,2,&amp;quot;&amp;quot;); 
+//         _this.SetCellText(sheet,13,1,&amp;quot;&amp;quot;);
+//         _this.SetCellText(sheet,17,2,&amp;quot;&amp;quot;);
+//         _this.SetCellText(sheet,3,2,&amp;quot;&amp;quot;);
+
+}
+//================================================================// 
+// 函数：commit
+// 说明：提交事务
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/11/06 13:55:41
+// 修改日志：
+//================================================================// 
+function commit()
+{
+           //测试写死的参数
+            var retflg=&amp;quot;1&amp;quot;
+            var project=&amp;quot;JQFIN&amp;quot;;
+            var trsflg =&amp;quot;0&amp;quot;
+            var num=&amp;quot;1&amp;quot;;
+            var edit=&amp;quot;&amp;quot;
+            var pro_note=&amp;quot;12&amp;quot;;
+            var sendto=&amp;quot;3&amp;quot;;
+            var tousr=&amp;quot;xlsgrid&amp;quot;;
+         
+         
+         
+         var file = _this.GetCellText(0,7,2);     //获取文件名     
+//         _this.SetCellText(sheet,9,2,file);    //文件描述
+        // var path = &amp;quot;&amp;quot;;//文件在服务端的路径
+         var path1 = &amp;quot;&amp;quot;;//server端附件路径
+         var path2 = &amp;quot;&amp;quot;;//server端图片路径
+         var filename = &amp;quot;&amp;quot;; //自定义文件名
+         var aftername = &amp;quot;&amp;quot;;//文件后缀名 
+         var sign = true;//附件
+         var flag = true;//贴图
+         var s = &amp;quot;&amp;quot;;//存储分配人
+//         var tousr = _this.GetCellText(sheet,5,2);
+         var ff = true;
+         var aftername1  = &amp;quot;&amp;quot;;//贴图后缀名
+         var filename1 = &amp;quot;&amp;quot;;//贴图文件名
+         var showimage = _this.GetCellShowText(sheetGraph,-1,-1);//贴图的2进制文件
+         var imagenote =&amp;quot;&amp;quot;;
+//         if ( tousr == &amp;quot;&amp;quot; ){
+//  //                    tousr = G_USRID;
+//  //                    s = (tousr+&amp;quot;,&amp;quot;).split(&amp;quot;,&amp;quot;); 
+//               alert (&amp;quot;输入分配人&amp;quot;);
+//               return ;
+//         } else{                              
+//                     if ( tousr.lastIndexOf(&amp;quot;,&amp;quot;) == -1 )   {        
+//                                //判断分配人是否输入错误
+//                             QuerySQLDS(&amp;quot;select * from v_user where id=&amp;apos;&amp;quot;+tousr+&amp;quot;&amp;apos;&amp;quot;);
+//                             var rowcount = _this.XMLDS_GetRowCount();
+//                             if ( rowcount &amp;lt; 1 ){
+//                                    alert (&amp;quot;分配人输入错误！请重输&amp;quot;);
+//  //                                    _this.SetCellText(sheet,9,2,&amp;quot;&amp;quot;);
+//                                    ff = false;
+//                              }           
+//                              s = (tousr+&amp;quot;,&amp;quot;).split(&amp;quot;,&amp;quot;);                    
+//                      } else {
+//                              s = tousr.split(&amp;quot;,&amp;quot;);
+//                              //判断手写输入时，输入的分配人是否有错
+//                              for (var i=0;i&amp;lt;s.length;i++)  {
+//                                    if (s[i] == &amp;quot;&amp;quot;)
+//                                        break;
+//                                    QuerySQLDS(&amp;quot;select * from v_usr where id=&amp;apos;&amp;quot;+s[i]+&amp;quot;&amp;apos;&amp;quot;);
+//                                    var countrow = _this.XMLDS_GetRowCount();
+//                                    if ( countrow &amp;lt; 1 ){
+//                                         ff = false;
+//                                    }
+//                              }
+//                              if ( !ff ){      
+//                                    alert (&amp;quot;分配人输入错误！请重输&amp;quot;); 
+//                              }
+//                      }
+//         }      
+         //上传附件                    
+         if ( file != &amp;quot;&amp;quot; || file.length != 0 )
+         {         
+         
+         
+//         alert(&amp;quot;开始上传附件&amp;quot;);
+         
+         
+               path1 = invokeOSFunc(&amp;quot;file&amp;quot;,&amp;quot;&amp;quot;) ; 
+               alert(path1);
+               path1 +=&amp;quot;pic/&amp;quot;;        
+               alert(path1);
+               filename = getFilename();//此处要先取文件名，防止两次http请求冲突,这个文件名就是保存在服务器上的文件名
+//               alert(&amp;quot;文件名=&amp;quot;+filename);
+               _this.OpenHttpRequest(&amp;quot;uploadFile.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;); //打开上传页面       
+               aftername = &amp;quot;.&amp;quot;+getBySplit(file,&amp;quot;.&amp;quot;,1);
+               //var aftername = &amp;quot;.rar&amp;quot;;
+                var temp_file = _this.ZipFile(file,&amp;quot;&amp;quot;);    //压缩文件到windows临时目录 
+                
+                
+               _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,temp_file,1);                  //上传选定文件 
+               _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,path1,0);//设定服务端的绝对保存路径，如 \tmp\,注意，路径后必须有符号 \   
+               alert(path1);
+               _this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,filename+aftername,0);   //设定服务端的保存文件名
+               var xml = _this.SendHttpRequest();        //开始上传       
+               //_this.XMLDS_Parse(ret); 
+               _this.CloseHttpRequest();    //关闭request 请求\
+               
+//               alert(&amp;quot;关闭了request请求&amp;quot;);
+               var p = &amp;quot;&amp;quot;;
+               if( xml == &amp;quot;&amp;quot; ) { 
+                      alert(&amp;quot;操作错误,可能是网络连接错误.&amp;quot;); 
+                      sign = false;
+               }else {
+                      _this.XMLDS_Parse(xml); 
+                      p = _this.XMLDS_GetString(1,&amp;quot;code&amp;quot;) ;
+                      if ( p == &amp;quot;1&amp;quot; ){
+                           xml = &amp;quot;保存成功&amp;quot;; 
+                           sign = true;
+                      }else{
+                            xml = &amp;quot;上传附件失败&amp;quot;;
+                            sign = false;
+                            alert ( &amp;quot;可能是网络连接错误，&amp;quot;+xml);
+                            _this.SetCellText(0,7,2,&amp;quot;&amp;quot;);
+  //                            _this.SetCellText(0,9,2,&amp;quot;&amp;quot;);                           
+                      }
+               }
+           }
+
+	var param=new Object();
+	param.guid=guid;
+	param.doc=filename+aftername;
+	invokeOSFuncExt(&amp;quot;update&amp;quot;,param) ;//这里是调用服务端代码
+//	alert(&amp;quot;返回true&amp;quot;);
+	return true ;
+}
+
+//================================================================//  
+// 函数：upload 
+// 说明：上传文件
+// 参数： 
+// 返回：  
+// 样例： 
+// 作者： 
+// 创建日期：11/30/06 15:51:46   
+// 修改日志： 
+//================================================================//  
+function upload()
+{
+
+         var path = invokeOSFunc(&amp;quot;file&amp;quot;,&amp;quot;&amp;quot;) ;          
+         var filename = getFilename();//此处要先取文件名，防止两次http请求冲突  
+         _this.OpenHttpRequest(&amp;quot;uploadFile.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);                    //打开上传页面
+         var file = _this.GetCellText(0,15,2);     //获取文件名                      
+         var aftername = getBySplit(file,&amp;quot;.&amp;quot;,1);//文件后缀名 
+         _this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,file,1);                  //上传选定文件 
+         _this.AddHttpRequestParam(&amp;quot;path&amp;quot;,path,0);//设定服务端的绝对保存路径，如 \tmp\,注意，路径后必须有符号 \   
+         _this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,filename+&amp;quot;.&amp;quot;+aftername,0);   //设定服务端的保存文件名
+         var ret = _this.SendHttpRequest();        //开始上传       
+         _this.XMLDS_Parse(ret); 
+         var p = _this.XMLDS_GetStringAt(1,3) 
+         if ( p == &amp;quot;1&amp;quot; ) 
+         { 
+              ret = &amp;quot;保存成功&amp;quot;; 
+         } 
+         else 
+         { 
+              ret = &amp;quot;保存失败&amp;quot;; 
+         } 
+         _this.CloseHttpRequest(); 
+         if( ret == &amp;quot;&amp;quot; )  
+         { 
+               alert(&amp;quot;操作错误,可能是网络连接错误.&amp;quot;); 
+         }  
+         else 
+               alert(ret); 
+} 
+
+//================================================================// 
+// 函数：readXML 
+// 说明：读取XML字符串某个节点的值
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/30/06 12:30:51
+// 修改日志：
+//================================================================// 
+function readXML(str)  
+{ 
+  
+      var xml = new ActiveXObject(&amp;quot;Msxml2.DOMDocument&amp;quot;);     
+      xml.loadXML(str);     
+      return xml.getElementsByTagName(&amp;quot;ROWSET&amp;quot;)[0].childNodes(0).childNodes(2).text; //得到&amp;lt;code&amp;gt;节点值 
+  
+ }  
+ 
+//================================================================// 
+// 函数：getFilename
+// 说明：得到上传文件的服务端文件名，设置文件前缀
+// 参数：
+// 返回：上传到服务端的文件名前缀
+// 样例：
+// 作者：
+// 创建日期：11/30/06 13:18:54
+// 修改日志：
+//================================================================// 
+function getFilename() 
+{ 
+      QuerySQLDS(&amp;quot;select to_char(sysdate,&amp;apos;yymmddhh24miss&amp;apos;) dat from dual&amp;quot;);  
+      var count = _this.XMLDS_GetRowCount(); 
+      var date = &amp;quot;&amp;quot;;      
+      if ( count &amp;gt; 0 )  
+      { 
+            date = _this.XMLDS_GetString(0,&amp;quot;dat&amp;quot;); 
+      } 
+      return  G_USRID+&amp;quot;_&amp;quot;+date; 
+}
+
+//================================================================// 
+// 函数：_thisOnSelectBoxCellModify
+// 说明：防止selectbox出现“缺少对象”错误
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：12/28/06 15:52:45
+// 修改日志：
+//================================================================// 
+function _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where)
+{
+      return 1;
+}
+//================================================================// 
+// 函数：thisOnCellModify
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/25/07 09:47:50
+// 修改日志：
+//================================================================// 
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+        
+        
+        if ( sheet == 0 &amp;&amp; row == 5 &amp;&amp; col == 5 )   //防止出现重复选中的情况
+        {
+              var f = true;
+              var id = _this.GetCellText(sheet,row,col);          
+              var u = _this.GetCellText(sheet,5,2);             
+              if ( f )    
+              {
+                    usr = id+&amp;quot;,&amp;quot;;   //如果是 usr += id+&amp;quot;,&amp;quot;，那么就会选多人
+                   _this.SetCellText(sheet,5,2,usr);
+              }                  
+        }        
+        if ( sheet == 0 &amp;&amp; row == 1 &amp;&amp; col == 5 )
+        {
+        	var org = _this.GetCellText(sheet,1,5);
+        	if ( org != G_ORGID ) 
+            	{
+	            	var where =&amp;quot;orgid=&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos;&amp;quot;;
+	            	var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_USR&amp;where=&amp;quot;+where),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	            	 _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,5,5,listid0);
+
+            	}
+        
+        }
+}
+
+
+
+//================================================================// 
+// 函数：trkdtl
+// 说明：事务处理
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：01/25/07 09:48:31
+// 修改日志：
+//================================================================// 
+function trkdtl()
+{
+     if ( commit() )
+     { 
+     alert(&amp;quot;commit完毕&amp;quot;);
+               //opener.refreshSheet();//刷新
+//               parent.close();  //父窗口关闭 
+                   
+      }
+
+}
+
+//================================================================// 
+// 函数：close
+// 说明：关闭窗口
+// 参数：
+// 返回：
+// 样例：
+// 作者： 注意：方法名不能与window的方法名重复
+// 创建日期：01/25/07 09:54:17
+// 修改日志：
+//================================================================// 
+function stop()
+{
+         reset();
+         window.close();
+
+}
+//================================================================// 
+// 函数：loadSheet
+// 说明：修改用
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：04/20/07 10:47:13
+// 修改日志：
+//================================================================// 
+function loadSheet()
+{
+//        QuerySQLDS(&amp;quot;select name from v_usr where id=&amp;apos;&amp;quot;+crtid+&amp;quot;&amp;apos;&amp;quot;);
+//        var crtusr = _this.XMLDS_GetString(0,&amp;quot;name&amp;quot;);
+//        crtusr = crtusr.RTrim();
+//	var sql = &amp;quot;select project,title,tousr,pro_note,imagenote from trkdtl where id=&amp;apos;&amp;quot;+num+&amp;quot;&amp;apos; and crtusr=&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos; and result=&amp;apos;1&amp;apos;&amp;quot;;
+//	QuerySQLDS(sql);
+//	var count = _this.XMLDS_GetRowCount(); 	
+//	if ( count &amp;gt; 0 )
+//	{
+//	    try
+//	    {
+//             var project = _this.XMLDS_GetString(0,&amp;quot;project&amp;quot;);
+//             var title  =_this.XMLDS_GetString(0,&amp;quot;title&amp;quot;);
+//             var tousr = _this.XMLDS_GetString(0,&amp;quot;tousr&amp;quot;);            
+//             var pro_note = _this.XMLDS_GetString(0,&amp;quot;pro_note&amp;quot;);
+//             var imagenote = _this.XMLDS_GetString(0,&amp;quot;imagenote&amp;quot;);
+//             QuerySQLDS(&amp;quot;select name from v_prj where id=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;&amp;quot;);
+//             var prj_name = _this.XMLDS_GetString(0,&amp;quot;name&amp;quot;);            
+//             QuerySQLDS(&amp;quot;select id from v_usr where name=&amp;apos;&amp;quot;+tousr+&amp;quot;&amp;apos;&amp;quot;);
+//             var tousrid = _this.XMLDS_GetString(0,&amp;quot;id&amp;quot;);
+//             _this.SetCellText(sheet,1,2,prj_name);
+//             _this.SetCellText(sheet,3,2,title);
+//             _this.SetCellText(sheet,5,2,tousrid);
+//             _this.SetCellText(sheet,7,2,imagenote);
+//             _this.SetCellShowText(sheetText,-1,-1,pro_note);
+//             }
+//             catch (e){alert(e);}
+//	}
+	
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot; ); 
+
+function commit() 
+{
+      var ret = 0; 
+      var db = null; 
+      var ds = null; 
+      var ps1 = null;
+      var ps2 = null;
+      var ps3 = null;
+      var project=&amp;quot;JQFIN&amp;quot;;
+      try
+      {
+             db = new pubpack.EADatabase();
+            
+             var guid = db.GetSQL(&amp;quot;select guid from trkdtl where project=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos; and result=&amp;apos;0&amp;apos;&amp;quot;); 
+             var trkguid =  db.GetSQL(&amp;quot;select trkguid from trkdtl where project=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;);
+             var trkdtl_crtusr = db.GetSQL(&amp;quot;select crtusr from trkdtl where guid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;&amp;quot;);
+//             var sql = &amp;quot;update trkdtl set pro_note=&amp;apos;&amp;quot;+pro_note+&amp;quot;&amp;apos;,tousr=&amp;apos;&amp;quot;+tousr+&amp;quot;&amp;apos;, &amp;quot; +
+//                       &amp;quot;style=&amp;apos;已处理&amp;apos;,crtusrorg=&amp;apos;&amp;quot;+crtusrorg+&amp;quot;&amp;apos;,crtusr=&amp;apos;&amp;quot;+crtusr+&amp;quot;&amp;apos;,&amp;quot; +
+//                       &amp;quot;result=&amp;apos;1&amp;apos;,project=&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;,filepath=&amp;apos;&amp;quot;+filepath+&amp;quot;&amp;apos;,&amp;quot; +
+//                       &amp;quot;filenote=&amp;apos;&amp;quot;+filenote+&amp;quot;&amp;apos;,title=&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos;,trkguid=&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;, imagepath=&amp;apos;&amp;quot;+imagepath+&amp;quot;&amp;apos;,imagenote=&amp;apos;&amp;quot;+imagenote+&amp;quot;&amp;apos; where  guid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;;
+//                   thro 
+             if ( edit == &amp;quot;save&amp;quot;)          
+             {  
+             var sql = &amp;quot;update trkdtl set pro_note=?,tousr=?,style=?,crtusrorg=?,crtusr=?, &amp;quot;+
+                       &amp;quot;result=?,project=?,filepath=?,filenote=?,title=?,trkguid=?,imagepath=?, &amp;quot;+
+                       &amp;quot;imagenote=?,selforg=?,aimorg=?  where guid=? and id=? &amp;quot;;
+             ps1 = db.prepareStatement(sql);
+             ps1.setString(1,pro_note);
+             ps1.setString(2,tousr);
+             ps1.setString(3,&amp;quot;2&amp;quot;);//修改过的，原来是“已处理”
+             ps1.setString(4,crtusrorg);
+             ps1.setString(5,crtusr);
+             ps1.setString(6,&amp;quot;1&amp;quot;);
+             ps1.setString(7,project);
+             ps1.setString(8,filepath);
+             ps1.setString(9,filenote);
+             ps1.setString(10,title);
+             ps1.setString(11,trkguid);
+             ps1.setString(12,imagepath);
+             ps1.setString(13,imagenote);
+             ps1.setString(14,selforg);
+             ps1.setString(15,aimorg);
+             ps1.setString(16,guid);
+             ps1.setString(17,id);
+             ret = ps1.executeUpdate(); 
+             ps1.close();
+               
+                                     
+//             var sql1 = &amp;quot;insert into trkdtl(id,project,crtusr,style,title,crtusrorg,&amp;quot; +  
+//                        &amp;quot; result,trkguid) values (&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+project+&amp;quot;&amp;apos;,&amp;quot; +  
+//                        &amp;quot; &amp;apos;&amp;quot;+tousr+&amp;quot;&amp;apos;,&amp;apos;未处理&amp;apos;,&amp;apos;&amp;quot;+title+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+crtusrorg+&amp;quot;&amp;apos;,&amp;quot; + 
+//                        &amp;quot; &amp;apos;0&amp;apos;,&amp;apos;&amp;quot;+trkguid+&amp;quot;&amp;apos;)&amp;quot;;
+            var sql1 = &amp;quot;&amp;quot;; 
+             if ( flag == &amp;quot;1&amp;quot; )
+             {
+              sql1 = &amp;quot;insert into trkdtl(id,project,crtusr,style,title,crtusrorg, &amp;quot; +
+                        &amp;quot;result,trkguid,acc,syt,selforg,aimorg) values (?,?,?,?,?,?,?,?,?,?,?,?) &amp;quot;;
+             ps2 = db.prepareStatement(sql1);    
+             ps2.setString(1,id);
+             ps2.setString(2,project);  
+             ps2.setString(3,tousr);  
+             ps2.setString(4,&amp;quot;4&amp;quot;);  //修改过的，原来是“”未处理
+             ps2.setString(5,title);  
+             ps2.setString(6,crtusrorg);  
+             ps2.setString(7,&amp;quot;0&amp;quot;);  
+             ps2.setString(8,trkguid);
+             ps2.setString(9,acc);
+             ps2.setString(10,syt);
+             ps2.setString(11,aimorg);
+             ps2.setString(12,selforg);
+             ps2.executeUpdate();
+             }
+             else  //edit != &amp;quot;save&amp;quot;
+             {
+            sql1 = &amp;quot;insert into trkdtl(id,project,crtusr,style,title,crtusrorg, &amp;quot; +
+                        &amp;quot;result,trkguid,acc,selforg,aimorg,syt) values (?,?,?,?,?,?,?,?,?,?,?,?) &amp;quot;;
+             ps2 = db.prepareStatement(sql1);    
+             ps2.setString(1,id);
+             ps2.setString(2,project);  
+             ps2.setString(3,trkdtl_crtusr);  
+             ps2.setString(4,&amp;quot;4&amp;quot;);  //修改过的，原来是“”未处理
+             ps2.setString(5,title);  
+             ps2.setString(6,crtusrorg);  
+             ps2.setString(7,&amp;quot;0&amp;quot;);  
+             ps2.setString(8,trkguid);
+             ps2.setString(9,acc);
+             ps2.setString(10,aimorg);
+             ps2.setString(11,selforg);
+             ps2.setString(12,syt);
+             ps2.executeUpdate();
+             
+             
+             
+             }
+             ps2.close();             
+             db.ExcecutSQL(&amp;quot;update trkhdr set stat=&amp;apos;2&amp;apos;,dtlusr=&amp;apos;&amp;quot;+tousr+&amp;quot;&amp;apos;, aimorg=&amp;apos;&amp;quot;+aimorg+&amp;quot;&amp;apos; where  id=&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;&amp;quot;);
+             db.Commit();  
+             }
+             else//修改
+             {
+                 var sql = &amp;quot;update  trkdtl set project=?,tousr=?,imagenote=?,title=?,pro_note=? where id=? and result=? and crtusr=?&amp;quot;;
+                 ps3 = db.prepareStatement(sql);
+                 ps3.setString(1,project);
+                 ps3.setString(2,tousr);
+                 ps3.setString(3,imagenote);
+                 ps3.setString(4,title);
+                 ps3.setString(5,pro_note);             
+                 ps3.setString(6,id);
+                 ps3.setString(7,&amp;quot;1&amp;quot;);
+                 ps3.setString(8,crtusr);
+                 ret =  ps3.executeUpdate();
+                 ps3.close();
+                 db.Commit();                      
+             }
+                    
+            //db.ExcecutSQL(sql1);          
+             
+            //ret = db.ExcecutSQL(sql);
+            return ret ; 
+      }
+      catch(e)
+      {
+            throw e;
+            db.Rollback();
+       }
+       finally
+       {
+             db.Close();
+       }
+}
+
+function file()
+{
+     // return  &amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;xlsgrid.file.dynadata.root&amp;quot;)+&amp;quot;upload/&amp;quot;;  
+     return  &amp;quot;/&amp;quot;+pubpack.EAOption.get(&amp;quot;filestore&amp;quot;)+&amp;quot;upload/&amp;quot;;  
+}
+
+function update()
+{
+	//把文件名写入数据库并更新此单的状态
+	var ret = 0; 
+      var db = null; 
+      var ds = null; 
+      var ps1 = null;
+      var ps2 = null;
+      var ps3 = null;
+      var project=&amp;quot;JQFIN&amp;quot;;
+//      throw new Exception(&amp;quot;开始更新数据&amp;quot;);//用来抛出错误
+
+      try
+      {
+             db = new pubpack.EADatabase();
+            
+             
+             var sql = &amp;quot;update TRK_SAMODIFY set stat=&amp;apos;6&amp;apos;, doc=? &amp;quot;+
+             &amp;quot;  where guid=? &amp;quot;;
+             
+
+             ps1 = db.prepareStatement(sql);
+             ps1.setString(1,doc);
+             ps1.setString(2,guid);
+//             ps1.setString(3,id);
+//		throw new Exception(ps1);//用来抛出错误显示ps1在界面上
+             ret = ps1.executeUpdate(); 
+             ps1.close();
+             db.Commit();  
+                                 
+            //db.ExcecutSQL(sql1);          
+             
+            //ret = db.ExcecutSQL(sql);
+      }
+      catch(e)
+      {
+            throw e;
+            db.Rollback();
+       }
+       finally
+       {
+             db.Close();
+       }
+
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

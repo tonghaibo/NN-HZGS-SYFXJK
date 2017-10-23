@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >Billmain</MWID><NAME >bill客户主页布局</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >Billmain.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >Print1</ID><NAME >打印1</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+<ROW num="1" ><ID >Print2</ID><NAME >打印2</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetCellText(0,0,0,&amp;quot;1234567&amp;quot;);  
+	_this.SetCellText(0,0,1,&amp;quot;4891132016405&amp;quot;); 
+	_this.SetCellText(0,1,0,&amp;quot;1234567890123&amp;quot;); 
+	_this.SetCellText(0,1,1,&amp;quot;76598676-4&amp;quot;); 
+}
+
+//打印1
+function Print1()
+{
+	_this.SetPrintMode(0);
+	_this.Print(0,0);
+}
+
+//打印2
+function Print2()
+{
+	_this.SetPrintMode(2);
+	_this.Print(0,0);  
+  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+
+// 首页的登录信息
+function LoginInfo()
+{
+	var ret= &amp;quot;&amp;quot;;
+	var usrinfo = webpack.EASession.GetLoginInfo(request);
+	var usrid = usrinfo.getUsrid();
+	var usrorgid = usrinfo.getusrOrg();
+	var db = null;
+	ret = &amp;quot;欢迎您，&amp;quot;+usrinfo.getUsrnam()+&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var sql = &amp;quot;select * from( select to_char(crtdat,&amp;apos;MM/DD HH24:MI&amp;apos;) tim from usrlog where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and action=&amp;apos;登录系统&amp;apos; order by crtdat desc) where rownum&amp;lt;=2 &amp;quot;;
+		var ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 1 ) {
+			ret+=&amp;quot;您最后一次登录时间是&amp;quot;+ds.getStringAt(1,&amp;quot;TIM&amp;quot;) +&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		sql = &amp;quot; select count(*) CNT from OALOG where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and ( mwtyp=&amp;apos;TRKDTL1&amp;apos; or mwtyp=&amp;apos;TRKHDR&amp;apos;) and to_char(crtdat,&amp;apos;YYMM&amp;apos;)=to_char(sysdate,&amp;apos;YYMM&amp;apos;)  &amp;quot;;
+		ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			ret+=&amp;quot;本月事务处理量&amp;quot;+ds.getStringAt(0,&amp;quot;CNT&amp;quot;) +&amp;quot;条 &amp;quot;;
+		}
+		sql = &amp;quot; select count(*) CNT from OALOG where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and to_char(crtdat,&amp;apos;YYMM&amp;apos;)=to_char(sysdate,&amp;apos;YYMM&amp;apos;) &amp;quot;;
+		ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			ret+=&amp;quot;活跃度&amp;quot;+ds.getStringAt(0,&amp;quot;CNT&amp;quot;) +&amp;quot;&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		sql = &amp;quot; select to_char(crtdat,&amp;apos;HH24:MI&amp;apos;) TIM from SIGNIN where usrid=&amp;apos;&amp;quot;+usrid +&amp;quot;&amp;apos; and org=&amp;apos;&amp;quot;+usrorgid +&amp;quot;&amp;apos; and to_char(crtdat,&amp;apos;YYMMDD&amp;apos;)=to_char(sysdate,&amp;apos;YYMMDD&amp;apos;) order by crtdat asc&amp;quot;;
+		ds =db.QuerySQL(sql);
+		if ( ds.getRowCount() &amp;gt; 0 ) {
+			ret+=&amp;quot;今天&amp;quot;+ds.getStringAt(0,&amp;quot;TIM&amp;quot;)+&amp;quot;已签到&amp;lt;BR&amp;gt;&amp;quot;;
+		}
+		else 
+			ret+=&amp;quot;&amp;lt;a href=\&amp;quot;show.sp?grdid=TRK_SIGNIN\&amp;quot;  target=_blank&amp;gt;&amp;lt;font color=&amp;apos;#FF0000&amp;apos;&amp;gt;您今天没签到，点击签到&amp;lt;/font&amp;gt;&amp;lt;/a&amp;gt;&amp;quot;;
+		//ret+=&amp;quot;&amp;nbsp;&amp;quot;;
+		//ret+=&amp;quot;&amp;lt;form name=&amp;apos;fsearch&amp;apos; action=&amp;apos;Layout.sp&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;input id=\&amp;quot;query\&amp;quot; style=&amp;apos;COLOR: #aaaaaa;border: 1px solid #0A246A; font-family:宋体; font-size:9pt&amp;apos; onfocus=\&amp;quot;if(document.all(&amp;apos;query&amp;apos;).value==&amp;apos;请输入...&amp;apos;)document.all(&amp;apos;query&amp;apos;).value=&amp;apos;&amp;apos;;\&amp;quot; size=\&amp;quot;18\&amp;quot; value=\&amp;quot;请输入...\&amp;quot; onclick=\&amp;quot; if(this.value==&amp;apos;请输入...&amp;apos;)this.value=&amp;apos;&amp;apos;\&amp;quot; name=\&amp;quot;query\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;fsearch.submit();\&amp;quot;&amp;gt;开始搜索&amp;lt;/a&amp;gt;&amp;quot;;
+		//ret+=&amp;quot;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;fsearch.submit();\&amp;quot;&amp;gt;开始搜索&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;id&amp;apos; value=&amp;apos;SearchTrk&amp;apos;&amp;gt;&amp;quot;;
+		//ret+=&amp;quot;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;encoding&amp;apos; value=&amp;apos;UTF-8&amp;apos;&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;;
+		//		ret+=&amp;quot;&amp;lt;form name=&amp;apos;fsearch&amp;apos; action=&amp;apos;Layout.sp&amp;apos;&amp;gt;&amp;nbsp;&amp;lt;input id=\&amp;quot;query\&amp;quot; style=&amp;apos;COLOR: #aaaaaa;border: 1px solid #0A246A; font-family:宋体; font-size:9pt&amp;apos; onfocus=\&amp;quot;if(document.all(&amp;apos;query&amp;apos;).value==&amp;apos;请输入...&amp;apos;)document.all(&amp;apos;query&amp;apos;).value=&amp;apos;&amp;apos;;\&amp;quot; size=\&amp;quot;18\&amp;quot; value=\&amp;quot;请输入...\&amp;quot; onclick=\&amp;quot; if(this.value==&amp;apos;请输入...&amp;apos;)this.value=&amp;apos;&amp;apos;\&amp;quot; name=\&amp;quot;query\&amp;quot;&amp;gt;&amp;nbsp;&amp;lt;a href=\&amp;quot;#\&amp;quot; onclick=\&amp;quot;fsearch.submit();\&amp;quot;&amp;gt;开始搜索&amp;lt;/a&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;id&amp;apos; value=&amp;apos;SearchTrk&amp;apos;&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;ignoreencoding&amp;apos; value=&amp;apos;1&amp;apos;&amp;gt;&amp;lt;input type=&amp;apos;hidden&amp;apos; name =&amp;apos;encoding&amp;apos; value=&amp;apos;UTF-8&amp;apos;&amp;gt;&amp;lt;/form&amp;gt;&amp;quot;;
+
+	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+
+
+	return ret;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

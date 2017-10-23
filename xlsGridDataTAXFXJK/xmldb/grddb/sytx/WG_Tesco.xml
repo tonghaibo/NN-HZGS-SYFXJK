@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_Tesco</MWID><NAME >乐购</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_Tesco.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);
+	_this.SaveTextFile( &amp;quot;d:/Tesco.txt&amp;quot;,msg,&amp;quot; (*.txt)|*.txt|All Files (*.*)|*.*| |&amp;quot; );
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var protocolpack = new JavaPackage(&amp;quot;org.apache.commons.httpclient.protocol&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+//var order = new pubpack.EAXmlDS();
+//var row = -1;
+
+var msg = &amp;quot;&amp;quot;;
+
+function start()
+{
+	return getOrderStr(&amp;quot;GMHD&amp;quot;,&amp;quot;2013-01-21&amp;quot;,&amp;quot;0007&amp;quot;,&amp;quot;10000704&amp;quot;,&amp;quot;654321&amp;quot;,&amp;quot;dept&amp;quot;,&amp;quot;utf-8&amp;quot;);
+}
+
+function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+{
+	var ret = &amp;quot;&amp;quot;;
+	var param = &amp;quot;&amp;quot;;
+	var url = &amp;quot;&amp;quot;;
+	try
+	{
+		var myhttps = new protocolpack.Protocol(&amp;quot;https&amp;quot;,new webget.MySecureProtocolSocketFactory(),443);   // CarrefourFactory
+		protocolpack.Protocol.registerProtocol(&amp;quot;https&amp;quot;,myhttps);
+		var httpcall = new webget.HttpCall();
+		ret = httpcall.Get(&amp;quot;https://mailsupplier.cn.tesco.com/exchweb/bin/auth/owalogon.asp?url=https://mailsupplier.cn.tesco.com/exchange&amp;reason=0&amp;quot;,code);
+		//1.登录
+		var loginurl=&amp;quot;https://mailsupplier.cn.tesco.com/exchweb/bin/auth/owaauth.dll&amp;quot;;
+		var params = &amp;quot;destination=https://mailsupplier.cn.tesco.com/exchange&amp;flags=0&amp;username=&amp;quot;+userid+&amp;quot;&amp;password=&amp;quot;+passwd+&amp;quot;&amp;SubmitCreds=登录&amp;forcedownlevel=0&amp;trusted=0&amp;quot;;
+//		ret = httpcall.Post(loginurl,&amp;quot;flags=0&amp;username=&amp;quot;+userid+&amp;quot;&amp;password=&amp;quot;+passwd+&amp;quot;&amp;destination=https://mailsupplier.cn.tesco.com/exchange/&amp;quot;,code);
+		ret = httpcall.Post(loginurl,params,code);
+//		throw new Exception(ret);
+	        //2.通过WebDAV得到邮件列表
+	        var pageurl=&amp;quot;https://mailsupplier.cn.tesco.com/exchange/&amp;quot;+userid+&amp;quot;/Inbox/&amp;quot;;//?Cmd=contents
+	        if(userid==&amp;quot;12256086&amp;quot;||userid==&amp;quot;12255751&amp;quot;) //待处理，不知道为什么需要2个SEARCH入口
+	        	pageurl=&amp;quot;https://mailsupplier.cn.tesco.com/exchange/&amp;quot;+userid+&amp;quot;/%E6%94%B6%E4%BB%B6%E7%AE%B1//&amp;quot;;//?Cmd=contents	        
+//	        var pageurl=&amp;quot;https://mailsupplier.cn.tesco.com/exchange/&amp;quot;+userid+&amp;quot;/#&amp;quot;;
+	        var pagedata = &amp;quot;&amp;lt;searchrequest xmlns=\&amp;quot;DAV:\&amp;quot;&amp;gt;&amp;lt;sql&amp;gt;SELECT \&amp;quot;http://schemas.microsoft.com/exchange/smallicon\&amp;quot; as smicon, \&amp;quot;http://schemas.microsoft.com/mapi/sent_representing_name\&amp;quot; as from, \&amp;quot;urn:schemas:httpmail:datereceived\&amp;quot; as recvd, \&amp;quot;http://schemas.microsoft.com/mapi/proptag/x10900003\&amp;quot; as flag, \&amp;quot;http://schemas.microsoft.com/mapi/subject\&amp;quot; as subj, \&amp;quot;http://schemas.microsoft.com/exchange/x-priority-long\&amp;quot; as prio, \&amp;quot;urn:schemas:httpmail:hasattachment\&amp;quot; as fattach,\&amp;quot;urn:schemas:httpmail:read\&amp;quot; as r, \&amp;quot;http://schemas.microsoft.com/exchange/outlookmessageclass\&amp;quot; as m, \&amp;quot;http://schemas.microsoft.com/mapi/proptag/x10950003\&amp;quot; as flagcolor &amp;quot;+
+				&amp;quot; FROM Scope(&amp;apos;SHALLOW TRAVERSAL OF \&amp;quot;\&amp;quot;&amp;apos;)&amp;quot;+
+				&amp;quot; WHERE \&amp;quot;http://schemas.microsoft.com/mapi/proptag/0x67aa000b\&amp;quot; = false AND \&amp;quot;DAV:isfolder\&amp;quot; = false&amp;quot;+
+				&amp;quot; ORDER BY \&amp;quot;urn:schemas:httpmail:datereceived\&amp;quot; DESC&amp;quot;+
+				&amp;quot; &amp;lt;/sql&amp;gt;&amp;lt;range type=\&amp;quot;row\&amp;quot;&amp;gt;0-24&amp;lt;/range&amp;gt;&amp;lt;/searchrequest&amp;gt;&amp;quot;;
+//	        msg=pageurl;
+//		msg += httpcall.Search(pageurl,pagedata,&amp;quot;GBK&amp;quot;);
+//		return pagedata ;
+		var node =  httpcall.SearchAndParse(pageurl,pagedata,code);//&amp;quot;GBK&amp;quot;);
+		
+	        return GetBillist(node,httpcall,userid,dat,deptid,kaid);
+	}
+	catch(e)
+	{
+//		return e;
+		throw new Exception(e);
+	}
+//	return msg;
+}
+
+//递归，取出单据列表
+function GetBillist(node,httpcall,userid,dat ,deptid,kaid)
+{
+	var nodename=&amp;quot;&amp;quot;+node.getNodeName();
+//	throw new Exception(nodename);
+//	msg+=&amp;quot;[&amp;quot;+nodename+&amp;quot;[&amp;quot;;
+	if ( &amp;quot;a:href&amp;quot; == nodename ||&amp;quot;A:HREF&amp;quot; ==nodename ) {
+	        var url = node.getFirstChild().getNodeValue();
+	        var frameHtml= httpcall.Get(url,&amp;quot;UTF-8&amp;quot;) ;
+	        var BASE=&amp;quot;&amp;quot;;
+	        //直接用字符定位找出FRAME里面的目标URL
+	        var loc1 = frameHtml.indexOf(&amp;quot;&amp;lt;BASE&amp;quot;);
+	        if( loc1&amp;gt;=0) {
+	          loc1=frameHtml.indexOf(&amp;quot;href=\&amp;quot;&amp;quot;,loc1+1);
+	          BASE= frameHtml.substring(loc1+6,frameHtml.indexOf(&amp;quot;\&amp;quot;&amp;quot;,loc1+8));
+	        }	       
+	        var FRAMESRC=&amp;quot;&amp;quot;;
+	        loc1 = frameHtml.indexOf(&amp;quot;&amp;lt;FRAME&amp;quot;);
+	        if(loc1&amp;gt;=0) loc1=frameHtml.indexOf(&amp;quot;&amp;lt;FRAME&amp;quot;,loc1+10);//第2个
+	        if(loc1&amp;gt;=0) loc1=frameHtml.indexOf(&amp;quot;&amp;lt;FRAME&amp;quot;,loc1+10);//第3个
+	        if( loc1&amp;gt;=0) {
+	          loc1=frameHtml.indexOf(&amp;quot;src=\&amp;quot;&amp;quot;,loc1+1);
+	          FRAMESRC= frameHtml.substring(loc1+5,frameHtml.indexOf(&amp;quot;\&amp;quot;&amp;quot;,loc1+8));
+	        }
+	        var orderHtml= httpcall.Get(BASE+FRAMESRC,&amp;quot;UTF-8&amp;quot;);
+	        //找出发送时间   发送时间:&amp;nbsp;&amp;lt;/TD&amp;gt; &amp;lt;TD&amp;gt;&amp;lt;NOBR&amp;gt;2011-3-27 (星期日) 17:01
+	        var billdat = &amp;quot;&amp;quot;;
+	        loc1 = orderHtml.indexOf(&amp;quot;发送时间:&amp;quot;);
+	        if( loc1&amp;gt;=0) {
+	          loc1=orderHtml.indexOf(&amp;quot;&amp;lt;NOBR&amp;gt;&amp;quot;,loc1+1);//2011-3-9 (星期三)
+	          var sss= orderHtml.substring(loc1+&amp;quot;&amp;lt;NOBR&amp;gt;&amp;quot;.length(),loc1+&amp;quot;&amp;lt;NOBR&amp;gt;&amp;quot;.length()+10).trim();
+	          var sss = sss.split(&amp;quot; &amp;quot;)[0];
+	          var ss = sss.split(&amp;quot;-&amp;quot;);
+	          if ( ss.length() &amp;gt;= 3){
+	          	var yy=ss[0];var mm=ss[1];var dd=ss[2];
+	          	if( mm.length()&amp;lt;2 ) mm = &amp;quot;0&amp;quot;+mm;
+	          	if( dd.length()&amp;lt;2 ) dd = &amp;quot;0&amp;quot;+dd;
+	          	billdat=yy+&amp;quot;-&amp;quot;+mm+&amp;quot;-&amp;quot;+dd;
+	          }
+	          
+	        }
+	        if(billdat==dat){
+		        //直接用字符定位找出信件内容里面的附件URL
+		        loc1 = orderHtml.indexOf(&amp;quot;&amp;lt;DIV id=\&amp;quot;idAttachmentWell\&amp;quot; class=\&amp;quot;AttachmentWell\&amp;quot;&amp;gt;&amp;quot;);
+		        if( loc1&amp;gt;=0) {
+		          loc1=orderHtml.indexOf(&amp;quot;&amp;lt;A href=\&amp;quot;&amp;quot;,loc1+1);
+		          var url1= orderHtml.substring(loc1+&amp;quot;&amp;lt;A href=\&amp;quot;&amp;quot;.length(),orderHtml.indexOf(&amp;quot;\&amp;quot;&amp;quot;,loc1+&amp;quot;&amp;lt;A href=\&amp;quot;&amp;quot;.length()+2));
+		          //这个就是附件内容
+		          if (url1 != &amp;quot;TP-EQUIV=&amp;quot;) {
+		            var orderText = httpcall.Get0(url1,&amp;quot;GBK&amp;quot;,&amp;quot;\r&amp;quot;);
+		            if(msg != &amp;quot;&amp;quot;) msg += &amp;quot;╃&amp;quot;;
+		            msg += parseOneBill(httpcall,orderText,userid,deptid,kaid);
+		          }
+		        }
+		}
+      }
+      
+      var children = node.getChildNodes();
+      if ( children != null ) {
+        var len = children.getLength();
+        for ( var i = 0; i &amp;lt; len; i++ ) {
+          GetBillist(children.item(i),httpcall,userid,dat,deptid,kaid);//递归遍历DOM树
+        }
+      }
+
+      return msg;
+}
+
+//解析一张单据
+//httpcall
+//str：单据的文本
+//返回：字符串分割的字符
+function  parseOneBill(httpcall,str,userid,deptid,kaid)
+{
+	var ret = str; 
+	var title_param = &amp;quot;                  TESCO 乐  购  商  品  订  单\r&amp;quot;;
+	var title_params = ret.split(title_param);
+	var line = &amp;quot;──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────\r&amp;quot;;
+	var msgs = &amp;quot;&amp;quot;;
+	for(var r = 1;r &amp;lt; title_params.length();r ++)
+	{
+		var lines = title_params[r].split(line);
+		var corpnam = lines[0].substring(lines[0].indexOf(&amp;quot;:&amp;quot;)+3,lines[0].indexOf(&amp;quot;页&amp;quot;)); 
+		corpnam  = EAfunc.regexReplace(corpnam , &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		if (corpnam.indexOf(&amp;quot;EXPRESS&amp;quot;) != -1) return;
+		var bilid = lines[1].substring(lines[1].indexOf(&amp;quot;订单号码&amp;quot;)+6,lines[1].indexOf(&amp;quot;促销期数&amp;quot;));//订单编号
+		bilid = EAfunc.regexReplace(bilid, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		var date = lines[1].substring(lines[1].indexOf(&amp;quot;订单日期&amp;quot;)+6,lines[1].indexOf(&amp;quot;交货日期&amp;quot;));//订单日期
+		date = EAfunc.regexReplace(date, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		//dd/mm/yyyy
+		var _date = date.split(&amp;quot;/&amp;quot;)[2]+&amp;quot;/&amp;quot;+date.split(&amp;quot;/&amp;quot;)[1]+&amp;quot;/&amp;quot;+date.split(&amp;quot;/&amp;quot;)[0];
+		var addrdate = lines[1].substring(lines[1].indexOf(&amp;quot;交货日期&amp;quot;)+6,lines[1].indexOf(&amp;quot;订单类型&amp;quot;));//交货日期
+		addrdate = EAfunc.regexReplace(addrdate, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		if (addrdate == &amp;quot;&amp;quot;) addrdate = date;
+		var _addrdate = addrdate.split(&amp;quot;/&amp;quot;)[2]+&amp;quot;/&amp;quot;+addrdate.split(&amp;quot;/&amp;quot;)[1]+&amp;quot;/&amp;quot;+addrdate.split(&amp;quot;/&amp;quot;)[0];
+		var tel = lines[1].substring(lines[1].indexOf(&amp;quot;电  话&amp;quot;)+6,lines[1].indexOf(&amp;quot;传  真&amp;quot;));//电话
+		tel = EAfunc.regexReplace(tel, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		var fax = lines[1].substring(lines[1].indexOf(&amp;quot;传  真&amp;quot;)+6,lines[1].indexOf(&amp;quot;店  址&amp;quot;));//传真
+		fax = EAfunc.regexReplace(fax, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+		var addr = lines[1].substring(lines[1].indexOf(&amp;quot;店  址&amp;quot;)+6,lines[1].indexOf(&amp;quot;邮  编&amp;quot;));//地址
+		addr = EAfunc.regexReplace(addr, &amp;quot;\\s+&amp;quot;,&amp;quot;&amp;quot;);
+//		throw new Exception(&amp;quot;corpnam&amp;quot;+corpnam+&amp;quot;,bilid=&amp;quot;+bilid+&amp;quot;,date=&amp;quot;+_date+&amp;quot;,addrdate=&amp;quot;+_addrdate+&amp;quot;,tel=&amp;quot;+tel+&amp;quot;,fax=&amp;quot;+fax+&amp;quot;\n,addr=&amp;quot;+addr);
+		var details = lines[3].split(&amp;quot;\r&amp;quot;);
+
+		var count = 1;
+//		if(bilid == &amp;quot;10239238&amp;quot;)
+//			throw new Exception(details.length());
+
+		for(var details_r = 0;details_r &amp;lt; details.length();details_r++)
+		{
+			if(details[details_r].length() &amp;gt; 0&amp;&amp;details[details_r] != &amp;quot;───&amp;quot;)
+			{
+				var detail = EAfunc.regexReplace(details[details_r] , &amp;quot;\\s+&amp;quot;,&amp;quot;,&amp;quot;);//抓明细
+				var detail1 = EAfunc.regexReplace(details[details_r+1] , &amp;quot;\\s+&amp;quot;,&amp;quot;,&amp;quot;);//抓明细
+//				,102717619/,椰岛鹿龟酒一星33度/500,瓶,个,12,-,-,12.00,-,12.00,12.00,1,1,***,6901160007073,ml/瓶,0.00,	
+				var itmid = detail1.split(&amp;quot;,&amp;quot;)[1];
+			
+				var _itmnam = &amp;quot;&amp;quot;;
+				var zpqty = &amp;quot;&amp;quot;;
+			
+				if(detail1.split(&amp;quot;,&amp;quot;).length() &amp;gt; 2)
+					_itmnam = detail1.split(&amp;quot;,&amp;quot;)[2];
+				zpqty = detail1.split(&amp;quot;,&amp;quot;)[detail1.split(&amp;quot;,&amp;quot;).length()-2];
+
+//				if((detail1.split(&amp;quot;,&amp;quot;)[3]).indexOf(&amp;quot;.&amp;quot;) == -1)
+//				{
+//					_itmnam = detail1.split(&amp;quot;,&amp;quot;)[2];
+//					zpqty = detail1.split(&amp;quot;,&amp;quot;)[4];
+//				}
+//				else
+//				{
+//					zpqty = detail1.split(&amp;quot;,&amp;quot;)[3];
+//				}
+			
+				if(msgs != &amp;quot;&amp;quot;)
+				 	msgs += &amp;quot;╃&amp;quot;;
+				//srflg,userid,deptid,kaid,bilid,ecorpnam,ecorpid,itmclass,ordid,dat,arrdat,tel,fax,seqid,eitmid,code,spec,eitmnam,untnum,qtyflg,qty,zpqty,eprice,corpaddr,note,EBOPTION,org
+				//&amp;100143587&amp;渔夫之宝特强薄荷糖(&amp;盒&amp;EA&amp;12&amp;12.00&amp;0&amp;12.00&amp;1&amp;1&amp;原味)/11g/盒
+				//SRFLG~~~USERID~~~DEPTID~~~KAID~~~BILID~~~ECORPNAM~~~ECORPID~~~ITMCLASS~~~ORDID~~~DAT~~~ARRDAT~~~
+				//TEL~~~FAX~~~SEQID~~~EITMID~~~CODE~~~SPEC~~~EITMNAM~~~
+				//QTYFLG~~~UNTNUM~~~QTY~~~ZPQTY~~~EPRICE~~~CORPADDR~~~NOTE~~~NULL
+				msgs += &amp;quot;NR ~~~&amp;quot;+userid+&amp;quot;~~~&amp;quot;+deptid+&amp;quot;~~~&amp;quot;+kaid+&amp;quot;~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~ ~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+_date+&amp;quot;~~~&amp;quot;+_addrdate+&amp;quot;~~~&amp;quot;+
+					tel+&amp;quot;~~~&amp;quot;+fax+&amp;quot;~~~&amp;quot;+count+&amp;quot;~~~&amp;quot;+itmid+&amp;quot;~~~ ~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[3]+&amp;quot;~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[2]+_itmnam+
+					&amp;quot;~~~ ~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[5]+&amp;quot;~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[9]+&amp;quot;~~~&amp;quot;+zpqty+&amp;quot;~~~&amp;quot;+detail.split(&amp;quot;,&amp;quot;)[6]+&amp;quot;~~~&amp;quot;+addr+&amp;quot;~~~ ~~~ &amp;quot;;
+				count ++;
+				details_r++;
+			}
+		}
+	}
+//	throw new Exception(msgs);
+	return msgs;
+
+}
+
+//将字符串中的某些字符替换成&amp;quot;&amp;quot;
+function ReploaceStatment(str,array)
+{
+	
+	for(var r = 0;r &amp;lt; array.length() ;r ++)
+	{
+		var replacestatment = array[r];
+		while(true)
+		{
+			if (str.indexOf(replacestatment)&amp;gt;-1)			
+				str = EAfunc.Replace(str,replacestatment,&amp;quot;&amp;quot;);	
+			else
+			     break;
+		}
+	}
+	return str;
+}
+
+function DeleteSameStatment(str,replacement1,replacement2)
+{
+	var strs = str.split(replacement1);
+	var strs_1 = strs[1];
+	for(var r = 2;r &amp;lt; strs.length()-1;r ++)
+	{
+		if(strs[r+1] == replacement2&amp;&amp;strs[r] == strs[r+1])
+		{
+			strs[r] = EAfunc.Replace(strs[r],replacement2,&amp;quot;&amp;quot;);
+			strs_1 += strs[r];
+		}
+		else
+			strs_1 += strs[r];
+	}
+	return strs_1;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

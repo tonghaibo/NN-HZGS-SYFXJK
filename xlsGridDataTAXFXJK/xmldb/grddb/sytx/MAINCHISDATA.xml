@@ -1,0 +1,511 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >MAINCHISDATA</MWID><NAME >云医院分割</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >MAINCHISDATA.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+var pub = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var EAScript= new JavaPackage ( &amp;quot;com.xlsgrid.net.pub.EAScript&amp;quot;);
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var xmlpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+var layoutpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.layout&amp;quot;);
+var grdpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.grd&amp;quot;);	
+var langpack = new JavaPackage ( &amp;quot;java.lang&amp;quot;);
+
+
+//
+// 
+//
+function GetBody(){
+var picstr=genSTR(&amp;quot;MOVPIC&amp;quot;);
+var menu4str=genSTR(&amp;quot;MENU4&amp;quot;);
+var menu2str=genSTR(&amp;quot;MENU2&amp;quot;);
+var menu3str=genSTR(&amp;quot;MENU3&amp;quot;);
+var menu1str=genSTR(&amp;quot;MENU1&amp;quot;);
+var title1=genSTR(&amp;quot;TITLE1&amp;quot;);
+var title2=genSTR(&amp;quot;TITLE2&amp;quot;);
+var title3=genSTR(&amp;quot;TITLE3&amp;quot;);
+var title4=genSTR(&amp;quot;TITLE4&amp;quot;);
+
+var html=&amp;quot;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;空中医院&amp;lt;/title&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;Content-type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot; /&amp;gt;
+    &amp;lt;META HTTP-EQUIV=\&amp;quot;Pragma\&amp;quot; CONTENT=\&amp;quot;no-cache\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot; /&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/ss.css\&amp;quot; /&amp;gt;
+	&amp;lt;link href=\&amp;quot;sytx/js/chis/css/cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+     &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;sytx/js/chis/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot; &amp;gt;
+	.copyright {
+	padding: 8px;
+	text-align: center;
+	font-size: 14px;
+	color:#B2B2B2;
+	}
+	&amp;lt;/style&amp;gt;
+
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery-1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+&amp;lt;script type=text/javascript&amp;gt;
+function clicul(id){
+	var li=document.getElementById(id);
+	if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+		li.style.display=&amp;apos;block&amp;apos;;
+	}
+	else{
+	 	li.style.display=&amp;apos;none&amp;apos;;
+	}
+
+}
+
+&amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt;
+&amp;lt;body &amp;gt; 
+    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+        &amp;lt;header&amp;gt;
+            &amp;lt;h1&amp;gt;空中医院&amp;lt;/h1&amp;gt;
+        &amp;lt;/header&amp;gt;
+        &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+        		&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;关于\&amp;quot; id=\&amp;quot;theabout\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+        		&amp;lt;/div&amp;gt;
+         	    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;主页\&amp;quot; id=\&amp;quot;about1\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-selected=\&amp;quot;true\&amp;quot; &amp;gt;
+		      &amp;quot;;
+			  //&amp;lt;!--主页---------&amp;gt;		        
+			  //data-include=\&amp;quot;L.SP?id=CHIA_FG_KS\&amp;quot;
+			 // html+=getlayout(request,picstr);   		
+		          //html+=getlayout(request,menu1str);   
+		          html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;		
+		        &amp;lt;!-- 健康管理代码--&amp;gt;
+		    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title2+&amp;quot;\&amp;quot; id=\&amp;quot;item12\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;&amp;gt;
+		        &amp;quot;;
+			  //&amp;lt;!--健康管理---------&amp;gt;		        
+			  
+			  //html+=getlayout(request,menu2str);   		
+		          html+=&amp;quot;
+		    &amp;lt;/div&amp;gt;
+		   
+		    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title3+&amp;quot;\&amp;quot; id=\&amp;quot;item10\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot;&amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--沟通---------&amp;gt;		        
+			    //html+=getlayout(request,menu3str);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;我的\&amp;quot; id=\&amp;quot;about\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		      &amp;quot;;
+			  //&amp;lt;!--我的---------&amp;gt;		        
+			 // html+=getlayout(request,menu4str);   		
+		          html+=&amp;quot;
+
+		     &amp;lt;/div&amp;gt;	
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;用药\&amp;quot; id=\&amp;quot;health01\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+			   &amp;quot;;
+			   //&amp;lt;!--用药---------&amp;gt;		            
+			   // html+=getlayout(request,&amp;quot;MEDICATION&amp;quot;);   		
+			    html+=&amp;quot;
+		     	&amp;lt;/div&amp;gt;	
+			&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;饮食\&amp;quot; id=\&amp;quot;health02\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--饮食---------&amp;gt;		        
+			    
+			   // html+=getlayout(request,&amp;quot;DIETCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;运动\&amp;quot; id=\&amp;quot;health03\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--运动---------&amp;gt;		        
+			    
+			    //html+=getlayout(request,&amp;quot;MOTIONCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;监测\&amp;quot; id=\&amp;quot;health04\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--监测---------&amp;gt;		        
+			    
+			    //html+=getlayout(request,&amp;quot;MONITORCHIS&amp;quot;);   		
+			    html+=&amp;quot;检测无法显示
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;宣教\&amp;quot; id=\&amp;quot;health05\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--宣教---------&amp;gt;		        
+			    
+			    //html+=getlayout(request,&amp;quot;MISSIONCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;预约提醒\&amp;quot; id=\&amp;quot;health06\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--预约提醒---------&amp;gt;		        
+			    
+			    //html+=getlayout(request,&amp;quot;RESERVATIONCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		
+			&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;虚拟大厅\&amp;quot; id=\&amp;quot;MYROOMpanel\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--虚拟大厅---------&amp;gt;		        
+			    
+			    //html+=getlayout(request,&amp;quot;MYROOM&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+			&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;神经内科\&amp;quot; id=\&amp;quot;SJNKpanel\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; style=\&amp;quot;background-color:#eee;\&amp;quot; &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--神经内科---------&amp;gt;		        
+			    //html+=getlayout(request,&amp;quot;SJNK&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     	&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;地图\&amp;quot; id=\&amp;quot;MAPFINDpanel\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--地图---------&amp;gt;		        
+			    
+			   // html+=getlayout(request,&amp;quot;MAPFIND&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     	&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;医生微站\&amp;quot; id=\&amp;quot;ABOUTDOCpanel\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--医生微站---------&amp;gt;		        
+			    
+			   // html+=getlayout(request,&amp;quot;ABOUTDOC&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+
+			
+			
+		        &amp;lt;/div&amp;gt;&amp;lt;!--这个是pages 的结束--------------------------------------------------------------------------------&amp;gt;	         
+		         
+		         
+		         &amp;lt;!--Footer to add tabs if desired--&amp;gt;
+		        &amp;lt;footer&amp;gt;
+		            &amp;lt;a href=\&amp;quot;#about1\&amp;quot; class=\&amp;quot;icon home\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title1+&amp;quot;&amp;lt;/a&amp;gt;	
+		            &amp;lt;a href=\&amp;quot;#item12\&amp;quot; class=\&amp;quot;icon heart\&amp;quot; id=&amp;apos;tab2&amp;apos; data-transition=\&amp;quot;up-reveal\&amp;quot;&amp;gt;&amp;quot;+title2+&amp;quot;&amp;lt;/a&amp;gt;
+			    &amp;lt;a href=\&amp;quot;#item10\&amp;quot; class=\&amp;quot;icon pencil\&amp;quot; id=&amp;apos;tab3&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title3+&amp;quot;&amp;lt;/a&amp;gt;
+		            &amp;lt;a href=\&amp;quot;#about\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title4+&amp;quot;&amp;lt;/a&amp;gt;
+			    
+
+	
+		        &amp;lt;/footer&amp;gt;
+    &amp;lt;/div&amp;gt;&amp;lt;!--这个是view 的结束-------------------------------------------------------------------------------------&amp;gt;
+
+&amp;lt;/body&amp;gt;
+
+&amp;lt;/html&amp;gt;	
+&amp;quot;;
+return html;
+
+}
+
+
+//获取滚动图片
+function genSTR(str){
+
+	var sql=&amp;quot;&amp;quot;;
+	var ds=&amp;quot;&amp;quot;;
+	var db=null;
+	db = new pubpack.EADatabase();
+	var layid=&amp;quot;&amp;quot;;
+	try{
+		sql=&amp;quot;
+			SELECT B.* FROM LAYOBJ A ,LAYOBJDTL B  
+			WHERE A.GUID=B.FORMGUID 
+			AND A.ID =&amp;apos;CHIS_MAINFGOS&amp;apos; AND A.CLS=&amp;apos;CHIS&amp;apos;and B.id =&amp;apos;&amp;quot;+str+&amp;quot;&amp;apos;
+		&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()==1){
+			layid=ds.getStringAt(0,&amp;quot;VAL&amp;quot;);
+			return layid; 
+		}
+	}
+	catch(e){ throw new Exception(e);}
+	if(db!=null){db.Close();}
+}
+
+function getlayout(request,layoutid){
+	var db = null;
+	var msg= &amp;quot;&amp;quot;;
+	var objid= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;objid&amp;quot;),&amp;quot;&amp;quot;) ;
+	var skin= pubpack.EAFunc.NVL( request.getParameter(&amp;quot;skin&amp;quot;),&amp;quot;&amp;quot;) ;
+	var hashead = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hashead&amp;quot;),&amp;quot;y&amp;quot;) ;
+	var deforg =  pubpack.EAFunc.NVL( request.getParameter(&amp;quot;thisorgid&amp;quot;),webpack.EAWebDeforg.GetDeforg(request)) ;
+	var browsetype = pubpack.EAFunc.getBroswerType( request );
+	var sb=new langpack.StringBuffer();
+	try{	
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var parent = new x_L();
+		parent.GetLayoutHTML(db,request,sb,deforg,layoutid,0,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;);
+	}
+		catch ( ee ) {
+			db.Rollback();
+			sb.append(ee.toString());
+			//throw new pubpack.EAException ( ee.toString() );
+		}
+		finally {
+			if (db!=null) db.Close();
+		}
+
+	return sb.toString();
+}
+
+function genmenu2(){
+
+var menu2=&amp;quot;
+ &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;用药\&amp;quot; id=\&amp;quot;health01\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--用药---------&amp;gt;		        
+			    
+			    html+=getlayout(request,&amp;quot;MEDICATION&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;饮食\&amp;quot; id=\&amp;quot;health02\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--饮食---------&amp;gt;		        
+			    
+			    html+=getlayout(request,&amp;quot;DIETCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;运动\&amp;quot; id=\&amp;quot;health03\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--运动---------&amp;gt;		        
+			    
+			    html+=getlayout(request,&amp;quot;MOTIONCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;监测\&amp;quot; id=\&amp;quot;health04\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--监测---------&amp;gt;		        
+			    
+			    html+=getlayout(request,&amp;quot;MONITORCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;宣教\&amp;quot; id=\&amp;quot;health05\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--宣教---------&amp;gt;		        
+			    
+			    html+=getlayout(request,&amp;quot;MISSIONCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;预约提醒\&amp;quot; id=\&amp;quot;health06\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  &amp;gt;
+		         &amp;quot;;
+			   //&amp;lt;!--预约提醒---------&amp;gt;		        
+			    
+			    html+=getlayout(request,&amp;quot;RESERVATIONCHIS&amp;quot;);   		
+			    html+=&amp;quot;
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;用药\&amp;quot; id=\&amp;quot;health01\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MEDICATION\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;饮食\&amp;quot; id=\&amp;quot;health02\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=DIETCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;运动\&amp;quot; id=\&amp;quot;health03\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=MOTIONCHIS\&amp;quot; &amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;监测\&amp;quot; id=\&amp;quot;health04\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MONITORCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;宣教\&amp;quot; id=\&amp;quot;health05\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MISSIONCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;预约提醒\&amp;quot; id=\&amp;quot;health06\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=RESERVATIONCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+&amp;quot;;
+return menu2;
+}
+function genbody(){
+var picstr=genSTR(&amp;quot;MOVPIC&amp;quot;);
+var menu4str=genSTR(&amp;quot;MENU4&amp;quot;);
+var menu2str=genSTR(&amp;quot;MENU2&amp;quot;);
+var menu3str=genSTR(&amp;quot;MENU3&amp;quot;);
+var menu1str=genSTR(&amp;quot;MENU1&amp;quot;);
+var title1=genSTR(&amp;quot;TITLE1&amp;quot;);
+var title2=genSTR(&amp;quot;TITLE2&amp;quot;);
+var title3=genSTR(&amp;quot;TITLE3&amp;quot;);
+var title4=genSTR(&amp;quot;TITLE4&amp;quot;);
+
+var html=&amp;quot;
+&amp;lt;html&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;空中医院&amp;lt;/title&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;Content-type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui\&amp;quot;&amp;gt;
+    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot; /&amp;gt;
+    &amp;lt;META HTTP-EQUIV=\&amp;quot;Pragma\&amp;quot; CONTENT=\&amp;quot;no-cache\&amp;quot;&amp;gt;
+    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot; /&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/icons.css\&amp;quot; /&amp;gt;
+    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/ss.css\&amp;quot; /&amp;gt;
+	&amp;lt;link href=\&amp;quot;sytx/js/chis/css/cate.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; /&amp;gt;
+     &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;   
+	&amp;lt;script src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;sytx/js/chis/js/appframework.ui.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;style type=\&amp;quot;text/css\&amp;quot; &amp;gt;
+	.copyright {
+	padding: 8px;
+	text-align: center;
+	font-size: 14px;
+	color:#B2B2B2;
+	}
+	&amp;lt;/style&amp;gt;
+
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/style.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot;/&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery-1.7.1.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery.event.drag-1.5.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;sytx/js/chis/js/jquery.touchSlider.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;link type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/css/menu.css\&amp;quot; rel=\&amp;quot;stylesheet\&amp;quot; /&amp;gt;
+&amp;lt;script type=text/javascript&amp;gt;
+function clicul(id){
+	var li=document.getElementById(id);
+	if(li.style.display==&amp;apos;none&amp;apos; || li.style.display==&amp;apos;&amp;apos; ){
+		li.style.display=&amp;apos;block&amp;apos;;
+	}
+	else{
+	 	li.style.display=&amp;apos;none&amp;apos;;
+	}
+
+}
+
+&amp;lt;/script&amp;gt;
+
+&amp;lt;/head&amp;gt;
+&amp;lt;body &amp;gt; 
+    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+        &amp;lt;header&amp;gt;
+            &amp;lt;h1&amp;gt;空中医院&amp;lt;/h1&amp;gt;
+        &amp;lt;/header&amp;gt;
+        &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+         	&amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title1+&amp;quot;\&amp;quot; id=\&amp;quot;item13\&amp;quot; data-selected=\&amp;quot;true\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu1str+&amp;quot;\&amp;quot;&amp;gt;
+		       &amp;lt;!--滚动图片---------&amp;gt;
+		  &amp;lt;/div&amp;gt;
+		  &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title4+&amp;quot;\&amp;quot; id=\&amp;quot;item11\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu4str+&amp;quot;\&amp;quot;&amp;gt;		         
+			  &amp;lt;!--我的---------&amp;gt;		        
+	           &amp;lt;/div&amp;gt;
+		        &amp;lt;!-- 健康管理代码--&amp;gt;
+		    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title2+&amp;quot;\&amp;quot; id=\&amp;quot;item12\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu2str+&amp;quot;\&amp;quot;&amp;gt;
+			  &amp;lt;!--健康管理---------&amp;gt;		        
+		    &amp;lt;/div&amp;gt;
+		    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title3+&amp;quot;\&amp;quot; id=\&amp;quot;item10\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu3str+&amp;quot;\&amp;quot;&amp;gt;
+			   &amp;lt;!--沟通---------&amp;gt;		       
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;用药\&amp;quot; id=\&amp;quot;health01\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MEDICATION\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;饮食\&amp;quot; id=\&amp;quot;health02\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=DIETCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;运动\&amp;quot; id=\&amp;quot;health03\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=MOTIONCHIS\&amp;quot; &amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;监测\&amp;quot; id=\&amp;quot;health04\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MONITORCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;宣教\&amp;quot; id=\&amp;quot;health05\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MISSIONCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;预约提醒\&amp;quot; id=\&amp;quot;health06\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=RESERVATIONCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+					        
+
+		        &amp;lt;/div&amp;gt;&amp;lt;!--这个是pages 的结束--------------------------------------------------------------------------------&amp;gt;
+		         &amp;lt;!--Footer to add tabs if desired--&amp;gt;
+		        &amp;lt;footer&amp;gt;
+		            &amp;lt;a href=\&amp;quot;#item13\&amp;quot; class=\&amp;quot;icon home\&amp;quot; id=&amp;apos;tab1&amp;apos; data-transition=\&amp;quot;slide\&amp;quot;&amp;gt;&amp;quot;+title1+&amp;quot;&amp;lt;/a&amp;gt;
+		            &amp;lt;a href=\&amp;quot;#item12\&amp;quot; class=\&amp;quot;icon heart\&amp;quot; id=&amp;apos;tab2&amp;apos; data-transition=\&amp;quot;up-reveal\&amp;quot;&amp;gt;&amp;quot;+title2+&amp;quot;&amp;lt;/a&amp;gt;
+			    &amp;lt;a href=\&amp;quot;#item10\&amp;quot; class=\&amp;quot;icon pencil\&amp;quot; id=&amp;apos;tab3&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title3+&amp;quot;&amp;lt;/a&amp;gt;
+			    &amp;lt;a href=\&amp;quot;#item11\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title4+&amp;quot;&amp;lt;/a&amp;gt;
+		        &amp;lt;/footer&amp;gt;
+    &amp;lt;/div&amp;gt;&amp;lt;!--这个是view 的结束-------------------------------------------------------------------------------------&amp;gt;
+&amp;lt;/body&amp;gt;
+
+&amp;lt;/html&amp;gt;	
+&amp;quot;;
+return html;
+}
+
+function genANgel(){
+var picstr=genSTR(&amp;quot;MOVPIC&amp;quot;);
+var menu4str=genSTR(&amp;quot;MENU4&amp;quot;);
+var menu2str=genSTR(&amp;quot;MENU2&amp;quot;);
+var menu3str=genSTR(&amp;quot;MENU3&amp;quot;);
+var menu1str=genSTR(&amp;quot;MENU1&amp;quot;);
+var title1=genSTR(&amp;quot;TITLE1&amp;quot;);
+var title2=genSTR(&amp;quot;TITLE2&amp;quot;);
+var title3=genSTR(&amp;quot;TITLE3&amp;quot;);
+var title4=genSTR(&amp;quot;TITLE4&amp;quot;);
+
+
+	var html=&amp;quot;
+	&amp;lt;!DOCTYPE html&amp;gt;
+	&amp;lt;html&amp;gt;
+	&amp;lt;head&amp;gt;
+	    &amp;lt;title&amp;gt;云医院&amp;lt;/title&amp;gt;
+	    &amp;lt;meta http-equiv=\&amp;quot;Content-type\&amp;quot; content=\&amp;quot;text/html; charset=utf-8\&amp;quot;&amp;gt;
+	    &amp;lt;meta name=\&amp;quot;viewport\&amp;quot; content=\&amp;quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0, minimal-ui\&amp;quot;&amp;gt;
+	    &amp;lt;meta name=\&amp;quot;apple-mobile-web-app-capable\&amp;quot; content=\&amp;quot;yes\&amp;quot; /&amp;gt;
+	    &amp;lt;META HTTP-EQUIV=\&amp;quot;Pragma\&amp;quot; CONTENT=\&amp;quot;no-cache\&amp;quot;&amp;gt;
+	    &amp;lt;meta http-equiv=\&amp;quot;X-UA-Compatible\&amp;quot; content=\&amp;quot;IE=edge\&amp;quot; /&amp;gt;
+	    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/angel/af.ui.css\&amp;quot; /&amp;gt;
+	    &amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;sytx/js/chis/angel/icons.css\&amp;quot; /&amp;gt;
+	    &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	    &amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.3/fastclick.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	    &amp;lt;script src=\&amp;quot;sytx/js/chis/angel/appframework.ui.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
+	    &amp;lt;script src=\&amp;quot;http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;sytx/js/chis/angel/app.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;sytx/js/chis/angel/controllers.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+		&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;sytx/js/chis/angel/directives.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;/head&amp;gt;
+	&amp;lt;body id=\&amp;quot;todoaf\&amp;quot;&amp;gt;
+	    &amp;lt;div id=\&amp;quot;splashscreen\&amp;quot; class=&amp;apos;ui-loader heavy&amp;apos;&amp;gt;
+	        App Framework
+	        &amp;lt;br&amp;gt;
+	        &amp;lt;br&amp;gt;
+	        &amp;lt;span class=&amp;apos;ui-icon ui-icon-loading spin&amp;apos;&amp;gt;&amp;lt;/span&amp;gt;
+	        &amp;lt;h1&amp;gt;Starting app&amp;lt;/h1&amp;gt;
+	
+	    &amp;lt;/div&amp;gt;
+	    &amp;lt;div class=\&amp;quot;view\&amp;quot; id=\&amp;quot;mainview\&amp;quot;&amp;gt;
+	        &amp;lt;header&amp;gt;
+	            &amp;lt;h1&amp;gt;Welcome&amp;lt;/h1&amp;gt;
+	        &amp;lt;/header&amp;gt;
+	        &amp;lt;div class=\&amp;quot;pages\&amp;quot;&amp;gt;
+	            &amp;lt;div class=\&amp;quot;panel active\&amp;quot; id=\&amp;quot;item13\&amp;quot; data-title=\&amp;quot;&amp;quot;+title1+&amp;quot;\&amp;quot; data-selected=\&amp;quot;true\&amp;quot;  ng-controller=\&amp;quot;TodoCtrl\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu1str+&amp;quot;\&amp;quot;&amp;gt;
+	            &amp;lt;/div&amp;gt;
+	            &amp;lt;div class=\&amp;quot;panel\&amp;quot; id=\&amp;quot;about\&amp;quot; data-title=\&amp;quot;About\&amp;quot;&amp;gt;
+	                This basic demo shows how to use Angular and App Framework UI together.
+	            &amp;lt;/div&amp;gt;
+	            &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title4+&amp;quot;\&amp;quot; id=\&amp;quot;item11\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu4str+&amp;quot;\&amp;quot;&amp;gt;		         
+			  &amp;lt;!--我的---------&amp;gt;		        
+	           &amp;lt;/div&amp;gt;
+		        &amp;lt;!-- 健康管理代码--&amp;gt;
+		    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title2+&amp;quot;\&amp;quot; id=\&amp;quot;item12\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu2str+&amp;quot;\&amp;quot;&amp;gt;
+			  &amp;lt;!--健康管理---------&amp;gt;		        
+		    &amp;lt;/div&amp;gt;
+		    &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;&amp;quot;+title3+&amp;quot;\&amp;quot; id=\&amp;quot;item10\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; style=\&amp;quot;margin:0;padding:0;\&amp;quot; data-include=\&amp;quot;L.sp?id=&amp;quot;+menu3str+&amp;quot;\&amp;quot;&amp;gt;
+			   &amp;lt;!--沟通---------&amp;gt;		       
+		     &amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;用药\&amp;quot; id=\&amp;quot;health01\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MEDICATION\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;饮食\&amp;quot; id=\&amp;quot;health02\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=DIETCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;运动\&amp;quot; id=\&amp;quot;health03\&amp;quot; data-footer=\&amp;quot;none\&amp;quot; data-include=\&amp;quot;L.sp?id=MOTIONCHIS\&amp;quot; &amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;监测\&amp;quot; id=\&amp;quot;health04\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MONITORCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;宣教\&amp;quot; id=\&amp;quot;health05\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=MISSIONCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+		     &amp;lt;div class=\&amp;quot;panel\&amp;quot; data-title=\&amp;quot;预约提醒\&amp;quot; id=\&amp;quot;health06\&amp;quot; data-footer=\&amp;quot;none\&amp;quot;  data-include=\&amp;quot;L.sp?id=RESERVATIONCHIS\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+
+	        &amp;lt;/div&amp;gt;
+	        &amp;lt;footer&amp;gt;
+        	    &amp;lt;a href=\&amp;quot;#item13\&amp;quot; class=\&amp;quot;icon home\&amp;quot; id=&amp;apos;tab1&amp;apos; data-transition=\&amp;quot;slide\&amp;quot;&amp;gt;&amp;quot;+title1+&amp;quot;&amp;lt;/a&amp;gt;
+	            &amp;lt;a href=\&amp;quot;#item12\&amp;quot; class=\&amp;quot;icon heart\&amp;quot; id=&amp;apos;tab2&amp;apos; data-transition=\&amp;quot;up-reveal\&amp;quot;&amp;gt;&amp;quot;+title2+&amp;quot;&amp;lt;/a&amp;gt;
+		    &amp;lt;a href=\&amp;quot;#item10\&amp;quot; class=\&amp;quot;icon pencil\&amp;quot; id=&amp;apos;tab3&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title3+&amp;quot;&amp;lt;/a&amp;gt;
+		    &amp;lt;a href=\&amp;quot;#item11\&amp;quot; class=\&amp;quot;icon user\&amp;quot; id=&amp;apos;tab4&amp;apos; data-transition=\&amp;quot;none\&amp;quot;&amp;gt;&amp;quot;+title4+&amp;quot;&amp;lt;/a&amp;gt;
+	        &amp;lt;/footer&amp;gt;
+	    &amp;lt;/div&amp;gt;
+	&amp;lt;/body&amp;gt;
+	&amp;lt;/html&amp;gt;
+&amp;quot;;
+return html;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

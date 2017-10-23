@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >CloudBGPreview</MWID><NAME >云桌面背景切换预览</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >CloudBGPreview.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD >1</HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetToFileSelectBox(&amp;quot;&amp;quot;,0,1,2);
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if(sheet==0&amp;&amp;row==1&amp;&amp;col==2){
+		alert(_this.GetCellText(0,1,2));	
+	}
+}
+//上传图片
+function UploadImage2()
+{
+	var row=_this.GetCurrentRow(0);
+	if ( row &amp;lt;1 ) {alert(&amp;quot;请选中行，再上传文件&amp;quot;);return;}
+	var id=_this.GetCellText(0,row,5);
+	var workdir = _this.GetWorkDir();
+	var SYSURLID = &amp;quot;public2&amp;quot;;
+	var deforg=G_ORGID;
+	var webdir = &amp;quot;webresource/images/&amp;quot;+ deforg+ &amp;quot;/usr&amp;quot;+G_USRID+&amp;quot;/&amp;quot; ;
+//	var form=document.getElementById(&amp;quot;myfilef&amp;quot;);
+//	  var btn=document.getElementById(&amp;quot;myfile&amp;quot;);
+//	  form.reset();
+//	  btn.click();
+	var filename = _this.GetCellText(0,1,2);
+
+	var fs = filename.split(&amp;quot;\\&amp;quot;);
+		// 上传文件到xlsGridData
+		var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+		//2010-10新增，加上内容的编号，以避免文件名冲突
+		var newfilename= fs[fs.length-1];
+		var srcfilnam = fs[fs.length-1];
+		var newfilenames=newfilename.split(&amp;quot;.&amp;quot;);
+		newfilename = getFilename();
+		if(newfilenames.length&amp;gt;1)
+			newfilename+=&amp;quot;.&amp;quot;+newfilenames[1];
+		_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+		
+		_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;, filename,1);//本地文件的路径
+		_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir ,0);	//远程保存的目录
+		
+		
+		_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,newfilename,0);//注意这里只能是文件名，用于远程保存的文件名
+		_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+		var ret=_this.SendHttpRequest(); 
+		
+		_this.CloseHttpRequest();
+		alert(newfilename);
+		try {
+			invokeOSFunc(&amp;quot;copytoweb&amp;quot;,&amp;quot;deforg=&amp;quot;+deforg  +&amp;quot;&amp;usrid=&amp;quot;+G_USRID) ;       
+		}
+		catch ( e ) {
+			alert ( e );
+		}
+		
+		if ( ret.indexOf(&amp;quot;成功&amp;quot;)&amp;gt;0 ){
+			var imagepath = &amp;quot;images/&amp;quot;+ deforg+ &amp;quot;/usr&amp;quot;+G_USRID+&amp;quot;/&amp;quot;+newfilename;
+
+			_this.SetCellText(0,3,1,imagepath );
+			//保存到记录到数据库
+			try {
+				invokeOSFunc(&amp;quot;savetoprofile&amp;quot;,&amp;quot;imagepath=&amp;quot;+imagepath+&amp;quot;&amp;usrid=&amp;quot;+G_USRID+&amp;quot;&amp;orgid=&amp;quot;+G_ORGID) ;       
+			}
+			catch ( e ) {
+				alert ( e );
+			}
+			
+			alert(&amp;quot;上传成功&amp;quot;);
+		}
+		else alert ( ret );
+//		alert( ret);
+		
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if(id==&amp;quot;上传&amp;quot;){
+		UploadImage2();
+	}
+}
+
+//================================================================// 
+// 函数：getFilename
+// 说明：得到上传文件的服务端文件名，设置文件前缀
+function getFilename() 
+{ 
+      QuerySQLDS(&amp;quot;select to_char(sysdate,&amp;apos;yymmddhh24miss&amp;apos;) dat from dual&amp;quot;);  
+      var count = _this.XMLDS_GetRowCount(); 
+      var date = &amp;quot;&amp;quot;;      
+      if ( count &amp;gt; 0 )  
+      { 
+            date = _this.XMLDS_GetString(0,&amp;quot;dat&amp;quot;); 
+      } 
+      return  G_USRID+&amp;quot;_&amp;quot;+date; 
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );//加载类包 
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );//加载类包 
+var basePath = pubpack.EAOption.dynaDataRoot;
+// 复制xlsGridData到web
+// 参数 deforg  sysurlid 
+function copytoweb()
+{
+	var srcpath = basePath +&amp;quot;webresource/images/&amp;quot;+ deforg  + &amp;quot;/usr&amp;quot;+usrid+&amp;quot;/&amp;quot;; 
+	var destpath = pubpack.EAOption.approot+&amp;quot;/images/&amp;quot;+ deforg  + &amp;quot;/usr&amp;quot;+usrid+&amp;quot;/&amp;quot;;
+	pubpack.EAFunc.copyDirectiory(srcpath,destpath,&amp;quot;&amp;quot;,&amp;quot;CVS&amp;quot;,true );
+	return &amp;quot;服务端：文件已从&amp;quot;+ srcpath +&amp;quot;同步到&amp;quot;+destpath ;
+}
+
+
+function savetoprofile(){
+	var db = null;
+	var usr=web.EASession.GetLoginInfo(request);//获取当前用户信息		
+	var usrid=usr.getUsrid();
+	var orgid= usr.getLogorg();
+	pubpack.EAFunc.Log(&amp;quot;adddesktop&amp;quot;);
+	try {
+		db = new pubpack.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+//		sql = &amp;quot;select * from usrprofiledtl where id=&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;AND ORG=&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;and refguid=&amp;apos;&amp;quot;+guid+&amp;quot;&amp;apos;AND TYP=&amp;apos;MYBG&amp;apos;&amp;quot;;
+//		var ds = db.QuerySQL(sql);
+//		if(ds.getRowCount()&amp;lt;1){
+			sql = &amp;quot;insert into usrprofiledtl (id,org,refid1 ,TYP)values(&amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+orgid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+imagepath+&amp;quot;&amp;apos;,&amp;apos;MYBG&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql);
+//		}
+		db.Commit();
+		return sql;
+	}catch(e){
+		db.Rollback();
+		throw new Exception(e);
+	}finally{
+		if ( db != null )
+		db.Close();
+	}	
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

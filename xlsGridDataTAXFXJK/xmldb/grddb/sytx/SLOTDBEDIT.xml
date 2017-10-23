@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP>M</MWTYP><MWID>SLOTDBEDIT</MWID><NAME>库位数据定义</NAME><NOTE></NOTE><FILE>SLOTDBEDIT.zxg</FILE><FIXED></FIXED><CATTYP>02</CATTYP><DTLRNG></DTLRNG><JAVACLS></JAVACLS><syt>x</syt><EXTJS>xlsgrid/js/dbhelper.js,xlsgrid/js/xlsevent.js,xlsgrid/js/xlscel.js,xlsgrid/js/main.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE>//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+function _thisOnpost_loaddata(sheet)
+{
+order = &amp;quot; order by SLOT.LOC, SLOT.ID&amp;quot;;
+       setButton();
+       // 构造3个 SQL
+       // 查询库位数据表记录
+       selectSQL = &amp;quot;SELECT SLOT.GUID,SLOT.LOC as 仓库编号,LOC.name as 仓库名称,SLOT.ID as 库位编号,&amp;quot;+
+                   &amp;quot;SLOT.NAME as 库位名称, &amp;quot;+
+                   &amp;quot;SLOT.SLOTTYP as 所属的功能区如收货区,SLOT.NOTE as 备注,SLOT.VOLUME as 体积 &amp;quot;+
+                   //,CRTUSR as 创建人,CRTDAT as 创建日期  
+                   &amp;quot;from SLOT,loc where slot.loc=loc.guid and loc.org=&amp;apos;&amp;quot;+G_ORGID+&amp;quot;&amp;apos;&amp;quot;;
+                //   alert(selectSQL);
+       //新增库位数据表记录
+       insertSQL = &amp;quot;INSERT INTO SLOT ( GUID,LOC,ID,NAME,SLOTTYP,NOTE,VOLUME ) &amp;quot;+
+            //&amp;quot;CRTUSR,CRTDAT ) &amp;quot;+
+            &amp;quot;VALUES( sys_guid(),?,?,?,?,?,? ) &amp;quot;;
+       // 修改库位数据表记录
+       updateSQL = &amp;quot;UPDATE SLOT SET LOC=?,ID=?,NAME=?,SLOTTYP=?,NOTE=?,VOLUME=? &amp;quot;+
+            //&amp;quot;CRTUSR=?,CRTDAT=to_date(?,&amp;apos;YYYY-MM-DD&amp;apos;) &amp;quot;
+            &amp;quot;where guid=?&amp;quot;;
+       //删除库位数据表记录
+       deleteSQL = &amp;quot;delete SLOT where guid=? &amp;quot;;
+            
+         
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+}
+
+function f_dbeditbeforesave(){
+
+}
+
+function f_dbeditpostloaddata(){
+      _this.SetColName(sheet,4,SKIP_COL_KEY);
+      _this.SetCellText(sheet,0,4,&amp;quot;仓库名称&amp;quot;);
+      _this.SetColVisible(sheet,3,-1);      
+      for(var a=1;a&amp;lt;_this.GetRowCount(sheet);a++){
+            _this.SetToSelectBox(&amp;quot;&amp;quot;,sheet,a,4,&amp;quot;LOC&amp;quot;,&amp;quot;&amp;quot;);
+      }
+       // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+
+        var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SLTTYP&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+             {
+                   var str = _this.GetCellText(sheet,row,7);
+                   _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid1);
+                   _this.SetCellText(sheet,row,7,str);
+             }
+       //alert(_this.HttpCall(&amp;quot;XmlDB.sp?bind=V_SLTTYP&amp;quot;));      
+}
+
+function f_dbeditcellmodify(sheet,row,col,oldvalue,newvalue){
+
+}
+
+
+function _thisOnSelectBoxCellModify(sheet,row,col,oldvalue,newvalue,key,where)
+{
+        if( sheet==0 &amp;&amp; row&amp;gt;=1 &amp;&amp; col==4 ){
+            var locname = SelectDataByKey(&amp;quot;LOC&amp;quot;,newvalue);
+            if ( getBySplit(locname ,&amp;quot;~&amp;quot;,0) == &amp;quot;1&amp;quot; ) {
+            _this.SetCellText(sheet,row,3,getBySplit(locname ,&amp;quot;~&amp;quot;,2));
+            _this.SetCellText(sheet,row,4,getBySplit(locname ,&amp;quot;~&amp;quot;,1));
+            }
+      }
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE>
+//基本数据维护保存数据前
+//脚本在此进行操作校验，比如验证数据是否可以安全删除
+//action: + 插入; U 更新; - 删除
+//datads: 维护界面传过来的数据
+//rowno: 当前要操作的数据行
+function beforeSaveDbData(action,eadb,datads,rowno)
+//var eadb = new pub.EADatabase(); var datads = new EAXmlDS();
+{throw new Exception(&amp;quot;仓库%s的%s库位已经使用&amp;quot;);
+  var guid = datads.getStringAt(rowno,&amp;quot;guid&amp;quot;);
+  var orgid = datads.getStringAt(rowno,&amp;quot;组织编号&amp;quot;);
+  var slotid= datads.getStringAt(rowno,&amp;quot;库位编号&amp;quot;);
+  var locid = datads.getStringAt(rowno,&amp;quot;仓库编号&amp;quot;);
+  if(guid == &amp;quot;&amp;quot;) return;
+  var oldid;
+  var usecount;
+  //try{
+  	var ds = eadb.QuerySQL(&amp;quot;select loc,id from slot where guid=&amp;apos;%s&amp;apos;&amp;quot;.format([guid]));
+  	oldloc = ds.getStringA(0,0);
+  	oldslot = ds.getStringA(0,1);
+  	usecount = eadb.GetSQL(&amp;quot;select count(*) from sltmov where slot=&amp;apos;%s&amp;apos;&amp;quot;.format([guid]));
+  //}catch(e) {return;}
+  if( usecount&amp;gt;0)
+    if( action==&amp;quot;-&amp;quot; || slotid != oldslot || locid != oldloc )
+    {
+      throw new Exception(&amp;quot;仓库%s的%s库位已经使用,不能修改或删除该库位。&amp;quot;.format([oldloc,oldslot]));
+    }  
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID>1单据编号</BILID><SUBTYP>0子类型</SUBTYP><CORPID>0往来单位编号</CORPID><CORPNAM>0往来单位名称</CORPNAM><LOCID>0仓库|部门编号</LOCID><LOCNAM>0仓库|部门名称</LOCNAM><DAT>0单据日期</DAT><CRTUSR>1录入人</CRTUSR><CRTUSRNAM>0录入人姓名</CRTUSRNAM><CHKUSR>1审核人</CHKUSR><CHKUSRNAM>0审核人姓名</CHKUSRNAM><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2><NOTE>0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID>1明细序号</SEQID><ITMID>1品种编号</ITMID><ITMNAM>0品种名称</ITMNAM><ITMSPC>0规格</ITMSPC><UNIT>0计量单位</UNIT><PRICE>0价格</PRICE><QTY>0数量</QTY><TAXTYP>0税率类型</TAXTYP><NOTAXMNY>0不含税税额</NOTAXMNY><TAXMNY>0税额</TAXMNY><MNY>0下单金额</MNY><REFID1>0参考编号1</REFID1><REFNAM1>0参考名称1</REFNAM1><REFID2>0参考编号2</REFID2><REFNAM2>0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

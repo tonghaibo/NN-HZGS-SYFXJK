@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >WG_Chinalh</MWID><NAME >联华</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WG_Chinalh.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var msg = invokeOSFunc(&amp;quot;start&amp;quot;);  
+	_this.SaveTextFile( &amp;quot;d:/Chinalh.htm&amp;quot;,msg,&amp;quot; (*.htm)|*.htm|All Files (*.*)|*.*| |&amp;quot; );
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var EAfunc = new pubpack.EAFunc();
+var HtmlParser = new x_WG_HtmlParser();
+var httpcall = new webget.HttpCall();
+var numberVerificationCodeIdentifier = new webget.NumberVerificationCodeIdentifier();
+//function getOrderStr(acc,dat,kaid,userid,passwd,deptid,code)
+function start()
+{
+	var userid = &amp;quot;15099&amp;quot;;
+	var passwd = &amp;quot;99051&amp;quot;;
+	var code = &amp;quot;UTF-8&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;
+	var param = &amp;quot;&amp;quot;;
+	var url = &amp;quot;&amp;quot;;
+	var msg = &amp;quot;&amp;quot;;
+	try
+	{
+	
+//	      ret = httpcall.Get(&amp;quot;http://supplierweb.carrefour.com.cn/&amp;quot;,&amp;quot;gbk&amp;quot;);// 登录
+//	        var sessionstr = &amp;quot;login.do;jsessionid=&amp;quot;;
+//	        var sessionstr1 = &amp;quot;action=doLogin&amp;quot;;
+//       var loc1= ret.indexOf(sessionstr);
+//        var loc2= ret.indexOf(sessionstr1);
+//        if ( loc1==-1 || loc2==-1 ) 
+//          throw new Exception (&amp;quot;无法定位首页的jsessionid&amp;quot; );
+//        var sessionid= ret.substring(loc1+sessionstr.length(),loc2-1);
+//        httpcall.Download(&amp;quot;http://supplierweb.carrefour.com.cn/includes/image.jsp&amp;quot;,&amp;quot;/first.bmp&amp;quot;);// 登录 B634EF082435740B3433C3D367AC7648
+//        // 分析图片
+//        var imagecode = numberVerificationCodeIdentifier.parsefile(&amp;quot;/first.bmp&amp;quot;);
+        
+//        //login.do;jsessionid=
+//        ret = httpcall.Post(&amp;quot;http://supplierweb.carrefour.com.cn/login.do;jsessionid=&amp;quot;+sessionid,&amp;quot;action=doLogin&amp;login=X852&amp;password=111111&amp;validate=&amp;quot;+imagecode,&amp;quot;GBK&amp;quot;);
+
+// 	return ret;
+		ret = httpcall.Get(&amp;quot;http://edi.chinalh.com/asp/index.asp&amp;quot;,code);
+		var str = &amp;quot;jsessionid=&amp;quot;;
+		var indexStart = ret.indexOf(str);
+		var indexEnd = ret.indexOf(&amp;quot;?service=&amp;quot;);
+		var jsessionid = ret.substring(indexStart+str.length(),indexEnd);
+		str = &amp;quot;&amp;lt;input type=\&amp;quot;hidden\&amp;quot; name=\&amp;quot;lt\&amp;quot; value=\&amp;quot;&amp;quot;;
+		indexStart = ret.indexOf(str);
+		indexEnd = ret.indexOf(&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;);
+		var token = ret.substring(indexStart+str.length(),indexEnd);
+		url = &amp;quot;http://cas.chinalh.com:90/casscm/login;jsessionid=&amp;quot;+jsessionid;
+		param = &amp;quot;service=http%3A%2F%2Fedi2.chinalh.com%3A80%2Flhscm%2F&amp;_eventId=submit&amp;lt=&amp;quot;+token+&amp;quot;&amp;password=&amp;quot;+passwd+&amp;quot;&amp;Submit=%E7%99%BB++%E5%BD%95&amp;usercode=&amp;quot;+userid+&amp;quot;&amp;username=CODE000715099&amp;quot;;
+		ret = httpcall.Post(url,param,code);
+		ret = httpcall.Get(&amp;quot;http://edi2.chinalh.com/lhscm/&amp;quot;,code);
+		return ret;
+
+				//SRFLG~~~USERID~~~DEPTID~~~KAID~~~BILID~~~ECORPNAM~~~ECORPID~~~ITMCLASS~~~
+				//ORDID~~~DAT~~~ARRDAT~~~TEL~~~FAX~~~SEQID~~~EITMID~~~CODE~~~SPEC~~~EITMNAM~~~
+				//QTYFLG~~~UNTNUM~~~QTY~~~ZPQTY~~~EPRICE~~~CORPADDR~~~NOTE~~~NULL
+//				msg += &amp;quot;NR ~~~&amp;quot;+userid+&amp;quot;~~~1~~~1~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+corpnam+&amp;quot;~~~ ~~~ ~~~&amp;quot;+bilid+&amp;quot;~~~&amp;quot;+_date+&amp;quot;~~~&amp;quot;+_addrdate+&amp;quot;~~~&amp;quot;+
+//					tel+&amp;quot;~~~&amp;quot;+fax+&amp;quot;~~~&amp;quot;+(row+1)+&amp;quot;~~~&amp;quot;+_detail.split(&amp;quot;&amp;&amp;quot;)[1]+&amp;quot;~~~ ~~~&amp;quot;+_detail.split(&amp;quot;&amp;&amp;quot;)[3]+&amp;quot;~~~&amp;quot;+_detail.split(&amp;quot;&amp;&amp;quot;)[2];
+//				if(_detail.split(&amp;quot;&amp;&amp;quot;).length() == 12)
+//					msg += &amp;quot;&amp;quot;+_detail.split(&amp;quot;&amp;&amp;quot;)[11];
+//				msg += &amp;quot;&amp;quot;+&amp;quot;~~~ ~~~_detail.split(&amp;quot;&amp;&amp;quot;)[5]~~~&amp;quot;+_detail.split(&amp;quot;&amp;&amp;quot;)[8]+&amp;quot;~~~&amp;quot;+_detail.split(&amp;quot;&amp;&amp;quot;)[7]+&amp;quot;~~~0~~~&amp;quot;+addr+&amp;quot;~~~ ~~~ &amp;quot;;
+
+	}
+	catch(e)
+	{
+		throw new Exception(e);
+	}
+}
+
+//将字符串中的某些字符替换成&amp;quot;&amp;quot;
+function ReploaceStatment(str,array)
+{
+	
+	for(var r = 0;r &amp;lt; array.length() ;r ++)
+	{
+		var replacestatment = array[r];
+		while(true)
+		{
+
+			if (str.indexOf(replacestatment)&amp;gt;-1)			
+				str = EAfunc.Replace(str,replacestatment,&amp;quot;&amp;quot;);	
+			else
+			     break;
+		}
+	}
+	return str;
+}
+
+function DeleteSameStatment(str,replacement1,replacement2)
+{
+	var strs = str.split(replacement1);
+	var strs_1 = strs[1];
+	for(var r = 2;r &amp;lt; strs.length()-1;r ++)
+	{
+		if(strs[r+1] == replacement2&amp;&amp;strs[r] == strs[r+1])
+		{
+			strs[r] = EAfunc.Replace(strs[r],replacement2,&amp;quot;&amp;quot;);
+			strs_1 += strs[r];
+		}
+		else
+			strs_1 += strs[r];
+	}
+	return strs_1;
+}
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >FXZT_InitFP</MWID><NAME >生成发票类主题分析数据</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >FXZT_InitFP.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >主题分析</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >0</SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >genData</ID><NAME >生成分析数据</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >FXDL</ID><NAME >风险类别</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,1,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >3</NROW><NCOL >4</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(1,&amp;quot;V&amp;quot;,&amp;quot;30%&amp;quot;);
+
+	_this.AutoFixScreenWidth();
+	
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,1,2,G_LOGDAT.substring(0,8)+&amp;quot;01&amp;quot;);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,1,3,2,G_LOGDAT);
+	
+	var swjgList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_SWJG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToComboBox(&amp;quot;&amp;quot;,1,1,5,swjgList);
+	//var hyList = _this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_TAX_GBCOMPCLASS&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	//_this.SetToComboBox(&amp;quot;&amp;quot;,1,3,5,hyList);
+	_this.SetToSelectBox(&amp;quot;&amp;quot;,1,3,5,&amp;quot;V_TAX_GBCOMPCLASS&amp;quot;,&amp;quot;year=&amp;quot;+G_LOGDAT.substring(0,4));
+	
+	for (var r=0;r&amp;lt;_this.GetRowCount(0);r++) {
+		_this.SetToBoolBox(0,r,0);
+		_this.SetCellText(0,r,0,&amp;quot;1&amp;quot;);
+	}
+}
+
+//生成分析数据
+function genData()
+{
+	var dat1 = _this.GetCellText(1,1,2);
+	var dat2 = _this.GetCellText(1,3,2);
+	
+	if (!confirm(&amp;quot;生成&amp;quot;+dat1+&amp;quot;~&amp;quot;+dat2+&amp;quot;分析数据，是否继续？&amp;quot;)) return;
+	
+	try {
+		var param = new Object();
+		param.xmlstr = _this.GetXml(0,1,0,_this.GetRowCount(0)-1,2);
+		param.fxdl = FXDL;
+		param.dat1 = dat1;
+		param.dat2 = dat2;
+		param.zgswjg = _this.GetCellText(1,1,5);	//主管税务机关
+		param.hy_dm = _this.GetCellText(1,3,5);		//行业
+		param.zwbfb = _this.GetCellText(1,5,2);		//在外百分比 --两头在外的商贸企业
+		param.maxje = _this.GetCellText(1,5,5);		//定额 --连续三个月开票超定额
+		param.yyyy = dat1.substring(0,4);		//年度
+		var ret = _this.invokeOSFuncExt(&amp;quot;genData&amp;quot;,param);
+		//_this.SetCellText(1,1,4,ret);
+		alert(ret);
+	}
+	catch (e) {
+		alert(&amp;quot;生成分析数据失败！&amp;quot;+e.toString());
+	}	
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == 0) {
+		if (row == 0 &amp;&amp; col == 0) {
+			for (var r=0;r&amp;lt;_this.GetRowCount(0);r++) {
+				_this.SetCellText(0,r,0,newvalue);
+			}
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var servletPack = new JavaPackage(&amp;quot;com.xlsgrid.net.servlet&amp;quot;);
+
+//生成分析数据
+//根据风险特殊库的中间件的数据源MAIN来生成
+function genData()
+{
+	var db = null;
+	try {
+		db = new pub.EADatabase();
+		var sql = &amp;quot;&amp;quot;;
+		var mwsql = new servletPack.MWSQL();
+		var ds = new pub.EAXmlDS(xmlstr);
+		for (var i=0;i&amp;lt;ds.getRowCount();i++) {
+			var flag = ds.getStringAt(i,&amp;quot;FLAG&amp;quot;);
+			var fxbh = ds.getStringAt(i,&amp;quot;FLBH&amp;quot;);
+			if (fxbh != &amp;quot;&amp;quot; &amp;&amp; flag == &amp;quot;1&amp;quot;) {
+				var mwid = &amp;quot;FX&amp;quot; + fxbh; //中间件的编号
+				var dssql = &amp;quot;&amp;quot;;
+				try { dssql = mwsql.GetQuerySQL(request,db,&amp;quot;TAXFXJK&amp;quot;,mwid,&amp;quot;MAIN&amp;quot;); } catch (e1) { }
+				if (dssql != &amp;quot;&amp;quot; &amp;&amp; dssql != null) {
+					var table_name = &amp;quot;TAX_FXJK_TEMP_&amp;quot; + fxbh;
+					sql = &amp;quot;drop table &amp;quot; + table_name;
+					try { db.ExcecutSQL(sql); } catch (e2) { }
+					
+					//替换sql的查询参数
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%ZGSWJG]&amp;quot;,zgswjg);
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%ZWBFB]&amp;quot;,zwbfb);
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%DAT1]&amp;quot;,dat1);
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%DAT2]&amp;quot;,dat2);
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%MAXJE]&amp;quot;,maxje);
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%YYYY]&amp;quot;,yyyy);
+					dssql = pub.EAFunc.Replace(dssql,&amp;quot;[%HY]&amp;quot;,hy_dm);
+					
+					sql = &amp;quot;create table &amp;quot; + table_name + &amp;quot; as select * from ( \n&amp;quot;+dssql+&amp;quot; \n)&amp;quot;;
+					db.ExcecutSQL(sql);
+					
+				}
+			}
+		}
+		
+		db.Commit();
+		return &amp;quot;生成分析数据成功！&amp;quot;;
+	}
+	catch (e) {
+		if (db != null) db.Rollback();
+		return e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select &amp;apos;1&amp;apos; flag,rownum,flbh,flmc 
+from (
+select flbh,flmc from FXJK_ITEM
+where typ=&amp;apos;2&amp;apos; and yxbz=&amp;apos;1&amp;apos; and dl=&amp;apos;[%FXDL]&amp;apos;
+order by flbh
+) t</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

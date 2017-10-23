@@ -1,0 +1,313 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >SelFlwDtl</MWID><NAME >明细数据流转换</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SelFlwDtl.zxg</FILE><FIXED >3,5</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA >1</LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >Send</ID><NAME >确定</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG >0</IMG><IMGMOUSE >1</IMGMOUSE><C7 >Send</C7><C8 >Send</C8><C9 >Send</C9><C10 >Send</C10></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >LOCID</ID><NAME >仓库</NAME><NOTNULL ></NOTNULL><KEYVAL >V_LOC</KEYVAL><INPCTL >list</INPCTL><DISPORD >6</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >LOCID</C13><C14 >LOCID</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >LOCID</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >LOCID</C29><C30 ></C30><C31 >LOCID</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="1" ><ID >STADAT</ID><NAME >单据开始日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL >[%SYS_BEGINMONTH]</DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >STADAT</C13><C14 >STADAT</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >STADAT</C18><C19 >STADAT</C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >STADAT</C29><C30 ></C30><C31 >STADAT</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="2" ><ID >ENDDAT</ID><NAME >单据结束日期</NAME><NOTNULL ></NOTNULL><KEYVAL >DATE</KEYVAL><INPCTL ></INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >ENDDAT</C13><C14 >ENDDAT</C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >ENDDAT</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >ENDDAT</C29><C30 ></C30><C31 >ENDDAT</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="3" ><ID >ITMID</ID><NAME >商品编号</NAME><NOTNULL ></NOTNULL><KEYVAL >V_ITEM</KEYVAL><INPCTL >select</INPCTL><DISPORD >4</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 >ITMID</C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >ITMID</C29><C30 ></C30><C31 >ITMID</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="4" ><ID >CUSTNAME</ID><NAME >往来单位</NAME><NOTNULL ></NOTNULL><KEYVAL >V_CORP</KEYVAL><INPCTL ></INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 >CUSTNAME</C24><C25 >CUSTNAME</C25><C26 >CUSTNAME</C26><C27 ></C27><C28 ></C28><C29 >CUSTNAME</C29><C30 ></C30><C31 >CUSTNAME</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="5" ><ID >SRCBIL</ID><NAME >单据编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >5</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 >SRCBIL</C29><C30 ></C30><C31 >SRCBIL</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="6" ><ID >datflw</ID><NAME >数据流类型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >7</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >0</VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 >datflw</C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="7" ><ID >action</ID><NAME >打开目标单据的Action</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 >action</C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="8" ><ID >srcbiltyp</ID><NAME >来源单据类型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34></ROW>
+<ROW num="9" ><ID >srcsubtyp</ID><NAME >来源单据子类型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 >srcsubtyp</C33><C34 ></C34></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:Main</DSKEY><NROW >2</NROW><NCOL >13</NCOL><CTLTYP ></CTLTYP><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C16 >0,3,1</C16><C17 >0,3,1</C17><C18 >0,3,1</C18><C19 >0,3,1</C19></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{	
+	_this.SetRedraw(0);
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_MULTIROW_CHECKBOX );  
+	// 大小单位处理
+	for ( var row=_this.GetMainCellRangeRow1(0);row&amp;lt;=_this.GetMainCellRangeRow2(0);row++ ) {
+		var itemid = _this.GetCellText(0,row,1);
+		if ( itemid!= &amp;quot;&amp;quot; ) {
+			var unit = _this.GetCellText(0,row,11);
+			var smlunt = _this.GetCellText(0,row,12);
+			var untnum = 1*_this.GetCellText(0,row,13);
+			if ( untnum == 0 ) untnum = 1;
+			_this.SetToUnitEntryBox(0,row,9,untnum,unit,smlunt);
+			_this.SetToUnitEntryBox(0,row,10,untnum,unit,smlunt);
+		}
+	}
+	_this.SetColVisible(0,2,0);
+	_this.SetColVisible(0,3,0);
+	_this.SetColVisible(0,11,0);
+	_this.SetColVisible(0,12,0);
+	_this.SetColVisible(0,13,0);
+	// 合并相同单据
+	var tmp = &amp;quot;&amp;quot;;
+	var startrow = _this.GetMainCellRangeRow1(sheet);
+	var row = 0;
+	for (row = _this.GetMainCellRangeRow1(sheet); row &amp;lt;= _this.GetMainCellRangeRow2(sheet); row ++) {
+		var bilid = _this.GetCellText(sheet, row, 1);
+		if ( bilid == &amp;quot;&amp;quot; ) break;
+		if ( bilid == tmp &amp;&amp; row !=_this.GetMainCellRangeRow1(sheet) ) {
+			_this.SetCellColor(0,row,1,255,255,255);
+			_this.SetCellColor(0,row,4,255,255,255);
+		}
+		if (bilid != tmp &amp;&amp; row !=_this.GetMainCellRangeRow1(sheet) ) {//换行
+			if ( startrow!=row-1 ) {
+				_this.MergeCells(sheet,startrow,1,row-1,1);
+				_this.MergeCells(sheet,startrow,4,row-1,4);
+				_this.SetCellLock(sheet,startrow,1,1);_this.SetCellLock(sheet,startrow,4,1);
+			}
+			startrow  = row;
+		}
+		tmp  = _this.GetCellText(sheet, row, 1);
+	}
+	if (_this.GetCellText(sheet, row, 1)!= tmp &amp;&amp; row !=_this.GetMainCellRangeRow1(sheet) ) {
+			if ( startrow!=row-1 ) {
+				_this.MergeCells(sheet,startrow,1,row-1,1);
+				_this.MergeCells(sheet,startrow,4,row-1,4);
+				_this.SetCellLock(sheet,startrow,1,1);_this.SetCellLock(sheet,startrow,4,1);
+			}
+	}
+
+	_this.SetCellBkColor(0,-1,-1,255,255,255);
+	_this.SetRedraw(1);
+}
+
+
+//查询某张单据
+function _thisOnDblClickMainCellRangeRow(sheet,row)
+{
+	var bilid = _this.GetCellText(sheet,row,1);
+	var biltyp = _this.GetCellText(sheet,row,2);
+	var subtyp = _this.GetCellText(sheet,row,3);
+
+	if(bilid != &amp;quot;&amp;quot;&amp;&amp; _this.GetCurrentCol(0) ==1){
+		var url = &amp;quot;show.sp?grdid=&amp;quot;+biltyp+&amp;quot;&amp;bilid=&amp;quot;+bilid+&amp;quot;&amp;subtyp=&amp;quot;+subtyp+&amp;quot;&amp;action=query&amp;quot;;
+		try{openBill(biltyp,bilid);}catch(e){ window.open(url);}
+	}	
+}
+
+function GetXml(sheet){
+	var row1 = _this.GetMainCellRangeRow1(sheet);
+	var row2 = _this.GetMainCellRangeRow2(sheet);
+	var xml=&amp;quot;&amp;lt;?xml version=&amp;apos;1.0&amp;apos; encoding=&amp;apos;UTF-8&amp;apos;?&amp;gt;&amp;quot;+&amp;quot;\n&amp;quot;;
+	var k=0;
+	xml = xml+&amp;quot;&amp;lt;ROWSET&amp;gt;&amp;quot;+&amp;quot;\n&amp;quot;
+	for(var row=row1;row&amp;lt;=row2;row++){
+		if(_this.GetRowSelected(sheet,row)==1){
+			xml = xml+&amp;quot;&amp;lt;ROW NUM=&amp;apos;&amp;quot;+k+&amp;quot;&amp;apos;&amp;gt;&amp;quot;+&amp;quot;\n&amp;quot;;
+			xml = xml+&amp;quot;&amp;lt;SELECTFLAG&amp;gt;1&amp;lt;/SELECTFLAG&amp;gt; \n&amp;quot;;
+			for(var col=1;col&amp;lt;_this.GetColCount(sheet)-1;col++){
+				xml = xml+&amp;quot;&amp;lt;&amp;quot;+_this.GetColName(sheet,col)+&amp;quot;&amp;gt;&amp;quot;+_this.GetCellText(sheet,row,col)+&amp;quot;&amp;lt;/&amp;quot;+_this.GetColName(sheet,col)+&amp;quot;&amp;gt;\n&amp;quot;;
+			}
+			xml = xml+&amp;quot;&amp;lt;/ROW&amp;gt; \n&amp;quot;;
+			k++;
+		}
+	}
+	xml = xml + &amp;quot;&amp;lt;/ROWSET&amp;gt; \n&amp;quot;;
+	return xml;
+}
+// 打勾选择刷新提示
+function f_refreshsum(col1,col2)	
+{
+	_this.SetRedraw(0);;
+	var cnt = 0 ;
+	var bilcnt = 0 ;
+	var cnt1 = 0 ;// 部分勾选
+	var oldbilid = &amp;quot;&amp;quot;;
+	for ( var row=_this.GetMainCellRangeRow1(0);row&amp;lt;=_this.GetMainCellRangeRow2(0);row ++ ) {
+			var qty = _this.GetCellText(0,row,col2);var oldqty = _this.GetCellText(0,row,col1);
+			
+			var b = _this.GetRowSelected(0,row);//选中
+			var bilid = _this.GetCellText(0,row,1);
+
+			if( b == &amp;quot;1&amp;quot; ) {	// 全选
+				cnt ++;
+				
+				if (qty ==&amp;quot;&amp;quot; || 1.0*qty==0 ) 
+					_this.SetCellText(0,row,col2,oldqty );
+				if ( _this.GetCellText(0,row,col2)!=  _this.GetCellText(0,row,col1)) {cnt1++;_this.SetCellBkColor(0,row,col2,0xCC,0xCC,0xCC);}
+				else _this.SetCellBkColor(0,row,col2,255,255,255);
+				if ( oldbilid!=bilid ){bilcnt ++;oldbilid  = bilid;}
+				
+			} else {
+				_this.SetCellText(0,row,col2,&amp;quot;&amp;quot; );
+			}
+	}
+	_this.SetCellText(0,1,1,&amp;quot;共选择了&amp;quot;+bilcnt+&amp;quot;张单据,&amp;quot;+cnt+&amp;quot;笔记录，其中修改了&amp;quot;+cnt1+&amp;quot;笔确认数。&amp;quot; );
+	_this.RefreshFormula();
+	_this.SetRedraw(1);
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{ 	
+	if( col == 0 ) f_refreshsum(9, 10);
+}
+
+function Send(){	
+
+	var param = new Object();
+	param.xmlstr =  GetXml(0);   
+	
+	param.acc = G_ACCID;
+	param.FLW = datflw;
+	param.usrid = G_USRID;	
+	param.mysytid = G_SYTID;
+	try {
+		var msg = invokeOSFuncExt(&amp;quot;Send&amp;quot;,param);	// biltyp,bilid,bilid
+		var bils = msg.split(&amp;quot;,&amp;quot;);
+		var billist = &amp;quot;&amp;quot;;
+		var cnt = 0 ;
+		for ( var i=1;i&amp;lt;bils.length;i++ ) {
+			if ( bils[i]==&amp;quot;&amp;quot; ) break;	//// 返回2个种类型，有些最后由逗号，有些没有
+			if ( i!=1 ) billist += &amp;quot;,&amp;quot;;
+			billist+=bils[i];
+			cnt ++;
+		}
+		var actionstr = &amp;quot;&amp;quot;;
+		if (action != &amp;quot;&amp;quot; )// billaction 是传入的参数
+			 actionstr = &amp;quot;&amp;action=&amp;quot;+ action ;
+		if(cnt &amp;gt;1){
+			if(confirm(&amp;quot;操作已成功！已生成单据：&amp;quot;+ billist +&amp;quot;是否打开？&amp;quot;)){
+		 		window.open(&amp;quot;entry.sp?grdid=&amp;quot;+ bils[0]+actionstr );
+			}
+		} else if (cnt == 1){
+			if(confirm(&amp;quot;操作已成功！已生成单据：&amp;quot;+ billist +&amp;quot;是否打开？&amp;quot;)){
+				window.open(&amp;quot;show.sp?grdid=&amp;quot;+ bils[0]+&amp;quot;&amp;bilid=&amp;quot;+ billist+actionstr );
+			}			
+		}
+			window.location.reload();
+	} catch(e) {
+		alert(e);
+	}
+}
+
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (col = 11 &amp;&amp; row &amp;gt;= _this.GetMainCellRangeRow1(sheet) &amp;&amp; row &amp;lt;= _this.GetMainCellRangeRow2(sheet)) {
+		if (newvalue != 0)
+			_this.SetRowSelected(sheet, row, 1);
+		else
+			_this.SetRowSelected(sheet, row, -1);
+		 f_refreshsum(9, 10);
+
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var utilpack = new JavaPackage(&amp;quot;java.util&amp;quot;);
+var grd = new JavaPackage(&amp;quot;com.xlsgrid.net.grd&amp;quot;);
+var xmldbpack = new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+
+// 客户端param传入的参数可以直接使用
+// 返回生成的单据号码
+function Send()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = &amp;quot;&amp;quot;;	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		var typ = &amp;quot;&amp;quot;;
+		if( ds.getRowCount()==0){
+			throw new pubpack.EAException(&amp;quot;没有选择需要转生成的数据！&amp;quot;);
+		}
+		// 数据流定义中：MappedMode name=&amp;quot;单据映射关系。0:(默认)多源单据对一目标单据映射；1:一对一映射&amp;quot;
+		// OnceClose 转换一次便强制关闭数据流
+		var flwdb = xmldbpack.EAXmlDB.getFlwLnkDestDs(mysytid );
+		var MappedMode = &amp;quot;0&amp;quot;;
+		var OnceClose = &amp;quot;0&amp;quot;; // 是否强制关闭数据流
+		var destBiltyp = &amp;quot;&amp;quot;;
+		for ( var i=0;i&amp;lt;flwdb.getRowCount();i++ ) {
+			if ( flwdb.getStringAt(i,&amp;quot;LnkID&amp;quot; )== FLW ){
+				MappedMode = flwdb.getStringAt(i,&amp;quot;MappedMode&amp;quot; );
+				OnceClose =  flwdb.getStringDef(i,&amp;quot;OnceClose&amp;quot;,&amp;quot;0&amp;quot; );
+				destBiltyp = flwdb.getStringAt(i,&amp;quot;DESTCLS&amp;quot; );
+ 
+				break;
+			}
+		}
+		var gen = new x_flwpub();
+		var bClose = false;
+		if (OnceClose ==&amp;quot;1&amp;quot;) bClose =true;
+		
+		if (MappedMode.equals(&amp;quot;1&amp;quot;)){	// 可能同时生成多张目标单据，N2M是多对多
+			ret = gen.GenN2M(db,FLW,acc,xmlstr,usrid,false );// 单据的列表
+		}
+		else {
+			ret = gen.GenN2NClose(db,FLW,acc,xmlstr,bClose).split(&amp;quot;,&amp;quot;)[1];// 单据号
+		}
+		db.Commit();
+		return destBiltyp+&amp;quot;,&amp;quot;+ret;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new Exception ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Main</ID><NAME ></NAME><DATDSC >select distinct a.srcbil,
+               a.srcbiltyp,
+               NVL(bh.subtyp,&amp;apos;&amp;apos;) subtyp ,
+               a.srcbildat,
+               a.refid3 itmid,
+               e.name|| e.spec itmnam,
+               a.refnam2,
+               a.refnam1 locmeno,
+               a.valleft ,
+               0 qty,
+               e.unit,e.smlunt,e.untnum
+          from datflwsta a, v_item e, bilhdr bh
+         where a.refid3 = e.id(+)
+           and a.srcbil = bh.bilid(+)
+           and a.srcbiltyp = bh.biltyp(+)
+           and a.acc = bh.acc(+)
+           and a.acc=&amp;apos;[%SYS_ACCID]&amp;apos; --and bh.acc=decode(&amp;apos;[%srcaccid]&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;[%SYS_ACCID]&amp;apos;,&amp;apos;[%srcaccid]&amp;apos;)
+           and a.valleft &amp;lt;&amp;gt; 0
+           and a.flw = &amp;apos;[%datflw]&amp;apos;
+           and nvl(a.endflg, &amp;apos;0&amp;apos;) &amp;lt;&amp;gt; &amp;apos;1&amp;apos;
+           and nvl(a.refid1, &amp;apos;@&amp;apos;) like &amp;apos;[%LOCID]%&amp;apos;
+           and nvl(a.refid3, &amp;apos;@&amp;apos;) like &amp;apos;[%ITMID]%&amp;apos;
+           and nvl(bh.refid2,  &amp;apos;@&amp;apos;) like &amp;apos;%[%CUSTNAME]%&amp;apos; 
+           and a.srcbil like &amp;apos;[%SRCBIL]%&amp;apos;
+           and to_char(a.SRCBILDAT, &amp;apos;yyyy-mm-dd&amp;apos;) &amp;gt;= nvl(&amp;apos;[%STADAT]&amp;apos;, &amp;apos;1999-01-01&amp;apos;)
+           and to_char(a.SRCBILDAT, &amp;apos;yyyy-mm-dd&amp;apos;) &amp;lt;= nvl(&amp;apos;[%ENDDAT]&amp;apos;, &amp;apos;2999-01-01&amp;apos;)
+           and nvl(bh.subtyp,&amp;apos;@&amp;apos;) like &amp;apos;[%srcsubtyp]%&amp;apos; 
+           and nvl(a.srcbiltyp,&amp;apos;@&amp;apos;) like &amp;apos;[%srcbiltyp]%&amp;apos; 
+           
+         order by a.srcbil,a.refid3,a.valleft
+</DATDSC><C4 ></C4><C5 ></C5><C6 >Main</C6><C7 >Main</C7><C8 >Main</C8><C9 >Main</C9><C10 >Main</C10><C11 >Main</C11><C12 >Main</C12><C13 >Main</C13><C14 >Main</C14><C15 >Main</C15><C16 >Main</C16><C17 >Main</C17><C18 >Main</C18><C19 >Main</C19><C20 >Main</C20><C21 >Main</C21><C22 >Main</C22><C23 >Main</C23><C24 >Main</C24><C25 >Main</C25><C26 >Main</C26><C27 >Main</C27><C28 >Main</C28><C29 >Main</C29><C30 >Main</C30><C31 >Main</C31><C32 >Main</C32><C33 >Main</C33><C34 >Main</C34><C35 >Main</C35><C36 ></C36><C37 >Main</C37><C38 >Main</C38><C39 >Main</C39><C40 >Main</C40><C41 >Main</C41><C42 >Main</C42><C43 >Main</C43><C44 >Main</C44><C45 >Main</C45><C46 >Main</C46><C47 >Main</C47><C48 >Main</C48><C49 >Main</C49><C50 >Main</C50></ROW>
+<ROW num="1" ><ID >ITMINFO</ID><NAME ></NAME><DATDSC >select unit,untnum,smlunt from item where id=&amp;apos;[%id]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 >ITMINFO</C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 >ITMINFO</C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 >ITMINFO</C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50></ROW>
+<ROW num="2" ><ID >SELSUBTYP</ID><NAME ></NAME><DATDSC >select subtyp from bilhdr where bilid = &amp;apos;[%bilid]&amp;apos; and biltyp = &amp;apos;[%biltyp]&amp;apos; and acc = &amp;apos;[%acc]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 >SELSUBTYP</C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50></ROW>
+<ROW num="3" ><ID >Title</ID><NAME ></NAME><DATDSC >select name from v_flw where id = &amp;apos;[%FLW]&amp;apos;</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13><C14 ></C14><C15 ></C15><C16 ></C16><C17 ></C17><C18 ></C18><C19 ></C19><C20 ></C20><C21 ></C21><C22 ></C22><C23 ></C23><C24 ></C24><C25 ></C25><C26 ></C26><C27 ></C27><C28 ></C28><C29 ></C29><C30 ></C30><C31 ></C31><C32 ></C32><C33 ></C33><C34 ></C34><C35 ></C35><C36 ></C36><C37 ></C37><C38 ></C38><C39 ></C39><C40 ></C40><C41 ></C41><C42 ></C42><C43 ></C43><C44 ></C44><C45 ></C45><C46 ></C46><C47 ></C47><C48 ></C48><C49 ></C49><C50 ></C50></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

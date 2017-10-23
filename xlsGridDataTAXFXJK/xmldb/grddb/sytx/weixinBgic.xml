@@ -1,0 +1,375 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >weixinBgic</MWID><NAME >北部湾保险微信服务</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >weixinBgic.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >微信</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >2</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >sendMsg</ID><NAME >推送消息</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	var xml = _sql.query(&amp;quot;USERLIST&amp;quot;);
+	_this.SetMainCellRange(sheet,4,2,5,5);
+	_this.SetXmlDS(sheet,4,2,5,5,xml);
+	for (var r=3;r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+		_this.SetToBoolBox(sheet,r,6);
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (row == 3 &amp;&amp; col == 6) {
+		for (var r=4;r&amp;lt;=_this.GetMainCellRangeRow2(sheet);r++) {
+			_this.SetCellText(sheet,r,6,newvalue);		
+		}
+	}
+}
+
+//推送消息
+function sendMsg()
+{
+	var openid = &amp;quot;&amp;quot;;
+	var tempid = &amp;quot;&amp;quot;;
+	var obj = new Object();
+	obj.openids = getOpenid();
+	obj.tempid = &amp;quot;&amp;quot;;
+	var ret = invokeOSFuncExt(&amp;quot;sendMessage&amp;quot;,obj);
+	alert(ret);
+}
+
+function getOpenid()
+{
+	var openid = &amp;quot;&amp;quot;;
+	for (var r=4;r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,6) == &amp;quot;1&amp;quot;) {
+			if (openid == &amp;quot;&amp;quot;) {
+				openid += _this.GetCellText(0,r,3);
+			}
+			else {
+				openid += &amp;quot;,&amp;quot;+_this.GetCellText(0,r,3);
+			}
+		}
+	}
+	return openid;
+}
+
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var resp = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin.message.resp&amp;quot;);
+var weixin = new JavaPackage(&amp;quot;com.xlsgrid.net.weixin&amp;quot;);
+var webget = new JavaPackage(&amp;quot;com.xlsgrid.net.webget&amp;quot;);
+var json = new JavaPackage(&amp;quot;net.sf.json&amp;quot;);
+
+/**
+ * 微信的接口消息响应处理中间件
+ * @author Harry
+ * @date 2013-10-11
+*/
+
+
+//响应微信服务器的业务逻辑处理方法
+function doPost()
+{
+	//防止中文乱码
+	response.setContentType(&amp;quot;content-type:text/html; charset=UTF-8&amp;quot;);
+
+	var respMessage = null;
+	var textMessage = null;
+	var db = null;
+
+	try {
+		// xml请求解析
+		var requestMap = weixin.MessageUtil.parseXml(request);	
+		
+		// 发送方帐号（open_id）
+		var fromUserName = requestMap.get(&amp;quot;FromUserName&amp;quot;);
+		
+		// 公众帐号
+		var toUserName = requestMap.get(&amp;quot;ToUserName&amp;quot;);
+		// 消息类型
+		var msgType = requestMap.get(&amp;quot;MsgType&amp;quot;);
+		
+		//request.getSession().setAttribute(&amp;quot;WEIXIN_FROMUSERNAME&amp;quot;,fromUserName);
+
+		// 回复文本消息
+		textMessage = new resp.TextMessage();
+		textMessage.setToUserName(fromUserName);
+		textMessage.setFromUserName(toUserName);
+		var dt = new java.util.Date();
+		textMessage.setCreateTime(dt.getTime());
+		textMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_TEXT);
+		textMessage.setFuncFlag(0);
+		
+		// 文本消息  
+		if (msgType.equals(weixin.MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {  
+			// 接收用户发送的文本消息内容  
+	                var content = requestMap.get(&amp;quot;Content&amp;quot;);  
+	  
+	                // 创建图文消息  
+	                var newsMessage = new resp.NewsMessage();  
+	                newsMessage.setToUserName(fromUserName);  
+	                newsMessage.setFromUserName(toUserName);  
+	                newsMessage.setCreateTime(dt.getTime());  
+	                newsMessage.setMsgType(weixin.MessageUtil.RESP_MESSAGE_TYPE_NEWS);  
+	                newsMessage.setFuncFlag(0);  
+	  
+	                var articleList = new java.util.ArrayList();  
+	                
+	                //绑定用户
+			if (content.indexOf(&amp;quot;/&amp;quot;) &amp;gt; -1) {
+				var id = content.split(&amp;quot;/&amp;quot;)[0];
+				var pwd = content.split(&amp;quot;/&amp;quot;)[1];
+				pub.EADbTool.ExcecutSQL(&amp;quot;insert into weixin_userbind(org,syt,FromUserName,usrid,passwd,TOUSERNAME)values(&amp;apos;BGIC&amp;apos;,&amp;apos;BGIC&amp;apos;,&amp;apos;&amp;quot;+fromUserName+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+id+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+pwd+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+toUserName+&amp;quot;&amp;apos;)&amp;quot;);
+				 var article = new resp.Article();  
+		                 article.setTitle(&amp;quot;身份绑定验证&amp;quot;);  
+		                    article.setDescription(&amp;quot;感谢您的使用，验证通过！&amp;quot;);  
+		                    article.setPicUrl(&amp;quot;http://www.bgic.com/dds/2.jpg&amp;quot;);  
+		                    article.setUrl(&amp;quot;http://www.bgic.com&amp;quot;);  
+		                    articleList.add(article);  
+		                    // 设置图文消息个数  
+		                    newsMessage.setArticleCount(articleList.size());  
+		                    // 设置图文消息包含的图文集合  
+		                    newsMessage.setArticles(articleList);  
+		                    // 将图文消息对象转换成xml字符串  
+		                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+
+				return respMessage;
+			}
+
+	                // 单图文消息  
+	                if (&amp;quot;1&amp;quot;.equals(content)) {  
+	                    var article = new resp.Article();  
+	                    article.setTitle(&amp;quot;示例1-单图文消息&amp;quot;);  
+	                    article.setDescription(&amp;quot;柳峰，80后，微信公众帐号开发经验4个月。为帮助初学者入门，特推出此系列教程，也希望借此机会认识更多同行！&amp;quot;);  
+	                    article.setPicUrl(&amp;quot;http://b275.photo.store.qq.com/psb?/V11JGWQf4B4Knx/XVCibE*CtxdQsJDpUa0HPM6nZqEjKFgOsCztHUa6GeE!/b/dIfG76M2IQAA&amp;bo=wAOAAgAAAAABAGY!&amp;rf=photoDetail&amp;quot;);  
+	                    article.setUrl(&amp;quot;http://www.xlsgrid.net/xlsgrid/lungoTest/test1.html&amp;quot;);  
+	                    articleList.add(article);  
+	                    // 设置图文消息个数  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    // 设置图文消息包含的图文集合  
+	                    newsMessage.setArticles(articleList);  
+	                    // 将图文消息对象转换成xml字符串  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+                	} 
+                	 // 单图文消息---不含图片  
+	                else if (&amp;quot;2&amp;quot;.equals(content)) {  
+	                    var article = new resp.Article();  
+	                    article.setTitle(&amp;quot;示例2-单图文消息不含图片&amp;quot;);  
+	                    // 图文消息中可以使用QQ表情、符号表情  
+	                    article.setDescription(&amp;quot;柳峰，80后，&amp;quot;  
+	                            + &amp;quot;，微信公众帐号开发经验4个月。为帮助初学者入门，特推出此系列连载教程，也希望借此机会认识更多同行！\n\n目前已推出教程共12篇，包括接口配置、消息封装、框架搭建、QQ表情发送、符号表情发送等。\n\n后期还计划推出一些实用功能的开发讲解，例如：天气预报、周边搜索、聊天功能等。&amp;quot;);  
+	                    // 将图片置为空  
+	                    article.setPicUrl(&amp;quot;&amp;quot;);  
+	                    article.setUrl(&amp;quot;http://blog.csdn.net/lyq8479&amp;quot;);  
+	                    articleList.add(article);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                } 
+	                // 多图文消息  
+	                else if (&amp;quot;3&amp;quot;.equals(content)) {  
+	                    var article1 = new resp.Article();  
+	                    article1.setTitle(&amp;quot;示例3-多图文消息\n第1篇 微信帐号开发教程&amp;quot;);  
+	                    article1.setDescription(&amp;quot;&amp;quot;);  
+	                    article1.setPicUrl(&amp;quot;http://b275.photo.store.qq.com/psb?/V11JGWQf4B4Knx/XVCibE*CtxdQsJDpUa0HPM6nZqEjKFgOsCztHUa6GeE!/b/dIfG76M2IQAA&amp;bo=wAOAAgAAAAABAGY!&amp;rf=photoDetail&amp;quot;);  
+	                    article1.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8937622&amp;quot;);  
+	  
+	                    var article2 = new resp.Article();  
+	                    article2.setTitle(&amp;quot;第2篇\n微信公众帐号的类型&amp;quot;);  
+	                    article2.setDescription(&amp;quot;&amp;quot;);  
+	                    article2.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article2.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8941577&amp;quot;);  
+	  
+	                    var article3 = new resp.Article();  
+	                    article3.setTitle(&amp;quot;第3篇\n开发模式启用及接口配置&amp;quot;);  
+	                    article3.setDescription(&amp;quot;&amp;quot;);  
+	                    article3.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article3.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8944988&amp;quot;);  
+	  
+	                    articleList.add(article1);  
+	                    articleList.add(article2);  
+	                    articleList.add(article3);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                }  
+	                 // 多图文消息---首条消息不含图片  
+	                else if (&amp;quot;4&amp;quot;.equals(content)) {  
+	                    var article1 = new resp.Article();  
+	                    article1.setTitle(&amp;quot;示例4-首条消息不含图片&amp;quot;);  
+	                    article1.setDescription(&amp;quot;&amp;quot;);  
+	                    // 将图片置为空  
+	                    article1.setPicUrl(&amp;quot;&amp;quot;);  
+	                    article1.setUrl(&amp;quot;http://blog.csdn.net/lyq8479&amp;quot;);  
+	  
+	                    var article2 = new resp.Article();  
+	                    article2.setTitle(&amp;quot;第4篇\n消息及消息处理工具的封装&amp;quot;);  
+	                    article2.setDescription(&amp;quot;&amp;quot;);  
+	                    article2.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article2.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8949088&amp;quot;);  
+	  
+	                    var article3 = new resp.Article();  
+	                    article3.setTitle(&amp;quot;第5篇\n各种消息的接收与响应&amp;quot;);  
+	                    article3.setDescription(&amp;quot;&amp;quot;);  
+	                    article3.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article3.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8952173&amp;quot;);  
+	  
+	                    var article4 = new resp.Article();  
+	                    article4.setTitle(&amp;quot;第6篇\n文本消息的内容长度限制揭秘&amp;quot;);  
+	                    article4.setDescription(&amp;quot;&amp;quot;);  
+	                    article4.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article4.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/8967824&amp;quot;);  
+	  
+	                    articleList.add(article1);  
+	                    articleList.add(article2);  
+	                    articleList.add(article3);  
+	                    articleList.add(article4);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                }
+	                // 多图文消息---最后一条消息不含图片  
+	                else if (&amp;quot;5&amp;quot;.equals(content)) {  
+	                    var article1 = new resp.Article();  
+	                    article1.setTitle(&amp;quot;示例5-最后一条消息不含图片\n第7篇 文本消息中换行符的使用&amp;quot;);  
+	                    article1.setDescription(&amp;quot;&amp;quot;);  
+	                    article1.setPicUrl(&amp;quot;http://b275.photo.store.qq.com/psb?/V11JGWQf4B4Knx/XVCibE*CtxdQsJDpUa0HPM6nZqEjKFgOsCztHUa6GeE!/b/dIfG76M2IQAA&amp;bo=wAOAAgAAAAABAGY!&amp;rf=photoDetail&amp;quot;);  
+	                    article1.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/9141467&amp;quot;);  
+	  
+	                    var article2 = new resp.Article();  
+	                    article2.setTitle(&amp;quot;第8篇\n文本消息中使用网页超链接&amp;quot;);  
+	                    article2.setDescription(&amp;quot;&amp;quot;);  
+	                    article2.setPicUrl(&amp;quot;http://avatar.csdn.net/1/4/A/1_lyq8479.jpg&amp;quot;);  
+	                    article2.setUrl(&amp;quot;http://blog.csdn.net/lyq8479/article/details/9157455&amp;quot;);  
+	  
+	                    var article3 = new resp.Article();  
+	                    article3.setTitle(&amp;quot;如果觉得文章对你有所帮助，请通过博客留言或关注微信公众帐号xiaoqrobot来支持柳峰！&amp;quot;);  
+	                    article3.setDescription(&amp;quot;&amp;quot;);  
+	                    // 将图片置为空  
+	                    article3.setPicUrl(&amp;quot;&amp;quot;);  
+	                    article3.setUrl(&amp;quot;http://blog.csdn.net/lyq8479&amp;quot;);  
+	  
+	                    articleList.add(article1);  
+	                    articleList.add(article2);  
+	                    articleList.add(article3);  
+	                    newsMessage.setArticleCount(articleList.size());  
+	                    newsMessage.setArticles(articleList);  
+	                    respMessage = weixin.MessageUtil.newsMessageToXml(newsMessage);  
+	                } 
+                	
+                	return respMessage;
+	                
+		}
+		
+	}
+	catch (Exception e) {
+		if (db != null) db.Rollback();
+		textMessage.setContent(e.toString());
+		respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+		return respMessage;
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+				
+	textMessage.setContent(&amp;quot;感谢您的关注！北部湾保险竭诚为您服务！&amp;quot;);
+	respMessage = weixin.MessageUtil.textMessageToXml(textMessage);
+	return respMessage;
+
+	
+}
+
+function emoji(hexEmoji) 
+{
+	return java.lang.String.valueOf(java.lang.Character.toChars(hexEmoji));
+}
+
+
+//推送消息测试
+function sendMessage()
+{
+	var appid = &amp;quot;wx28ea8c2a0d5bd3d0&amp;quot;;
+	var secret = &amp;quot;a25e8d427bc2034d4be0a3c4fc36d9c9&amp;quot;;
+//	var accessToken = weixin.WeixinUtil.getAccessToken(&amp;quot;wx28ea8c2a0d5bd3d0&amp;quot;,&amp;quot;a25e8d427bc2034d4be0a3c4fc36d9c9&amp;quot;);
+//	var token = accessToken.getToken();
+	
+	var url=&amp;quot;https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&amp;appid=&amp;quot;+appid+&amp;quot;&amp;secret=&amp;quot;+secret;
+	var httpcall = new webget.HttpCall();
+	var token = httpcall.Get(url,&amp;quot;UTF-8&amp;quot;);	
+	var jsobj = json.JSONObject.fromObject(token); 
+	token = jsobj.getString(&amp;quot;access_token&amp;quot;);
+	//return token;
+	url = &amp;quot;https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=&amp;quot;+token;
+	
+	var sendcount = 0;
+	var failcount = 0;
+	var arr_openid = openids.split(&amp;quot;,&amp;quot;);
+	//return arr_openid;
+	//openid=oxLTvjpEpXE_Ec_hlquFVnVdXIGE
+	for (var i=0;i&amp;lt;arr_openid.length();i++) {
+		var jsonstr = &amp;quot;{
+			\&amp;quot;touser\&amp;quot;:\&amp;quot;&amp;quot;+arr_openid[i]+&amp;quot;\&amp;quot;,
+			\&amp;quot;template_id\&amp;quot;:\&amp;quot;vKHqya-KyGQOn9o8KId8lQE1uSlp4a4rXAFR7UTwTfU\&amp;quot;,
+			\&amp;quot;url\&amp;quot;:\&amp;quot;http://www.bgic.com\&amp;quot;,
+			\&amp;quot;topcolor\&amp;quot;:\&amp;quot;#00FF00\&amp;quot;,
+			\&amp;quot;data\&amp;quot;:{
+				\&amp;quot;title\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;亲，给您拜年啦\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot; },
+				\&amp;quot;work\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;北部湾保险祝您马年行大运，关注我者，马年必发！\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot; },
+				\&amp;quot;remark\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;请关注：硕格软件\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot;}
+			}
+		}&amp;quot;;
+		
+//		jsonstr = &amp;quot;{
+//			\&amp;quot;touser\&amp;quot;:\&amp;quot;oxLTvjoQVvJxMleyeshJif2OPEW8\&amp;quot;,
+//			\&amp;quot;template_id\&amp;quot;:\&amp;quot;L_Iprr_uV2YC1RGZvw-UVfkxraE-9zijhQEr_aLPetM\&amp;quot;,
+//			\&amp;quot;url\&amp;quot;:\&amp;quot;http://www.bgic.com\&amp;quot;,
+//			\&amp;quot;topcolor\&amp;quot;:\&amp;quot;#00FF00\&amp;quot;,
+//			\&amp;quot;data\&amp;quot;:{
+//				\&amp;quot;productType\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;业务名\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot; },
+//				\&amp;quot;name\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;北部湾保险xxx险\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot; },
+//				\&amp;quot;number\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;1份\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot; },
+//				\&amp;quot;expDate\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;永久有效\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot; },
+//				\&amp;quot;remark\&amp;quot;:{ \&amp;quot;value\&amp;quot;:\&amp;quot;备注：如有疑问，请拨打咨询硕格软件热线4006221068。\&amp;quot;,\&amp;quot;color\&amp;quot;:\&amp;quot;#181818\&amp;quot;}
+//			}
+//		}&amp;quot;;
+	
+		var jsonObject = weixin.WeixinUtil.httpRequest(url,&amp;quot;POST&amp;quot;,&amp;quot;&amp;quot;+jsonstr);
+		if (jsonObject != null) {
+			var result = jsonObject.getInt(&amp;quot;errcode&amp;quot;);
+			if (result == &amp;quot;0&amp;quot;) sendcount ++;
+			else failcount ++;
+			//return result+&amp;quot;:&amp;quot;+jsonObject.getString(&amp;quot;errmsg&amp;quot;);
+		}
+	}
+	return &amp;quot;推送消息完毕！成功&amp;quot;+sendcount+&amp;quot;，失败&amp;quot;+failcount+&amp;quot;。&amp;quot;;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >USERLIST</ID><NAME ></NAME><DATDSC >select rownum,fromusername,usrid,bindtime from (
+select fromusername,usrid,
+	to_char(bindtime,&amp;apos;yyyy/mm/dd hh24:mi:ss&amp;apos;) bindtime 
+from weixin_userbind
+where org=&amp;apos;BGIC&amp;apos;
+order by bindtime desc
+)</DATDSC></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,560 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >AnalyseInv</MWID><NAME >库存分析</NAME><NOTE ></NOTE><NOACCNAME >1</NOACCNAME><FILE >AnalyseInv.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >BuildSaleBil</ID><NAME >生成销售</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >BuildSaleBil</C10><C11 >BuildSaleBil</C11><C12 ></C12></ROW>
+<ROW num="1" ><ID >SetDefaultValue</ID><NAME >设置默认值</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11><C12 >SetDefaultValue</C12></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >DAT</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >0</VISFLG><KEYFLG ></KEYFLG><C13 >DAT</C13><C14 >DAT</C14><C15 >DAT</C15><C16 ></C16><C17 >DAT</C17></ROW>
+<ROW num="1" ><ID >tag</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >tag</C14><C15 ></C15><C16 ></C16><C17 >tag</C17></ROW>
+<ROW num="2" ><ID >table</ID><NAME ></NAME><NOTNULL ></NOTNULL><KEYVAL >ITEM</KEYVAL><INPCTL >select</INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >table</C16><C17 >table</C17></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,0,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:Main</DSKEY><NROW >14</NROW><NCOL >6</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS >1</ISCROSS><HROW >1</HROW><HCOLS >订单编号,商品编号,商品名称,需开单数</HCOLS><ROWORDER >商品编号,订单编号</ROWORDER><VCOLS >LOC</VCOLS><VCOLSQL ></VCOLSQL><VALUECOL >INVQTY</VALUECOL><C20 >0,0,0</C20><C21 >0,0,0</C21><C22 >0,0,0</C22><C23 >0,0,0</C23></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ModifyLoc = &amp;quot;&amp;quot;;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	for (var c =3;c&amp;lt;_this.GetColCount(sheet)-2;c=c+2 )
+	{
+		//在仓库库存数前各增加一列
+		_this.AppendCol(sheet,c);
+		//设置新增列的单元堍为可修改
+		for (var r = 1;r&amp;lt;_this.GetRowCount(sheet);r++)
+		{
+			_this.SetCellLock(sheet,r,c+1,0);
+			//设置库存数量列醒目颜色
+			if(c&amp;gt;3)
+			_this.SetCellBkColor(sheet,r,c,0xFF,0xFF,0xCC );
+			_this.SetCellBkColor(sheet,r,_this.GetColCount(sheet)-2,0xFF,0xFF,0xCC);
+		}				
+	}
+	//合并第一行的显示列标题
+	var tmpvalue = &amp;quot;&amp;quot;; 
+	for (var c = 4;c&amp;lt;_this.GetColCount(sheet);c=c+2) 
+	{
+		var tmpvalue = _this.GetCellText(sheet,0,c+1);
+		_this.MergeCells(sheet,0,c,0,c+1);
+		_this.SetCellText(sheet,0,c,tmpvalue);
+		_this.SetCellLock(sheet,0,c,1);		
+	}
+	//设定固定滚动行列
+//	_this.SetFixedRow(sheet,1);
+//	_this.SetFixedCol(sheet,4);
+	
+	//在状态栏显示当前处理的订单
+	window.status = &amp;quot;当前处理订单：&amp;quot;+tag; 
+	//由于列表显示过长可以隐藏列表中没有库存的列
+	var rcval = &amp;quot;&amp;quot;;
+	for (var c=5;c&amp;lt;_this.GetColCount(sheet);c=c+2)
+	{
+		var flag = false;
+		for (var r=1;r&amp;lt;_this.GetMainCellRangeRow2(sheet);r++)
+		{
+			rcval = _this.GetCellText(sheet,r,c);
+			if(rcval&amp;gt;0)
+			{
+				flag = true;
+				break;
+			}
+		}
+		if(!flag)
+		{
+			_this.SetColVisible(sheet,c,-1);
+			_this.SetColVisible(sheet,c-1,-1);
+		}	
+	}
+	//设置背景色为白色
+	_this.SetCellBkColor(sheet,-1,-1,255,255,255);
+	
+	
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	var loc = _this.GetCellText(sheet,0,col);
+	var actionqty = _this.GetCellText(sheet,row,3);
+	if(isNaN(newvalue))
+	{
+		alert(&amp;quot;请输入一个有效的数字！&amp;quot;);
+		_this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+		return;
+	}
+	var totalqty = getCurRowSumQty(sheet,row,col)+1.0*newvalue;
+	if(totalqty&amp;gt;actionqty)
+	{
+		alert(&amp;quot;生成的销售总量大于订单量，请确认！&amp;quot;);
+		_this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+		return;
+	}
+	if(1.0*newvalue&amp;gt; 1.0 * _this.GetCellText(sheet,row,col+1))
+	{
+		alert(&amp;quot;输入的数量不能大于【&amp;quot;+loc+&amp;quot;】的可开库存，请确认！&amp;quot;);
+		_this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+		return;
+	}
+	var sumordqty = getCurColSamLocQty(sheet,row,col)+1.0*newvalue;
+	window.status=&amp;quot;订单：&amp;quot;+tag+&amp;quot; 仓库【&amp;quot;+loc+&amp;quot;】商品【&amp;quot;+_this.GetCellText(sheet,row,1)+&amp;quot;】已使用库存：&amp;quot;+sumordqty+&amp;quot; [可用库存：&amp;quot;+_this.GetCellText(sheet,row,col+1)+&amp;quot;]&amp;quot;;
+	if(sumordqty&amp;gt;1.0 * _this.GetCellText(sheet,row,col+1))
+	{
+		alert(&amp;quot;【&amp;quot;+loc+&amp;quot;】的商品【&amp;quot;+_this.GetCellText(sheet,row,1)+&amp;quot;】可开库存不足，请确认！&amp;quot;);
+		var curqty = sumordqty-1.0*newvalue;
+		window.status=&amp;quot;订单：&amp;quot;+tag+&amp;quot; 仓库【&amp;quot;+loc+&amp;quot;】商品【&amp;quot;+_this.GetCellText(sheet,row,1)+&amp;quot;】已使用库存：&amp;quot;+curqty+&amp;quot; [可用库存：&amp;quot;+_this.GetCellText(sheet,row,col+1)+&amp;quot;]&amp;quot;;		
+		_this.SetCellText(sheet,row,col,&amp;quot;&amp;quot;);
+		return;
+	}
+	var locstr = _this.GetCellText(sheet,0,col+1);
+	ModifyLoc += locstr.substring(0,4)+&amp;quot;,&amp;quot;;
+	
+}
+//当前行修改数量合计
+function getCurRowSumQty(sheet,row,curcol)
+{
+	var sumqty = 0;
+	var modiqty = 0;
+	for (var c=4 ;c&amp;lt;_this.GetColCount(sheet);c=c+2)
+	{
+		if(c != curcol)
+		{
+			modiqty =1.0 * _this.GetCellText(sheet,row,c);
+			sumqty += modiqty;
+		}
+	}
+	if(sumqty == &amp;quot;&amp;quot;) sumqty = 0;
+	return sumqty;
+}
+
+
+//================================================================// 
+// 函数：getCurColSamLocQty
+// 说明：当前商品在不同订单，相同仓库的数量合计
+// 参数：currow---&amp;gt;当前的行,curcol---&amp;gt;订单所在的列
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/25/10 12:10:27
+// 修改日志：
+//================================================================// 
+function getCurColSamLocQty(sheet,currow,curcol)
+{
+	var itmid = _this.GetCellText(sheet,currow,1);
+	var ordqty = 0;
+	var sumqty = 0;
+	for (var r = 1;r&amp;lt;_this.GetRowCount(sheet);r++)
+	{
+		if(r != currow &amp;&amp; itmid == _this.GetCellText(sheet,r,1))
+		{
+			ordqty = 1.0 * _this.GetCellText(sheet,r,curcol);
+			sumqty += ordqty;
+		}
+	}
+	return sumqty
+}
+//鼠标左键点击
+var G_LocCol = &amp;quot;&amp;quot;;
+function _thisOnMouseLClick(sheet,row,col)
+{
+	var itmid = &amp;quot;&amp;quot;;
+	var curqty = 0;
+	var sumqty = 0;
+	//设置window的状态栏
+	if(row&amp;gt;=1 &amp;&amp; row&amp;lt;=_this.GetMainCellRangeRow2(sheet) &amp;&amp; col&amp;gt;=4 &amp;&amp; col%2==0 &amp;&amp; col&amp;lt;=_this.GetMainCellRangeCol2(sheet))
+	{
+		var loc = _this.GetCellText(sheet,0,col);
+		itmid = _this.GetCellText(sheet,row,1);
+		for (var r=1;r&amp;lt;_this.GetMainCellRangeRow2(sheet);r++)
+		{
+			t_itmid = _this.GetCellText(sheet,r,1);
+			if(itmid == t_itmid)
+			{
+				curqty = 1.0 * _this.GetCellText(sheet,r,col);
+				sumqty += curqty;
+			}
+		}
+		 window.status=&amp;quot;订单：&amp;quot;+tag+&amp;quot; 仓库【&amp;quot;+loc+&amp;quot;】商品【&amp;quot;+_this.GetCellText(sheet,row,1)+&amp;quot;】已使用库存：&amp;quot;+sumqty+&amp;quot; [可用库存：&amp;quot;+_this.GetCellText(sheet,row,col+1)+&amp;quot;]&amp;quot;;		
+	} 
+	else 
+		window.status = &amp;quot;订单：&amp;quot;+tag;
+		
+	//取得当前仓库
+	if(row == 0 &amp;&amp; col&amp;lt;_this.GetRowCount(sheet))
+	{
+		if(col &amp;gt; 3)
+		{
+			var loc = _this.GetCellText(sheet,0,col);
+			if(loc != &amp;quot;&amp;quot; )
+			{
+				loc = loc.substring(0,4);
+				_this.SetCellBkColor(sheet,0,col,0,160,233);
+				G_LocCol = col;
+			}
+		}	
+		else 
+			G_LocCol = &amp;quot;&amp;quot;;	
+			
+		for (var c=0;c&amp;lt;_this.GetColCount(sheet);c++)
+		{
+			if(c!=col )
+			{
+				_this.SetCellBkColor(sheet,0,c,255,255,255);
+			}
+		}	
+	}					
+	else{
+		for (var c=0;c&amp;lt;_this.GetColCount(sheet);c++)
+		{
+			_this.SetCellBkColor(sheet,0,c,255,255,255);
+		}	
+	}	
+
+}
+
+
+var G_OrdCol = 3;//订单数列
+var sheet = 0;
+//设置默认值
+function SetDefaultValue()
+{
+	var ordid = &amp;quot;&amp;quot;;		
+	var sumExpQty = 0;
+	var curOrdQty = 0;
+	var tmpqty = 0;
+	var locColQty = 0;
+	var expitemQty = 0;
+	if(G_LocCol != &amp;quot;&amp;quot;)	
+	{
+		for (var r = 1 ;r&amp;lt;_this.GetRowCount(sheet);r++)
+	  	{
+	  		ordid = _this.GetCellText(sheet,r,0);
+	  		if(ordid != &amp;quot;&amp;quot;)	
+	  		{
+	  			curOrdQty = 1.0 * _this.GetCellText(sheet,r,G_OrdCol);
+	  			sumExpQty = 1.0 * getCurRowSumQty(sheet,r,G_LocCol);//当前行的数量合计
+	  			//如果在设置当前行的默认值时,别的仓库列已有数据,录入时有控制,所以别的仓库列的合计数不会超过订单数量
+	  			if(sumExpQty&amp;gt;=0)	   
+	  			{
+	  				//如果别的仓库列的合计数量与订单数相等就不设默认值
+	  				if(sumExpQty == curOrdQty) 
+	  					_this.SetCellText(sheet,r,G_LocCol,0);
+	  				else if (sumExpQty &amp;lt; curOrdQty)
+	  				{
+	  					//理论上如果别的仓库数量合计小于订单数量那么默认值应该等于订单数量-合计数量
+	  					tmpqty = curOrdQty - sumExpQty;
+	  					//但这里要考虑库存的问题
+	  					locColQty = 1.0 * _this.GetCellText(sheet,r,G_LocCol+1);
+	  					//为了支持批量生成,这里要加上别的订单相同商品的数量再跟库存比较
+	  					//除当前商品的数量外,别的订单中相同商品的数量
+	  					expitemQty = 1.0 * getCurColSamLocQty(sheet,r,G_LocCol);						
+	  					if(locColQty == &amp;quot;&amp;quot;)
+	  						 locColQty = 0;
+	  					//如果有库存
+						else if (locColQty &amp;gt; 0)
+						{
+							//如果可开库存的数量大于剩余数量那么直接设为订单剩余数量
+							if(locColQty - expitemQty &amp;gt;= tmpqty)
+								_this.SetCellText(sheet,r,G_LocCol,tmpqty);
+							//如果可开库存的数量小于剩余数量那么直接设为库存数
+							else if (locColQty-expitemQty &amp;lt; tmpqty)
+								_this.SetCellText(sheet,r,G_LocCol,locColQty-expitemQty);
+						}
+	  				}
+	  			}			
+	  			
+	  		}
+	  	}
+	  	var locstr = _this.GetCellText(sheet,0,G_LocCol);
+	  	ModifyLoc += locstr.substring(0,4)+&amp;quot;,&amp;quot;;
+	}
+}
+
+//生成销售
+function BuildSaleBil()
+{
+	var saletyp = &amp;quot;&amp;quot;;
+	while(saletyp == &amp;quot;&amp;quot;)
+	{
+		var saletyp = window.prompt(&amp;quot;请设置要生成销售的类型(0:正常销售 1:延迟销售)&amp;quot;,&amp;quot;0&amp;quot;);
+		if(saletyp == &amp;quot;&amp;quot;)
+			alert(&amp;quot;必须要设置一个销售类型，请重新设置！&amp;quot;);
+	}	
+	for (var c = 4;c&amp;lt;_this.GetColCount(sheet);c=c+2)
+	{
+		var colnam = _this.GetCellText(sheet,0,c+1);
+		_this.SetColName(sheet,c,&amp;quot;L&amp;quot;+colnam.substring(0,4));
+		_this.SetColName(sheet,c+1,&amp;quot;L&amp;quot;+colnam);
+	}
+	var xml = _this.GetXml(sheet,1,_this.GetMainCellRangeCol1(sheet),_this.GetMainCellRangeRow2(sheet),_this.GetMainCellRangeCol2(sheet));
+	var param = new Object();
+	param.acc = G_ACCID;
+	param.syt = G_SYTID;
+	param.org = G_ORGID;
+	param.usrid = G_USRID;
+	param.usrnam = G_USRNAM;
+	param.ordid = tag;
+	param.dat = DAT;
+	param.xml = xml;
+	if(saletyp == &amp;quot;0&amp;quot;) 
+		param.saleClass = &amp;quot;SO&amp;quot;;
+	else if (saletyp == &amp;quot;1&amp;quot;)
+		param.saleClass = &amp;quot;SX&amp;quot;;
+	param.ModLoc = ModifyLoc;
+	try{	
+		var ret = invokeOSFuncExt(&amp;quot;doAction&amp;quot;,param);
+		if(ret!=&amp;quot;&amp;quot;)
+		{
+			alert(&amp;quot;已成功生成销售单据：[&amp;quot;+ret+&amp;quot;]！&amp;quot;);
+			window.location.reload();
+		}	
+	}catch(e){
+		alert(e);
+	}		
+				       
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var utlpack = new JavaPackage(&amp;quot;java.util&amp;quot;);
+function doAction()
+{
+	var db = null;
+	var ds = null;
+	try
+	{	
+		db = new pubpack.EADatabase();
+		ds = new pubpack.EAXmlDS(xml);
+		var nxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;&amp;lt;ROWSET&amp;gt;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+		var nds = new pubpack.EAXmlDS(nxml);
+		var colnam = &amp;quot;&amp;quot;;
+		for (var r = 0;r&amp;lt; ds.getRowCount();r++)
+		{
+			if( ds.getStringAt(r,&amp;quot;订单编号&amp;quot;)!=&amp;quot;&amp;quot;)
+			{
+				nds.copyOneRow(ds,r);
+				nds.removeColumn(&amp;quot;num&amp;quot;);
+				nds.removeColumn(&amp;quot;SELECTFLAG&amp;quot;);
+				nds.removeColumn(&amp;quot;name&amp;quot;);					
+			}	
+		}
+		var i = 15;
+		while(i&amp;gt;0)
+		{
+			var lcol = 4;		
+			while(lcol&amp;lt; nds.getColumnCount() )
+			{
+				colnam = nds.getColumnName(lcol);
+				colnam = colnam.substring(1,5);
+				if(ModLoc.indexOf(colnam)&amp;lt;0)
+				{
+					nds.removeColumn(lcol+1);
+					nds.removeColumn(lcol); 
+				} 
+				lcol += 2;
+			}
+			i--;
+		}			 
+		var ret = buildSBil(db,nds);		
+		db.Commit();	
+		return ret;	
+	}catch(e){
+		db.Rollback();
+		throw new Exception(e);
+	}
+
+}
+
+//================================================================// 
+// 函数：buildSaleBil(ordid)
+// 说明：
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/25/10 14:43:02
+// 修改日志：
+//================================================================// 
+function buildSBil(db,ds) 
+{
+
+
+	var sql = &amp;quot;&amp;quot;;
+	var locCol = 4;		//第一个仓库列
+	var locid = &amp;quot;&amp;quot;;		//仓库编号
+	var saleQty = 0;	//销售数量
+	var ordid = &amp;quot;&amp;quot;;		//订单编号
+	var itmid = &amp;quot;&amp;quot;;		//商品编号
+	var saleBil = &amp;quot;&amp;quot;;	//销售单据号
+	var tax = &amp;quot;&amp;quot;;		//税率	
+	var keyStr = &amp;quot;&amp;quot;;        //键值，用来取出单据编号
+	var seqid = 1;
+	var ret = &amp;quot;&amp;quot;;
+	var map = new utlpack.HashMap();	
+	var seqmap = new utlpack.HashMap();
+	//不管什么仓库，只要仓库列有数字就插入单据明细表。
+	while(locCol &amp;lt; ds.getColumnCount())
+	{
+		locid = ds.getColumnName(locCol);
+		locid = locid.substring(1,5);
+		for (var row=0;row&amp;lt; ds.getRowCount();row++)
+		{
+			saleQty = 1.0 * ds.getStringDef(row,locCol,&amp;quot;0&amp;quot;);
+			if(saleQty == 0) 
+				continue;
+			else {
+				ordid = ds.getStringAt(row,&amp;quot;订单编号&amp;quot;);
+				itmid = ds.getStringAt(row,&amp;quot;商品编号&amp;quot;);
+				//在插入的时候要再次检查是否有可开库存如果没有抛出异常(并发)
+				//var invqty = db.GetSQL(&amp;quot;select nvl(GENINVQTY(&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;),0) from dual&amp;quot;);
+				var invqty = db.GetSQL(&amp;quot;select decode(GENINVQTY(&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;),0,200,GENINVQTY(&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;)) from dual&amp;quot;); 
+				if(invqty == 0) 
+					throw new Exception(&amp;quot;商品：&amp;quot;+itmid+&amp;quot;在仓库：&amp;quot;+locid+&amp;quot;无可开库存，可能已被占用！&amp;quot;); 
+				//税率
+				sql = &amp;quot;select to_number(nvl((select potax from item where id=&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;),0.17)) TAX from dual&amp;quot;;
+				tax = db.GetSQL(sql);
+				//确定单据的唯一键
+				keyStr = locid+&amp;quot;#&amp;quot;+ordid+&amp;quot;#&amp;quot;+tax;
+				//从单据库中取出单据
+				if(!map.containsKey(keyStr))
+				{
+					saleBil = db.GetBillid(acc,&amp;quot;EB&amp;quot;,&amp;quot;EB&amp;quot;);
+					map.put(keyStr,saleBil);
+				}
+				else
+					saleBil = map.get(keyStr);
+				//从单据明细库中取中相应的明细号
+				if(!seqmap.containsKey(keyStr))
+				{
+					seqid = 1;
+					seqmap.put(keyStr,seqid);
+				}
+				else
+					seqid =1+1*seqmap.get(keyStr);
+				
+				sql = &amp;quot;
+					insert into bildtl (ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,LOCID,DAT,STAT,SEQID,ITMID,ITMNAM,ITMSPC,UNIT,UNTNUM,TONNUM,PRICE,QTY,
+							    TAXTYP,NOTAXMNY,TAXMNY,MNY,REFID1,REFNAM1,REFID2,REFNAM2,DATFLW,SMLUNT,ITEMPC,REFID3,REFNAM3,REFID4,REFNAM4,REFID5,REFNAM5)
+					 select &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos; ACC,&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; SYT,&amp;apos;&amp;quot;+org+&amp;quot;&amp;apos; ORG,&amp;apos;&amp;quot;+saleBil+&amp;quot;&amp;apos; BILID,&amp;apos;&amp;quot;+saleClass+&amp;quot;&amp;apos; BILTYP,decode(&amp;apos;&amp;quot;+saleClass+&amp;quot;&amp;apos;,&amp;apos;SO&amp;apos;,2,&amp;apos;SX&amp;apos;,1) SUBTYP,
+					        c.id CORPID,&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos; LOCID,to_date(&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;) DAT,&amp;apos;1&amp;apos; STAT,&amp;quot;+seqid+&amp;quot; SEQID,i.id ITMID,i.name ITMNAM,
+					        i.spec ITMSPC,i.unit UNIT,i.untnum UNTNUM,i.tonnum TONNUM,a.sprice*(1+to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;)) PRICE,
+					        case when a.qty&amp;gt;&amp;quot;+invqty+&amp;quot; then &amp;quot;+invqty+&amp;quot; else a.qty end QTY,
+					        to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;) TAX,a.sprice*(1+to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;))*qty/(1+to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;)) NOTAXMNY /*不含税单价*/,
+					        a.sprice*(1+to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;))*to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;) TAXMNY ,sprice*(1+to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;))*qty MNY,&amp;apos;&amp;apos; REFID1/*折扣不含税额*/,&amp;apos;&amp;apos; REFNAM1/*折扣*/,
+					       /* decode(GENPROTPRICE(&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;,a.scorpid,&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos;),sprice,&amp;apos;1&amp;apos;,&amp;apos;0&amp;apos;)*/i.price REFID2,/*nvl(GENKAPRICE(&amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos;,scorpid),i.PRICE)*/i.price REFNAM2 /*原始单价*/,&amp;apos;&amp;apos; DATFLW,i.smlunt SMLUNT,
+					        trim(a.deptid) ITEMPC/*借用字段存放部门*/,&amp;apos;&amp;apos; REFID3,&amp;apos;&amp;apos; REFNAM3,&amp;apos;&amp;apos; REFID4,&amp;apos;&amp;apos; REFNAM4,
+					        /*(select TO_CHAR(to_date(&amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos;,&amp;apos;yyyy-mm-dd&amp;apos;)-to_number(nvl(extcal1,&amp;apos;0&amp;apos;))*to_number(decode(imitmflg,&amp;apos;0&amp;apos;,nvl(b.CUSTBZQBL,&amp;apos;0.1&amp;apos;),nvl(b.ECUSTBZQBL,&amp;apos;0.1&amp;apos;)))+to_number(nvl(b.KAZTDAT,&amp;apos;7&amp;apos;)),&amp;apos;YYYY-MM-DD&amp;apos;) YCDAT  
+				 		    from item c,(select nvl(b.CUSTBZQBL,&amp;apos;1&amp;apos;) CUSTBZQBL,nvl(b.ECUSTBZQBL,&amp;apos;1&amp;apos;) ECUSTBZQBL,nvl(b.EXTCAT7,&amp;apos;0&amp;apos;) KAZTDAT from V_CUST a ,v_ka b where a.id=C.ID and a.refid = b.id )b
+ 						    where c.id = i.id)*/&amp;apos;2010-05-07&amp;apos; REFID5,&amp;apos;&amp;apos; REFNAM5
+					   from ord_tmp a,item i,corp c
+					  where a.scorpid = c.id and a.sitmid = i.id
+					    and nvl(i.potax,to_number(&amp;apos;0.17&amp;apos;)) = to_number(&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos;)
+					    and a.ordid = &amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos; 
+					    and a.sitmid = &amp;apos;&amp;quot;+itmid+&amp;quot;&amp;apos; and dat = &amp;apos;&amp;quot;+dat+&amp;quot;&amp;apos; 							
+				&amp;quot;;	
+				db.ExcecutSQL(sql);
+			}
+		}
+		
+		locCol+=2; 
+	}
+	//插完单据明细表（bildtl）后可根据单据明细表构造单据头信息表
+	var sobil = &amp;quot;&amp;quot;;	
+	if(map.size == 0) return;	
+	else{
+		var keys = map.keySet();		
+		var it = keys.iterator();
+		while(it.hasNext())
+		{	
+			keyStr = it.next();		 
+			sobil = map.get(keyStr);
+			ret += sobil+&amp;quot;,&amp;quot;;
+			ordid = keyStr.split(&amp;quot;#&amp;quot;)[1];		
+			locid = keyStr.split(&amp;quot;#&amp;quot;)[0];	
+			sql = &amp;quot;
+				insert into bilhdr(ACC,SYT,ORG,BILID,BILTYP,SUBTYP,CORPID,CORPNAM,LOCID,LOCNAM,DAT,STAT,CRTUSR,CRTUSRNAM,NOTE,SUMQTY,SUMMNY,REFID1,REFNAM1,
+						  REFID2,REFNAM2,REFID3,REFNAM3,REFID4,REFNAM4,REFID5,REFNAM5,REFID6,REFNAM6)
+				select bl.acc,max(bl.SYT) syt,max(bl.ORG) org,bl.BILID,bl.BILTYP,decode(&amp;apos;&amp;quot;+saleClass+&amp;quot;&amp;apos;,&amp;apos;SO&amp;apos;,2,&amp;apos;SX&amp;apos;,1) SUBTYP,c.id CORPID,c.name CORPNAM,
+				       &amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;,(select name from loc where id=&amp;apos;&amp;quot;+locid+&amp;quot;&amp;apos;) LOCNAM,sysdate DAT,&amp;apos;1&amp;apos; STAT, &amp;apos;&amp;quot;+usrid+&amp;quot;&amp;apos; CRTUSR,&amp;apos;&amp;quot;+usrnam+&amp;quot;&amp;apos; CRTUSRNAM,&amp;apos;&amp;apos; NOTE,
+				       sum(bl.qty) SUMQTY,sum(bl.mny) SUMMNY,&amp;apos;&amp;quot;+tax+&amp;quot;&amp;apos; REFID1/*税率*/,&amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos; REFNAM1/*对方订单号*/,
+				       /*(select usrid from v_kausr where kaid=c.refid) */ &amp;apos;&amp;apos;REFID2/*业务员编号*/, &amp;apos;&amp;apos; REFNAM2/*对应的单据号*/,
+				       /*(select addr from v_onlyaddr where id=c.id)*/&amp;apos;&amp;apos; REFID3 /*送货地址*/,to_char(sysdate+1,&amp;apos;yyyy-mm-dd&amp;apos;) REFNAM3/*送货日期*/,
+				       &amp;apos;&amp;apos; REFID4 /*临时客户名称*/,&amp;apos;1&amp;apos; REFNAM4 /*送货标志*/,&amp;apos;0&amp;apos; REFID5/*是否已签单*/,/*(select usrname from v_kausr where kaid=c.refid)*/&amp;apos;&amp;apos; REFNAM5/*业务员名称*/,
+				       trim(bl.itempc) REFID6/*合同编号*/,(select name from v_dept b where b.id=trim(bl.itempc)) REFNAM6/*合同名称*/
+				   from bildtl bl,corp c
+				  where bl.corpid = c.id
+				    and bl.acc = &amp;apos;&amp;quot;+acc+&amp;quot;&amp;apos;
+				    and bl.bilid = &amp;apos;&amp;quot;+sobil+&amp;quot;&amp;apos;
+				    and bl.biltyp = &amp;apos;&amp;quot;+saleClass+&amp;quot;&amp;apos;
+				  group by bl.acc, bl.BILID, bl.BILTYP,c.id, c.name,c.refid,bl.itempc			
+			&amp;quot;;
+			db.ExcecutSQL(sql);
+			//生成单据后要把订单表的生成销售数量回写
+			sql = &amp;quot; 
+				update ord_tmp o
+				   set traqty = (  select sum(bl.qty) qty from bilhdr bh,bildtl bl
+				                    where bh.acc = bl.acc and bh.bilid = bl.bilid and bh.biltyp = bl.biltyp
+				                      and trim(bh.refnam1) = o.ordid
+				                      and bl.itmid = o.sitmid
+				                      and bh.biltyp in (&amp;apos;SX&amp;apos;,&amp;apos;SO&amp;apos;)
+				                )
+				  where o.ordid=&amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos;
+			
+			      &amp;quot;;
+			db.ExcecutSQL(sql);	
+			//如果生成的数量跟订单相等要把状态设为已处理
+			sql = &amp;quot; update ord_tmp set stat=&amp;apos;1&amp;apos; where ordid=&amp;apos;&amp;quot;+ordid+&amp;quot;&amp;apos; and qty = traqty&amp;quot;;
+			db.ExcecutSQL(sql);
+		}
+	     }		   
+	return ret;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >Main</ID><NAME ></NAME><DATDSC >	select ordid 订单编号,sitmid 商品编号,sitmnam 商品名称,qty 需开单数, locid||locnam LOC,
+		decode(geninvqty(sitmid,locid),0,200,geninvqty(sitmid,locid)) invqty
+	  from (
+	      select ordid,sitmid,sitmnam,sum(untnum*qty-nvl(traqty,0)) qty,b.id locid,b.name locnam
+	        from ord_tmp a,[%table] b
+	       where sitmid is not null
+	         and scorpid is not null
+	         --and sprice is not null
+	         and dat = &amp;apos;[%DAT]&amp;apos;
+		 and ordid like case when &amp;apos;[%tag]&amp;apos; = &amp;apos;当天全部&amp;apos; then &amp;apos;%&amp;apos; else &amp;apos;[%tag]&amp;apos; end
+	       group by sitmid,sitmnam,ID,NAME,ordid   
+	       having sum(qty-nvl(traqty,0))&amp;gt;0
+	      )a
+</DATDSC><C4 >Main</C4><C5 >Main</C5><C6 >Main</C6><C7 >Main</C7><C8 >Main</C8><C9 >Main</C9><C10 >Main</C10><C11 >Main</C11><C12 >Main</C12><C13 >Main</C13><C14 >Main</C14><C15 >Main</C15><C16 >Main</C16><C17 >Main</C17><C18 >Main</C18><C19 >Main</C19><C20 >Main</C20><C21 >Main</C21><C22 >Main</C22></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

@@ -1,0 +1,418 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ImageBatch</MWID><NAME >图片批处理工具</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ImageBatch.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >IMG</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var bassheet = 0;
+var imgsheet = 1;
+var svgsheet = 2;
+var isFull = 0;		//是否全屏设计 0=否 1=是
+var G_SRCROW = -1;
+var G_SRCURL = &amp;quot;&amp;quot;;
+var G_DESTDIR = &amp;quot;C:&amp;quot;;	//输出目录
+var G_DESTURL = &amp;quot;&amp;quot;;	//输出路径
+var G_DESTFORMAT = &amp;quot;&amp;quot;;	//输出后缀
+var G_W = 0;		//设计宽度
+var G_H = 0;		//设计高度
+
+//载入ZXG之后
+function _thisOnpost_LoadZXGFile(sheet)
+{
+	setLayout();
+	
+	var list =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_IMAGE_FORMAT&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+	_this.SetToRadioBox(&amp;quot;&amp;quot;,bassheet,3,6,list);
+	_this.SetToBoolBox(bassheet,3,11);
+	_this.SetToBoolBox(bassheet,5,11);
+	
+	_this.SetCellText(bassheet,3,6,&amp;quot;no&amp;quot;);
+	_this.SetCellText(bassheet,3,11,&amp;quot;1&amp;quot;);
+	_this.SetCellText(bassheet,5,11,&amp;quot;1&amp;quot;);
+	
+	G_DESTFORMAT = _this.GetCellText(bassheet,3,6);
+	G_W = 1*_this.GetCellText(bassheet,5,7);
+	G_H = 1*_this.GetCellText(bassheet,5,9);
+	
+	_this.SetToSVGForm(&amp;quot;svgform&amp;quot;,svgsheet,-1,-1,&amp;quot;&amp;quot;);
+	_this.SVGFORM_SetClipWH(&amp;quot;svgform&amp;quot;,-1,-1,G_W,G_H);
+	
+	_this.SetColVisible(imgsheet,1,-1);
+	for (var c = 4; c &amp;lt; 13; c ++) {
+		_this.SetColVisible(imgsheet,c,-1);
+	}
+	_this.SetColVisible(imgsheet,_this.GetColCount(imgsheet)-2,-1);
+	
+	_this.SetAttribe(&amp;quot;SHEET_1&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	
+	_this.SetDesignMode(1);
+}
+
+//点击按钮
+function _thisOnButtonCtrlClick(id,sheet,row,col)
+{
+	if (id == &amp;quot;选择&amp;quot;) {
+		var ret = _this.SelectDir();
+		if (ret != &amp;quot;&amp;quot;) _this.SetCellText(sheet,row,col-1,ret);
+	}
+	else if (id == &amp;quot;查询文件&amp;quot;) {
+		_this.SetRowCount(imgsheet,19);
+		_this.SetMainCellRange(imgsheet,1,1,18,_this.GetColCount(imgsheet)-2);
+		setNullSheet(imgsheet);
+		
+		var xml = _this.FindFile(_this.GetCellText(sheet,3,2)+&amp;quot;\\&amp;quot;+_this.GetCellText(sheet,5,2));
+		_this.SetXmlDS(imgsheet,1,1,18,9,xml);
+		
+		setStyle(imgsheet);
+		
+		for (var c = 4; c &amp;lt; 10; c ++) {
+			_this.SetCellText(imgsheet,0,c,_this.GetColName(imgsheet,c));
+		}
+	}
+	else if (id == &amp;quot;输出到本地&amp;quot; ) {
+		//保存当前正在编辑的图片
+		if (G_SRCROW != -1) {
+			G_DESTDIR = _this.GetWindowTempFile();
+			if (G_DESTFORMAT == &amp;quot;no&amp;quot;) {
+				var str = _this.GetCellText(imgsheet,G_SRCROW,2);
+				var arr = str.split(&amp;quot;.&amp;quot;);
+				G_DESTFORMAT = arr[arr.length-1];
+			}
+			var desturl = G_DESTDIR+&amp;quot;.&amp;quot;+G_DESTFORMAT;
+			_this.SetAttribe(&amp;quot;&amp;quot;,_this.ATTR_EXPORT_IMAGE_FORMAT,G_DESTFORMAT);
+			_this.SetCellText(imgsheet,G_SRCROW,_this.GetColCount(imgsheet)-2,_this.SVGFORM_SaveImageFile(&amp;quot;svgform&amp;quot;,desturl,-1,-1,-1,-1));
+		}
+		
+		var ret = _this.SelectDir();
+		if (ret != &amp;quot;&amp;quot;) G_DESTDIR = ret;
+		
+		for (var r = _this.GetMainCellRangeRow1(imgsheet); r &amp;lt;= _this.GetMainCellRangeRow2(imgsheet); r ++) {
+			var srcurl = _this.GetCellText(imgsheet,r,_this.GetColCount(imgsheet)-2);
+			var itmid = _this.GetCellText(imgsheet,r,13);
+			var place = _this.GetCellText(imgsheet,r,14);
+			
+			if (_this.GetCellText(bassheet,3,11) != &amp;quot;1&amp;quot; &amp;&amp; srcurl == &amp;quot;&amp;quot;) srcurl = _this.GetCellText(imgsheet,r,2);
+			
+			if (srcurl != &amp;quot;&amp;quot; &amp;&amp; itmid != &amp;quot;&amp;quot; &amp;&amp; place != &amp;quot;&amp;quot;) {
+				if (_this.GetCellText(imgsheet,r,_this.GetColCount(imgsheet)-2) != &amp;quot;&amp;quot;) { //再次点击，不重新进行设计
+					srcurl = _this.GetCellText(imgsheet,r,_this.GetColCount(imgsheet)-2);
+				}
+				
+				var arr = srcurl.split(&amp;quot;.&amp;quot;);
+				G_DESTFORMAT = arr[arr.length-1];
+				
+				var filnam = itmid+place+&amp;quot;.&amp;quot;+G_DESTFORMAT;
+				var desturl = G_DESTDIR+&amp;quot;\\&amp;quot;+filnam;
+				
+				setImage (srcurl,desturl);
+				_this.SetRedraw(1);
+			}
+		}
+		
+		alert(&amp;quot;成功输出到本地，目录：&amp;quot;+G_DESTDIR);
+	}
+	else if (id == &amp;quot;上传服务器&amp;quot; ) {
+		//保存当前正在编辑的图片
+		if (G_SRCROW != -1) {
+			G_DESTDIR = _this.GetWindowTempFile();
+			if (G_DESTFORMAT == &amp;quot;no&amp;quot;) {
+				var str = _this.GetCellText(imgsheet,G_SRCROW,2);
+				var arr = str.split(&amp;quot;.&amp;quot;);
+				G_DESTFORMAT = arr[arr.length-1];
+			}
+			var desturl = G_DESTDIR+&amp;quot;.&amp;quot;+G_DESTFORMAT;
+			_this.SetAttribe(&amp;quot;&amp;quot;,_this.ATTR_EXPORT_IMAGE_FORMAT,G_DESTFORMAT);
+			_this.SetCellText(imgsheet,G_SRCROW,_this.GetColCount(imgsheet)-2,_this.SVGFORM_SaveImageFile(&amp;quot;svgform&amp;quot;,desturl,-1,-1,-1,-1));
+		}
+		
+		var typ = &amp;quot;2&amp;quot;; //图片存放方式 =1 图片文件 =2 数据库表
+		var cnt = 0;
+		var num = 0;
+		for (var r = _this.GetMainCellRangeRow1(imgsheet); r &amp;lt;= _this.GetMainCellRangeRow2(imgsheet); r ++) {
+			if (_this.GetCellText(imgsheet,r,2) != &amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(imgsheet,r,13) != &amp;quot;&amp;quot; &amp;&amp; _this.GetCellText(imgsheet,r,14) != &amp;quot;&amp;quot;) {
+				cnt ++;
+			}
+		}
+		
+		_this.SetToStandardCell(sheet,7,13);
+		_this.SetCellBorder(sheet,7,13,0,0,0,0);
+		
+		for (var r = _this.GetMainCellRangeRow1(imgsheet); r &amp;lt;= _this.GetMainCellRangeRow2(imgsheet); r ++) {
+			var srcurl = _this.GetCellText(imgsheet,r,_this.GetColCount(imgsheet)-2);
+			var itmid = _this.GetCellText(imgsheet,r,13);
+			var place = _this.GetCellText(imgsheet,r,14);
+			
+			if (_this.GetCellText(bassheet,3,11) != &amp;quot;1&amp;quot; &amp;&amp; srcurl == &amp;quot;&amp;quot;) srcurl = _this.GetCellText(imgsheet,r,2);
+			
+			if (srcurl != &amp;quot;&amp;quot; &amp;&amp; itmid != &amp;quot;&amp;quot; &amp;&amp; place != &amp;quot;&amp;quot;) {
+				var arr = srcurl.split(&amp;quot;.&amp;quot;);
+				G_DESTFORMAT = arr[arr.length-1];
+				var filename = itmid+place+&amp;quot;.&amp;quot;+G_DESTFORMAT;
+				var webdir = &amp;quot;/webresource/images/&amp;quot;+G_DEFORG+&amp;quot;/itemimg/&amp;quot;;
+				
+				// 上传文件到xlsGridData
+//				typ = &amp;quot;1&amp;quot;;
+//				var saveUrl = homeurl+&amp;quot;UploadToXlsGridData.sp&amp;quot;;
+//				_this.OpenHttpRequest(saveUrl,&amp;quot;UPLOAD&amp;quot;);
+//				_this.AddHttpRequestParam(&amp;quot;uploadfile&amp;quot;,srcurl,1);//本地文件的路径
+//				_this.AddHttpRequestParam(&amp;quot;path&amp;quot;,webdir,0);	//远程保存的目录
+//				_this.AddHttpRequestParam(&amp;quot;filename&amp;quot;,filename,0);//注意这里只能是文件名，用于远程保存的文件名
+//				_this.AddHttpRequestParam(&amp;quot;handle&amp;quot;,&amp;quot;REPORTSTORE&amp;quot;,0);
+//				var ret = _this.SendHttpRequest();
+//				_this.CloseHttpRequest();
+				
+				// 上传图片到formBlob表
+				typ = &amp;quot;2&amp;quot;;
+				_this.OpenHttpRequest(homeurl+&amp;quot;EAFormBlobUpload.sp&amp;quot;,&amp;quot;UPLOAD&amp;quot;);
+				_this.AddHttpRequestParam(&amp;quot;action&amp;quot;,&amp;quot;upload&amp;quot;,0);
+				_this.AddHttpRequestParam(&amp;quot;data&amp;quot;,srcurl,1);
+				_this.AddHttpRequestParam(&amp;quot;formguid&amp;quot;,&amp;quot;&amp;quot;,0);
+				_this.AddHttpRequestParam(&amp;quot;sytid&amp;quot;,G_SYTID,0);
+				_this.AddHttpRequestParam(&amp;quot;grdid&amp;quot;,G_GRDID,0);
+				_this.AddHttpRequestParam(&amp;quot;fileurl&amp;quot;,srcurl,0);
+				var ret = _this.SendHttpRequest();
+				_this.CloseHttpRequest();
+				
+				if ( ret == &amp;quot;&amp;quot; ) {
+					return &amp;quot;操作错误,可能是网络连接错误.&amp;quot; ;
+				} else {
+					if (typ == &amp;quot;1&amp;quot;) ret = &amp;quot;images/&amp;quot;+G_DEFORG+&amp;quot;/itemimg/&amp;quot;+filename;
+					if (typ == &amp;quot;2&amp;quot;) ret = &amp;quot;EAFormBlob.sp?guid=&amp;quot;+ret;
+					
+					alert(ret);
+				}
+				
+				//刷新进度
+				num ++;
+				percent = Math.round(num/cnt*100,2);
+				_this.SetToRectbox(sheet,7,13,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;+(percent*_this.GetColWidth(sheet,13)/100),&amp;quot;&amp;quot;,&amp;quot;#0088FF&amp;quot;,1,&amp;quot;#AAAAAA&amp;quot;,1,&amp;quot;#AAAAAA&amp;quot;,1,&amp;quot;#AAAAAA&amp;quot;,1,&amp;quot;#AAAAAA&amp;quot;);
+				_this.SetCellText(sheet,7,13,id+&amp;quot; &amp;quot;+percent+&amp;quot;%&amp;quot;);
+				
+				_this.SetRedraw(1);
+			}
+		}
+		
+//		if (typ == &amp;quot;1&amp;quot;) { //商品图片以文件方式存储，需要复制资源文件到web
+//			openwindow(&amp;quot;ROOT_0/xlsgrid/jsp/design/reload.jsp?hiddenField=7&amp;quot;);
+//		}
+		
+		_this.SetToStandardCell(sheet,7,13);
+		_this.SetCellBorder(sheet,7,13,1,1,1,1);
+		_this.SetToButton(id,sheet,7,13,id,&amp;quot;&amp;quot;,&amp;quot;&amp;quot;,3,-1,-1);
+	}
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if (sheet == imgsheet &amp;&amp; row &amp;gt; 0) {
+		var srcurl = _this.GetCellText(imgsheet,row,2);
+		var itmnam = _this.GetCellText(imgsheet,row,3);
+		
+		if (srcurl != &amp;quot;&amp;quot;) {
+			//保存当前正在编辑的图片
+			if (G_SRCROW != -1) {
+				G_DESTDIR = _this.GetWindowTempFile();
+				if (G_DESTFORMAT == &amp;quot;no&amp;quot;) {
+					var str = _this.GetCellText(imgsheet,G_SRCROW,2);
+					var arr = str.split(&amp;quot;.&amp;quot;);
+					G_DESTFORMAT = arr[arr.length-1];
+				}
+				var desturl = G_DESTDIR+&amp;quot;.&amp;quot;+G_DESTFORMAT;
+				_this.SetAttribe(&amp;quot;&amp;quot;,_this.ATTR_EXPORT_IMAGE_FORMAT,G_DESTFORMAT);
+				_this.SetCellText(imgsheet,G_SRCROW,_this.GetColCount(imgsheet)-2,_this.SVGFORM_SaveImageFile(&amp;quot;svgform&amp;quot;,desturl,-1,-1,-1,-1));
+			}
+			
+			//点击行显示该行图片
+			G_DESTFORMAT = _this.GetCellText(bassheet,3,6);
+			if (_this.GetCellText(imgsheet,row,_this.GetColCount(imgsheet)-2) != &amp;quot;&amp;quot;) { //再次点击，不重新进行设计
+				srcurl = _this.GetCellText(imgsheet,row,_this.GetColCount(imgsheet)-2);
+			}
+			if (G_DESTFORMAT == &amp;quot;no&amp;quot;) {
+				var arr = srcurl.split(&amp;quot;.&amp;quot;);
+				G_DESTFORMAT = arr[arr.length-1];
+			}
+			setImage (srcurl,&amp;quot;&amp;quot;);
+			
+			G_SRCROW = row;
+		}
+	}
+	if (sheet == bassheet &amp;&amp; row == 3 &amp;&amp; col == 12) {
+		if (G_SRCURL != &amp;quot;&amp;quot;) setImage (G_SRCURL,G_DESTURL);
+	}
+}
+
+//本地图片转换输出
+//	SVGForm	实现
+//	srcurl	图片来源位置
+//	desturl	图片转换后输出的目标位置
+function setImage(srcurl,desturl)
+{
+	G_SRCURL = srcurl;
+	G_DESTURL = desturl;
+	
+	var ret = &amp;quot;&amp;quot;;
+	var px = _this.GetColWidth(svgsheet,-1); //窗口宽
+	var py = _this.GetRowHeight(svgsheet,-1); //窗口高
+	var ix = 0; //图片位置x
+	var iy = 0; //图片位置y
+	if (G_W != 0) ix = (px-G_W)/2;
+	if (G_H != 0) iy = (py-G_H)/2;
+	if (ix &amp;lt;= 0) ix = 1;
+	if (iy &amp;lt;= 0) iy = 1;
+	
+	var svg = &amp;quot;&amp;lt;svg&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+srcurl+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+ix+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+iy+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+	
+	if (_this.GetCellText(bassheet,5,11) == &amp;quot;1&amp;quot; &amp;&amp; G_W != 0 &amp;&amp; G_H != 0) { //自动调整图片大小
+		svg = &amp;quot;&amp;lt;svg&amp;gt;&amp;lt;img src=\&amp;quot;&amp;quot;+srcurl+&amp;quot;\&amp;quot; width=\&amp;quot;&amp;quot;+G_W+&amp;quot;\&amp;quot; height=\&amp;quot;&amp;quot;+G_H+&amp;quot;\&amp;quot; x=\&amp;quot;&amp;quot;+ix+&amp;quot;\&amp;quot; y=\&amp;quot;&amp;quot;+iy+&amp;quot;\&amp;quot;&amp;gt;&amp;quot;;
+	}
+	
+	_this.SetToSVGForm(&amp;quot;svgform&amp;quot;,svgsheet,-1,-1,svg);
+	_this.SVGFORM_SetClipWH(&amp;quot;svgform&amp;quot;,-1,-1,G_W,G_H);
+	
+//	_this.SetToolbarString(&amp;quot;正在转换&amp;quot;+ srcurl +&amp;quot;到&amp;quot;+ desturl);
+	
+	_this.SetAttribe(&amp;quot;&amp;quot;,_this.ATTR_EXPORT_IMAGE_FORMAT,G_DESTFORMAT);
+	if (desturl != &amp;quot;&amp;quot;) ret = _this.SVGFORM_SaveImageFile(&amp;quot;svgform&amp;quot;,desturl,-1,-1,-1,-1);
+	
+	return ret;
+}
+
+//清空页面内容
+function setNullSheet(sheet)
+{
+	_this.SetRedraw(0);
+	for (var r = _this.GetMainCellRangeRow1(sheet); r &amp;lt; _this.GetRowCount(sheet); r ++) {
+		for (var c = _this.GetMainCellRangeCol1(sheet); c &amp;lt; _this.GetColCount(sheet)-1; c ++) {
+			_this.SetCellText(sheet,r,c,&amp;quot;&amp;quot;);
+		}
+	}
+	_this.SetRedraw(1);
+}
+
+//设置页面样式
+//	隔行换色
+//	自适应行高
+function setStyle(sheet)
+{
+//	_this.SetRedraw(0);
+	for (var r = _this.GetMainCellRangeRow1(sheet); r &amp;lt; _this.GetRowCount(sheet); r ++) {
+		if (r%2 == 0) {
+			for (var c = _this.GetMainCellRangeCol1(sheet); c &amp;lt;= _this.GetMainCellRangeCol2(sheet); c ++) {
+				_this.SetCellBkColor(sheet,r,c,251,251,251);
+			}
+		} else {
+			for (var c = _this.GetMainCellRangeCol1(sheet); c &amp;lt;= _this.GetMainCellRangeCol2(sheet); c ++) {
+				_this.SetCellBkColor(sheet,r,c,255,255,255);
+			}
+		}
+		if (_this.GetCellText(sheet,r,2) != &amp;quot;&amp;quot;) _this.SetCellText(sheet,r,14,r);
+		if (_this.GetCellText(sheet,r,3) != &amp;quot;&amp;quot;) _this.SetCellText(sheet,r,13,_this.GetCellText(sheet,r,3));
+		_this.AutoFixOneRowHeight(sheet,r);
+	}
+//	_this.SetRedraw(1);
+}
+
+//设置页面布局
+function setLayout()
+{
+	var layoutxml = &amp;quot;&amp;quot;;
+	
+	if (isFull == 0) {
+		layoutxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROWSET&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C1  height=\&amp;quot;145\&amp;quot; width=\&amp;quot;100%\&amp;quot; &amp;gt;&amp;quot;+bassheet+&amp;quot;&amp;lt;/C1&amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C2  height=\&amp;quot;145\&amp;quot; width=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;/C2&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C1  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;450\&amp;quot; &amp;gt;&amp;quot;+imgsheet+&amp;quot;&amp;lt;/C1&amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C2  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;100%\&amp;quot; &amp;gt;&amp;quot;+svgsheet+&amp;quot;&amp;lt;/C2&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+		
+		isFull = 1;
+	} else {
+		layoutxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROWSET&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C1  height=\&amp;quot;0\&amp;quot; width=\&amp;quot;100%\&amp;quot; &amp;gt;&amp;quot;+bassheet+&amp;quot;&amp;lt;/C1&amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C2  height=\&amp;quot;0\&amp;quot; width=\&amp;quot;0\&amp;quot; &amp;gt;&amp;lt;/C2&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C1  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;0\&amp;quot; &amp;gt;&amp;quot;+imgsheet+&amp;quot;&amp;lt;/C1&amp;gt; &amp;quot;+
+		&amp;quot;	&amp;lt;C2  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;100%\&amp;quot; &amp;gt;&amp;quot;+svgsheet+&amp;quot;&amp;lt;/C2&amp;gt; &amp;quot;+
+		&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+		&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+		
+		isFull = 0;
+	}
+	
+	_this.SetLayoutDS(layoutxml);
+}
+
+//鼠标双击
+function _thisOnMouseDClick(sheet,row,col)
+{
+	if (sheet == svgsheet) {
+		setLayout();
+		if (G_SRCURL != &amp;quot;&amp;quot;) setImage (G_SRCURL,G_DESTURL);
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == bassheet) {
+		if (row == 5 &amp;&amp; col == 7) {
+			if (isNaN(newvalue)) {
+				_this.SetCellText(sheet,row,col,oldvalue);
+				_this.SetRedraw(1);
+				_this.SetCellFocus(sheet,row,col-1);
+				return;
+			}
+			G_W = newvalue;
+			if (G_SRCURL != &amp;quot;&amp;quot;) setImage (G_SRCURL,G_DESTURL);
+		}
+		if (row == 5 &amp;&amp; col == 9) {
+			if (isNaN(newvalue)) {
+				_this.SetCellText(sheet,row,col,oldvalue);
+				_this.SetRedraw(1);
+				_this.SetCellFocus(sheet,row,col-1);
+				return;
+			}
+			G_H = newvalue;
+			if (G_SRCURL != &amp;quot;&amp;quot;) setImage (G_SRCURL,G_DESTURL);
+		}
+		if (row == 7 &amp;&amp; col == 6) {
+			for (var r = _this.GetMainCellRangeRow1(imgsheet); r &amp;lt; _this.GetRowCount(imgsheet); r ++) {
+				if (_this.GetCellText(imgsheet,r,3) != &amp;quot;&amp;quot;) _this.SetCellText(imgsheet,r,13,newvalue);
+			}
+		}
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >getItems</ID><NAME ></NAME><DATDSC >select id,replace(name,&amp;apos;　&amp;apos;,&amp;apos;&amp;apos;) name,nvl(width,0) width,
+       nvl(height,0) height,nvl(depth,0) depth
+  from item
+ where org=&amp;apos;[%SYS_DEFORG]&amp;apos; and bascat1 like &amp;apos;[%BASCAT]%&amp;apos;
+   and (id like &amp;apos;%[%NOTE]%&amp;apos; or name like &amp;apos;%[%NOTE]%&amp;apos;)
+ order by id</DATDSC><C4 >getItems</C4><C5 >getItems</C5><C6 >getItems</C6><C7 >getItems</C7></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

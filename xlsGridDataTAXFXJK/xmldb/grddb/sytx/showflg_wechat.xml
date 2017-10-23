@@ -1,0 +1,285 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >showflg_wechat</MWID><NAME >视频聊天组件</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >showflg_wechat.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >showflg</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var webpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot;);	
+var web = new JavaPackage ( &amp;quot;com.xlsgrid.net.web&amp;quot; );
+var ret = &amp;quot;&amp;quot;;
+//
+function GetBody(){
+	// OS 中如何得到登录的信息
+	var usr=web.EASession.GetLoginInfo(request);
+	var orgid=usr.getOrgid();
+	var accid=usr.getAccid();
+	var userid =usr.getUsrid();
+	
+	if(SHOWVIDEO==null|| SHOWVIDEO==&amp;quot;&amp;quot;) SHOWVIDEO= &amp;quot;1&amp;quot;;
+	if(RIGHTFRAMEURL==null|| RIGHTFRAMEURL==&amp;quot;&amp;quot;) RIGHTFRAMEURL= &amp;quot;&amp;quot;;
+	if(WELCOMETEXT==null|| WELCOMETEXT==&amp;quot;&amp;quot;) WELCOMETEXT= &amp;quot;&amp;quot;;
+	
+	//咨询的参数
+	var zxuserid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;ZXUSERID&amp;quot;),&amp;quot;&amp;quot;);
+	var zxdoc  = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;zxdoc&amp;quot;),&amp;quot;&amp;quot;);
+	
+	//会诊的参数
+	var hosroom = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;room&amp;quot;),&amp;quot;&amp;quot;);
+	var hzuserid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;HZUSERID&amp;quot;),&amp;quot;&amp;quot;);
+	var hzdoc  = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;hzdoc&amp;quot;),&amp;quot;&amp;quot;);
+	
+	//预约本次会诊的病人参数
+	var mora = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;mora&amp;quot;),&amp;quot;&amp;quot;);
+	var orderid = pubpack.EAFunc.NVL( request.getParameter(&amp;quot;orderid&amp;quot;),&amp;quot;&amp;quot;);
+	
+//&amp;lt;!--//xmidware下的目录格式如下：xlsgrid/images/flash/js/jquery-1.7.2.min.js&amp;quot;--&amp;gt;    
+//XMIDWARE_APP_USRGUID
+	var baseguid=&amp;quot;&amp;quot;;
+	var sql=&amp;quot;&amp;quot;;
+	var ds=null;
+	var db=null;
+	try{
+		db = new pubpack.EADatabase();
+		sql=&amp;quot;select guid from hin_his a where a.formguid=&amp;apos;&amp;quot;+XMIDWARE_APP_USRGUID+&amp;quot;&amp;apos;&amp;quot;;
+		ds=db.QuerySQL(sql);
+		if(ds.getRowCount()!=0)
+		{
+			baseguid=ds.getStringAt(0,&amp;quot;guid&amp;quot;);
+		} 
+	}catch(e){}
+	finally{
+		if(db!=null){
+			db.Close();
+		}
+	}
+
+
+//图片地址
+var html=&amp;quot;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;cordova.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; charset=\&amp;quot;utf-8\&amp;quot; src=\&amp;quot;cordova_plugins.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;  
+
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.jquery.min.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.jquery.mobile-1.4.0-rc.1.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.main.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script type=\&amp;quot;text/javascript\&amp;quot; src=\&amp;quot;xlsgrid/images/flash/js/chart.peer.js\&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+	&amp;lt;script&amp;gt;
+		var SHOWVIDEO=&amp;apos;&amp;quot;+SHOWVIDEO+&amp;quot;&amp;apos;;
+		var RIGHTFRAMEURL=&amp;apos;&amp;quot;+RIGHTFRAMEURL+&amp;quot;&amp;apos;;
+		var WELCOMETEXT=&amp;apos;&amp;quot;+WELCOMETEXT+&amp;quot;&amp;apos;;
+		var TITLE=&amp;apos;&amp;quot;+TITLE+&amp;quot;&amp;apos;;
+	&amp;lt;/script&amp;gt;
+	&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/style.css\&amp;quot;&amp;gt;    
+    	&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/jquery.mobile.flatui.css\&amp;quot; /&amp;gt;
+    	&amp;lt;link rel=\&amp;quot;stylesheet\&amp;quot; type=\&amp;quot;text/css\&amp;quot; href=\&amp;quot;xlsgrid/images/flash/css/bootstrap.min.css\&amp;quot;&amp;gt; 
+	&amp;lt;div id=\&amp;quot;loadingDiv\&amp;quot; style=\&amp;quot;position:fixed;display:none;z-index:2000;top:10px;left:0px;width:100%;height:100%;background-color:#FFFFFF\&amp;quot;&amp;gt;
+	&amp;lt;div height=20% style=\&amp;quot;filter: alpha(opacity=45); opacity:0.45; height:40px;width:100%;position:fixed;left:0px;top:0px;background-color:#2c2c2c;\&amp;quot;&amp;gt;
+		&amp;lt;div style=\&amp;quot;position:fixed;top:10px;\&amp;quot;&amp;gt;&amp;lt;a style=\&amp;quot;margin-left:10px\&amp;quot; onclick=\&amp;quot;gendown()\&amp;quot;&amp;gt; 返回&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+	&amp;lt;iframe id=\&amp;quot;loadingafram\&amp;quot; src=\&amp;quot;\&amp;quot; width=100% height=80% frameborder=0&amp;gt;&amp;lt;/iframe&amp;gt;
+	&amp;lt;/div&amp;gt;
+	&amp;lt;!----- 图片等资源的预览 -----&amp;gt;
+	&amp;lt;div id=\&amp;quot;div_img_popup\&amp;quot; onclick=\&amp;quot;document.all(&amp;apos;div_img_popup&amp;apos;).style.display=&amp;apos;none&amp;apos;;document.all(&amp;apos;div_img_show&amp;apos;).style.display=&amp;apos;none&amp;apos;;\&amp;quot;  style=\&amp;quot;z-index:9997;position:fixed; background:rgba(0,0,0,0.6); bottom:0; top:0;left:0;right:0; display:none;\&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+	&amp;lt;div id=\&amp;quot;div_img_show\&amp;quot; onclick=\&amp;quot;document.all(&amp;apos;div_img_popup&amp;apos;).style.display=&amp;apos;none&amp;apos;;document.all(&amp;apos;div_img_show&amp;apos;).style.display=&amp;apos;none&amp;apos;;\&amp;quot; style=\&amp;quot;z-index:9998;position:absolute; top:0px; left:0%; width:100%; height:100%;margin-left:0px; margin-top:0px; display:none;\&amp;quot;&amp;gt;
+		&amp;lt;img class=\&amp;quot;big\&amp;quot; id=\&amp;quot;pupupimg\&amp;quot; src=\&amp;quot;\&amp;quot; style=\&amp;quot;z-index:9999;display:;width:; height:;top:0px;left:0px;\&amp;quot;/&amp;gt;
+	&amp;lt;/div&amp;gt;
+	
+	&amp;lt;div id=\&amp;quot;info\&amp;quot; style=\&amp;quot;display:none; position:relative; width:100%; height:100%; z-index:999999;\&amp;quot;&amp;gt;
+		&amp;lt;div style=\&amp;quot;position:absolute; top:0; left:0;\&amp;quot;&amp;gt;&amp;lt;a href=\&amp;quot;#\&amp;quot;&amp;gt;关闭&amp;lt;/a&amp;gt;&amp;lt;/div&amp;gt;
+	&amp;lt;/div&amp;gt;
+	
+	&amp;lt;table width=100% height=100% border=0&amp;gt;
+	&amp;lt;tr&amp;gt;
+	&amp;lt;td width=50%&amp;gt;
+	&amp;lt;div class=\&amp;quot;header linear-g\&amp;quot; style=\&amp;quot;height:50px; \&amp;quot;&amp;gt;&amp;lt;table width=100% height=100% &amp;gt;&amp;quot;;//	position:fixed;
+		if (SHOWPATINFO == &amp;quot;2&amp;quot;) {
+			html +=&amp;quot;&amp;lt;td width=10%  align=center valign=middle &amp;gt;
+		        &amp;lt;/td&amp;gt;&amp;quot;;
+	        } else {
+	        	html +=&amp;quot;&amp;lt;td width=10%  align=center valign=middle &amp;gt;
+		        &amp;lt;a href=\&amp;quot;#panel-left\&amp;quot;  class=\&amp;quot;glyphicon glyphicon-th-large\&amp;quot;&amp;gt; &amp;lt;/a&amp;gt;&amp;lt;/td&amp;gt;&amp;quot;;
+	        }
+	        
+	       html+=&amp;quot; 
+	       
+	       &amp;lt;td align=center valign=middle id=\&amp;quot;myroomname\&amp;quot; &amp;gt;正在连接....&amp;lt;/td&amp;gt;
+	      
+		 &amp;lt;td width=10% onclick=\&amp;quot;javascript:init(G_APP_USRGUID,G_USRID1,1);f_switchvideo();f_showaddwnd();\&amp;quot; align=center valign=middle&amp;gt;
+	        &amp;lt;font color=#663300&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-facetime-video\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt; &amp;lt;/td&amp;gt;
+
+	       	&amp;lt;td width=10% onclick=\&amp;quot;try{parent.f_goback();}catch(e){}\&amp;quot; align=center valign=middle&amp;gt;
+	        &amp;lt;font color=#663300 &amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-remove\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt; &amp;lt;/td&amp;gt;
+	       &amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+	&amp;lt;/div&amp;gt;&amp;quot;;
+
+
+    
+  html+= &amp;quot;&amp;lt;div data-role=\&amp;quot;page\&amp;quot; id=\&amp;quot;mainpage\&amp;quot; style=\&amp;quot;height:100%;position:relative;\&amp;quot; &amp;gt;
+    
+    
+    &amp;lt;div data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;left\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;list-group shortcut_menu dn linear-g\&amp;quot; id=\&amp;quot;panel-left\&amp;quot;  &amp;gt;
+         &amp;lt;div class=\&amp;quot;header linear-g\&amp;quot;&amp;gt;
+       		&amp;lt;a class=\&amp;quot;text-center col-xs-8\&amp;quot;&amp;gt;本次会诊预约的患者&amp;lt;/a&amp;gt;
+    &amp;lt;/div&amp;gt;&amp;quot;;
+    
+    if(SHOWORDER == &amp;quot;1&amp;quot;) {
+    	var sql=&amp;quot;&amp;quot;;
+	var ds=null;
+	var db = new pubpack.EADatabase();
+    	
+    	sql = &amp;quot;select c.imgguid,c.name,c.guid,c.id,a.preno orderid
+		  from chis_preno a, yx_monthwork b, usr c
+		 where a.formguid = b.guid
+		   and a.usrid = c.id
+		   and a.org=b.org
+		   and a.org=c.org
+		   and b.crtusr=&amp;apos;&amp;quot;+userid+&amp;quot;&amp;apos;
+		   and a.flg = &amp;apos;&amp;quot;+mora+&amp;quot;&amp;apos;
+		   and a.org=&amp;apos;CHIS&amp;apos; 
+		   and a.predat=to_char(sysdate,&amp;apos;yyyy-mm-dd&amp;apos;)
+		   and monstat=&amp;apos;1&amp;apos;
+		   and a.stat is null
+		order by seqid&amp;quot;;
+    	
+    	ds = db.QuerySQL(sql);
+    	if(ds.getRowCount() &amp;gt; 0) {
+    		html +=&amp;quot;&amp;lt;div style=&amp;apos;margin:5px auto;&amp;apos;&amp;gt;&amp;lt;button type=&amp;apos;button&amp;apos; class=&amp;apos;btn btn-info&amp;apos; onclick=&amp;apos;getOver();&amp;apos;&amp;gt;结束与此患者的会诊&amp;lt;/button&amp;gt;&amp;lt;/div&amp;gt;&amp;quot;;
+    		
+	    	for (var r=0;r&amp;lt;ds.getRowCount();r++) {
+	    		var img = ds.getStringAt(r,&amp;quot;imgguid&amp;quot;);
+	    		var name = ds.getStringAt(r,&amp;quot;name&amp;quot;);
+	    		var oguid = ds.getStringAt(r,&amp;quot;guid&amp;quot;);
+	    		var oid = ds.getStringAt(r,&amp;quot;id&amp;quot;);
+	    		var orderid= ds.getStringAt(r,&amp;quot;orderid&amp;quot;);
+	    		html +=&amp;quot;&amp;lt;a id=&amp;apos;&amp;quot;+oguid+&amp;quot;&amp;apos; onclick=\&amp;quot;callNext(&amp;apos;&amp;quot;+oguid+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+orderid+&amp;quot;&amp;apos;);\&amp;quot; class=\&amp;quot;list-group-item\&amp;quot;&amp;gt;
+	    			&amp;lt;img src=\&amp;quot;EAFormBlob.sp?guid=&amp;quot;+ds.getStringAt(r,&amp;quot;imgguid&amp;quot;)+&amp;quot;\&amp;quot; style=&amp;apos;width:40px;&amp;apos;/&amp;gt; &amp;lt;span&amp;gt;&amp;nbsp;&amp;quot;+name+&amp;quot;&amp;lt;/span&amp;gt;&amp;lt;/a&amp;gt; &amp;quot;;
+	    	}
+	    	
+    	} else {
+    		html +=&amp;quot;&amp;lt;BR&amp;gt;&amp;lt;BR&amp;gt;本次会诊无人预约&amp;quot;;
+    	}
+    }
+        
+        
+        
+        
+        
+   html+=&amp;quot; &amp;lt;/div&amp;gt;
+    
+    
+    &amp;lt;div data-role=\&amp;quot;panel\&amp;quot; data-position=\&amp;quot;right\&amp;quot; data-display=\&amp;quot;push\&amp;quot; class=\&amp;quot;user_box text-center dn linear-g\&amp;quot; id=\&amp;quot;panel-right\&amp;quot; style=\&amp;quot;border:1px solid #F2F2F2;background:#F2F2F2\&amp;quot; &amp;gt;
+    	
+
+    &amp;lt;/div&amp;gt;
+   
+
+    &amp;lt;div id=\&amp;quot;mainzone\&amp;quot; data-role=\&amp;quot;content\&amp;quot; class=\&amp;quot;container\&amp;quot; role=\&amp;quot;main\&amp;quot; style=\&amp;quot;float:left;width:100%;padding-right: 0px;padding-left: 0px;margin-top:5px;\&amp;quot; onclick=\&amp;quot;f_hideaddwnd();\&amp;quot;&amp;gt;
+    	&amp;lt;table border=0  cellspacing=0 cellpadding=0&amp;gt;&amp;lt;tr&amp;gt;
+    	&amp;lt;td id=&amp;apos;lefttd&amp;apos; width=100% height=20&amp;gt;
+    	&amp;lt;table width=100% height=100%&amp;gt;&amp;quot;;
+    	if(SHOWVIDEO==&amp;quot;1&amp;quot;) {
+    		html += &amp;quot;&amp;lt;tr height=100 id=\&amp;quot;videos1\&amp;quot; style=\&amp;quot;display:none\&amp;quot;&amp;gt;
+    			&amp;lt;td &amp;gt;
+    					&amp;lt;video id=\&amp;quot;other1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:50%;height:auto; float:left;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+					&amp;lt;video id=\&amp;quot;you1\&amp;quot;   autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:50%;height:auto;float:left;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+    			&amp;lt;/td&amp;gt;
+    		&amp;lt;/tr&amp;gt;&amp;quot;;
+    	}
+    		html += &amp;quot;&amp;lt;tr&amp;gt;
+    			&amp;lt;td valign=top&amp;gt;
+    			&amp;lt;div id=&amp;apos;leftdiv&amp;apos; style=\&amp;quot;float:left;width:100%;height:20px;overflow:auto;padding-right:10px;padding-left:10px;\&amp;quot;&amp;gt; 
+		        	&amp;lt;ul class=\&amp;quot;content-reply-box mg10\&amp;quot; id=\&amp;quot;list\&amp;quot;&amp;gt;
+		        	&amp;lt;/ul&amp;gt;
+		        &amp;lt;/div&amp;gt;	
+    			&amp;lt;/td&amp;gt;
+    		&amp;lt;/tr&amp;gt;
+    	&amp;lt;/table&amp;gt;
+    	
+        &amp;lt;/td&amp;gt;&amp;quot;;
+       
+	
+	
+	html+=&amp;quot;&amp;lt;/tr&amp;gt;
+	&amp;lt;/table&amp;gt;
+    &amp;lt;/div&amp;gt;
+       &amp;lt;div id=\&amp;quot;bottomNav\&amp;quot; style=\&amp;quot;height:50px; display:block;\&amp;quot;&amp;gt;
+		&amp;lt;table width=100% border=0 height=100%&amp;gt;
+		&amp;lt;tr&amp;gt;&amp;lt;td align=center valign=middle height=50&amp;gt;
+			&amp;lt;table width=100% height=100%  border=0  &amp;gt;&amp;lt;tr&amp;gt;
+			&amp;lt;td width=50 align=\&amp;quot;center\&amp;quot; atyle=\&amp;quot;cursor:point;margin-left:0\&amp;quot; onclick=\&amp;quot;javascript:f_showaddwnd();\&amp;quot;&amp;gt;&amp;lt;font size=4&amp;gt;&amp;lt;li class=\&amp;quot;glyphicon glyphicon-plus\&amp;quot;&amp;gt;&amp;lt;/li&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+			&amp;lt;td &amp;gt;&amp;lt;input type=\&amp;quot;text\&amp;quot; style=\&amp;quot;padding-left:10px;width:100%;height:38px;border: 1px solid #dedede;-moz-border-radius: 5px;-webkit-border-radius: 5px;border-radius:5px;\&amp;quot; id=\&amp;quot;text\&amp;quot;/&amp;gt;&amp;lt;/td&amp;gt;
+			&amp;lt;td width=80 id=\&amp;quot;send\&amp;quot; style=\&amp;quot;cursor:point;\&amp;quot; align=center&amp;gt;&amp;lt;font size=4&amp;gt;回复&amp;lt;/font&amp;gt;&amp;lt;/td&amp;gt;
+			&amp;lt;/tr&amp;gt; 
+				
+			&amp;lt;/table&amp;gt;	
+		&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;
+		&amp;lt;tr&amp;gt;&amp;lt;td&amp;gt;
+			&amp;lt;table id=&amp;apos;addwnd&amp;apos; width=100% height=100% style=\&amp;quot;border-top:1px solid #CDCDCD;display:none;\&amp;quot;&amp;gt;
+			&amp;lt;tr&amp;gt;
+				&amp;lt;td width=20% align=center valign=middle&amp;gt;&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn \&amp;quot; style=\&amp;quot;width:100%;height:60px;font-size: 12px\&amp;quot; onclick=\&amp;quot;capture(50,1,0,1024,768);\&amp;quot;&amp;gt;
+				  &amp;lt;p&amp;gt;&amp;lt;font color=#003333&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-camera\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;拍照
+				&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td width=20% align=center valign=middle&amp;gt;&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn \&amp;quot; style=\&amp;quot;width:100%;height:60px;font-size: 12px\&amp;quot; onclick=\&amp;quot;capture(100,1,0,-1,-1);\&amp;quot;&amp;gt;
+				  &amp;lt;p&amp;gt;&amp;lt;font color=#663300&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-film\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;高清拍照
+				&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td width=20% align=center valign=middle&amp;gt;&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn \&amp;quot; style=\&amp;quot;width:100%;height:60px;font-size: 12px\&amp;quot; onclick=\&amp;quot;captureAudio();\&amp;quot;&amp;gt;
+				  &amp;lt;p&amp;gt;&amp;lt;font color=#444477&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-volume-up\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;录语音
+				&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;
+				
+				&amp;lt;td width=20% align=center valign=middle&amp;gt;&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn \&amp;quot; style=\&amp;quot;width:100%;height:60px;font-size: 12px\&amp;quot; onclick=\&amp;quot;capture(100,0,0,-1,-1)\&amp;quot;&amp;gt;
+				  &amp;lt;p&amp;gt;&amp;lt;font color=#629924&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-picture\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;相册库
+				&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;
+				&amp;lt;td width=20% align=center valign=middle&amp;gt;&amp;lt;button type=\&amp;quot;button\&amp;quot; class=\&amp;quot;btn \&amp;quot; style=\&amp;quot;width:100%;height:60px;font-size: 12px\&amp;quot; onclick=\&amp;quot;capture(100,0,1,-1,-1);\&amp;quot;&amp;gt;
+				  &amp;lt;p&amp;gt;&amp;lt;font color=#884400&amp;gt;&amp;lt;span class=\&amp;quot;glyphicon glyphicon-eye-open\&amp;quot; style=\&amp;quot;font-size: 24px\&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;&amp;lt;/font&amp;gt;&amp;lt;/p&amp;gt;选视频
+				&amp;lt;/button&amp;gt;&amp;lt;/td&amp;gt;
+				
+			&amp;lt;/tr&amp;gt;
+			
+			&amp;lt;/table&amp;gt;
+		&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;tr&amp;gt;&amp;lt;td valign=top align=left&amp;gt;
+			&amp;lt;div id=&amp;apos;recordwnd&amp;apos; style=&amp;apos;display:none;&amp;apos; align=center&amp;gt;
+			&amp;lt;button id=&amp;apos;luyin&amp;apos; class=&amp;apos;btn btn-primary btn-lg&amp;apos; style=&amp;apos;width:90%;height:50px;&amp;apos;&amp;gt;&amp;lt;apan class=&amp;apos;glyphicon glyphicon-volume-up&amp;apos;&amp;gt;&amp;lt;/span&amp;gt;按住录音&amp;lt;/button&amp;gt; &amp;lt;div id=&amp;apos;test&amp;apos; align=center&amp;gt;请点击开始录音&amp;lt;/div&amp;gt;
+			&amp;lt;/div&amp;gt;
+		&amp;lt;/td&amp;gt;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+  &amp;lt;/td&amp;gt; &amp;quot;;
+	 if(RIGHTFRAMEURL!=&amp;quot;&amp;quot;) {
+       		 html += &amp;quot;&amp;lt;td id=&amp;apos;righttd&amp;apos; width=50% height=100% style=\&amp;quot;border:1px solid #ccc;\&amp;quot;&amp;gt;&amp;quot;;
+		html+=&amp;quot;&amp;lt;iframe src=\&amp;quot;&amp;quot;+RIGHTFRAMEURL+&amp;quot;\&amp;quot; border=0 width=100% height=100% frameborder=0 id=\&amp;quot;RIGHTFRAMEBL\&amp;quot;&amp;gt;&amp;lt;/iframe&amp;gt;&amp;quot;;
+
+//			html+=&amp;quot;&amp;lt;div id=\&amp;quot;show_vidio\&amp;quot; style=\&amp;quot;display:block; \&amp;quot;&amp;gt;
+//			
+//				&amp;lt;div id=\&amp;quot;videos1\&amp;quot; style=\&amp;quot;width:100%;\&amp;quot; &amp;gt;
+//				&amp;lt;video id=\&amp;quot;other1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:100%;height:auto;z-index:10;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+//					&amp;lt;/div&amp;gt;
+//				
+//				&amp;lt;video id=\&amp;quot;you1\&amp;quot; autoplay=\&amp;quot;autoplay\&amp;quot; style=\&amp;quot;width:100%;height:auto;\&amp;quot; controls&amp;gt;&amp;lt;/video&amp;gt;
+//			&amp;lt;/div&amp;gt; &amp;quot;;
+		html+=&amp;quot;&amp;lt;/td&amp;gt;&amp;quot;;	
+	}
+
+
+
+	html+=&amp;quot;&amp;lt;/tr&amp;gt;&amp;lt;/table&amp;gt;&amp;lt;/body&amp;gt;&amp;quot;;
+
+return html;
+
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

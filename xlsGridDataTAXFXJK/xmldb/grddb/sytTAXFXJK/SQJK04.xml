@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SQJK04</MWID><NAME >采集率通告报表（一般纳税人）</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SQJK04.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >发票事前监控</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >5</NROW><NCOL >10</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHOW_ZERO,1);
+	_this.AutoFixScreenWidth();
+	
+	_sql.querytods(&amp;quot;GetDate&amp;quot;);
+	var dat = _this.XMLDS_GetString(0,&amp;quot;DAT&amp;quot;);
+	_this.SetCellText(0,0,1,dat+&amp;quot;一般纳税人采集率&amp;quot;);
+	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select b.name,a.&amp;quot;应采集企业&amp;quot;,a.&amp;quot;完全采集企业&amp;quot;,a.&amp;quot;完全采集率&amp;quot;,&amp;apos;&amp;apos; &amp;quot;部分采集企业&amp;quot;,&amp;apos;&amp;apos; &amp;quot;部分采集率&amp;quot;,
+       a.&amp;quot;已采集企业&amp;quot;,a.&amp;quot;采集率&amp;quot;,a.&amp;quot;未采集企业&amp;quot;,a.&amp;quot;未采集率&amp;quot;
+from (
+select substr(b.zgswj_dm,0,7) swjg,
+       count(distinct a.nsrsbh) &amp;quot;应采集企业&amp;quot;,
+      
+     count( distinct case when ((frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)  
+         or((b.fddbrsfzjlx_dm !=&amp;apos;201&amp;apos; or length(trim(fddbrsfzhm))&amp;lt;15) and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or( a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos; )
+         or(frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos; )
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)        
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and  a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or  (a.FDDBRXM is null  and  a.CWFZRXM is null and  bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)                                     
+         or (frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos;  and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos;  and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;) )
+           then a.nsrsbh else null end  )&amp;quot;完全采集企业&amp;quot;,
+        
+       round(
+          count( distinct case when ((frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)  
+         or((b.fddbrsfzjlx_dm !=&amp;apos;201&amp;apos;or length(trim(fddbrsfzhm))&amp;lt;15) and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or( a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos; )
+         or(frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos; )
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)        
+         or (frcjqk=&amp;apos;1&amp;apos; and cwcjqk=&amp;apos;1&amp;apos; and a.BSRXM is null and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (frcjqk=&amp;apos;1&amp;apos; and  a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and bsrcjqk=&amp;apos;1&amp;apos; and a.GPRXM is null)
+          or (a.FDDBRXM is null  and  cwcjqk=&amp;apos;1&amp;apos; and  a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;)
+          or  (a.FDDBRXM is null  and  a.CWFZRXM is null and  bsrcjqk=&amp;apos;1&amp;apos; and gprcjqk=&amp;apos;1&amp;apos;)                                     
+         or (frcjqk=&amp;apos;1&amp;apos; and a.CWFZRXM is null and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and cwcjqk=&amp;apos;1&amp;apos;  and a.BSRXM is null and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and bsrcjqk=&amp;apos;1&amp;apos;  and a.GPRXM is null ) 
+         or (a.FDDBRXM is null and a.CWFZRXM is null and a.BSRXM is null and gprcjqk=&amp;apos;1&amp;apos;))
+           then a.nsrsbh else null end ) /count(distinct a.nsrsbh)*100,2) &amp;quot;完全采集率&amp;quot;,
+       
+       count( distinct  case when (frcjqk=&amp;apos;1&amp;apos; or cwcjqk=&amp;apos;1&amp;apos; or bsrcjqk=&amp;apos;1&amp;apos; or gprcjqk=&amp;apos;1&amp;apos;) then a.nsrsbh else null end ) &amp;quot;部分采集企业&amp;quot;,
+       round(count(distinct case when not (frcjqk=&amp;apos;1&amp;apos; or cwcjqk=&amp;apos;1&amp;apos; or bsrcjqk=&amp;apos;1&amp;apos; or gprcjqk=&amp;apos;1&amp;apos;) then a.nsrsbh else null end )/count(distinct a.nsrsbh)*100,2) &amp;quot;部分采集率&amp;quot;,
+       
+       count( distinct case when (frcjqk=&amp;apos;1&amp;apos; or cwcjqk=&amp;apos;1&amp;apos; or bsrcjqk=&amp;apos;1&amp;apos; or gprcjqk=&amp;apos;1&amp;apos;) then a.nsrsbh else null end ) &amp;quot;已采集企业&amp;quot;,
+       round(count(case when (frcjqk=&amp;apos;1&amp;apos; or cwcjqk=&amp;apos;1&amp;apos; or bsrcjqk=&amp;apos;1&amp;apos; or gprcjqk=&amp;apos;1&amp;apos;) then a.nsrsbh else null end )/count(distinct a.nsrsbh)*100,2) &amp;quot;采集率&amp;quot;,
+      
+       count( distinct case when ( frcjqk=&amp;apos;0&amp;apos; and  cwcjqk=&amp;apos;0&amp;apos; and bsrcjqk=&amp;apos;0&amp;apos;  and  gprcjqk=&amp;apos;0&amp;apos;)
+        then a.nsrsbh else null end ) &amp;quot;未采集企业&amp;quot;,
+      
+       round(count( distinct  case when ( frcjqk=&amp;apos;0&amp;apos; and cwcjqk=&amp;apos;0&amp;apos; and bsrcjqk=&amp;apos;0&amp;apos; and  gprcjqk=&amp;apos;0&amp;apos;)
+        then a.nsrsbh else null end )/count(distinct a.nsrsbh)*100,2) &amp;quot;未采集率&amp;quot;
+       
+from tax_smqy_ybnsr a,dj_nsrxx b
+WHERE (a.nsrsbh=b.nsrsbh or a.nsrsbh=b.shxydm)
+  and b.nsrzt_dm in (&amp;apos;01&amp;apos;,&amp;apos;02&amp;apos;,&amp;apos;03&amp;apos;,&amp;apos;04&amp;apos;)  
+  and b.yxbz=&amp;apos;Y&amp;apos;
+  and b.djxh in (select djxh from v_tax_ybnsr_djxx where yxqz&amp;gt;sysdate and yxqq&amp;lt;sysdate and nsrzt_dm &amp;lt;&amp;apos;05&amp;apos; )
+group by substr(b.zgswj_dm,0,7)
+) a,v_swjg b
+where a.swjg=b.id
+order by a.swjg
+</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8><C9 >MAIN</C9><C10 >MAIN</C10><C11 >MAIN</C11><C12 >MAIN</C12><C13 >MAIN</C13></ROW>
+<ROW num="1" ><ID >GetDate</ID><NAME ></NAME><DATDSC >select to_char(max(crtdat),&amp;apos;yyyy-mm-dd&amp;apos;) dat from tax_smqy_ybnsr</DATDSC><C4 ></C4><C5 ></C5><C6 ></C6><C7 ></C7><C8 ></C8><C9 ></C9><C10 ></C10><C11 ></C11><C12 ></C12><C13 ></C13></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

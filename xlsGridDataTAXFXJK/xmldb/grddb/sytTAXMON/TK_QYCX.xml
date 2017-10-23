@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >Q</MWTYP><MWID >TK_QYCX</MWID><NAME >非工业纳税企业操作</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >TK_QYCX.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXMON</syt></ROW>
+</ROWSET>
+</grdds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >YYMM1</ID><NAME >开始年月</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD >1</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >0</VISFLG><KEYFLG ></KEYFLG><C13 >YYMM1</C13></ROW>
+<ROW num="1" ><ID >YYMM2</ID><NAME >截止年月</NAME><NOTNULL ></NOTNULL><KEYVAL >V_YYYY_MM</KEYVAL><INPCTL >list</INPCTL><DISPORD >2</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >0</EDTFLG><VISFLG >0</VISFLG><KEYFLG ></KEYFLG><C13 >YYMM2</C13></ROW>
+<ROW num="2" ><ID >CMID</ID><NAME >纳税人识别号</NAME><NOTNULL >1</NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD >3</DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG >1</EDTFLG><VISFLG >1</VISFLG><KEYFLG ></KEYFLG><C13 >CMID</C13></ROW>
+</ROWSET>
+</grdpamds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,1</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:main</DSKEY><NROW >3</NROW><NCOL >6</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL><C20 >0,2,1</C20><C21 >0,2,1</C21></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet=0;
+//数据加载完毕
+var as=0;
+function _thisOnpost_loaddata(sheet)
+{
+	for(var row=2;row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+	{
+		_this.SetToBoolBox(sheet,row,1);
+	}
+	if(as==0){
+	var Addmenu = &amp;quot;&amp;lt;item id=\&amp;quot;isNoTax\&amp;quot; name=\&amp;quot;非国工业纳税企业\&amp;quot;/&amp;gt;&amp;lt;item id=\&amp;quot;isTax\&amp;quot; name=\&amp;quot;工业纳税企业\&amp;quot;/&amp;gt;&amp;quot;;
+	_this.AddToolbarButton(&amp;quot;&amp;quot;,&amp;quot;标志为&amp;quot;,&amp;quot;&amp;quot;,Addmenu,0,0,0,70);
+	as = 1;
+	}
+	var CMID= _this.GetCellText(0,2,3);
+        _sql.querytods(&amp;quot;isTax&amp;quot;,&amp;quot;CMID=&amp;quot;+CMID);
+	var isT = _this.XMLDS_GetString(0,&amp;quot;no&amp;quot;);
+	if(isT==&amp;apos;0&amp;apos;){
+		_this.SetCellText(0,2,7,&amp;quot;是&amp;quot;);
+	}else{_this.SetCellText(0,2,7,&amp;quot;否&amp;quot;);
+}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+  if(row==5 &amp;&amp; col==1)
+  {
+  	for(var r=5;r&amp;lt;=_this.GetMainCellRangeRow2(sheet); r++){
+  		_this.SetCellText(sheet,r,1,newvalue);
+  	}
+  }
+}
+
+
+function getSelectRow()
+{
+	var comps = &amp;quot;&amp;quot;;
+	for (var r=_this.GetMainCellRangeRow1(0);r&amp;lt;=_this.GetMainCellRangeRow2(0);r++) {
+		if (_this.GetCellText(0,r,1) == &amp;quot;1&amp;quot;) {
+			var id = _this.GetCellText(0,r,3);
+			if (comps == &amp;quot;&amp;quot;) comps += id;
+			else comps += &amp;quot;,&amp;quot; + id;
+		}
+	}
+	return comps;
+}
+//非国税管理企业
+function isnoTaxCompany()
+{
+	
+	var comps = getSelectRow();
+	
+	if (comps != &amp;quot;&amp;quot;) {
+		if (!confirm(&amp;quot;是否标志为非工业纳税企业？&amp;quot;)) return;
+		var param = new Object();
+		param.cms = comps;
+		param.thisusrid = G_USRID;
+		var ret = invokeOSFuncExt(&amp;quot;updateFlag&amp;quot;,param);
+		alert(ret);
+	}else{ alert(&amp;quot;请选中一条记录&amp;quot;);}
+	
+	
+}
+
+//国税管理企业
+function isTaxCompany()
+{
+	
+	var comps = getSelectRow();
+	
+	if (comps != &amp;quot;&amp;quot;) {
+		if (!confirm(&amp;quot;是否标志为工业纳税企业？&amp;quot;)) return;
+		var param = new Object();
+		param.cms = comps;
+		param.thisusrid = G_USRID;
+		var ret = invokeOSFuncExt(&amp;quot;updateFlag2&amp;quot;,param);
+		alert(ret);
+	}else{ alert(&amp;quot;请选中一条记录&amp;quot;);}
+}
+
+//点击菜单项
+function _thisOnMenuItemSelect(sheet,row,col,menuitemid)
+{
+	if (menuitemid == &amp;quot;isNoTax&amp;quot;) {
+		isnoTaxCompany();
+	}
+	else if (menuitemid == &amp;quot;isTax&amp;quot;) {
+		isTaxCompany();
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+function updateFlag()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		var ammnos = cms.split(&amp;quot;,&amp;quot;);
+		for (var i=0;i&amp;lt;ammnos.length();i++) {
+			sql = &amp;quot;insert into TAX_NOTAXCOM(cmid,crtusr) values(&amp;apos;&amp;quot;+ammnos[i]+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+thisusrid+&amp;quot;&amp;apos;)&amp;quot;;
+			ret += db.ExcecutSQL(sql);
+		}
+		
+		db.Commit();
+		return &amp;quot;操作成功! 标志记录数&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return &amp;quot;操作失败&amp;quot;+e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+function updateFlag2()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ret = 0;
+	try {
+		db = new pub.EADatabase();
+		var ammnos = cms.split(&amp;quot;,&amp;quot;);
+		for (var i=0;i&amp;lt;ammnos.length();i++) {
+			sql = &amp;quot;delete from TAX_NOTAXCOM where cmid=&amp;apos;&amp;quot;+ammnos[i]+&amp;quot;&amp;apos;&amp;quot;;
+			ret += db.ExcecutSQL(sql);
+		}
+		
+		db.Commit();
+		return &amp;quot;操作成功! 标志记录数&amp;quot;+ret;
+	}
+	catch(e) {
+		if (db != null) db.Rollback();
+		return &amp;quot;操作失败&amp;quot;+e.toString();
+	}
+	finally {
+		if (db != null) db.Close();
+	}
+}
+
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >main</ID><NAME ></NAME><DATDSC >select flag,rownum rn,id,name,addr,lawman from(
+select &amp;apos;&amp;apos; flag,a.id id,b.name name,b.addr addr,b.lawman lawman
+from tax_taxdata a,v_tax_company b
+where a.id=b.id(+) 
+and (a.id like &amp;apos;[%CMID]%&amp;apos;)
+group by a.id,b.name,b.addr,b.lawman
+)</DATDSC><C4 ></C4><C5 ></C5><C6 >main</C6></ROW>
+<ROW num="1" ><ID >isTax</ID><NAME ></NAME><DATDSC >select decode(count(*),0,0,1) no from TAX_NOTAXCOM where CMID=&amp;apos;[%CMID]&amp;apos;</DATDSC><C4 >isTax</C4><C5 >isTax</C5><C6 >isTax</C6></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

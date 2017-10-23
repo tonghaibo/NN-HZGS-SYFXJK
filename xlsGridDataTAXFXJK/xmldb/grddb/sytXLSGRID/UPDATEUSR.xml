@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >UPDATEUSR</MWID><NAME >操作员资料维护</NAME><NOTE ></NOTE><FILE >UPDATEUSR.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><JAVACLS ></JAVACLS><syt >XLSGRID</syt><EXTJS >xlsgrid/js/dbhelper.js</EXTJS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//================================================================// 
+// 函数：thisOnpost_loaddata
+// 说明：调用dbhelper的初始化动作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/17/05 17:31:52
+// 修改日志：
+//================================================================// 
+order = &amp;quot; order by id&amp;quot;;
+function _thisOnpost_loaddata(sheet)
+{
+
+       setButton();
+       // 构造3个 SQL
+       // 查询用户数据表记录
+       selectSQL = &amp;quot;SELECT GUID,ID as 用户编号,NAME as 用户名称,ORG as 组织,MOBILE as 手机号码, &amp;quot;+
+                   &amp;quot;DEFLOC 所在仓库,&amp;quot;+      //LOC as 所属部门, 
+                   &amp;quot;MAINURL as \&amp;quot;登录后的首页\&amp;quot;,POST as \&amp;quot;岗位描述\&amp;quot;,USEFLG as \&amp;quot;是否使用标志\&amp;quot; &amp;quot;+
+                   //&amp;quot;,CRTUSR as 创建人,CRTDAT as 创建时间
+                   &amp;quot;from USR  &amp;quot;;
+       //新增用户数据表记录
+       insertSQL = &amp;quot;INSERT INTO USR ( GUID,ID,NAME,ORG,MOBILE,DEFLOC,MAINURL,POST,USEFLG &amp;quot;+      //LOC,
+                   //,CRTUSR,CRTDAT 
+                   &amp;quot; ) values( sys_guid(),?,?,?,?,?,?,?,? )&amp;quot;;
+       // 修改用户数据表记录
+       updateSQL = &amp;quot;UPDATE USR SET ID=?,NAME=?,ORG=?,MOBILE=?, &amp;quot;+
+                   &amp;quot;DEFLOC=?,MAINURL=?,POST=?,USEFLG=? &amp;quot;+
+                   //,CRTUSR=?,CRTDAT=?
+                   &amp;quot;where guid=?&amp;quot;;
+       //删除用户数据表记录
+       deleteSQL = &amp;quot;delete USR where guid=? &amp;quot;;
+            
+       _dbhelper.SetSelectSQL( selectSQL );
+       _dbhelper.SetInsertSQL( insertSQL );
+       _dbhelper.SetUpdateSQL( updateSQL );
+       _dbhelper.SetDeleteSQL( deleteSQL );
+       
+       // 载入数据并放在相应的位置
+       _dbhelper.Load(1,1,2,2);
+
+}
+
+function initpage(){
+}
+
+function f_dbeditbeforesave(){
+
+}
+//================================================================// 
+// 函数：f_dbeditpostloaddata
+// 说明：载入每一个页后，做页面的初始化工作
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：11/29/05 11:57:45
+// 修改日志：
+//================================================================// 
+function f_dbeditpostloaddata(){
+//      _this.SetColVisible(sheet,3,-1);
+        // 自定义的特殊处理
+       // 如：
+       //       1、设置列的邦定属性
+       //       2、设置默认值
+       //       3、设置可修改或隐藏属性
+       //alert(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_LOC&amp;quot;));
+//       var listid0 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_LOC&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+//       var listid1 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_USRCLASS&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+//      // var listid2 =_this.CreateListValueByXMLDS(_this.HttpCall(homeurl+&amp;quot;/XmlDB.sp?bind=V_USEFLG&amp;quot;),&amp;quot;ID&amp;quot;,&amp;quot;NAME&amp;quot;);
+//       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+//       {
+//            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid0);
+//            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,8,listid1);
+//            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,10,listid2);
+//            
+//            
+//       }
+                 
+       for(row=_this.GetMainCellRangeRow1(sheet);row&amp;lt;=_this.GetMainCellRangeRow2(sheet);row++)
+       {
+//            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,7,listid0);
+//            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,8,listid1);
+//            _this.SetToComboBox(&amp;quot;&amp;quot;, sheet,row,10,listid2);
+            _this.SetToBoolBox(sheet,row,10);
+            
+            
+       }
+}
+//================================================================// 
+// 函数：f_dbeditafternewrow
+// 说明：自动生成生成编号
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:06:17
+// 修改日志：
+//================================================================// 
+var nCntNoCommit = 0;      // 没有保存的新增的编号数，用于定位
+function f_dbeditafternewrow(sheet,row)
+{
+      try {
+//            var refid = _this.GetCellText(sheet,row-1,8 );
+//            var ret = invokeOSFunc(&amp;quot;GetMaxid&amp;quot;,&amp;quot;refid=&amp;quot;+refid) ;        
+//            ret = nCntNoCommit + 1.0*ret;
+//            _this.SetCellText(sheet,row,4,ret );
+//            alert ( G_ORGID );
+             _this.SetCellText(sheet,row,5,G_ORGID );
+              _this.SetCellText(sheet,row,10,1);
+
+
+//            nCntNoCommit ++;
+       }
+      catch ( e ) {
+            alert ( e );
+      }
+}
+
+//================================================================// 
+// 函数：f_dbeditbeforesave
+// 说明：保存时，把nCntNoCommit =0
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:15:22
+// 修改日志：
+//================================================================// 
+function f_dbeditbeforesave(){
+      nCntNoCommit =0;
+}</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+//================================================================// 
+// 函数：GetMaxid
+// 说明：得到最大的编号
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/27/06 14:08:25
+// 修改日志：
+//================================================================// 
+function GetMaxid()
+{
+      var ret = &amp;quot;&amp;quot;;
+      try {
+            if ( refid == &amp;quot;2&amp;quot; )       // 业务员从10000开始编号
+                  ret = pubpack.EADbTool.GetSQL(&amp;quot;SELECT NVL(MAX(to_number(ID))+1,1) FROM USR where isnumber(id)=&amp;apos;1&amp;apos; and post=&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos;&amp;quot;);
+            else
+                  ret = pubpack.EADbTool.GetSQL(&amp;quot;SELECT NVL(MAX(to_number(ID))+1,1) FROM USR where isnumber(id)=&amp;apos;1&amp;apos; and post!=&amp;apos;&amp;quot;+refid+&amp;quot;&amp;apos;&amp;quot;);
+      }
+      catch (  e ){
+            ret = e.toString();
+      }
+      
+      return ret;
+}</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2></ROW>
+</ROWSET>
+</flddtl></mdroot>

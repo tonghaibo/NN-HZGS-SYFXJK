@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >BZX003</MWID><NAME >应缴税费表中征收项目不符合标准代码数据</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >BZX003.zxg</FILE><SCENE ></SCENE><FIXED >7,1</FIXED><CATTYP >金三考核指标</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><CLOSEPAGES ></CLOSEPAGES><syt >TAXFXJK</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >loadData</ID><NAME >查询</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >3</IMG><IMGMOUSE >3</IMGMOUSE></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var ZXGFILE0 = &amp;quot;&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	ZXGFILE0 = _this.SaveTempZXGFile(0);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,0,2,12,G_LOGDAT.substring(0,8)+&amp;quot;01&amp;quot;);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,0,3,12,G_LOGDAT);
+	
+	//loadData();
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.AutoFixScreenWidth();
+}
+
+function formatStr(str,len)
+{
+	var spaceStr = &amp;quot;&amp;quot;;
+	var strlen = str.length;
+	if (len &amp;gt; strlen) {
+		for (var i=0;i&amp;lt;len-strlen;i++) {
+			spaceStr += &amp;quot; &amp;quot;; //全角的空格
+		}
+		return spaceStr + str;
+	}
+	
+	return str;
+}
+
+function loadData()
+{
+	var dat1 = _this.GetCellText(0,2,12);
+	var dat2 = _this.GetCellText(0,3,12);
+	
+	_this.LoadZXGFile(ZXGFILE0,-1,0);
+//	_this.SetFixedRow(0,1);
+	
+	_this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this.SELECTFLAG_SINGLEROW);
+	_this.SetMainCellRange(0,1,2,5,12);
+
+	var xml = _sql.query(&amp;quot;MAIN&amp;quot;,&amp;quot;DAT1=&amp;quot;+dat1+&amp;quot;&amp;DAT2=&amp;quot;+dat2);
+	_this.SetXmlDS(0,7,1,9,_this.GetColCount(0)-1,xml);
+	
+	_this.SetToDateBox(&amp;quot;&amp;quot;,0,2,12,dat1);
+	_this.SetToDateBox(&amp;quot;&amp;quot;,0,3,12,dat2);
+	_this.SetCellText(0,4,3,dat1+&amp;quot;至&amp;quot;+dat2);
+	
+	_sql.querytods(&amp;quot;TJDS&amp;quot;,&amp;quot;DAT1=&amp;quot;+dat1+&amp;quot;&amp;DAT2=&amp;quot;+dat2);
+	var gxfz = _this.XMLDS_GetString(0,&amp;quot;GX_FZ&amp;quot;);
+	var gxfm = _this.XMLDS_GetString(0,&amp;quot;GX_FM&amp;quot;);
+	var gxbl = _this.XMLDS_GetString(0,&amp;quot;GX_BL&amp;quot;);
+	var hzfz = _this.XMLDS_GetString(0,&amp;quot;HZ_FZ&amp;quot;);
+	var hzfm = _this.XMLDS_GetString(0,&amp;quot;HZ_FM&amp;quot;);
+	var hzbl = _this.XMLDS_GetString(0,&amp;quot;HZ_BL&amp;quot;);
+	
+	var gxstr = &amp;quot;广西&amp;quot;+formatStr(&amp;quot;&amp;quot;,6)+formatStr(gxfz,10)+formatStr(gxfm,12)+formatStr(gxbl,10);
+	var hzstr = &amp;quot;贺州&amp;quot;+formatStr(&amp;quot;&amp;quot;,6)+formatStr(hzfz,10)+formatStr(hzfm,12)+formatStr(hzbl,10);
+	_this.SetCellText(0,3,9,gxstr);
+	_this.SetCellText(0,4,9,hzstr);
+	
+	_this.AutoFixScreenWidth();
+	
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select rownum,t.* from (
+select (select swjgjc from CJ_FXJK.DM_GY_SWJG b where a.zgswskfj_dm=b.swjg_dm) zgswj_dm,&amp;apos;&amp;apos; n1,&amp;apos;&amp;apos; n2,
+       (select swjgjc from CJ_FXJK.DM_GY_SWJG b where a.skssswjg_dm=b.swjg_dm) skssswjg_dm,
+       to_char(a.yzpzxh) yzpzxh,
+       a.yzpzmxxh,
+       trim(a.ZSXM_DM)||(SELECT ZSXMJC FROM CJ_FXJK.DM_GY_ZSXM b where a.ZSXM_DM=b.ZSXM_DM) ZSXM_DM,
+       to_char(a.djxh) djxh,
+       b.nsrsbh,
+       b.nsrmc    
+from CJ_FXJK.ZS_YJSF A,CJ_FXJK.dj_nsrxx B
+WHERE A.YZFSRQ BETWEEN DATE &amp;apos;[%DAT1]&amp;apos; AND DATE &amp;apos;[%DAT2]&amp;apos;
+   and a.sjgsdq like &amp;apos;14511%&amp;apos;
+   AND A.ZSXM_DM NOT IN (SELECT T.ZSXM_DM
+                                   FROM CJ_FXJK.DM_GY_ZSXM T
+                                  WHERE T.YXBZ = &amp;apos;Y&amp;apos;
+                                    AND T.XYBZ = &amp;apos;Y&amp;apos;)
+   and a.djxh=b.djxh
+order by a.zgswskfj_dm,a.yzpzxh,a.yzpzmxxh
+) t </DATDSC><C4 >MAIN</C4><C5 ></C5><C6 >MAIN</C6><C7 >MAIN</C7><C8 >MAIN</C8></ROW>
+<ROW num="1" ><ID >TJDS</ID><NAME ></NAME><DATDSC >select gx_fz,gx_fm,round(gx_fz/gx_fm,4)*100 gx_bl,
+	hz_fz,hz_fm,round(hz_fz/hz_fm,4)*100 hz_bl
+from (	
+select count(decode(b.ZSXM_DM,null,1,null)) gx_fz,
+      count(1) gx_fm,
+      count(decode(substr(a.sjgsdq,0,5),&amp;apos;14511&amp;apos;,decode(b.ZSXM_DM,null,1,null),null)) hz_fz,
+      count(decode(substr(a.sjgsdq,0,5),&amp;apos;14511&amp;apos;,1,null)) hz_fm
+FROM HX_ZS.ZS_YJSF@JS3Q A,
+    (select * from HX_DM_QG.DM_GY_ZSXM@JS3Q where YXBZ(+)=&amp;apos;Y&amp;apos; AND XYBZ(+)=&amp;apos;Y&amp;apos;)  B
+WHERE A.YZFSRQ BETWEEN DATE &amp;apos;[%DAT1]&amp;apos; AND DATE &amp;apos;[%DAT2]&amp;apos;
+ --and a.sjgsdq like &amp;apos;14511%&amp;apos;
+ AND trim(A.ZSXM_DM)=trim(B.ZSXM_DM(+))
+ ) t</DATDSC><C4 >TJDS</C4><C5 >TJDS</C5><C6 >TJDS</C6><C7 >TJDS</C7><C8 ></C8></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

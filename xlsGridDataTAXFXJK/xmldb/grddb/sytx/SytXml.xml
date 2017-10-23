@@ -1,0 +1,494 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SytXml</MWID><NAME >系统XML定义输出</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SytXml.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP >XML</CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN >1</SHOWBTN><CLOSEPAGES >0</CLOSEPAGES><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >save</ID><NAME >保存</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >save</C10><C11 ></C11></ROW>
+<ROW num="1" ><ID >expxml1</ID><NAME >输出格式1</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 >GRDBTNDS_1</C10><C11 >expxml</C11></ROW>
+<ROW num="2" ><ID >expxml2</ID><NAME >输出格式2</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG >1</IMG><IMGMOUSE >1</IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grdbtnds><grdpamds>
+<ROWSET>
+<ROW num="0" ><ID >syt</ID><NAME >系统</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >SYTID</C14><C15 >SYT</C15><C16 >syt</C16></ROW>
+<ROW num="1" ><ID >typ</ID><NAME >分类</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 >GRDTYP</C13><C14 >GRDTYP</C14><C15 >TYP</C15><C16 >typ</C16></ROW>
+<ROW num="2" ><ID >mwtyp</ID><NAME >中间件类型</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 >GRDID</C14><C15 >MWID</C15><C16 >mwid</C16></ROW>
+<ROW num="3" ><ID >mwid</ID><NAME >中间件编号</NAME><NOTNULL ></NOTNULL><KEYVAL ></KEYVAL><INPCTL ></INPCTL><DISPORD ></DISPORD><SQLWHE ></SQLWHE><DEFVAL ></DEFVAL><TIP ></TIP><EDTFLG ></EDTFLG><VISFLG ></VISFLG><KEYFLG ></KEYFLG><C13 ></C13><C14 ></C14><C15 ></C15><C16 >GRDPAMDS_3</C16></ROW>
+</ROWSET>
+</grdpamds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+var sheet1 = 0;
+var sheet2 = 1;
+var sheet3 = 2;
+var sheet4 = 3;
+var sheet5 = 4;
+var G_SYT = &amp;quot;&amp;quot;;
+var G_TYP = &amp;quot;&amp;quot;;
+var G_MWTYP = &amp;quot;&amp;quot;;
+var G_MWID = &amp;quot;&amp;quot;;
+var G_PATHBASE = &amp;quot;&amp;quot;;
+var G_FILENAME = &amp;quot;文件名&amp;quot;;
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+//	_this.ShowTabBar(1); 
+	
+	try { G_SYT = syt; } catch ( e ) { }
+	try { G_TYP = typ; } catch ( e ) { }
+	try { G_MWTYP = mwtyp; } catch ( e ) { }
+	try { G_MWID = mwid; } catch ( e ) { }
+	
+	if (G_SYT == &amp;quot;&amp;quot;) G_SYT = G_SYTID;
+	G_PATHBASE = &amp;quot;/xmldb/grddb/syt&amp;quot;+G_SYT+&amp;quot;/&amp;quot;;
+	
+	if (G_SYT == &amp;quot;MEA&amp;quot;) {
+		_this.SetCellText(sheet4,5,1,&amp;quot;2B&amp;quot;);
+		_this.SetCellText(sheet4,9,1,&amp;quot;3000L&amp;quot;);
+		_this.SetCellText(sheet5,5,1,&amp;quot;2B&amp;quot;);
+		_this.SetCellText(sheet5,9,1,&amp;quot;3000L&amp;quot;);
+	}
+	
+	setLayout();
+	loadTree();
+}
+
+//加载中间件树
+function loadTree()
+{
+	var treexml = invokeOSFunc(&amp;quot;GetTreeXML&amp;quot;,&amp;quot;syt=&amp;quot;+G_SYT+&amp;quot;&amp;typ=&amp;quot;+G_TYP+&amp;quot;&amp;mwtyp=&amp;quot;+G_MWTYP+&amp;quot;&amp;mwid=&amp;quot;+G_MWID);
+        _this.SetToTreeCtrl(&amp;quot;MWTree&amp;quot;,sheet,-1,-1,&amp;quot;&amp;lt;?xml version =  &amp;apos;1.0&amp;apos;?&amp;gt;&amp;quot;+ treexml);
+}
+
+/*页面布局*/
+function setLayout()
+{
+	var layoutxml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROWSET&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C1  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;270\&amp;quot; colspan=\&amp;quot;2\&amp;quot; &amp;gt;&amp;quot;+sheet1+&amp;quot;&amp;lt;/C1&amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C2  height=\&amp;quot;100%\&amp;quot; width=\&amp;quot;800\&amp;quot; colspan=\&amp;quot;2\&amp;quot; &amp;gt;&amp;quot;+sheet2+&amp;quot;,&amp;quot;+sheet3+&amp;quot;&amp;lt;/C2&amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C3  height=\&amp;quot;50%\&amp;quot; width=\&amp;quot;100%\&amp;quot; &amp;gt;&amp;quot;+sheet4+&amp;quot;&amp;lt;/C3&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;/ROW&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;ROW &amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C1  width=\&amp;quot;270\&amp;quot; &amp;gt;&amp;lt;/C1&amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C2  width=\&amp;quot;800\&amp;quot; &amp;gt;&amp;lt;/C2&amp;gt; &amp;quot;+
+	&amp;quot;	&amp;lt;C3  height=\&amp;quot;50%\&amp;quot; width=\&amp;quot;100%\&amp;quot; &amp;gt;&amp;quot;+sheet5+&amp;quot;&amp;lt;/C3&amp;gt; &amp;quot;+
+	&amp;quot;&amp;lt;/ROW&amp;gt;&amp;quot;+
+	&amp;quot;&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	_this.SetLayoutDS(layoutxml);
+}
+
+//双击树状控件项目
+function _thisOnTreeItemDClick(id, hItem, tagid, attribe, value)
+{
+	//得到树节点信息
+	var mwid = getXmlAttribute(attribe,&amp;quot;mwid&amp;quot;);
+	
+	if (mwid != &amp;quot;&amp;quot;) {
+		G_MWID = mwid;
+		G_FILENAME = tagid;
+		
+		_this.SetRowCount(sheet2,0);
+		_this.SetColCount(sheet2,0);
+		_this.SetRowCount(sheet3,0);
+		_this.SetColCount(sheet3,0);
+		
+		_this.LoadZXGFile(&amp;quot;DownloadFromXlsGridData.sp?filename=&amp;quot;+G_PATHBASE+G_MWID+&amp;quot;.zxg&amp;t=&amp;quot;+Math.random(),0,sheet2);
+		_this.SetRedraw(1);
+		_this.SetCellFocus(sheet2,-1,-1);
+		
+		_this.SetRowCount(sheet3,_this.GetRowCount(sheet2)+1);
+		_this.SetColCount(sheet3,_this.GetColCount(sheet2));
+		
+		_sql.querytods(&amp;quot;GetCellDef&amp;quot;,&amp;quot;syt=&amp;quot;+G_SYT+&amp;quot;&amp;mwid=&amp;quot;+G_MWID);
+		if (_this.XMLDS_GetRowCount() &amp;gt; 0) {
+			for (var r = 0; r &amp;lt; _this.XMLDS_GetRowCount(); r ++) {
+				var grdrow = 1*_this.XMLDS_GetString(r,&amp;quot;GRDROW&amp;quot;);
+				var grdcol = 1*_this.XMLDS_GetString(r,&amp;quot;GRDCOL&amp;quot;);
+				var id1 = _this.XMLDS_GetString(r,&amp;quot;ID1&amp;quot;);
+				var name1 = _this.XMLDS_GetString(r,&amp;quot;NAME1&amp;quot;);
+				var id2 = _this.XMLDS_GetString(r,&amp;quot;ID2&amp;quot;);
+				var name2 = _this.XMLDS_GetString(r,&amp;quot;NAME2&amp;quot;);
+				var str = id1+&amp;quot;~!~&amp;quot;+name1+&amp;quot;~!~&amp;quot;+id2+&amp;quot;~!~&amp;quot;+name2;
+				
+				_this.SetCellText(sheet3,grdrow,grdcol,str);
+			}
+		}
+		
+		_this.XMLDS_Reset();
+		_sql.querytods(&amp;quot;GetColDef&amp;quot;,&amp;quot;syt=&amp;quot;+G_SYT+&amp;quot;&amp;mwid=&amp;quot;+G_MWID);
+		if (_this.XMLDS_GetRowCount() &amp;gt; 0) {
+			for (var r = 0; r &amp;lt; _this.XMLDS_GetRowCount(); r ++) {
+				var grdcol = 1*_this.XMLDS_GetString(r,&amp;quot;GRDCOL&amp;quot;);
+				var id1 = _this.XMLDS_GetString(r,&amp;quot;ID1&amp;quot;);
+				var name1 = _this.XMLDS_GetString(r,&amp;quot;NAME1&amp;quot;);
+				var id2 = _this.XMLDS_GetString(r,&amp;quot;ID2&amp;quot;);
+				var name2 = _this.XMLDS_GetString(r,&amp;quot;NAME2&amp;quot;);
+				var str = id1+&amp;quot;~!~&amp;quot;+name1+&amp;quot;~!~&amp;quot;+id2+&amp;quot;~!~&amp;quot;+name2;
+				
+				_this.SetCellText(sheet3,_this.GetRowCount(sheet3)-1,grdcol,str);
+			}
+		}
+	}
+}
+
+function getXmlAttribute(attribe,attribename)
+{
+	var loc = attribe.indexOf( attribename+&amp;quot;=\&amp;quot;&amp;quot; );
+        if (loc &amp;gt; -1) {
+		var loc1 = attribe.indexOf( &amp;quot;\&amp;quot;&amp;quot;,loc+attribename.length+2 );
+		var ret = attribe.substring( loc+attribename.length+2,loc1 );
+		return ret;
+	}
+	return &amp;quot;&amp;quot;;
+}
+
+//鼠标左键点击
+function _thisOnMouseLClick(sheet,row,col)
+{
+	if (sheet == sheet2) {
+		try {
+//			var msg = invokeOSFunc(&amp;quot;GetDesDef&amp;quot;,&amp;quot;syt=&amp;quot;+G_SYT+&amp;quot;&amp;mwid=&amp;quot;+G_MWID+&amp;quot;&amp;row=&amp;quot;+row+&amp;quot;&amp;col=&amp;quot;+col);
+			
+			_this.SetCellText(sheet4,3,1,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet4,5,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet4,7,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet4,9,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet4,11,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet5,3,1,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet5,5,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet5,7,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet5,9,3,&amp;quot;&amp;quot;);
+			_this.SetCellText(sheet5,11,3,&amp;quot;&amp;quot;);
+			
+			_this.SetCellText(sheet4,3,1,&amp;quot;CELL_&amp;quot;+row+&amp;quot;_&amp;quot;+col);
+			_this.SetCellText(sheet5,3,1,&amp;quot;COL_&amp;quot;+col);
+			
+			var str = _this.GetCellText(sheet3,row,col);
+			if (str != &amp;quot;&amp;quot;) {
+				var arr = str.split(&amp;quot;~!~&amp;quot;);
+				_this.SetCellText(sheet4,5,3,arr[0]);
+				_this.SetCellText(sheet4,7,3,arr[1]);
+				_this.SetCellText(sheet4,9,3,arr[2]);
+				_this.SetCellText(sheet4,11,3,arr[3]);
+			} else {
+				str = _this.GetCellText(sheet3,_this.GetRowCount(sheet3)-1,col);
+				if (str != &amp;quot;&amp;quot;) {
+					var arr = str.split(&amp;quot;~!~&amp;quot;);
+					_this.SetCellText(sheet5,5,3,arr[0]);
+					_this.SetCellText(sheet5,7,3,arr[1]);
+					_this.SetCellText(sheet5,9,3,arr[2]);
+					_this.SetCellText(sheet5,11,3,arr[3]);
+				}
+			}
+			
+//			_this.SetRedraw(1);
+//			_this.SetCellFocus(sheet5,5,3);
+		} catch ( e ) {
+			alert ( e );
+		}
+	}
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if (sheet == sheet4) {
+		var str = _this.GetCellText(sheet,3,1);
+		var id1 = _this.GetCellText(sheet,5,3);
+		var nam1 = _this.GetCellText(sheet,7,3);
+		var id2 = _this.GetCellText(sheet,9,3);
+		var nam2 = _this.GetCellText(sheet,11,3);
+		
+		if (str != &amp;quot;&amp;quot;) {
+			var r = str.split(&amp;quot;_&amp;quot;)[1];
+			var c = str.split(&amp;quot;_&amp;quot;)[2];
+			
+			_this.SetCellText(sheet3,r,c,id1+&amp;quot;~!~&amp;quot;+nam1+&amp;quot;~!~&amp;quot;+id2+&amp;quot;~!~&amp;quot;+nam2);
+		}
+	}
+	if (sheet == sheet5) {
+		var str = _this.GetCellText(sheet,3,1);
+		var id1 = _this.GetCellText(sheet,5,3);
+		var nam1 = _this.GetCellText(sheet,7,3);
+		var id2 = _this.GetCellText(sheet,9,3);
+		var nam2 = _this.GetCellText(sheet,11,3);
+		
+		if (str != &amp;quot;&amp;quot;) {
+			var r = _this.GetRowCount(sheet3)-1;
+			var c = str.split(&amp;quot;_&amp;quot;)[1];
+			
+			_this.SetCellText(sheet3,r,c,id1+&amp;quot;~!~&amp;quot;+nam1+&amp;quot;~!~&amp;quot;+id2+&amp;quot;~!~&amp;quot;+nam2);
+		}
+	}
+}
+
+//保存
+function save()
+{
+	//POST方式调用网络OS函数
+	var param = new Object();
+	param.xmlstr = _this.GetXml(sheet3,0,0,_this.GetRowCount(sheet3)-1,_this.GetColCount(sheet3)-1);
+	param.syt = G_SYT;
+	param.grd = G_MWID;
+	try {
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert ( msg );
+	}
+	catch (e) {
+		alert ( e );
+	}
+}
+
+//输出格式1
+function expxml1()
+{
+	var filestr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt;&amp;quot;;
+	
+	var hdrstr = &amp;quot;&amp;quot;;
+	for (var r = 0; r &amp;lt; _this.GetRowCount(sheet3)-1; r ++) {
+		for (var c = 0; c &amp;lt; _this.GetColCount(sheet3); c ++) {
+			var str = _this.GetCellText(sheet3,r,c);
+			if (str != &amp;quot;&amp;quot;) {
+				var arr = str.split(&amp;quot;~!~&amp;quot;);
+				var id = arr[0];
+				var name = arr[1];
+				if (id != null &amp;&amp; id != &amp;quot;&amp;quot;) {
+					id = id.replace(/ /g,&amp;quot;&amp;quot;);
+					hdrstr += &amp;quot;\n&amp;lt;&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;!-- &amp;quot;+name+&amp;quot; --&amp;gt;&amp;quot;;
+				}
+			}
+		}
+	}
+	if (hdrstr != &amp;quot;&amp;quot;) hdrstr = &amp;quot;\n&amp;lt;HEADER&amp;gt;\n&amp;lt;ROW num=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+ hdrstr +&amp;quot;\n&amp;lt;/ROW&amp;gt;\n&amp;lt;/HEADER&amp;gt;&amp;quot;;
+	
+	var dtlstr = &amp;quot;&amp;quot;;
+	for (var c = 0; c &amp;lt; _this.GetColCount(sheet3); c ++) {
+		var str = _this.GetCellText(sheet3,_this.GetRowCount(sheet3)-1,c);
+		if (str != &amp;quot;&amp;quot;) {
+			var arr = str.split(&amp;quot;~!~&amp;quot;);
+			var id = arr[0];
+			var name = arr[1];
+			if (id != null &amp;&amp; id != &amp;quot;&amp;quot;) {
+				id = id.replace(/ /g,&amp;quot;&amp;quot;);
+				dtlstr += &amp;quot;\n&amp;lt;&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;!-- &amp;quot;+name+&amp;quot; --&amp;gt;&amp;quot;;
+			}
+		}
+	}
+	if (dtlstr != &amp;quot;&amp;quot;) dtlstr = &amp;quot;\n&amp;lt;DETAIL&amp;gt;\n&amp;lt;ROW num=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+ dtlstr +&amp;quot;\n&amp;lt;/ROW&amp;gt;\n&amp;lt;/DETAIL&amp;gt;&amp;quot;;
+	
+	filestr += &amp;quot;\n&amp;lt;ROWSET&amp;gt;&amp;quot;+ hdrstr + dtlstr +&amp;quot;\n&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	_this.SaveTextFile(G_FILENAME+&amp;quot;_1.xml&amp;quot;,filestr,&amp;quot;XML 电子表格 (*.xml)|*.xml|All Files(*.*)||&amp;quot;);
+}
+
+//输出格式2
+function expxml2()
+{
+	var filestr = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos; encoding=\&amp;quot;GBK\&amp;quot;?&amp;gt;&amp;quot;;
+	
+	var hdrstr = &amp;quot;&amp;quot;;
+	for (var r = 0; r &amp;lt; _this.GetRowCount(sheet3)-1; r ++) {
+		for (var c = 0; c &amp;lt; _this.GetColCount(sheet3); c ++) {
+			var str = _this.GetCellText(sheet3,r,c);
+			if (str != &amp;quot;&amp;quot;) {
+				var arr = str.split(&amp;quot;~!~&amp;quot;);
+				var id = arr[2];
+				var name = arr[3];
+				if (id != null &amp;&amp; id != &amp;quot;&amp;quot;) {
+					id = id.replace(/ /g,&amp;quot;&amp;quot;);
+					hdrstr += &amp;quot;\n&amp;lt;&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;!-- &amp;quot;+name+&amp;quot; --&amp;gt;&amp;quot;;
+				}
+			}
+		}
+	}
+	if (hdrstr != &amp;quot;&amp;quot;) hdrstr = &amp;quot;\n&amp;lt;HEADER&amp;gt;\n&amp;lt;ROW num=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+ hdrstr +&amp;quot;\n&amp;lt;/ROW&amp;gt;\n&amp;lt;/HEADER&amp;gt;&amp;quot;;
+	
+	var dtlstr = &amp;quot;&amp;quot;;
+	for (var c = 0; c &amp;lt; _this.GetColCount(sheet3); c ++) {
+		var str = _this.GetCellText(sheet3,_this.GetRowCount(sheet3)-1,c);
+		if (str != &amp;quot;&amp;quot;) {
+			var arr = str.split(&amp;quot;~!~&amp;quot;);
+			var id = arr[2];
+			var name = arr[3];
+			if (id != null &amp;&amp; id != &amp;quot;&amp;quot;) {
+				id = id.replace(/ /g,&amp;quot;&amp;quot;);
+				dtlstr += &amp;quot;\n&amp;lt;&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;/&amp;quot;+id+&amp;quot;&amp;gt; &amp;lt;!-- &amp;quot;+name+&amp;quot; --&amp;gt;&amp;quot;;
+			}
+		}
+	}
+	if (dtlstr != &amp;quot;&amp;quot;) dtlstr = &amp;quot;\n&amp;lt;DETAIL&amp;gt;\n&amp;lt;ROW num=\&amp;quot;1\&amp;quot;&amp;gt;&amp;quot;+ dtlstr +&amp;quot;\n&amp;lt;/ROW&amp;gt;\n&amp;lt;/DETAIL&amp;gt;&amp;quot;;
+	
+	filestr += &amp;quot;\n&amp;lt;ROWSET&amp;gt;&amp;quot;+ hdrstr + dtlstr +&amp;quot;\n&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	_this.SaveTextFile(G_FILENAME+&amp;quot;_2.xml&amp;quot;,filestr,&amp;quot;XML 电子表格 (*.xml)|*.xml|All Files(*.*)||&amp;quot;);
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pub = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var xmldb = new JavaPackage(&amp;quot;com.xlsgrid.net.xmldb&amp;quot;);
+
+function GetTreeXML()
+{
+	var db = null;
+	var ds = null;
+	var sql = &amp;quot;&amp;quot;;
+	var xml = &amp;quot;&amp;quot;;
+	var title = &amp;quot;源&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		sql = &amp;quot;select nvl(typ,&amp;apos;未分类&amp;apos;) typ,id repid,id,name from SYSMW where syt=&amp;apos;%s&amp;apos; and decode(&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~&amp;apos;,typ)=decode(&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~&amp;apos;,&amp;apos;%s&amp;apos;) and decode(&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~&amp;apos;,mwtyp)=decode(&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~&amp;apos;,&amp;apos;%s&amp;apos;) and decode(&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~&amp;apos;,id)=decode(&amp;apos;%s&amp;apos;,&amp;apos;&amp;apos;,&amp;apos;~&amp;apos;,&amp;apos;%s&amp;apos;) order by decode(typ,&amp;apos;未分类&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;0&amp;apos;),typ,mwtyp,id&amp;quot;
+			.format([syt,typ,typ,typ,mwtyp,mwtyp,mwtyp,mwid,mwid,mwid]);
+		
+		if (syt == &amp;quot;MEA&amp;quot;) {
+			sql = &amp;quot;select nvl(a.typ,&amp;apos;未分类&amp;apos;) typ,b.repid,a.id,a.name from sysmw a, mea_report b where a.syt=b.syt and a.id=b.grdid order by decode(a.typ,&amp;apos;未分类&amp;apos;,&amp;apos;9&amp;apos;,&amp;apos;0&amp;apos;),a.typ,a.mwtyp,b.seq&amp;quot;;
+		}
+		
+		ds = db.QuerySQL(sql);
+		
+		xml += &amp;quot;&amp;lt;&amp;quot;+title+&amp;quot;&amp;gt;&amp;quot;; 
+		var tmp = &amp;quot;&amp;quot;;
+		for (var i = 0; i &amp;lt; ds.getRowCount(); i ++) {
+			var typ = ds.getStringAt(i,&amp;quot;TYP&amp;quot;);
+			
+			if (typ != tmp) {
+				xml += &amp;quot;&amp;lt;&amp;quot;+typ+&amp;quot; imageid=\&amp;quot;2\&amp;quot; mwid=\&amp;quot;\&amp;quot; refid=\&amp;quot;\&amp;quot; &amp;gt;&amp;quot;;
+				
+				for (var j = 0; j &amp;lt; ds.getRowCount(); j ++) {
+					var _typ = ds.getStringAt(j,&amp;quot;TYP&amp;quot;);
+					var _repid = ds.getStringAt(j,&amp;quot;REPID&amp;quot;);
+					var _id = ds.getStringAt(j,&amp;quot;ID&amp;quot;);
+					var _name = ds.getStringAt(j,&amp;quot;NAME&amp;quot;);
+					
+					if (_typ == typ) {
+						xml += &amp;quot;&amp;lt;&amp;quot;+_repid+&amp;quot;.&amp;quot;+_name+&amp;quot; imageid=\&amp;quot;3\&amp;quot; mwid=\&amp;quot;&amp;quot;+_id+&amp;quot;\&amp;quot; refid=\&amp;quot;&amp;quot;+_typ+&amp;quot;\&amp;quot; /&amp;gt;&amp;quot;;
+					}
+				}
+				
+				xml += &amp;quot;&amp;lt;/&amp;quot;+typ+&amp;quot;&amp;gt;&amp;quot;;
+			}
+			
+			tmp = typ;
+		}
+		xml += &amp;quot;&amp;lt;/&amp;quot;+title+&amp;quot;&amp;gt;&amp;quot;;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pub.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	
+	return xml;
+}
+
+function GetDesDef()
+{
+	var grdxmldb = new xmldb.EAGRDXmlDB(syt,mwid);
+	var grdcelds = grdxmldb.getGrdCelDS();
+	var grdcolds = grdxmldb.getGrdColDS();
+	
+	for (var i = 0; i &amp;lt; grdcelds.getRowCount(); i ++) {
+		var id = grdcelds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		
+		var arr = id.split(&amp;quot;,&amp;quot;);
+		if (arr.length() &amp;gt;= 3) {
+			if (arr[1] == row &amp;&amp; arr[2] == col) {
+				return &amp;quot;CELL_&amp;quot;+row+&amp;quot;_&amp;quot;+col;
+			}
+		}
+	}
+	
+	for (var i = 0; i &amp;lt; grdcolds.getRowCount(); i ++) {
+		var id = grdcolds.getStringAt(i,&amp;quot;ID&amp;quot;);
+		
+		var arr = id.split(&amp;quot;,&amp;quot;);
+		if (arr.length() &amp;gt;= 2) {
+			if (arr[1] == col) {
+				return &amp;quot;COL_&amp;quot;+col;
+			}
+		}
+	}
+	
+	return &amp;quot; &amp;quot;;
+}
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	var ct1 = 0;
+	var ct2 = 0;
+	var msg = &amp;quot;&amp;quot;;
+	
+	try {
+		db = new pub.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var ds = new pub.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		
+		db.ExcecutSQL(&amp;quot;delete from SytXmlCellDef where sytid=&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; and grdid=&amp;apos;&amp;quot;+grd+&amp;quot;&amp;apos;&amp;quot;);
+		db.ExcecutSQL(&amp;quot;delete from SytXmlColDef where sytid=&amp;apos;&amp;quot;+syt+&amp;quot;&amp;apos; and grdid=&amp;apos;&amp;quot;+grd+&amp;quot;&amp;apos;&amp;quot;);
+		
+		for (var r = 0; r &amp;lt; ds.getRowCount(); r ++) {
+			for (var c = 3; c &amp;lt; ds.getColumnCount(); c ++) {
+				var str = ds.getStringAt(r,c);
+				if (str != &amp;quot;&amp;quot;) {
+					var arr = str.split(&amp;quot;~!~&amp;quot;);
+					var id1 = &amp;quot;&amp;quot;;
+					var name1 = &amp;quot;&amp;quot;;
+					var id2 = &amp;quot;&amp;quot;;
+					var name2 = &amp;quot;&amp;quot;;
+					
+					try { id1 = arr[0]; } catch ( e ) { }
+					try { name1 = arr[1]; } catch ( e ) { }
+					try { id2 = arr[2]; } catch ( e ) { }
+					try { name2 = arr[3]; } catch ( e ) { }
+					
+					if (r != ds.getRowCount()-1) {
+						sql = &amp;quot;insert into SytXmlCellDef(sytid,grdid,grdrow,grdcol,id1,name1,id2,name2) values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,%s,%s,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;
+							.format([syt,grd,&amp;quot;&amp;quot;+r,&amp;quot;&amp;quot;+(c-3),id1,name1,id2,name2]);
+						ct1 += db.ExcecutSQL(sql);
+					} else {
+						sql = &amp;quot;insert into SytXmlColDef(sytid,grdid,grdcol,id1,name1,id2,name2) values(&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;,&amp;apos;%s&amp;apos;)&amp;quot;
+							.format([syt,grd,&amp;quot;&amp;quot;+(c-3),id1,name1,id2,name2]);
+						ct2 += db.ExcecutSQL(sql);
+					}
+				}
+			}
+		}
+		
+		db.Commit();
+		msg = &amp;quot;保存成功!\n基本属性:&amp;quot;+ct1+&amp;quot;\n明细列属性:&amp;quot;+ct2;
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pub.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >GetCellDef</ID><NAME ></NAME><DATDSC >select * from SYTXMLCELLDEF where sytid=&amp;apos;[%syt]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;</DATDSC><C4 >GetCellDef</C4></ROW>
+<ROW num="1" ><ID >GetColDef</ID><NAME ></NAME><DATDSC >select * from SYTXMLCOLDEF where sytid=&amp;apos;[%syt]&amp;apos; and grdid=&amp;apos;[%mwid]&amp;apos;</DATDSC><C4 ></C4></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

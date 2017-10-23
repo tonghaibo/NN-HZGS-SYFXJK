@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >dtlModuleData</MWID><NAME >中间件模板明细数据备份</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >dtlModuleData.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE ></BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><syt >x</syt><LMS ></LMS></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE ></GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+//	_Sytid		系统号
+//	mdid		中间件编号
+//	lms		栏目数
+//	m_grdColDS	右栏绑定数据xml
+//	m_grdDtlDS	明细数据xml
+function dtlModuleData(_Sytid,mdid,lms,m_grdColDS,m_grdDtlDS)
+{
+	var db = null;
+	var sql = &amp;quot;&amp;quot;;
+	
+	try {
+//		pubpack.EAFunc.Log(&amp;quot;dtlModuleData info:&amp;quot;+ m_grdColDS);
+		
+		db = new pubpack.EADatabase();			// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		var indexitemid = &amp;quot;&amp;quot;;		//指标项 eg：01,02
+		var arr1 = new Array();
+		var arr2 = new Array();
+		var idxitmid = &amp;quot;&amp;quot;;		//指标项 eg：01,02（扩展字段、区分栏目）
+		var idxitmtyp = &amp;quot;&amp;quot;;		//指标项类型（扩展字段、1：指标即使是取值类也写入指标库；0：其他）
+		//从右栏xml获取指标项字符串
+		for ( var row = 0; row &amp;lt; m_grdColDS.getRowCount(); row ++ ) {
+			var itmid = m_grdColDS.getStringAt(row,&amp;quot;INDEXID&amp;quot;);
+			var itmtyp = m_grdColDS.getStringAt(row,&amp;quot;WHERE&amp;quot;);
+			if (itmid != &amp;quot;&amp;quot;) {
+				if (indexitemid == &amp;quot;&amp;quot;)
+					indexitemid += itmid;
+				else if (indexitemid.indexOf(itmid) == -1)
+					indexitemid += &amp;quot;,&amp;quot;+ itmid;
+				
+				if (idxitmid == &amp;quot;&amp;quot;)
+					idxitmid += itmid;
+				else
+					idxitmid += &amp;quot;,&amp;quot;+ itmid;
+				
+				if (itmtyp == &amp;quot;&amp;quot; || itmtyp == &amp;quot;0&amp;quot;) itmtyp = &amp;quot;0&amp;quot;;
+				else itmtyp = &amp;quot;1&amp;quot;;
+				if (idxitmtyp == &amp;quot;&amp;quot;)
+					idxitmtyp += itmtyp;
+				else
+					idxitmtyp += &amp;quot;,&amp;quot;+ itmtyp;
+			}
+			if (idxitmid != &amp;quot;&amp;quot; &amp;&amp; itmid == &amp;quot;&amp;quot;) {
+				arr1.push(idxitmid);
+				idxitmid = &amp;quot;&amp;quot;;
+				arr2.push(idxitmtyp);
+				idxitmtyp = &amp;quot;&amp;quot;;
+			}
+		}
+		
+		//明细列名转换
+		for ( var col = 0; col &amp;lt; m_grdDtlDS.getColumnCount(); col ++ ) {
+			for (var row = 0; row &amp;lt; m_grdColDS.getRowCount(); row ++) {
+				if (col == m_grdColDS.getStringAt(row,&amp;quot;ID&amp;quot;).split(&amp;quot;,&amp;quot;)[1]) {
+					m_grdDtlDS.setColumnName(col+2, m_grdColDS.getStringAt(row,&amp;quot;VALFLD&amp;quot;));
+				}
+			}
+		}
+//		pubpack.EAFunc.Log(&amp;quot;dtlModuleData cs:&amp;quot;+ m_grdDtlDS.getRowCount());
+		//删除报表指标设计库数据  table:fin_repframe
+		sql = &amp;quot;delete from fin_repframe where repid=&amp;apos;&amp;quot;+mdid+&amp;quot;&amp;apos;&amp;quot;;
+		db.ExcecutSQL(sql);
+		
+		for ( var row = 0; row &amp;lt; m_grdDtlDS.getRowCount(); row ++ ) {	//明细XML存入报表指标设计库：fin_repframe
+			for (var i = 1; i &amp;lt;= lms; i ++) {
+				var indexid = &amp;quot;&amp;quot;;
+				var indexnam = &amp;quot;&amp;quot;;
+				var hc = &amp;quot;&amp;quot;;
+				var isget = 0;
+				if (lms == 1) {
+					try {
+						indexid = m_grdDtlDS.getStringAt(row,&amp;quot;IDXID&amp;quot;);
+						indexnam = m_grdDtlDS.getStringAt(row,&amp;quot;XM&amp;quot;);
+						hc = m_grdDtlDS.getStringAt(row,&amp;quot;HC&amp;quot;);
+					} catch (e) {
+						indexid = m_grdDtlDS.getStringAt(row,&amp;quot;IDXID&amp;quot;+ i);
+						indexnam = m_grdDtlDS.getStringAt(row,&amp;quot;XM&amp;quot;+ i);
+						hc = m_grdDtlDS.getStringAt(row,&amp;quot;HC&amp;quot;+ i);
+					}
+				} else {
+					indexid = m_grdDtlDS.getStringAt(row,&amp;quot;IDXID&amp;quot;+ i);
+					indexnam = m_grdDtlDS.getStringAt(row,&amp;quot;XM&amp;quot;+ i);
+					hc = m_grdDtlDS.getStringAt(row,&amp;quot;HC&amp;quot;+ i);
+				}
+				if (indexid.indexOf(&amp;quot;,&amp;quot;) != -1) {
+					isget = indexid.split(&amp;quot;,&amp;quot;)[1];
+					indexid = indexid.split(&amp;quot;,&amp;quot;)[0];
+				}
+				sql = &amp;quot;insert into fin_repframe select sys_guid(),&amp;apos;&amp;quot;
+					+ mdid +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ indexid +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ indexnam +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ indexitemid
+					+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ hc +&amp;quot;&amp;apos;,&amp;quot;+ i +&amp;quot;,&amp;quot;+ (row+1) +&amp;quot;,&amp;apos;&amp;quot;+ _Sytid +&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+isget+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+arr1[i-1]+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+arr2[i-1]+&amp;quot;&amp;apos; from dual&amp;quot;;
+				db.ExcecutSQL(sql);
+			}
+		}
+		db.Commit();
+	}
+	catch ( ee ) {
+		db.Rollback();
+		pubpack.EAFunc.Log(&amp;quot;dtlModuleData error:&amp;quot;+ee.toString() +&amp;quot;(&amp;quot;+ mdid +&amp;quot;)&amp;quot;);
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

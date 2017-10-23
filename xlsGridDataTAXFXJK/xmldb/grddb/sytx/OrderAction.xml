@@ -1,0 +1,191 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >OrderAction</MWID><NAME >订单处理</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >OrderAction.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >usr</BILHDRTABLE><BILDTLTABLE ></BILDTLTABLE><COLLIST ></COLLIST><WHERE ></WHERE><ORDER ></ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD ></WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >//发送一个HTTP请求,获取返回数据
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	//当前日期
+	var dat = new Date();
+	var y = dat.getYear();
+	var m =&amp;quot;&amp;quot;+(dat.getMonth()+1);
+	if (m.length&amp;lt;2) m = &amp;quot;0&amp;quot;+m;
+	var d = dat.getDate();
+	if (d.length&amp;lt;2) 
+		d = &amp;quot;0&amp;quot;+d;
+	var curdat = y+&amp;quot;-&amp;quot;+m+&amp;quot;-&amp;quot;+d;	
+	curdat = &amp;quot;2010-07-23&amp;quot;;	
+//------------------------------------------
+	//发送http请求,返回订单的字符串
+	//+&amp;quot;&amp;usrid=xlsgrid&amp;userpwd=0&amp;quot;
+//	var getUrl = &amp;quot;http://www.3abill.com/xlsgrid/ROOT_XLSGRID/HttpStr.sp?&amp;grdid=HttpStr&amp;grdtyp=M&amp;sytid=x&amp;ACC=&amp;quot;+G_ACCID+&amp;quot;&amp;dat=&amp;quot;+curdat; 
+//	alert(getUrl);
+//	_this.OpenHttpRequest(getUrl,&amp;quot;GET&amp;quot;);
+//	var ret = _this.SendHttpRequest();	
+//	_this.CloseHttpRequest();
+	//---------------
+	var param = new Object();
+	param.acc = &amp;quot;&amp;quot;;	
+	param.dat= &amp;quot;&amp;quot;;
+	param.kaid= &amp;quot;&amp;quot;;
+	param.userid= &amp;quot;&amp;quot;;
+	param.passwd= &amp;quot;&amp;quot;;
+	param.deptid= &amp;quot;&amp;quot;;
+	param.code= &amp;quot;&amp;quot;;
+	alert(&amp;quot;acc=&amp;quot;+acc+&amp;quot;|dat=&amp;quot;+dat+&amp;quot;|kaid=&amp;quot;+kaid+&amp;quot;|userid=&amp;quot;+userid+&amp;quot;|passwd=&amp;quot;+passwd+&amp;quot;|deptid=&amp;quot;+deptid+&amp;quot;|code=&amp;quot;+code);
+	//deptid空,code从数据库中取,dat抓取日期,acc 用户acc , kaid 渠道,userid passwd 登录需要的用户名密码
+	var ret = invokeOSFuncExt(&amp;quot;getStr&amp;quot;,param);
+//------------------------------------------
+
+
+	var param = new Object();
+	param.acc = G_ACCID; 
+	param.dat = curdat; 
+	param.str = ret; 
+	alert(ret);
+	//返回字符串后再做数据处理
+	var msg = invokeOSFuncExt(&amp;quot;doStrToDB&amp;quot;,param);
+	if(msg!=&amp;quot;&amp;quot;){
+		alert(&amp;quot;导入订单表成功,共操作&amp;quot;+msg+&amp;quot;条记录！&amp;quot;);
+		if(msg!=&amp;quot;0&amp;quot;){ 
+		//if(true){
+			alert(&amp;quot;发送短信&amp;quot;);
+			var param2 = new Object();
+			param2.sms = &amp;quot;有&amp;quot;+msg+&amp;quot;条新的订单记录！&amp;quot;;
+			param2.phone = &amp;quot;13023171375&amp;quot;;
+			var msg2 = invokeOSFuncExt(&amp;quot;SendSMS&amp;quot;,param2);
+			alert(msg2);
+		}
+	}
+	window.close();
+	//window.location.href=&amp;quot;Layout.sp?id=A3orderGet&amp;quot;;
+	//window.document.href=&amp;quot;http://www.3abill.com/xlsgrid/ROOT_3ABill/&amp;quot;;
+}
+
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage(&amp;quot;com.xlsgrid.net.pub&amp;quot;);
+var iopack = new JavaPackage(&amp;quot;java.io&amp;quot;);
+var utilpack = new JavaPackage(&amp;quot;java.util&amp;quot;);
+//================================================================// 
+// 函数：doStrToDB
+// 说明：把服务器返回的字符串插入数据库
+// 参数：
+// 返回：
+// 样例：
+// 作者：
+// 创建日期：05/18/10 11:30:09
+// 修改日志：
+//================================================================// 
+var EBID = 4;//订单单据号对应的列号
+var EBSEQ = 12;//订单单据明细号对应列号
+var EBKA = 2;
+var MidTab = &amp;quot;ORD_TMP&amp;quot;;//订单中间表
+function doStrToDB()
+{
+	var db = null;
+	var br = null;
+	var ds = null;
+	var s = &amp;quot;&amp;quot;;
+	var sql = &amp;quot;&amp;quot;;
+	var pstmt = null;
+	var msg = 0;
+	var map = new utilpack.HashMap();	
+	var row = null;//字符串中的每一行都是一张订单的商品明细,商品明细中以&amp;quot;~~~&amp;quot;分割的数组
+	try{
+		db = new pubpack.EADatabase(); 
+		br = new iopack.BufferedReader(new iopack.StringReader(str));
+		while((s = br.readLine())!=null)
+		{
+			row = s.split(&amp;quot;~~~&amp;quot;);
+			sql = &amp;quot;select * from ord_tmp where ordid=&amp;apos;&amp;quot;+row[EBID]+&amp;quot;&amp;apos; and seqid=&amp;apos;&amp;quot;+row[EBSEQ]+&amp;quot;&amp;apos;&amp;quot;;
+			var tmpds = db.QuerySQL(sql);
+			if (tmpds.getRowCount()==0)
+			{
+				if(map.containsKey(row[EBKA]))
+				{
+					var tmp = map.get(row[EBKA]);
+					tmp += row[EBID];
+					map.remove(row[EBKA]);
+					map.put(row[EBKA],row[EBID]);
+				}
+				else{
+					map.put(row[EBKA],row[EBID]);
+				}
+				//这里要过滤掉如果订单每一个商品明细对应的订单单据号与订单明细号在数据库如果有存在就不做插入数据库的动作
+				sql = &amp;quot; insert into &amp;quot;+MidTab+&amp;quot; a(srflg,userid,deptid,kaid,bilid,ecorpnam,ecorpid,itmclass,ordid,dat,arrdat,tel,fax,seqid,eitmid,code,spec,eitmnam,untnum,qty,zpqty,eprice) 
+				        values(trim(?),trim(?),trim(?),trim(?),trim(?),trim(?),trim(?),trim(?),trim(?),to_char(to_date(?,&amp;apos;dd/mm/yyyy&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;),to_char(to_date(?,&amp;apos;dd/mm/yyyy&amp;apos;),&amp;apos;yyyy-mm-dd&amp;apos;),trim(?),trim(?),trim(?),trim(?),trim(?),trim(?),trim(?),to_number(?),to_number(?),to_number(?),to_number(?,&amp;apos;999999.9999&amp;apos;))
+				       &amp;quot;;
+				//throw new Exception (sql);
+				pstmt = db.GetConn().prepareStatement(sql);	
+						
+				if(tmpds.getRowCount()==0)			
+				{
+					//var xyz=&amp;quot;&amp;quot;;
+					for ( var r=0;r&amp;lt;row.length();r++)
+					{					
+						pstmt.setString(r+1,row[r]);	
+						//xyz+=(r+1)+&amp;quot;:&amp;quot;+row[r]+&amp;quot;|&amp;quot;;
+					}
+					//throw new Exception(xyz);
+					pstmt.addBatch();
+					msg++;
+				}
+				pstmt.executeBatch();
+			}														
+		 }		
+		 var set = map.keySet();
+		 var it = set.iterator();
+		 while(it.hasNext())
+		 {
+		 	var ka = it.next();
+		 	sql = &amp;quot; insert into msg(title,note)values(&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;||&amp;apos;新订单&amp;apos;,&amp;apos;&amp;quot;+ka+&amp;quot;&amp;apos;||&amp;apos;新订单明细：&amp;apos;||&amp;apos;&amp;quot;+map.get(ka)+&amp;quot;&amp;apos;)&amp;quot;;
+		 	db.ExcecutSQL(sql);
+		 }
+		db.Commit();
+		return msg;
+	}catch(e){
+		db.Rollback();
+		throw new Exception(e);
+	}	 
+	finally{
+		if(br!=null) 
+			br.close();
+	}
+} 
+function SendSMS(){
+	var msg = &amp;quot;&amp;quot;;
+	var eaSms= new pubpack.EASendSMS();
+	
+	var i=eaSms.SendSMS( phone,sms);
+	//eaSms.CloseChannel();
+	var balance=eaSms.getBalance();
+
+	msg = i+&amp;quot;发送短信成功&amp;quot;+balance;
+	
+	return msg;
+}
+
+function getStr(){
+	var func = new x_WG_Currefour();
+	//var ret = func.getOrderStr(acc,dat,kaid,userid,passwd,deptid,code);//抓下来的订单的字符串 
+	var ret = func.getOrderStr(acc,dat,kaid,userid,passwd,deptid,code);//抓下来的订单的字符串 
+
+	return ret;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

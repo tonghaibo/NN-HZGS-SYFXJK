@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >R</MWTYP><MWID >SVGChartDemo</MWID><NAME >分析图样例</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >SVGChartDemo.zxg</FILE><FIXED >2,1</FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt><WIDTHMOD >1</WIDTHMOD></ROW>
+</ROWSET>
+</grdds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,1</ID><NAME >系列１</NAME><VALFLD ></VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 >0,1</C11></ROW>
+<ROW num="1" ><ID >0,2</ID><NAME >系列２</NAME><VALFLD ></VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><CHKVAL ></CHKVAL><UNCHKVAL ></UNCHKVAL><FLD ></FLD><C11 >0,2</C11></ROW>
+</ROWSET>
+</grdcolds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >fx1</ID><NAME >走势分析</NAME><ACTTYP >CHART5</ACTTYP><URL >姓名</URL><URLTARGET >登录次数</URLTARGET><TIP ></TIP><BTNORD >0</BTNORD><IMG >240</IMG><IMGMOUSE >180</IMGMOUSE><C10 >fx1</C10><C11 >fx1</C11><C12 >fx1</C12><C13 >fx1</C13><C14 >fx1</C14><C15 >fx1</C15></ROW>
+</ROWSET>
+</grdbtnds><grdshwds>
+<ROWSET>
+<ROW num="0" ><ID >0,2,0</ID><NAME ></NAME><DBNAME ></DBNAME><DSKEY >DSC:MAIN</DSKEY><NROW >6</NROW><NCOL >3</NCOL><PAGES ></PAGES><PAGESIZE ></PAGESIZE><URL ></URL><CTLTYP ></CTLTYP><DYNCTL ></DYNCTL><LISTID ></LISTID><ISCROSS ></ISCROSS><HROW ></HROW><HCOLS ></HCOLS><ROWORDER ></ROWORDER><VCOLS ></VCOLS><VCOLSQL ></VCOLSQL><VALUECOL ></VALUECOL></ROW>
+</ROWSET>
+</grdshwds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	_this.SplitSheet(0,&amp;quot;V&amp;quot;,&amp;quot;40%&amp;quot;);  
+	reloadsvgchart();  
+}
+
+
+function reloadsvgchart()
+{
+	//////////////////////////////////////////////////////////////////////////////////
+	// 如果要自己定义分析图的程序，可以在附件脚本文件中添加如xlsgrid/js/x/SVGChart.djs ,通过修改x/SVGChart来建立个性化的分析图程序
+	// １、分析图来源的是一个XML
+	var xml = _this.GetXml(0,1,0,_this.GetRowCount(0)-1,_this.GetColCount(0)-1);
+	// ２.建立分析图
+	// SVGChart(objid,sheet,row,col,type,title,xtitle,ytitle,width,height,xml)
+	// objid: SetToSvgform 的Object ID编号
+	// sheet,row,col, 图表所在的表格位置
+	// type: =0 线图 =1 直方图 =2 立方图　=3 饼图
+	// title: 标题 xtitle x轴名称 ytitle y轴名称
+	// width,height: 要求固定的高度和宽度，如果是自动适应窗口的大小，设置为-1，-1
+	// xml: xmlds描述的数据字符串
+	var chart = new SVGChart(&amp;quot;CHART1&amp;quot;,1 ,-1,-1,1,&amp;quot;各大KA销售订单量统计&amp;quot;,&amp;quot;KA&amp;quot;,&amp;quot;笔数&amp;quot;,800,300,xml );
+	chart.m_bShowSeralName = 1 ;		// 是否在右边显示系列名称
+	chart.load();	
+
+
+}
+
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	reloadsvgchart();  
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE ></GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >MAIN</ID><NAME ></NAME><DATDSC >select * from (
+select usrid 用户编号,usrnam 姓名,count(*) 登录次数 from usrlog
+where to_char(crtdat,&amp;apos;YYMM&amp;apos;)=to_char(sysdate,&amp;apos;YYMM&amp;apos;)
+and action=&amp;apos;登录系统&amp;apos;
+group by usrid,usrnam
+order by usrid
+) where rownum&amp;lt;5</DATDSC><C4 >MAIN</C4><C5 >MAIN</C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>

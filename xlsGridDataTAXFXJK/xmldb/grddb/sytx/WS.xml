@@ -1,0 +1,366 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >F</MWTYP><MWID >WS</MWID><NAME >Web请求服务接口定义</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >WS.zxg</FILE><SCENE ></SCENE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG >13,1,18,7</DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><USESMLUNT ></USESMLUNT><ITEMTABLE ></ITEMTABLE><BILHDRTABLE >WS</BILHDRTABLE><BILDTLTABLE >WSDTL</BILDTLTABLE><COLLIST >SYTID &amp;quot;系统号&amp;quot;,WSTYP &amp;quot;分类&amp;quot;,ID &amp;quot;接口ID&amp;quot;,NAME &amp;quot;接口名称&amp;quot;,NOTE &amp;quot;接口说明&amp;quot;,MWID &amp;quot;业务中间件编号&amp;quot;,TO_CHAR(CRTDAT,&amp;apos;YYYY-MM-DD HH24:MI:SS&amp;apos;) 创建时间</COLLIST><WHERE ></WHERE><ORDER >ID</ORDER><DBNAME ></DBNAME><LISTSUM ></LISTSUM><LOADDATA ></LOADDATA><CHECKTITLE ></CHECKTITLE><IFBILL ></IFBILL><EXTJS ></EXTJS><JAVACLS ></JAVACLS><POST2MWID ></POST2MWID><LMS ></LMS><WIDTHMOD >1</WIDTHMOD><HEIGHTMOD ></HEIGHTMOD><CLIENTCLASS ></CLIENTCLASS><SHOWBTN ></SHOWBTN><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdcelds>
+<ROWSET>
+<ROW num="0" ><ID >0,3,2</ID><CELLID ></CELLID><NAME >系统号</NAME><VALFLD >SYTID</VALFLD><DEFVAL >[%SYS_SYTID]</DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP >SELECTBOX</CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 >0,3,2</C19></ROW>
+<ROW num="1" ><ID >0,5,2</ID><CELLID ></CELLID><NAME >接口ID</NAME><VALFLD >ID</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,5,2</C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="2" ><ID >0,7,2</ID><CELLID ></CELLID><NAME >接口名称</NAME><VALFLD >NAME</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="3" ><ID >0,9,2</ID><CELLID ></CELLID><NAME >说明</NAME><VALFLD >NOTE</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 ></C18><C19 ></C19></ROW>
+<ROW num="4" ><ID >0,3,4</ID><CELLID ></CELLID><NAME >分类</NAME><VALFLD >WSTYP</VALFLD><DEFVAL ></DEFVAL><NOTNULL ></NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 ></C17><C18 >0,3,4</C18><C19 >0,3,4</C19></ROW>
+<ROW num="5" ><ID >0,5,4</ID><CELLID ></CELLID><NAME >业务中间件编号</NAME><VALFLD >MWID</VALFLD><DEFVAL ></DEFVAL><NOTNULL >1</NOTNULL><VALTYP ></VALTYP><MAXLEN ></MAXLEN><CTLTYP ></CTLTYP><LISTID ></LISTID><WHERE ></WHERE><ORDER ></ORDER><IFQUERY >1</IFQUERY><IFQUERYSCOPE ></IFQUERYSCOPE><QUERTDEFVAL ></QUERTDEFVAL><FLD ></FLD><C17 >0,5,4</C17><C18 ></C18><C19 >0,5,4</C19></ROW>
+</ROWSET>
+</grdcelds><grdcolds>
+<ROWSET>
+<ROW num="0" ><ID >0,1</ID><NAME >编号</NAME><VALFLD >ID</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+<ROW num="1" ><ID >0,2</ID><NAME >名称</NAME><VALFLD >NAME</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+<ROW num="2" ><ID >0,3</ID><NAME >说明</NAME><VALFLD >NOTE</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+<ROW num="3" ><ID >0,4</ID><NAME >字段类型</NAME><VALFLD >COLTYP</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+<ROW num="4" ><ID >0,5</ID><NAME >字段长度</NAME><VALFLD >COLLEN</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+<ROW num="5" ><ID >0,7</ID><NAME >非空</NAME><VALFLD >NOTNULL</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+<ROW num="6" ><ID >0,6</ID><NAME >上级编号</NAME><VALFLD >REFID</VALFLD><NOTNULL ></NOTNULL><COLTYP ></COLTYP><LISTID ></LISTID><LABEL ></LABEL><ISIDX ></ISIDX><INDEXID ></INDEXID><WHERE ></WHERE><ORDER ></ORDER><FLD ></FLD></ROW>
+</ROWSET>
+</grdcolds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >Test</ID><NAME >测试</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+<ROW num="1" ><ID >AddSYSMOD</ID><NAME >添加到权限</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+<ROW num="2" ><ID >QueryLOG</ID><NAME >调用日志</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 >QueryLOG</C11></ROW>
+<ROW num="3" ><ID >CODE</ID><NAME >业务编码</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 >CODE</C11></ROW>
+<ROW num="4" ><ID >INSROW1</ID><NAME >插入多行参数</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 >PreviewPARAMXML</C10><C11 ></C11></ROW>
+<ROW num="5" ><ID >INSROW2</ID><NAME >插入多行返回值</NAME><ACTTYP ></ACTTYP><URL ></URL><URLTARGET ></URLTARGET><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C10 ></C10><C11 ></C11></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var G_THISSYTID = &amp;quot;&amp;quot;;
+
+
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+
+	var xml  =_sql.query(&amp;quot;QueryRETDTL&amp;quot;, &amp;quot;GUID=&amp;quot;+G_GUID);
+
+	//判断返回值的字段所在行
+	var row=-1;
+	for( var row = _this.GetRowCount(0)-2;row&amp;gt;=0 ;row -- ) 
+		if (_this.GetCellText(0,row,1)==&amp;quot;返回值：&amp;quot; ) break;
+			  
+	_this.SetXmlDS(0,row+2,1,row+7,6,xml );
+	refreshxml();
+	if ( stat==&amp;quot;0&amp;quot; &amp;&amp; _this.GetCellText(0,3,2)==&amp;quot;&amp;quot; ) 
+		_this.SetCellText(0,3,2,G_SYTID);
+	if ( stat==&amp;quot;0&amp;quot; &amp;&amp; _this.GetCellText(0,5,4)==&amp;quot;&amp;quot; ) 
+		_this.SetCellText(0,5,4,&amp;quot;webs&amp;quot;);
+	var list3 = _this.CreateListValue();
+	_this.SetListValue(list3,&amp;quot;VARCHAR2&amp;quot;,&amp;quot;VARCHAR2字符串&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;CHAR&amp;quot;,&amp;quot;CHAR字符&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;NUMBER&amp;quot;,&amp;quot;NUMBER数字型&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;INT&amp;quot;,&amp;quot;INT整型&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;DATE&amp;quot;,&amp;quot;日期&amp;quot;);
+	_this.SetListValue(list3,&amp;quot;DATETIME&amp;quot;,&amp;quot;日期时间&amp;quot;);
+	for ( var row= _this.GetMainCellRangeRow1(0);row&amp;lt;=_this.GetMainCellRangeRow2(0);row ++ ) {
+		_this.SetToComboBox(&amp;quot;&amp;quot;, 0,row,4,list3)  ;	
+		_this.SetToBoolBox(sheet,row,7);
+	}
+	for ( var row= _this.GetMainCellRangeRow2(0)+4;row&amp;lt;=_this.GetRowCount(0)-2;row ++ ) {
+		_this.SetToComboBox(&amp;quot;&amp;quot;, 0,row,4,list3)  ;	
+		_this.SetToBoolBox(sheet,row,7);
+	}
+		
+	
+}
+
+//测试
+function Test()
+{
+	var thissytid = _this.GetCellText(0,3,2);
+	var wsid = _this.GetCellText(0,5,2);
+	openWindow(&amp;quot;show.sp?grdid=WSTest&amp;wsid=&amp;quot;+wsid + &amp;quot;&amp;thissytid=&amp;quot;+thissytid );
+  
+}
+
+//保存单据数据后
+function _thisOnaftersave(success)
+{
+	//判断返回值的字段所在行
+	var row=-1;
+	for( var row = _this.GetRowCount(0)-2;row&amp;gt;=0 ;row -- ) 
+		if (_this.GetCellText(0,row,1)==&amp;quot;返回值：&amp;quot; ) break;
+
+	var param = new Object();
+	param.xmlstr = _this.GetXml(0,row+2,1,_this.GetRowCount(0)-2,6);
+
+	param.FORMGUID = G_GUID;
+	try {
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert(msg);
+	}
+	catch (e) {
+		alert ( e );
+	}
+	
+}
+
+//添加到权限
+function AddSYSMOD()
+{
+	// 通过Get的方式调用服务端的一个函数
+	var sParam =&amp;quot;G_SYTID=&amp;quot;+_this.GetCellText(0,3,2)+&amp;quot;&amp;GRDID=webs&amp;FUNCID=&amp;quot;+_this.GetCellText(0,5,2)+&amp;quot;&amp;NAME=&amp;quot;+_this.GetCellText(0,7,2)+&amp;quot;&amp;NOTE=&amp;quot;+_this.GetCellText(0,9,2);
+
+	try {
+		ret = invokeOSFunc(&amp;quot;AddSYSMOD&amp;quot;,sParam) ;       
+		alert ( ret );
+	}
+	catch ( e ) {
+		alert ( e );
+	}
+}
+
+//操作日志
+function QueryLOG()
+{
+	//openWindow(&amp;quot;show.sp?grdid=OPLOG&amp;MWTYP=WEB&amp;MWID=webs.&amp;quot;+_this.GetCellText(0,5,2)+&amp;quot;&amp;loaddata=1&amp;quot;);
+	openWindow(&amp;quot;show.sp?grdid=OPLOG&amp;MWTYP=WEB&amp;MWID=&amp;quot;+_this.GetCellText(0,5,4)+&amp;quot;.&amp;quot;+_this.GetCellText(0,5,2)+&amp;quot;&amp;loaddata=1&amp;quot;);
+}
+
+//编码
+function CODE()
+{
+		var mwid = _this.GetCellText(0,5,4);
+		if ( mwid == &amp;quot;&amp;quot; ) mwid  = &amp;quot;webs&amp;quot;;
+		openWindow(&amp;quot;xlsgrid/jsp/design/designer.jsp?sytid=&amp;quot;+_this.GetCellText(0,3,2)+&amp;quot;&amp;grdid=&amp;quot;+mwid +&amp;quot;&amp;opensheet=2&amp;addosfunc=&amp;quot;+_this.GetCellText(0,5,2) + &amp;quot;&amp;addosfuncnote=param: xml return:xml&amp;quot;) ;
+}
+
+function refreshxml()
+{
+	var sheet =0;
+	
+	var xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\r\n&amp;lt;ROWSET&amp;gt; \r\n   &amp;lt;ROW&amp;gt;\r\n&amp;quot;;
+	var oldrefid = &amp;quot;&amp;quot;;//老的上级编号
+	var oldtagid = &amp;quot;&amp;quot;;//老的上级标签,such as BILDTL
+	var prestr = &amp;quot;      &amp;quot;;
+	for ( var i=_this.GetMainCellRangeRow1(sheet);i&amp;lt;=_this.GetMainCellRangeRow2(sheet);i++ ) {
+		var colid = _this.GetCellText(sheet,i,1);
+
+		if ( colid!=&amp;quot;&amp;quot; ) {
+			
+			var refid = _this.GetCellText(sheet,i,6);//上级编号
+			if(oldtagid !=&amp;quot;&amp;quot; &amp;&amp;oldtagid !=refid){
+					
+				xml +=prestr +prestr +prestr +&amp;quot;&amp;lt;/ROW&amp;gt;\r\n&amp;quot;;
+				xml +=prestr +prestr +&amp;quot;&amp;lt;/ROWSET&amp;gt;\r\n&amp;quot;;
+				xml +=prestr +&amp;quot;&amp;lt;/&amp;quot;+oldtagid +&amp;quot;&amp;gt;\r\n&amp;quot;;
+			}
+			
+			if(oldrefid!=refid ){
+				if(refid!=&amp;quot;&amp;quot;){
+					xml +=&amp;quot;\r\n&amp;quot;+prestr +prestr +&amp;quot;&amp;lt;ROWSET&amp;gt;\r\n&amp;quot;;
+					xml +=prestr +prestr +prestr +&amp;quot;&amp;lt;ROW&amp;gt;\r\n&amp;quot;;
+				}
+				oldtagid = _this.GetCellText(sheet,i-1,1);
+				if(refid==&amp;quot;&amp;quot;)oldtagid=&amp;quot;&amp;quot;;
+				
+			}
+			if(refid!=&amp;quot;&amp;quot;)
+				xml +=prestr +prestr +prestr +&amp;quot;&amp;lt;&amp;quot;+colid+&amp;quot;&amp;gt;&amp;quot;;
+			else xml +=prestr +&amp;quot;&amp;lt;&amp;quot;+colid+&amp;quot;&amp;gt;&amp;quot;;
+
+			if(!(_this.GetCellText(sheet,i,6)==&amp;quot;&amp;quot;&amp;&amp;_this.GetCellText(sheet,i+1,6)!=&amp;quot;&amp;quot;))//不等于下一行的上编号
+				xml +=&amp;quot;&amp;lt;/&amp;quot;+colid+&amp;quot;&amp;gt;\r\n&amp;quot;;	
+			oldrefid = refid;
+//			if(refid!=&amp;quot;&amp;quot; )
+				
+			
+		}
+	}
+	//最后一行
+	if(oldtagid !=&amp;quot;&amp;quot; ){
+		xml +=prestr +prestr +prestr +&amp;quot;&amp;lt;/ROW&amp;gt;\r\n&amp;quot;;
+		xml +=prestr +prestr +&amp;quot;&amp;lt;/ROWSET&amp;gt;\r\n&amp;quot;;
+		xml +=prestr +&amp;quot;&amp;lt;/&amp;quot;+oldtagid +&amp;quot;&amp;gt;\r\n&amp;quot;;
+	}
+
+	
+	
+	xml+=&amp;quot;   &amp;lt;/ROW&amp;gt;\r\n&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	
+	_this.SetCellText(0,_this.GetMainCellRangeRow2(0)+1,2 , xml );
+	
+	var row=-1;
+	for( var row = _this.GetRowCount(0)-2;row&amp;gt;=0 ;row -- ) 
+		if (_this.GetCellText(0,row,1)==&amp;quot;返回值：&amp;quot; ) break;
+
+	xml = &amp;quot;&amp;lt;?xml version = &amp;apos;1.0&amp;apos;?&amp;gt;\r\n&amp;lt;ROWSET&amp;gt; \r\n   &amp;lt;ROW&amp;gt;\r\n&amp;quot;;
+	for ( var i=row+2;i&amp;lt;_this.GetRowCount(0)-2;i++ ) {
+		var colid = _this.GetCellText(sheet,i,1);
+		if ( colid!=&amp;quot;&amp;quot; ) {
+			xml +=&amp;quot;      &amp;lt;&amp;quot;+colid+&amp;quot;&amp;gt;&amp;lt;/&amp;quot;+colid+&amp;quot;&amp;gt;\r\n&amp;quot;;
+		}
+	}
+	xml+=&amp;quot;   &amp;lt;/ROW&amp;gt;\r\n&amp;lt;/ROWSET&amp;gt;&amp;quot;;
+	_this.SetCellText(0,_this.GetRowCount(0)-1,2 , xml );
+
+
+}
+//修改单元格内容
+function _thisOnCellModify(sheet,row,col,oldvalue,newvalue)
+{
+	if ( row&amp;gt;=9 ) {
+		refreshxml();
+	}
+}
+
+//最后一个输入焦点按回车
+function _thisOnLastEditFocus(row,col)
+{
+	var currow = _this.GetRowCount(0)-2;
+	_this.InsertRowAndCopy(0,currow +1,currow );
+	
+}
+
+//插入多行返回值
+function INSROW1()
+{
+	var rows = prompt( &amp;quot;请输入插入的空行数&amp;quot;,&amp;quot;1&amp;quot; );
+	if ( rows!= undefined ) {
+		var num = 1*rows;
+		
+		_this.SetRedraw(0);
+		for ( var n = 0;n&amp;lt;num;n++ ) {
+			var currow = _this.GetMainCellRangeRow2(0);
+			_this.InsertRowAndCopy(0,currow +1,currow );
+
+		}
+		_this.SetRedraw(1);
+	}
+}
+//插入多行返回值
+function INSROW2()
+{
+	var rows = prompt( &amp;quot;请输入插入的空行数&amp;quot;,&amp;quot;1&amp;quot; );
+	if ( rows!= undefined ) {
+		var num = 1*rows;
+		
+		_this.SetRedraw(0);
+		for ( var n = 0;n&amp;lt;num;n++ ) {
+			var currow = _this.GetRowCount(0)-2;
+			_this.InsertRowAndCopy(0,currow +1,currow );
+
+		}
+		_this.SetRedraw(1);
+	}
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+
+// 客户端param传入的参数可以直接使用
+function save()
+{
+	var db = null;
+	var msg= &amp;quot;操作成功&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		db.ExcecutSQL(&amp;quot;delete from wsretdtl where formguid=&amp;apos;&amp;quot; + FORMGUID+&amp;quot;&amp;apos; &amp;quot; );
+		
+		var ds = new pubpack.EAXmlDS(xmlstr);	// 客户端可以传入一个xml
+		for ( var row=0;row&amp;lt;ds.getRowCount();row ++ ) {
+			if (ds.getStringAt(row,&amp;quot;ID&amp;quot;)==&amp;quot;&amp;quot;)break; 
+			var sql = &amp;quot;insert into wsretdtl ( formguid,seqid,id,name,note,coltyp,collen,notnull ) &amp;quot; + 
+				&amp;quot; values (&amp;apos;&amp;quot;+FORMGUID+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+(row+1)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;ID&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;NAME&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;NOTE&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;COLTYP&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;COLLEN&amp;quot;)+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+ds.getStringAt(row,&amp;quot;NOTNULL&amp;quot;)+&amp;quot;&amp;apos;)&amp;quot;;
+			db.ExcecutSQL(sql );
+		}
+		db.Commit();	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+}
+// 客户端param传入的参数可以直接使用
+// 参数：[%G_SYTID]&amp;apos;,&amp;apos;[%GRDID].[%FUNCID]&amp;apos;,&amp;apos;[%NAME]&amp;apos;,&amp;apos;[%] NOTE 
+function AddSYSMOD()
+{
+	var sql = &amp;quot;select * from sysmod where syt=&amp;apos;&amp;quot;+G_SYTID+&amp;quot;&amp;apos; and id=&amp;apos;&amp;quot;+GRDID+&amp;quot;.&amp;quot;+FUNCID+&amp;quot;&amp;apos; &amp;quot;;
+	
+
+	var inssql = &amp;quot;insert into sysmod ( syt,id,name,note,action,modtyp,grdid) &amp;quot;+
+		&amp;quot; values( &amp;apos;&amp;quot;+G_SYTID+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+GRDID+&amp;quot;.&amp;quot;+FUNCID+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+NAME+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+NOTE+&amp;quot;&amp;apos;,&amp;apos;&amp;quot;+FUNCID+&amp;quot;&amp;apos;,&amp;apos;3&amp;apos;,&amp;apos;&amp;quot;+GRDID+&amp;quot;&amp;apos;) &amp;quot; ;
+	
+	var db = null;
+	var msg= &amp;quot;操作成功&amp;quot;;
+	
+	try {
+		db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+		
+		var ds = db.QuerySQL(sql);
+		
+		if (ds.getRowCount()&amp;gt;0 ) throw new pubpack.EAException(&amp;quot;该权限已经添加过了，无需添加！&amp;quot; );
+		db.ExcecutSQL(inssql);
+		
+		
+		db.Commit();	
+	}
+	catch ( ee ) {
+		db.Rollback();
+		throw new pubpack.EAException ( ee.toString() );
+	}
+	finally {
+		if (db!=null) db.Close();
+	}
+	return msg;
+	
+}
+
+
+var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var baskpack = new JavaPackage ( &amp;quot;com.xlsgrid.net&amp;quot; );
+//作为.sp服务时的入口
+//预定义变量：request,response
+function Response()
+{
+      var code = request.getParameter(&amp;quot;CODE&amp;quot;);
+      var db = null;
+      var ret= &amp;quot;100&amp;quot;;
+      try {
+            db = new pubpack.EADatabase();	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+                  }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return ret ;
+}
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><grddscds>
+<ROWSET>
+<ROW num="0" ><ID >QueryRETDTL</ID><NAME ></NAME><DATDSC >select ID	
+,NAME	
+,NOTE	,COLTYP	
+,COLLEN	,NOTNULL	
+from WSRETDTL
+where formguid=&amp;apos;[%GUID]&amp;apos; 
+order by SEQID	</DATDSC><C4 >QueryRETDTL</C4><C5 >QueryRETDTL</C5></ROW>
+<ROW num="1" ><ID >AddSYSMOD</ID><NAME ></NAME><DATDSC ></DATDSC><C4 ></C4><C5 ></C5></ROW>
+</ROWSET>
+</grddscds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5><REFID6 >0扩展字段</REFID6><REFNAM6 >0扩展字段</REFNAM6><NOTE >0备注</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0扩展字段</REFID1><REFNAM1 >0扩展字段</REFNAM1><REFID2 >0扩展字段</REFID2><REFNAM2 >0扩展字段</REFNAM2><REFID3 >0扩展字段</REFID3><REFNAM3 >0扩展字段</REFNAM3><REFID4 >0扩展字段</REFID4><REFNAM4 >0扩展字段</REFNAM4><REFID5 >0扩展字段</REFID5><REFNAM5 >0扩展字段</REFNAM5></ROW>
+</ROWSET>
+</flddtl></mdroot>

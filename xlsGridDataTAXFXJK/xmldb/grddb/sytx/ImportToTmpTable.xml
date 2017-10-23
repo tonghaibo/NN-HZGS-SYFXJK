@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='GBK'?><mdroot><grdds>
+<ROWSET>
+<ROW num="0" ><MWTYP >M</MWTYP><MWID >ImportToTmpTable</MWID><NAME >导入数据到临时表</NAME><NOTE ></NOTE><NOACCNAME ></NOACCNAME><FILE >ImportToTmpTable.zxg</FILE><FIXED ></FIXED><CATTYP ></CATTYP><DTLRNG ></DTLRNG><BATINP ></BATINP><MANUNIT ></MANUNIT><ORDER ></ORDER><EXTJS ></EXTJS><JAVACLS ></JAVACLS><syt >x</syt></ROW>
+</ROWSET>
+</grdds><grdbtnds>
+<ROWSET>
+<ROW num="0" ><ID >PasteFromExcel</ID><NAME >从Excel粘贴数据</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="1" ><ID >SAVE</ID><NAME >保存</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 ></C7></ROW>
+<ROW num="2" ><ID >ImpFromFile</ID><NAME >快速导入文件</NAME><TIP ></TIP><BTNORD ></BTNORD><IMG ></IMG><IMGMOUSE ></IMGMOUSE><C7 >ImpFromFile</C7></ROW>
+</ROWSET>
+</grdbtnds><grdjsds>
+<ROWSET>
+<ROW num="0" ><GRDJSDS_VALUE >var sheet = 0;
+//数据加载完毕
+function _thisOnpost_loaddata(sheet)
+{
+	 _this.SetAttribe(&amp;quot;SHEET_0&amp;quot;,_this.ATTR_SHEET_SELECTFLAG,_this. SELECTFLAG_SINGLEROW ); 
+}
+
+//undefined
+function PasteFromExcel()
+{
+	alert ( &amp;quot;说明：先在Excel选择一片区域，然后复制\n点击确定下一步&amp;quot; );
+	_this.SetFocusCell(0,1,1);
+	// 粘贴一片数据到表格
+	_this.PasteData( 0,1,1,2,2);
+}
+
+//undefined
+function SAVE()
+{
+	var tmpdsname = prompt( &amp;quot;请输入数据库连接名字&amp;quot;,&amp;quot;&amp;quot; );
+	if ( tmpdsname == undefined ) return;
+	
+	var tmptablename = prompt( &amp;quot;请输入临时表的名字&amp;quot;,&amp;quot;&amp;quot; );
+	if ( tmptablename == undefined ) return;
+
+	// 设置列名称
+	for ( var i=1;i&amp;lt;_this.GetColCount(0);i++) {
+		var s = _this.GetCellText(0,0,i);
+		if ( s!= &amp;quot;&amp;quot; ) _this.SetColName(0,i,s) ;
+	}
+	//建立一个参数对象
+	var param = new Object();
+	param.xmlstr = _this.GetXml(0,1,1,_this.GetRowCount(0)-1,_this.GetColCount(0)-1);
+	param.tablename = tmptablename ;
+	param.dsname = tmpdsname ;
+
+	try {
+		msg = invokeOSFuncExt(&amp;quot;save&amp;quot;,param);
+		alert(msg);
+	}
+	catch (e) {
+		alert ( e );
+	}
+  
+}
+
+
+//undefined
+function ImpFromFile()
+{
+	var txt = _this.LoadTextFile(&amp;quot;&amp;quot; );
+	if ( txt !=&amp;quot;&amp;quot; ) {
+		var tmpdsname = prompt( &amp;quot;请输入数据库连接名字&amp;quot;,&amp;quot;&amp;quot; );
+		if ( tmpdsname == undefined ) return;
+		
+		var tmptablename = prompt( &amp;quot;请输入临时表的名字&amp;quot;,&amp;quot;tmptable&amp;quot; );
+		if ( tmptablename == undefined ) return;
+		var div = prompt( &amp;quot;请输入分隔符&amp;quot;,&amp;quot;,&amp;quot; );
+		if ( div == undefined ) return;
+		var useFirstRow = 0 ;
+		if ( confirm( &amp;quot;是否使用首行为列名称&amp;quot; )== 1) useFirstRow = 1 ;
+
+
+		//建立一个参数对象
+		var param = new Object();
+		param.txt = txt;
+		param.tablename = tmptablename ;
+		param.dsname = tmpdsname ;
+		param.div = div ;
+		param.useFirstRow  = useFirstRow ;
+	
+		try {
+			msg = invokeOSFuncExt(&amp;quot;savetxt&amp;quot;,param);
+			alert(msg);
+		}
+		catch (e) {
+			alert ( e );
+		}
+	}	
+}
+</GRDJSDS_VALUE></ROW>
+</ROWSET>
+</grdjsds><grdosds>
+<ROWSET>
+<ROW num="0" ><GRDOSDS_VALUE >var pubpack = new JavaPackage ( &amp;quot;com.xlsgrid.net.pub&amp;quot; );
+var filepack = new JavaPackage ( &amp;quot;java.io&amp;quot; );
+function save()
+{
+      var db = null;
+      var msg= &amp;quot;&amp;quot;;
+      var sql = &amp;quot;&amp;quot;;
+      try {
+      	    if ( dsname == &amp;quot;&amp;quot; ) db = new pubpack.EADatabase();
+            else db = new pubpack.EADatabase(dsname);	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            var ds = new pubpack.EAXmlDS(xmlstr);		// 把传入的xml放到数组
+            // 创建临时表
+            sql = &amp;quot;CREATE TABLE &amp;quot;+tablename + &amp;quot;(&amp;quot; ;
+            for ( var i=0;i&amp;lt;ds.getColumnCount();i++ ) {
+            	if ( i!= 0 ) sql+=&amp;quot;,&amp;quot;;
+            	sql+= ds.getColumnName(i)+&amp;quot; varchar(255) &amp;quot;;
+            	
+            }
+            sql+=&amp;quot;)&amp;quot;;
+            db.ExcecutSQL(sql);
+//            pubpack.EAFunc.Log(sql);
+            // 插入数据
+            var cnt = ds.getRowCount();
+            for ( var i=0;i&amp;lt;cnt;i++ ) {
+            	sql = &amp;quot;INSERT INTO &amp;quot;+tablename +&amp;quot; values( &amp;quot;;
+            	for ( var j=0;j&amp;lt;ds.getColumnCount();j++ ) {
+            		if ( j!= 0 ) sql+=&amp;quot;,&amp;quot;;
+            		sql+= &amp;quot;&amp;apos;&amp;quot;+ds.getStringAt(i,j)+&amp;quot;&amp;apos; &amp;quot;;
+            	}
+            	sql+=&amp;quot;)&amp;quot;;
+            	db.ExcecutSQL(sql);
+
+            }                
+            msg=&amp;quot;插入&amp;quot;+cnt+&amp;quot;笔记录到&amp;quot;+tablename  ;
+	    db.Commit();	
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return msg;
+}
+// 快速保存一个csv文件
+function savetxt()
+{
+      var db = null;
+      var msg= &amp;quot;&amp;quot;;
+      var sql = &amp;quot;&amp;quot;;
+      var sscollist ;//列的数组
+      var sCollist = &amp;quot;&amp;quot;;
+      try {
+      	    if ( dsname == &amp;quot;&amp;quot; ) db = new pubpack.EADatabase();
+            else db = new pubpack.EADatabase(dsname);	// 如果连接到其他数据库, new pubpack.EADatabase(“dbname”)
+            // 创建临时表
+            
+            if ( useFirstRow == 1 ) {
+            
+            }
+            else {
+            	    sql = &amp;quot;CREATE TABLE &amp;quot;+tablename + &amp;quot;(&amp;quot; ;	
+	            for ( var i=0;i&amp;lt;50;i++ ) {
+	            	if ( i!= 0 ) sql+=&amp;quot;,&amp;quot;;
+	            	sql+=&amp;quot;S&amp;quot;+i+&amp;quot; varchar2(1024) &amp;quot;;
+	            }
+	            sql+=&amp;quot;)&amp;quot;;
+            	    try {db.ExcecutSQL(sql);}catch(  e ) {msg+=&amp;quot;表&amp;quot;+tablename+&amp;quot;已存在，插入记录&amp;quot;;}
+	    }
+            
+            
+            // 先保存到临时文件
+            var filename = pubpack.EAOption.dynaDataRoot+&amp;quot;/tmp.txt&amp;quot;;
+	    pubpack.EAFunc.WriteToFile(filename, txt);
+            var fi = new filepack.FileInputStream(filename);
+            var ir = new filepack.InputStreamReader(fi,&amp;quot;GBK&amp;quot;);
+            var reader = new filepack.BufferedReader(ir);
+            var lineStr = &amp;quot;&amp;quot;;
+            var expDiv  = div ;
+            var cnt = 0 ;
+           
+	    while ((lineStr = reader.readLine()) != null)
+            {
+                    var strval = lineStr.split(expDiv  );
+//                    throw new Exception(strval );
+                    var collist = &amp;quot;&amp;quot;;
+                    var vallist = &amp;quot;&amp;quot;;
+                    if ( useFirstRow == 1 &amp;&amp; cnt==0  ) {
+                    	 
+			    sql = &amp;quot;CREATE TABLE &amp;quot;+tablename + &amp;quot;(&amp;quot; ;	
+		            for ( var j=0;j&amp;lt;strval.length();j++ ) {
+		            	if ( j!= 0 ) {sql+=&amp;quot;,&amp;quot;;sCollist +=&amp;quot;,&amp;quot;;}
+		            	sql+=strval[j]+&amp;quot; varchar2(1024) &amp;quot;;
+		            	sCollist +=strval[j];
+		            }
+		            sql+=&amp;quot;)&amp;quot;;
+		            sscollist = sCollist.split(&amp;quot;,&amp;quot;);
+		           	
+
+	            	    try {db.ExcecutSQL(sql);}catch(  e ) {msg+=&amp;quot;表&amp;quot;+tablename+&amp;quot;已存在，插入记录&amp;quot;;}
+                    }
+                    else {
+//                    GN_TMP_MATCH
+	                    // 插入数据
+	               	    sql = &amp;quot;INSERT INTO &amp;quot;+tablename+&amp;quot;(&amp;quot; ;
+	            	    for ( var j=0;j&amp;lt;strval.length();j++ ) {
+	            		if ( j!= 0 ) {
+	            			vallist +=&amp;quot;,&amp;quot;;
+	            			collist += &amp;quot;,&amp;quot;;
+	            		}
+	            		if ( useFirstRow == 1){
+	            			//
+	            			if ( j&amp;gt;=sscollist .length() ) {
+	            				//throw new Exception ( &amp;quot;明细表的列数&amp;quot;+j+&amp;quot;,大于首行的列数&amp;quot;+sscollist .length()+&amp;quot;，行首是&amp;quot;+sCollist +&amp;quot;,运行退出&amp;quot; );
+	            			}
+	            			else 
+	            				collist+=sscollist [j];
+	            		}
+	            		else  
+		            		collist+=&amp;quot;S&amp;quot;+j;
+	            		vallist += &amp;quot;&amp;apos;&amp;quot;+strval[j]+&amp;quot;&amp;apos; &amp;quot;;
+	            	    }
+	            	    sql+=collist+&amp;quot;) values( &amp;quot;+vallist +&amp;quot;)&amp;quot;;
+	            	    
+	            	    db.ExcecutSQL(sql);
+	            }
+		    cnt ++;
+            }                
+            msg+=&amp;quot; 插入&amp;quot;+(cnt-1)+&amp;quot;笔记录到&amp;quot;+tablename  ;
+	    db.Commit();
+	    reader.close();
+	    fi.close();
+      }
+      catch ( ee ) {
+            db.Rollback();
+            throw new pubpack.EAException ( ee.toString() );
+      }
+      finally {
+            if (db!=null) db.Close();
+      }
+      return msg;
+}
+
+</GRDOSDS_VALUE></ROW>
+</ROWSET>
+</grdosds><fldhdr>
+<ROWSET>
+<ROW num="0" ><BILID >1单据编号</BILID><STAT >0单据状态</STAT><SUBTYP >0子类型</SUBTYP><CORPID >0往来单位编号</CORPID><CORPNAM >0往来单位名称</CORPNAM><LOCID >0仓库|部门编号</LOCID><LOCNAM >0仓库|部门名称</LOCNAM><DAT >0单据日期</DAT><CRTUSR >1录入人</CRTUSR><CRTUSRNAM >0录入人姓名</CRTUSRNAM><CRTDAT >0录入日期</CRTDAT><CHKUSR >1审核人</CHKUSR><CHKUSRNAM >0审核人姓名</CHKUSRNAM><CHKDAT >0审核日期</CHKDAT><SUMQTY >0合计金额</SUMQTY><SUMMNY >0合计金额</SUMMNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3><REFID4 >0参考编号4</REFID4><REFNAM4 >0参考名称4</REFNAM4><REFID5 >0参考编号5</REFID5><REFNAM5 >0参考名称5</REFNAM5><REFID6 >0参考编号6</REFID6><REFNAM6 >0参考名称6</REFNAM6><NOTE >0备注信息</NOTE></ROW>
+</ROWSET>
+</fldhdr><flddtl>
+<ROWSET>
+<ROW num="0" ><SEQID >1明细序号</SEQID><ITMID >1品种编号</ITMID><ITMNAM >0品种名称</ITMNAM><ITEMPC >0品种批次号</ITEMPC><ITMSPC >0规格</ITMSPC><UNIT >0计量单位</UNIT><SMLUNT >0小计量单位</SMLUNT><UNTNUM >0大单位转小单位因子</UNTNUM><PRICE >0价格</PRICE><QTY >0数量</QTY><TAXTYP >0税率类型</TAXTYP><NOTAXMNY >0不含税税额</NOTAXMNY><TAXMNY >0税额</TAXMNY><MNY >0下单金额</MNY><REFID1 >0参考编号1</REFID1><REFNAM1 >0参考名称1</REFNAM1><REFID2 >0参考编号2</REFID2><REFNAM2 >0参考名称2</REFNAM2><REFID3 >0参考编号3</REFID3><REFNAM3 >0参考名称3</REFNAM3></ROW>
+</ROWSET>
+</flddtl></mdroot>
